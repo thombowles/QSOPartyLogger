@@ -1,0 +1,143 @@
+#!/usr/bin/env python3
+"""Generate mdc.json from the official Maryland-DC QSO Party rules.
+
+Source (committed alongside this script, so the run is reproducible):
+  mdc_rules_2024.txt — pdftotext of "The Fun Contest Maryland-DC QSO Party
+  Rules", Revised 06 AUG 2024 v.5, from
+  https://w3vpr.org/wp/wp-content/uploads/2026/05/MDCQSOPartyRules_Revised_8-06-24_ras_v5.pdf
+
+The 25 contest entities are rules Table 1 (§7c): 23 Maryland counties +
+Baltimore City (BAL, distinct from Baltimore County BCT) + Washington DC (WDC).
+
+Usage:  python3 gen_mdc.py        (run from docs/research/)
+"""
+import json
+import os
+import re
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUT = os.path.join(HERE, "..", "..", "Resources", "Parties", "mdc.json")
+SRC = os.path.join(HERE, "mdc_rules_2024.txt")
+
+text = open(SRC, encoding="utf-8").read()
+
+# Table 1's rows sit between the exchange paragraph (§7c) that introduces it and
+# the table's own caption, which pdftotext places *below* the rows.
+# The §7c line names "Table 1" itself, so skip past that line before looking
+# for the caption that terminates the rows.
+start = text.index("\n", text.index("For MDC stations, use your county or city"))
+end = text.index("Table 1", start)
+table = text[start:end]
+
+# Rows interleave two columns:
+#   "1     Allegany                ALY              14    Howard          HWD"
+# Names carry periods, spaces, and curly apostrophes (Prince George's).
+pairs = re.findall(r"(\d{1,2})\s+([A-Z][A-Za-z.’'\s]*?)\s+([A-Z]{3})\b", table)
+
+entities = {}
+for num, name, abbr in pairs:
+    name = name.strip().replace("’", "'")
+    if abbr in entities and entities[abbr] != name:
+        sys.exit(f"MDC conflict: {abbr} -> {entities[abbr]} vs {name}")
+    entities[abbr] = (int(num), name)
+
+assert len(entities) == 25, f"expected 25 MDC entities, got {len(entities)}: {sorted(entities)}"
+assert sorted(n for n, _ in entities.values()) == list(range(1, 26)), \
+    "Table 1 numbering must be exactly 1..25"
+assert len({n for _, n in entities.values()}) == 25, "MDC entity names not unique"
+# Baltimore City and Baltimore County are separate entities — the classic trap.
+assert entities["BAL"][1] == "Baltimore City", entities["BAL"]
+assert entities["BCT"][1] == "Baltimore County", entities["BCT"]
+assert entities["WDC"][1] == "Washington DC", entities["WDC"]
+
+counties = [
+    {"abbr": abbr, "name": name}
+    for abbr, (_, name) in sorted(entities.items(), key=lambda kv: kv[1][0])
+]
+
+mdc = {
+    "schemaVersion": 1,
+    "id": "mdc",
+    "name": "Maryland-DC QSO Party",
+    "cabrilloContest": "MDC-QSO-PARTY",
+    "homeState": "MD",
+    "countyAbbrLength": 3,
+    "validBands": ["160m", "80m", "40m", "20m", "15m", "10m"],
+    # §14a: 3 points CW, 1 point phone. §6: no digital modes exist.
+    "points": {"phone": 1, "cw": 3, "digital": 0},
+    "dupeScope": "bandMode",
+    "multipliers": {
+        # §16: MDC entrants sum entities + states (less MD) + provinces + DXCC,
+        # each counted once for the contest ("initial contact").
+        "inState": {
+            "classes": ["county", "state", "province", "dx"],
+            "homeStateCountsViaCounty": False,
+            "countScope": "once",
+        },
+        # §17: non-MDC entrants count only the 25 MDC entities.
+        "outState": {
+            "classes": ["county"],
+            "homeStateCountsViaCounty": False,
+            "countScope": "once",
+        },
+    },
+    "bonuses": [
+        # §18a / §20f(i): one-time 50 points for working W3VPR in any mode.
+        {"type": "workStation", "call": "W3VPR", "points": 50, "scope": "once"},
+        # §18b / §20f(ii): 250 at 13 entities, 500 at all 25. Highest tier pays.
+        {"type": "sweepTiers", "tiers": [{"count": 13, "points": 250},
+                                         {"count": 25, "points": 500}]},
+    ],
+    "dxStyle": "prefix",
+    "allowedModes": ["phone", "cw"],
+    # No county-line provision exists; §10g relocation is sequential, not
+    # simultaneous, so one QSO carries exactly one entity.
+    "maxSimultaneousCounties": 1,
+    # §10i: Maryland may never be counted as a state. DC is not a state either —
+    # it arrives as entity WDC.
+    "excludedStateTokens": ["MD", "DC"],
+    # §7: "You give your Call Sign and Location" — no RST, no serial.
+    "exchangeIncludesRST": False,
+    # §10b: non-MDC entrants may only claim contacts with MD/DC stations.
+    "outStateWorksHomeStationsOnly": True,
+    # §15a/§15b, applied to the basic score before bonuses. Cabrillo has no
+    # CATEGORY-STATION value for the rules' "Club" category; Club and Fixed both
+    # multiply by 1, so entering as FIXED scores identically.
+    "scoreMultipliers": {
+        "power": {"QRP": 3, "LOW": 2, "HIGH": 1},
+        "stationCategory": {"ROVER": 4, "PORTABLE": 3, "MOBILE": 2, "FIXED": 1},
+    },
+    # §2: single 14-hour period, second Saturday in August 1400Z to 0400Z
+    # Sunday. Second Saturday of Aug 2026 = Aug 8.
+    "schedule": [{"start": "2026-08-08T14:00:00Z", "end": "2026-08-09T04:00:00Z"}],
+    "counties": counties,
+    "notes": (
+        "Verified against the official rules PDF 'The Fun Contest Maryland-DC QSO Party "
+        "Rules', Revised 06 AUG 2024 v.5 (w3vpr.org, fetched 2026-07-23; sponsor page "
+        "re-checked 2026-07-24 — still the current revision, both bonuses confirmed). "
+        "Entities are rules Table 1: 23 MD counties + Baltimore City (BAL, separate from "
+        "Baltimore County BCT) + Washington DC (WDC). Exchange is call + location only, no "
+        "RST. CW 3 pts / phone 1 pt; no digital modes exist in this contest. Mults count "
+        "once for the contest, never per band or mode. Maryland is never a state mult "
+        "(rules 10i); AK/HI count as states only, never DXCC (10h/16d). Non-MDC entrants "
+        "score only contacts with MD/DC stations (10b). Power and station category are "
+        "final-score multipliers (15a/15b); the rules' 'Club' category has no Cabrillo "
+        "CATEGORY-STATION equivalent and multiplies by 1 exactly as FIXED does. "
+        "The sponsor has not yet published 2026 dates; the window is derived from rules "
+        "§2 ('second Saturday in August at 1400 UTC ... ending at 0400 Sunday UTC'), "
+        "which for 2026 is Aug 8 — cross-checked against WA7BNM contest #86 and the "
+        "State QSO Party Challenge calendar, both of which agree. Cabrillo CONTEST value "
+        "MDC-QSO-PARTY per WA7BNM's registry; the sponsor's rules require Cabrillo but do "
+        "not print the header token. Not modeled: cross-mode contacts are prohibited "
+        "(10e), and net/repeater/satellite QSOs are void (10d/10j)."
+    ),
+}
+
+with open(OUT, "w", encoding="utf-8") as f:
+    json.dump(mdc, f, indent=2, ensure_ascii=False)
+    f.write("\n")
+
+print(f"mdc.json: {len(counties)} entities")
+for c in counties:
+    print(f"  {c['abbr']}  {c['name']}")

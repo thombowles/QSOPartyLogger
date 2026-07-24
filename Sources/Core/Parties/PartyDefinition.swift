@@ -62,6 +62,20 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     var exchangeIncludesRST: Bool { exchangeIncludesRSTRaw ?? true }
     private let exchangeIncludesRSTRaw: Bool?
 
+    /// Whether an out-of-state entrant earns credit *only* for contacts with
+    /// home-state stations. MDC rule 10b: "Stations not located in the state of
+    /// Maryland, or the District of Columbia may only receive credit for
+    /// contacts with stations located in Maryland or the District of Columbia."
+    /// Rows carrying any other location are not contest QSOs — no points, no
+    /// multiplier, excluded from dupe accounting.
+    ///
+    /// Most state parties word the same restriction somewhere in their rules;
+    /// the default is `false` so that definitions written before this field
+    /// existed keep scoring identically (constitution Article 4). Turn it on
+    /// per party only with the rule text to back it.
+    var outStateWorksHomeStationsOnly: Bool { outStateWorksHomeStationsOnlyRaw ?? false }
+    private let outStateWorksHomeStationsOnlyRaw: Bool?
+
     /// Final-score multipliers by entry category (NJQP power; MDC power ×
     /// station category). Keys are the Cabrillo raw values ("QRP", "ROVER"…).
     let scoreMultipliers: ScoreMultipliers?
@@ -220,6 +234,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case excludedStateTokensRaw = "excludedStateTokens"
         case provincesRaw = "provinces"
         case exchangeIncludesRSTRaw = "exchangeIncludesRST"
+        case outStateWorksHomeStationsOnlyRaw = "outStateWorksHomeStationsOnly"
     }
 }
 

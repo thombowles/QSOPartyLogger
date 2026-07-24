@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "id": "mdc",
+  "name": "Maryland-DC QSO Party",
+  "cabrilloContest": "MDC-QSO-PARTY",
+  "homeState": "MD",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 3,
+    "digital": 0
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "W3VPR",
+      "points": 50,
+      "scope": "once"
+    },
+    {
+      "type": "sweepTiers",
+      "tiers": [
+        {
+          "count": 13,
+          "points": 250
+        },
+        {
+          "count": 25,
+          "points": 500
+        }
+      ]
+    }
+  ],
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "excludedStateTokens": [
+    "MD",
+    "DC"
+  ],
+  "exchangeIncludesRST": false,
+  "outStateWorksHomeStationsOnly": true,
+  "scoreMultipliers": {
+    "power": {
+      "QRP": 3,
+      "LOW": 2,
+      "HIGH": 1
+    },
+    "stationCategory": {
+      "ROVER": 4,
+      "PORTABLE": 3,
+      "MOBILE": 2,
+      "FIXED": 1
+    }
+  },
+  "schedule": [
+    {
+      "start": "2026-08-08T14:00:00Z",
+      "end": "2026-08-09T04:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ALY",
+      "name": "Allegany"
+    },
+    {
+      "abbr": "ANA",
+      "name": "Anne Arundel"
+    },
+    {
+      "abbr": "BAL",
+      "name": "Baltimore City"
+    },
+    {
+      "abbr": "BCT",
+      "name": "Baltimore County"
+    },
+    {
+      "abbr": "CLV",
+      "name": "Calvert"
+    },
+    {
+      "abbr": "CLN",
+      "name": "Caroline"
+    },
+    {
+      "abbr": "CRL",
+      "name": "Carroll"
+    },
+    {
+      "abbr": "CEC",
+      "name": "Cecil"
+    },
+    {
+      "abbr": "CHS",
+      "name": "Charles"
+    },
+    {
+      "abbr": "DRC",
+      "name": "Dorchester"
+    },
+    {
+      "abbr": "FRD",
+      "name": "Frederick"
+    },
+    {
+      "abbr": "GAR",
+      "name": "Garrett"
+    },
+    {
+      "abbr": "HFD",
+      "name": "Harford"
+    },
+    {
+      "abbr": "HWD",
+      "name": "Howard"
+    },
+    {
+      "abbr": "KEN",
+      "name": "Kent"
+    },
+    {
+      "abbr": "MON",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "PGE",
+      "name": "Prince George's"
+    },
+    {
+      "abbr": "QAN",
+      "name": "Queen Anne's"
+    },
+    {
+      "abbr": "STM",
+      "name": "St. Mary's"
+    },
+    {
+      "abbr": "SMR",
+      "name": "Somerset"
+    },
+    {
+      "abbr": "TAL",
+      "name": "Talbot"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WIC",
+      "name": "Wicomico"
+    },
+    {
+      "abbr": "WRC",
+      "name": "Worcester"
+    },
+    {
+      "abbr": "WDC",
+      "name": "Washington DC"
+    }
+  ],
+  "notes": "Verified against the official rules PDF 'The Fun Contest Maryland-DC QSO Party Rules', Revised 06 AUG 2024 v.5 (w3vpr.org, fetched 2026-07-23; sponsor page re-checked 2026-07-24 — still the current revision, both bonuses confirmed). Entities are rules Table 1: 23 MD counties + Baltimore City (BAL, separate from Baltimore County BCT) + Washington DC (WDC). Exchange is call + location only, no RST. CW 3 pts / phone 1 pt; no digital modes exist in this contest. Mults count once for the contest, never per band or mode. Maryland is never a state mult (rules 10i); AK/HI count as states only, never DXCC (10h/16d). Non-MDC entrants score only contacts with MD/DC stations (10b). Power and station category are final-score multipliers (15a/15b); the rules' 'Club' category has no Cabrillo CATEGORY-STATION equivalent and multiplies by 1 exactly as FIXED does. The sponsor has not yet published 2026 dates; the window is derived from rules §2 ('second Saturday in August at 1400 UTC ... ending at 0400 Sunday UTC'), which for 2026 is Aug 8 — cross-checked against WA7BNM contest #86 and the State QSO Party Challenge calendar, both of which agree. Cabrillo CONTEST value MDC-QSO-PARTY per WA7BNM's registry; the sponsor's rules require Cabrillo but do not print the header token. Not modeled: cross-mode contacts are prohibited (10e), and net/repeater/satellite QSOs are void (10d/10j)."
+}

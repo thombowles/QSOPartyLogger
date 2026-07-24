@@ -20,8 +20,13 @@ enum ScoreEngine {
         var multiplierKeys: Set<MultKey> = []
         var bonusPoints = 0
         var categoryFactor = 1
+        var outOfScopeCount = 0
         var dupeRowIDs: Set<UUID> = []
         var invalidRowIDs: Set<UUID> = []
+        /// Rows the party gives this entrant no credit for at all — an
+        /// out-of-state log's contacts with other out-of-state stations, where
+        /// the rules restrict credit to home-state stations.
+        var outOfScopeRowIDs: Set<UUID> = []
         /// Rows that added at least one new multiplier when first logged.
         var newMultRowIDs: Set<UUID> = []
 
@@ -47,15 +52,21 @@ enum ScoreEngine {
         var result = ScoreBreakdown()
         let rows = log.qsos.sortedChronologically()
         let allowedModes = Set(party.allowedModeClasses)
+        let countyAbbrs = Set(party.counties.map(\.abbr))
 
         // Invalid-mode rows are not contest QSOs at all (WA: "we cannot
         // accept" digital) — they never enter dupe/point/mult accounting.
-        let contestRows = rows.filter { allowedModes.contains($0.modeClass) }
-        result.invalidRowIDs = Set(rows.map(\.id)).subtracting(contestRows.map(\.id))
+        let inAllowedMode = rows.filter { allowedModes.contains($0.modeClass) }
+        result.invalidRowIDs = Set(rows.map(\.id)).subtracting(inAllowedMode.map(\.id))
         result.invalidModeCount = result.invalidRowIDs.count
 
+        // Neither are contacts the rules give this entrant no credit for
+        // (MDC 10b: non-MDC stations may only work MD/DC).
+        let contestRows = inScopeRows(inAllowedMode, log: log, party: party, countyAbbrs: countyAbbrs)
+        result.outOfScopeRowIDs = Set(inAllowedMode.map(\.id)).subtracting(contestRows.map(\.id))
+        result.outOfScopeCount = result.outOfScopeRowIDs.count
+
         let firstIDs = DupeChecker.firstOccurrenceIDs(contestRows)
-        let countyAbbrs = Set(party.counties.map(\.abbr))
         let rule = log.myLocation.isInState ? party.multipliers.inState : party.multipliers.outState
         let wantedClasses = Set(rule.classes)
         var dxCount = 0
@@ -110,6 +121,18 @@ enum ScoreEngine {
             breakdown: result
         )
         return result
+    }
+
+    /// Drops contacts an out-of-state entrant earns no credit for, in parties
+    /// that restrict them to home-state stations. A no-op everywhere else.
+    private static func inScopeRows(
+        _ rows: [QSO],
+        log: ContestLog,
+        party: PartyDefinition,
+        countyAbbrs: Set<String>
+    ) -> [QSO] {
+        guard party.outStateWorksHomeStationsOnly, !log.myLocation.isInState else { return rows }
+        return rows.filter { countyAbbrs.contains($0.theirLoc.uppercased()) }
     }
 
     private static func scopeComponent(_ scope: PartyDefinition.CountScope, row: QSO) -> String {
@@ -227,7 +250,12 @@ enum ScoreEngine {
     /// the sidebar's "QSOs by band" matrix.
     static func bandModeCounts(log: ContestLog, party: PartyDefinition) -> [Band: [ModeClass: Int]] {
         let allowed = Set(party.allowedModeClasses)
-        let rows = log.qsos.sortedChronologically().filter { allowed.contains($0.modeClass) }
+        let rows = inScopeRows(
+            log.qsos.sortedChronologically().filter { allowed.contains($0.modeClass) },
+            log: log,
+            party: party,
+            countyAbbrs: Set(party.counties.map(\.abbr))
+        )
         let firstIDs = DupeChecker.firstOccurrenceIDs(rows)
         var out: [Band: [ModeClass: Int]] = [:]
         for row in rows where firstIDs.contains(row.id) {

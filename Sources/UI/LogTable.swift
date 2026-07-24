@@ -85,6 +85,11 @@ struct LogTable: View {
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(.red)
                     }
+                    if score.outOfScopeRowIDs.contains(q.id) {
+                        Text("NO CREDIT")
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(.red)
+                    }
                     if score.newMultRowIDs.contains(q.id) {
                         Text("MULT")
                             .font(.caption2.weight(.bold))
@@ -114,7 +119,9 @@ struct LogTable: View {
 
     private func pointsText(_ q: QSO) -> String {
         guard let party else { return "-" }
-        if score.dupeRowIDs.contains(q.id) || score.invalidRowIDs.contains(q.id) { return "0" }
+        if score.dupeRowIDs.contains(q.id)
+            || score.invalidRowIDs.contains(q.id)
+            || score.outOfScopeRowIDs.contains(q.id) { return "0" }
         return String(party.points.points(for: q.modeClass))
     }
 }

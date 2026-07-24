@@ -33,26 +33,29 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-| # | Party | 2026 dates (UTC, provisional) | Research | Status |
-| --- | --- | --- | --- | --- |
-| 1 | **Maryland-DC** | Aug 8 1400Z → Aug 9 0359Z | [`mdcqp_rules.md`](../research/mdcqp_rules.md) + [`mdc_rules_2024.txt`](../research/mdc_rules_2024.txt) | research banked |
-| 2 | **Hawaii** | Aug 22 1600Z → Aug 24 0200Z | — ⚠️ | not started |
-| 3 | **Ohio** | Aug 22 1600Z → Aug 23 0400Z | [`ohqp_rules_text.txt`](../research/ohqp_rules_text.txt), [`ohqp_mults_ohio.html`](../research/ohqp_mults_ohio.html) | raw sources only |
-| — | ~~Kansas~~ | Aug 29 1400Z → Aug 30 0200Z; Aug 30 1400–2000Z | official PDFs | **done** |
-| 4 | **Tennessee** | Sep 6 1700Z → Sep 7 0300Z | [`tnqp_rules.md`](../research/tnqp_rules.md) + [`tnqp_counties.tsv`](../research/tnqp_counties.tsv) | research banked |
-| 5 | **Colorado** | Sep 12 1400Z → Sep 13 0359Z | [`coqp_src_rules.txt`](../research/coqp_src_rules.txt), [`coqp_src_counties.txt`](../research/coqp_src_counties.txt) | raw sources only |
-| 6 | **New Jersey** | Sep 19 1400Z → Sep 20 0200Z ⚠️ **date disputed** | [`njqp_2026rules.txt`](../research/njqp_2026rules.txt) | raw sources only |
-| 7 | **Iowa** | Sep 19 1400Z → Sep 20 0200Z | [`iaqp_page.txt`](../research/iaqp_page.txt), [`iaqp_county_list.txt`](../research/iaqp_county_list.txt), [`iaqp_state_prov.txt`](../research/iaqp_state_prov.txt) | raw sources only |
-| 8 | **New Hampshire** | Sep 19 1600Z → Sep 20 0400Z; Sep 20 1200–2200Z | [`nhqp_rules.md`](../research/nhqp_rules.md) + [`nhqp_counties.tsv`](../research/nhqp_counties.tsv) | research banked |
-| 9 | **Washington Salmon Run** | Sep 19 1600Z → Sep 20 0700Z; Sep 20 1600–2400Z | [`warun_rules.md`](../research/warun_rules.md) + [`warun_counties.tsv`](../research/warun_counties.tsv) | research banked |
-| — | ~~Texas~~ | Sep 19 1400Z → Sep 20 0200Z; Sep 20 1400–2000Z | [`tqp_verify.md`](../research/tqp_verify.md) | **done** (`verified: partial`) |
-| 10 | **Maine** | Sep 26 1200Z → Sep 27 1200Z ⚠️ **not on the Challenge calendar** | — | not started |
-| 11 | **California** | Oct 3 1600Z → Oct 4 2200Z | — | not started |
-| 12 | **Arizona** | Oct 10 1500Z → Oct 11 0500Z | — | not started |
-| 13 | **Pennsylvania** | Oct 10 1600Z → Oct 11 0400Z; Oct 11 1300–2200Z | — | not started |
-| 14 | **South Dakota** | Oct 10 1800Z → Oct 11 1800Z | — | not started |
-| 15 | **New York** | Oct 17 1400Z → Oct 18 0200Z | — | not started |
-| 16 | **Illinois** | Oct 18 1700Z → Oct 19 0100Z | — | not started |
+**14 remaining** of the 16 in scope; 4 parties bundled (ALQP, MDC, KSQP, TQP).
+Rows are in contest-date order — the top unstruck row is what's next.
+
+| Party | 2026 dates (UTC, provisional) | Research | Status |
+| --- | --- | --- | --- |
+| ~~Maryland-DC~~ | Aug 8 1400Z → Aug 9 0400Z | [`mdcqp_rules.md`](../research/mdcqp_rules.md) + [`mdc_rules_2024.txt`](../research/mdc_rules_2024.txt) | **done** |
+| **Hawaii** | Aug 22 1600Z → Aug 24 0200Z | — ⚠️ | not started |
+| **Ohio** | Aug 22 1600Z → Aug 23 0400Z | [`ohqp_rules_text.txt`](../research/ohqp_rules_text.txt), [`ohqp_mults_ohio.html`](../research/ohqp_mults_ohio.html) | raw sources only |
+| ~~Kansas~~ | Aug 29 1400Z → Aug 30 0200Z; Aug 30 1400–2000Z | official PDFs | **done** |
+| **Tennessee** | Sep 6 1700Z → Sep 7 0300Z | [`tnqp_rules.md`](../research/tnqp_rules.md) + [`tnqp_counties.tsv`](../research/tnqp_counties.tsv) | research banked |
+| **Colorado** | Sep 12 1400Z → Sep 13 0359Z | [`coqp_src_rules.txt`](../research/coqp_src_rules.txt), [`coqp_src_counties.txt`](../research/coqp_src_counties.txt) | raw sources only |
+| **New Jersey** | Sep 19 1400Z → Sep 20 0200Z ⚠️ **date disputed** | [`njqp_2026rules.txt`](../research/njqp_2026rules.txt) | raw sources only |
+| **Iowa** | Sep 19 1400Z → Sep 20 0200Z | [`iaqp_page.txt`](../research/iaqp_page.txt), [`iaqp_county_list.txt`](../research/iaqp_county_list.txt), [`iaqp_state_prov.txt`](../research/iaqp_state_prov.txt) | raw sources only |
+| **New Hampshire** | Sep 19 1600Z → Sep 20 0400Z; Sep 20 1200–2200Z | [`nhqp_rules.md`](../research/nhqp_rules.md) + [`nhqp_counties.tsv`](../research/nhqp_counties.tsv) | research banked |
+| **Washington Salmon Run** | Sep 19 1600Z → Sep 20 0700Z; Sep 20 1600–2400Z | [`warun_rules.md`](../research/warun_rules.md) + [`warun_counties.tsv`](../research/warun_counties.tsv) | research banked |
+| ~~Texas~~ | Sep 19 1400Z → Sep 20 0200Z; Sep 20 1400–2000Z | [`tqp_verify.md`](../research/tqp_verify.md) | **done** (`verified: partial`) |
+| **Maine** | Sep 26 1200Z → Sep 27 1200Z ⚠️ **not on the Challenge calendar** | — | not started |
+| **California** | Oct 3 1600Z → Oct 4 2200Z | — | not started |
+| **Arizona** | Oct 10 1500Z → Oct 11 0500Z | — | not started |
+| **Pennsylvania** | Oct 10 1600Z → Oct 11 0400Z; Oct 11 1300–2200Z | — | not started |
+| **South Dakota** | Oct 10 1800Z → Oct 11 1800Z | — | not started |
+| **New York** | Oct 17 1400Z → Oct 18 0200Z | — | not started |
+| **Illinois** | Oct 18 1700Z → Oct 19 0100Z | — | not started |
 
 ## Open questions carried by this worklist
 
@@ -77,6 +80,18 @@ dates below decide *build order only*.
 
 ## Also outstanding
 
+- **Review `outStateWorksHomeStationsOnly` for the parties that predate it.**
+  MDC introduced this field (rules 10b: non-MDC entrants earn credit only for
+  MD/DC contacts). It defaults to `false` so ALQP/KSQP/TQP keep scoring exactly
+  as before, per Article 4 — but most state parties word the same restriction
+  somewhere. When each is next re-verified, check its rule text and turn the
+  field on where the sponsor says so.
+- **Generator consolidation.** `gen_parties.py` is not runnable: it reads
+  `KSQP-Mults.txt`, `TX_county_abbrevs.txt`, and
+  `research/alqp_counties_text.txt`, none of which are committed. `gen_mdc.py`
+  is self-contained and runs from committed data — the pattern to follow. Folding
+  the older three into runnable per-party generators is a refactor and belongs in
+  its own commit (Article 4).
 - **TQP Cabrillo name** — `tqp.json` ships the `TX-QSO-PARTY` alias while
   `tqp_verify.md` concludes `TXQP` is the safe export value
   ([Appendix A.3](../CONSTITUTION.md#appendix-a--known-violations)). Resolve

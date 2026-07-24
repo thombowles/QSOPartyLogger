@@ -12,15 +12,24 @@ Built for KE5CW. Bundled parties, all with official county data:
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
+- **Maryland-DC QSO Party** (Aug 8, 2026) — verified against the official
+  rules PDF (rev. 06 AUG 2024 v.5): 25 entities including Baltimore City
+  separate from Baltimore County and DC as `WDC`, exchange is call +
+  location with **no RST**, CW 3 / phone 1, mults once for the contest,
+  Maryland never counts as a state, power × station-category final-score
+  multipliers, W3VPR +50 and a tiered 250/500 jurisdiction sweep.
 - **Kansas QSO Party** (Aug 29–30, 2026) — verified against the official 2026
   rules; 1×1 word tracker included.
 - **Texas QSO Party** (Sep 19–20, 2026) — rules verified against txqp.net
   2026 (bands: all except 60/30/17/12; Cabrillo name `TXQP` per WA7BNM;
   robot site not yet live).
 
-Research for seven more (MD-DC, Hawaii, Ohio, Tennessee, Colorado, Iowa,
-New Jersey, New Hampshire, WA Salmon Run) is complete and banked in the
-project notes; definitions land as they're built.
+The remaining 2026 parties are tracked in
+[`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md) in contest-date
+order — the season ends with Illinois on Oct 18. Seven of them have official
+rules research banked in `docs/research/`; the rest start from the sponsors'
+sites. Adding a party is governed by
+[`docs/CONSTITUTION.md`](docs/CONSTITUTION.md).
 
 ## Features
 
@@ -233,7 +242,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 220 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 236 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -247,5 +256,13 @@ typed QSY commands, and keyer timing.
 - TQP: rules from txqp.net; counties from the official `txcounty.zip`
   (2014 revision, current as of fetch). Marked `verified: partial` — confirm
   band list and current-year details before submitting.
+- MDC: rules + Table 1 entities from the sponsor's official PDF
+  ("The Fun Contest Maryland-DC QSO Party Rules", rev. 06 AUG 2024 v.5,
+  w3vpr.org) fetched 2026-07-23, sponsor page re-checked 2026-07-24. Entities
+  generated from the committed rules text by
+  [`docs/research/gen_mdc.py`](docs/research/gen_mdc.py) — never hand-typed.
+  The sponsor has not published 2026 dates; the Aug 8 window is derived from
+  the rules' "second Saturday in August" formula and cross-checked against two
+  calendars.
 - DC is accepted as a loggable state token (counted with states); strictly,
   KSQP rules enumerate 50 states — sponsors' checkers accept DC.

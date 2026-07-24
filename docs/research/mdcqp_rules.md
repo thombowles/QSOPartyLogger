@@ -21,7 +21,7 @@ Researched 2026-07-23. Sponsor: Anne Arundel Radio Club (AARC), W3VPR.
 ## Exchange
 
 - S1 §7: "You give your Call Sign and Location to each contacted station." (No RST, no serial number.)
-  - MD/DC stations: "For MDC stations, use your county or city as indicated below in Table 1." (25 entities; see mdcqp_counties.tsv)
+  - MD/DC stations: "For MDC stations, use your county or city as indicated below in Table 1." (25 entities; parsed straight out of Table 1 in `mdc_rules_2024.txt` by `gen_mdc.py` — there is no separate counties TSV for this party.)
   - US/Canada non-MDC: "For Canadian and non-MDC stations, use your province or state."
   - DX: "For stations outside of Canada and the United States, use your country."
 
