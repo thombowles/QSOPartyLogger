@@ -1,0 +1,479 @@
+{
+  "schemaVersion": 1,
+  "id": "ksqp",
+  "name": "Kansas QSO Party",
+  "cabrilloContest": "KS-QSO-PARTY",
+  "homeState": "KS",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 3,
+    "digital": 3
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "KS0KS",
+      "points": 100
+    }
+  ],
+  "oneByOne": {
+    "words": [
+      "KANSAS",
+      "QSOPARTY",
+      "SUNFLOWER",
+      "YELLOWBRICKROAD"
+    ],
+    "wildcard": "KS0KS"
+  },
+  "counties": [
+    {
+      "abbr": "ALL",
+      "name": "Allen"
+    },
+    {
+      "abbr": "AND",
+      "name": "Anderson"
+    },
+    {
+      "abbr": "ATC",
+      "name": "Atchison"
+    },
+    {
+      "abbr": "BAR",
+      "name": "Barber"
+    },
+    {
+      "abbr": "BRT",
+      "name": "Barton"
+    },
+    {
+      "abbr": "BOU",
+      "name": "Bourbon"
+    },
+    {
+      "abbr": "BRO",
+      "name": "Brown"
+    },
+    {
+      "abbr": "BUT",
+      "name": "Butler"
+    },
+    {
+      "abbr": "CHS",
+      "name": "Chase"
+    },
+    {
+      "abbr": "CHT",
+      "name": "Chautauqua"
+    },
+    {
+      "abbr": "CHE",
+      "name": "Cherokee"
+    },
+    {
+      "abbr": "CHY",
+      "name": "Cheyenne"
+    },
+    {
+      "abbr": "CLK",
+      "name": "Clark"
+    },
+    {
+      "abbr": "CLY",
+      "name": "Clay"
+    },
+    {
+      "abbr": "CLO",
+      "name": "Cloud"
+    },
+    {
+      "abbr": "COF",
+      "name": "Coffey"
+    },
+    {
+      "abbr": "COM",
+      "name": "Comanche"
+    },
+    {
+      "abbr": "COW",
+      "name": "Cowley"
+    },
+    {
+      "abbr": "CRA",
+      "name": "Crawford"
+    },
+    {
+      "abbr": "DEC",
+      "name": "Decatur"
+    },
+    {
+      "abbr": "DIC",
+      "name": "Dickinson"
+    },
+    {
+      "abbr": "DON",
+      "name": "Doniphan"
+    },
+    {
+      "abbr": "DOU",
+      "name": "Douglas"
+    },
+    {
+      "abbr": "EDW",
+      "name": "Edwards"
+    },
+    {
+      "abbr": "ELK",
+      "name": "Elk"
+    },
+    {
+      "abbr": "ELL",
+      "name": "Ellis"
+    },
+    {
+      "abbr": "ELS",
+      "name": "Ellsworth"
+    },
+    {
+      "abbr": "FIN",
+      "name": "Finney"
+    },
+    {
+      "abbr": "FOR",
+      "name": "Ford"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "GEA",
+      "name": "Geary"
+    },
+    {
+      "abbr": "GOV",
+      "name": "Gove"
+    },
+    {
+      "abbr": "GRM",
+      "name": "Graham"
+    },
+    {
+      "abbr": "GRT",
+      "name": "Grant"
+    },
+    {
+      "abbr": "GRY",
+      "name": "Gray"
+    },
+    {
+      "abbr": "GLY",
+      "name": "Greeley"
+    },
+    {
+      "abbr": "GRE",
+      "name": "Greenwood"
+    },
+    {
+      "abbr": "HAM",
+      "name": "Hamilton"
+    },
+    {
+      "abbr": "HPR",
+      "name": "Harper"
+    },
+    {
+      "abbr": "HVY",
+      "name": "Harvey"
+    },
+    {
+      "abbr": "HAS",
+      "name": "Haskell"
+    },
+    {
+      "abbr": "HOG",
+      "name": "Hodgeman"
+    },
+    {
+      "abbr": "JAC",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JEW",
+      "name": "Jewell"
+    },
+    {
+      "abbr": "JOH",
+      "name": "Johnson"
+    },
+    {
+      "abbr": "KEA",
+      "name": "Kearny"
+    },
+    {
+      "abbr": "KIN",
+      "name": "Kingman"
+    },
+    {
+      "abbr": "KIO",
+      "name": "Kiowa"
+    },
+    {
+      "abbr": "LAB",
+      "name": "Labette"
+    },
+    {
+      "abbr": "LAN",
+      "name": "Lane"
+    },
+    {
+      "abbr": "LEA",
+      "name": "Leavenworth"
+    },
+    {
+      "abbr": "LCN",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Linn"
+    },
+    {
+      "abbr": "LOG",
+      "name": "Logan"
+    },
+    {
+      "abbr": "LYO",
+      "name": "Lyon"
+    },
+    {
+      "abbr": "MRN",
+      "name": "Marion"
+    },
+    {
+      "abbr": "MSH",
+      "name": "Marshall"
+    },
+    {
+      "abbr": "MCP",
+      "name": "McPherson"
+    },
+    {
+      "abbr": "MEA",
+      "name": "Meade"
+    },
+    {
+      "abbr": "MIA",
+      "name": "Miami"
+    },
+    {
+      "abbr": "MIT",
+      "name": "Mitchell"
+    },
+    {
+      "abbr": "MGY",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "MOR",
+      "name": "Morris"
+    },
+    {
+      "abbr": "MTN",
+      "name": "Morton"
+    },
+    {
+      "abbr": "NEM",
+      "name": "Nemaha"
+    },
+    {
+      "abbr": "NEO",
+      "name": "Neosho"
+    },
+    {
+      "abbr": "NES",
+      "name": "Ness"
+    },
+    {
+      "abbr": "NOR",
+      "name": "Norton"
+    },
+    {
+      "abbr": "OSA",
+      "name": "Osage"
+    },
+    {
+      "abbr": "OSB",
+      "name": "Osborne"
+    },
+    {
+      "abbr": "OTT",
+      "name": "Ottawa"
+    },
+    {
+      "abbr": "PAW",
+      "name": "Pawnee"
+    },
+    {
+      "abbr": "PHI",
+      "name": "Phillips"
+    },
+    {
+      "abbr": "POT",
+      "name": "Pottawatomie"
+    },
+    {
+      "abbr": "PRA",
+      "name": "Pratt"
+    },
+    {
+      "abbr": "RAW",
+      "name": "Rawlins"
+    },
+    {
+      "abbr": "REN",
+      "name": "Reno"
+    },
+    {
+      "abbr": "REP",
+      "name": "Republic"
+    },
+    {
+      "abbr": "RIC",
+      "name": "Rice"
+    },
+    {
+      "abbr": "RIL",
+      "name": "Riley"
+    },
+    {
+      "abbr": "ROO",
+      "name": "Rooks"
+    },
+    {
+      "abbr": "RUS",
+      "name": "Rush"
+    },
+    {
+      "abbr": "RSL",
+      "name": "Russell"
+    },
+    {
+      "abbr": "SAL",
+      "name": "Saline"
+    },
+    {
+      "abbr": "SCO",
+      "name": "Scott"
+    },
+    {
+      "abbr": "SED",
+      "name": "Sedgwick"
+    },
+    {
+      "abbr": "SEW",
+      "name": "Seward"
+    },
+    {
+      "abbr": "SHA",
+      "name": "Shawnee"
+    },
+    {
+      "abbr": "SHE",
+      "name": "Sheridan"
+    },
+    {
+      "abbr": "SMN",
+      "name": "Sherman"
+    },
+    {
+      "abbr": "SMI",
+      "name": "Smith"
+    },
+    {
+      "abbr": "STA",
+      "name": "Stafford"
+    },
+    {
+      "abbr": "STN",
+      "name": "Stanton"
+    },
+    {
+      "abbr": "STE",
+      "name": "Stevens"
+    },
+    {
+      "abbr": "SUM",
+      "name": "Sumner"
+    },
+    {
+      "abbr": "THO",
+      "name": "Thomas"
+    },
+    {
+      "abbr": "TRE",
+      "name": "Trego"
+    },
+    {
+      "abbr": "WAB",
+      "name": "Wabaunsee"
+    },
+    {
+      "abbr": "WAL",
+      "name": "Wallace"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WIC",
+      "name": "Wichita"
+    },
+    {
+      "abbr": "WIL",
+      "name": "Wilson"
+    },
+    {
+      "abbr": "WOO",
+      "name": "Woodson"
+    },
+    {
+      "abbr": "WYA",
+      "name": "Wyandotte"
+    }
+  ],
+  "notes": "Verified against official 2026 rules (ksqsoparty.org, fetched 2026-07-23). Counties from official KSQP-Mults PDF."
+}

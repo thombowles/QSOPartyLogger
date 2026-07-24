@@ -1,0 +1,90 @@
+name: QSOPartyLogger
+options:
+  bundleIdPrefix: org.b5n
+  deploymentTarget:
+    macOS: "15.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "15.0"
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: "-"
+    DEVELOPMENT_TEAM: ""
+    ENABLE_HARDENED_RUNTIME: NO
+targets:
+  QSOPartyLogger:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources
+      - path: Resources/Parties
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.b5n.QSOPartyLogger
+        CODE_SIGN_ENTITLEMENTS: Resources/QSOPartyLogger.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Tom Bowles, KE5CW"
+        INFOPLIST_KEY_NSPrincipalClass: NSApplication
+        INFOPLIST_KEY_CFBundleDisplayName: "QSO Party Logger"
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0.0
+        SWIFT_EMIT_LOC_STRINGS: YES
+    info:
+      path: Resources/Info.plist
+      properties:
+        CFBundleName: QSOPartyLogger
+        CFBundleDisplayName: QSO Party Logger
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+        LSMinimumSystemVersion: "15.0"
+        NSHumanReadableCopyright: "© 2026 Tom Bowles, KE5CW"
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: QSO Party Log
+            CFBundleTypeRole: Editor
+            LSHandlerRank: Owner
+            LSItemContentTypes:
+              - org.b5n.qsopartylogger.log
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: org.b5n.qsopartylogger.log
+            UTTypeDescription: QSO Party Log
+            UTTypeConformsTo:
+              - public.data
+              - public.json
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - qplog
+    entitlements:
+      path: Resources/QSOPartyLogger.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.device.serial: true
+        com.apple.security.device.usb: true
+        com.apple.security.files.user-selected.read-write: true
+  QSOPartyLoggerTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests
+    dependencies:
+      - target: QSOPartyLogger
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.b5n.QSOPartyLoggerTests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/QSOPartyLogger.app/Contents/MacOS/QSOPartyLogger"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+schemes:
+  QSOPartyLogger:
+    build:
+      targets:
+        QSOPartyLogger: all
+        QSOPartyLoggerTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - QSOPartyLoggerTests

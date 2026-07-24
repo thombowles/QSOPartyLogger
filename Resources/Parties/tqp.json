@@ -1,0 +1,1069 @@
+{
+  "schemaVersion": 1,
+  "id": "tqp",
+  "name": "Texas QSO Party",
+  "cabrilloContest": "TX-QSO-PARTY",
+  "homeState": "TX",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 3,
+    "digital": 3
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "state",
+        "county",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "mobileCountyCount",
+      "per": 5,
+      "points": 500
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ANDE",
+      "name": "Anderson"
+    },
+    {
+      "abbr": "ANDR",
+      "name": "Andrews"
+    },
+    {
+      "abbr": "ANGE",
+      "name": "Angelina"
+    },
+    {
+      "abbr": "ARAN",
+      "name": "Aransas"
+    },
+    {
+      "abbr": "ARCH",
+      "name": "Archer"
+    },
+    {
+      "abbr": "ARMS",
+      "name": "Armstrong"
+    },
+    {
+      "abbr": "ATAS",
+      "name": "Atascosa"
+    },
+    {
+      "abbr": "AUST",
+      "name": "Austin"
+    },
+    {
+      "abbr": "BAIL",
+      "name": "Bailey"
+    },
+    {
+      "abbr": "BAND",
+      "name": "Bandera"
+    },
+    {
+      "abbr": "BAST",
+      "name": "Bastrop"
+    },
+    {
+      "abbr": "BAYL",
+      "name": "Baylor"
+    },
+    {
+      "abbr": "BEE",
+      "name": "Bee"
+    },
+    {
+      "abbr": "BELL",
+      "name": "Bell"
+    },
+    {
+      "abbr": "BEXA",
+      "name": "Bexar"
+    },
+    {
+      "abbr": "BLAN",
+      "name": "Blanco"
+    },
+    {
+      "abbr": "BORD",
+      "name": "Borden"
+    },
+    {
+      "abbr": "BOSQ",
+      "name": "Bosque"
+    },
+    {
+      "abbr": "BOWI",
+      "name": "Bowie"
+    },
+    {
+      "abbr": "BZIA",
+      "name": "Brazoria"
+    },
+    {
+      "abbr": "BZOS",
+      "name": "Brazos"
+    },
+    {
+      "abbr": "BREW",
+      "name": "Brewster"
+    },
+    {
+      "abbr": "BRIS",
+      "name": "Briscoe"
+    },
+    {
+      "abbr": "BROO",
+      "name": "Brooks"
+    },
+    {
+      "abbr": "BROW",
+      "name": "Brown"
+    },
+    {
+      "abbr": "BURL",
+      "name": "Burleson"
+    },
+    {
+      "abbr": "BURN",
+      "name": "Burnet"
+    },
+    {
+      "abbr": "CALD",
+      "name": "Caldwell"
+    },
+    {
+      "abbr": "CALH",
+      "name": "Calhoun"
+    },
+    {
+      "abbr": "CALL",
+      "name": "Callahan"
+    },
+    {
+      "abbr": "CMRN",
+      "name": "Cameron"
+    },
+    {
+      "abbr": "CAMP",
+      "name": "Camp"
+    },
+    {
+      "abbr": "CARS",
+      "name": "Carson"
+    },
+    {
+      "abbr": "CASS",
+      "name": "Cass"
+    },
+    {
+      "abbr": "CAST",
+      "name": "Castro"
+    },
+    {
+      "abbr": "CHAM",
+      "name": "Chambers"
+    },
+    {
+      "abbr": "CHER",
+      "name": "Cherokee"
+    },
+    {
+      "abbr": "CHIL",
+      "name": "Childress"
+    },
+    {
+      "abbr": "CLAY",
+      "name": "Clay"
+    },
+    {
+      "abbr": "COCH",
+      "name": "Cochran"
+    },
+    {
+      "abbr": "COKE",
+      "name": "Coke"
+    },
+    {
+      "abbr": "COLE",
+      "name": "Coleman"
+    },
+    {
+      "abbr": "COLN",
+      "name": "Collin"
+    },
+    {
+      "abbr": "COLW",
+      "name": "Collingsworth"
+    },
+    {
+      "abbr": "COLO",
+      "name": "Colorado"
+    },
+    {
+      "abbr": "COML",
+      "name": "Comal"
+    },
+    {
+      "abbr": "COMA",
+      "name": "Comanche"
+    },
+    {
+      "abbr": "CONC",
+      "name": "Concho"
+    },
+    {
+      "abbr": "COOK",
+      "name": "Cooke"
+    },
+    {
+      "abbr": "CORY",
+      "name": "Coryell"
+    },
+    {
+      "abbr": "COTT",
+      "name": "Cottle"
+    },
+    {
+      "abbr": "CRAN",
+      "name": "Crane"
+    },
+    {
+      "abbr": "CROC",
+      "name": "Crockett"
+    },
+    {
+      "abbr": "CROS",
+      "name": "Crosby"
+    },
+    {
+      "abbr": "CULB",
+      "name": "Culberson"
+    },
+    {
+      "abbr": "DALM",
+      "name": "Dallam"
+    },
+    {
+      "abbr": "DALS",
+      "name": "Dallas"
+    },
+    {
+      "abbr": "DAWS",
+      "name": "Dawson"
+    },
+    {
+      "abbr": "DSMI",
+      "name": "Deaf Smith"
+    },
+    {
+      "abbr": "DELT",
+      "name": "Delta"
+    },
+    {
+      "abbr": "DENT",
+      "name": "Denton"
+    },
+    {
+      "abbr": "DEWI",
+      "name": "Dewitt"
+    },
+    {
+      "abbr": "DICK",
+      "name": "Dickens"
+    },
+    {
+      "abbr": "DIMM",
+      "name": "Dimmit"
+    },
+    {
+      "abbr": "DONL",
+      "name": "Donley"
+    },
+    {
+      "abbr": "DUVA",
+      "name": "Duval"
+    },
+    {
+      "abbr": "EAST",
+      "name": "Eastland"
+    },
+    {
+      "abbr": "ECTO",
+      "name": "Ector"
+    },
+    {
+      "abbr": "EDWA",
+      "name": "Edwards"
+    },
+    {
+      "abbr": "EPAS",
+      "name": "El Paso"
+    },
+    {
+      "abbr": "ELLI",
+      "name": "Ellis"
+    },
+    {
+      "abbr": "ERAT",
+      "name": "Erath"
+    },
+    {
+      "abbr": "FALL",
+      "name": "Falls"
+    },
+    {
+      "abbr": "FANN",
+      "name": "Fannin"
+    },
+    {
+      "abbr": "FAYE",
+      "name": "Fayette"
+    },
+    {
+      "abbr": "FISH",
+      "name": "Fisher"
+    },
+    {
+      "abbr": "FLOY",
+      "name": "Floyd"
+    },
+    {
+      "abbr": "FOAR",
+      "name": "Foard"
+    },
+    {
+      "abbr": "FBEN",
+      "name": "Fort Bend"
+    },
+    {
+      "abbr": "FRAN",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "FREE",
+      "name": "Freestone"
+    },
+    {
+      "abbr": "FRIO",
+      "name": "Frio"
+    },
+    {
+      "abbr": "GAIN",
+      "name": "Gaines"
+    },
+    {
+      "abbr": "GALV",
+      "name": "Galveston"
+    },
+    {
+      "abbr": "GARZ",
+      "name": "Garza"
+    },
+    {
+      "abbr": "GILL",
+      "name": "Gillespie"
+    },
+    {
+      "abbr": "GLAS",
+      "name": "Glasscock"
+    },
+    {
+      "abbr": "GOLI",
+      "name": "Goliad"
+    },
+    {
+      "abbr": "GONZ",
+      "name": "Gonzales"
+    },
+    {
+      "abbr": "GRAY",
+      "name": "Gray"
+    },
+    {
+      "abbr": "GRSN",
+      "name": "Grayson"
+    },
+    {
+      "abbr": "GREG",
+      "name": "Gregg"
+    },
+    {
+      "abbr": "GRIM",
+      "name": "Grimes"
+    },
+    {
+      "abbr": "GUAD",
+      "name": "Guadalupe"
+    },
+    {
+      "abbr": "HALE",
+      "name": "Hale"
+    },
+    {
+      "abbr": "HALL",
+      "name": "Hall"
+    },
+    {
+      "abbr": "HAMI",
+      "name": "Hamilton"
+    },
+    {
+      "abbr": "HANS",
+      "name": "Hansford"
+    },
+    {
+      "abbr": "HDMN",
+      "name": "Hardeman"
+    },
+    {
+      "abbr": "HRDN",
+      "name": "Hardin"
+    },
+    {
+      "abbr": "HARR",
+      "name": "Harris"
+    },
+    {
+      "abbr": "HRSN",
+      "name": "Harrison"
+    },
+    {
+      "abbr": "HART",
+      "name": "Hartley"
+    },
+    {
+      "abbr": "HASK",
+      "name": "Haskell"
+    },
+    {
+      "abbr": "HAYS",
+      "name": "Hays"
+    },
+    {
+      "abbr": "HEMP",
+      "name": "Hemphill"
+    },
+    {
+      "abbr": "HEND",
+      "name": "Henderson"
+    },
+    {
+      "abbr": "HIDA",
+      "name": "Hidalgo"
+    },
+    {
+      "abbr": "HILL",
+      "name": "Hill"
+    },
+    {
+      "abbr": "HOCK",
+      "name": "Hockley"
+    },
+    {
+      "abbr": "HOOD",
+      "name": "Hood"
+    },
+    {
+      "abbr": "HOPK",
+      "name": "Hopkins"
+    },
+    {
+      "abbr": "HOUS",
+      "name": "Houston"
+    },
+    {
+      "abbr": "HOWA",
+      "name": "Howard"
+    },
+    {
+      "abbr": "HUDS",
+      "name": "Hudspeth"
+    },
+    {
+      "abbr": "HUNT",
+      "name": "Hunt"
+    },
+    {
+      "abbr": "HUTC",
+      "name": "Hutchinson"
+    },
+    {
+      "abbr": "IRIO",
+      "name": "Irion"
+    },
+    {
+      "abbr": "JACK",
+      "name": "Jack"
+    },
+    {
+      "abbr": "JKSN",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JASP",
+      "name": "Jasper"
+    },
+    {
+      "abbr": "JDAV",
+      "name": "Jeff Davis"
+    },
+    {
+      "abbr": "JEFF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JHOG",
+      "name": "Jim Hogg"
+    },
+    {
+      "abbr": "JWEL",
+      "name": "Jim Wells"
+    },
+    {
+      "abbr": "JOHN",
+      "name": "Johnson"
+    },
+    {
+      "abbr": "JONE",
+      "name": "Jones"
+    },
+    {
+      "abbr": "KARN",
+      "name": "Karnes"
+    },
+    {
+      "abbr": "KAUF",
+      "name": "Kaufman"
+    },
+    {
+      "abbr": "KEND",
+      "name": "Kendall"
+    },
+    {
+      "abbr": "KENY",
+      "name": "Kenedy"
+    },
+    {
+      "abbr": "KENT",
+      "name": "Kent"
+    },
+    {
+      "abbr": "KERR",
+      "name": "Kerr"
+    },
+    {
+      "abbr": "KIMB",
+      "name": "Kimble"
+    },
+    {
+      "abbr": "KING",
+      "name": "King"
+    },
+    {
+      "abbr": "KINN",
+      "name": "Kinney"
+    },
+    {
+      "abbr": "KLEB",
+      "name": "Kleberg"
+    },
+    {
+      "abbr": "KNOX",
+      "name": "Knox"
+    },
+    {
+      "abbr": "LSAL",
+      "name": "La Salle"
+    },
+    {
+      "abbr": "LAMA",
+      "name": "Lamar"
+    },
+    {
+      "abbr": "LAMB",
+      "name": "Lamb"
+    },
+    {
+      "abbr": "LAMP",
+      "name": "Lampasas"
+    },
+    {
+      "abbr": "LAVA",
+      "name": "Lavaca"
+    },
+    {
+      "abbr": "LEE",
+      "name": "Lee"
+    },
+    {
+      "abbr": "LEON",
+      "name": "Leon"
+    },
+    {
+      "abbr": "LIBE",
+      "name": "Liberty"
+    },
+    {
+      "abbr": "LIME",
+      "name": "Limestone"
+    },
+    {
+      "abbr": "LIPS",
+      "name": "Lipscomb"
+    },
+    {
+      "abbr": "LIVO",
+      "name": "Live Oak"
+    },
+    {
+      "abbr": "LLAN",
+      "name": "Llano"
+    },
+    {
+      "abbr": "LOVI",
+      "name": "Loving"
+    },
+    {
+      "abbr": "LUBB",
+      "name": "Lubbock"
+    },
+    {
+      "abbr": "LYNN",
+      "name": "Lynn"
+    },
+    {
+      "abbr": "MADI",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MARI",
+      "name": "Marion"
+    },
+    {
+      "abbr": "MART",
+      "name": "Martin"
+    },
+    {
+      "abbr": "MASO",
+      "name": "Mason"
+    },
+    {
+      "abbr": "MATA",
+      "name": "Matagorda"
+    },
+    {
+      "abbr": "MAVE",
+      "name": "Maverick"
+    },
+    {
+      "abbr": "MCUL",
+      "name": "McCulloch"
+    },
+    {
+      "abbr": "MLEN",
+      "name": "McLennan"
+    },
+    {
+      "abbr": "MMUL",
+      "name": "McMullen"
+    },
+    {
+      "abbr": "MEDI",
+      "name": "Medina"
+    },
+    {
+      "abbr": "MENA",
+      "name": "Menard"
+    },
+    {
+      "abbr": "MIDL",
+      "name": "Midland"
+    },
+    {
+      "abbr": "MILA",
+      "name": "Milam"
+    },
+    {
+      "abbr": "MILL",
+      "name": "Mills"
+    },
+    {
+      "abbr": "MITC",
+      "name": "Mitchell"
+    },
+    {
+      "abbr": "MONT",
+      "name": "Montague"
+    },
+    {
+      "abbr": "MGMY",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "MOOR",
+      "name": "Moore"
+    },
+    {
+      "abbr": "MORR",
+      "name": "Morris"
+    },
+    {
+      "abbr": "MOTL",
+      "name": "Motley"
+    },
+    {
+      "abbr": "NACO",
+      "name": "Nacogdoches"
+    },
+    {
+      "abbr": "NAVA",
+      "name": "Navarro"
+    },
+    {
+      "abbr": "NEWT",
+      "name": "Newton"
+    },
+    {
+      "abbr": "NOLA",
+      "name": "Nolan"
+    },
+    {
+      "abbr": "NUEC",
+      "name": "Nueces"
+    },
+    {
+      "abbr": "OCHI",
+      "name": "Ochiltree"
+    },
+    {
+      "abbr": "OLDH",
+      "name": "Oldham"
+    },
+    {
+      "abbr": "ORAN",
+      "name": "Orange"
+    },
+    {
+      "abbr": "PPIN",
+      "name": "Palo Pinto"
+    },
+    {
+      "abbr": "PANO",
+      "name": "Panola"
+    },
+    {
+      "abbr": "PARK",
+      "name": "Parker"
+    },
+    {
+      "abbr": "PARM",
+      "name": "Parmer"
+    },
+    {
+      "abbr": "PECO",
+      "name": "Pecos"
+    },
+    {
+      "abbr": "POLK",
+      "name": "Polk"
+    },
+    {
+      "abbr": "POTT",
+      "name": "Potter"
+    },
+    {
+      "abbr": "PRES",
+      "name": "Presidio"
+    },
+    {
+      "abbr": "RAIN",
+      "name": "Rains"
+    },
+    {
+      "abbr": "RAND",
+      "name": "Randall"
+    },
+    {
+      "abbr": "REAG",
+      "name": "Reagan"
+    },
+    {
+      "abbr": "REAL",
+      "name": "Real"
+    },
+    {
+      "abbr": "RRIV",
+      "name": "Red River"
+    },
+    {
+      "abbr": "REEV",
+      "name": "Reeves"
+    },
+    {
+      "abbr": "REFU",
+      "name": "Refugio"
+    },
+    {
+      "abbr": "ROBE",
+      "name": "Roberts"
+    },
+    {
+      "abbr": "RBSN",
+      "name": "Robertson"
+    },
+    {
+      "abbr": "ROCK",
+      "name": "Rockwall"
+    },
+    {
+      "abbr": "RUNN",
+      "name": "Runnels"
+    },
+    {
+      "abbr": "RUSK",
+      "name": "Rusk"
+    },
+    {
+      "abbr": "SABI",
+      "name": "Sabine"
+    },
+    {
+      "abbr": "SAUG",
+      "name": "San Augustine"
+    },
+    {
+      "abbr": "SJAC",
+      "name": "San Jacinto"
+    },
+    {
+      "abbr": "SPAT",
+      "name": "San Patricio"
+    },
+    {
+      "abbr": "SSAB",
+      "name": "San Saba"
+    },
+    {
+      "abbr": "SCHL",
+      "name": "Schleicher"
+    },
+    {
+      "abbr": "SCUR",
+      "name": "Scurry"
+    },
+    {
+      "abbr": "SHAC",
+      "name": "Shackelford"
+    },
+    {
+      "abbr": "SHEL",
+      "name": "Shelby"
+    },
+    {
+      "abbr": "SHMN",
+      "name": "Sherman"
+    },
+    {
+      "abbr": "SMIT",
+      "name": "Smith"
+    },
+    {
+      "abbr": "SOME",
+      "name": "Somervell"
+    },
+    {
+      "abbr": "STAR",
+      "name": "Starr"
+    },
+    {
+      "abbr": "STEP",
+      "name": "Stephens"
+    },
+    {
+      "abbr": "STER",
+      "name": "Sterling"
+    },
+    {
+      "abbr": "STON",
+      "name": "Stonewall"
+    },
+    {
+      "abbr": "SUTT",
+      "name": "Sutton"
+    },
+    {
+      "abbr": "SWIS",
+      "name": "Swisher"
+    },
+    {
+      "abbr": "TARR",
+      "name": "Tarrant"
+    },
+    {
+      "abbr": "TAYL",
+      "name": "Taylor"
+    },
+    {
+      "abbr": "TERL",
+      "name": "Terrell"
+    },
+    {
+      "abbr": "TERY",
+      "name": "Terry"
+    },
+    {
+      "abbr": "THRO",
+      "name": "Throckmorton"
+    },
+    {
+      "abbr": "TITU",
+      "name": "Titus"
+    },
+    {
+      "abbr": "TGRE",
+      "name": "Tom Green"
+    },
+    {
+      "abbr": "TRAV",
+      "name": "Travis"
+    },
+    {
+      "abbr": "TRIN",
+      "name": "Trinity"
+    },
+    {
+      "abbr": "TYLE",
+      "name": "Tyler"
+    },
+    {
+      "abbr": "UPSH",
+      "name": "Upshur"
+    },
+    {
+      "abbr": "UPTO",
+      "name": "Upton"
+    },
+    {
+      "abbr": "UVAL",
+      "name": "Uvalde"
+    },
+    {
+      "abbr": "VVER",
+      "name": "Val Verde"
+    },
+    {
+      "abbr": "VZAN",
+      "name": "Van Zandt"
+    },
+    {
+      "abbr": "VICT",
+      "name": "Victoria"
+    },
+    {
+      "abbr": "WALK",
+      "name": "Walker"
+    },
+    {
+      "abbr": "WALL",
+      "name": "Waller"
+    },
+    {
+      "abbr": "WARD",
+      "name": "Ward"
+    },
+    {
+      "abbr": "WASH",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WEBB",
+      "name": "Webb"
+    },
+    {
+      "abbr": "WHAR",
+      "name": "Wharton"
+    },
+    {
+      "abbr": "WHEE",
+      "name": "Wheeler"
+    },
+    {
+      "abbr": "WICH",
+      "name": "Wichita"
+    },
+    {
+      "abbr": "WILB",
+      "name": "Wilbarger"
+    },
+    {
+      "abbr": "WILY",
+      "name": "Willacy"
+    },
+    {
+      "abbr": "WMSN",
+      "name": "Williamson"
+    },
+    {
+      "abbr": "WLSN",
+      "name": "Wilson"
+    },
+    {
+      "abbr": "WINK",
+      "name": "Winkler"
+    },
+    {
+      "abbr": "WISE",
+      "name": "Wise"
+    },
+    {
+      "abbr": "WOOD",
+      "name": "Wood"
+    },
+    {
+      "abbr": "YOAK",
+      "name": "Yoakum"
+    },
+    {
+      "abbr": "YOUN",
+      "name": "Young"
+    },
+    {
+      "abbr": "ZAPA",
+      "name": "Zapata"
+    },
+    {
+      "abbr": "ZAVA",
+      "name": "Zavala"
+    }
+  ],
+  "notes": "verified: partial — points/mults/bonus from txqp.net rules; counties from official txcounty.zip (2014 file, fetched 2026-07-23). Confirm band list and current-year rules before submitting."
+}

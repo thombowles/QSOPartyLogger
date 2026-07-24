@@ -1,0 +1,106 @@
+import SwiftUI
+import UniformTypeIdentifiers
+
+extension UTType {
+    static var qplog: UTType {
+        UTType(exportedAs: "org.b5n.qsopartylogger.log")
+    }
+}
+
+/// Document wrapper around `ContestLog`. Mutations are main-actor and register
+/// undo so the document machinery tracks dirty state (and the user gets undo
+/// for free). Snapshots hand an immutable `ContestLog` value to the writer,
+/// which is what makes the `@unchecked Sendable` sound.
+@Observable
+final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
+    typealias Snapshot = ContestLog
+
+    static var readableContentTypes: [UTType] { [.qplog] }
+
+    var log: ContestLog
+
+    @MainActor
+    init() {
+        var initial = ContestLog(partyID: "ksqp")
+        initial.station = AppSettings.shared.lastStationProfile ?? StationProfile()
+        self.log = initial
+    }
+
+    init(configuration: ReadConfiguration) throws {
+        guard let data = configuration.file.regularFileContents else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        self.log = try ContestLog.decode(from: data)
+    }
+
+    func snapshot(contentType: UTType) throws -> ContestLog {
+        log
+    }
+
+    func fileWrapper(snapshot: ContestLog, configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: try snapshot.encoded())
+    }
+
+    // MARK: Mutations (undoable, main-actor)
+
+    var party: PartyDefinition? {
+        PartyCatalog.party(id: log.partyID)
+    }
+
+    @MainActor
+    func append(qsos: [QSO], undoManager: UndoManager?) {
+        log.qsos.append(contentsOf: qsos)
+        let ids = Set(qsos.map(\.id))
+        undoManager?.registerUndo(withTarget: self) { doc in
+            MainActor.assumeIsolated {
+                doc.remove(ids: ids, undoManager: undoManager)
+            }
+        }
+        undoManager?.setActionName("Log Contact")
+    }
+
+    @MainActor
+    func remove(ids: Set<UUID>, undoManager: UndoManager?) {
+        let removed = log.qsos.filter { ids.contains($0.id) }
+        log.qsos.removeAll { ids.contains($0.id) }
+        undoManager?.registerUndo(withTarget: self) { doc in
+            MainActor.assumeIsolated {
+                doc.append(qsos: removed, undoManager: undoManager)
+            }
+        }
+        undoManager?.setActionName("Delete Contact")
+    }
+
+    @MainActor
+    func removeGroup(groupID: UUID, undoManager: UndoManager?) {
+        remove(ids: Set(log.qsos.filter { $0.groupID == groupID }.map(\.id)), undoManager: undoManager)
+    }
+
+    @MainActor
+    func update(qso: QSO, undoManager: UndoManager?) {
+        guard let idx = log.qsos.firstIndex(where: { $0.id == qso.id }) else { return }
+        let old = log.qsos[idx]
+        log.qsos[idx] = qso
+        undoManager?.registerUndo(withTarget: self) { doc in
+            MainActor.assumeIsolated {
+                doc.update(qso: old, undoManager: undoManager)
+            }
+        }
+        undoManager?.setActionName("Edit Contact")
+    }
+
+    @MainActor
+    func updateStation(_ station: StationProfile, location: MyLocation, partyID: String, undoManager: UndoManager?) {
+        let (oldStation, oldLoc, oldParty) = (log.station, log.myLocation, log.partyID)
+        log.station = station
+        log.myLocation = location
+        log.partyID = partyID
+        AppSettings.shared.lastStationProfile = station
+        undoManager?.registerUndo(withTarget: self) { doc in
+            MainActor.assumeIsolated {
+                doc.updateStation(oldStation, location: oldLoc, partyID: oldParty, undoManager: undoManager)
+            }
+        }
+        undoManager?.setActionName("Change Station Setup")
+    }
+}
