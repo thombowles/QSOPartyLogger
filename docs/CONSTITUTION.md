@@ -403,9 +403,7 @@ precedent.
    manufacturer's command name in a shared, radio-neutral setting, violating
    Article 11. A connected FlexRadio keys through CWX while the UI says "K3".
    The label should come from the connected descriptor.
-2. **The README claims Hawaii research is banked**; no `hqp_*` file exists in
-   `docs/research/`. Either the research or the claim is missing (Article 6).
-3. **TQP is `verified: partial`** — band list and current-year details
+2. **TQP is `verified: partial`** — band list and current-year details
    unconfirmed against txqp.net. Separately, `tqp.json` ships
    `cabrilloContest: "TX-QSO-PARTY"`, which WA7BNM lists only as an *alias*,
    while [`tqp_verify.md`](research/tqp_verify.md) concludes `TXQP` is the safe

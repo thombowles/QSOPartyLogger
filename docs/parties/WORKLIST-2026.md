@@ -33,13 +33,13 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**14 remaining** of the 16 in scope; 4 parties bundled (ALQP, MDC, KSQP, TQP).
+**13 remaining** of the 16 in scope; 5 parties bundled (ALQP, MDC, HQP, KSQP, TQP).
 Rows are in contest-date order — the top unstruck row is what's next.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
 | ~~Maryland-DC~~ | Aug 8 1400Z → Aug 9 0400Z | [`mdcqp_rules.md`](../research/mdcqp_rules.md) + [`mdc_rules_2024.txt`](../research/mdc_rules_2024.txt) | **done** |
-| **Hawaii** | Aug 22 1600Z → Aug 24 0200Z | — ⚠️ | not started |
+| ~~Hawaii~~ | Aug 22 1600Z → Aug 24 0400Z ⚠️ see below | [`hqp_rules.md`](../research/hqp_rules.md) + [`hqp_districts.tsv`](../research/hqp_districts.tsv) | **done** (`verified: partial`) |
 | **Ohio** | Aug 22 1600Z → Aug 23 0400Z | [`ohqp_rules_text.txt`](../research/ohqp_rules_text.txt), [`ohqp_mults_ohio.html`](../research/ohqp_mults_ohio.html) | raw sources only |
 | ~~Kansas~~ | Aug 29 1400Z → Aug 30 0200Z; Aug 30 1400–2000Z | official PDFs | **done** |
 | **Tennessee** | Sep 6 1700Z → Sep 7 0300Z | [`tnqp_rules.md`](../research/tnqp_rules.md) + [`tnqp_counties.tsv`](../research/tnqp_counties.tsv) | research banked |
@@ -67,25 +67,27 @@ Rows are in contest-date order — the top unstruck row is what's next.
 2. **Maine is absent from the Challenge calendar** but listed by WA7BNM for
    Sep 26–27. Confirm the party runs in 2026 from the sponsor before building it;
    if it does not, strike it from this list rather than shipping a guess.
-3. **Hawaii research does not exist.** The README claims it is banked; no
-   `hqp_*` file is in `docs/research/`
-   ([Appendix A.2](../CONSTITUTION.md#appendix-a--known-violations)). Hawaii
-   starts from zero.
+3. **Hawaii's operating window — unresolved with the sponsor.** HQP shipped
+   `verified: partial` because rules rule 1 contradicts itself: "36 hours from
+   1800 UTC Aug 22 through 0359 UTC Aug 24" *and* "6am Saturday … to 6pm Sunday
+   in Hawaii". The literal UTC pair spans 33h59m, and 1800Z is 8am HST, not 6am.
+   Shipped 1600Z→0400Z, the only span matching the stated 36 hours and both
+   Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
+   **Email `info@hawaiiqsoparty.org` to settle it.** See
+   [`hqp_rules.md` §2](../research/hqp_rules.md).
 4. **Ohio, Colorado, New Jersey, Iowa have raw sponsor text but no write-up.**
    Each still needs its 14-section research doc before any JSON (Article 15).
    Do not shortcut from raw text straight to a party file.
-5. **Hawaii's window spans ~34 hours** (Aug 22 1600Z → Aug 24 0200Z) as a single
-   row rather than two weekend sessions. Verify against the sponsor: it may be
-   one continuous period, which is unusual and worth an explicit test.
 
 ## Also outstanding
 
 - **Review `outStateWorksHomeStationsOnly` for the parties that predate it.**
-  MDC introduced this field (rules 10b: non-MDC entrants earn credit only for
-  MD/DC contacts). It defaults to `false` so ALQP/KSQP/TQP keep scoring exactly
-  as before, per Article 4 — but most state parties word the same restriction
-  somewhere. When each is next re-verified, check its rule text and turn the
-  field on where the sponsor says so.
+  MDC introduced this field (rules 10b) and HQP is already its second user
+  ("Hawai'i stations work anyone – non-Hawai'i stations work only Hawai'i"),
+  which suggests it is the norm rather than the exception. It defaults to `false`
+  so ALQP/KSQP/TQP keep scoring exactly as before, per Article 4. When each is
+  next re-verified, check its rule text and turn the field on where the sponsor
+  says so.
 - **Generator consolidation.** `gen_parties.py` is not runnable: it reads
   `KSQP-Mults.txt`, `TX_county_abbrevs.txt`, and
   `research/alqp_counties_text.txt`, none of which are committed. `gen_mdc.py`
@@ -94,7 +96,7 @@ Rows are in contest-date order — the top unstruck row is what's next.
   its own commit (Article 4).
 - **TQP Cabrillo name** — `tqp.json` ships the `TX-QSO-PARTY` alias while
   `tqp_verify.md` concludes `TXQP` is the safe export value
-  ([Appendix A.3](../CONSTITUTION.md#appendix-a--known-violations)). Resolve
+  ([Appendix A.2](../CONSTITUTION.md#appendix-a--known-violations)). Resolve
   before anyone submits a TQP log.
 - **ALQP runs this weekend** (Jul 25–26) and is already done — no action.
 

@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "id": "hqp",
+  "name": "Hawaii QSO Party",
+  "cabrilloContest": "HI-QSO-PARTY",
+  "homeState": "HI",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 3,
+    "digital": 3
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBand"
+    }
+  },
+  "bonuses": [],
+  "outStateWorksHomeStationsOnly": true,
+  "maxSimultaneousCounties": 1,
+  "schedule": [
+    {
+      "start": "2026-08-22T16:00:00Z",
+      "end": "2026-08-24T04:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "KAU",
+      "name": "Kauai"
+    },
+    {
+      "abbr": "NII",
+      "name": "Niihau"
+    },
+    {
+      "abbr": "KAL",
+      "name": "Kalawao"
+    },
+    {
+      "abbr": "LNI",
+      "name": "Lana'i"
+    },
+    {
+      "abbr": "MAU",
+      "name": "Maui"
+    },
+    {
+      "abbr": "MOL",
+      "name": "Molokai"
+    },
+    {
+      "abbr": "HON",
+      "name": "Honolulu"
+    },
+    {
+      "abbr": "LHN",
+      "name": "Leeward"
+    },
+    {
+      "abbr": "PRL",
+      "name": "Pearl Harbor Area"
+    },
+    {
+      "abbr": "WHN",
+      "name": "Windward"
+    },
+    {
+      "abbr": "HIL",
+      "name": "Hilo"
+    },
+    {
+      "abbr": "KOH",
+      "name": "Kohala"
+    },
+    {
+      "abbr": "KON",
+      "name": "Kona"
+    },
+    {
+      "abbr": "VOL",
+      "name": "Volcano Park"
+    }
+  ],
+  "notes": "verified: partial — rules read verbatim from the sponsor's rules page (hawaiiqsoparty.org/rules-page/, 2026-07-24; the page carries 2026 dates but prints no revision number). Multiplier entities are the 14 Hawai'i DISTRICTS, not counties: they subdivide the 5 counties, with Honolulu County alone contributing HON/LHN/PRL/WHN and Hawai'i County contributing HIL/KOH/KON/VOL. Abbreviations exist only on the sponsor's multiplier map (hawaiiqsoparty.org/mult-map/, committed as multmap_all.png), transcribed to hqp_districts.tsv and generated from there — never hand-typed into this file. Mult scope is asymmetric: out-of-state count districts PER BAND (ceiling 84 = 6 bands x 14), Hawai'i stations count districts + states incl. DC + provinces + DXCC ONCE for the contest. Non-Hawai'i stations may only work Hawai'i. All three modes are legal; digital is worth 3 points, equal to CW. No bonuses, no final-score multipliers, no district lines. OPEN QUESTION (why this is partial): rule 1 reads 'Operating period is 36 hours from 1800 UTC Aug 22 through 0359 UTC Aug 24, 2026. Note: That's 6am Saturday Aug 22 to start and end at 6pm Sunday in Hawaii.' Those claims disagree — the literal UTC pair spans 33h59m, not 36 hours, and 1800Z is 8am HST, not 6am. 1600Z->0400Z is the only span matching both the stated 36 hours and both Hawaii times, so that is what ships; the State QSO Party Challenge calendar instead says 1600Z->0200Z (34h). Confirm with info@hawaiiqsoparty.org before submitting a log. Not modeled: grid squares as a substitute QTH for modes that cannot send a name (rules allow it, sponsor's log checker resolves them)."
+}

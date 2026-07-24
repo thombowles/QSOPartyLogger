@@ -1,0 +1,28 @@
+# Hawai'i QSO Party multiplier districts — 14 total.
+# Transcribed from the sponsor's official multiplier map:
+#   https://www.hawaiiqsoparty.org/mult-map/
+#   image: https://www.hawaiiqsoparty.org/wp-content/uploads/2019/10/MultMap-1024x733.png
+#   committed copy: multmap_all.png  (maps credited to EI8IC)
+# Transcribed 2026-07-24. The abbreviations exist ONLY on this map — the rules
+# page links to it rather than printing a list, so this file is the extracted
+# text Article 2 requires before generating the party JSON.
+#
+# Districts are subdivisions of Hawaii's 5 counties, not counties themselves:
+# Honolulu County alone contributes 4 districts. The county column is recorded
+# for reference; the contest exchange carries the district abbreviation.
+#
+# abbr	district	county
+KAU	Kauai	Kaua'i County
+NII	Niihau	Kaua'i County
+KAL	Kalawao	Kalawao County
+LNI	Lana'i	Maui County
+MAU	Maui	Maui County
+MOL	Molokai	Maui County
+HON	Honolulu	Honolulu County (O'ahu)
+LHN	Leeward	Honolulu County (O'ahu)
+PRL	Pearl Harbor Area	Honolulu County (O'ahu)
+WHN	Windward	Honolulu County (O'ahu)
+HIL	Hilo	Hawai'i County
+KOH	Kohala	Hawai'i County
+KON	Kona	Hawai'i County
+VOL	Volcano Park	Hawai'i County

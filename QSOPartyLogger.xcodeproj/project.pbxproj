@@ -22,6 +22,7 @@
 		2AAD513E3761DAD300741555 /* TCPTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522A7E3D7B2C6485763680DB /* TCPTransport.swift */; };
 		2B2A1A856A6A6B9837A2EFB1 /* ElecraftK3Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6991F8344C755AD580ADCF48 /* ElecraftK3Driver.swift */; };
 		2FADB97332AC9D40282F9897 /* RadioBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771A2A2E70C2A91608F19549 /* RadioBar.swift */; };
+		2FB28E2BB6D45DB0A743B1FB /* HawaiiQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EB12C03231B219068E0737 /* HawaiiQSOPartyTests.swift */; };
 		322428A6E8BFF4A899E390B9 /* SerialPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8C4419151BB1282C6E55EC /* SerialPort.swift */; };
 		36D1463B5DC69485948798D3 /* LogDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */; };
 		39531F3450A50C5765C48B87 /* ClusterProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2914E1429C4152BCF4A61DC /* ClusterProtocolTests.swift */; };
@@ -189,6 +190,7 @@
 		F435A4BFCDEA86D0D8F785C4 /* RadioRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioRegistry.swift; sourceTree = "<group>"; };
 		F53E1CCA809156CAFA061676 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountyLineExpanderTests.swift; sourceTree = "<group>"; };
+		F8EB12C03231B219068E0737 /* HawaiiQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HawaiiQSOPartyTests.swift; sourceTree = "<group>"; };
 		FC2368B3BCDC5B105D90A366 /* MyLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLocation.swift; sourceTree = "<group>"; };
 		FD32257D3D8870AAFF61403B /* ExchangeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeParser.swift; sourceTree = "<group>"; };
 		FF2C8D6694C9F0C035095796 /* FlexRadioDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexRadioDriver.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				CA4CFCAA1F93033279C3D7CF /* DupeCheckerTests.swift */,
 				6BA4D636DCF7164283660F61 /* EntryCommandTests.swift */,
 				A3EE6994E490B94BF6B0B2F7 /* ExchangeParserTests.swift */,
+				F8EB12C03231B219068E0737 /* HawaiiQSOPartyTests.swift */,
 				5892A4EA032BA925FA66EA70 /* MarylandDCQSOPartyTests.swift */,
 				245471C16B083B398057F4A0 /* ModelTests.swift */,
 				165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */,
@@ -555,6 +558,7 @@
 				3E4CB50A4A38D69CDDF3CB6A /* EntryCommandTests.swift in Sources */,
 				EFF567B7FAA9F043F72398D2 /* ExchangeParserTests.swift in Sources */,
 				60A60A674801918D78F66985 /* FlexRadioDriverTests.swift in Sources */,
+				2FB28E2BB6D45DB0A743B1FB /* HawaiiQSOPartyTests.swift in Sources */,
 				097E888A0ACA42B4ED11F066 /* K3ProtocolTests.swift in Sources */,
 				0B13C9686C52A0FFC4FD1016 /* KeyerTimingTests.swift in Sources */,
 				36D1463B5DC69485948798D3 /* LogDocumentTests.swift in Sources */,
