@@ -16,6 +16,11 @@ struct RadioDescriptor: Identifiable, Sendable {
     let baudRates: [Int]
     /// DTR/RTS line keying is possible (serial radios only).
     let supportsDirectKeying: Bool
+    /// How the keyer picker names *this* radio's own keyer. The shared
+    /// `KeyerBackend` setting is radio-neutral (Article 11), so the model's
+    /// command name lives here rather than in the enum or the UI: keep the
+    /// neutral "Radio keyer" prefix and add the command in parentheses.
+    let keyerLabel: String
     let makeDriver: @Sendable () -> any RadioDriver
 }
 
@@ -28,6 +33,7 @@ enum RadioRegistry {
             defaultBaud: 38400,
             baudRates: ElecraftK3Driver.baudRates,
             supportsDirectKeying: true,
+            keyerLabel: "Radio keyer (KY)",
             makeDriver: { ElecraftK3Driver() }
         ),
         RadioDescriptor(
@@ -37,6 +43,7 @@ enum RadioRegistry {
             defaultBaud: 0,
             baudRates: [],
             supportsDirectKeying: false,
+            keyerLabel: "Radio keyer (CWX)",
             makeDriver: { FlexRadioDriver() }
         ),
     ]

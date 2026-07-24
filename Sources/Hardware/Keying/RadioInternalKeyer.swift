@@ -1,8 +1,12 @@
 import Foundation
 
-/// CW via the K3's internal keyer (`KY` command) — zero extra wiring; the
-/// radio does the element timing.
-final class K3InternalKeyer: CWSender, @unchecked Sendable {
+/// CW via the radio's own keyer — zero extra wiring; the radio does the
+/// element timing. Radio-neutral: it drives whatever driver it is handed
+/// through `sendInternalKeyerText` / `stopInternalKeyer`, so the same class
+/// serves a K3's `KY` buffer and a Flex's CWX. This is the fallback path:
+/// direct DTR/RTS keying is preferred wherever control lines exist
+/// (Article 11).
+final class RadioInternalKeyer: CWSender, @unchecked Sendable {
 
     private let driver: any RadioDriver
     private let lock = NSLock()

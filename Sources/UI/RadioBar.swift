@@ -164,14 +164,14 @@ struct RadioBar: View {
         .onChange(of: settings.wpm) {
             radio.syncWPM(settings.wpm, settings: settings)
         }
-        .help("CW speed — ⌘= / ⌘- adjusts by 2 WPM; syncs with the K3 knob")
+        .help("CW speed — ⌘= / ⌘- adjusts by 2 WPM; syncs with the radio's speed knob")
     }
 
     private var keyerGroup: some View {
         captioned("Keyer") {
             Picker("", selection: $settings.keyerBackend) {
                 ForEach(AppSettings.KeyerBackend.allCases, id: \.self) { backend in
-                    Text(backend.rawValue).tag(backend)
+                    Text(backend.displayName(for: radio.connectedDescriptor)).tag(backend)
                 }
             }
             .labelsHidden()

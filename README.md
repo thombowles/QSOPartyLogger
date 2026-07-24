@@ -248,11 +248,11 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 250 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 257 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
-typed QSY commands, and keyer timing.
+typed QSY commands, keyer timing, and keyer labelling.
 
 ## Data provenance
 

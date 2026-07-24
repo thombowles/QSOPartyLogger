@@ -111,8 +111,28 @@ final class AppSettings {
     }
 
     enum KeyerBackend: String, Codable, CaseIterable {
+        // The raw values are the persisted `keyerBackend` tokens in
+        // UserDefaults, frozen verbatim from when they doubled as labels.
+        // They are storage, never display: changing one silently resets an
+        // existing operator's keyer choice to `.direct` on next launch.
+        // Labels come from `displayName(for:)`.
         case direct = "Direct DTR/RTS"
         case radioInternal = "K3 internal (KY)"
+
+        /// Shown when the internal keyer's owner isn't known yet — no radio
+        /// connected, so nothing can name its command.
+        static let neutralRadioKeyerLabel = "Radio keyer"
+
+        /// Label for the keyer picker. The internal-keyer case takes its name
+        /// from the connected radio's descriptor, so the setting never claims
+        /// one manufacturer's command while another radio is sending
+        /// (Article 11).
+        func displayName(for descriptor: RadioDescriptor?) -> String {
+            switch self {
+            case .direct: "Direct DTR/RTS"
+            case .radioInternal: descriptor?.keyerLabel ?? Self.neutralRadioKeyerLabel
+            }
+        }
     }
 
     var keyerBackend: KeyerBackend {
