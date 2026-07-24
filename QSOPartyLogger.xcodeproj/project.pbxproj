@@ -7,16 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		001422B5EA133D81250B56D7 /* Parties in Resources */ = {isa = PBXBuildFile; fileRef = E70A4C058DB0BE3BF9AA15BC /* Parties */; };
+		098B5B5D2F15D62548FB7A6B /* County.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE0321C50DA1A9D4AEB58D0 /* County.swift */; };
+		1DAC9D9495B4F17E4872E359 /* PartyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */; };
 		1E7FDC4C244F2B6F88CA2229 /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9CC975E303DB2512FF84C86 /* Band.swift */; };
 		5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF66C01612DA91290CFA1B6 /* SmokeTests.swift */; };
+		632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */; };
 		6A3CA6D517471AE74A517ECA /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245471C16B083B398057F4A0 /* ModelTests.swift */; };
 		6F9727CF59F10761B4AFEFD7 /* StationProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478647587A295E345278D2A5 /* StationProfile.swift */; };
-		7276E2F689BDD6BC85495327 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 71E92FA0682BF7C0EAC34D30 /* Resources */; };
 		92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009080AA1C81D0A7D94FA410 /* ModeClass.swift */; };
 		A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC43C19DF629A758F1B4641 /* ContestLog.swift */; };
 		AE2D036E6F83E9F0F1141634 /* QSOPartyLoggerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C2D0EBC8E5FC6F24E96A7A /* QSOPartyLoggerApp.swift */; };
 		C46093573C4E0C33B0EE6086 /* QSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28174F39D351A29CC80B77F2 /* QSO.swift */; };
 		D7F2318518DBD917270727B9 /* MyLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2368B3BCDC5B105D90A366 /* MyLocation.swift */; };
+		D9CBAA91D8BCAD19385482BA /* PartyCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDA62C0033DE71F4781CC89 /* PartyCatalog.swift */; };
+		FEFDD64CFF603D6BBD4A5EAC /* MultClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2559BE76C4D55ED692590BD6 /* MultClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,23 +37,39 @@
 /* Begin PBXFileReference section */
 		009080AA1C81D0A7D94FA410 /* ModeClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeClass.swift; sourceTree = "<group>"; };
 		245471C16B083B398057F4A0 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
+		2559BE76C4D55ED692590BD6 /* MultClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultClass.swift; sourceTree = "<group>"; };
 		28174F39D351A29CC80B77F2 /* QSO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSO.swift; sourceTree = "<group>"; };
 		29C2D0EBC8E5FC6F24E96A7A /* QSOPartyLoggerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSOPartyLoggerApp.swift; sourceTree = "<group>"; };
 		478647587A295E345278D2A5 /* StationProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationProfile.swift; sourceTree = "<group>"; };
 		5779472576EDDB16AD912D7C /* QSOPartyLoggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QSOPartyLoggerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EEF467249C2C6AB91F4EF7D /* QSOPartyLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QSOPartyLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		71E92FA0682BF7C0EAC34D30 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = SOURCE_ROOT; };
+		6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCatalogTests.swift; sourceTree = "<group>"; };
 		7CC43C19DF629A758F1B4641 /* ContestLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestLog.swift; sourceTree = "<group>"; };
+		8CE0321C50DA1A9D4AEB58D0 /* County.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = County.swift; sourceTree = "<group>"; };
+		9CDA62C0033DE71F4781CC89 /* PartyCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCatalog.swift; sourceTree = "<group>"; };
+		B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyDefinition.swift; sourceTree = "<group>"; };
 		D9CC975E303DB2512FF84C86 /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
 		DBF66C01612DA91290CFA1B6 /* SmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokeTests.swift; sourceTree = "<group>"; };
+		E70A4C058DB0BE3BF9AA15BC /* Parties */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Parties; path = Resources/Parties; sourceTree = SOURCE_ROOT; };
 		FC2368B3BCDC5B105D90A366 /* MyLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLocation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		05C8075E68F80C865BFBE918 /* Parties */ = {
+			isa = PBXGroup;
+			children = (
+				8CE0321C50DA1A9D4AEB58D0 /* County.swift */,
+				2559BE76C4D55ED692590BD6 /* MultClass.swift */,
+				9CDA62C0033DE71F4781CC89 /* PartyCatalog.swift */,
+				B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */,
+			);
+			path = Parties;
+			sourceTree = "<group>";
+		};
 		253DA519482BE9A4D26A4AA0 = {
 			isa = PBXGroup;
 			children = (
-				71E92FA0682BF7C0EAC34D30 /* Resources */,
+				549F15C98CDB2CF9D4251922 /* Resources */,
 				99EA7424B6084DE4C85A58A0 /* Sources */,
 				F178A799124A01CB94CD3AA1 /* Tests */,
 				ECB22FA4CD396544CF3A7254 /* Products */,
@@ -79,8 +100,17 @@
 			isa = PBXGroup;
 			children = (
 				245471C16B083B398057F4A0 /* ModelTests.swift */,
+				6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		549F15C98CDB2CF9D4251922 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E70A4C058DB0BE3BF9AA15BC /* Parties */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		99EA7424B6084DE4C85A58A0 /* Sources */ = {
@@ -115,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				413CC5311794C009CA2F290C /* Models */,
+				05C8075E68F80C865BFBE918 /* Parties */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -210,7 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7276E2F689BDD6BC85495327 /* Resources in Resources */,
+				001422B5EA133D81250B56D7 /* Parties in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A3CA6D517471AE74A517ECA /* ModelTests.swift in Sources */,
+				632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */,
 				5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -232,8 +264,12 @@
 			files = (
 				1E7FDC4C244F2B6F88CA2229 /* Band.swift in Sources */,
 				A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */,
+				098B5B5D2F15D62548FB7A6B /* County.swift in Sources */,
 				92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */,
+				FEFDD64CFF603D6BBD4A5EAC /* MultClass.swift in Sources */,
 				D7F2318518DBD917270727B9 /* MyLocation.swift in Sources */,
+				D9CBAA91D8BCAD19385482BA /* PartyCatalog.swift in Sources */,
+				1DAC9D9495B4F17E4872E359 /* PartyDefinition.swift in Sources */,
 				C46093573C4E0C33B0EE6086 /* QSO.swift in Sources */,
 				AE2D036E6F83E9F0F1141634 /* QSOPartyLoggerApp.swift in Sources */,
 				6F9727CF59F10761B4AFEFD7 /* StationProfile.swift in Sources */,

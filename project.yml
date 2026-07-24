@@ -18,7 +18,7 @@ targets:
     platform: macOS
     sources:
       - path: Sources
-      - path: Resources
+      - path: Resources/Parties
         type: folder
         buildPhase: resources
     settings:
