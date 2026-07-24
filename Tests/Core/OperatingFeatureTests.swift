@@ -137,6 +137,93 @@ final class OperatingFeatureTests: XCTestCase {
         XCTAssertEqual(LogDocument.mirrorFileName(for: log), "2026-07-25 ALQP KE5CW")
     }
 
+    // MARK: RST pre-fill
+
+    func testClearForNextContactPrefillsDefaultRST() {
+        let entry = EntryState()
+        entry.call = "W1AW"
+        entry.rstSent = "579"
+        entry.rstRcvd = "449"
+        entry.exchange = "DAL"
+        entry.clearForNextContact(modeClass: .cw)
+        XCTAssertEqual(entry.call, "")
+        XCTAssertEqual(entry.exchange, "")
+        XCTAssertEqual(entry.rstSent, "599")
+        XCTAssertEqual(entry.rstRcvd, "599")
+
+        entry.clearForNextContact(modeClass: .phone)
+        XCTAssertEqual(entry.rstSent, "59")
+        XCTAssertEqual(entry.rstRcvd, "59")
+    }
+
+    func testSyncRSTDefaultsFollowsModeChange() {
+        let entry = EntryState()
+        entry.clearForNextContact(modeClass: .cw)
+        entry.syncRSTDefaults(modeClass: .phone)
+        XCTAssertEqual(entry.rstSent, "59")
+        XCTAssertEqual(entry.rstRcvd, "59")
+        entry.syncRSTDefaults(modeClass: .cw)
+        XCTAssertEqual(entry.rstSent, "599")
+        XCTAssertEqual(entry.rstRcvd, "599")
+    }
+
+    func testSyncRSTDefaultsPreservesUserTypedReports() {
+        let entry = EntryState()
+        entry.rstSent = "579"
+        entry.rstRcvd = "339"
+        entry.syncRSTDefaults(modeClass: .phone)
+        XCTAssertEqual(entry.rstSent, "579")
+        XCTAssertEqual(entry.rstRcvd, "339")
+    }
+
+    // MARK: Cut numbers for CW macros
+
+    func testCutNumbersAppliesToRSTOnly() {
+        let out = AppSettings.expandMacros(
+            "{CALL} {RST} {EXCH} DE {MYCALL}",
+            myCall: "KE5CW", call: "N9TF", rst: "599", exchange: "DAL",
+            cutNumbers: true
+        )
+        XCTAssertEqual(out, "N9TF 5NN DAL DE KE5CW", "digits in callsigns must never be cut")
+    }
+
+    func testCutNumbersMapsNineAndZero() {
+        XCTAssertEqual(AppSettings.applyCutNumbers("590"), "5NT")
+        XCTAssertEqual(AppSettings.applyCutNumbers("579"), "57N")
+    }
+
+    func testCutNumbersOffByDefault() {
+        let out = AppSettings.expandMacros(
+            "{RST}", myCall: "KE5CW", call: "W1AW", rst: "599", exchange: ""
+        )
+        XCTAssertEqual(out, "599")
+    }
+
+    // MARK: RadioBar flow-layout row packing
+
+    func testFlowLayoutPacksRowsByWidth() {
+        let widths: [CGFloat] = [100, 100, 100]
+        XCTAssertEqual(
+            FlowLayout.packRows(itemWidths: widths, containerWidth: .infinity, spacing: 8),
+            [[0, 1, 2]]
+        )
+        // 100 + 8 + 100 fits in 250; the third item would overflow → next row.
+        XCTAssertEqual(
+            FlowLayout.packRows(itemWidths: widths, containerWidth: 250, spacing: 8),
+            [[0, 1], [2]]
+        )
+        // Exact fit: 100+8+100+8+100 = 316.
+        XCTAssertEqual(
+            FlowLayout.packRows(itemWidths: widths, containerWidth: 316, spacing: 8),
+            [[0, 1, 2]]
+        )
+        // An oversized item still occupies its own row.
+        XCTAssertEqual(
+            FlowLayout.packRows(itemWidths: [300], containerWidth: 250, spacing: 8),
+            [[0]]
+        )
+    }
+
     // MARK: Default document naming
 
     func testDefaultDisplayName() {

@@ -18,7 +18,9 @@ struct ScoreSidebar: View {
             }
             .padding(12)
         }
-        .frame(minWidth: 230, idealWidth: 260)
+        // Capped so a fresh launch can't hand the sidebar half the window —
+        // the entry/log side holds layout priority and takes the slack.
+        .frame(minWidth: 230, idealWidth: 270, maxWidth: 400)
         .background(.background.secondary)
     }
 

@@ -22,6 +22,7 @@ final class RadioController {
     private var directKeyer: CWKeyer?
     private var internalKeyer: K3InternalKeyer?
     private var sendingClearTask: Task<Void, Never>?
+    private var validationTask: Task<Void, Never>?
 
     /// The K3 drops its TX flag between CW elements (QSK), which made the TX
     /// badge flicker during macros. Treat "app is sending a macro" as
@@ -89,7 +90,40 @@ final class RadioController {
         isConnected = true
     }
 
+    /// Auto-connect on document open. Silently does nothing when the saved
+    /// port isn't currently present (radio unplugged / at another desk);
+    /// otherwise connects and then verifies the radio actually answers CAT
+    /// polls within a few seconds, surfacing an error if it doesn't.
+    func connectAndValidate(settings: AppSettings) {
+        guard !isConnected else { return }
+        refreshPorts()
+        guard !settings.portPath.isEmpty,
+              availablePorts.contains(where: { $0.path == settings.portPath }) else { return }
+
+        connect(settings: settings)
+        guard isConnected else { return }
+
+        validationTask?.cancel()
+        validationTask = Task { [weak self] in
+            // The driver's first poll goes out at +0.2 s and repeats every
+            // 0.5 s, so a live radio answers well inside this window.
+            let deadline = Date().addingTimeInterval(4)
+            while Date() < deadline {
+                try? await Task.sleep(nanoseconds: 200_000_000)
+                guard let self, !Task.isCancelled, self.isConnected else { return }
+                if self.radioState != nil { return }  // validated — radio is talking
+            }
+            guard let self, !Task.isCancelled, self.isConnected, self.radioState == nil else { return }
+            let portName = (settings.portPath as NSString).lastPathComponent
+            self.lastError = "Connected to \(portName), but the radio isn't answering CAT polls. "
+                + "Check power, cable, and baud rate. Polling continues — the frequency display "
+                + "will light up as soon as it responds."
+        }
+    }
+
     func disconnect() {
+        validationTask?.cancel()
+        validationTask = nil
         directKeyer?.shutdown()
         directKeyer = nil
         internalKeyer = nil

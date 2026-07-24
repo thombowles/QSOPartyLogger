@@ -86,10 +86,18 @@ final class EntryState {
             : "DUPE: \(callSign) already worked on \(band.rawValue) \(modeClass.displayName) (\(dupes.map(\.theirLoc).joined(separator: ", ")))"
     }
 
-    func clearForNextContact() {
+    /// Swap pre-filled default reports when the operating mode changes
+    /// (599 ↔ 59); anything the operator actually typed is left alone.
+    func syncRSTDefaults(modeClass: ModeClass) {
+        let defaults = Set(ModeClass.allCases.map(\.defaultRST))
+        if rstSent.isEmpty || defaults.contains(rstSent) { rstSent = modeClass.defaultRST }
+        if rstRcvd.isEmpty || defaults.contains(rstRcvd) { rstRcvd = modeClass.defaultRST }
+    }
+
+    func clearForNextContact(modeClass: ModeClass) {
         call = ""
-        rstSent = ""
-        rstRcvd = ""
+        rstSent = modeClass.defaultRST
+        rstRcvd = modeClass.defaultRST
         exchange = ""
         exchangeStatus = .idle
         dupeWarning = nil

@@ -90,6 +90,7 @@ struct MainView: View {
     private var splitContent: some View {
         HSplitView {
             leftPane
+                .layoutPriority(1)
             ScoreSidebar(log: document.log, party: party, score: score)
         }
     }
@@ -104,7 +105,7 @@ struct MainView: View {
                 manualRawMode: $manualRawMode
             )
             .onChange(of: radio.radioState?.band) { revalidate() }
-            .onChange(of: radio.radioState?.mode) { revalidate() }
+            .onChange(of: radio.radioState?.mode) { modeChanged() }
             .onChange(of: radio.radioReportedWPM) { syncSpeedFromRadio() }
             .onChange(of: repeatCQ) { repeatCQChanged() }
             .onChange(of: radio.isConnected) { if !radio.isConnected { stopRepeat() } }
@@ -114,6 +115,7 @@ struct MainView: View {
                 .onChange(of: document.log.partyID) { applyDefaultDocumentName() }
                 .onChange(of: document.log.station.callsign) { applyDefaultDocumentName() }
                 .onChange(of: document.log.setupCompleted) { autoSaveNewDocumentIfNeeded() }
+                .onChange(of: document.log.qsos) { autoSaveAfterChange() }
             Divider()
 
             EntryBar(entry: entry, party: party, onLog: returnPressed, focus: $focusedField)
@@ -130,7 +132,7 @@ struct MainView: View {
                 enabled: radio.isConnected && currentModeClass == .cw,
                 repeatEnabled: $repeatCQ,
                 repeatInterval: $settings.repeatIntervalSeconds,
-                esmEnabled: settings.esmEnabled
+                esmEnabled: $settings.esmEnabled
             )
             Divider()
 
@@ -142,7 +144,7 @@ struct MainView: View {
             applyDefaultDocumentName()
         })
         .onChange(of: manualBand) { revalidate() }
-        .onChange(of: manualRawMode) { revalidate() }
+        .onChange(of: manualRawMode) { modeChanged() }
     }
 
     private var logTable: some View {
@@ -272,7 +274,16 @@ struct MainView: View {
             showSetup = true
         }
         focusedField = .call
+        entry.applyDefaults(modeClass: currentModeClass)
         installKeyMonitor()
+        radio.connectAndValidate(settings: settings)
+    }
+
+    /// Mode changes (radio or manual): swap pre-filled RST defaults
+    /// (599 ↔ 59) and re-check validation/dupes for the new mode.
+    private func modeChanged() {
+        entry.syncRSTDefaults(modeClass: currentModeClass)
+        revalidate()
     }
 
     /// Return key: plain logging, or the ESM state machine when enabled.
@@ -408,6 +419,21 @@ struct MainView: View {
         }
     }
 
+    /// Write the document through to disk after every QSO change (log, edit,
+    /// delete, undo) so a crash or power loss mid-contest never costs
+    /// contacts. Drafts that don't have a file yet are skipped — the
+    /// setup-completion auto-save gives them one.
+    private func autoSaveAfterChange() {
+        guard let window = hostWindow,
+              let nsDocument = window.windowController?.document as? NSDocument,
+              let url = nsDocument.fileURL else { return }
+        nsDocument.save(to: url, ofType: nsDocument.fileType ?? "QSO Party Log", for: .saveOperation) { error in
+            if let error {
+                NSLog("Auto-save after QSO change failed: \(error)")
+            }
+        }
+    }
+
     private func revalidate() {
         entry.revalidate(
             party: party,
@@ -446,7 +472,7 @@ struct MainView: View {
         )
         document.append(qsos: rows, undoManager: undoManager)
         _ = party
-        entry.clearForNextContact()
+        entry.clearForNextContact(modeClass: currentModeClass)
         focusedField = .call
     }
 
@@ -456,7 +482,8 @@ struct MainView: View {
             myCall: document.log.station.callsign.uppercased(),
             call: entry.callNormalized,
             rst: entry.rstSent.isEmpty ? currentModeClass.defaultRST : entry.rstSent,
-            exchange: document.log.myLocation.displayText
+            exchange: document.log.myLocation.displayText,
+            cutNumbers: settings.cwCutNumbers && currentModeClass == .cw
         )
     }
 

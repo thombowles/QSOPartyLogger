@@ -48,6 +48,11 @@ final class AppSettings {
         didSet { defaults.set(esmEnabled, forKey: "esmEnabled") }
     }
 
+    /// Send cut numbers in the {RST} macro when keying CW (599 → 5NN).
+    var cwCutNumbers: Bool {
+        didSet { defaults.set(cwCutNumbers, forKey: "cwCutNumbers") }
+    }
+
     /// Gap between repeat-CQ transmissions, in seconds.
     var repeatIntervalSeconds: Double {
         didSet { defaults.set(repeatIntervalSeconds, forKey: "repeatIntervalSeconds") }
@@ -72,9 +77,22 @@ final class AppSettings {
             .flatMap { try? JSONDecoder().decode(KeyerLineConfig.self, from: $0) })
             ?? KeyerLineConfig()
         esmEnabled = defaults.object(forKey: "esmEnabled") as? Bool ?? false
+        cwCutNumbers = defaults.object(forKey: "cwCutNumbers") as? Bool ?? false
         repeatIntervalSeconds = defaults.object(forKey: "repeatIntervalSeconds") as? Double ?? 3.0
         lastStationProfile = defaults.data(forKey: "lastStationProfile")
             .flatMap { try? JSONDecoder().decode(StationProfile.self, from: $0) }
+    }
+
+    /// CW cut numbers for signal reports: 9→N, 0→T (599 → 5NN). Applied only
+    /// to the {RST} value — callsigns and exchanges are never altered.
+    static func applyCutNumbers(_ value: String) -> String {
+        String(value.map { c -> Character in
+            switch c {
+            case "9": "N"
+            case "0": "T"
+            default: c
+            }
+        })
     }
 
     /// Expand message macros against current entry state.
@@ -83,12 +101,13 @@ final class AppSettings {
         myCall: String,
         call: String,
         rst: String,
-        exchange: String
+        exchange: String,
+        cutNumbers: Bool = false
     ) -> String {
         template
             .replacingOccurrences(of: "{MYCALL}", with: myCall)
             .replacingOccurrences(of: "{CALL}", with: call)
-            .replacingOccurrences(of: "{RST}", with: rst)
+            .replacingOccurrences(of: "{RST}", with: cutNumbers ? applyCutNumbers(rst) : rst)
             .replacingOccurrences(of: "{EXCH}", with: exchange)
             .trimmingCharacters(in: .whitespaces)
     }

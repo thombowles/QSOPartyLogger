@@ -11,7 +11,7 @@ struct MessagesRow: View {
 
     @Binding var repeatEnabled: Bool
     @Binding var repeatInterval: Double
-    let esmEnabled: Bool
+    @Binding var esmEnabled: Bool
 
     var body: some View {
         HStack(spacing: 6) {
@@ -44,14 +44,13 @@ struct MessagesRow: View {
 
             Spacer()
 
-            if esmEnabled {
-                Text("ESM")
-                    .font(.caption2.weight(.bold))
-                    .padding(.horizontal, 5)
-                    .padding(.vertical, 2)
-                    .background(.purple.opacity(0.2), in: Capsule())
-                    .help("Enter sends the next message (toggle in CW Messages)")
+            Toggle(isOn: $esmEnabled) {
+                Label("ESM", systemImage: "return")
+                    .font(.caption)
             }
+            .toggleStyle(.button)
+            .tint(.purple)
+            .help("Enter Sends Message: Return sends CQ / exchange / TU based on the entry fields, and logs automatically after the exchange.")
 
             Toggle(isOn: $repeatEnabled) {
                 Label("Repeat CQ", systemImage: "repeat")

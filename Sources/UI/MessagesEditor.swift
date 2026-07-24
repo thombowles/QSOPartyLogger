@@ -40,8 +40,8 @@ struct MessagesEditor: View {
                 }
             }
 
-            Toggle("Enter sends next message (ESM)", isOn: $settings.esmEnabled)
-                .help("Return sends CQ / exchange / TU based on the entry fields; logging happens automatically after the exchange.")
+            Toggle("Send cut numbers for RST (599 → 5NN)", isOn: $settings.cwCutNumbers)
+                .help("Replaces 9→N and 0→T in the {RST} macro when keying CW. Callsigns and county codes are never altered.")
 
             HStack {
                 Button("Restore Defaults") {

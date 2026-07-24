@@ -28,6 +28,7 @@
 		46267A86861ADDCD7E3EDBA8 /* CloudMirrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57263564A0C38ADE1B3E1897 /* CloudMirrorTests.swift */; };
 		497F973081DCEE07F2662518 /* RadioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AE54A60C33CC8614CCB97C /* RadioController.swift */; };
 		4BB24860B49D12AC15176471 /* ExchangeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD32257D3D8870AAFF61403B /* ExchangeParser.swift */; };
+		51CCF86780EC05B9994EBB7A /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53E1CCA809156CAFA061676 /* FlowLayout.swift */; };
 		5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF66C01612DA91290CFA1B6 /* SmokeTests.swift */; };
 		54C22E5CBC85F00E72EBE2E6 /* MessagesEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C6419D10E7C381AE554C1B /* MessagesEditor.swift */; };
 		632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */; };
@@ -145,6 +146,7 @@
 		EF6989E84D7AABBEB0B1451F /* MorseCodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCodeTests.swift; sourceTree = "<group>"; };
 		F208CF00E5CDC47B602583B8 /* AlabamaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlabamaQSOPartyTests.swift; sourceTree = "<group>"; };
 		F435A4BFCDEA86D0D8F785C4 /* RadioRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioRegistry.swift; sourceTree = "<group>"; };
+		F53E1CCA809156CAFA061676 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountyLineExpanderTests.swift; sourceTree = "<group>"; };
 		FC2368B3BCDC5B105D90A366 /* MyLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLocation.swift; sourceTree = "<group>"; };
 		FD32257D3D8870AAFF61403B /* ExchangeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeParser.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				5F01ACCE3E8BBB30BB6AFFB0 /* EditQSOSheet.swift */,
 				5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */,
 				A212165D3C12989B35E8EB28 /* EntryState.swift */,
+				F53E1CCA809156CAFA061676 /* FlowLayout.swift */,
 				1A23E3ADEAE3B7F86B2A421E /* LogTable.swift */,
 				4617D5E5CB3103CD4E042746 /* MainView.swift */,
 				01C6419D10E7C381AE554C1B /* MessagesEditor.swift */,
@@ -501,6 +504,7 @@
 				7BD916C1B52B135ADEA0EB0E /* EntryBar.swift in Sources */,
 				B8458132FA359341C94E3C56 /* EntryState.swift in Sources */,
 				4BB24860B49D12AC15176471 /* ExchangeParser.swift in Sources */,
+				51CCF86780EC05B9994EBB7A /* FlowLayout.swift in Sources */,
 				A4CFB4E343DE9324E720816E /* K3InternalKeyer.swift in Sources */,
 				BD620D19CDA5954AD41075B9 /* KeyerTiming.swift in Sources */,
 				CEACC3EEBBF6A962A00C0F48 /* LogDocument.swift in Sources */,

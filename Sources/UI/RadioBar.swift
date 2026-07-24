@@ -1,7 +1,9 @@
 import SwiftUI
 
-/// Radio connection, live frequency/mode, WPM, and keying backend — laid out
-/// as two compact rows so controls never wrap or truncate at normal widths.
+/// Radio connection, live frequency/mode, WPM, and keying backend. Control
+/// clusters sit in a wrapping FlowLayout, so narrowing the window (or
+/// widening the score panel) reflows them onto more rows instead of
+/// clipping or truncating.
 struct RadioBar: View {
     @Bindable var settings: AppSettings
     var radio: RadioController
@@ -11,129 +13,137 @@ struct RadioBar: View {
     @Binding var manualRawMode: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            connectionRow
-            operatingRow
+        FlowLayout(horizontalSpacing: 10, verticalSpacing: 6) {
+            portGroup
+            baudGroup
+            connectButton
+            frequencyDisplay
+            if radio.radioState == nil {
+                bandGroup
+                modeGroup
+            }
+            wpmStepper
+            keyerGroup
+            if let sending = radio.nowSending {
+                sendingIndicator(sending)
+            }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .background(.background.secondary)
     }
 
-    // MARK: Row 1 — connection + live radio state
+    // MARK: Control clusters (flow items)
 
-    private var connectionRow: some View {
-        HStack(spacing: 8) {
-            captioned("Port") {
-                HStack(spacing: 2) {
-                    Picker("", selection: $settings.portPath) {
-                        Text("No port").tag("")
-                        ForEach(radio.availablePorts) { port in
-                            Text(port.displayName).tag(port.path)
-                        }
-                    }
-                    .labelsHidden()
-                    .frame(minWidth: 130, maxWidth: 210)
-                    .disabled(radio.isConnected)
-
-                    Button {
-                        radio.refreshPorts()
-                    } label: {
-                        Image(systemName: "arrow.clockwise")
-                    }
-                    .controlSize(.small)
-                    .disabled(radio.isConnected)
-                    .help("Rescan serial ports")
-                }
-            }
-
-            captioned("Baud") {
-                Picker("", selection: $settings.baudRate) {
-                    ForEach(RadioRegistry.descriptor(id: settings.radioID)?.baudRates ?? [38400], id: \.self) { rate in
-                        Text(String(rate)).tag(rate)
+    private var portGroup: some View {
+        captioned("Port") {
+            HStack(spacing: 2) {
+                Picker("", selection: $settings.portPath) {
+                    Text("No port").tag("")
+                    ForEach(radio.availablePorts) { port in
+                        Text(port.displayName).tag(port.path)
                     }
                 }
                 .labelsHidden()
-                .frame(width: 84)
+                .frame(minWidth: 130, maxWidth: 210)
                 .disabled(radio.isConnected)
-            }
 
-            Button(radio.isConnected ? "Disconnect" : "Connect") {
-                if radio.isConnected {
-                    radio.disconnect()
-                } else {
-                    radio.connect(settings: settings)
+                Button {
+                    radio.refreshPorts()
+                } label: {
+                    Image(systemName: "arrow.clockwise")
                 }
-            }
-            .fixedSize()
-            .tint(radio.isConnected ? .red : .accentColor)
-
-            Divider().frame(height: 24)
-
-            frequencyDisplay
-
-            Spacer(minLength: 8)
-
-            if let sending = radio.nowSending {
-                Label(sending, systemImage: "dot.radiowaves.left.and.right")
-                    .font(.callout.monospaced())
-                    .foregroundStyle(.red)
-                    .lineLimit(1)
-                Button("Esc") { radio.abortCW(settings: settings) }
-                    .controlSize(.small)
-                    .fixedSize()
+                .controlSize(.small)
+                .disabled(radio.isConnected)
+                .help("Rescan serial ports")
             }
         }
     }
 
-    // MARK: Row 2 — band/mode + keyer
-
-    private var operatingRow: some View {
-        HStack(spacing: 8) {
-            if radio.radioState == nil {
-                captioned("Band") {
-                    Picker("", selection: $manualBand) {
-                        ForEach(party?.validBands ?? Band.allCases) { band in
-                            Text(band.rawValue).tag(band)
-                        }
-                    }
-                    .labelsHidden()
-                    .frame(width: 84)
+    private var baudGroup: some View {
+        captioned("Baud") {
+            Picker("", selection: $settings.baudRate) {
+                ForEach(RadioRegistry.descriptor(id: settings.radioID)?.baudRates ?? [38400], id: \.self) { rate in
+                    Text(String(rate)).tag(rate)
                 }
-                captioned("Mode") {
-                    Picker("", selection: $manualRawMode) {
-                        ForEach(Self.rawModes(for: party), id: \.self) { mode in
-                            Text(mode).tag(mode)
-                        }
-                    }
-                    .labelsHidden()
-                    .frame(width: 84)
+            }
+            .labelsHidden()
+            .frame(width: 84)
+            .disabled(radio.isConnected)
+        }
+    }
+
+    private var connectButton: some View {
+        Button(radio.isConnected ? "Disconnect" : "Connect") {
+            if radio.isConnected {
+                radio.disconnect()
+            } else {
+                radio.connect(settings: settings)
+            }
+        }
+        .fixedSize()
+        .tint(radio.isConnected ? .red : .accentColor)
+    }
+
+    private var bandGroup: some View {
+        captioned("Band") {
+            Picker("", selection: $manualBand) {
+                ForEach(party?.validBands ?? Band.allCases) { band in
+                    Text(band.rawValue).tag(band)
                 }
-                Divider().frame(height: 24)
             }
+            .labelsHidden()
+            .frame(width: 84)
+        }
+    }
 
-            Stepper(value: $settings.wpm, in: 8...50) {
-                Text("\(settings.wpm) WPM")
-                    .monospacedDigit()
-                    .fixedSize()
-            }
-            .fixedSize()
-            .onChange(of: settings.wpm) {
-                radio.syncWPM(settings.wpm, settings: settings)
-            }
-            .help("CW speed — ⌘= / ⌘- adjusts by 2 WPM; syncs with the K3 knob")
-
-            captioned("Keyer") {
-                Picker("", selection: $settings.keyerBackend) {
-                    ForEach(AppSettings.KeyerBackend.allCases, id: \.self) { backend in
-                        Text(backend.rawValue).tag(backend)
-                    }
+    private var modeGroup: some View {
+        captioned("Mode") {
+            Picker("", selection: $manualRawMode) {
+                ForEach(Self.rawModes(for: party), id: \.self) { mode in
+                    Text(mode).tag(mode)
                 }
-                .labelsHidden()
-                .frame(width: 170)
             }
+            .labelsHidden()
+            .frame(width: 84)
+        }
+    }
 
-            Spacer(minLength: 0)
+    private var wpmStepper: some View {
+        Stepper(value: $settings.wpm, in: 8...50) {
+            Text("\(settings.wpm) WPM")
+                .monospacedDigit()
+                .fixedSize()
+        }
+        .fixedSize()
+        .onChange(of: settings.wpm) {
+            radio.syncWPM(settings.wpm, settings: settings)
+        }
+        .help("CW speed — ⌘= / ⌘- adjusts by 2 WPM; syncs with the K3 knob")
+    }
+
+    private var keyerGroup: some View {
+        captioned("Keyer") {
+            Picker("", selection: $settings.keyerBackend) {
+                ForEach(AppSettings.KeyerBackend.allCases, id: \.self) { backend in
+                    Text(backend.rawValue).tag(backend)
+                }
+            }
+            .labelsHidden()
+            .frame(width: 170)
+        }
+    }
+
+    private func sendingIndicator(_ sending: String) -> some View {
+        HStack(spacing: 6) {
+            Label(sending, systemImage: "dot.radiowaves.left.and.right")
+                .font(.callout.monospaced())
+                .foregroundStyle(.red)
+                .lineLimit(1)
+                .frame(maxWidth: 260)
+            Button("Esc") { radio.abortCW(settings: settings) }
+                .controlSize(.small)
+                .fixedSize()
         }
     }
 
