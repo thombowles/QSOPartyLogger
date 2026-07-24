@@ -175,14 +175,22 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     }
 
     /// Could this token be a DX prefix under `.prefix` style? 1–5 chars,
-    /// letters/digits with at least one letter, and not a known token.
+    /// letters/digits with at least one letter, and not a county or any
+    /// state/province/DX token — including excluded ones like the home state,
+    /// which must never sneak back in as a "DX prefix".
+    /// Known limitation: DXCC prefixes that collide with US state or Canadian
+    /// province codes (OH Finland, ON Belgium, PA Netherlands…) are read as
+    /// the state/province — same resolution sponsors' log checkers apply.
     func isPlausibleDXPrefix(_ token: String) -> Bool {
         guard dxStyle == .prefix else { return false }
         guard (1...5).contains(token.count) else { return false }
         guard token.allSatisfy({ $0.isLetter || $0.isNumber }) else { return false }
         guard token.contains(where: \.isLetter) else { return false }
         guard countiesByAbbr[token] == nil else { return false }
-        guard !validOutStateTokens.contains(token) else { return false }
+        guard !MultClass.acceptedStateTokens.contains(token) else { return false }
+        guard !MultClass.canadianProvinces.contains(token) else { return false }
+        guard !provinces.contains(token) else { return false }
+        guard token != MultClass.dxToken else { return false }
         return true
     }
 

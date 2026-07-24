@@ -1,0 +1,327 @@
+{
+  "schemaVersion": 1,
+  "id": "alqp",
+  "name": "Alabama QSO Party",
+  "cabrilloContest": "AL-QSO-PARTY",
+  "homeState": "AL",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 2,
+    "digital": 0
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "perMode"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perMode"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "schedule": [
+    {
+      "start": "2026-07-25T15:00:00Z",
+      "end": "2026-07-26T03:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "AUTA",
+      "name": "Autauga"
+    },
+    {
+      "abbr": "BALD",
+      "name": "Baldwin"
+    },
+    {
+      "abbr": "BARB",
+      "name": "Barbour"
+    },
+    {
+      "abbr": "BIBB",
+      "name": "Bibb"
+    },
+    {
+      "abbr": "BLOU",
+      "name": "Blount"
+    },
+    {
+      "abbr": "BULL",
+      "name": "Bullock"
+    },
+    {
+      "abbr": "BUTL",
+      "name": "Butler"
+    },
+    {
+      "abbr": "CHOU",
+      "name": "Calhoun"
+    },
+    {
+      "abbr": "CHMB",
+      "name": "Chambers"
+    },
+    {
+      "abbr": "CKEE",
+      "name": "Cherokee"
+    },
+    {
+      "abbr": "CHIL",
+      "name": "Chilton"
+    },
+    {
+      "abbr": "CHOC",
+      "name": "Choctaw"
+    },
+    {
+      "abbr": "CLRK",
+      "name": "Clarke"
+    },
+    {
+      "abbr": "CLAY",
+      "name": "Clay"
+    },
+    {
+      "abbr": "CLEB",
+      "name": "Cleburne"
+    },
+    {
+      "abbr": "COFF",
+      "name": "Coffee"
+    },
+    {
+      "abbr": "COLB",
+      "name": "Colbert"
+    },
+    {
+      "abbr": "CONE",
+      "name": "Conecuh"
+    },
+    {
+      "abbr": "COOS",
+      "name": "Coosa"
+    },
+    {
+      "abbr": "COVI",
+      "name": "Covington"
+    },
+    {
+      "abbr": "CREN",
+      "name": "Crenshaw"
+    },
+    {
+      "abbr": "CULM",
+      "name": "Cullman"
+    },
+    {
+      "abbr": "DALE",
+      "name": "Dale"
+    },
+    {
+      "abbr": "DLLS",
+      "name": "Dallas"
+    },
+    {
+      "abbr": "DKLB",
+      "name": "Dekalb"
+    },
+    {
+      "abbr": "ELMO",
+      "name": "Elmore"
+    },
+    {
+      "abbr": "ESCA",
+      "name": "Escambia"
+    },
+    {
+      "abbr": "ETOW",
+      "name": "Etowah"
+    },
+    {
+      "abbr": "FAYE",
+      "name": "Fayette"
+    },
+    {
+      "abbr": "FRNK",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "GENE",
+      "name": "Geneva"
+    },
+    {
+      "abbr": "GREE",
+      "name": "Greene"
+    },
+    {
+      "abbr": "HALE",
+      "name": "Hale"
+    },
+    {
+      "abbr": "HNRY",
+      "name": "Henry"
+    },
+    {
+      "abbr": "HOUS",
+      "name": "Houston"
+    },
+    {
+      "abbr": "JKSN",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JEFF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "LAMA",
+      "name": "Lamar"
+    },
+    {
+      "abbr": "LAUD",
+      "name": "Lauderdale"
+    },
+    {
+      "abbr": "LAWR",
+      "name": "Lawrence"
+    },
+    {
+      "abbr": "LEE",
+      "name": "Lee"
+    },
+    {
+      "abbr": "LIME",
+      "name": "Limestone"
+    },
+    {
+      "abbr": "LOWN",
+      "name": "Lowndes"
+    },
+    {
+      "abbr": "MACO",
+      "name": "Macon"
+    },
+    {
+      "abbr": "MDSN",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MRGO",
+      "name": "Marengo"
+    },
+    {
+      "abbr": "MARI",
+      "name": "Marion"
+    },
+    {
+      "abbr": "MRSH",
+      "name": "Marshall"
+    },
+    {
+      "abbr": "MOBI",
+      "name": "Mobile"
+    },
+    {
+      "abbr": "MNRO",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MGMY",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "MORG",
+      "name": "Morgan"
+    },
+    {
+      "abbr": "PERR",
+      "name": "Perry"
+    },
+    {
+      "abbr": "PICK",
+      "name": "Pickens"
+    },
+    {
+      "abbr": "PIKE",
+      "name": "Pike"
+    },
+    {
+      "abbr": "RAND",
+      "name": "Randolph"
+    },
+    {
+      "abbr": "RSSL",
+      "name": "Russell"
+    },
+    {
+      "abbr": "SHEL",
+      "name": "Shelby"
+    },
+    {
+      "abbr": "SCLR",
+      "name": "St. Clair"
+    },
+    {
+      "abbr": "SUMT",
+      "name": "Sumter"
+    },
+    {
+      "abbr": "TDEG",
+      "name": "Talladega"
+    },
+    {
+      "abbr": "TPOO",
+      "name": "Tallapoosa"
+    },
+    {
+      "abbr": "TUSC",
+      "name": "Tuscaloosa"
+    },
+    {
+      "abbr": "WLKR",
+      "name": "Walker"
+    },
+    {
+      "abbr": "WASH",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WLCX",
+      "name": "Wilcox"
+    },
+    {
+      "abbr": "WINS",
+      "name": "Winston"
+    }
+  ],
+  "notes": "Verified against official 2026 AQP rules (alabamacontestgroup.org, fetched 2026-07-23). Counties from official County Map and Counties page. County-line sitting is NOT permitted (rules Misc a). Mults count once per mode; DC counts as Maryland; DX mults are country prefixes."
+}

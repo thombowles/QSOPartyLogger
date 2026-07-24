@@ -4,8 +4,20 @@ Mac-native QSO Party contest logger (SwiftUI, macOS 15+) with first-class
 county-line support, live rules-based scoring, Elecraft K3 CAT control with
 direct DTR/RTS CW keying, and ADIF / Cabrillo export.
 
-Built for KE5CW. Kansas QSO Party ships fully verified against the official
-2026 rules; Texas QSO Party is bundled with official county data.
+Built for KE5CW. Bundled parties, all with official county data:
+
+- **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
+  rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
+  county-line sitting not permitted, phone/CW only.
+- **Kansas QSO Party** (Aug 29–30, 2026) — verified against the official 2026
+  rules; 1×1 word tracker included.
+- **Texas QSO Party** (Sep 19–20, 2026) — rules verified against txqp.net
+  2026 (bands: all except 60/30/17/12; Cabrillo name `TXQP` per WA7BNM;
+  robot site not yet live).
+
+Research for seven more (MD-DC, Hawaii, Ohio, Tennessee, Colorado, Iowa,
+New Jersey, New Hampshire, WA Salmon Run) is complete and banked in the
+project notes; definitions land as they're built.
 
 ## Features
 
