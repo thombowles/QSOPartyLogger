@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "ohqp",
+  "name": "Ohio QSO Party",
+  "cabrilloContest": "MRRC-OHQP",
+  "homeState": "OH",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 0
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perMode"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perMode"
+    }
+  },
+  "bonuses": [],
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "outStateWorksHomeStationsOnly": true,
+  "maxSimultaneousCounties": 1,
+  "provinces": [
+    "NL",
+    "PE",
+    "NS",
+    "NB",
+    "QC",
+    "ON",
+    "MB",
+    "SK",
+    "AB",
+    "BC",
+    "NT"
+  ],
+  "schedule": [
+    {
+      "start": "2026-08-22T16:00:00Z",
+      "end": "2026-08-23T04:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ADAM",
+      "name": "Adams"
+    },
+    {
+      "abbr": "ALLE",
+      "name": "Allen"
+    },
+    {
+      "abbr": "ASHL",
+      "name": "Ashland"
+    },
+    {
+      "abbr": "ASHT",
+      "name": "Ashtabula"
+    },
+    {
+      "abbr": "ATHE",
+      "name": "Athens"
+    },
+    {
+      "abbr": "AUGL",
+      "name": "Auglaize"
+    },
+    {
+      "abbr": "BELM",
+      "name": "Belmont"
+    },
+    {
+      "abbr": "BROW",
+      "name": "Brown"
+    },
+    {
+      "abbr": "BUTL",
+      "name": "Butler"
+    },
+    {
+      "abbr": "CARR",
+      "name": "Carroll"
+    },
+    {
+      "abbr": "CHAM",
+      "name": "Champaign"
+    },
+    {
+      "abbr": "CLAR",
+      "name": "Clark"
+    },
+    {
+      "abbr": "CLER",
+      "name": "Clermont"
+    },
+    {
+      "abbr": "CLIN",
+      "name": "Clinton"
+    },
+    {
+      "abbr": "COLU",
+      "name": "Columbiana"
+    },
+    {
+      "abbr": "COSH",
+      "name": "Coshocton"
+    },
+    {
+      "abbr": "CRAW",
+      "name": "Crawford"
+    },
+    {
+      "abbr": "CUYA",
+      "name": "Cuyahoga"
+    },
+    {
+      "abbr": "DARK",
+      "name": "Darke"
+    },
+    {
+      "abbr": "DEFI",
+      "name": "Defiance"
+    },
+    {
+      "abbr": "DELA",
+      "name": "Delaware"
+    },
+    {
+      "abbr": "ERIE",
+      "name": "Erie"
+    },
+    {
+      "abbr": "FAIR",
+      "name": "Fairfield"
+    },
+    {
+      "abbr": "FAYE",
+      "name": "Fayette"
+    },
+    {
+      "abbr": "FRAN",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "FULT",
+      "name": "Fulton"
+    },
+    {
+      "abbr": "GALL",
+      "name": "Gallia"
+    },
+    {
+      "abbr": "GEAU",
+      "name": "Geauga"
+    },
+    {
+      "abbr": "GREE",
+      "name": "Greene"
+    },
+    {
+      "abbr": "GUER",
+      "name": "Guernsey"
+    },
+    {
+      "abbr": "HAMI",
+      "name": "Hamilton"
+    },
+    {
+      "abbr": "HANC",
+      "name": "Hancock"
+    },
+    {
+      "abbr": "HARD",
+      "name": "Hardin"
+    },
+    {
+      "abbr": "HARR",
+      "name": "Harrison"
+    },
+    {
+      "abbr": "HENR",
+      "name": "Henry"
+    },
+    {
+      "abbr": "HIGH",
+      "name": "Highland"
+    },
+    {
+      "abbr": "HOCK",
+      "name": "Hocking"
+    },
+    {
+      "abbr": "HOLM",
+      "name": "Holmes"
+    },
+    {
+      "abbr": "HURO",
+      "name": "Huron"
+    },
+    {
+      "abbr": "JACK",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JEFF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "KNOX",
+      "name": "Knox"
+    },
+    {
+      "abbr": "LAKE",
+      "name": "Lake"
+    },
+    {
+      "abbr": "LAWR",
+      "name": "Lawrence"
+    },
+    {
+      "abbr": "LICK",
+      "name": "Licking"
+    },
+    {
+      "abbr": "LOGA",
+      "name": "Logan"
+    },
+    {
+      "abbr": "LORA",
+      "name": "Lorain"
+    },
+    {
+      "abbr": "LUCA",
+      "name": "Lucas"
+    },
+    {
+      "abbr": "MADI",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MAHO",
+      "name": "Mahoning"
+    },
+    {
+      "abbr": "MARI",
+      "name": "Marion"
+    },
+    {
+      "abbr": "MEDI",
+      "name": "Medina"
+    },
+    {
+      "abbr": "MEIG",
+      "name": "Meigs"
+    },
+    {
+      "abbr": "MERC",
+      "name": "Mercer"
+    },
+    {
+      "abbr": "MIAM",
+      "name": "Miami"
+    },
+    {
+      "abbr": "MONR",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MONT",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "MORG",
+      "name": "Morgan"
+    },
+    {
+      "abbr": "MORR",
+      "name": "Morrow"
+    },
+    {
+      "abbr": "MUSK",
+      "name": "Muskingum"
+    },
+    {
+      "abbr": "NOBL",
+      "name": "Noble"
+    },
+    {
+      "abbr": "OTTA",
+      "name": "Ottawa"
+    },
+    {
+      "abbr": "PAUL",
+      "name": "Paulding"
+    },
+    {
+      "abbr": "PERR",
+      "name": "Perry"
+    },
+    {
+      "abbr": "PICK",
+      "name": "Pickaway"
+    },
+    {
+      "abbr": "PIKE",
+      "name": "Pike"
+    },
+    {
+      "abbr": "PORT",
+      "name": "Portage"
+    },
+    {
+      "abbr": "PREB",
+      "name": "Preble"
+    },
+    {
+      "abbr": "PUTN",
+      "name": "Putnam"
+    },
+    {
+      "abbr": "RICH",
+      "name": "Richland"
+    },
+    {
+      "abbr": "ROSS",
+      "name": "Ross"
+    },
+    {
+      "abbr": "SAND",
+      "name": "Sandusky"
+    },
+    {
+      "abbr": "SCIO",
+      "name": "Scioto"
+    },
+    {
+      "abbr": "SENE",
+      "name": "Seneca"
+    },
+    {
+      "abbr": "SHEL",
+      "name": "Shelby"
+    },
+    {
+      "abbr": "STAR",
+      "name": "Stark"
+    },
+    {
+      "abbr": "SUMM",
+      "name": "Summit"
+    },
+    {
+      "abbr": "TRUM",
+      "name": "Trumbull"
+    },
+    {
+      "abbr": "TUSC",
+      "name": "Tuscarawas"
+    },
+    {
+      "abbr": "UNIO",
+      "name": "Union"
+    },
+    {
+      "abbr": "VANW",
+      "name": "Van Wert"
+    },
+    {
+      "abbr": "VINT",
+      "name": "Vinton"
+    },
+    {
+      "abbr": "WARR",
+      "name": "Warren"
+    },
+    {
+      "abbr": "WASH",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAYN",
+      "name": "Wayne"
+    },
+    {
+      "abbr": "WILL",
+      "name": "Williams"
+    },
+    {
+      "abbr": "WOOD",
+      "name": "Wood"
+    },
+    {
+      "abbr": "WYAN",
+      "name": "Wyandot"
+    }
+  ],
+  "notes": "Verified against the sponsor's official rules (ohqp.org/index.php/rules/, captured 2026-07-23, page re-checked 2026-07-24 — header reads 'Next OhQP Sat 22 Aug 2026' and the self-spotting rule is tagged '[New 2026]', so this is the current-year revision). Counties generated from the sponsor's official multiplier list (ohqp_mults_ohio.html), which states 'these abbreviations must be used ... this list trumps all other lists' — never hand-typed. The rules' stated 'Total of 150 multipliers for Ohio Stations' is asserted by the generator (88 counties + 49 states + DC + 11 provinces + 1 DX) and independently confirms the county count and Ohio's exclusion from the state list. Mults count ONCE PER MODE, so one county on CW and again on SSB is two multipliers. Phone 1 pt / CW 2 pts; no digital modes. Non-Ohio stations may work only Ohio stations. Simultaneous multi-county operation is expressly forbidden. PROVINCES: only 11 count, and NT is a COMBINED Yukon-NWT-Nunavut multiplier per the official list — YT and NU are therefore not valid OhQP tokens and are rejected on entry; a Yukon station sends NT. The sponsor's list misspells two counties ('Auglaze' for Auglaize, 'VanWert' for Van Wert); abbreviations are kept verbatim and the display names corrected, with the generator asserting it touches only those two. Cabrillo CONTEST value MRRC-OHQP per WA7BNM; the sponsor prints none and states it ignores Cabrillo headers entirely, collecting call/location/category at upload instead. Not modeled: the 500-foot rule for mobiles claiming a new county, and the no-cross-mode-contacts rule."
+}

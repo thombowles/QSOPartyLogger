@@ -33,14 +33,14 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**13 remaining** of the 16 in scope; 5 parties bundled (ALQP, MDC, HQP, KSQP, TQP).
+**12 remaining** of the 16 in scope; 6 parties bundled (ALQP, MDC, HQP, OhQP, KSQP, TQP).
 Rows are in contest-date order — the top unstruck row is what's next.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
 | ~~Maryland-DC~~ | Aug 8 1400Z → Aug 9 0400Z | [`mdcqp_rules.md`](../research/mdcqp_rules.md) + [`mdc_rules_2024.txt`](../research/mdc_rules_2024.txt) | **done** |
 | ~~Hawaii~~ | Aug 22 1600Z → Aug 24 0400Z ⚠️ see below | [`hqp_rules.md`](../research/hqp_rules.md) + [`hqp_districts.tsv`](../research/hqp_districts.tsv) | **done** (`verified: partial`) |
-| **Ohio** | Aug 22 1600Z → Aug 23 0400Z | [`ohqp_rules_text.txt`](../research/ohqp_rules_text.txt), [`ohqp_mults_ohio.html`](../research/ohqp_mults_ohio.html) | raw sources only |
+| ~~Ohio~~ | Aug 22 1600Z → Aug 23 0400Z | [`ohqp_rules.md`](../research/ohqp_rules.md) + [`ohqp_mults_ohio.html`](../research/ohqp_mults_ohio.html) | **done** |
 | ~~Kansas~~ | Aug 29 1400Z → Aug 30 0200Z; Aug 30 1400–2000Z | official PDFs | **done** |
 | **Tennessee** | Sep 6 1700Z → Sep 7 0300Z | [`tnqp_rules.md`](../research/tnqp_rules.md) + [`tnqp_counties.tsv`](../research/tnqp_counties.tsv) | research banked |
 | **Colorado** | Sep 12 1400Z → Sep 13 0359Z | [`coqp_src_rules.txt`](../research/coqp_src_rules.txt), [`coqp_src_counties.txt`](../research/coqp_src_counties.txt) | raw sources only |
@@ -75,9 +75,13 @@ Rows are in contest-date order — the top unstruck row is what's next.
    Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
    **Email `info@hawaiiqsoparty.org` to settle it.** See
    [`hqp_rules.md` §2](../research/hqp_rules.md).
-4. **Ohio, Colorado, New Jersey, Iowa have raw sponsor text but no write-up.**
+4. **Colorado, New Jersey, Iowa have raw sponsor text but no write-up.**
    Each still needs its 14-section research doc before any JSON (Article 15).
    Do not shortcut from raw text straight to a party file.
+5. **Watch for combined multiplier entities.** OhQP's official list folds Yukon,
+   NWT and Nunavut into a single `NT` multiplier, so `YT`/`NU` are invalid
+   tokens there. Sponsors abbreviate Canada inconsistently — read each one's own
+   list rather than assuming the standard 13 provinces.
 
 ## Also outstanding
 
