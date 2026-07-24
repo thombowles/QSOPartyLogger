@@ -22,6 +22,11 @@ struct MainView: View {
     @State private var isExporting = false
     @State private var keyMonitor: Any?
 
+    @State private var operatingMode: OperatingMode = .run
+    @State private var repeatCQ = false
+    @State private var repeatTask: Task<Void, Never>?
+    @State private var hostWindow: NSWindow?
+
     private var party: PartyDefinition? {
         document.party
     }
@@ -52,7 +57,7 @@ struct MainView: View {
                 SetupSheet(document: document)
             }
             .sheet(isPresented: $showMessagesEditor) {
-                MessagesEditor(settings: settings)
+                MessagesEditor(document: document, settings: settings)
             }
             .sheet(item: $editingQSO) { qso in
                 EditQSOSheet(original: qso, party: party) { updated in
@@ -103,27 +108,40 @@ struct MainView: View {
             stationStrip
             Divider()
 
-            EntryBar(entry: entry, party: party, onLog: logContact, focus: $focusedField)
+            EntryBar(entry: entry, party: party, onLog: returnPressed, focus: $focusedField)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
 
             MessagesRow(
-                messages: settings.messages,
+                operatingMode: $operatingMode,
+                messages: activeMessages,
                 expand: expandMacros,
                 onSend: sendMessage,
-                enabled: radio.isConnected && currentModeClass == .cw
+                enabled: radio.isConnected && currentModeClass == .cw,
+                repeatEnabled: $repeatCQ,
+                repeatInterval: $settings.repeatIntervalSeconds,
+                esmEnabled: settings.esmEnabled
             )
             Divider()
 
             logTable
         }
         .frame(minWidth: 760)
+        .background(WindowAccessor { window in
+            hostWindow = window
+            applyDefaultDocumentName()
+        })
         .onChange(of: entry.exchange) { revalidate() }
         .onChange(of: entry.call) { revalidate() }
         .onChange(of: radio.radioState?.band) { revalidate() }
         .onChange(of: radio.radioState?.mode) { revalidate() }
         .onChange(of: manualBand) { revalidate() }
         .onChange(of: manualRawMode) { revalidate() }
+        .onChange(of: radio.radioReportedWPM) { syncSpeedFromRadio() }
+        .onChange(of: repeatCQ) { repeatCQChanged() }
+        .onChange(of: radio.isConnected) { if !radio.isConnected { stopRepeat() } }
+        .onChange(of: document.log.partyID) { applyDefaultDocumentName() }
+        .onChange(of: document.log.station.callsign) { applyDefaultDocumentName() }
     }
 
     private var logTable: some View {
@@ -139,6 +157,7 @@ struct MainView: View {
     }
 
     private func onDisappear() {
+        stopRepeat()
         if let monitor = keyMonitor {
             NSEvent.removeMonitor(monitor)
             keyMonitor = nil
@@ -218,12 +237,116 @@ struct MainView: View {
 
     // MARK: Actions
 
+    private var activeMessages: [String] {
+        document.log.messages.messages(for: operatingMode)
+    }
+
     private func onAppear() {
         if document.log.station.callsign.isEmpty {
             showSetup = true
         }
         focusedField = .call
         installKeyMonitor()
+    }
+
+    /// Return key: plain logging, or the ESM state machine when enabled.
+    private func returnPressed() {
+        entry.applyDefaults(modeClass: currentModeClass)
+        revalidate()
+        let exchangeValid: Bool = {
+            if case .valid = entry.exchangeStatus { return true }
+            return false
+        }()
+
+        guard settings.esmEnabled, radio.isConnected, currentModeClass == .cw else {
+            logContact()
+            return
+        }
+
+        switch ESM.nextAction(
+            mode: operatingMode,
+            callEmpty: entry.callNormalized.isEmpty,
+            exchangeValid: exchangeValid
+        ) {
+        case .sendMessage(let index):
+            sendMessageAt(index)
+        case .logAndSend(let index):
+            logContact()
+            sendMessageAt(index)
+        case .none:
+            logContact()
+        }
+    }
+
+    private func sendMessageAt(_ index: Int) {
+        let set = activeMessages
+        guard set.indices.contains(index), !set[index].isEmpty else { return }
+        sendMessage(set[index])
+    }
+
+    // MARK: CW speed
+
+    private func syncSpeedFromRadio() {
+        guard let wpm = radio.radioReportedWPM, wpm != settings.wpm else { return }
+        settings.wpm = wpm
+    }
+
+    private func adjustWPM(by delta: Int) {
+        settings.wpm = min(50, max(8, settings.wpm + delta))
+        radio.syncWPM(settings.wpm, settings: settings)
+    }
+
+    // MARK: Repeat CQ
+
+    private func repeatCQChanged() {
+        repeatCQ ? startRepeat() : stopRepeat()
+    }
+
+    private func startRepeat() {
+        repeatTask?.cancel()
+        guard radio.isConnected, currentModeClass == .cw else {
+            repeatCQ = false
+            return
+        }
+        let cq = document.log.messages.run.first ?? ""
+        guard !cq.isEmpty else {
+            repeatCQ = false
+            return
+        }
+        repeatTask = Task {
+            while !Task.isCancelled && repeatCQ {
+                let text = expandMacros(cq)
+                radio.sendCW(text, settings: settings)
+                let onAir = radio.estimatedSendDuration(text, settings: settings)
+                let wait = onAir + settings.repeatIntervalSeconds
+                do {
+                    try await Task.sleep(nanoseconds: UInt64(wait * 1_000_000_000))
+                } catch {
+                    break
+                }
+            }
+        }
+    }
+
+    private func stopRepeat() {
+        repeatTask?.cancel()
+        repeatTask = nil
+        if repeatCQ { repeatCQ = false }
+    }
+
+    // MARK: Document naming
+
+    /// Give unsaved logs a useful default name: "2026-07-25 ALQP KE5CW".
+    private func applyDefaultDocumentName() {
+        guard let window = hostWindow,
+              let nsDocument = window.windowController?.document as? NSDocument,
+              nsDocument.fileURL == nil else { return }
+        let name = LogDocument.defaultDisplayName(
+            partyID: document.log.partyID,
+            callsign: document.log.station.callsign
+        )
+        nsDocument.displayName = name
+        window.title = name
     }
 
     private func revalidate() {
@@ -287,16 +410,34 @@ struct MainView: View {
     private func installKeyMonitor() {
         guard keyMonitor == nil else { return }
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            // Any keystroke cancels a running repeat-CQ loop (per Tom's spec:
+            // "typing anything cancels repeat").
+            if repeatTask != nil {
+                stopRepeat()
+            }
+
+            // ⌘= / ⌘+ and ⌘- (plus keypad variants): CW speed ±2 WPM.
+            if event.modifierFlags.contains(.command) {
+                switch event.keyCode {
+                case 24, 69:  // '=' / keypad '+'
+                    adjustWPM(by: 2)
+                    return nil
+                case 27, 78:  // '-' / keypad '-'
+                    adjustWPM(by: -2)
+                    return nil
+                default:
+                    break
+                }
+            }
+
             let fKeyCodes: [UInt16: Int] = [
                 122: 0, 120: 1, 99: 2, 118: 3, 96: 4, 97: 5, 98: 6, 100: 7,
             ]
             if let index = fKeyCodes[event.keyCode] {
-                if settings.messages.indices.contains(index) {
-                    sendMessage(settings.messages[index])
-                }
+                sendMessageAt(index)
                 return nil
             }
-            if event.keyCode == 53 {  // Esc: abort CW immediately
+            if event.keyCode == 53 {  // Esc: abort CW + stop repeating
                 radio.abortCW(settings: settings)
                 return nil
             }
@@ -322,6 +463,29 @@ struct MainView: View {
         exportType = .plainText
         exportName = "\(document.log.station.callsign.isEmpty ? "log" : document.log.station.callsign).log"
         isExporting = true
+    }
+}
+
+/// Grabs the hosting NSWindow so the document's display name can be set.
+struct WindowAccessor: NSViewRepresentable {
+    let onWindow: (NSWindow) -> Void
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async {
+            if let window = view.window {
+                onWindow(window)
+            }
+        }
+        return view
+    }
+
+    func updateNSView(_ view: NSView, context: Context) {
+        DispatchQueue.main.async {
+            if let window = view.window {
+                onWindow(window)
+            }
+        }
     }
 }
 

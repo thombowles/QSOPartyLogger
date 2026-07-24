@@ -9,6 +9,8 @@ protocol RadioDriver: AnyObject {
 
     /// Latest state pushed here (background queue).
     var onStateChange: (@Sendable (RadioState) -> Void)? { get set }
+    /// Radio-side keyer speed changes (front-panel knob), for speed sync.
+    var onKeyerSpeedChange: (@Sendable (Int) -> Void)? { get set }
 
     func setFrequency(hz: Int)
     func setKeyerSpeed(wpm: Int)

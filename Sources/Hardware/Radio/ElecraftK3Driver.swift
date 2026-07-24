@@ -14,7 +14,11 @@ final class ElecraftK3Driver: RadioDriver, @unchecked Sendable {
     private let pollQueue = DispatchQueue(label: "org.b5n.QSOPartyLogger.k3poll", qos: .userInitiated)
 
     var onStateChange: (@Sendable (RadioState) -> Void)?
+    /// Fired when the radio reports a keyer speed different from the last
+    /// one seen — turning the K3's front-panel speed knob updates the app.
+    var onKeyerSpeedChange: (@Sendable (Int) -> Void)?
     private var lastState: RadioState?
+    private var lastWPM: Int?
 
     // MARK: Lifecycle
 
@@ -46,12 +50,14 @@ final class ElecraftK3Driver: RadioDriver, @unchecked Sendable {
         pollTimer = nil
         transport = nil
         lastState = nil
+        lastWPM = nil
         rxBuffer = ""
         lock.unlock()
     }
 
     private func poll() {
-        currentTransport()?.write(Self.cmdPollIF)
+        // IF = freq/mode/TX; KS = keyer speed (bidirectional speed sync).
+        currentTransport()?.write(Self.cmdPollIF + Self.cmdPollKS)
     }
 
     private func currentTransport() -> (any SerialTransport)? {
@@ -63,6 +69,7 @@ final class ElecraftK3Driver: RadioDriver, @unchecked Sendable {
     // MARK: Commands (pure builders — unit tested)
 
     static let cmdPollIF = "IF;"
+    static let cmdPollKS = "KS;"
     static let cmdAutoInfoOff = "AI0;"
     static let cmdExtendedMode = "K31;"
 
@@ -171,13 +178,24 @@ final class ElecraftK3Driver: RadioDriver, @unchecked Sendable {
     }
 
     private func handle(response: String) {
-        guard let state = Self.parseIF(response) else { return }
-        lock.lock()
-        let changed = state != lastState
-        lastState = state
-        lock.unlock()
-        if changed {
-            onStateChange?(state)
+        if let state = Self.parseIF(response) {
+            lock.lock()
+            let changed = state != lastState
+            lastState = state
+            lock.unlock()
+            if changed {
+                onStateChange?(state)
+            }
+            return
+        }
+        if let wpm = Self.parseKS(response) {
+            lock.lock()
+            let changed = wpm != lastWPM
+            lastWPM = wpm
+            lock.unlock()
+            if changed {
+                onKeyerSpeedChange?(wpm)
+            }
         }
     }
 }

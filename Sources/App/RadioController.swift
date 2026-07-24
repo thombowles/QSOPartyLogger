@@ -11,6 +11,9 @@ final class RadioController {
     private(set) var radioState: RadioState?
     private(set) var lastError: String?
     private(set) var nowSending: String?
+    /// Keyer speed the radio last reported (K3 front-panel knob) — observed
+    /// by the UI to sync `AppSettings.wpm`.
+    private(set) var radioReportedWPM: Int?
 
     var availablePorts: [SerialPortInfo] = []
 
@@ -57,6 +60,11 @@ final class RadioController {
                 self?.radioState = state
             }
         }
+        newDriver.onKeyerSpeedChange = { [weak self] wpm in
+            Task { @MainActor [weak self] in
+                self?.radioReportedWPM = wpm
+            }
+        }
         newDriver.start(transport: newPort)
 
         let keyer = CWKeyer(transport: newPort, config: settings.keyerLineConfig, wpm: settings.wpm)
@@ -84,6 +92,13 @@ final class RadioController {
         isConnected = false
         radioState = nil
         nowSending = nil
+        radioReportedWPM = nil
+    }
+
+    /// Estimated on-air duration of a message at the current speed — used to
+    /// schedule the next repeat-CQ transmission for either keyer backend.
+    func estimatedSendDuration(_ text: String, settings: AppSettings) -> TimeInterval {
+        KeyerTiming.totalDurationMs(text: text, wpm: settings.wpm) / 1000.0
     }
 
     private func activeSender(_ settings: AppSettings) -> (any CWSender)? {

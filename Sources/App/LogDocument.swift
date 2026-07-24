@@ -97,6 +97,29 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         undoManager?.setActionName("Edit Contact")
     }
 
+    /// "2026-07-25 ALQP KE5CW" — default display name for unsaved logs.
+    nonisolated static func defaultDisplayName(partyID: String, callsign: String, date: Date = Date()) -> String {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        f.timeZone = TimeZone(identifier: "UTC")
+        f.locale = Locale(identifier: "en_US_POSIX")
+        var parts = [f.string(from: date), partyID.uppercased()]
+        if !callsign.isEmpty { parts.append(callsign.uppercased()) }
+        return parts.joined(separator: " ")
+    }
+
+    @MainActor
+    func updateMessages(_ sets: MessageSets, undoManager: UndoManager?) {
+        let old = log.messages
+        log.messages = sets
+        undoManager?.registerUndo(withTarget: self) { doc in
+            MainActor.assumeIsolated {
+                doc.updateMessages(old, undoManager: undoManager)
+            }
+        }
+        undoManager?.setActionName("Edit CW Messages")
+    }
+
     @MainActor
     func updateStation(_ station: StationProfile, location: MyLocation, partyID: String, undoManager: UndoManager?) {
         let (oldStation, oldLoc, oldParty) = (log.station, log.myLocation, log.partyID)

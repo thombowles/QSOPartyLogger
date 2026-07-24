@@ -1,5 +1,50 @@
 import Foundation
 
+/// F1–F8 CW message sets, one per operating style. Stored per document so
+/// each contest (window) carries its own macros — running two parties at
+/// once means two logs with independent messages.
+struct MessageSets: Codable, Equatable, Sendable {
+    var run: [String]
+    var searchPounce: [String]
+
+    static let defaultRun = [
+        "CQ TEST {MYCALL}",
+        "{CALL} {RST} {EXCH}",
+        "TU {MYCALL}",
+        "{MYCALL}",
+        "AGN?",
+        "?",
+        "B4",
+        "73 TU {MYCALL}",
+    ]
+
+    static let defaultSearchPounce = [
+        "{MYCALL}",
+        "{RST} {EXCH}",
+        "TU",
+        "{MYCALL}",
+        "AGN?",
+        "?",
+        "R {RST} {EXCH}",
+        "73",
+    ]
+
+    static let standard = MessageSets(run: defaultRun, searchPounce: defaultSearchPounce)
+
+    func messages(for mode: OperatingMode) -> [String] {
+        switch mode {
+        case .run: run
+        case .searchPounce: searchPounce
+        }
+    }
+}
+
+/// Run (calling CQ) vs Search & Pounce operating style.
+enum OperatingMode: String, Codable, CaseIterable, Sendable {
+    case run = "Run"
+    case searchPounce = "S&P"
+}
+
 /// The persisted document payload (`.qplog` = JSON of this).
 struct ContestLog: Codable, Equatable, Sendable {
     var schemaVersion: Int = 1
@@ -8,17 +53,36 @@ struct ContestLog: Codable, Equatable, Sendable {
     var station: StationProfile
     var myLocation: MyLocation
     var qsos: [QSO]
+    /// Per-contest CW macros (Run + S&P sets).
+    var messages: MessageSets
 
     init(
         partyID: String,
         station: StationProfile = StationProfile(),
         myLocation: MyLocation = .outOfState(location: ""),
-        qsos: [QSO] = []
+        qsos: [QSO] = [],
+        messages: MessageSets = .standard
     ) {
         self.partyID = partyID
         self.station = station
         self.myLocation = myLocation
         self.qsos = qsos
+        self.messages = messages
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case schemaVersion, partyID, station, myLocation, qsos, messages
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        schemaVersion = try c.decode(Int.self, forKey: .schemaVersion)
+        partyID = try c.decode(String.self, forKey: .partyID)
+        station = try c.decode(StationProfile.self, forKey: .station)
+        myLocation = try c.decode(MyLocation.self, forKey: .myLocation)
+        qsos = try c.decode([QSO].self, forKey: .qsos)
+        // Documents written before per-contest macros existed get the defaults.
+        messages = try c.decodeIfPresent(MessageSets.self, forKey: .messages) ?? .standard
     }
 
     static func decode(from data: Data) throws -> ContestLog {

@@ -42,9 +42,15 @@ final class AppSettings {
         }
     }
 
-    /// F1–F8 CW messages. Macros: {MYCALL} {CALL} {RST} {EXCH}.
-    var messages: [String] {
-        didSet { defaults.set(messages, forKey: "messages") }
+    /// Enter Sends Message (N1MM-style ESM): Return sends the contextually
+    /// next message instead of only logging.
+    var esmEnabled: Bool {
+        didSet { defaults.set(esmEnabled, forKey: "esmEnabled") }
+    }
+
+    /// Gap between repeat-CQ transmissions, in seconds.
+    var repeatIntervalSeconds: Double {
+        didSet { defaults.set(repeatIntervalSeconds, forKey: "repeatIntervalSeconds") }
     }
 
     var lastStationProfile: StationProfile? {
@@ -56,17 +62,6 @@ final class AppSettings {
         }
     }
 
-    static let defaultMessages = [
-        "CQ KSQP {MYCALL}",
-        "{CALL} {RST} {EXCH}",
-        "TU {MYCALL}",
-        "{MYCALL}",
-        "AGN?",
-        "?",
-        "B4",
-        "73 TU {MYCALL}",
-    ]
-
     init() {
         radioID = defaults.string(forKey: "radioID") ?? "elecraft-k3"
         portPath = defaults.string(forKey: "portPath") ?? ""
@@ -76,8 +71,8 @@ final class AppSettings {
         keyerLineConfig = (defaults.data(forKey: "keyerLineConfig")
             .flatMap { try? JSONDecoder().decode(KeyerLineConfig.self, from: $0) })
             ?? KeyerLineConfig()
-        let stored = defaults.stringArray(forKey: "messages") ?? []
-        messages = stored.count == 8 ? stored : Self.defaultMessages
+        esmEnabled = defaults.object(forKey: "esmEnabled") as? Bool ?? false
+        repeatIntervalSeconds = defaults.object(forKey: "repeatIntervalSeconds") as? Double ?? 3.0
         lastStationProfile = defaults.data(forKey: "lastStationProfile")
             .flatMap { try? JSONDecoder().decode(StationProfile.self, from: $0) }
     }
