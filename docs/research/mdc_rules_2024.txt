@@ -1,0 +1,323 @@
+                       The Fun Contest Maryland-DC QSO Party Rules
+                                                                      Revised 06 AUG 2024
+
+
+1) Contest Sponsor: The Anne Arundel Radio Club (AARC)
+2) Contest Dates: This contest is conducted in a single 14-hour operating period beginning
+   on the second Saturday in August at 1400 UTC and ending at 0400 Sunday UTC.
+3) Entry Acceptance: Valid entries must be received within 14 days of the end of the contest.
+4) Station Categories: There are five categories. You may only enter under one category.
+   a) Club Station (Club) – A station operated by a single operator using a single
+      transmitter and using a club call sign throughout the duration of the contest or a
+      station operated by multiple operators using a single or multiple transmitters, using a
+      single call sign (whether a club call sign or individual call sign throughout the duration
+      of the contest. Both require that all stations be operated from the same fixed
+      location.
+   b) Rover Station (Rover) – A MDC mobile or portable station which operates from three
+      or more MDC contest locations as listed in Table 1 during the contest period.
+   c) Portable Station (Portable) – An amateur radio station set up in a temporary location.
+      Portable stations include the same basic equipment as fixed and mobile stations.
+      Mobile stations using antennas that are not connected to the vehicle are considered
+      portable stations.
+   d) Mobile Station (Mobile) – A station operated from inside a motorized vehicle in
+      motion or parked, regardless of the number of operators or number of transmitters.
+      A station transmitter(s) must be safely operated from inside the vehicle, using
+      antennas mounted on the vehicle and not attached elsewhere. Power must not be
+      sourced from a utility/power grid. For safety reasons, a single operator should only
+      operate while parked.
+   e) Fixed Station (Fixed) – A station operated from a fixed location by a single operator
+      using a single transmitter with a transmitted signal output of less than 1 watt (PEP)
+      to the legal limit during the QSO Party. Fixed amateur radio stations are typically
+      established in a permanent structure with equipment that is not intended for portable
+      operation. Fixed stations are generally powered from commercial electrical supply
+      available in the building.
+5) Power Categories: There are three power categories. You may only enter under one
+   category. The highest power used during the QSO Party determines the power level.
+   a) QRP - 5 watts or less during the OSO Party.
+   b) LOW - 100 watts or less during the QSO Party.
+   c) High - above 100 watts.
+6) Modes: Only two transmitting modes are allowed.
+   a) Phone: Any phone mode may be used.
+
+
+                                        Page 1 of 8                                            v.5
+                           The Fun Contest Maryland-DC QSO Party Rules
+                                                                           Revised 06 AUG 2024
+
+   b) CW: Only International Morse Code may be used.
+7) The Exchange: The exchange is simple. You give your Call Sign and Location to each
+   contacted station. Your location will be as follows:
+   a) For stations outside of Canada and the United States, use your country.
+   b) For Canadian and non-MDC stations, use your province or state.
+   c) For MDC stations, use your county or city as indicated below in Table 1.
+
+
+        No.   County/City         Abbreviation         No.   County/City         Abbreviation
+
+
+        1     Allegany                ALY              14    Howard                  HWD
+
+
+        2     Anne Arundel            ANA              15    Kent                    KEN
+
+
+        3     Baltimore City          BAL              16    Montgomery              MON
+
+
+        4     Baltimore County        BCT              17    Prince George’s         PGE
+
+
+        5     Calvert                 CLV              18    Queen Anne’s            QAN
+
+
+        6     Caroline                CLN              19    St. Mary’s              STM
+
+
+        7     Carroll                 CRL              20    Somerset                SMR
+
+
+        8     Cecil                   CEC              21    Talbot                  TAL
+
+
+        9     Charles                 CHS              22    Washington              WAS
+
+
+        10    Dorchester              DRC              23    Wicomico                WIC
+
+
+        11    Frederick               FRD              24    Worcester               WRC
+
+
+        12    Garrett                 GAR              25    Washington DC           WDC
+
+
+        13    Harford                 HFD
+
+
+                                                 Table 1
+
+
+
+
+                                         Page 2 of 8                                             v.5
+                      The Fun Contest Maryland-DC QSO Party Rules
+                                                                    Revised 06 AUG 2024
+
+8) Exchange Examples:
+   a) W3VPR this is N3ADF in Queen Anne (QAN if using CW) county.
+   b) N3ADF this is W3VPR in Anne Arundel (ANA if using CW) county.
+   c) W3VPR this is AG4RR in Kentucky (KY if using CW).
+   d) AG4RR this is W3VPR in Anne Arundel (ANA if using CW) county.
+9) Canadian Provinces: The following are the Canadian Provinces and Territories used for
+   the purposes of this contest.
+
+
+                          Province              Call Area and Description
+                Newfoundland &                             NL
+                Labrador
+                New Brunswick                             NB
+                Nova Scotia                               NS
+                Prince Edward Island                       PE
+                Quebec                                    QC
+                Ontario                                   ON
+                Manitoba                                  MB
+                Saskatchewan                               SK
+                Alberta                                    AB
+                British Columbia                          BC
+                Northwest Territories                      NT
+                Nunavut Territory                         NU
+                Yukon Territory                            YT
+                                            Table-2
+Example:
+             W3VPR this is VE3XYZ, I am in Ontario (ON if using CW).
+             VE3XYZ this is W3VPR, we are in Washington DC Whiskey Delta Charlie
+             (WDC if using CW).
+
+
+
+
+                                        Page 3 of 8                                        v.5
+                       The Fun Contest Maryland-DC QSO Party Rules
+                                                                     Revised 06 AUG 2024
+
+10) Miscellaneous Rules:
+   a) Make lots of lots of contacts.
+   b) Stations not located in the state of Maryland, or the District of Columbia may only
+      receive credit for contacts with stations located in Maryland or the District of Columbia
+      (MDC section) Stations located in the state of Maryland or District of Columbia may
+      work stations anywhere.
+   c) Club stations must operate from a single location.
+   d) The use of repeaters, digipeaters, satellite retransmission, or the Internet (e.g.,
+      Echo Link) is not allowed.
+   e) Cross-mode contacts are prohibited.
+   f) Stations may be worked only once per band per mode except as exempted by
+      paragraph g. below. This means that any station (so long as one is in one of the
+      locations listed in Table 1) may contact any other station on any band up to two
+      times, provided a different mode is used each time.
+   g) Stations that change their location from one MDC entity (as listed in Table 1) to
+      another, shall be considered as a “new” station, and may be worked again from this
+      new location in all contest modes for contest credit for both stations involved.
+      Similarly non-MDC stations who change their location from one US State,
+      Canadian Province, or country to another shall also be considered a “new” station.
+   h) For the MDC QSO party, Alaska, and Hawaii count as States only.
+   i) Participating stations may not count Maryland as a state they have worked. The
+      emphasis is on working Maryland Counties, Baltimore City or Washington DC.
+   j) Contacts made during a net operation may not be included.
+11) All MDC QSO Party 2024 submissions must be made using the online submission form
+    found at www.w3vpr.org/qso_party_submission_2024 and that submission must contain
+    a Cabrillo log.
+12) Self-spotting in any form is not permitted. Self-spotting is defined as the practice of
+    sending a spot advertisement of your station's call sign and current operating
+    frequency.
+13) Authorized and Suggested Frequencies: Contacts on WARC bands, 60 meters, and
+    VHF/UHF are not allowed. The following are suggested frequencies for use by W3VPR
+    during the contest.
+   a) CW: 3.557, 7.045, 14.045, 21.045, 28.045
+   b) SSB: 1.895, 3.821, 7.230, 14.271, 21.371, 28.371
+14) Scoring:
+   a) Contact Points will be based on the mode used to complete the contact, as follows:
+
+                                        Page 4 of 8                                           v.5
+                        The Fun Contest Maryland-DC QSO Party Rules
+                                                                       Revised 06 AUG 2024
+
+       i) 3 points if the contact was made in CW mode (using International Morse Code)
+       ii) 1 point if the contact was made using phone.
+15) Multipliers for all entrants: The total number of all Contact Points will be multiplied by
+    each of the following multipliers in sequence. (See example below).
+   a) Station Category Multiplier: Based on the category for which the station is entered.
+       i) 1 if the Entrants Station Category is Club.
+       ii) 4 If the Entrants Station Category is Rover.
+       iii) 3 the Entrant’s Station Category is Portable.
+       iv) 2 If the Entrants Station Category is Mobile.
+       v) 1 if Entrants Station Category is Fixed.
+   b) Power Category Multiplier:
+       i) 3 If the Entrants Power Category is a QRP station.
+       ii) 2 If the Entrants Power Category is a Low Power station.
+       iii) 1 If the Entrants Power Category is a High-Power station.
+16) State Multiplier points for MDC Stations: Stations in Maryland and the District of
+    Columbia earn one multiplier point for making initial contact with the following:
+   a) Each Maryland County, and cities of Baltimore (BAL) and the District of Columbia
+      (WDC) – 25 maximum.
+   b) Each State (less Maryland) – 49 maximum.
+   c) Each Canadian Province – 13 maximum.
+   d) Each DXCC country except the United States of America, Canada, Hawaii, and
+      Alaska.
+   e) Multiplier points described in a) through d) above will be added together before being
+      used as a multiplier.
+17) State Multiplier points for non-MDC Stations: Stations not operating from within
+    Maryland or the District of Columbia earn one multiplier point for making initial contacts
+    with:
+   a) Each Maryland County, the cities of Baltimore (BAL) and the District of Columbia
+      (WDC) – 25 maximum.
+18) Bonus Points: (MDC or non-MDC)
+   a) Fifty bonus points will be awarded to each station submitting a contest log with at
+
+                                         Page 5 of 8                                             v.5
+                        The Fun Contest Maryland-DC QSO Party Rules
+                                                                     Revised 06 AUG 2024
+
+      least one conﬁrmed contact with station W3VPR (The call sign of the Anne Arundel
+      Radio Club). The Fifty points may be claimed on the website entry.
+   b) FIVE HUNDRED bonus points will be awarded for working all 25 MDC jurisdictions
+      during the MDC QSO Party.
+      i) TWO HUNDRED-FIFTY bonus points will be awarded for working 13 of the 25
+         MDC jurisdictions during the MDC QSO Party.
+19) Inaccuracies in form of submissions, especially ﬂagrant ones, will result in
+    rejection of submission.
+20) Total Score:
+   a) Add the number of contacts (qso’s) made using each of the two Modes listed in item 6
+      above. (CW or Phone)
+   b) For each Mode multiply the number of Contact Points noted in 14.a.i) and 14.a.ii)
+      above. Add those numbers together to produce the number of Contact Points
+      earned. (qso’s x mode value = contact points).
+   c) Determine the Station Category Multiplier noted in 15.a) above and the Power
+      Category Multiplier noted in 15.b).
+   d) Next, based on whether you are entering from within Maryland-DC (MDC) or outside
+      of Maryland-DC. Determine either your In-State Multiplier Points, or your Out-Of-
+      State Multiplier Points as applicable(Items 16 & 17 above). Consider this amount to
+      be your State Multiplier.
+   e) Now multiply your Contact Points times your Maximum Power Multiplier times your
+      Station Category Multiplier times your State Multiplier to create your Basic Score.
+      The formula for this is:
+      (Contact Points) x (Maximum Power Multiplier) x (Station Category Multiplier) x
+               (State Multiplier) = (Basic Score)
+   f) Next determine if you have earned any Bonus Points.
+      i) If you have contacted W3VPR during the contest, in any mode, you earn a one-
+         time 50 bonus points.
+      ii) If you worked all 25 MDC jurisdictions during the contest, you earn 500 bonus
+          points. If you worked 13 MDC jurisdictions during the contest, you earn 250
+          bonus points.
+   g) Add your Basic Score to your Bonus Points to get your Total Score. The formula
+      follows:
+                   (Basic Score) + (Bonus Points) = (Total Score).
+                   You are done. You have your Total Score.
+
+
+
+                                       Page 6 of 8                                          v.5
+                        The Fun Contest Maryland-DC QSO Party Rules
+                                                                     Revised 06 AUG 2024
+
+Example:
+           If you make 1 phone, and 1 CW qso, your Contact Points are 1+3 for a total of 4
+           points. If you used a maximum transmit power of 100 watts, your power multiplier
+           is 2, and your total is 4 x 2 or 8. If your entry category is “Fixed Station”, your
+           category multiplier is 1, and your total is 1 x 8 or 8. If you lived in Maryland and
+           made those 3 contacts with 3 different counties, your state multiplier is 3, and your
+           total becomes 3 x 8 or 24 points. And finally, the bonus points are calculated and
+           added to the basic score. A contact with W3VPR would add 50 bonus points for
+           24 + 50 or 74 points. Thus, you would report a total of 74 points.
+21) The judges will use this same method to compute your score based on the entries made
+    on your submitted entry form. This will be done electronically to avoid issues. Failure to
+    ﬁll in the form completely may result in rejection of the entry form by the judges.
+22) QSO Party logging software: There are several logging software programs that support
+    the MDC QSO Party, which include the creation of a Cabrillo file. Here are a few:
+
+      • http://www.n1mm.com – This free software can be adapted to a large number of on-
+        air contests.
+
+      • http://www.n3fjp.com/stateqsoparty.html – A very large selection of logging software
+        is available
+
+      • http://www.qsl.net/w3km/ -- Download GenLog for free!
+
+      • http://writelog.com – A very large selection of logging software is available
+      NOTE: You are not required to use logging software to document your contacts.
+      The above listing does not infer or imply an endorsement by the Anne Arundel
+      Radio Club or the MDC QSO Party Committee. Caveat emptor (Buyer Beware!).
+      Use all software at your own risk.
+23) Logs: All Maryland QSO Party Submissions must comply with the following rules:
+   a) The participant's MDC QSO Party Log must be in the Cabrillo format. No
+      handwritten logs are allowed in 2024. All entrants must use the WEBSITE ENTRY
+      form to upload logs.
+   b) Website entries with associated logs must be received within 14 days of the end of the
+      contest.
+   c) The website entry form can be found at:
+      www.w3vpr.org/QSO_Party_Submission_2024
+24) All decisions by the Maryland QSO Party Contest Committee concerning any
+    Maryland DC QSO Party submission will be considered final. By submitting your
+    entry, you agree to abide by the decisions of the Maryland-DC QSO Party Contest
+    Committee.
+
+
+
+                                        Page 7 of 8                                           v.5
+                        The Fun Contest Maryland-DC QSO Party Rules
+                                                                       Revised 06 AUG 2024
+
+25) Awards: Prizes may be awarded in each category as indicated below.
+   a) A plaque and certificate will be awarded to the station with the highest score in each
+      category if there are a minimum of five (5) entries submitted in that category. If there
+      are not five entries in a category the first-place finisher will receive an e-mailed
+      certificate suitable for printing acknowledging their accomplishment.
+   b) Any station ranking in the top five (5) in their category will receive a printed certificate.
+   c) Any station ranking lower than 5th in their category but logging more than 10
+      QSO Party Contacts will receive an emailed printable version of a Participation
+      Certificate.
+
+
+
+
+                                         Page 8 of 8                                             v.5
+

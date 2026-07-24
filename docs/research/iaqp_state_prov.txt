@@ -1,0 +1,32 @@
+IOWA QSO Party State and Province List                              Updated: 12 AUG 2018
+
+
+
+  Abr   State             Abr   State            Abr   Province
+  AL    Alabama           NE    Nebraska         AB    Alberta
+  AK    Alaska            NV    Nevada           BC    British Columbia
+  AZ    Arizona           NH    New Hampshire    MB    Manitoba
+  AR    Arkansas          NJ    New Jersey       NB    New Brunswick
+  CA    California        NM    New Mexico       NL    Newfoundland and Labrador
+  CO    Colorado          NY    New York         NT    Northwest Territories
+  CT    Connecticut       NC    North Carolina   NS    Nova Scotia
+  DE    Delaware          ND    North Dakota     NU    Nunavut
+  FL    Florida           OH    Ohio             ON    Ontario
+  GA    Georgia           OK    Oklahoma         PE    Prince Edward Island
+  HI    Hawaii            OR    Oregon           QC    Quebec
+  ID    Idaho             PA    Pennsylvania     SK    Saskatchewan
+  IL    Illinois          RI    Rhode Island     YT    Yukon
+  IN    Indiana           SC    South Carolina
+  IA    Iowa              SD    South Dakota
+  KS    Kansas            TN    Tennessee
+  KY    Kentucky          TX    Texas
+  LA    Louisiana         UT    Utah
+  ME    Maine             VT    Vermont
+  MD    Maryland and DC   VA    Virginia
+  MA    Massachusetts     WA    Washington
+  MI    Michigan          WV    West Virginia    DX    Any other station located
+  MN    Minnesota         WI    Wisconsin              outside the US and Canada
+  MS    Mississippi       WY    Wyoming
+  MO    Missouri
+  MT    Montana
+

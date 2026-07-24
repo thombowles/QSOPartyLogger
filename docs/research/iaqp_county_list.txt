@@ -1,0 +1,39 @@
+IOWA QSO Party County List                                      Updated: 08 JUNE 2018
+
+
+
+ Num   Abr   County        Num   Abr   County      Num   Abr   County
+ 1     ADR   Adair         34    FLO   Floyd       67    MNA   Monona
+ 2     ADM   Adams         35    FRA   Franklin    68    MOE   Monroe
+ 3     ALL   Allamakee     36    FRE   Fremont     69    MTG   Montgomery
+ 4     APP   Appanoose     37    GRE   Greene      70    MUS   Muscatine
+ 5     AUD   Audubon       38    GRU   Grundy      71    OBR   O'Brien
+ 6     BEN   Benton        39    GUT   Guthrie     72    OSC   Osceola
+ 7     BKH   Black Hawk    40    HAM   Hamilton    73    PAG   Page
+ 8     BOO   Boone         41    HAN   Hancock     74    PLA   Palo Alto
+ 9     BRE   Bremer        42    HDN   Hardin      75    PLY   Plymouth
+ 10    BUC   Buchanan      43    HRS   Harrison    76    POC   Pocahontas
+ 11    BNV   Buena Vista   44    HEN   Henry       77    POL   Polk
+ 12    BTL   Butler        45    HOW   Howard      78    POT   Pottawattamie
+ 13    CAL   Calhoun       46    HUM   Humboldt    79    POW   Poweshiek
+ 14    CAR   Carroll       47    IDA   Ida         80    RIN   Ringgold
+ 15    CAS   Cass          48    IOW   Iowa        81    SAC   Sac
+ 16    CED   Cedar         49    JAC   Jackson     82    SCO   Scott
+ 17    CEG   Cerro Gordo   50    JAS   Jasper      83    SHE   Shelby
+ 18    CHE   Cherokee      51    JEF   Jefferson   84    SIO   Sioux
+ 19    CHI   Chickasaw     52    JOH   Johnson     85    STR   Story
+ 20    CLR   Clarke        53    JON   Jones       86    TAM   Tama
+ 21    CLA   Clay          54    KEO   Keokuk      87    TAY   Taylor
+ 22    CLT   Clayton       55    KOS   Kossuth     88    UNI   Union
+ 23    CLN   Clinton       56    LEE   Lee         89    VAN   Van Buren
+ 24    CRF   Crawford      57    LIN   Linn        90    WAP   Wapello
+ 25    DAL   Dallas        58    LOU   Louisa      91    WAR   Warren
+ 26    DAV   Davis         59    LUC   Lucas       92    WAS   Washington
+ 27    DEC   Decatur       60    LYN   Lyon        93    WAY   Wayne
+ 28    DEL   Delaware      61    MAD   Madison     94    WEB   Webster
+ 29    DSM   Des Moines    62    MAH   Mahaska     95    WNB   Winnebago
+ 30    DIC   Dickinson     63    MRN   Marion      96    WNS   Winneshiek
+ 31    DUB   Dubuque       64    MSL   Marshall    97    WOO   Woodbury
+ 32    EMM   Emmet         65    MIL   Mills       98    WOR   Worth
+ 33    FAY   Fayette       66    MIT   Mitchell    99    WRI   Wright
+
