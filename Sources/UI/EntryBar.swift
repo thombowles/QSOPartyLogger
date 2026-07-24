@@ -18,8 +18,10 @@ struct EntryBar: View {
             HStack(spacing: 10) {
                 field("Call", text: $entry.call, width: 140, focusTag: .call)
                     .textCase(.uppercase)
-                field("RST S", text: $entry.rstSent, width: 60, focusTag: .rstSent)
-                field("RST R", text: $entry.rstRcvd, width: 60, focusTag: .rstRcvd)
+                if party?.exchangeIncludesRST ?? true {
+                    field("RST S", text: $entry.rstSent, width: 60, focusTag: .rstSent)
+                    field("RST R", text: $entry.rstRcvd, width: 60, focusTag: .rstRcvd)
+                }
                 field(exchangeLabel, text: $entry.exchange, width: 170, focusTag: .exchange)
                 statusBadge
                 Spacer()

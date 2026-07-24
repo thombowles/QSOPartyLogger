@@ -47,6 +47,12 @@ struct ScoreSidebar: View {
                     Text("Bonus")
                     Text("+\(score.bonusPoints)")
                 }
+                if score.categoryFactor != 1 {
+                    GridRow {
+                        Text("Category ×")
+                        Text("\(score.categoryFactor)")
+                    }
+                }
                 if score.dupeCount > 0 {
                     GridRow {
                         Text("Dupes").foregroundStyle(.orange)
@@ -70,10 +76,10 @@ struct ScoreSidebar: View {
                     .foregroundStyle(.secondary)
                 ForEach(Array(party.bonuses.enumerated()), id: \.offset) { _, bonus in
                     switch bonus {
-                    case .workStation(let call, let points):
+                    case .workStation(let call, let points, let scope):
                         let worked = log.qsos.contains { $0.call.uppercased() == call.uppercased() }
                         Label(
-                            "\(call) +\(points)",
+                            "\(call) +\(points)\(scopeLabel(scope))",
                             systemImage: worked ? "checkmark.circle.fill" : "circle"
                         )
                         .foregroundStyle(worked ? .green : .secondary)
@@ -83,6 +89,21 @@ struct ScoreSidebar: View {
                             systemImage: score.bonusPoints > 0 ? "car.fill" : "car"
                         )
                         .foregroundStyle(score.bonusPoints > 0 ? .green : .secondary)
+                    case .activatedCountyCount(let minQSOs, let points):
+                        Label(
+                            "+\(points) per county activated (\(minQSOs)+ QSOs)",
+                            systemImage: "flag.checkered"
+                        )
+                        .foregroundStyle(.secondary)
+                    case .sweepTiers(let tiers):
+                        let worked = score.workedValues(.county).count
+                        ForEach(Array(tiers.enumerated()), id: \.offset) { _, tier in
+                            Label(
+                                "+\(tier.points) at \(tier.count) jurisdictions (\(worked)/\(tier.count))",
+                                systemImage: worked >= tier.count ? "checkmark.seal.fill" : "seal"
+                            )
+                            .foregroundStyle(worked >= tier.count ? .green : .secondary)
+                        }
                     }
                 }
                 .font(.callout)
@@ -95,7 +116,7 @@ struct ScoreSidebar: View {
         let rule = log.myLocation.isInState ? party.multipliers.inState : party.multipliers.outState
 
         VStack(alignment: .leading, spacing: 6) {
-            Text("MULTIPLIERS — \(score.multiplierCount)")
+            Text("MULTIPLIERS — \(score.multiplierCount)\(scopeSuffix(rule.countScope))")
                 .font(.caption.weight(.bold))
                 .foregroundStyle(.secondary)
 
@@ -103,10 +124,10 @@ struct ScoreSidebar: View {
                 countyGrid(party)
             }
             ForEach(nonCountyClasses(rule), id: \.self) { multClass in
-                let values = score.multipliers[multClass, default: []]
+                let values = score.workedValues(multClass)
                 if !values.isEmpty {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(label(for: multClass) + " (\(values.count))")
+                        Text(label(for: multClass) + " (\(score.classCounts[multClass] ?? 0))")
                             .font(.caption2.weight(.semibold))
                             .foregroundStyle(.secondary)
                         Text(values.sorted().joined(separator: " "))
@@ -115,6 +136,22 @@ struct ScoreSidebar: View {
                     }
                 }
             }
+        }
+    }
+
+    private func scopeLabel(_ scope: BonusRule.WorkStationScope) -> String {
+        switch scope {
+        case .once: ""
+        case .perMode: "/mode"
+        case .perQSO: "/QSO"
+        }
+    }
+
+    private func scopeSuffix(_ scope: PartyDefinition.CountScope) -> String {
+        switch scope {
+        case .once: ""
+        case .perMode: " (per mode)"
+        case .perBand: " (per band)"
         }
     }
 
@@ -136,7 +173,7 @@ struct ScoreSidebar: View {
     }
 
     private func countyGrid(_ party: PartyDefinition) -> some View {
-        let worked = score.multipliers[.county, default: []]
+        let worked = score.workedValues(.county)
         let columns = [GridItem(.adaptive(minimum: 40), spacing: 3)]
         return VStack(alignment: .leading, spacing: 3) {
             Text("Counties \(worked.count)/\(party.counties.count)")

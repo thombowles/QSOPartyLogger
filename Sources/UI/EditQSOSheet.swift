@@ -38,7 +38,7 @@ struct EditQSOSheet: View {
                         }
                         .frame(width: 90)
                         Picker("", selection: $rawMode) {
-                            ForEach(["CW", "SSB", "RTTY"], id: \.self) { Text($0).tag($0) }
+                            ForEach(RadioBar.rawModes(for: party), id: \.self) { Text($0).tag($0) }
                         }
                         .frame(width: 90)
                     }

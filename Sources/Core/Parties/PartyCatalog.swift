@@ -10,7 +10,9 @@ enum PartyCatalog {
     }
 
     static func decode(_ data: Data) throws -> PartyDefinition {
-        let party = try JSONDecoder().decode(PartyDefinition.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let party = try decoder.decode(PartyDefinition.self, from: data)
         try party.validate()
         return party
     }

@@ -28,7 +28,7 @@ final class PartyCatalogTests: XCTestCase {
         XCTAssertEqual(ksqp.points.points(for: .digital), 3)
         XCTAssertEqual(ksqp.oneByOne?.words.count, 4)
         XCTAssertEqual(ksqp.oneByOne?.wildcard, "KS0KS")
-        XCTAssertEqual(ksqp.bonuses, [.workStation(call: "KS0KS", points: 100)])
+        XCTAssertEqual(ksqp.bonuses, [.workStation(call: "KS0KS", points: 100, scope: .once)])
         XCTAssertTrue(ksqp.multipliers.inState.homeStateCountsViaCounty)
         XCTAssertFalse(ksqp.validBands.contains(.m160), "KSQP has no 160m")
     }
@@ -75,7 +75,7 @@ final class PartyCatalogTests: XCTestCase {
 
     func testBonusRuleRoundTrip() throws {
         let rules: [BonusRule] = [
-            .workStation(call: "KS0KS", points: 100),
+            .workStation(call: "KS0KS", points: 100, scope: .once),
             .mobileCountyCount(per: 5, points: 500),
         ]
         let data = try JSONEncoder().encode(rules)

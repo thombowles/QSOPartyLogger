@@ -1,37 +1,66 @@
 import Foundation
 
 /// Pure rules-driven scoring: fold the log against a party definition.
-/// Score = QSO points × multipliers + bonuses.
+/// Score = QSO points × multipliers × category factors + bonuses.
 enum ScoreEngine {
+
+    /// One counted multiplier. `scope` is "" (once), a mode raw value
+    /// (perMode), or a band raw value (perBand).
+    struct MultKey: Hashable, Sendable {
+        let multClass: MultClass
+        let value: String
+        let scope: String
+    }
 
     struct ScoreBreakdown: Equatable {
         var validQSOs = 0
         var dupeCount = 0
+        var invalidModeCount = 0
         var qsoPoints = 0
-        var multipliers: [MultClass: Set<String>] = [:]
+        var multiplierKeys: Set<MultKey> = []
         var bonusPoints = 0
+        var categoryFactor = 1
         var dupeRowIDs: Set<UUID> = []
+        var invalidRowIDs: Set<UUID> = []
         /// Rows that added at least one new multiplier when first logged.
         var newMultRowIDs: Set<UUID> = []
 
-        var multiplierCount: Int {
-            multipliers.values.reduce(0) { $0 + $1.count }
-        }
+        var multiplierCount: Int { multiplierKeys.count }
 
         var total: Int {
-            qsoPoints * multiplierCount + bonusPoints
+            qsoPoints * multiplierCount * categoryFactor + bonusPoints
+        }
+
+        /// Unique values worked for a class, regardless of scope — for the
+        /// sidebar county grid and per-class chips.
+        func workedValues(_ multClass: MultClass) -> Set<String> {
+            Set(multiplierKeys.filter { $0.multClass == multClass }.map(\.value))
+        }
+
+        /// Per-class scoped counts, for the sidebar breakdown.
+        var classCounts: [MultClass: Int] {
+            Dictionary(grouping: multiplierKeys, by: \.multClass).mapValues(\.count)
         }
     }
 
     static func score(log: ContestLog, party: PartyDefinition) -> ScoreBreakdown {
         var result = ScoreBreakdown()
         let rows = log.qsos.sortedChronologically()
-        let firstIDs = DupeChecker.firstOccurrenceIDs(rows)
+        let allowedModes = Set(party.allowedModeClasses)
+
+        // Invalid-mode rows are not contest QSOs at all (WA: "we cannot
+        // accept" digital) — they never enter dupe/point/mult accounting.
+        let contestRows = rows.filter { allowedModes.contains($0.modeClass) }
+        result.invalidRowIDs = Set(rows.map(\.id)).subtracting(contestRows.map(\.id))
+        result.invalidModeCount = result.invalidRowIDs.count
+
+        let firstIDs = DupeChecker.firstOccurrenceIDs(contestRows)
         let countyAbbrs = Set(party.counties.map(\.abbr))
         let rule = log.myLocation.isInState ? party.multipliers.inState : party.multipliers.outState
         let wantedClasses = Set(rule.classes)
+        var dxCount = 0
 
-        for row in rows {
+        for row in contestRows {
             guard firstIDs.contains(row.id) else {
                 result.dupeCount += 1
                 result.dupeRowIDs.insert(row.id)
@@ -42,23 +71,53 @@ enum ScoreEngine {
 
             for (multClass, value) in multContributions(
                 theirLoc: row.theirLoc.uppercased(),
+                call: row.call,
                 countyAbbrs: countyAbbrs,
                 party: party,
                 rule: rule
             ) where wantedClasses.contains(multClass) || isHomeStateViaCounty(multClass, value, party, rule) {
-                if result.multipliers[multClass, default: []].insert(value).inserted {
+                if multClass == .dx, let cap = rule.dxMultCap,
+                   dxCount >= cap,
+                   !result.multiplierKeys.contains(where: { $0.multClass == .dx && $0.value == value }) {
+                    continue
+                }
+                let key = MultKey(
+                    multClass: multClass,
+                    value: value,
+                    scope: scopeComponent(rule.countScope, row: row)
+                )
+                if result.multiplierKeys.insert(key).inserted {
                     result.newMultRowIDs.insert(row.id)
+                    if multClass == .dx,
+                       result.workedValues(.dx).count > dxCount {
+                        dxCount = result.workedValues(.dx).count
+                    }
                 }
             }
         }
 
+        result.categoryFactor = party.scoreMultipliers?.factor(
+            power: log.station.categoryPower,
+            station: log.station.categoryStation
+        ) ?? 1
+
         result.bonusPoints = bonusPoints(
-            rows: rows,
+            rows: contestRows,
             firstIDs: firstIDs,
+            log: log,
             party: party,
-            countyAbbrs: countyAbbrs
+            countyAbbrs: countyAbbrs,
+            breakdown: result
         )
         return result
+    }
+
+    private static func scopeComponent(_ scope: PartyDefinition.CountScope, row: QSO) -> String {
+        switch scope {
+        case .once: ""
+        case .perMode: row.modeClass.rawValue
+        case .perBand: row.band.rawValue
+        }
     }
 
     private static func isHomeStateViaCounty(
@@ -68,9 +127,10 @@ enum ScoreEngine {
         rule.homeStateCountsViaCounty && multClass == .state && value == party.homeState
     }
 
-    /// Which multiplier a received location contributes under the given rule.
+    /// Which multiplier(s) a received location contributes under the rule.
     private static func multContributions(
         theirLoc: String,
+        call: String,
         countyAbbrs: Set<String>,
         party: PartyDefinition,
         rule: PartyDefinition.MultRule
@@ -78,18 +138,24 @@ enum ScoreEngine {
         if countyAbbrs.contains(theirLoc) {
             var out: [(MultClass, String)] = [(.county, theirLoc)]
             if rule.homeStateCountsViaCounty {
-                // KSQP: the first home-state county logged doubles as the state mult.
                 out.append((.state, party.homeState))
             }
             return out
         }
-        if MultClass.acceptedStateTokens.contains(theirLoc) {
+        if let aliased = party.stateAliases[theirLoc] {
+            return [(.state, aliased)]
+        }
+        if MultClass.acceptedStateTokens.contains(theirLoc),
+           !party.excludedStateTokens.contains(theirLoc) {
             return [(.state, theirLoc)]
         }
-        if MultClass.canadianProvinces.contains(theirLoc) {
+        if party.provinces.contains(theirLoc) {
             return [(.province, theirLoc)]
         }
         if theirLoc == MultClass.dxToken {
+            return [(.dx, MultClass.dxToken)]
+        }
+        if party.isPlausibleDXPrefix(theirLoc) {
             return [(.dx, theirLoc)]
         }
         return []
@@ -98,17 +164,27 @@ enum ScoreEngine {
     private static func bonusPoints(
         rows: [QSO],
         firstIDs: Set<UUID>,
+        log: ContestLog,
         party: PartyDefinition,
-        countyAbbrs: Set<String>
+        countyAbbrs: Set<String>,
+        breakdown: ScoreBreakdown
     ) -> Int {
         var total = 0
         let valid = rows.filter { firstIDs.contains($0.id) }
         for bonus in party.bonuses {
             switch bonus {
-            case .workStation(let call, let points):
-                if valid.contains(where: { $0.call.uppercased() == call.uppercased() }) {
+            case .workStation(let call, let points, let scope):
+                let matches = valid.filter { $0.call.uppercased() == call.uppercased() }
+                guard !matches.isEmpty else { break }
+                switch scope {
+                case .once:
                     total += points
+                case .perMode:
+                    total += Set(matches.map(\.modeClass)).count * points
+                case .perQSO:
+                    total += matches.count * points
                 }
+
             case .mobileCountyCount(let per, let points):
                 // One contact per county per station; every `per` distinct
                 // counties a (mobile) station is worked in earns the bonus.
@@ -119,29 +195,63 @@ enum ScoreEngine {
                 for (_, counties) in countiesByCall {
                     total += (counties.count / per) * points
                 }
+
+            case .activatedCountyCount(let minQSOs, let points):
+                // My own activation bonus: in-state mobile/rover/portable
+                // earning per county with >= minQSOs valid QSOs made from it.
+                guard log.myLocation.isInState, isRovingCategory(log.station.categoryStation) else { break }
+                let byMyCounty = Dictionary(grouping: valid) { $0.myLoc.uppercased() }
+                for (county, qsos) in byMyCounty
+                where countyAbbrs.contains(county) && qsos.count >= minQSOs {
+                    total += points
+                }
+
+            case .sweepTiers(let tiers):
+                let worked = breakdown.workedValues(.county).count
+                if let best = tiers.filter({ worked >= $0.count }).max(by: { $0.count < $1.count }) {
+                    total += best.points
+                }
             }
         }
         return total
     }
 
+    private static func isRovingCategory(_ category: StationProfile.CategoryStation) -> Bool {
+        switch category {
+        case .mobile, .rover, .portable, .expedition: true
+        case .fixed, .school: false
+        }
+    }
+
     /// Would logging this contact add a new multiplier? (Live "NEW MULT" badge.)
     static func wouldAddMultiplier(
         theirLocs: [String],
+        band: Band,
+        modeClass: ModeClass,
         log: ContestLog,
         party: PartyDefinition
     ) -> Bool {
-        let current = score(log: log, party: party).multipliers
+        guard party.allowedModeClasses.contains(modeClass) else { return false }
+        let current = score(log: log, party: party).multiplierKeys
         let rule = log.myLocation.isInState ? party.multipliers.inState : party.multipliers.outState
         let wantedClasses = Set(rule.classes)
         let countyAbbrs = Set(party.counties.map(\.abbr))
+        let scope: String = switch rule.countScope {
+        case .once: ""
+        case .perMode: modeClass.rawValue
+        case .perBand: band.rawValue
+        }
+
         for loc in theirLocs {
             for (multClass, value) in multContributions(
                 theirLoc: loc.uppercased(),
+                call: "",
                 countyAbbrs: countyAbbrs,
                 party: party,
                 rule: rule
             ) where wantedClasses.contains(multClass) || isHomeStateViaCounty(multClass, value, party, rule) {
-                if !(current[multClass]?.contains(value) ?? false) {
+                let key = MultKey(multClass: multClass, value: value, scope: scope)
+                if !current.contains(key) {
                     return true
                 }
             }

@@ -32,6 +32,7 @@ enum ExchangeParser {
         }
     }
 
+    /// Absolute ceiling; parties usually cap lower via `maxSimultaneousCounties`.
     static let maxCounties = 4
 
     static func tokenize(_ raw: String) -> [String] {
@@ -53,7 +54,8 @@ enum ExchangeParser {
         if counties.count == tokens.count {
             var seen = Set<String>()
             let unique = tokens.filter { seen.insert($0).inserted }
-            guard unique.count <= maxCounties else {
+            let cap = min(maxCounties, party.maxSimultaneousCounties)
+            guard unique.count <= cap else {
                 return .failure(.tooManyCounties(unique.count))
             }
             return .success(ParsedExchange(locations: unique, isInStateCounties: true))
@@ -62,6 +64,12 @@ enum ExchangeParser {
         if outs.count == tokens.count {
             // Out-of-state stations have exactly one location.
             guard tokens.count == 1 else { return .failure(.mixedTypes) }
+            return .success(ParsedExchange(locations: [tokens[0]], isInStateCounties: false))
+        }
+
+        // DX prefix (ALQP/TQP/TnQP/WA/MDC style): single unknown token that
+        // plausibly is a DXCC prefix.
+        if tokens.count == 1, party.isPlausibleDXPrefix(tokens[0]) {
             return .success(ParsedExchange(locations: [tokens[0]], isInStateCounties: false))
         }
 

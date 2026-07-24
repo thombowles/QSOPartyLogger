@@ -51,7 +51,8 @@ final class EntryState {
         case .success(let parsed):
             exchangeStatus = .valid(parsed.locations)
             isNewMult = ScoreEngine.wouldAddMultiplier(
-                theirLocs: parsed.locations, log: log, party: party
+                theirLocs: parsed.locations, band: band, modeClass: modeClass,
+                log: log, party: party
             )
             updateDupeWarning(parsed: parsed, log: log, band: band, modeClass: modeClass)
         case .failure(let error):

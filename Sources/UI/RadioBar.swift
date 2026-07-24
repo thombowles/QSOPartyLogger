@@ -115,11 +115,23 @@ struct RadioBar: View {
                 }
                 .frame(width: 100)
                 Picker("Mode", selection: $manualRawMode) {
-                    ForEach(["CW", "SSB", "RTTY"], id: \.self) { mode in
+                    ForEach(Self.rawModes(for: party), id: \.self) { mode in
                         Text(mode).tag(mode)
                     }
                 }
                 .frame(width: 96)
+            }
+        }
+    }
+
+    /// Manual raw-mode options limited to the party's legal mode classes.
+    static func rawModes(for party: PartyDefinition?) -> [String] {
+        let classes = party?.allowedModeClasses ?? ModeClass.allCases
+        return classes.map { cls in
+            switch cls {
+            case .cw: "CW"
+            case .phone: "SSB"
+            case .digital: "RTTY"
             }
         }
     }

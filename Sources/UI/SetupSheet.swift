@@ -35,6 +35,11 @@ struct SetupSheet: View {
                             Text(party.name).tag(party.id)
                         }
                     }
+                    if let windows = party?.schedule, !windows.isEmpty {
+                        Text(scheduleText(windows))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                     if let notes = party?.notes, notes.lowercased().contains("partial") {
                         Label(notes, systemImage: "info.circle")
                             .font(.caption)
@@ -117,7 +122,7 @@ struct SetupSheet: View {
     private func countyPicker(_ party: PartyDefinition) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text("Counties (1–4; more than one = county line):")
+                Text(countyCapText(party))
                     .font(.caption)
                 Spacer()
                 if !selectedCounties.isEmpty {
@@ -154,6 +159,23 @@ struct SetupSheet: View {
         }
     }
 
+    private func countyCapText(_ party: PartyDefinition) -> String {
+        let cap = min(ExchangeParser.maxCounties, party.maxSimultaneousCounties)
+        return cap == 1
+            ? "County (this party does not permit county-line operation):"
+            : "Counties (1–\(cap); more than one = county line):"
+    }
+
+    private func scheduleText(_ windows: [PartyDefinition.ScheduleWindow]) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d HHmm'Z'"
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return windows
+            .map { "\(formatter.string(from: $0.start)) – \(formatter.string(from: $0.end))" }
+            .joined(separator: "  ·  ")
+    }
+
     private func filteredCounties(_ party: PartyDefinition) -> [County] {
         let query = countySearch.trimmingCharacters(in: .whitespaces).uppercased()
         guard !query.isEmpty else { return party.counties }
@@ -163,9 +185,10 @@ struct SetupSheet: View {
     }
 
     private func toggle(_ abbr: String) {
+        let cap = min(ExchangeParser.maxCounties, party?.maxSimultaneousCounties ?? ExchangeParser.maxCounties)
         if let idx = selectedCounties.firstIndex(of: abbr) {
             selectedCounties.remove(at: idx)
-        } else if selectedCounties.count < ExchangeParser.maxCounties {
+        } else if selectedCounties.count < cap {
             selectedCounties.append(abbr)
         }
     }

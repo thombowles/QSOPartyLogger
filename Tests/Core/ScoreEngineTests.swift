@@ -68,7 +68,7 @@ final class ScoreEngineTests: XCTestCase {
             qso(call: "W0C", their: "CHS"),
         ])
         let s = ScoreEngine.score(log: log, party: ksqp)
-        XCTAssertEqual(s.multipliers[.county], ["MRN", "CHS"])
+        XCTAssertEqual(s.workedValues(.county), ["MRN", "CHS"])
         XCTAssertEqual(s.multiplierCount, 2)
         XCTAssertEqual(s.total, 9 * 2)
     }
@@ -110,7 +110,7 @@ final class ScoreEngineTests: XCTestCase {
         let s = ScoreEngine.score(log: outStateLog(rows), party: ksqp)
         XCTAssertEqual(s.validQSOs, 2)
         XCTAssertEqual(s.qsoPoints, 6)
-        XCTAssertEqual(s.multipliers[.county], ["LIN", "AND"])
+        XCTAssertEqual(s.workedValues(.county), ["LIN", "AND"])
         XCTAssertEqual(s.total, 6 * 2)
     }
 
@@ -125,11 +125,11 @@ final class ScoreEngineTests: XCTestCase {
             qso(call: "DL1AA", my: "MRN", their: "DX"),
         ])
         let s = ScoreEngine.score(log: log, party: ksqp)
-        XCTAssertEqual(s.multipliers[.state], ["KS", "TX"])
-        XCTAssertEqual(s.multipliers[.province], ["MB"])
-        XCTAssertEqual(s.multipliers[.dx], ["DX"])
+        XCTAssertEqual(s.workedValues(.state), ["KS", "TX"])
+        XCTAssertEqual(s.workedValues(.province), ["MB"])
+        XCTAssertEqual(s.workedValues(.dx), ["DX"])
         XCTAssertEqual(s.multiplierCount, 4)
-        XCTAssertNil(s.multipliers[.county], "KSQP in-state rule counts no county class")
+        XCTAssertTrue(s.workedValues(.county).isEmpty, "KSQP in-state rule counts no county class")
     }
 
     func testInStateSecondCountyAddsNoMult() {
@@ -152,8 +152,8 @@ final class ScoreEngineTests: XCTestCase {
             qso(call: "W0CCC", my: "GRAY", their: "OK"),
         ]
         let s = ScoreEngine.score(log: log, party: tqp)
-        XCTAssertEqual(s.multipliers[.county], ["HARR", "DSMI"])
-        XCTAssertEqual(s.multipliers[.state], ["OK"], "homeStateCountsViaCounty=false for TQP")
+        XCTAssertEqual(s.workedValues(.county), ["HARR", "DSMI"])
+        XCTAssertEqual(s.workedValues(.state), ["OK"], "homeStateCountsViaCounty=false for TQP")
         XCTAssertEqual(s.multiplierCount, 3)
     }
 
@@ -190,8 +190,8 @@ final class ScoreEngineTests: XCTestCase {
 
     func testWouldAddMultiplier() {
         let log = outStateLog([qso(call: "W0A", their: "MRN")])
-        XCTAssertTrue(ScoreEngine.wouldAddMultiplier(theirLocs: ["CHS"], log: log, party: ksqp))
-        XCTAssertFalse(ScoreEngine.wouldAddMultiplier(theirLocs: ["MRN"], log: log, party: ksqp))
-        XCTAssertTrue(ScoreEngine.wouldAddMultiplier(theirLocs: ["MRN", "CHS"], log: log, party: ksqp))
+        XCTAssertTrue(ScoreEngine.wouldAddMultiplier(theirLocs: ["CHS"], band: .m20, modeClass: .cw, log: log, party: ksqp))
+        XCTAssertFalse(ScoreEngine.wouldAddMultiplier(theirLocs: ["MRN"], band: .m20, modeClass: .cw, log: log, party: ksqp))
+        XCTAssertTrue(ScoreEngine.wouldAddMultiplier(theirLocs: ["MRN", "CHS"], band: .m20, modeClass: .cw, log: log, party: ksqp))
     }
 }
