@@ -56,14 +56,28 @@ project notes; definitions land as they're built.
   sends CQ / exchange / TU based on what's filled in, and logs automatically
   after the exchange — N1MM muscle memory intact.
 - **DX cluster spotting**: connect to any DXSpider/AR-Cluster telnet node
-  (toolbar antenna icon). Current-band spots appear in the sidebar sorted by
+  (toolbar antenna icon), optionally **automatically when a contest opens**.
+  Nodes you've used are remembered in a Recent Clusters menu, and the
+  commands run at login are configurable — `sh/dx 30` by default, so the
+  band map is populated with recent spots the moment you connect instead of
+  starting empty. Current-band spots appear in the sidebar sorted by
   frequency, gray when already worked on this band+mode; click one to tune
   and pre-fill the call, or step spot-to-spot with ⌘← / ⌘→.
 - **Band map window (⌘B)**: floating N1MM-style panel — vertical frequency
   ruler for the current band with spots plotted where they live, a red VFO
   marker tracking the radio, and a dashed CQ line marking your run
   frequency. Zoom 25/50/100 kHz or the whole band; click a spot to tune +
-  fill the call, click empty map to QSY there. Remembers its position.
+  fill the call, click empty map to QSY there. Remembers its position. This
+  is the only place spots are shown — the score panel stays about scoring.
+- **Spot filters** (funnel button in the band map), built for QSO party
+  operating: **North American stations only** (drop DX you can't get an
+  exchange from), **North American spotters only**, **hide stations already
+  worked** on this band+mode, **hide RBN/skimmer spots**, per-mode (CW /
+  phone / digital, inferred from the spotter's comment first and the band
+  plan second), per-band, and how long spots live before ageing out
+  (5 min – 2 hr, default 15). It's a panel, not a menu — tick as many boxes
+  as you like in one visit — and everything applies instantly to the map and
+  to ⌘← / ⌘→. All off by default; **Reset All** puts them back.
 - **CQ frequency memory**: sending F1 (or starting repeat-CQ) in Run mode
   remembers the run frequency; ⌘J — or the chip next to Repeat — jumps back
   and flips you to Run after an S&P excursion.
@@ -88,6 +102,8 @@ project notes; definitions land as they're built.
 | Keys | Action |
 | --- | --- |
 | `Enter` | Log (or ESM next-message; or execute a typed QSY command) |
+| `Space` | Jump to the next entry field (Call → Exchange) |
+| `F12` | Wipe the entry fields and start the contact over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
 | `Esc` | Abort CW + stop repeat-CQ |
 | `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
@@ -123,10 +139,38 @@ retrying while the prompt is up, so approving it connects immediately.
 
 ## DX cluster spots
 
-Toolbar → antenna icon → enter a cluster host/port (e.g. a nearby DXSpider
-node on 7300) → Connect. The app logs in with your contest callsign and
-filters the stream to real spots on amateur bands. Spots older than 15
-minutes age out automatically.
+Toolbar → antenna icon → enter a cluster host/port → Connect. The app waits
+for the node's actual login prompt, answers with your contest callsign, runs
+the startup commands (`sh/dx 30` unless you change them), and filters the
+stream to real spots on amateur bands — both live `DX de …` broadcasts and
+the columnar `sh/dx` reply format. Spots carry their own timestamp, so a
+`sh/dx` backfill shows true spot age; anything older than 15 minutes ages
+out automatically. Telnet option negotiation is handled, so nodes behind a
+real telnetd work too.
+
+**North American spotters only** is a one-click filter for stateside QSO
+parties, where EU/JA skimmer spots are noise: it keeps spots posted from the
+US (incl. Alaska/Hawaii), Canada, Mexico, Central America, the Caribbean,
+and Greenland, and drops the rest. It filters on the *spotter's* callsign —
+the station that actually heard the signal — and applies instantly, with no
+reconnect and no node-side filter commands, so it works on any cluster
+software. Off by default. It lives with the mode, band, and age filters in
+the band map's funnel panel.
+
+The popover shows a **live node window** with everything the cluster says
+and a box to type node commands (`sh/dx 30`, `set/skimmer`, `set/ft8`,
+`bye`). If a node never answers, keeps re-prompting for a login, or accepts
+you but sends nothing, the app says so rather than sitting silently
+"connected" — and the node window shows exactly what happened.
+
+Tick **Connect automatically when a contest opens** to have every contest
+window come up already spotting. Previously used nodes are listed under
+Recent Clusters.
+
+Node notes: verified end-to-end against `dxc.wa9pie.net:8000` (DXSpider) and
+`dxc.nc7j.com:7373` (AR-Cluster). `ve7cc.net:23` accepts the connection and
+prints its banner, but never answers the login from this client — nothing
+sent to it gets a reply — so use another node if you hit that.
 
 ## Adding a QSO party (no code)
 
@@ -189,9 +233,11 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 171 unit tests cover the scoring engine, county
-data, exporters, K3 and FlexRadio protocols, spot parsing/navigation, the
-band map scale, typed QSY commands, and keyer timing.
+(`brew install xcodegen`). 220 unit tests cover the scoring engine, county
+data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
+spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
+worked, skimmer), spot navigation, cluster history, the band map scale,
+typed QSY commands, and keyer timing.
 
 ## Data provenance
 

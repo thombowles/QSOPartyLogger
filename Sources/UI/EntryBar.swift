@@ -9,6 +9,18 @@ struct EntryBar: View {
 
     enum Field: Hashable {
         case call, rstSent, rstRcvd, exchange
+
+        /// Where Space (and ESM's Return) moves next. Call jumps straight to
+        /// the exchange because the RSTs are pre-filled — Tab still walks
+        /// every field for the rare 579.
+        func next(includesRST: Bool) -> Field {
+            switch self {
+            case .call: .exchange
+            case .rstSent: includesRST ? .rstRcvd : .exchange
+            case .rstRcvd: .exchange
+            case .exchange: .call
+            }
+        }
     }
 
     @FocusState.Binding var focus: Field?
@@ -98,6 +110,13 @@ struct EntryBar: View {
                 .focused($focus, equals: focusTag)
                 .onSubmit(onLog)
                 .autocorrectionDisabled()
+                // Space advances instead of typing a space — except in the
+                // exchange, where it separates county-line entries ("LIN AND").
+                .onKeyPress(.space) {
+                    guard focusTag != .exchange else { return .ignored }
+                    focus = focusTag.next(includesRST: party?.exchangeIncludesRST ?? true)
+                    return .handled
+                }
         }
     }
 }

@@ -50,6 +50,40 @@ final class CountyLineExpanderTests: XCTestCase {
         XCTAssertEqual(Set(rows.map(\.groupID)).count, 1)
     }
 
+    /// End-to-end: a typed county list (comma, space, or slash) crossed with
+    /// my own county line produces one row per pair — 2 × 2 = 4.
+    func testTypedSeparatorsAllProduceTheFullCrossProduct() throws {
+        let ksqp = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        for typed in ["LIN/AND", "LIN AND", "LIN,AND", "lin, and"] {
+            let parsed = try ExchangeParser.parse(typed, party: ksqp).get()
+            XCTAssertEqual(parsed.locations, ["LIN", "AND"], "separator '\(typed)' should split")
+
+            let rows = CountyLineExpander.expand(
+                entry: entry(),
+                myLocs: ["MRN", "CHS"],
+                theirLocs: parsed.locations
+            )
+            XCTAssertEqual(rows.count, 4, "2 of mine × 2 of theirs from '\(typed)'")
+            XCTAssertEqual(
+                rows.map { "\($0.myLoc)-\($0.theirLoc)" },
+                ["MRN-LIN", "MRN-AND", "CHS-LIN", "CHS-AND"]
+            )
+            XCTAssertEqual(Set(rows.map(\.groupID)).count, 1, "one contact, one group")
+        }
+    }
+
+    func testPartiesThatForbidCountyLinesStillRejectTwo() throws {
+        // ALQP caps at one county; that rejection is the party rule, not a
+        // limitation of the expander.
+        let alqp = try XCTUnwrap(PartyCatalog.party(id: "alqp"))
+        XCTAssertEqual(alqp.maxSimultaneousCounties, 1)
+        switch ExchangeParser.parse("AUTA/BALD", party: alqp) {
+        case .success: XCTFail("ALQP must reject a two-county exchange")
+        case .failure(let error):
+            XCTAssertEqual(error, .tooManyCounties(2))
+        }
+    }
+
     func testSeparateContactsGetSeparateGroupIDs() {
         let a = CountyLineExpander.expand(entry: entry(), myLocs: ["TX"], theirLocs: ["LIN"])
         let b = CountyLineExpander.expand(entry: entry(), myLocs: ["TX"], theirLocs: ["LIN"])

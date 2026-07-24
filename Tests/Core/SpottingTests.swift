@@ -46,6 +46,47 @@ final class SpottingTests: XCTestCase {
         )
     }
 
+    // MARK: sh/dx replies (different layout from broadcast spots)
+
+    /// `sh/dx` output is columnar with a trailing `<spotter>`, not `DX de …`.
+    func testParseShowDXLine() {
+        let line = "  14025.0  K5ABC        24-Jul-2026 1523Z  loud in VA                     <W3LPL>"
+        let spot = SpotParser.parse(line, receivedAt: Date())
+        XCTAssertEqual(spot?.call, "K5ABC")
+        XCTAssertEqual(spot?.freqKHz ?? 0, 14025.0, accuracy: 0.001)
+        XCTAssertEqual(spot?.spotter, "W3LPL")
+        XCTAssertEqual(spot?.comment, "loud in VA")
+        XCTAssertEqual(spot?.band, .m20)
+    }
+
+    func testShowDXUsesTheSpotsOwnTimestamp() throws {
+        let received = Date(timeIntervalSince1970: 1_785_078_000)
+        let line = "  14025.0  K5ABC        24-Jul-2026 1523Z  loud                           <W3LPL>"
+        let spot = try XCTUnwrap(SpotParser.parse(line, receivedAt: received))
+        var utc = Calendar(identifier: .gregorian)
+        utc.timeZone = TimeZone(identifier: "UTC")!
+        let parts = utc.dateComponents([.year, .month, .day, .hour, .minute], from: spot.receivedAt)
+        XCTAssertEqual(parts.year, 2026)
+        XCTAssertEqual(parts.month, 7)
+        XCTAssertEqual(parts.day, 24)
+        XCTAssertEqual(parts.hour, 15)
+        XCTAssertEqual(parts.minute, 23)
+    }
+
+    func testParseShowDXSingleDigitDayAndNoComment() {
+        let line = " 14195.0  VK9CZ         7-Jan-2020 0234Z                                  <W1ABC>"
+        let spot = SpotParser.parse(line, receivedAt: Date())
+        XCTAssertEqual(spot?.call, "VK9CZ")
+        XCTAssertEqual(spot?.spotter, "W1ABC")
+        XCTAssertEqual(spot?.comment, "")
+    }
+
+    func testShowDXHeaderAndChatterRejected() {
+        XCTAssertNil(SpotParser.parse("Callsign   Frequency   Date      Time", receivedAt: Date()))
+        XCTAssertNil(SpotParser.parse("  599.0  K5ABC   24-Jul-2026 1523Z  x   <W3LPL>", receivedAt: Date()))
+        XCTAssertNil(SpotParser.parse("dxc.example.com >", receivedAt: Date()))
+    }
+
     // MARK: Store: upsert, purge, band filter
 
     @MainActor
@@ -68,6 +109,17 @@ final class SpottingTests: XCTestCase {
         store.add(spot(call: "OLD1", freqKHz: 14001.0, at: now.addingTimeInterval(-16 * 60)))
         store.add(spot(call: "NEW1", freqKHz: 14002.0, at: now.addingTimeInterval(-60)))
         store.purge(now: now)
+        XCTAssertEqual(store.spots(band: .m20).map(\.call), ["NEW1"])
+    }
+
+    @MainActor
+    func testStoreDropsStaleSpotsFromABulkShowDXReply() {
+        // sh/dx returns a batch spanning a wide time range; anything older
+        // than the window relative to the newest spot is already stale.
+        let now = Date(timeIntervalSince1970: 1_785_078_000)
+        let store = SpotStore()
+        store.add(spot(call: "OLD1", freqKHz: 14001.0, at: now.addingTimeInterval(-40 * 60)))
+        store.add(spot(call: "NEW1", freqKHz: 14002.0, at: now))
         XCTAssertEqual(store.spots(band: .m20).map(\.call), ["NEW1"])
     }
 

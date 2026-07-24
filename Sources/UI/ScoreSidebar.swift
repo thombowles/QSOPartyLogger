@@ -1,24 +1,16 @@
 import SwiftUI
 
-/// Running score, band spots, per-band QSO matrix, multiplier tracker,
-/// bonus status, and (KSQP) 1x1 words.
+/// Running score, per-band QSO matrix, multiplier tracker, bonus status, and
+/// (KSQP) 1x1 words. Spots live in the band map window (⌘B), not here.
 struct ScoreSidebar: View {
     let log: ContestLog
     let party: PartyDefinition?
     let score: ScoreEngine.ScoreBreakdown
-    /// Cluster spots on the current band, sorted by frequency.
-    let spots: [Spot]
-    let currentBand: Band
-    /// Calls already worked on the current band+mode (grayed in the list).
-    let workedCalls: Set<String>
-    let clusterConnected: Bool
-    let onTuneSpot: (Spot) -> Void
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 totalsCard
-                spotsSection
                 if let party {
                     bandModeSection(party)
                     bonusSection(party)
@@ -32,54 +24,6 @@ struct ScoreSidebar: View {
         // the entry/log side holds layout priority and takes the slack.
         .frame(minWidth: 230, idealWidth: 270, maxWidth: 400)
         .background(.background.secondary)
-    }
-
-    // MARK: Spots
-
-    @ViewBuilder
-    private var spotsSection: some View {
-        if clusterConnected || !spots.isEmpty {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("SPOTS — \(currentBand.rawValue.uppercased()) (\(spots.count))")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(.secondary)
-                if spots.isEmpty {
-                    Text("No spots on this band yet")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                let now = Date()
-                ForEach(spots) { spot in
-                    Button {
-                        onTuneSpot(spot)
-                    } label: {
-                        HStack(spacing: 6) {
-                            Text(String(format: "%.1f", spot.freqKHz))
-                                .font(.caption.monospaced())
-                            Text(spot.call)
-                                .font(.caption.monospaced().weight(.semibold))
-                            Spacer(minLength: 4)
-                            Text(age(spot, now: now))
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
-                        }
-                        .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(workedCalls.contains(spot.call) ? .secondary : .primary)
-                    .help(
-                        "de \(spot.spotter)"
-                            + (spot.comment.isEmpty ? "" : " — \(spot.comment)")
-                            + " • click to tune; ⌘← / ⌘→ steps through spots"
-                    )
-                }
-            }
-        }
-    }
-
-    private func age(_ spot: Spot, now: Date) -> String {
-        let minutes = Int(now.timeIntervalSince(spot.receivedAt) / 60)
-        return minutes <= 0 ? "now" : "\(minutes)m"
     }
 
     // MARK: QSOs by band/mode

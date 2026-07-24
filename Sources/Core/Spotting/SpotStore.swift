@@ -7,18 +7,23 @@ import Observation
 @Observable
 final class SpotStore {
 
-    static let maxAge: TimeInterval = 15 * 60
+    /// How long a spot stays before ageing out, in minutes (operator setting).
+    var maxAgeMinutes: Int = 15
+
+    private var maxAge: TimeInterval { Double(max(1, maxAgeMinutes)) * 60 }
 
     private(set) var all: [Spot] = []
 
     func add(_ spot: Spot) {
         all.removeAll { $0.id == spot.id }
         all.append(spot)
-        purge(now: spot.receivedAt)
+        // Age out relative to the newest spot we know about, not this one —
+        // a bulk sh/dx reply arrives with older spots mixed in.
+        purge(now: all.map(\.receivedAt).max() ?? spot.receivedAt)
     }
 
     func purge(now: Date) {
-        all.removeAll { now.timeIntervalSince($0.receivedAt) > Self.maxAge }
+        all.removeAll { now.timeIntervalSince($0.receivedAt) > maxAge }
     }
 
     /// Spots on one band, sorted by frequency (the band-map order).

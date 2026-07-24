@@ -31,6 +31,7 @@ struct MainView: View {
     @State private var spotClient = SpotClient()
     @State private var spotPurgeTask: Task<Void, Never>?
     @State private var showClusterPopover = false
+    @State private var clusterCommand = ""
     /// Reference frequency for ⌘←/⌘→ when no live radio frequency exists.
     @State private var spotCursorKHz: Double?
     /// Run frequency captured when CQ is sent; ⌘J jumps back to it.
@@ -103,17 +104,17 @@ struct MainView: View {
         HSplitView {
             leftPane
                 .layoutPriority(1)
-            ScoreSidebar(
-                log: document.log,
-                party: party,
-                score: score,
-                spots: spotStore.spots(band: currentBand),
-                currentBand: currentBand,
-                workedCalls: workedCallsOnCurrentBandMode,
-                clusterConnected: spotClient.status == .connected,
-                onTuneSpot: { tune(to: $0) }
-            )
+            ScoreSidebar(log: document.log, party: party, score: score)
         }
+    }
+
+    /// Spots on the current band after every filter — the band map and
+    /// ⌘←/⌘→ work from this same list so they can't disagree.
+    private var visibleSpotsOnBand: [Spot] {
+        SpotFilter.filter(
+            spotStore.spots(band: currentBand),
+            options: settings.spotFilterOptions(workedCalls: workedCallsOnCurrentBandMode)
+        )
     }
 
     /// Calls already in the log on the current band+mode — grays their spots.
@@ -183,6 +184,13 @@ struct MainView: View {
         }
         .onChange(of: cqFrequencyHz) {
             bandMapModel?.cqKHz = cqFrequencyHz.map { Double($0) / 1000 }
+        }
+        .onChange(of: settings.spotMaxAgeMinutes) {
+            spotStore.maxAgeMinutes = settings.spotMaxAgeMinutes
+            spotStore.purge(now: Date())
+        }
+        .onChange(of: document.log.partyID) {
+            bandMapModel?.partyBands = party?.validBands ?? Band.allCases
         }
     }
 
@@ -343,17 +351,48 @@ struct MainView: View {
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 60)
             }
+            if !settings.clusterHistory.isEmpty {
+                Menu("Recent Clusters") {
+                    ForEach(settings.clusterHistory, id: \.self) { entry in
+                        Button(entry) {
+                            if let parsed = ClusterHistory.parse(entry) {
+                                settings.clusterHost = parsed.host
+                                settings.clusterPort = Int(parsed.port)
+                                connectCluster()
+                            }
+                        }
+                    }
+                    Divider()
+                    Button("Clear List") { settings.clusterHistory = [] }
+                }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("On connect")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                TextField("sh/dx 30", text: $settings.clusterCommands, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .font(.callout.monospaced())
+                    .lineLimit(2...4)
+                    .frame(width: 246)
+                    .help("Commands sent after login, one per line. sh/dx backfills recent spots.")
+            }
+
+            Toggle("Connect automatically when a contest opens", isOn: $settings.clusterAutoConnect)
+                .font(.callout)
+
+            Text("Spot filters (continent, mode, band, age) live in the band map window — ⌘B.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: 250, alignment: .leading)
+
             HStack(spacing: 8) {
                 if spotClient.status == .disconnected {
-                    Button("Connect") {
-                        spotClient.connect(
-                            host: settings.clusterHost,
-                            port: (1...65535).contains(settings.clusterPort)
-                                ? UInt16(settings.clusterPort) : 7300,
-                            callsign: document.log.station.callsign
-                        )
-                    }
-                    .keyboardShortcut(.defaultAction)
+                    Button("Connect") { connectCluster() }
+                        .keyboardShortcut(.defaultAction)
                 } else {
                     Button("Disconnect") {
                         spotClient.disconnect()
@@ -364,9 +403,14 @@ struct MainView: View {
                     Text("Not connected").foregroundStyle(.secondary)
                 case .connecting:
                     Text("Connecting…").foregroundStyle(.orange)
+                case .loggingIn:
+                    Text("Logging in…").foregroundStyle(.orange)
                 case .connected:
-                    Label("Connected", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                    Label(
+                        "\(spotClient.spotsReceived) spots",
+                        systemImage: "checkmark.circle.fill"
+                    )
+                    .foregroundStyle(.green)
                 }
             }
             .font(.callout)
@@ -376,12 +420,79 @@ struct MainView: View {
                     .foregroundStyle(.orange)
                     .frame(maxWidth: 250, alignment: .leading)
             }
-            Text("Logs in with your callsign. Spots for the current band appear in the sidebar — click to tune, ⌘← / ⌘→ to step through them.")
+
+            if spotClient.status != .disconnected || !spotClient.console.isEmpty {
+                nodeConsole
+            }
+            Text("Logs in with your callsign. Spots for the current band appear in the sidebar and band map — click to tune, ⌘← / ⌘→ to step through them.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 250, alignment: .leading)
         }
         .padding(14)
+    }
+
+    /// Everything the node has said, plus a box to talk back to it. Without
+    /// this a node that rejects a login or needs a SET/… command just looks
+    /// like "connected, no spots".
+    private var nodeConsole: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Node")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 1) {
+                        ForEach(Array(spotClient.console.enumerated()), id: \.offset) { index, line in
+                            Text(line)
+                                .font(.system(size: 10, design: .monospaced))
+                                .foregroundStyle(line.hasPrefix(">") ? Color.accentColor : .secondary)
+                                .textSelection(.enabled)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .id(index)
+                        }
+                    }
+                    .padding(4)
+                }
+                .frame(width: 250, height: 140)
+                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 5))
+                .onChange(of: spotClient.console.count) {
+                    proxy.scrollTo(spotClient.console.count - 1, anchor: .bottom)
+                }
+            }
+            HStack(spacing: 4) {
+                TextField("command (e.g. sh/dx 30)", text: $clusterCommand)
+                    .textFieldStyle(.roundedBorder)
+                    .font(.caption.monospaced())
+                    .onSubmit(sendClusterCommand)
+                Button("Send", action: sendClusterCommand)
+                    .controlSize(.small)
+                    .disabled(clusterCommand.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+            .frame(width: 250)
+            .disabled(spotClient.status == .disconnected)
+        }
+    }
+
+    private func sendClusterCommand() {
+        spotClient.send(clusterCommand)
+        clusterCommand = ""
+    }
+
+    private func connectCluster() {
+        let port: UInt16 = (1...65535).contains(settings.clusterPort)
+            ? UInt16(settings.clusterPort) : 7300
+        spotClient.connect(
+            host: settings.clusterHost,
+            port: port,
+            callsign: document.log.station.callsign,
+            initialCommands: settings.clusterCommands
+        )
+        guard spotClient.status != .disconnected else { return }  // refused (no host/call)
+        settings.clusterHistory = ClusterHistory.adding(
+            ClusterHistory.entry(host: settings.clusterHost, port: Int(port)),
+            to: settings.clusterHistory
+        )
     }
 
     // MARK: Actions
@@ -403,6 +514,12 @@ struct MainView: View {
         spotClient.onSpot = { spot in
             spotStore.add(spot)
         }
+        if settings.clusterAutoConnect,
+           !settings.clusterHost.trimmingCharacters(in: .whitespaces).isEmpty,
+           !document.log.station.callsign.isEmpty,
+           spotClient.status == .disconnected {
+            connectCluster()
+        }
         spotPurgeTask = Task {
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 60_000_000_000)
@@ -410,10 +527,13 @@ struct MainView: View {
             }
         }
 
+        spotStore.maxAgeMinutes = settings.spotMaxAgeMinutes
+
         if bandMapModel == nil {
-            let model = BandMapModel(radio: radio, spotStore: spotStore)
+            let model = BandMapModel(radio: radio, spotStore: spotStore, settings: settings)
             model.band = currentBand
             model.workedCalls = workedCallsOnCurrentBandMode
+            model.partyBands = party?.validBands ?? Band.allCases
             model.onTuneSpot = { tune(to: $0) }
             model.onTuneKHz = { qsyTo(kHz: $0) }
             bandMapModel = model
@@ -471,12 +591,24 @@ struct MainView: View {
         ) {
         case .sendMessage(let index):
             sendMessageAt(index)
+            // Sending his report means the exchange is what's needed next —
+            // move the cursor there so Return keeps the QSO flowing.
+            if let current = focusedField {
+                focusedField = current.next(includesRST: party?.exchangeIncludesRST ?? true)
+            }
         case .logAndSend(let index):
             logContact()
             sendMessageAt(index)
         case .none:
             logContact()
         }
+    }
+
+    /// F12 — wipe a half-typed contact and get back to the call field.
+    private func clearEntry() {
+        entry.clearForNextContact(modeClass: currentModeClass)
+        focusedField = .call
+        revalidate()
     }
 
     private func sendMessageAt(_ index: Int) {
@@ -538,7 +670,7 @@ struct MainView: View {
     }
 
     private func jumpToSpot(_ direction: SpotStore.Direction) {
-        let bandSpots = spotStore.spots(band: currentBand)
+        let bandSpots = visibleSpotsOnBand
         let reference = radio.radioState.map { Double($0.frequencyHz) / 1000 }
             ?? spotCursorKHz
             ?? Double(currentBand.defaultFreqKHz)
@@ -777,6 +909,10 @@ struct MainView: View {
             ]
             if let index = fKeyCodes[event.keyCode] {
                 sendMessageAt(index)
+                return nil
+            }
+            if event.keyCode == 111 {  // F12: wipe the entry and start over
+                clearEntry()
                 return nil
             }
             if event.keyCode == 53 {  // Esc: abort CW + stop repeating

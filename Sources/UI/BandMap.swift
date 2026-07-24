@@ -9,23 +9,37 @@ final class BandMapModel {
     var band: Band = .m20
     var workedCalls: Set<String> = []
     var cqKHz: Double?
+    /// Bands the party allows — what the band filter menu offers.
+    var partyBands: [Band] = Band.allCases
     var onTuneSpot: ((Spot) -> Void)?
     var onTuneKHz: ((Double) -> Void)?
 
     private let radio: RadioController
     private let spotStore: SpotStore
+    /// Held directly so filter changes re-render without any syncing.
+    let settings: AppSettings
 
-    init(radio: RadioController, spotStore: SpotStore) {
+    init(radio: RadioController, spotStore: SpotStore, settings: AppSettings) {
         self.radio = radio
         self.spotStore = spotStore
+        self.settings = settings
     }
 
     var vfoKHz: Double? {
         radio.radioState.map { Double($0.frequencyHz) / 1000 }
     }
 
+    /// Spots for the displayed band, after the operator's filters. The band
+    /// filter still applies: an excluded band shows nothing even when tuned.
     var spots: [Spot] {
-        spotStore.spots(band: band)
+        SpotFilter.filter(
+            spotStore.spots(band: band),
+            options: settings.spotFilterOptions(workedCalls: workedCalls)
+        )
+    }
+
+    var filtersActive: Bool {
+        settings.spotFilterOptions(workedCalls: workedCalls).isActive
     }
 }
 
@@ -35,6 +49,7 @@ final class BandMapModel {
 struct BandMapView: View {
     let model: BandMapModel
     @AppStorage("bandMapSpanKHz") private var spanKHz: Double = 50
+    @State private var showFilters = false
 
     private static let spanChoices: [(label: String, kHz: Double)] = [
         ("25", 25), ("50", 50), ("100", 100), ("All", 10_000),
@@ -73,9 +88,135 @@ struct BandMapView: View {
             }
             .pickerStyle(.segmented)
             .labelsHidden()
-            .frame(width: 160)
+            .frame(width: 150)
             .help("Visible span in kHz, centered on the VFO")
+            filtersButton
         }
+    }
+
+    /// Everything that decides which spots appear, next to the spots.
+    ///
+    /// A popover rather than a Menu: macOS dismisses a menu on every click,
+    /// so ticking three bands meant reopening it three times, and a Picker
+    /// inside a menu hides its current value.
+    private var filtersButton: some View {
+        Button {
+            showFilters.toggle()
+        } label: {
+            Image(systemName: model.filtersActive
+                ? "line.3.horizontal.decrease.circle.fill"
+                : "line.3.horizontal.decrease.circle")
+        }
+        .buttonStyle(.borderless)
+        .help("Filter spots by spotter continent, mode, and band; set how long spots live")
+        .popover(isPresented: $showFilters, arrowEdge: .bottom) {
+            filtersPopover
+        }
+    }
+
+    private var filtersPopover: some View {
+        @Bindable var settings = model.settings
+        return VStack(alignment: .leading, spacing: 10) {
+            Text("Spot Filters")
+                .font(.headline)
+
+            Toggle("North American stations only", isOn: $settings.northAmericanStationsOnly)
+                .help("Hide spots of DX stations — a state QSO party exchange comes from NA")
+            Toggle("North American spotters only", isOn: $settings.northAmericanSpottersOnly)
+                .help("Hide spots posted from outside North America")
+            Toggle("Hide stations already worked", isOn: $settings.hideWorkedSpots)
+                .help("Drop spots for calls already in the log on this band and mode")
+            Toggle("Hide RBN / skimmer spots", isOn: $settings.hideSkimmerSpots)
+                .help("Drop automated skimmer spots (\"-#\" nodes and dB/WPM reports)")
+
+            Divider()
+            Text("MODES")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(.secondary)
+            HStack(spacing: 14) {
+                ForEach(ModeClass.allCases) { mode in
+                    Toggle(mode.displayName, isOn: modeBinding(mode, settings: settings))
+                }
+            }
+
+            Divider()
+            HStack {
+                Text("BANDS")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Button("All") { settings.spotBands = [] }
+                    .controlSize(.small)
+                    .disabled(settings.spotBands.isEmpty)
+            }
+            FlowLayout(horizontalSpacing: 12, verticalSpacing: 4) {
+                ForEach(model.partyBands) { band in
+                    Toggle(band.rawValue, isOn: bandBinding(band, settings: settings))
+                }
+            }
+
+            Divider()
+            HStack {
+                Text("Age out after")
+                Spacer()
+                Picker("", selection: $settings.spotMaxAgeMinutes) {
+                    ForEach(Self.ageChoices, id: \.self) { minutes in
+                        Text(Self.ageLabel(minutes)).tag(minutes)
+                    }
+                }
+                .labelsHidden()
+                .frame(width: 96)
+            }
+
+            HStack {
+                Button("Reset All") {
+                    settings.northAmericanSpottersOnly = false
+                    settings.northAmericanStationsOnly = false
+                    settings.hideWorkedSpots = false
+                    settings.hideSkimmerSpots = false
+                    settings.spotModes = []
+                    settings.spotBands = []
+                    settings.spotMaxAgeMinutes = 15
+                }
+                .disabled(!model.filtersActive && settings.spotMaxAgeMinutes == 15)
+                Spacer()
+                Button("Done") { showFilters = false }
+                    .keyboardShortcut(.defaultAction)
+            }
+        }
+        .toggleStyle(.checkbox)
+        .padding(14)
+        .frame(width: 290)
+    }
+
+    private static let ageChoices = [5, 10, 15, 30, 60, 120]
+
+    private static func ageLabel(_ minutes: Int) -> String {
+        minutes < 60 ? "\(minutes) min" : "\(minutes / 60) hr"
+    }
+
+    /// Empty set means "all", so materialise the full set before removing an
+    /// entry — otherwise unticking the first item would do nothing.
+    private func modeBinding(_ mode: ModeClass, settings: AppSettings) -> Binding<Bool> {
+        Binding(
+            get: { settings.spotModes.isEmpty || settings.spotModes.contains(mode) },
+            set: { on in
+                var modes = settings.spotModes.isEmpty ? Set(ModeClass.allCases) : settings.spotModes
+                if on { modes.insert(mode) } else { modes.remove(mode) }
+                settings.spotModes = modes.count == ModeClass.allCases.count ? [] : modes
+            }
+        )
+    }
+
+    private func bandBinding(_ band: Band, settings: AppSettings) -> Binding<Bool> {
+        Binding(
+            get: { settings.spotBands.isEmpty || settings.spotBands.contains(band) },
+            set: { on in
+                var bands = settings.spotBands.isEmpty ? Set(model.partyBands) : settings.spotBands
+                if on { bands.insert(band) } else { bands.remove(band) }
+                settings.spotBands = bands.count == model.partyBands.count ? [] : bands
+            }
+        )
     }
 
     private func map(size: CGSize) -> some View {

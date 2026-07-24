@@ -49,7 +49,8 @@ final class FlexRadioDriver: RadioDriver, @unchecked Sendable {
         transport.onReceive = { [weak self] data in
             self?.ingest(data)
         }
-        sendCommand("client program QSOPartyLogger")
+        // No `client program` handshake: the radio rejects unregistered
+        // program names ("unknown client program"), and nothing needs it.
         sendCommand("sub slice all")
         sendCommand("sub tx all")
         sendCommand("sub cwx all")

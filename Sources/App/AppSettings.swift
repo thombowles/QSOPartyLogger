@@ -39,6 +39,73 @@ final class AppSettings {
         didSet { defaults.set(clusterPort, forKey: "clusterPort") }
     }
 
+    /// Connect to the cluster automatically when a contest opens.
+    var clusterAutoConnect: Bool {
+        didSet { defaults.set(clusterAutoConnect, forKey: "clusterAutoConnect") }
+    }
+
+    /// Previously used nodes, most recent first ("host:port").
+    var clusterHistory: [String] {
+        didSet { defaults.set(clusterHistory, forKey: "clusterHistory") }
+    }
+
+    /// Commands sent right after login, one per line. `sh/dx` backfills the
+    /// band map with recent spots instead of waiting for new ones.
+    var clusterCommands: String {
+        didSet { defaults.set(clusterCommands, forKey: "clusterCommands") }
+    }
+
+    /// Hide spots posted by non-North-American spotters — in a stateside QSO
+    /// party, EU/JA skimmer spots are noise.
+    var northAmericanSpottersOnly: Bool {
+        didSet { defaults.set(northAmericanSpottersOnly, forKey: "northAmericanSpottersOnly") }
+    }
+
+    /// Hide spots *of* stations outside North America — DX isn't workable
+    /// exchange in a state QSO party.
+    var northAmericanStationsOnly: Bool {
+        didSet { defaults.set(northAmericanStationsOnly, forKey: "northAmericanStationsOnly") }
+    }
+
+    /// Hide stations already worked on the current band and mode.
+    var hideWorkedSpots: Bool {
+        didSet { defaults.set(hideWorkedSpots, forKey: "hideWorkedSpots") }
+    }
+
+    /// Hide automated RBN / skimmer spots.
+    var hideSkimmerSpots: Bool {
+        didSet { defaults.set(hideSkimmerSpots, forKey: "hideSkimmerSpots") }
+    }
+
+    /// Drop spots older than this (minutes) — contest spots go stale fast.
+    var spotMaxAgeMinutes: Int {
+        didSet { defaults.set(spotMaxAgeMinutes, forKey: "spotMaxAgeMinutes") }
+    }
+
+    /// Mode classes to show; empty means every mode.
+    var spotModes: Set<ModeClass> {
+        didSet { defaults.set(spotModes.map(\.rawValue), forKey: "spotModes") }
+    }
+
+    /// Bands to show; empty means every band.
+    var spotBands: Set<Band> {
+        didSet { defaults.set(spotBands.map(\.rawValue), forKey: "spotBands") }
+    }
+
+    /// The spot filters as the engine wants them. `workedCalls` is supplied
+    /// by the caller, which is the only part that isn't a stored preference.
+    func spotFilterOptions(workedCalls: Set<String>) -> SpotFilter.Options {
+        SpotFilter.Options(
+            northAmericanSpottersOnly: northAmericanSpottersOnly,
+            northAmericanStationsOnly: northAmericanStationsOnly,
+            hideWorked: hideWorkedSpots,
+            hideSkimmer: hideSkimmerSpots,
+            modes: spotModes,
+            bands: spotBands,
+            workedCalls: workedCalls
+        )
+    }
+
     var wpm: Int {
         didSet { defaults.set(wpm, forKey: "wpm") }
     }
@@ -93,6 +160,16 @@ final class AppSettings {
         tcpPort = defaults.object(forKey: "tcpPort") as? Int ?? Int(FlexRadioDriver.defaultPort)
         clusterHost = defaults.string(forKey: "clusterHost") ?? ""
         clusterPort = defaults.object(forKey: "clusterPort") as? Int ?? 7300
+        clusterAutoConnect = defaults.object(forKey: "clusterAutoConnect") as? Bool ?? false
+        clusterHistory = defaults.stringArray(forKey: "clusterHistory") ?? []
+        clusterCommands = defaults.string(forKey: "clusterCommands") ?? "sh/dx 30"
+        northAmericanSpottersOnly = defaults.object(forKey: "northAmericanSpottersOnly") as? Bool ?? false
+        northAmericanStationsOnly = defaults.object(forKey: "northAmericanStationsOnly") as? Bool ?? false
+        hideWorkedSpots = defaults.object(forKey: "hideWorkedSpots") as? Bool ?? false
+        hideSkimmerSpots = defaults.object(forKey: "hideSkimmerSpots") as? Bool ?? false
+        spotMaxAgeMinutes = defaults.object(forKey: "spotMaxAgeMinutes") as? Int ?? 15
+        spotModes = Set((defaults.stringArray(forKey: "spotModes") ?? []).compactMap(ModeClass.init(rawValue:)))
+        spotBands = Set((defaults.stringArray(forKey: "spotBands") ?? []).compactMap(Band.init(rawValue:)))
         wpm = defaults.object(forKey: "wpm") as? Int ?? 22
         keyerBackend = KeyerBackend(rawValue: defaults.string(forKey: "keyerBackend") ?? "") ?? .direct
         keyerLineConfig = (defaults.data(forKey: "keyerLineConfig")
