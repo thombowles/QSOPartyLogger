@@ -21,6 +21,24 @@ final class AppSettings {
         didSet { defaults.set(baudRate, forKey: "baudRate") }
     }
 
+    /// Network CAT (FlexRadio): host/IP and TCP port.
+    var tcpHost: String {
+        didSet { defaults.set(tcpHost, forKey: "tcpHost") }
+    }
+
+    var tcpPort: Int {
+        didSet { defaults.set(tcpPort, forKey: "tcpPort") }
+    }
+
+    /// DX cluster (spots) connection.
+    var clusterHost: String {
+        didSet { defaults.set(clusterHost, forKey: "clusterHost") }
+    }
+
+    var clusterPort: Int {
+        didSet { defaults.set(clusterPort, forKey: "clusterPort") }
+    }
+
     var wpm: Int {
         didSet { defaults.set(wpm, forKey: "wpm") }
     }
@@ -71,6 +89,10 @@ final class AppSettings {
         radioID = defaults.string(forKey: "radioID") ?? "elecraft-k3"
         portPath = defaults.string(forKey: "portPath") ?? ""
         baudRate = defaults.object(forKey: "baudRate") as? Int ?? 38400
+        tcpHost = defaults.string(forKey: "tcpHost") ?? ""
+        tcpPort = defaults.object(forKey: "tcpPort") as? Int ?? Int(FlexRadioDriver.defaultPort)
+        clusterHost = defaults.string(forKey: "clusterHost") ?? ""
+        clusterPort = defaults.object(forKey: "clusterPort") as? Int ?? 7300
         wpm = defaults.object(forKey: "wpm") as? Int ?? 22
         keyerBackend = KeyerBackend(rawValue: defaults.string(forKey: "keyerBackend") ?? "") ?? .direct
         keyerLineConfig = (defaults.data(forKey: "keyerLineConfig")

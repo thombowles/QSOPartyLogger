@@ -12,10 +12,23 @@ struct RadioBar: View {
     @Binding var manualBand: Band
     @Binding var manualRawMode: String
 
+    private var descriptor: RadioDescriptor? {
+        RadioRegistry.descriptor(id: settings.radioID)
+    }
+
+    private var isNetworkRadio: Bool {
+        if case .network = descriptor?.connection { true } else { false }
+    }
+
     var body: some View {
         FlowLayout(horizontalSpacing: 10, verticalSpacing: 6) {
-            portGroup
-            baudGroup
+            radioGroup
+            if isNetworkRadio {
+                hostGroup
+            } else {
+                portGroup
+                baudGroup
+            }
             connectButton
             frequencyDisplay
             if radio.radioState == nil {
@@ -23,7 +36,9 @@ struct RadioBar: View {
                 modeGroup
             }
             wpmStepper
-            keyerGroup
+            if descriptor?.supportsDirectKeying ?? true {
+                keyerGroup
+            }
             if let sending = radio.nowSending {
                 sendingIndicator(sending)
             }
@@ -34,6 +49,36 @@ struct RadioBar: View {
     }
 
     // MARK: Control clusters (flow items)
+
+    private var radioGroup: some View {
+        captioned("Radio") {
+            Picker("", selection: $settings.radioID) {
+                ForEach(RadioRegistry.all) { desc in
+                    Text(desc.displayName).tag(desc.id)
+                }
+            }
+            .labelsHidden()
+            .frame(maxWidth: 190)
+            .disabled(radio.isConnected)
+        }
+    }
+
+    private var hostGroup: some View {
+        captioned("Host") {
+            HStack(spacing: 2) {
+                TextField("192.168.1.100", text: $settings.tcpHost)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 140)
+                    .disabled(radio.isConnected)
+                    .help("FlexRadio IP address or hostname (SmartSDR API)")
+                TextField("Port", value: $settings.tcpPort, format: .number.grouping(.never))
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 54)
+                    .disabled(radio.isConnected)
+                    .help("TCP port — 4992 unless you've changed it")
+            }
+        }
+    }
 
     private var portGroup: some View {
         captioned("Port") {
@@ -78,7 +123,7 @@ struct RadioBar: View {
             if radio.isConnected {
                 radio.disconnect()
             } else {
-                radio.connect(settings: settings)
+                radio.connectManually(settings: settings)
             }
         }
         .fixedSize()
@@ -154,7 +199,7 @@ struct RadioBar: View {
                 Text(state.displayFrequency)
                     .font(.system(.title3, design: .monospaced).weight(.semibold))
                     .fixedSize()
-                Text(state.mode.rawMode)
+                Text(state.rawMode)
                     .font(.callout.weight(.semibold))
                     .foregroundStyle(.secondary)
                     .fixedSize()

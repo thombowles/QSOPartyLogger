@@ -39,6 +39,11 @@ enum Band: String, Codable, CaseIterable, Sendable, Identifiable {
         edges.first { $0.1.contains(freqKHz) }?.0
     }
 
+    /// US band edges in kHz — the band map's vertical extent.
+    var rangeKHz: ClosedRange<Int> {
+        Self.edges.first { $0.0 == self }!.1
+    }
+
     /// Fallback frequency for Cabrillo rows logged without CAT data.
     var defaultFreqKHz: Int {
         switch self {

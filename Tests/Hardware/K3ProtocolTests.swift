@@ -58,7 +58,7 @@ final class K3ProtocolTests: XCTestCase {
         let state = try XCTUnwrap(ElecraftK3Driver.parseIF(ifResponse(freqHz: 14_042_000)))
         XCTAssertEqual(state.frequencyHz, 14_042_000)
         XCTAssertEqual(state.frequencyKHz, 14042)
-        XCTAssertEqual(state.mode, .cw)
+        XCTAssertEqual(state.rawMode, "CW")
         XCTAssertEqual(state.band, .m20)
         XCTAssertFalse(state.isTransmitting)
     }
@@ -69,15 +69,14 @@ final class K3ProtocolTests: XCTestCase {
         XCTAssertEqual(tx.band, .m40)
 
         let usb = try XCTUnwrap(ElecraftK3Driver.parseIF(ifResponse(freqHz: 14_240_000, modeDigit: "2")))
-        XCTAssertEqual(usb.mode, .usb)
-        XCTAssertEqual(usb.mode.rawMode, "USB")
-        XCTAssertEqual(usb.mode.modeClass, .phone)
+        XCTAssertEqual(usb.rawMode, "USB")
+        XCTAssertEqual(usb.modeClass, .phone)
 
         let data = try XCTUnwrap(ElecraftK3Driver.parseIF(ifResponse(freqHz: 14_080_000, modeDigit: "6")))
-        XCTAssertEqual(data.mode.modeClass, .digital)
+        XCTAssertEqual(data.modeClass, .digital)
 
         let cwr = try XCTUnwrap(ElecraftK3Driver.parseIF(ifResponse(freqHz: 14_042_000, modeDigit: "7")))
-        XCTAssertEqual(cwr.mode.rawMode, "CW")
+        XCTAssertEqual(cwr.rawMode, "CW")
     }
 
     func testParseIFRejectsGarbage() {
@@ -100,6 +99,24 @@ final class K3ProtocolTests: XCTestCase {
         XCTAssertEqual(ElecraftK3Driver.cmdSetKeyerSpeed(wpm: 28), "KS028;")
         XCTAssertEqual(ElecraftK3Driver.cmdSetKeyerSpeed(wpm: 99), "KS050;", "clamped to 50")
         XCTAssertEqual(ElecraftK3Driver.cmdSetKeyerSpeed(wpm: 1), "KS008;", "clamped to 8")
+    }
+
+    func testCmdSetMode() {
+        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "CW", frequencyHz: 14_040_000), "MD3;")
+        XCTAssertEqual(
+            ElecraftK3Driver.cmdSetMode(rawMode: "SSB", frequencyHz: 14_200_000), "MD2;",
+            "SSB above 10 MHz is USB"
+        )
+        XCTAssertEqual(
+            ElecraftK3Driver.cmdSetMode(rawMode: "SSB", frequencyHz: 7_200_000), "MD1;",
+            "SSB below 10 MHz is LSB"
+        )
+        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "USB", frequencyHz: 7_200_000), "MD2;")
+        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "LSB", frequencyHz: 14_200_000), "MD1;")
+        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "RTTY", frequencyHz: 14_080_000), "MD6;")
+        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "AM", frequencyHz: 14_200_000), "MD5;")
+        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "FM", frequencyHz: 29_600_000), "MD4;")
+        XCTAssertNil(ElecraftK3Driver.cmdSetMode(rawMode: "???", frequencyHz: 14_000_000))
     }
 
     func testKYChunkingRespects24CharLimit() {
@@ -155,7 +172,7 @@ final class K3ProtocolTests: XCTestCase {
 
         wait(for: [got], timeout: 2.0)
         XCTAssertEqual(received?.frequencyKHz, 14042)
-        XCTAssertEqual(received?.mode, .cw)
+        XCTAssertEqual(received?.rawMode, "CW")
         driver.stop()
     }
 

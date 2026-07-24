@@ -13,6 +13,9 @@ protocol RadioDriver: AnyObject {
     var onKeyerSpeedChange: (@Sendable (Int) -> Void)? { get set }
 
     func setFrequency(hz: Int)
+    /// ADIF-style mode ("CW", "SSB", "USB", "RTTY"…). Drivers resolve "SSB"
+    /// to the conventional sideband for the current frequency.
+    func setMode(rawMode: String)
     func setKeyerSpeed(wpm: Int)
     /// Send text through the radio's internal keyer, if it has one.
     func sendInternalKeyerText(_ text: String)

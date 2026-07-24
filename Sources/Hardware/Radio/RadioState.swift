@@ -28,13 +28,16 @@ enum K3Mode: Character, Sendable {
     }
 }
 
+/// Radio-agnostic live state: any driver (serial CAT, TCP) publishes this.
 struct RadioState: Equatable, Sendable {
     var frequencyHz: Int
-    var mode: K3Mode
+    /// ADIF-style mode string ("CW", "USB", "RTTY"…).
+    var rawMode: String
     var isTransmitting: Bool
 
     var frequencyKHz: Int { frequencyHz / 1000 }
     var band: Band? { Band.from(freqKHz: frequencyKHz) }
+    var modeClass: ModeClass { ModeClass.classify(rawMode: rawMode) }
 
     var displayFrequency: String {
         let mhz = Double(frequencyHz) / 1_000_000.0

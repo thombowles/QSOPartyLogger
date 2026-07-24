@@ -224,6 +224,34 @@ final class OperatingFeatureTests: XCTestCase {
         )
     }
 
+    // MARK: Band/mode QSO breakdown
+
+    func testBandModeCounts() throws {
+        let party = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        var log = ContestLog(partyID: "ksqp")
+        log.myLocation = .outOfState(location: "TX")
+        let t = Date(timeIntervalSince1970: 1_785_078_000)
+        func qso(_ call: String, _ band: Band, _ mode: ModeClass, offset: TimeInterval) -> QSO {
+            QSO(
+                timestampUTC: t.addingTimeInterval(offset),
+                call: call, band: band, modeClass: mode,
+                rawMode: mode == .cw ? "CW" : "SSB",
+                rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: "RIL"
+            )
+        }
+        log.qsos = [
+            qso("K0A", .m40, .cw, offset: 0),
+            qso("K0B", .m40, .cw, offset: 60),
+            qso("K0B", .m40, .cw, offset: 120),  // exact dupe — not counted
+            qso("K0C", .m20, .phone, offset: 180),
+        ]
+        let counts = ScoreEngine.bandModeCounts(log: log, party: party)
+        XCTAssertEqual(counts[.m40]?[.cw], 2)
+        XCTAssertEqual(counts[.m20]?[.phone], 1)
+        XCTAssertNil(counts[.m80])
+        XCTAssertNil(counts[.m40]?[.phone])
+    }
+
     // MARK: Default document naming
 
     func testDefaultDisplayName() {

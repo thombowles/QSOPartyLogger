@@ -27,6 +27,18 @@ struct MainView: View {
     @State private var repeatTask: Task<Void, Never>?
     @State private var hostWindow: NSWindow?
 
+    @State private var spotStore = SpotStore()
+    @State private var spotClient = SpotClient()
+    @State private var spotPurgeTask: Task<Void, Never>?
+    @State private var showClusterPopover = false
+    /// Reference frequency for ⌘←/⌘→ when no live radio frequency exists.
+    @State private var spotCursorKHz: Double?
+    /// Run frequency captured when CQ is sent; ⌘J jumps back to it.
+    @State private var cqFrequencyHz: Int?
+
+    @State private var bandMapModel: BandMapModel?
+    @State private var bandMapPanel: NSPanel?
+
     private var party: PartyDefinition? {
         document.party
     }
@@ -41,7 +53,7 @@ struct MainView: View {
     }
 
     private var currentRawMode: String {
-        radio.radioState?.mode.rawMode ?? manualRawMode
+        radio.radioState?.rawMode ?? manualRawMode
     }
 
     private var currentModeClass: ModeClass {
@@ -91,8 +103,26 @@ struct MainView: View {
         HSplitView {
             leftPane
                 .layoutPriority(1)
-            ScoreSidebar(log: document.log, party: party, score: score)
+            ScoreSidebar(
+                log: document.log,
+                party: party,
+                score: score,
+                spots: spotStore.spots(band: currentBand),
+                currentBand: currentBand,
+                workedCalls: workedCallsOnCurrentBandMode,
+                clusterConnected: spotClient.status == .connected,
+                onTuneSpot: { tune(to: $0) }
+            )
         }
+    }
+
+    /// Calls already in the log on the current band+mode — grays their spots.
+    private var workedCallsOnCurrentBandMode: Set<String> {
+        Set(
+            document.log.qsos
+                .filter { $0.band == currentBand && $0.modeClass == currentModeClass }
+                .map { $0.call.uppercased() }
+        )
     }
 
     private var leftPane: some View {
@@ -105,7 +135,7 @@ struct MainView: View {
                 manualRawMode: $manualRawMode
             )
             .onChange(of: radio.radioState?.band) { revalidate() }
-            .onChange(of: radio.radioState?.mode) { modeChanged() }
+            .onChange(of: radio.radioState?.rawMode) { modeChanged() }
             .onChange(of: radio.radioReportedWPM) { syncSpeedFromRadio() }
             .onChange(of: repeatCQ) { repeatCQChanged() }
             .onChange(of: radio.isConnected) { if !radio.isConnected { stopRepeat() } }
@@ -128,11 +158,13 @@ struct MainView: View {
                 operatingMode: $operatingMode,
                 messages: activeMessages,
                 expand: expandMacros,
-                onSend: sendMessage,
+                onSend: sendMessageAt,
                 enabled: radio.isConnected && currentModeClass == .cw,
                 repeatEnabled: $repeatCQ,
                 repeatInterval: $settings.repeatIntervalSeconds,
-                esmEnabled: $settings.esmEnabled
+                esmEnabled: $settings.esmEnabled,
+                cqFrequencyLabel: cqFrequencyHz.map { String(format: "%.1f", Double($0) / 1000) },
+                onJumpToCQ: jumpToCQFrequency
             )
             Divider()
 
@@ -145,6 +177,13 @@ struct MainView: View {
         })
         .onChange(of: manualBand) { revalidate() }
         .onChange(of: manualRawMode) { modeChanged() }
+        .onChange(of: currentBand) { bandMapModel?.band = currentBand }
+        .onChange(of: workedCallsOnCurrentBandMode) {
+            bandMapModel?.workedCalls = workedCallsOnCurrentBandMode
+        }
+        .onChange(of: cqFrequencyHz) {
+            bandMapModel?.cqKHz = cqFrequencyHz.map { Double($0) / 1000 }
+        }
     }
 
     private var logTable: some View {
@@ -165,6 +204,11 @@ struct MainView: View {
             NSEvent.removeMonitor(monitor)
             keyMonitor = nil
         }
+        spotPurgeTask?.cancel()
+        spotPurgeTask = nil
+        spotClient.disconnect()
+        bandMapPanel?.close()
+        bandMapPanel = nil
         radio.disconnect()
     }
 
@@ -236,6 +280,29 @@ struct MainView: View {
                 Label("CW Messages", systemImage: "keyboard")
             }
 
+            Button {
+                toggleBandMap()
+            } label: {
+                Label("Band Map", systemImage: "ruler")
+            }
+            .help("Band map — spots by frequency with the VFO marker (⌘B)")
+
+            Button {
+                showClusterPopover.toggle()
+            } label: {
+                Label(
+                    "Spots",
+                    systemImage: spotClient.status == .connected
+                        ? "antenna.radiowaves.left.and.right.circle.fill"
+                        : "antenna.radiowaves.left.and.right"
+                )
+                .foregroundStyle(spotClient.status == .connected ? .green : .primary)
+            }
+            .help("DX cluster connection for spots — click a spot to tune, ⌘←/⌘→ to step")
+            .popover(isPresented: $showClusterPopover) {
+                clusterPopover
+            }
+
             Menu {
                 if let path = CloudMirror.folderDisplayPath {
                     Text(path)
@@ -262,6 +329,61 @@ struct MainView: View {
         }
     }
 
+    // MARK: DX cluster popover
+
+    private var clusterPopover: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("DX Cluster")
+                .font(.headline)
+            HStack(spacing: 6) {
+                TextField("dxc.example.com", text: $settings.clusterHost)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 180)
+                TextField("Port", value: $settings.clusterPort, format: .number.grouping(.never))
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 60)
+            }
+            HStack(spacing: 8) {
+                if spotClient.status == .disconnected {
+                    Button("Connect") {
+                        spotClient.connect(
+                            host: settings.clusterHost,
+                            port: (1...65535).contains(settings.clusterPort)
+                                ? UInt16(settings.clusterPort) : 7300,
+                            callsign: document.log.station.callsign
+                        )
+                    }
+                    .keyboardShortcut(.defaultAction)
+                } else {
+                    Button("Disconnect") {
+                        spotClient.disconnect()
+                    }
+                }
+                switch spotClient.status {
+                case .disconnected:
+                    Text("Not connected").foregroundStyle(.secondary)
+                case .connecting:
+                    Text("Connecting…").foregroundStyle(.orange)
+                case .connected:
+                    Label("Connected", systemImage: "checkmark.circle.fill")
+                        .foregroundStyle(.green)
+                }
+            }
+            .font(.callout)
+            if let error = spotClient.lastError {
+                Label(error, systemImage: "exclamationmark.triangle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                    .frame(maxWidth: 250, alignment: .leading)
+            }
+            Text("Logs in with your callsign. Spots for the current band appear in the sidebar — click to tune, ⌘← / ⌘→ to step through them.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: 250, alignment: .leading)
+        }
+        .padding(14)
+    }
+
     // MARK: Actions
 
     private var activeMessages: [String] {
@@ -277,6 +399,38 @@ struct MainView: View {
         entry.applyDefaults(modeClass: currentModeClass)
         installKeyMonitor()
         radio.connectAndValidate(settings: settings)
+
+        spotClient.onSpot = { spot in
+            spotStore.add(spot)
+        }
+        spotPurgeTask = Task {
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 60_000_000_000)
+                spotStore.purge(now: Date())
+            }
+        }
+
+        if bandMapModel == nil {
+            let model = BandMapModel(radio: radio, spotStore: spotStore)
+            model.band = currentBand
+            model.workedCalls = workedCallsOnCurrentBandMode
+            model.onTuneSpot = { tune(to: $0) }
+            model.onTuneKHz = { qsyTo(kHz: $0) }
+            bandMapModel = model
+        }
+    }
+
+    // MARK: Band map panel
+
+    private func toggleBandMap() {
+        if let panel = bandMapPanel {
+            panel.isVisible ? panel.orderOut(nil) : panel.orderFront(nil)
+            return
+        }
+        guard let model = bandMapModel else { return }
+        let panel = BandMapPanel.make(model: model, near: hostWindow)
+        bandMapPanel = panel
+        panel.orderFront(nil)
     }
 
     /// Mode changes (radio or manual): swap pre-filled RST defaults
@@ -286,8 +440,18 @@ struct MainView: View {
         revalidate()
     }
 
-    /// Return key: plain logging, or the ESM state machine when enabled.
+    /// Return key: typed QSY commands first, then plain logging or the ESM
+    /// state machine.
     private func returnPressed() {
+        // "14025", "40M", "CW"… in the call field tunes instead of logging —
+        // hands stay on the keyboard.
+        if let command = EntryCommand.parse(entry.call) {
+            execute(command)
+            entry.call = ""
+            revalidate()
+            return
+        }
+
         entry.applyDefaults(modeClass: currentModeClass)
         revalidate()
         let exchangeValid: Bool = {
@@ -318,7 +482,85 @@ struct MainView: View {
     private func sendMessageAt(_ index: Int) {
         let set = activeMessages
         guard set.indices.contains(index), !set[index].isEmpty else { return }
+        // F1 in Run mode is the CQ — remember where we're running from.
+        if operatingMode == .run, index == 0 {
+            captureCQFrequency()
+        }
         sendMessage(set[index])
+    }
+
+    // MARK: Typed QSY commands + spot tuning
+
+    private func execute(_ command: EntryCommand) {
+        switch command {
+        case .frequency(let kHz):
+            qsyTo(kHz: kHz)
+        case .band(let band):
+            qsyTo(kHz: Double(band.defaultFreqKHz))
+        case .mode(let mode):
+            if radio.isConnected {
+                radio.setMode(rawMode: mode)
+            } else {
+                manualRawMode = manualToken(for: mode)
+            }
+        }
+    }
+
+    /// Tune the radio (or the manual band picker when disconnected) and move
+    /// the spot cursor — shared by typed commands and band-map clicks.
+    private func qsyTo(kHz: Double) {
+        if radio.isConnected {
+            radio.setFrequency(kHz: kHz)
+        } else if let band = Band.from(freqKHz: Int(kHz.rounded())) {
+            manualBand = band
+        }
+        spotCursorKHz = kHz
+    }
+
+    /// Map any typed mode onto the manual picker's CW/SSB/RTTY tokens.
+    private func manualToken(for mode: String) -> String {
+        switch ModeClass.classify(rawMode: mode) {
+        case .cw: "CW"
+        case .phone: "SSB"
+        case .digital: "RTTY"
+        }
+    }
+
+    private func tune(to spot: Spot) {
+        radio.setFrequency(kHz: spot.freqKHz)
+        if !radio.isConnected, let band = spot.band {
+            manualBand = band
+        }
+        spotCursorKHz = spot.freqKHz
+        entry.call = spot.call
+        focusedField = .call
+        revalidate()
+    }
+
+    private func jumpToSpot(_ direction: SpotStore.Direction) {
+        let bandSpots = spotStore.spots(band: currentBand)
+        let reference = radio.radioState.map { Double($0.frequencyHz) / 1000 }
+            ?? spotCursorKHz
+            ?? Double(currentBand.defaultFreqKHz)
+        guard let spot = SpotStore.next(in: bandSpots, afterKHz: reference, direction: direction) else {
+            return
+        }
+        tune(to: spot)
+    }
+
+    // MARK: CQ frequency memory
+
+    private func captureCQFrequency() {
+        if let hz = radio.radioState?.frequencyHz {
+            cqFrequencyHz = hz
+        }
+    }
+
+    private func jumpToCQFrequency() {
+        guard let hz = cqFrequencyHz else { return }
+        radio.setFrequency(kHz: Double(hz) / 1000)
+        spotCursorKHz = Double(hz) / 1000
+        operatingMode = .run
     }
 
     // MARK: CW speed
@@ -350,6 +592,7 @@ struct MainView: View {
             repeatCQ = false
             return
         }
+        captureCQFrequency()
         repeatTask = Task {
             while !Task.isCancelled && repeatCQ {
                 let text = expandMacros(cq)
@@ -503,6 +746,7 @@ struct MainView: View {
             }
 
             // ⌘= / ⌘+ and ⌘- (plus keypad variants): CW speed ±2 WPM.
+            // ⌘←/⌘→: previous/next spot on the band. ⌘J: back to CQ frequency.
             if event.modifierFlags.contains(.command) {
                 switch event.keyCode {
                 case 24, 69:  // '=' / keypad '+'
@@ -510,6 +754,18 @@ struct MainView: View {
                     return nil
                 case 27, 78:  // '-' / keypad '-'
                     adjustWPM(by: -2)
+                    return nil
+                case 123:  // ←
+                    jumpToSpot(.down)
+                    return nil
+                case 124:  // →
+                    jumpToSpot(.up)
+                    return nil
+                case 38:  // 'j'
+                    jumpToCQFrequency()
+                    return nil
+                case 11:  // 'b'
+                    toggleBandMap()
                     return nil
                 default:
                     break

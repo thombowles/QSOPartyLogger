@@ -1,17 +1,22 @@
 import SwiftUI
 
 /// F1–F8 CW message buttons for the active operating mode, plus the
-/// Run/S&P toggle and repeat-CQ controls.
+/// Run/S&P toggle, ESM, repeat-CQ, and the CQ-frequency jump chip.
 struct MessagesRow: View {
     @Binding var operatingMode: OperatingMode
     let messages: [String]
     let expand: (String) -> String
-    let onSend: (String) -> Void
+    /// Send the message in F-key slot `index` (0-based).
+    let onSend: (Int) -> Void
     let enabled: Bool
 
     @Binding var repeatEnabled: Bool
     @Binding var repeatInterval: Double
     @Binding var esmEnabled: Bool
+
+    /// "14025.4" when a CQ frequency is remembered; nil hides the chip.
+    let cqFrequencyLabel: String?
+    let onJumpToCQ: () -> Void
 
     var body: some View {
         HStack(spacing: 6) {
@@ -26,7 +31,7 @@ struct MessagesRow: View {
 
             ForEach(Array(messages.prefix(8).enumerated()), id: \.offset) { index, template in
                 Button {
-                    onSend(template)
+                    onSend(index)
                 } label: {
                     VStack(spacing: 1) {
                         Text("F\(index + 1)")
@@ -43,6 +48,16 @@ struct MessagesRow: View {
             }
 
             Spacer()
+
+            if let cqFrequencyLabel {
+                Button {
+                    onJumpToCQ()
+                } label: {
+                    Label(cqFrequencyLabel, systemImage: "arrow.uturn.backward")
+                        .font(.caption.monospacedDigit())
+                }
+                .help("Jump back to your CQ run frequency and Run mode (⌘J)")
+            }
 
             Toggle(isOn: $esmEnabled) {
                 Label("ESM", systemImage: "return")

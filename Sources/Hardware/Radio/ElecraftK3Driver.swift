@@ -81,6 +81,22 @@ final class ElecraftK3Driver: RadioDriver, @unchecked Sendable {
         String(format: "KS%03d;", min(50, max(8, wpm)))
     }
 
+    /// MD command for an app mode; "SSB" resolves to the conventional
+    /// sideband for the frequency (USB at/above 10 MHz, LSB below).
+    static func cmdSetMode(rawMode: String, frequencyHz: Int) -> String? {
+        let digit: Character? = switch rawMode.uppercased() {
+        case "CW": "3"
+        case "USB": "2"
+        case "LSB": "1"
+        case "SSB": frequencyHz >= 10_000_000 ? "2" : "1"
+        case "RTTY", "DIGI": "6"
+        case "AM": "5"
+        case "FM": "4"
+        default: nil
+        }
+        return digit.map { "MD\($0);" }
+    }
+
     /// KY accepts ≤24 chars per command; chunk at word boundaries when possible.
     static func cmdKeyerText(_ text: String) -> [String] {
         var chunks: [String] = []
@@ -109,6 +125,14 @@ final class ElecraftK3Driver: RadioDriver, @unchecked Sendable {
         currentTransport()?.write(Self.cmdSetFrequency(hz: hz))
     }
 
+    func setMode(rawMode: String) {
+        lock.lock()
+        let freq = lastState?.frequencyHz ?? 14_000_000
+        lock.unlock()
+        guard let cmd = Self.cmdSetMode(rawMode: rawMode, frequencyHz: freq) else { return }
+        currentTransport()?.write(cmd)
+    }
+
     func setKeyerSpeed(wpm: Int) {
         currentTransport()?.write(Self.cmdSetKeyerSpeed(wpm: wpm))
     }
@@ -134,7 +158,7 @@ final class ElecraftK3Driver: RadioDriver, @unchecked Sendable {
         guard let mode = K3Mode(rawValue: chars[29]) else { return nil }
         return RadioState(
             frequencyHz: freq,
-            mode: mode,
+            rawMode: mode.rawMode,
             isTransmitting: chars[28] == "1"
         )
     }

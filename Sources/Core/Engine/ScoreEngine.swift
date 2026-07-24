@@ -223,6 +223,19 @@ enum ScoreEngine {
         }
     }
 
+    /// Valid (non-dupe, allowed-mode) QSO counts per band and mode class —
+    /// the sidebar's "QSOs by band" matrix.
+    static func bandModeCounts(log: ContestLog, party: PartyDefinition) -> [Band: [ModeClass: Int]] {
+        let allowed = Set(party.allowedModeClasses)
+        let rows = log.qsos.sortedChronologically().filter { allowed.contains($0.modeClass) }
+        let firstIDs = DupeChecker.firstOccurrenceIDs(rows)
+        var out: [Band: [ModeClass: Int]] = [:]
+        for row in rows where firstIDs.contains(row.id) {
+            out[row.band, default: [:]][row.modeClass, default: 0] += 1
+        }
+        return out
+    }
+
     /// Would logging this contact add a new multiplier? (Live "NEW MULT" badge.)
     static func wouldAddMultiplier(
         theirLocs: [String],

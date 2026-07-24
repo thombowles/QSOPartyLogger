@@ -39,6 +39,8 @@
 	<string>15.0</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>© 2026 Tom Bowles, KE5CW</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>QSO Party Logger connects to your FlexRadio and DX cluster spotting nodes on your local network.</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
