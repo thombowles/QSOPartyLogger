@@ -8,16 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		001422B5EA133D81250B56D7 /* Parties in Resources */ = {isa = PBXBuildFile; fileRef = E70A4C058DB0BE3BF9AA15BC /* Parties */; };
+		07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DA5A46F75BD3EFC70DC50D /* CabrilloExporter.swift */; };
 		098B5B5D2F15D62548FB7A6B /* County.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE0321C50DA1A9D4AEB58D0 /* County.swift */; };
 		1DAC9D9495B4F17E4872E359 /* PartyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */; };
 		1E7FDC4C244F2B6F88CA2229 /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9CC975E303DB2512FF84C86 /* Band.swift */; };
 		3BE9C47F0CF9E0AC8134E7FD /* DupeCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4CFCAA1F93033279C3D7CF /* DupeCheckerTests.swift */; };
 		4499E2CE096927357D50EABF /* ScoreEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29960406C674052D5117926D /* ScoreEngineTests.swift */; };
+		45800F9A79A1866E099BDAB9 /* AdifExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C32262E99EC74EB6D9BC74D /* AdifExporterTests.swift */; };
 		4BB24860B49D12AC15176471 /* ExchangeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD32257D3D8870AAFF61403B /* ExchangeParser.swift */; };
 		5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF66C01612DA91290CFA1B6 /* SmokeTests.swift */; };
 		632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */; };
 		6A3CA6D517471AE74A517ECA /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245471C16B083B398057F4A0 /* ModelTests.swift */; };
 		6F9727CF59F10761B4AFEFD7 /* StationProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478647587A295E345278D2A5 /* StationProfile.swift */; };
+		74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */; };
+		75B4B677B2E8E0D1B4F0795D /* AdifExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A779F556F857265114F40CB4 /* AdifExporter.swift */; };
 		87DFF3866AB92FA4A0F51166 /* DupeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A13A0105A3055F65F9C60 /* DupeChecker.swift */; };
 		92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009080AA1C81D0A7D94FA410 /* ModeClass.swift */; };
 		A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC43C19DF629A758F1B4641 /* ContestLog.swift */; };
@@ -59,11 +63,15 @@
 		64E7C41D9406F1E08708929F /* OneByOneTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneByOneTracker.swift; sourceTree = "<group>"; };
 		658A13A0105A3055F65F9C60 /* DupeChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DupeChecker.swift; sourceTree = "<group>"; };
 		6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCatalogTests.swift; sourceTree = "<group>"; };
+		6C32262E99EC74EB6D9BC74D /* AdifExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdifExporterTests.swift; sourceTree = "<group>"; };
 		7CC43C19DF629A758F1B4641 /* ContestLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestLog.swift; sourceTree = "<group>"; };
 		8CE0321C50DA1A9D4AEB58D0 /* County.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = County.swift; sourceTree = "<group>"; };
 		95D6B397C7B014ACA6232F8F /* CountyLineExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountyLineExpander.swift; sourceTree = "<group>"; };
 		9CDA62C0033DE71F4781CC89 /* PartyCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCatalog.swift; sourceTree = "<group>"; };
 		A3EE6994E490B94BF6B0B2F7 /* ExchangeParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeParserTests.swift; sourceTree = "<group>"; };
+		A5DA5A46F75BD3EFC70DC50D /* CabrilloExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabrilloExporter.swift; sourceTree = "<group>"; };
+		A779F556F857265114F40CB4 /* AdifExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdifExporter.swift; sourceTree = "<group>"; };
+		AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabrilloExporterTests.swift; sourceTree = "<group>"; };
 		B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyDefinition.swift; sourceTree = "<group>"; };
 		CA4CFCAA1F93033279C3D7CF /* DupeCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DupeCheckerTests.swift; sourceTree = "<group>"; };
 		D9CC975E303DB2512FF84C86 /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
@@ -119,6 +127,8 @@
 		4C5BF7BAC2BF13B905627B74 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				6C32262E99EC74EB6D9BC74D /* AdifExporterTests.swift */,
+				AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */,
 				F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */,
 				CA4CFCAA1F93033279C3D7CF /* DupeCheckerTests.swift */,
 				A3EE6994E490B94BF6B0B2F7 /* ExchangeParserTests.swift */,
@@ -136,6 +146,15 @@
 				E70A4C058DB0BE3BF9AA15BC /* Parties */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		580EDB53EED5E5CD825CD646 /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				A779F556F857265114F40CB4 /* AdifExporter.swift */,
+				A5DA5A46F75BD3EFC70DC50D /* CabrilloExporter.swift */,
+			);
+			path = Export;
 			sourceTree = "<group>";
 		};
 		99EA7424B6084DE4C85A58A0 /* Sources */ = {
@@ -170,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				FDD94321082321BD5D776867 /* Engine */,
+				580EDB53EED5E5CD825CD646 /* Export */,
 				413CC5311794C009CA2F290C /* Models */,
 				05C8075E68F80C865BFBE918 /* Parties */,
 			);
@@ -290,6 +310,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45800F9A79A1866E099BDAB9 /* AdifExporterTests.swift in Sources */,
+				74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */,
 				A4276D42A299E140C2F6C501 /* CountyLineExpanderTests.swift in Sources */,
 				3BE9C47F0CF9E0AC8134E7FD /* DupeCheckerTests.swift in Sources */,
 				EFF567B7FAA9F043F72398D2 /* ExchangeParserTests.swift in Sources */,
@@ -305,7 +327,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75B4B677B2E8E0D1B4F0795D /* AdifExporter.swift in Sources */,
 				1E7FDC4C244F2B6F88CA2229 /* Band.swift in Sources */,
+				07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */,
 				A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */,
 				098B5B5D2F15D62548FB7A6B /* County.swift in Sources */,
 				F12378741285B339A876009B /* CountyLineExpander.swift in Sources */,

@@ -1,0 +1,108 @@
+import Foundation
+
+/// Cabrillo V3 export. County-line contacts arrive pre-expanded as separate
+/// rows, so each emits its own QSO line with its own sent county — the format
+/// QSO party sponsors (and N1MM) expect.
+enum CabrilloExporter {
+
+    static let creator = "QSO Party Logger 1.0"
+
+    static func export(log: ContestLog, party: PartyDefinition, score: ScoreEngine.ScoreBreakdown) -> String {
+        var lines: [String] = []
+        let s = log.station
+
+        lines.append("START-OF-LOG: 3.0")
+        lines.append("CREATED-BY: \(creator)")
+        lines.append("CONTEST: \(party.cabrilloContest)")
+        lines.append("CALLSIGN: \(s.callsign.uppercased())")
+        lines.append("LOCATION: \(cabrilloLocation(log: log, party: party))")
+        lines.append("CATEGORY-OPERATOR: \(s.categoryOperator.rawValue)")
+        lines.append("CATEGORY-BAND: ALL")
+        lines.append("CATEGORY-MODE: \(categoryMode(log.qsos))")
+        lines.append("CATEGORY-POWER: \(s.categoryPower.rawValue)")
+        lines.append("CATEGORY-STATION: \(s.categoryStation.rawValue)")
+        lines.append("CATEGORY-TRANSMITTER: \(s.categoryTransmitter.rawValue)")
+        lines.append("CLAIMED-SCORE: \(score.total)")
+        lines.append("OPERATORS: \(s.operators.isEmpty ? s.callsign.uppercased() : s.operators.uppercased())")
+        if !s.club.isEmpty { lines.append("CLUB: \(s.club)") }
+        lines.append("NAME: \(s.name)")
+        if !s.address.isEmpty { lines.append("ADDRESS: \(s.address)") }
+        if !s.city.isEmpty { lines.append("ADDRESS-CITY: \(s.city)") }
+        if !s.stateProvince.isEmpty { lines.append("ADDRESS-STATE-PROVINCE: \(s.stateProvince)") }
+        if !s.postalCode.isEmpty { lines.append("ADDRESS-POSTALCODE: \(s.postalCode)") }
+        if !s.country.isEmpty { lines.append("ADDRESS-COUNTRY: \(s.country)") }
+        if !s.email.isEmpty { lines.append("EMAIL: \(s.email)") }
+        lines.append("SOAPBOX: ")
+
+        let myCall = s.callsign.uppercased()
+        for q in log.qsos.sortedChronologically() {
+            lines.append(qsoLine(q, myCall: myCall))
+        }
+        lines.append("END-OF-LOG:")
+        return lines.joined(separator: "\n") + "\n"
+    }
+
+    /// In-state logs use the party state; out-of-state use the operator's
+    /// state/province, or "DX" for entrants outside US/Canada.
+    static func cabrilloLocation(log: ContestLog, party: PartyDefinition) -> String {
+        switch log.myLocation {
+        case .inState: party.homeState
+        case .outOfState(let loc): loc.isEmpty ? "DX" : loc.uppercased()
+        }
+    }
+
+    static func categoryMode(_ qsos: [QSO]) -> String {
+        let classes = Set(qsos.map(\.modeClass))
+        if classes.count > 1 { return "MIXED" }
+        switch classes.first {
+        case .cw: return "CW"
+        case .phone: return "SSB"
+        case .digital: return "RTTY"
+        case nil: return "MIXED"
+        }
+    }
+
+    static func cabrilloMode(_ rawMode: String) -> String {
+        switch rawMode.uppercased() {
+        case "CW": "CW"
+        case "SSB", "USB", "LSB", "AM": "PH"
+        case "FM": "FM"
+        case "RTTY": "RY"
+        default: "DG"
+        }
+    }
+
+    private static let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd HHmm"
+        f.timeZone = TimeZone(identifier: "UTC")
+        f.locale = Locale(identifier: "en_US_POSIX")
+        return f
+    }()
+
+    static func qsoLine(_ q: QSO, myCall: String) -> String {
+        let freq = String(q.freqKHz ?? q.band.defaultFreqKHz)
+        let mode = cabrilloMode(q.rawMode)
+        let when = dateFormatter.string(from: q.timestampUTC)
+        return "QSO: "
+            + freq.leftPadded(to: 5) + " "
+            + mode.padded(to: 2) + " "
+            + when + " "
+            + myCall.padded(to: 13) + " "
+            + q.rstSent.padded(to: 3) + " "
+            + q.myLoc.uppercased().padded(to: 6) + " "
+            + q.call.uppercased().padded(to: 13) + " "
+            + q.rstRcvd.padded(to: 3) + " "
+            + q.theirLoc.uppercased().padded(to: 6)
+    }
+}
+
+extension String {
+    func padded(to width: Int) -> String {
+        count >= width ? self : self + String(repeating: " ", count: width - count)
+    }
+
+    func leftPadded(to width: Int) -> String {
+        count >= width ? self : String(repeating: " ", count: width - count) + self
+    }
+}
