@@ -103,14 +103,24 @@ struct MainView: View {
                 manualBand: $manualBand,
                 manualRawMode: $manualRawMode
             )
+            .onChange(of: radio.radioState?.band) { revalidate() }
+            .onChange(of: radio.radioState?.mode) { revalidate() }
+            .onChange(of: radio.radioReportedWPM) { syncSpeedFromRadio() }
+            .onChange(of: repeatCQ) { repeatCQChanged() }
+            .onChange(of: radio.isConnected) { if !radio.isConnected { stopRepeat() } }
             Divider()
 
             stationStrip
+                .onChange(of: document.log.partyID) { applyDefaultDocumentName() }
+                .onChange(of: document.log.station.callsign) { applyDefaultDocumentName() }
+                .onChange(of: document.log.setupCompleted) { autoSaveNewDocumentIfNeeded() }
             Divider()
 
             EntryBar(entry: entry, party: party, onLog: returnPressed, focus: $focusedField)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
+                .onChange(of: entry.exchange) { revalidate() }
+                .onChange(of: entry.call) { revalidate() }
 
             MessagesRow(
                 operatingMode: $operatingMode,
@@ -131,17 +141,8 @@ struct MainView: View {
             hostWindow = window
             applyDefaultDocumentName()
         })
-        .onChange(of: entry.exchange) { revalidate() }
-        .onChange(of: entry.call) { revalidate() }
-        .onChange(of: radio.radioState?.band) { revalidate() }
-        .onChange(of: radio.radioState?.mode) { revalidate() }
         .onChange(of: manualBand) { revalidate() }
         .onChange(of: manualRawMode) { revalidate() }
-        .onChange(of: radio.radioReportedWPM) { syncSpeedFromRadio() }
-        .onChange(of: repeatCQ) { repeatCQChanged() }
-        .onChange(of: radio.isConnected) { if !radio.isConnected { stopRepeat() } }
-        .onChange(of: document.log.partyID) { applyDefaultDocumentName() }
-        .onChange(of: document.log.station.callsign) { applyDefaultDocumentName() }
     }
 
     private var logTable: some View {
@@ -359,19 +360,52 @@ struct MainView: View {
         if repeatCQ { repeatCQ = false }
     }
 
-    // MARK: Document naming
+    // MARK: Document naming + automatic first save
 
     /// Give unsaved logs a useful default name: "2026-07-25 ALQP KE5CW".
     private func applyDefaultDocumentName() {
         guard let window = hostWindow,
-              let nsDocument = window.windowController?.document as? NSDocument,
-              nsDocument.fileURL == nil else { return }
+              let nsDocument = window.windowController?.document as? NSDocument else { return }
+        document.knownFileURL = nsDocument.fileURL
+        guard nsDocument.fileURL == nil else { return }
         let name = LogDocument.defaultDisplayName(
             partyID: document.log.partyID,
             callsign: document.log.station.callsign
         )
         nsDocument.displayName = name
         window.title = name
+    }
+
+    /// Once Contest Setup completes, write the log straight into the logs
+    /// folder (no save panel) so it exists on disk — and in iCloud — from the
+    /// first minute. Later edits ride normal autosave-in-place; relaunching
+    /// restores the window, so the operator picks up where they left off.
+    private func autoSaveNewDocumentIfNeeded() {
+        guard document.log.setupCompleted,
+              let window = hostWindow,
+              let nsDocument = window.windowController?.document as? NSDocument,
+              nsDocument.fileURL == nil else { return }
+
+        // Need a logs folder first; offer the chooser once (recommends iCloud
+        // Drive). Declining leaves the classic ⌘S flow.
+        if !CloudMirror.isConfigured {
+            guard CloudMirror.chooseFolder() else { return }
+        }
+
+        let baseName = LogDocument.defaultDisplayName(
+            partyID: document.log.partyID,
+            callsign: document.log.station.callsign
+        )
+        guard let url = CloudMirror.uniqueSaveURL(baseName: baseName) else { return }
+        nsDocument.save(to: url, ofType: nsDocument.fileType ?? "QSO Party Log", for: .saveOperation) { error in
+            if let error {
+                NSLog("Auto-save failed: \(error)")
+            } else {
+                Task { @MainActor in
+                    document.knownFileURL = url
+                }
+            }
+        }
     }
 
     private func revalidate() {

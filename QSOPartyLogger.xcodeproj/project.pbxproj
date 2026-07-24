@@ -25,6 +25,7 @@
 		3D1801F37FFEC64F2E540F52 /* SerialPortEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D026EFBE941E3104530AE /* SerialPortEnumerator.swift */; };
 		4499E2CE096927357D50EABF /* ScoreEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29960406C674052D5117926D /* ScoreEngineTests.swift */; };
 		45800F9A79A1866E099BDAB9 /* AdifExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C32262E99EC74EB6D9BC74D /* AdifExporterTests.swift */; };
+		46267A86861ADDCD7E3EDBA8 /* CloudMirrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57263564A0C38ADE1B3E1897 /* CloudMirrorTests.swift */; };
 		497F973081DCEE07F2662518 /* RadioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AE54A60C33CC8614CCB97C /* RadioController.swift */; };
 		4BB24860B49D12AC15176471 /* ExchangeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD32257D3D8870AAFF61403B /* ExchangeParser.swift */; };
 		5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF66C01612DA91290CFA1B6 /* SmokeTests.swift */; };
@@ -99,6 +100,7 @@
 		32C89D2926CF6C8F0A3DEC77 /* CloudMirror.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudMirror.swift; sourceTree = "<group>"; };
 		4617D5E5CB3103CD4E042746 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		478647587A295E345278D2A5 /* StationProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationProfile.swift; sourceTree = "<group>"; };
+		57263564A0C38ADE1B3E1897 /* CloudMirrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudMirrorTests.swift; sourceTree = "<group>"; };
 		5779472576EDDB16AD912D7C /* QSOPartyLoggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QSOPartyLoggerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BE5CDC2177C8552E1D6426F /* MorseCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCode.swift; sourceTree = "<group>"; };
 		5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryBar.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 		D7D85D0B7071B633C7CF23AE /* App */ = {
 			isa = PBXGroup;
 			children = (
+				57263564A0C38ADE1B3E1897 /* CloudMirrorTests.swift */,
 				D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */,
 			);
 			path = App;
@@ -460,6 +463,7 @@
 				45800F9A79A1866E099BDAB9 /* AdifExporterTests.swift in Sources */,
 				FBF94AC519A65928C7634BA7 /* AlabamaQSOPartyTests.swift in Sources */,
 				74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */,
+				46267A86861ADDCD7E3EDBA8 /* CloudMirrorTests.swift in Sources */,
 				A4276D42A299E140C2F6C501 /* CountyLineExpanderTests.swift in Sources */,
 				3BE9C47F0CF9E0AC8134E7FD /* DupeCheckerTests.swift in Sources */,
 				EFF567B7FAA9F043F72398D2 /* ExchangeParserTests.swift in Sources */,

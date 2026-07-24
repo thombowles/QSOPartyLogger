@@ -19,6 +19,11 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
 
     var log: ContestLog
 
+    /// Where this document currently lives on disk (tracked by the UI from
+    /// the NSDocument bridge; nil while still an unsaved draft). Used to skip
+    /// redundant iCloud mirroring for documents stored in the logs folder.
+    @ObservationIgnored var knownFileURL: URL?
+
     /// Nonisolated on purpose: `DocumentGroup`'s new-document factory runs on a
     /// background dispatch queue, so this must not touch main-actor state.
     /// The last station profile is read directly from UserDefaults (thread-safe)
@@ -48,8 +53,10 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     func fileWrapper(snapshot: ContestLog, configuration: WriteConfiguration) throws -> FileWrapper {
         let data = try snapshot.encoded()
         // Best-effort iCloud mirror on every save; never blocks or fails the
-        // primary write.
-        if CloudMirror.isEnabled, snapshot.setupCompleted {
+        // primary write. Documents that already live in the logs folder ARE
+        // the synced copy — mirroring them would trigger "file changed by
+        // another application" churn.
+        if CloudMirror.isEnabled, snapshot.setupCompleted, !CloudMirror.folderContains(knownFileURL) {
             let name = LogDocument.mirrorFileName(for: snapshot)
             DispatchQueue.global(qos: .utility).async {
                 CloudMirror.mirror(data: data, fileName: name)
