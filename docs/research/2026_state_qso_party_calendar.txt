@@ -1,0 +1,68 @@
+# 2026 State QSO Party Challenge Contest Calendar
+# Source: https://stateqsoparty.com/wp-content/uploads/2026/03/2026-State-QSO-Party-Calendarc.pdf
+# Fetched: 2026-07-24 (pdftotext -layout)
+
+             2026 State QSO Party Challenge Contest Calendar
+Start Date    Start Time   End Date    End Time           Contest Name/Link
+ 2/7/2026       0000Z      2/8/2026     2400Z     Vermont QSO Party
+ 2/7/2026       1400Z      2/7/2026     2400Z     Minnesota QSO Party
+ 2/7/2026       1600Z      2/8/2026     0359Z     British Columbia QSO Party
+ 2/8/2026       1600Z      2/8/2026     2359Z     British Columbia QSO Party
+2/28/2026       1500Z      3/1/2026     0159Z     South Carolina QSO Party
+ 3/1/2026       1500Z      3/2/2026     0100Z     North Carolina QSO Party
+3/14/2026       1400Z      3/15/2026    0200Z     Oklahoma QSO Party
+3/14/2026       1600Z      3/15/2026    0400Z     Idaho QSO Party
+3/15/2026       1400Z      3/16/2026    0200Z     Idaho QSO Party
+3/15/2026       1400Z      3/15/2026    2200Z     Oklahoma QSO Party
+3/15/2026       1800Z      3/16/2026    0100Z     Wisconsin QSO Party
+3/21/2026       1400Z      3/22/2026    0400Z     Virginia QSO Party
+3/22/2026       1200Z      3/22/2026    2400Z     Virginia QSO Party
+ 4/4/2026       1400Z      4/5/2026     0200Z     Louisiana QSO Party
+ 4/4/2026       1400Z      4/5/2026     0200Z     Mississippi QSO Party
+4/11/2026       1400Z      4/12/2026    0400Z     Missouri QSO Party
+4/12/2026       1400Z      4/12/2026    2000Z     Missouri QSO Party
+4/11/2026       1400Z      4/12/2026    0200Z     New Mexico QSO Party
+4/11/2026       1800Z      4/12/2026    1800Z     North Dakota QSO Party
+4/11/2026       1800Z      4/12/2026    0359Z     Georgia QSO Party
+4/12/2026       1400Z      4/12/2026    2359Z     Georgia QSO Party
+4/18/2026       1800Z      4/19/2026    0300Z     Ontario QSO Party
+4/18/2026       1600Z      4/19/2026    0400Z     Michigan QSO Party
+4/19/2026       1200Z      4/19/2026    2000Z     Ontario QSO Party
+4/19/2026       1300Z      4/19/2026    2400Z     Quebec QSO Party
+4/25/2026       1400Z      4/26/2026    0200Z     Nebraska QSO Party
+4/25/2026       1600Z      4/26/2026    0159Z     Florida QSO Party
+4/26/2026       1200Z      4/26/2026    2159Z     Florida QSO Party
+ 5/2/2026       1300Z      5/3/2026     0700Z     7th Call Area QSO Party
+ 5/2/2026       1500Z      5/3/2026     0259Z     Indiana QSO Party
+ 5/2/2026       2000Z      5/3/2026     0500Z     New England QSO Party
+ 5/2/2026       1700Z      5/3/2026     2359Z     Delaware QSO Party
+ 5/3/2026       1300Z      5/3/2026     2400Z     New England QSO Party
+ 5/9/2026       1700Z      5/10/2026    0300Z     Canadian Prairies QSO Party
+5/16/2026       1400Z      5/17/2026    0200Z     Arkansas QSO Party
+ 6/6/2026       1300Z      6/7/2026     0100Z     Kentucky QSO Party
+ 6/7/2026       1400Z      6/8/2026     0100Z     Atlantic Canada QSO Party
+6/20/2026       1600Z      6/21/2026    0400Z     West Virginia QSO Party
+7/25/2026       1500Z      7/26/2026    0300Z     Alabama QSO Party
+ 8/8/2026       1400Z      8/9/2026     0359Z     Maryland-DC QSO Party
+8/22/2026       1600Z      8/24/2026    0200Z     Hawaii QSO Party
+8/22/2026       1600Z      8/23/2026    0400Z     Ohio QSO Party
+8/29/2026       1400Z      8/30/2026    0200Z     Kansas QSO Party
+8/30/2026       1400Z      8/30/2026    2000Z     Kansas QSO Party
+ 9/6/2026       1700Z      9/7/2026     0300Z     Tennessee QSO Party
+9/12/2026    1400Z    9/13/2026   0359Z   Colorado QSO Party
+9/19/2026    1400Z    9/20/2026   0200Z   Texas QSO Party
+9/19/2026    1400Z    9/20/2026   0200Z   Iowa QSO Party
+9/19/2026    1400Z    9/20/2026   0200Z   New Jersey QSO Party
+9/19/2026    1600Z    9/20/2026   0400Z   New Hampshire QSO Party
+9/19/2026    1600Z    9/20/2026   0700Z   Washington St Salmon Run
+9/20/2026    1400Z    9/20/2026   2000Z   Texas QSO Party
+9/20/2026    1200Z    9/20/2026   2200Z   New Hampshire QSO Party
+9/20/2026    1600Z    9/20/2026   2400Z   Washington St Salmon Run
+10/3/2026    1600Z    10/4/2026   2200Z   California QSO Party
+10/10/2026   1500Z   10/11/2026   0500Z   Arizona QSO Party
+10/10/2026   1600Z   10/11/2026   0400Z   Pennsylvania QSO Party
+10/10/2026   1800Z   10/11/2026   1800Z   South Dakota QSO Party
+10/11/2026   1300Z   10/11/2026   2200Z   Pennsylvania QSO Party
+10/17/2026   1400Z   10/18/2026   0200Z   New York QSO Party
+10/18/2026   1700Z   10/19/2026   0100Z   Illinois QSO Party
+
