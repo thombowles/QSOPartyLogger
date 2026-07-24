@@ -3,9 +3,9 @@ import SwiftUI
 @main
 struct QSOPartyLoggerApp: App {
     var body: some Scene {
-        WindowGroup {
-            Text("QSO Party Logger")
-                .padding()
+        DocumentGroup(newDocument: { LogDocument() }) { configuration in
+            MainView(document: configuration.document)
         }
+        .defaultSize(width: 1280, height: 800)
     }
 }
