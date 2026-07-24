@@ -19,11 +19,19 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
 
     var log: ContestLog
 
-    @MainActor
+    /// Nonisolated on purpose: `DocumentGroup`'s new-document factory runs on a
+    /// background dispatch queue, so this must not touch main-actor state.
+    /// The last station profile is read directly from UserDefaults (thread-safe)
+    /// rather than through the @MainActor `AppSettings.shared`.
     init() {
         var initial = ContestLog(partyID: "ksqp")
-        initial.station = AppSettings.shared.lastStationProfile ?? StationProfile()
+        initial.station = LogDocument.savedStationProfile() ?? StationProfile()
         self.log = initial
+    }
+
+    nonisolated static func savedStationProfile() -> StationProfile? {
+        UserDefaults.standard.data(forKey: "lastStationProfile")
+            .flatMap { try? JSONDecoder().decode(StationProfile.self, from: $0) }
     }
 
     init(configuration: ReadConfiguration) throws {
