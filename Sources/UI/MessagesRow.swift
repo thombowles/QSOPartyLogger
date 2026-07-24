@@ -21,7 +21,7 @@ struct MessagesRow: View {
                 }
             }
             .pickerStyle(.segmented)
-            .frame(width: 110)
+            .fixedSize()
             .help("Run = calling CQ; S&P = search and pounce. Each has its own F1–F8 set.")
 
             ForEach(Array(messages.prefix(8).enumerated()), id: \.offset) { index, template in

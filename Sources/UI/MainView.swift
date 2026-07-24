@@ -232,6 +232,30 @@ struct MainView: View {
             } label: {
                 Label("CW Messages", systemImage: "keyboard")
             }
+
+            Menu {
+                if let path = CloudMirror.folderDisplayPath {
+                    Text(path)
+                }
+                Button(CloudMirror.isConfigured ? "Change iCloud Folder…" : "Choose iCloud Folder…") {
+                    _ = CloudMirror.chooseFolder()
+                }
+                if CloudMirror.isConfigured {
+                    Toggle("Auto-Save Copies to iCloud", isOn: Binding(
+                        get: { CloudMirror.isEnabled },
+                        set: { CloudMirror.isEnabled = $0 }
+                    ))
+                    Button("Open iCloud Folder") {
+                        CloudMirror.openFolderInFinder()
+                    }
+                }
+            } label: {
+                Label(
+                    "iCloud",
+                    systemImage: CloudMirror.isEnabled ? "icloud.fill" : "icloud"
+                )
+            }
+            .help("Mirror every save into an iCloud Drive folder so contests sync to your other Macs")
         }
     }
 
@@ -242,7 +266,8 @@ struct MainView: View {
     }
 
     private func onAppear() {
-        if document.log.station.callsign.isEmpty {
+        // New (or never-configured) contests go straight to Contest Setup.
+        if !document.log.setupCompleted {
             showSetup = true
         }
         focusedField = .call

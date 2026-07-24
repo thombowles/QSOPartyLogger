@@ -46,7 +46,26 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     }
 
     func fileWrapper(snapshot: ContestLog, configuration: WriteConfiguration) throws -> FileWrapper {
-        FileWrapper(regularFileWithContents: try snapshot.encoded())
+        let data = try snapshot.encoded()
+        // Best-effort iCloud mirror on every save; never blocks or fails the
+        // primary write.
+        if CloudMirror.isEnabled, snapshot.setupCompleted {
+            let name = LogDocument.mirrorFileName(for: snapshot)
+            DispatchQueue.global(qos: .utility).async {
+                CloudMirror.mirror(data: data, fileName: name)
+            }
+        }
+        return FileWrapper(regularFileWithContents: data)
+    }
+
+    /// Stable per-contest mirror name: dated by the first QSO (or today for
+    /// an empty log) so a contest keeps one file across saves.
+    nonisolated static func mirrorFileName(for log: ContestLog) -> String {
+        defaultDisplayName(
+            partyID: log.partyID,
+            callsign: log.station.callsign,
+            date: log.qsos.map(\.timestampUTC).min() ?? Date()
+        )
     }
 
     // MARK: Mutations (undoable, main-actor)
@@ -126,6 +145,7 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         log.station = station
         log.myLocation = location
         log.partyID = partyID
+        log.setupCompleted = true
         AppSettings.shared.lastStationProfile = station
         undoManager?.registerUndo(withTarget: self) { doc in
             MainActor.assumeIsolated {

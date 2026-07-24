@@ -55,23 +55,28 @@ struct ContestLog: Codable, Equatable, Sendable {
     var qsos: [QSO]
     /// Per-contest CW macros (Run + S&P sets).
     var messages: MessageSets
+    /// Whether the operator has been through Contest Setup for this log —
+    /// new documents prompt for setup immediately.
+    var setupCompleted: Bool
 
     init(
         partyID: String,
         station: StationProfile = StationProfile(),
         myLocation: MyLocation = .outOfState(location: ""),
         qsos: [QSO] = [],
-        messages: MessageSets = .standard
+        messages: MessageSets = .standard,
+        setupCompleted: Bool = false
     ) {
         self.partyID = partyID
         self.station = station
         self.myLocation = myLocation
         self.qsos = qsos
         self.messages = messages
+        self.setupCompleted = setupCompleted
     }
 
     private enum CodingKeys: String, CodingKey {
-        case schemaVersion, partyID, station, myLocation, qsos, messages
+        case schemaVersion, partyID, station, myLocation, qsos, messages, setupCompleted
     }
 
     init(from decoder: Decoder) throws {
@@ -83,6 +88,9 @@ struct ContestLog: Codable, Equatable, Sendable {
         qsos = try c.decode([QSO].self, forKey: .qsos)
         // Documents written before per-contest macros existed get the defaults.
         messages = try c.decodeIfPresent(MessageSets.self, forKey: .messages) ?? .standard
+        // Legacy docs in active use (callsign set) count as already set up.
+        setupCompleted = try c.decodeIfPresent(Bool.self, forKey: .setupCompleted)
+            ?? !station.callsign.isEmpty
     }
 
     static func decode(from data: Data) throws -> ContestLog {

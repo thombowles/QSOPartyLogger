@@ -21,6 +21,14 @@ final class RadioController {
     private var driver: (any RadioDriver)?
     private var directKeyer: CWKeyer?
     private var internalKeyer: K3InternalKeyer?
+    private var sendingClearTask: Task<Void, Never>?
+
+    /// The K3 drops its TX flag between CW elements (QSK), which made the TX
+    /// badge flicker during macros. Treat "app is sending a macro" as
+    /// transmitting for the whole estimated duration.
+    var isTransmitting: Bool {
+        (radioState?.isTransmitting ?? false) || nowSending != nil
+    }
 
     init() {
         refreshPorts()
@@ -91,6 +99,8 @@ final class RadioController {
         port = nil
         isConnected = false
         radioState = nil
+        sendingClearTask?.cancel()
+        sendingClearTask = nil
         nowSending = nil
         radioReportedWPM = nil
     }
@@ -113,10 +123,23 @@ final class RadioController {
         guard let sender = activeSender(settings) else { return }
         sender.wpm = settings.wpm
         sender.send(text)
+
+        // Show "sending" (and hold the TX badge) for the estimated on-air
+        // time — works identically for direct keying and the K3's KY keyer.
+        nowSending = text
+        sendingClearTask?.cancel()
+        let duration = estimatedSendDuration(text, settings: settings) + 0.2
+        sendingClearTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
+            guard !Task.isCancelled else { return }
+            self?.nowSending = nil
+        }
     }
 
     func abortCW(settings: AppSettings) {
         activeSender(settings)?.abort()
+        sendingClearTask?.cancel()
+        sendingClearTask = nil
         nowSending = nil
     }
 

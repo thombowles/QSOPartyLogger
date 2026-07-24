@@ -92,6 +92,51 @@ final class OperatingFeatureTests: XCTestCase {
         XCTAssertEqual(ElecraftK3Driver.cmdPollKS, "KS;")
     }
 
+    // MARK: Setup-completed flag
+
+    func testNewLogNeedsSetup() {
+        XCTAssertFalse(ContestLog(partyID: "ksqp").setupCompleted)
+    }
+
+    func testLegacyDocSetupInference() throws {
+        // Legacy files (no setupCompleted key): configured iff callsign present.
+        var log = ContestLog(partyID: "ksqp")
+        log.station.callsign = "KE5CW"
+        var json = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: log.encoded()) as? [String: Any]
+        )
+        json.removeValue(forKey: "setupCompleted")
+        let withCall = try ContestLog.decode(from: JSONSerialization.data(withJSONObject: json))
+        XCTAssertTrue(withCall.setupCompleted)
+
+        var blank = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: ContestLog(partyID: "ksqp").encoded()) as? [String: Any]
+        )
+        blank.removeValue(forKey: "setupCompleted")
+        let noCall = try ContestLog.decode(from: JSONSerialization.data(withJSONObject: blank))
+        XCTAssertFalse(noCall.setupCompleted)
+    }
+
+    // MARK: iCloud mirror naming
+
+    func testMirrorFileNameUsesFirstQSODate() {
+        var log = ContestLog(partyID: "alqp")
+        log.station.callsign = "KE5CW"
+        log.qsos = [
+            QSO(
+                timestampUTC: Date(timeIntervalSince1970: 1_785_078_000),  // Jul 26 2026
+                call: "K4A", band: .m40, modeClass: .cw, rawMode: "CW",
+                rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: "JEFF"
+            ),
+            QSO(
+                timestampUTC: Date(timeIntervalSince1970: 1_784_991_600),  // Jul 25 2026 (earlier)
+                call: "K4B", band: .m40, modeClass: .cw, rawMode: "CW",
+                rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: "MOBI"
+            ),
+        ]
+        XCTAssertEqual(LogDocument.mirrorFileName(for: log), "2026-07-25 ALQP KE5CW")
+    }
+
     // MARK: Default document naming
 
     func testDefaultDisplayName() {

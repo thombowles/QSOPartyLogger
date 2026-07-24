@@ -48,6 +48,7 @@
 		AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A15E4511652305732261EE /* SetupSheet.swift */; };
 		B8458132FA359341C94E3C56 /* EntryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A212165D3C12989B35E8EB28 /* EntryState.swift */; };
 		BA29F9177B9172AD408E813B /* OneByOneTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */; };
+		BC984B0894398DED6243482C /* CloudMirror.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C89D2926CF6C8F0A3DEC77 /* CloudMirror.swift */; };
 		BD620D19CDA5954AD41075B9 /* KeyerTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD16E7B08B6FA679CE465107 /* KeyerTiming.swift */; };
 		C46093573C4E0C33B0EE6086 /* QSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28174F39D351A29CC80B77F2 /* QSO.swift */; };
 		C4A0BBE3CA76C438A158B860 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4617D5E5CB3103CD4E042746 /* MainView.swift */; };
@@ -95,6 +96,7 @@
 		29960406C674052D5117926D /* ScoreEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEngineTests.swift; sourceTree = "<group>"; };
 		29C2D0EBC8E5FC6F24E96A7A /* QSOPartyLoggerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSOPartyLoggerApp.swift; sourceTree = "<group>"; };
 		2B632B0C39468C5E56F37CB5 /* ScoreEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEngine.swift; sourceTree = "<group>"; };
+		32C89D2926CF6C8F0A3DEC77 /* CloudMirror.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudMirror.swift; sourceTree = "<group>"; };
 		4617D5E5CB3103CD4E042746 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		478647587A295E345278D2A5 /* StationProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationProfile.swift; sourceTree = "<group>"; };
 		5779472576EDDB16AD912D7C /* QSOPartyLoggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QSOPartyLoggerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -340,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				093C918A35B84A46D9369272 /* AppSettings.swift */,
+				32C89D2926CF6C8F0A3DEC77 /* CloudMirror.swift */,
 				B27158AAEFAD7C21DD3D17B0 /* LogDocument.swift */,
 				29C2D0EBC8E5FC6F24E96A7A /* QSOPartyLoggerApp.swift */,
 				91AE54A60C33CC8614CCB97C /* RadioController.swift */,
@@ -483,6 +486,7 @@
 				C6FA714C3CDFA18E1988D2E3 /* CWKeyer.swift in Sources */,
 				E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */,
 				07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */,
+				BC984B0894398DED6243482C /* CloudMirror.swift in Sources */,
 				A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */,
 				098B5B5D2F15D62548FB7A6B /* County.swift in Sources */,
 				F12378741285B339A876009B /* CountyLineExpander.swift in Sources */,

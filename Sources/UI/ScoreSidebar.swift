@@ -120,9 +120,10 @@ struct ScoreSidebar: View {
                 .font(.caption.weight(.bold))
                 .foregroundStyle(.secondary)
 
-            if rule.classes.contains(.county) {
-                countyGrid(party)
-            }
+            // Always show the county grid: when counties aren't a multiplier
+            // class (e.g. KSQP in-state), they still matter for county-sweep
+            // awards like Worked All Kansas.
+            countyGrid(party, isMultClass: rule.classes.contains(.county))
             ForEach(nonCountyClasses(rule), id: \.self) { multClass in
                 let values = score.workedValues(multClass)
                 if !values.isEmpty {
@@ -172,11 +173,18 @@ struct ScoreSidebar: View {
         }
     }
 
-    private func countyGrid(_ party: PartyDefinition) -> some View {
-        let worked = score.workedValues(.county)
+    private func countyGrid(_ party: PartyDefinition, isMultClass: Bool) -> some View {
+        // When counties don't score as mults, derive worked-county tracking
+        // straight from the log.
+        let worked: Set<String> = isMultClass
+            ? score.workedValues(.county)
+            : {
+                let abbrs = Set(party.counties.map(\.abbr))
+                return Set(log.qsos.map { $0.theirLoc.uppercased() }).intersection(abbrs)
+            }()
         let columns = [GridItem(.adaptive(minimum: 40), spacing: 3)]
         return VStack(alignment: .leading, spacing: 3) {
-            Text("Counties \(worked.count)/\(party.counties.count)")
+            Text("Counties \(worked.count)/\(party.counties.count)\(isMultClass ? "" : " (award tracking)")")
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(.secondary)
             LazyVGrid(columns: columns, spacing: 3) {
