@@ -1,0 +1,36 @@
+           How to Log a County-Line QSO
+
+Screen shots are on following pages.
+
+
+N1MM+
+    • Enter counties separated by the / character.
+    • Example: DELN/SISK/HUMB
+
+
+N3FJP
+    • Enter counties separated by the + character.
+    • Example: DELN+SISK+HUMB
+
+
+Writelog
+    • For participants outside CA:
+        o Enter counties in CNTY, CTY2, CTY3 and CTY4 fields.
+        o Press the space bar to navigate between these
+           fields.
+    • For participants inside CA:
+        o Enter counties separated by the / character.
+        o Example: DELN/SISK/HUMB
+N1MM+
+
+
+
+
+N3FJP
+Writelog outside CA
+
+
+
+
+Writelog inside CA
+

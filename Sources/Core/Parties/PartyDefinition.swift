@@ -153,21 +153,34 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         var dxMultCap: Int? { dxMultCapRaw }
         private let dxMultCapRaw: Int?
 
+        /// Cap on the multiplier total that reaches the **score**, where a party
+        /// recognises more multipliers than it will pay for. CQP: "Although
+        /// there are 63 possible multipliers that can accrue toward the CA
+        /// station's multiplier tally, the maximum number of counted multipliers
+        /// toward the CA station's final score is 58." The distinction is the
+        /// sponsor's — every multiplier is still tallied and shown, only the
+        /// count that multiplies QSO points is limited. nil = no cap.
+        var maxScoredMultipliers: Int? { maxScoredMultipliersRaw }
+        private let maxScoredMultipliersRaw: Int?
+
         init(
             classes: [MultClass],
             homeStateCountsViaCounty: Bool,
             countScope: CountScope,
-            dxMultCap: Int? = nil
+            dxMultCap: Int? = nil,
+            maxScoredMultipliers: Int? = nil
         ) {
             self.classes = classes
             self.homeStateCountsViaCounty = homeStateCountsViaCounty
             self.countScope = countScope
             self.dxMultCapRaw = dxMultCap
+            self.maxScoredMultipliersRaw = maxScoredMultipliers
         }
 
         private enum CodingKeys: String, CodingKey {
             case classes, homeStateCountsViaCounty, countScope
             case dxMultCapRaw = "dxMultCap"
+            case maxScoredMultipliersRaw = "maxScoredMultipliers"
         }
     }
 

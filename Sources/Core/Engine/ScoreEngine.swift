@@ -29,8 +29,16 @@ enum ScoreEngine {
         var outOfScopeRowIDs: Set<UUID> = []
         /// Rows that added at least one new multiplier when first logged.
         var newMultRowIDs: Set<UUID> = []
+        /// Set from the entrant's `MultRule.maxScoredMultipliers` where the
+        /// party pays for fewer multipliers than it recognises (CQP: 58 of 63).
+        var multiplierCap: Int?
 
-        var multiplierCount: Int { multiplierKeys.count }
+        /// Multipliers that reach the score. Every key is still tallied in
+        /// `multiplierKeys` — the cap limits what is paid for, not what counts
+        /// as worked, which is the sponsor's own distinction.
+        var multiplierCount: Int {
+            min(multiplierKeys.count, multiplierCap ?? .max)
+        }
 
         var total: Int {
             qsoPoints * multiplierCount * categoryFactor + bonusPoints
@@ -69,6 +77,7 @@ enum ScoreEngine {
         let firstIDs = DupeChecker.firstOccurrenceIDs(contestRows)
         let rule = log.myLocation.isInState ? party.multipliers.inState : party.multipliers.outState
         let wantedClasses = Set(rule.classes)
+        result.multiplierCap = rule.maxScoredMultipliers
         var dxCount = 0
 
         for row in contestRows {
@@ -284,6 +293,9 @@ enum ScoreEngine {
         guard party.allowedModeClasses.contains(modeClass) else { return false }
         let current = score(log: log, party: party).multiplierKeys
         let rule = log.myLocation.isInState ? party.multipliers.inState : party.multipliers.outState
+        // Past the party's scored ceiling, a further multiplier pays nothing, so
+        // the badge must not send the operator chasing it (CQP: 58 of 63).
+        if let cap = rule.maxScoredMultipliers, current.count >= cap { return false }
         let wantedClasses = Set(rule.classes)
         let countyAbbrs = Set(party.counties.map(\.abbr))
         let scope = scopeComponent(rule.countScope, band: band, modeClass: modeClass)

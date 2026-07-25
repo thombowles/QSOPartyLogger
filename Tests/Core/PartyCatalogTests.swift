@@ -12,8 +12,8 @@ final class PartyCatalogTests: XCTestCase {
         let parties = PartyCatalog.loadBundled()
         XCTAssertEqual(
             Set(parties.map(\.id)),
-            ["alqp", "coqp", "hqp", "iaqp", "ksqp", "mdc", "meqp", "nhqp", "njqp", "ohqp",
-             "tnqp", "tqp", "warun"]
+            ["alqp", "coqp", "cqp", "hqp", "iaqp", "ksqp", "mdc", "meqp", "nhqp", "njqp",
+             "ohqp", "tnqp", "tqp", "warun"]
         )
     }
 

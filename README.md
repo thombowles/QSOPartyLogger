@@ -84,10 +84,23 @@ Built for KE5CW. Bundled parties, all with official county data:
   QSO**. `verified: partial` — whether Maine itself is a state multiplier for
   Maine entrants is not stated.
 
+- **California QSO Party** (Oct 3–4, 2026) — 58 counties in 4-letter codes, and
+  the sponsor publishes the *formula* that makes them (`CCOS`, `LANG`, `MARN`,
+  `MARP` are the stated exceptions; `San`/`Santa` fold to a single `S`), so the
+  generator re-derives every abbreviation and asserts it matches. **Phone rose
+  to 3 points for 2026** — CW and phone now pay alike. Multipliers are
+  asymmetric: California stations count **states and provinces, never
+  counties**, capped at **58 scored out of 63 possible**, with California itself
+  earned via the first CA county worked — the first party to state that rule
+  outright. Everyone else counts the 58 counties once each. DX scores points for
+  California stations but is never a multiplier for anyone. No RST in the
+  exchange. **Known limitation:** CQP's exchange carries a serial number, which
+  this app does not yet model — see provenance below before submitting a log.
+
 The remaining 2026 parties are tracked in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md) in contest-date
 order — the season ends with Illinois on Oct 18. All banked research is now
-used; the remaining six start from their sponsors' sites. Adding a party is governed by
+used; the remaining five start from their sponsors' sites. Adding a party is governed by
 [`docs/CONSTITUTION.md`](docs/CONSTITUTION.md).
 
 ## Features
@@ -302,7 +315,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 405 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 432 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -408,6 +421,21 @@ typed QSY commands, keyer timing, and keyer labelling.
   **Known scoring limitation:** DXCC entities are multipliers for every entrant
   and uncapped, but the exchange is the literal token "DX" — the same missing
   prefix table that limits NHQP, biting harder here.
+- CQP: rules from NCCC's official page and PDF (cqp.org/Rules.html and
+  cqp.org/pdf/CQP_2026_Rules.pdf, both stamped "Last Update: 19-July-2026 at
+  1500 UTC"), plus cqp.org/cqp_multipliers.html, which alone carries the county
+  table, the DC→MD fold and the "1st CA county counts as CA" rule. Read verbatim
+  2026-07-24. Counties are verified **twice** by
+  [`gen_cqp.py`](docs/research/gen_cqp.py): parsed from the sponsor's table, then
+  re-derived from the sponsor's own published abbreviation formula and asserted
+  to match. **Rule change for 2026:** phone QSOs went from 2 points to 3, marked
+  "**NEW in 2026**" by the sponsor; a full diff against the still-published 2025
+  revision (Last Update 05-July-2025) shows it is the only substantive change.
+  **Known limitation:** the CQP exchange is "QSO number and 4-letter county
+  abbreviation" — it carries no RST, and this app does not model serial numbers,
+  so the exported Cabrillo leaves the QSO-number element empty. Scoring is
+  unaffected (points and multipliers never depend on the serial), but CQP accepts
+  Cabrillo only, so serials must be added before submitting.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows

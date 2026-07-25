@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "id": "cqp",
+  "name": "California QSO Party",
+  "cabrilloContest": "CA-QSO-PARTY",
+  "homeState": "CA",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 3,
+    "cw": 3,
+    "digital": 3
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "state",
+        "province"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "once",
+      "maxScoredMultipliers": 58
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 4,
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "exchangeIncludesRST": false,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-10-03T16:00:00Z",
+      "end": "2026-10-04T22:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ALAM",
+      "name": "Alameda"
+    },
+    {
+      "abbr": "ALPI",
+      "name": "Alpine"
+    },
+    {
+      "abbr": "AMAD",
+      "name": "Amador"
+    },
+    {
+      "abbr": "BUTT",
+      "name": "Butte"
+    },
+    {
+      "abbr": "CALA",
+      "name": "Calaveras"
+    },
+    {
+      "abbr": "COLU",
+      "name": "Colusa"
+    },
+    {
+      "abbr": "CCOS",
+      "name": "Contra Costa"
+    },
+    {
+      "abbr": "DELN",
+      "name": "Del Norte"
+    },
+    {
+      "abbr": "ELDO",
+      "name": "El Dorado"
+    },
+    {
+      "abbr": "FRES",
+      "name": "Fresno"
+    },
+    {
+      "abbr": "GLEN",
+      "name": "Glenn"
+    },
+    {
+      "abbr": "HUMB",
+      "name": "Humboldt"
+    },
+    {
+      "abbr": "IMPE",
+      "name": "Imperial"
+    },
+    {
+      "abbr": "INYO",
+      "name": "Inyo"
+    },
+    {
+      "abbr": "KERN",
+      "name": "Kern"
+    },
+    {
+      "abbr": "KING",
+      "name": "Kings"
+    },
+    {
+      "abbr": "LAKE",
+      "name": "Lake"
+    },
+    {
+      "abbr": "LASS",
+      "name": "Lassen"
+    },
+    {
+      "abbr": "LANG",
+      "name": "Los Angeles"
+    },
+    {
+      "abbr": "MADE",
+      "name": "Madera"
+    },
+    {
+      "abbr": "MARN",
+      "name": "Marin"
+    },
+    {
+      "abbr": "MARP",
+      "name": "Mariposa"
+    },
+    {
+      "abbr": "MEND",
+      "name": "Mendocino"
+    },
+    {
+      "abbr": "MERC",
+      "name": "Merced"
+    },
+    {
+      "abbr": "MODO",
+      "name": "Modoc"
+    },
+    {
+      "abbr": "MONO",
+      "name": "Mono"
+    },
+    {
+      "abbr": "MONT",
+      "name": "Monterey"
+    },
+    {
+      "abbr": "NAPA",
+      "name": "Napa"
+    },
+    {
+      "abbr": "NEVA",
+      "name": "Nevada"
+    },
+    {
+      "abbr": "ORAN",
+      "name": "Orange"
+    },
+    {
+      "abbr": "PLAC",
+      "name": "Placer"
+    },
+    {
+      "abbr": "PLUM",
+      "name": "Plumas"
+    },
+    {
+      "abbr": "RIVE",
+      "name": "Riverside"
+    },
+    {
+      "abbr": "SACR",
+      "name": "Sacramento"
+    },
+    {
+      "abbr": "SBEN",
+      "name": "San Benito"
+    },
+    {
+      "abbr": "SBER",
+      "name": "San Bernardino"
+    },
+    {
+      "abbr": "SDIE",
+      "name": "San Diego"
+    },
+    {
+      "abbr": "SFRA",
+      "name": "San Francisco"
+    },
+    {
+      "abbr": "SJOA",
+      "name": "San Joaquin"
+    },
+    {
+      "abbr": "SLUI",
+      "name": "San Luis Obispo"
+    },
+    {
+      "abbr": "SMAT",
+      "name": "San Mateo"
+    },
+    {
+      "abbr": "SBAR",
+      "name": "Santa Barbara"
+    },
+    {
+      "abbr": "SCLA",
+      "name": "Santa Clara"
+    },
+    {
+      "abbr": "SCRU",
+      "name": "Santa Cruz"
+    },
+    {
+      "abbr": "SHAS",
+      "name": "Shasta"
+    },
+    {
+      "abbr": "SIER",
+      "name": "Sierra"
+    },
+    {
+      "abbr": "SISK",
+      "name": "Siskiyou"
+    },
+    {
+      "abbr": "SOLA",
+      "name": "Solano"
+    },
+    {
+      "abbr": "SONO",
+      "name": "Sonoma"
+    },
+    {
+      "abbr": "STAN",
+      "name": "Stanislaus"
+    },
+    {
+      "abbr": "SUTT",
+      "name": "Sutter"
+    },
+    {
+      "abbr": "TEHA",
+      "name": "Tehama"
+    },
+    {
+      "abbr": "TRIN",
+      "name": "Trinity"
+    },
+    {
+      "abbr": "TULA",
+      "name": "Tulare"
+    },
+    {
+      "abbr": "TUOL",
+      "name": "Tuolumne"
+    },
+    {
+      "abbr": "VENT",
+      "name": "Ventura"
+    },
+    {
+      "abbr": "YOLO",
+      "name": "Yolo"
+    },
+    {
+      "abbr": "YUBA",
+      "name": "Yuba"
+    }
+  ],
+  "notes": "Rules from the Northern California Contest Club's official page and PDF (cqp.org/Rules.html and cqp.org/pdf/CQP_2026_Rules.pdf, both stamped 'Rules: 2026 California QSO Party (CQP), Last Update: 19-July-2026 at 1500 UTC'), plus the multipliers page (cqp.org/cqp_multipliers.html) which alone carries the county table, the DC/MD fold and the 'first CA county counts as CA' rule. All read verbatim 2026-07-24. KNOWN LIMITATION - READ BEFORE SUBMITTING A LOG: the CQP exchange is 'QSO number and 4-letter county abbreviation' (or QSO number and state/province/DX). It carries NO RST, and this app does not yet model serial numbers at all. Scoring is unaffected - points and multipliers never depend on the serial - but the exported Cabrillo leaves the QSO-number element EMPTY, and CQP accepts Cabrillo only. Add serial numbers before submitting, or wait for serial support. RULE CHANGE FOR 2026: phone QSOs are now worth 3 points, up from 2; the sponsor marks it '**NEW in 2026**'. CW was and remains 3. A full diff against the still-published 2025 revision (cqp.org/pdf/CQP_2025_Rules.pdf, Last Update 05-July-2025) shows this is the ONLY substantive change between the two. Multipliers are asymmetric in an unusual way: California stations count STATES AND PROVINCES, never counties, with a cap of 58 SCORED multipliers out of 63 possible (50 states + 13 provinces) - the sponsor's own distinction between what accrues to the tally and what reaches the final score, so this app tallies all of them and scores at most 58. California itself is earned via a county: 'The first valid CA QSO logged with 4-letter county abbreviation will count as the multiplier for California', which the multiplier table restates as '1st CA county counts as CA' - the first party to state that rule outright rather than leave it to arithmetic. Non-California stations count the 58 counties, once each, and nothing else. DX scores QSO points for California stations but is NEVER a multiplier for anyone, and 'DX QSO's do not count for non-California participants' at all, since 'Non-CA to non-CA contacts do not count for QSO credit'. Canada is the standard 13 including NL, and DC counts as Maryland. Six bands including 160 m, no WARC, no VHF; CW and phone only, so a digital QSO is invalid rather than zero-point. County lines are sent as one exchange and are capped at 4 counties, matching the sponsor's own logging guide (DELN/SISK/HUMB, and Writelog fields CNTY/CTY2/CTY3/CTY4); state-line operations are not allowed. A California mobile changing county or state is a new station for both point and multiplier credit. No bonus stations, no bonus points, no final-score multiplier - the special award categories are claimed with SOAPBOX: lines and do not touch the score. Cabrillo CONTEST value CA-QSO-PARTY per WA7BNM; the sponsor requires Cabrillo but prints no header token. County abbreviations are verified twice: parsed from the sponsor's table, then re-derived from the sponsor's own published formula (first 4 characters, 'San'/'Santa' folded to a single S, with Contra Costa, Los Angeles, Marin and Mariposa called out as exceptions) and asserted to match."
+}

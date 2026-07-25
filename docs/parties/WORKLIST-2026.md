@@ -9,7 +9,7 @@ Ordered by contest date, so the next contest to run is always the next one built
 and you have everything; nothing important lives only in a chat log.
 
 - **Next party:** the top unstruck row of the table below — currently
-  **California**, which starts from the sponsor's site with nothing captured.
+  **Arizona**, which starts from the sponsor's site with nothing captured.
 - **Process per party:** the Article 22 definition of done at the bottom of this
   file. One party per commit (Article 9). Research doc *before* JSON (Article 15).
 - **To restart the build loop**, self-paced, one party per iteration:
@@ -64,9 +64,9 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**6 remaining** of the 16 in scope (10 built so far: MDC, HQP, OhQP, TnQP, COQP,
-NJQP, IAQP, NHQP, Salmon Run, MEQP); 13 parties bundled in total, those 10 plus
-the pre-existing ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
+**5 remaining** of the 16 in scope (11 built so far: MDC, HQP, OhQP, TnQP, COQP,
+NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP); 14 parties bundled in total, those 11
+plus the pre-existing ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
 next, and the count above must equal the number of unstruck rows below.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
@@ -83,7 +83,7 @@ next, and the count above must equal the number of unstruck rows below.
 | ~~Washington Salmon Run~~ | Sep 19 1600Z → Sep 20 0700Z; Sep 20 1600–2400Z | [`warun_rules.md`](../research/warun_rules.md) + [`warun_counties.tsv`](../research/warun_counties.tsv) | **done** |
 | ~~Texas~~ | Sep 19 1400Z → Sep 20 0200Z; Sep 20 1400–2000Z | [`tqp_verify.md`](../research/tqp_verify.md) | **done** (`verified: partial`) |
 | ~~Maine~~ | Sep 26 1200Z → Sep 27 1200Z ✅ sponsor confirms it runs | [`meqp_rules.md`](../research/meqp_rules.md) + [`meqp_rules_2026.txt`](../research/meqp_rules_2026.txt) + [`meqp_page.txt`](../research/meqp_page.txt) | **done** (`verified: partial`) |
-| **California** | Oct 3 1600Z → Oct 4 2200Z | — | not started |
+| ~~California~~ | Oct 3 1600Z → Oct 4 2200Z | [`cqp_rules.md`](../research/cqp_rules.md) + [`cqp_rules_2026.txt`](../research/cqp_rules_2026.txt) + [`cqp_multipliers.txt`](../research/cqp_multipliers.txt) | **done** |
 | **Arizona** | Oct 10 1500Z → Oct 11 0500Z | — | not started |
 | **Pennsylvania** | Oct 10 1600Z → Oct 11 0400Z; Oct 11 1300–2200Z | — | not started |
 | **South Dakota** | Oct 10 1800Z → Oct 11 1800Z | — | not started |
@@ -120,11 +120,16 @@ next, and the count above must equal the number of unstruck rows below.
    Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
    **Email `info@hawaiiqsoparty.org` to settle it.** See
    [`hqp_rules.md` §2](../research/hqp_rules.md).
-4. **All banked research is used up.** Every one of the 6 remaining —
-   California, Arizona, Pennsylvania, South Dakota, New York, Illinois — starts
-   from its sponsor's site with nothing captured, so expect each iteration to be
-   research-heavy, as Hawaii and Maine were.
-5. **Banked research has mislabelled `homeStateCountsViaCounty` twice.** Both
+4. **All banked research is used up.** Every one of the 5 remaining — Arizona,
+   Pennsylvania, South Dakota, New York, Illinois — starts from its sponsor's
+   site with nothing captured, so expect each iteration to be research-heavy, as
+   Hawaii, Maine and California were.
+5. **Banked research has mislabelled `homeStateCountsViaCounty` twice.**
+   *(CQP is the counter-example worth knowing: its sponsor states the rule
+   outright — "The first valid CA QSO logged with 4-letter county abbreviation
+   will count as the multiplier for California", and the multiplier table's CA
+   row reads "1st CA county counts as CA". When a sponsor says it, ship it true;
+   the lesson below is about the cases where nobody said it.)* Both
    `tnqp_rules.md` and `nhqp_rules.md` claimed "home-state-via-county: YES" when
    the sponsor only meant that home-state counties are in the in-state class list.
    That flag means something narrower — a home county *also* yielding the home
@@ -141,12 +146,41 @@ next, and the count above must equal the number of unstruck rows below.
    Newfoundland (NF) and Labrador (LB) will count seperately" [sic] — so `NL` is
    invalid there too, for a different reason than NJQP. Three parties, three
    different deviations: 11, 13-with-`NF`, and 14. Never assume the standard 13,
-   and never assume the standard spellings.
+   and never assume the standard spellings. **CQP is the control case** — its
+   multipliers page lists the standard 13 including `NL`, so the default was
+   right there; it was still read before being relied on, which is the point.
 
 ## Deferred engine gaps
 
-Recorded when a party needed something the schema does not model. None blocks a
-party; each would be its own commit (Article 4).
+Recorded when a party needed something the schema does not model. Each would be
+its own commit (Article 4).
+
+- **⚠️ SERIAL NUMBERS — the first gap that actually blocks a submission.** CQP's
+  exchange is "**QSO number** and 4-letter county abbreviation" (or QSO number and
+  state/province/DX) with **no RST at all**, and `QSO` has `rstSent`/`rstRcvd` and
+  no serial field. Scoring is unaffected — points and multipliers never depend on
+  the serial — but `CabrilloExporter.qsoLine` writes `rstSent`/`rstRcvd` into the
+  exchange slots, so a CQP log exports with the QSO-number element **empty**, and
+  CQP accepts Cabrillo only. CQP ships with a `KNOWN LIMITATION` note under
+  [Article 17](../CONSTITUTION.md#article-17--mapping-rules-to-the-schema)
+  ("a note in `notes` if you ship before the field exists"), but this one should
+  be built rather than carried.
+
+  Sketch, all additive: `PartyDefinition.exchangeIncludesSerial` (default false);
+  `QSO.serialSent`/`serialRcvd` as optionals so existing logs decode unchanged;
+  `EntryBar` swaps the RST pair for a sent serial (auto, next in sequence) and a
+  typed received serial; the Cabrillo exchange slots take the serial where the
+  party uses one; ADIF gets `stx`/`srx` rather than `rst_sent`/`rst_rcvd`.
+
+  **Answer this before writing any of it:** what serial does a *county-line*
+  contact carry? CQP sends `DELN/SISK/HUMB` as **one exchange**, so it is one
+  QSO number — but this app expands a county line into one row per county
+  (KSQP rule 11), and those rows must not each burn a serial. The sponsor's own
+  guide is [`cqp_countyline_logging.txt`](../research/cqp_countyline_logging.txt).
+  Rows already share a `groupID`, which is the natural hook.
+
+  Likely second user: **Pennsylvania** (Oct 10) is believed to use a QSO number
+  too — worth checking first, since two users would settle the design.
 
 - **Self-activation multipliers.** TnQP: "Tennessee mobiles and rovers may claim
   one multiplier for any Tennessee county from which they complete at least 10
@@ -205,12 +239,13 @@ party; each would be its own commit (Article 4).
   MDC introduced this field (rules 10b), and every party built since had needed
   it — until **MEQP, the first to answer no, and to say so outright**: "all QSOs
   made during the contest period that meet MEQP criteria are eligible for
-  points—not just contacts with Maine stations." So the run is nine for ten, and
-  the field is genuinely per-party rather than a near-universal default. Six
-  state the restriction outright (MDC, HQP, OhQP, TnQP, COQP, and the Salmon
-  Run's "Stations outside Washington state work only Washington state
-  stations"); three more (NJQP, IAQP, NHQP) only imply it and ship it on with an
-  open question. ALQP/KSQP/TQP are very likely wrong to have it off.
+  points—not just contacts with Maine stations." CQP then swung back the other
+  way just as explicitly ("Non-CA to non-CA contacts do not count for QSO
+  credit"), so the run is ten for eleven and the field is genuinely per-party
+  rather than a near-universal default. Seven state the restriction outright
+  (MDC, HQP, OhQP, TnQP, COQP, CQP, and the Salmon Run's "Stations outside
+  Washington state work only Washington state stations"); three more (NJQP, IAQP,
+  NHQP) only imply it and ship it on with an open question. ALQP/KSQP/TQP are very likely wrong to have it off.
   It defaults to `false` so those three keep scoring exactly as before per
   Article 4, but each should be re-read and switched on where the sponsor says so
   — ideally in one deliberate commit covering all three, with their own tests

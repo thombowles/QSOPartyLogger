@@ -1,0 +1,317 @@
+ 
+ CQP Multipliers 
+ 61st Running Of The CQP! 
+ 1600 UTC October 3, 2026 to 2200 UTC October 4, 2026 
+ CQP 2026 Begins: 
+ HOME 
+ Awards 
+ Activate Your County 
+ Audio-Video 
+ CountyTracker 
+ CA Counties Map 
+ Club Competition 
+ CQP Certificate 
+ CQP Multipliers 
+ Data Graphs 
+ FAQ 
+ History 
+ Log Submission 
+ Records 
+ Results 
+ Rules 
+ Scores Database 
+ Software 
+ Strategy 
+ Other NCCC Websites 
+ Click here for a printable copy (PDF) of this page. 
+ CQP Multipliers 
+ Multiplier “Rules” California QSO Party (CQP) 
+First and foremost we want the multipliers to be “easy to remember” and somewhat “mistake proof”
+for both casual contesters and experienced contesters. 
+ CA County Multipliers for Out-of-State Participants (58) 
+ Use the first 4 characters of the county name to make them unique
+ This rule is broken for Contra Costa
+ ( CCOS ) and Los Angeles ( LANG ) 
+ Marin ( MARN ) and Mariposa ( MARP ) counties are not unique in 4 characters 
+ If the county name is one of the 10 counties that start with “San” or “Santa” abbreviate that part to a single “ S ” 
+ ALAM 
+ Alameda
+ MARN 
+ Marin
+ SMAT 
+ San Mateo
+ ALPI 
+ Alpine
+ MARP 
+ Mariposa
+ SBAR 
+ Santa Barbara
+ AMAD 
+ Amador
+ MEND 
+ Mendocino
+ SCLA 
+ Santa Clara
+ BUTT 
+ Butte
+ MERC 
+ Merced
+ SCRU 
+ Santa Cruz
+ CALA 
+ Calaveras
+ MODO 
+ Modoc
+ SHAS 
+ Shasta
+ COLU 
+ Colusa
+ MONO 
+ Mono
+ SIER 
+ Sierra
+ CCOS 
+ Contra Costa
+ MONT 
+ Monterey
+ SISK 
+ Siskiyou
+ DELN 
+ Del Norte
+ NAPA 
+ Napa
+ SOLA 
+ Solano
+ ELDO 
+ El Dorado
+ NEVA 
+ Nevada
+ SONO 
+ Sonoma
+ FRES 
+ Fresno
+ ORAN 
+ Orange
+ STAN 
+ Stanislaus
+ GLEN 
+ Glenn
+ PLAC 
+ Placer
+ SUTT 
+ Sutter
+ HUMB 
+ Humboldt
+ PLUM 
+ Plumas
+ TEHA 
+ Tehama
+ IMPE 
+ Imperial
+ RIVE 
+ Riverside
+ TRIN 
+ Trinity
+ INYO 
+ Inyo
+ SACR 
+ Sacramento
+ TULA 
+ Tulare
+ KERN 
+ Kern
+ SBEN 
+ San Benito
+ TUOL 
+ Tuolumne
+ KING 
+ Kings
+ SBER 
+ San Bernardino
+ VENT 
+ Ventura
+ LAKE 
+ Lake
+ SDIE 
+ San Diego
+ YOLO 
+ Yolo
+ LASS 
+ Lassen
+ SFRA 
+ San Francisco
+ YUBA 
+ Yuba
+ LANG 
+ Los Angeles
+ SJOA 
+ San Joaquin
+ MADE 
+ Madera
+ SLUI 
+ San Luis Obispo
+ USA/Canada Multipliers for California Participants 
+ Maximum of 58 Scored Multipliers out of 63 Total Multipliers 
+(U.S. states = 50 and Canadian provinces/territories = 13 ) 
+ Reference: Postal Abbreviations
+ US https://simple.wikipedia.org/wiki/U.S._postal_abbreviations 
+ Canada http://canadaonline.about.com/library/bl/blpabb.htm 
+ AL 
+ Alabama 
+ MI 
+ Michigan 
+ TX 
+ Texas 
+ AK 
+ Alaska 
+ MN 
+ Minnesota 
+ UT 
+ Utah 
+ AZ 
+ Arizona 
+ MS 
+ Mississippi 
+ VT 
+ Vermont 
+ AR 
+ Arkansas 
+ MO 
+ Missouri 
+ VA 
+ Virginia 
+ CA 
+ 1st CA county counts as CA 
+ MT 
+ Montana 
+ WA 
+ Washington 
+ CO 
+ Colorado 
+ NE 
+ Nebraska 
+ WV 
+ West Virginia 
+ CT 
+ Connecticut 
+ NV 
+ Nevada 
+ WI 
+ Wisconsin 
+ DE 
+ Delaware 
+ NH 
+ New Hampshire 
+ WY 
+ Wyoming 
+ FL 
+ Florida 
+ NJ 
+ New Jersey 
+ AB 
+ Alberta 
+ GA 
+ Georgia 
+ NM 
+ New Mexico 
+ BC 
+ British Columbia 
+ HI 
+ Hawaii 
+ NY 
+ New York 
+ MB 
+ Manitoba 
+ ID 
+ Idaho 
+ NC 
+ North Carolina 
+ NB 
+ New Brunswick 
+ IL 
+ Illinois 
+ ND 
+ North Dakota 
+ NL 
+ Newfoundland & Labrador 
+ IN 
+ Indiana 
+ OH 
+ Ohio 
+ NT 
+ Northwest Territories 
+ IA 
+ Iowa 
+ OK 
+ Oklahoma 
+ NS 
+ Nova Scotia 
+ KS 
+ Kansas 
+ OR 
+ Oregon 
+ NU 
+ Nunavut 
+ KY 
+ Kentucky 
+ PA 
+ Pennsylvania 
+ ON 
+ Ontario 
+ LA 
+ Louisiana 
+ RI 
+ Rhode Island 
+ PE 
+ Prince Edward Island 
+ ME 
+ Maine 
+ SC 
+ South Carolina 
+ QC 
+ Quebec 
+ MD 
+ Maryland & DC 
+ SD 
+ South Dakota 
+ SK 
+ Saskatchewan 
+ MA 
+ Massachusetts 
+ TN 
+ Tennessee 
+ YT 
+ Yukon 
+ Notes: 
+ Although there are 63 possible multipliers that can accrue toward the CA station's multiplier tally, the maximum number of counted multipliers toward the CA station's final score is 58 .
+ DX is the QTH sent by all stations outside of the U.S. and Canada, however it does not count as an additional multiplier toward the CA station's multiplier tally. DX QSOs count as QSO credit.
+ The first valid CA QSO logged with 4-letter county abbreviation will count as the multiplier for California. California stations must log all CA contacts with their 4-letter county abbreviation.
+ Common Multiplier Logging Errors California QSO Party (CQP) 
+ There are common multiplier abbreviation problems that can potentially result in losing points. One type of problem is not entering enough characters to clearly specify a unique California county. Here are some common problems we have seen over the years.
+ County abbreviation problems 
+ MON – This is an ambiguous abbreviation for: 
+ MONT Monterey 
+ MONO Mono 
+ MAR – This is an ambiguous abbreviation for: 
+ MARN Marin 
+ MARP Mariposa 
+ SB – This is an ambiguous abbreviation for: 
+ SBEN San Benito 
+ SBER San Bernardino 
+SBAR Santa Barbara
+ Note: SB is the abbreviation of the ARRL section “Santa Barbara”. This is fine for ARRL Field Day, but CQP is about California counties and “SB” is not quite enough letters to clearly distinguish it from the other possibilities.
+ State abbreviation problems
+ AL : AL Alabama state, not ALAM Alameda
+ county or ALPI Alpine county
+ LA : LA Louisiana state, not LANG Los Angeles
+ county or LASS Lassen county
+ NV : NV Nevada state, not NEVA Nevada
+ county
+ OR : OR Oregon state, not ORAN Orange county
+ DX QSOs 
+ DX QSO’s do not count for non-California participants. 
+ For California participants, DX QSO’s count for QSO points but not multiplier credit. There are no DX multipliers. 
+ United States commonwealths, territories and possessions do not count as multipliers. 
+ The preferred QTH abbreviation for any DX station is “DX”. You may instead log the ARRL DXCC country abbreviation (e.g. G for England, DL for Germany, etc), but simply “DX” is easier for you. 
+ All NCCC web sites are hosted by QTH.com . Web design and maintenance by K6MM 
+ 
