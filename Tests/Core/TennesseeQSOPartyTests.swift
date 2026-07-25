@@ -263,22 +263,22 @@ final class TennesseeQSOPartyTests: XCTestCase {
     // MARK: County lines — two allowed, three rejected
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("davi", party: tnqp).get().locations, ["DAVI"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: tnqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DL", party: tnqp).get().locations, ["DL"])
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: tnqp).get().locations, ["DC"],
+        XCTAssertEqual(try ExchangeParser.parse("davi", party: tnqp, role: .inState).get().locations, ["DAVI"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: tnqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DL", party: tnqp, role: .inState).get().locations, ["DL"])
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: tnqp, role: .inState).get().locations, ["DC"],
                        "loggable, credited as MD")
         // Two-county line is legal here.
         XCTAssertEqual(
-            try ExchangeParser.parse("MONT/WILS", party: tnqp).get().locations,
+            try ExchangeParser.parse("MONT/WILS", party: tnqp, role: .inState).get().locations,
             ["MONT", "WILS"]
         )
         // Three is not.
         XCTAssertEqual(
-            ExchangeParser.parse("MONT/WILS/DAVI", party: tnqp),
+            ExchangeParser.parse("MONT/WILS/DAVI", party: tnqp, role: .inState),
             .failure(.tooManyCounties(3))
         )
-        guard case .failure = ExchangeParser.parse("TN", party: tnqp) else {
+        guard case .failure = ExchangeParser.parse("TN", party: tnqp, role: .inState) else {
             return XCTFail("TN token must be rejected")
         }
     }

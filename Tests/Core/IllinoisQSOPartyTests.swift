@@ -235,15 +235,15 @@ final class IllinoisQSOPartyTests: XCTestCase {
     func testUpToFourCountyCorners() throws {
         XCTAssertEqual(ilqp.maxSimultaneousCounties, 4)
         XCTAssertEqual(
-            try ExchangeParser.parse("ADAM/BOND/BOON", party: ilqp).get().locations,
+            try ExchangeParser.parse("ADAM/BOND/BOON", party: ilqp, role: .inState).get().locations,
             ["ADAM", "BOND", "BOON"],
             "a three-county corner"
         )
         XCTAssertEqual(
-            try ExchangeParser.parse("ADAM/BOND/BOON/BROW", party: ilqp).get().locations.count, 4
+            try ExchangeParser.parse("ADAM/BOND/BOON/BROW", party: ilqp, role: .inState).get().locations.count, 4
         )
         XCTAssertEqual(
-            ExchangeParser.parse("ADAM/BOND/BOON/BROW/BURO", party: ilqp),
+            ExchangeParser.parse("ADAM/BOND/BOON/BROW/BURO", party: ilqp, role: .inState),
             .failure(.tooManyCounties(5)),
             "the rules stop at four"
         )
@@ -309,14 +309,14 @@ final class IllinoisQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing and scope of credit
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("cook", party: ilqp).get().locations, ["COOK"])
-        XCTAssertEqual(try ExchangeParser.parse("LEE", party: ilqp).get().locations, ["LEE"],
+        XCTAssertEqual(try ExchangeParser.parse("cook", party: ilqp, role: .inState).get().locations, ["COOK"])
+        XCTAssertEqual(try ExchangeParser.parse("LEE", party: ilqp, role: .inState).get().locations, ["LEE"],
                        "the 3-letter code parses alongside the 4-letter ones")
-        XCTAssertEqual(try ExchangeParser.parse("WTSD", party: ilqp).get().locations, ["WTSD"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: ilqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: ilqp).get().locations, ["DC"])
-        XCTAssertEqual(try ExchangeParser.parse("DL", party: ilqp).get().locations, ["DL"])
-        guard case .failure = ExchangeParser.parse("IL", party: ilqp) else {
+        XCTAssertEqual(try ExchangeParser.parse("WTSD", party: ilqp, role: .inState).get().locations, ["WTSD"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: ilqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: ilqp, role: .inState).get().locations, ["DC"])
+        XCTAssertEqual(try ExchangeParser.parse("DL", party: ilqp, role: .inState).get().locations, ["DL"])
+        guard case .failure = ExchangeParser.parse("IL", party: ilqp, role: .inState) else {
             return XCTFail("IL must be rejected — Illinois stations send a county")
         }
     }

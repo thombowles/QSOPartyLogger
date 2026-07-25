@@ -11,8 +11,62 @@ final class ExchangeParserTests: XCTestCase {
         tqp = try XCTUnwrap(PartyCatalog.party(id: "tqp"))
     }
 
-    func parse(_ s: String, _ party: PartyDefinition) -> Result<ExchangeParser.ParsedExchange, ExchangeParser.ExchangeError> {
-        ExchangeParser.parse(s, party: party)
+    func parse(
+        _ s: String,
+        _ party: PartyDefinition,
+        role: ExchangeParser.Role = .inState
+    ) -> Result<ExchangeParser.ParsedExchange, ExchangeParser.ExchangeError> {
+        ExchangeParser.parse(s, party: party, role: role)
+    }
+
+    // MARK: What the operator's own location makes valid
+
+    /// Where the sponsor restricts out-of-state entrants to home-state
+    /// contacts, a state token is not something they can ever receive — so it
+    /// is a typo, not an exchange.
+    func testRestrictedPartiesRejectStateTokensFromOutOfState() throws {
+        let warun = try XCTUnwrap(PartyCatalog.party(id: "warun"))
+        XCTAssertTrue(warun.outStateWorksHomeStationsOnly)
+
+        XCTAssertEqual(
+            try parse("KING", warun, role: .outOfState).get().locations, ["KING"],
+            "a Washington county is what an out-of-state entrant hears"
+        )
+        guard case .failure = parse("TX", warun, role: .outOfState) else {
+            return XCTFail("TX is not loggable by an out-of-state Salmon Run entrant")
+        }
+        XCTAssertEqual(
+            try parse("TX", warun, role: .inState).get().locations, ["TX"],
+            "the same token is exactly what a Washington station works"
+        )
+    }
+
+    /// Maine is the one party whose out-of-state entrants score each other, and
+    /// its definition says so — so the wider set stays valid for them.
+    func testMaineOutOfStateEntrantsKeepTheWiderSet() throws {
+        let meqp = try XCTUnwrap(PartyCatalog.party(id: "meqp"))
+        XCTAssertFalse(meqp.outStateWorksHomeStationsOnly)
+
+        XCTAssertEqual(try parse("TX", meqp, role: .outOfState).get().locations, ["TX"])
+        XCTAssertEqual(try parse("DX", meqp, role: .outOfState).get().locations, ["DX"])
+    }
+
+    /// The DX-prefix guess is gated on DX actually being a multiplier for this
+    /// operator, in every party that uses prefixes.
+    func testDXPrefixGuessFollowsTheMultiplierClasses() throws {
+        for id in ["alqp", "azqp", "ilqp", "mdc", "sdqp", "tnqp", "warun"] {
+            let party = try XCTUnwrap(PartyCatalog.party(id: id))
+            XCTAssertEqual(
+                ExchangeParser.acceptsDXPrefix(party: party, role: .outOfState),
+                party.multipliers.outState.classes.contains(.dx),
+                "\(id) out of state"
+            )
+            XCTAssertEqual(
+                ExchangeParser.acceptsDXPrefix(party: party, role: .inState),
+                party.multipliers.inState.classes.contains(.dx),
+                "\(id) in state"
+            )
+        }
     }
 
     func testSingleCountyLowercase() throws {

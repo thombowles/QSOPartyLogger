@@ -73,7 +73,11 @@ struct MainView: View {
                 MessagesEditor(document: document, settings: settings)
             }
             .sheet(item: $editingQSO) { qso in
-                EditQSOSheet(original: qso, party: party) { updated in
+                EditQSOSheet(
+                    original: qso,
+                    party: party,
+                    role: document.log.myLocation.isInState ? .inState : .outOfState
+                ) { updated in
                     document.update(qso: updated, undoManager: undoManager)
                 }
             }

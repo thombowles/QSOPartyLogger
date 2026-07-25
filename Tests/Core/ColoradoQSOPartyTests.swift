@@ -284,21 +284,21 @@ final class ColoradoQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("den", party: coqp).get().locations, ["DEN"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: coqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: coqp).get().locations, ["DX"])
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: coqp).get().locations, ["DC"],
+        XCTAssertEqual(try ExchangeParser.parse("den", party: coqp, role: .inState).get().locations, ["DEN"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: coqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: coqp, role: .inState).get().locations, ["DX"])
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: coqp, role: .inState).get().locations, ["DC"],
                        "loggable, credited as MD")
         // Two-county line is legal.
         XCTAssertEqual(
-            try ExchangeParser.parse("SUM/PAR", party: coqp).get().locations,
+            try ExchangeParser.parse("SUM/PAR", party: coqp, role: .inState).get().locations,
             ["SUM", "PAR"]
         )
         XCTAssertEqual(
-            ExchangeParser.parse("SUM/PAR/DEN", party: coqp),
+            ExchangeParser.parse("SUM/PAR/DEN", party: coqp, role: .inState),
             .failure(.tooManyCounties(3))
         )
-        guard case .failure = ExchangeParser.parse("CO", party: coqp) else {
+        guard case .failure = ExchangeParser.parse("CO", party: coqp, role: .inState) else {
             return XCTFail("CO token must be rejected — Colorado stations send a county")
         }
     }

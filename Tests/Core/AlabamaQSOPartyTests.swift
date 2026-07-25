@@ -9,6 +9,54 @@ final class AlabamaQSOPartyTests: XCTestCase {
         alqp = try XCTUnwrap(PartyCatalog.party(id: "alqp"), "bundled ALQP should load")
     }
 
+    /// Reported from operating ALQP as a Texas station: "SAF" was typed into
+    /// the exchange and validated green. It matches no Alabama county — it was
+    /// being guessed at as a DXCC prefix, and every typo passed that guess.
+    ///
+    /// DX is not a multiplier class for an out-of-state ALQP entrant
+    /// (`multipliers.outState.classes` is `["county"]`), so the guess can never
+    /// buy that operator anything, and now does not run for them.
+    func testOutOfStateEntrantGetsNoDXPrefixGuess() {
+        guard case .failure(let error) = ExchangeParser.parse("SAF", party: alqp, role: .outOfState)
+        else {
+            return XCTFail("SAF is not an Alabama county and must not validate out of state")
+        }
+        guard case .unknownAbbreviation(let token, _) = error else {
+            return XCTFail("expected an unknown-abbreviation error, got \(error)")
+        }
+        XCTAssertEqual(token, "SAF")
+    }
+
+    func testOutOfStateEntrantStillLogsRealCounties() throws {
+        XCTAssertEqual(
+            try ExchangeParser.parse("SHEL", party: alqp, role: .outOfState).get().locations,
+            ["SHEL"]
+        )
+        XCTAssertEqual(
+            try ExchangeParser.parse("jeff", party: alqp, role: .outOfState).get().locations,
+            ["JEFF"]
+        )
+    }
+
+    /// The gap this does not close: an Alabama station counts DX prefixes as
+    /// multipliers, so for them the guess still runs and still accepts
+    /// anything. Only a real DXCC prefix table can fix that, and this test
+    /// records the state of affairs rather than endorsing it.
+    func testInStateEntrantStillGetsTheLooseDXGuess() throws {
+        XCTAssertTrue(alqp.multipliers.inState.classes.contains(.dx))
+        XCTAssertEqual(
+            try ExchangeParser.parse("SAF", party: alqp, role: .inState).get().locations,
+            ["SAF"]
+        )
+    }
+
+    /// A typo is pointed at counties, never at state tokens the operator could
+    /// not log anyway.
+    func testSuggestionsForAnOutOfStateEntrantAreCounties() {
+        let suggestions = ExchangeParser.suggestions(for: "SHE", party: alqp, role: .outOfState)
+        XCTAssertTrue(suggestions.contains("SHEL"), "got \(suggestions)")
+    }
+
     var seq: TimeInterval = 0
     func qso(
         call: String = "K4ZGB",
@@ -107,16 +155,16 @@ final class AlabamaQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("chou", party: alqp).get().locations, ["CHOU"])
-        XCTAssertEqual(try ExchangeParser.parse("DL", party: alqp).get().locations, ["DL"], "DX prefix accepted")
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: alqp).get().locations, ["DC"], "DC loggable (counts as MD)")
+        XCTAssertEqual(try ExchangeParser.parse("chou", party: alqp, role: .inState).get().locations, ["CHOU"])
+        XCTAssertEqual(try ExchangeParser.parse("DL", party: alqp, role: .inState).get().locations, ["DL"], "DX prefix accepted")
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: alqp, role: .inState).get().locations, ["DC"], "DC loggable (counts as MD)")
         // County-line sitting is not permitted: two counties must be rejected.
         XCTAssertEqual(
-            ExchangeParser.parse("AUTA/BALD", party: alqp),
+            ExchangeParser.parse("AUTA/BALD", party: alqp, role: .inState),
             .failure(.tooManyCounties(2))
         )
         // AL is never a valid exchange (AL stations send their county).
-        guard case .failure = ExchangeParser.parse("AL", party: alqp) else {
+        guard case .failure = ExchangeParser.parse("AL", party: alqp, role: .inState) else {
             return XCTFail("AL token must be rejected")
         }
     }

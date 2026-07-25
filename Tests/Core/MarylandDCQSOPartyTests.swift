@@ -187,22 +187,22 @@ final class MarylandDCQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("ana", party: mdc).get().locations, ["ANA"])
-        XCTAssertEqual(try ExchangeParser.parse("WDC", party: mdc).get().locations, ["WDC"])
-        XCTAssertEqual(try ExchangeParser.parse("OK", party: mdc).get().locations, ["OK"])
-        XCTAssertEqual(try ExchangeParser.parse("DL", party: mdc).get().locations, ["DL"],
+        XCTAssertEqual(try ExchangeParser.parse("ana", party: mdc, role: .inState).get().locations, ["ANA"])
+        XCTAssertEqual(try ExchangeParser.parse("WDC", party: mdc, role: .inState).get().locations, ["WDC"])
+        XCTAssertEqual(try ExchangeParser.parse("OK", party: mdc, role: .inState).get().locations, ["OK"])
+        XCTAssertEqual(try ExchangeParser.parse("DL", party: mdc, role: .inState).get().locations, ["DL"],
                        "§7a: DX sends its country")
         // MD stations always send an entity, so the bare state token is invalid.
-        guard case .failure = ExchangeParser.parse("MD", party: mdc) else {
+        guard case .failure = ExchangeParser.parse("MD", party: mdc, role: .inState) else {
             return XCTFail("MD token must be rejected")
         }
         // DC likewise — it is entity WDC, never the state token DC.
-        guard case .failure = ExchangeParser.parse("DC", party: mdc) else {
+        guard case .failure = ExchangeParser.parse("DC", party: mdc, role: .inState) else {
             return XCTFail("DC token must be rejected — DC is entity WDC")
         }
         // No county-line provision: two entities at once is invalid.
         XCTAssertEqual(
-            ExchangeParser.parse("ANA/BAL", party: mdc),
+            ExchangeParser.parse("ANA/BAL", party: mdc, role: .inState),
             .failure(.tooManyCounties(2))
         )
     }

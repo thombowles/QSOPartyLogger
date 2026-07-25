@@ -307,17 +307,17 @@ final class SouthDakotaQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("minn", party: sdqp).get().locations, ["MINN"])
-        XCTAssertEqual(try ExchangeParser.parse("DAY", party: sdqp).get().locations, ["DAY"],
+        XCTAssertEqual(try ExchangeParser.parse("minn", party: sdqp, role: .inState).get().locations, ["MINN"])
+        XCTAssertEqual(try ExchangeParser.parse("DAY", party: sdqp, role: .inState).get().locations, ["DAY"],
                        "the 3-letter code parses alongside the 4-letter ones")
-        XCTAssertEqual(try ExchangeParser.parse("OGLA", party: sdqp).get().locations, ["OGLA"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: sdqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: sdqp).get().locations, ["DC"],
+        XCTAssertEqual(try ExchangeParser.parse("OGLA", party: sdqp, role: .inState).get().locations, ["OGLA"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: sdqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: sdqp, role: .inState).get().locations, ["DC"],
                        "no DC rule is stated, so DC is its own token")
-        XCTAssertEqual(try ExchangeParser.parse("NL", party: sdqp).get().locations, ["NL"])
-        XCTAssertEqual(try ExchangeParser.parse("DL", party: sdqp).get().locations, ["DL"],
+        XCTAssertEqual(try ExchangeParser.parse("NL", party: sdqp, role: .inState).get().locations, ["NL"])
+        XCTAssertEqual(try ExchangeParser.parse("DL", party: sdqp, role: .inState).get().locations, ["DL"],
                        "a DXCC prefix, this party's DX form")
-        guard case .failure = ExchangeParser.parse("SD", party: sdqp) else {
+        guard case .failure = ExchangeParser.parse("SD", party: sdqp, role: .inState) else {
             return XCTFail("SD must be rejected — South Dakota stations send a county")
         }
     }
@@ -326,7 +326,7 @@ final class SouthDakotaQSOPartyTests: XCTestCase {
     /// be logged separately."
     func testCountyLineEntriesAreRejected() {
         XCTAssertEqual(
-            ExchangeParser.parse("AURO/BEAD", party: sdqp),
+            ExchangeParser.parse("AURO/BEAD", party: sdqp, role: .inState),
             .failure(.tooManyCounties(2)),
             "two counties are two contacts in SDQP"
         )

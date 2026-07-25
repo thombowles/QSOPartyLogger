@@ -55,7 +55,7 @@ final class CountyLineExpanderTests: XCTestCase {
     func testTypedSeparatorsAllProduceTheFullCrossProduct() throws {
         let ksqp = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
         for typed in ["LIN/AND", "LIN,AND", "lin, and"] {
-            let parsed = try ExchangeParser.parse(typed, party: ksqp).get()
+            let parsed = try ExchangeParser.parse(typed, party: ksqp, role: .inState).get()
             XCTAssertEqual(parsed.locations, ["LIN", "AND"], "separator '\(typed)' should split")
 
             let rows = CountyLineExpander.expand(
@@ -77,7 +77,7 @@ final class CountyLineExpanderTests: XCTestCase {
         // limitation of the expander.
         let alqp = try XCTUnwrap(PartyCatalog.party(id: "alqp"))
         XCTAssertEqual(alqp.maxSimultaneousCounties, 1)
-        switch ExchangeParser.parse("AUTA/BALD", party: alqp) {
+        switch ExchangeParser.parse("AUTA/BALD", party: alqp, role: .inState) {
         case .success: XCTFail("ALQP must reject a two-county exchange")
         case .failure(let error):
             XCTAssertEqual(error, .tooManyCounties(2))

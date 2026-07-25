@@ -209,19 +209,19 @@ final class HawaiiQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("hon", party: hqp).get().locations, ["HON"])
-        XCTAssertEqual(try ExchangeParser.parse("VOL", party: hqp).get().locations, ["VOL"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: hqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: hqp).get().locations, ["DX"],
+        XCTAssertEqual(try ExchangeParser.parse("hon", party: hqp, role: .inState).get().locations, ["HON"])
+        XCTAssertEqual(try ExchangeParser.parse("VOL", party: hqp, role: .inState).get().locations, ["VOL"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: hqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: hqp, role: .inState).get().locations, ["DX"],
                        "non-USA/Canada send the literal token")
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: hqp).get().locations, ["DC"])
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: hqp, role: .inState).get().locations, ["DC"])
         // Hawai'i stations send a district, so the bare state token is invalid.
-        guard case .failure = ExchangeParser.parse("HI", party: hqp) else {
+        guard case .failure = ExchangeParser.parse("HI", party: hqp, role: .inState) else {
             return XCTFail("HI token must be rejected — Hawai'i stations send a district")
         }
         // No district-line provision.
         XCTAssertEqual(
-            ExchangeParser.parse("HON/LHN", party: hqp),
+            ExchangeParser.parse("HON/LHN", party: hqp, role: .inState),
             .failure(.tooManyCounties(2))
         )
     }

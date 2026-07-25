@@ -270,23 +270,23 @@ final class SalmonRunTests: XCTestCase {
 
     func testCountyLineIsTwoCountiesMaximum() throws {
         XCTAssertEqual(
-            try ExchangeParser.parse("CLAL/JEFF", party: warun).get().locations,
+            try ExchangeParser.parse("CLAL/JEFF", party: warun, role: .inState).get().locations,
             ["CLAL", "JEFF"]
         )
         XCTAssertEqual(
-            ExchangeParser.parse("CLAL/JEFF/KING", party: warun),
+            ExchangeParser.parse("CLAL/JEFF/KING", party: warun, role: .inState),
             .failure(.tooManyCounties(3)),
             "only one two-county line at a time, even at a 3-county intersection"
         )
     }
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("king", party: warun).get().locations, ["KING"])
-        XCTAssertEqual(try ExchangeParser.parse("COL", party: warun).get().locations, ["COL"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: warun).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DL", party: warun).get().locations, ["DL"],
+        XCTAssertEqual(try ExchangeParser.parse("king", party: warun, role: .inState).get().locations, ["KING"])
+        XCTAssertEqual(try ExchangeParser.parse("COL", party: warun, role: .inState).get().locations, ["COL"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: warun, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DL", party: warun, role: .inState).get().locations, ["DL"],
                        "DX sends a DXCC prefix")
-        guard case .failure = ExchangeParser.parse("WA", party: warun) else {
+        guard case .failure = ExchangeParser.parse("WA", party: warun, role: .inState) else {
             return XCTFail("WA must be rejected — WA stations send a county")
         }
     }

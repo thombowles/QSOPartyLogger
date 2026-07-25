@@ -91,9 +91,9 @@ final class CaliforniaQSOPartyTests: XCTestCase {
     /// each as a common logging error; a 2-letter token is always the state.
     func testStateTokensThatShadowCountyAbbreviations() throws {
         for (state, county) in [("AL", "ALAM"), ("LA", "LANG"), ("NV", "NEVA"), ("OR", "ORAN")] {
-            XCTAssertEqual(try ExchangeParser.parse(state, party: cqp).get().locations, [state],
+            XCTAssertEqual(try ExchangeParser.parse(state, party: cqp, role: .inState).get().locations, [state],
                            "\(state) is the state, not \(county)")
-            XCTAssertEqual(try ExchangeParser.parse(county, party: cqp).get().locations, [county])
+            XCTAssertEqual(try ExchangeParser.parse(county, party: cqp, role: .inState).get().locations, [county])
             XCTAssertNil(cqp.county(for: state))
         }
     }
@@ -407,14 +407,14 @@ final class CaliforniaQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("scla", party: cqp).get().locations, ["SCLA"])
-        XCTAssertEqual(try ExchangeParser.parse("CCOS", party: cqp).get().locations, ["CCOS"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: cqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: cqp).get().locations, ["DC"])
-        XCTAssertEqual(try ExchangeParser.parse("NL", party: cqp).get().locations, ["NL"],
+        XCTAssertEqual(try ExchangeParser.parse("scla", party: cqp, role: .inState).get().locations, ["SCLA"])
+        XCTAssertEqual(try ExchangeParser.parse("CCOS", party: cqp, role: .inState).get().locations, ["CCOS"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: cqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: cqp, role: .inState).get().locations, ["DC"])
+        XCTAssertEqual(try ExchangeParser.parse("NL", party: cqp, role: .inState).get().locations, ["NL"],
                        "Canada is the standard 13 here, unlike MEQP and NJQP")
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: cqp).get().locations, ["DX"])
-        guard case .failure = ExchangeParser.parse("CA", party: cqp) else {
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: cqp, role: .inState).get().locations, ["DX"])
+        guard case .failure = ExchangeParser.parse("CA", party: cqp, role: .inState) else {
             return XCTFail("CA must be rejected — California stations send a county")
         }
     }
@@ -423,16 +423,16 @@ final class CaliforniaQSOPartyTests: XCTestCase {
     /// guide uses DELN/SISK/HUMB and offers four Writelog county fields.
     func testCountyLineUpToFourCounties() throws {
         XCTAssertEqual(
-            try ExchangeParser.parse("DELN/SISK/HUMB", party: cqp).get().locations,
+            try ExchangeParser.parse("DELN/SISK/HUMB", party: cqp, role: .inState).get().locations,
             ["DELN", "SISK", "HUMB"],
             "the sponsor's own worked example"
         )
         XCTAssertEqual(
-            try ExchangeParser.parse("DELN/SISK/HUMB/TRIN", party: cqp).get().locations.count, 4,
+            try ExchangeParser.parse("DELN/SISK/HUMB/TRIN", party: cqp, role: .inState).get().locations.count, 4,
             "four is the limit, and it is allowed"
         )
         XCTAssertEqual(
-            ExchangeParser.parse("DELN/SISK/HUMB/TRIN/MODO", party: cqp),
+            ExchangeParser.parse("DELN/SISK/HUMB/TRIN/MODO", party: cqp, role: .inState),
             .failure(.tooManyCounties(5))
         )
     }

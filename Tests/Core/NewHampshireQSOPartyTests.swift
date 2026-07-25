@@ -210,15 +210,15 @@ final class NewHampshireQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("hil", party: nhqp).get().locations, ["HIL"])
-        XCTAssertEqual(try ExchangeParser.parse("MER", party: nhqp).get().locations, ["MER"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: nhqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: nhqp).get().locations, ["DX"])
-        guard case .failure = ExchangeParser.parse("NH", party: nhqp) else {
+        XCTAssertEqual(try ExchangeParser.parse("hil", party: nhqp, role: .inState).get().locations, ["HIL"])
+        XCTAssertEqual(try ExchangeParser.parse("MER", party: nhqp, role: .inState).get().locations, ["MER"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: nhqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: nhqp, role: .inState).get().locations, ["DX"])
+        guard case .failure = ExchangeParser.parse("NH", party: nhqp, role: .inState) else {
             return XCTFail("NH must be rejected — NH stations send a county")
         }
         XCTAssertEqual(
-            ExchangeParser.parse("HIL/COO", party: nhqp),
+            ExchangeParser.parse("HIL/COO", party: nhqp, role: .inState),
             .failure(.tooManyCounties(2)),
             "no county-line provision exists"
         )
