@@ -122,6 +122,7 @@ final class HubSpotClient {
             for row in result.rejected {
                 log("? could not read: \(row)")
             }
+            checkSelfSpotConfirmation(in: result.spots)
             if !result.spots.isEmpty {
                 spotsReceived += result.spots.count
                 onSpots?(result.spots)
@@ -134,6 +135,92 @@ final class HubSpotClient {
                 + "Retrying in \(Int(wait))s. Cluster spots are unaffected."
             log("*** fetch failed (\(consecutiveFailures)): \(error.localizedDescription)")
             return wait
+        }
+    }
+
+    // MARK: Self-spotting
+
+    enum SendState: Equatable {
+        case idle
+        case sending
+        /// The POST returned 200. That means *sent*, not *accepted* — the page
+        /// re-renders rather than reporting a status, so this is provisional
+        /// until the spot is seen on the board.
+        case sent(Date)
+        /// Seen in a later poll. This is the only real confirmation.
+        case confirmed
+        case failed(String)
+    }
+
+    private(set) var sendState: SendState = .idle
+    private var lastSent: HubSelfSpot.Fields?
+    private var lastSentAt: Date?
+    /// Polls checked since a send without seeing it land.
+    private var pollsAwaitingConfirmation = 0
+
+    /// Post a self-spot. The caller is responsible for having confirmed it
+    /// with the operator: this reaches a public board immediately.
+    func selfSpot(_ fields: HubSelfSpot.Fields, source: HubSpotSource, party: PartyDefinition) async {
+        if let problem = HubSelfSpot.validate(fields, party: party) {
+            sendState = .failed(problem.errorDescription ?? "Invalid spot.")
+            return
+        }
+        if let lastSent, let lastSentAt,
+           HubSelfSpot.isDuplicate(fields, of: lastSent, lastSentAt: lastSentAt, now: Date()) {
+            sendState = .failed("That spot just went out — nothing has changed since.")
+            return
+        }
+        guard let url = URL(string: source.postURL) else {
+            sendState = .failed("Bad hub URL for \(party.name).")
+            return
+        }
+
+        let boundary = "QSOPartyLogger-\(UUID().uuidString)"
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)",
+                         forHTTPHeaderField: "Content-Type")
+        request.httpBody = HubSelfSpot.multipartBody(
+            fields: fields, party: party, boundary: boundary
+        )
+
+        sendState = .sending
+        log("> self-spot \(fields.station) \(HubSelfSpot.formattedFrequency(fields.frequencyKHz))"
+            + " \(fields.county ?? "")")
+        do {
+            let (_, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+                throw URLError(.badServerResponse)
+            }
+            lastSent = fields
+            lastSentAt = Date()
+            pollsAwaitingConfirmation = 0
+            sendState = .sent(Date())
+            log("*** self-spot sent — waiting to see it on the board")
+        } catch {
+            sendState = .failed("Couldn't post the spot: \(error.localizedDescription)")
+            log("*** self-spot failed: \(error.localizedDescription)")
+        }
+    }
+
+    /// Look for a just-sent spot in what the board now shows. The form gives
+    /// no acknowledgement of its own, so an unverified send would leave the
+    /// operator sitting on a frequency believing they are advertised.
+    private func checkSelfSpotConfirmation(in spots: [Spot]) {
+        guard case .sent = sendState, let sent = lastSent else { return }
+        let call = sent.station.trimmingCharacters(in: .whitespaces).uppercased()
+        if spots.contains(where: { $0.call == call }) {
+            sendState = .confirmed
+            log("*** self-spot confirmed on the board")
+            return
+        }
+        pollsAwaitingConfirmation += 1
+        if pollsAwaitingConfirmation >= 2 {
+            sendState = .failed(
+                "The spot was sent but hasn't appeared on the board. It may not have "
+                + "been accepted — check the page before relying on it."
+            )
+            log("*** self-spot not seen after \(pollsAwaitingConfirmation) polls")
         }
     }
 

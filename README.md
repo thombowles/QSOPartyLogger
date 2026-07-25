@@ -356,6 +356,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `⌘B` | Toggle the band map window |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
+| `⇧⌘S` | Spot yourself to the QSO Party Hub (confirm with Return, cancel with Esc) |
 | `⌘⇧D` | Contest Dashboard (season history + SQP Challenge) |
 | `⌘[` / `⌘]` | Dashboard: previous / next year |
 | `⌘R` | Dashboard: re-read the history file |
@@ -463,6 +464,32 @@ a county from the wrong column. Rows it cannot parse are listed rather than
 silently dropped, a frequency it had to reconstruct from a malformed entry is
 flagged before you tune there, and a call the board has already corrected —
 these boards keep the typo alongside the fix — is greyed and stepped over.
+
+### Spotting yourself (⇧⌘S)
+
+In-state operators are the ones sponsors are asking to post, so ⇧⌘S opens a
+spot pre-filled from what the app already knows: your call from the station
+profile, your frequency from the radio, your county from the log. Return
+sends, Escape cancels.
+
+**Every send is confirmed first.** The hub's form has no CSRF token, no
+authentication and no session — whatever is posted reaches a public board
+instantly, and submitting twice posts twice. An identical spot repeated within
+five minutes is refused, though changing frequency or county never counts as a
+repeat, because those are exactly when a re-spot matters.
+
+**Rovers get prompted.** Change county in the log and the spot sheet opens by
+itself, pre-filled for the new county. It still never posts on its own — it
+just stops the county change from being the thing you forget.
+
+Frequency goes out in clean kilohertz, which is the one thing this app can do
+to reduce the ambiguity its own parser exists to resolve.
+
+A 200 back from the hub means *sent*, not *accepted* — the page re-renders
+rather than reporting a status. The app therefore watches the next couple of
+polls for your call to appear and says **confirmed on the board** only once it
+has actually seen it. If it never shows up you are told, rather than left
+sitting on a frequency believing you are advertised.
 
 Node notes: verified end-to-end against `dxc.wa9pie.net:8000` (DXSpider),
 `dxc.nc7j.com:7373` (AR-Cluster), and SDC's telnet server on

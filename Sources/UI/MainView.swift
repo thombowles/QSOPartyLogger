@@ -41,6 +41,13 @@ struct MainView: View {
     @State private var spotStore = SpotStore()
     @State private var spotClient = SpotClient()
     @State private var hubSpotClient = HubSpotClient()
+    @State private var showSelfSpot = false
+    @State private var selfSpotFields = HubSelfSpot.Fields(
+        station: "", frequencyKHz: 0, county: nil, comment: "", poster: ""
+    )
+    /// The county the last self-spot went out for, so a rover is prompted when
+    /// it moves — the moment that matters, and the one most often forgotten.
+    @State private var lastSelfSpotCounty: String?
     @State private var spotPurgeTask: Task<Void, Never>?
     @State private var showClusterPopover = false
     @State private var clusterCommand = ""
@@ -110,6 +117,20 @@ struct MainView: View {
             }
             .sheet(isPresented: $showMessagesEditor) {
                 MessagesEditor(document: document, settings: settings)
+            }
+            .sheet(isPresented: $showSelfSpot) {
+                if let party, let source = party.hubSpots {
+                    SelfSpotSheet(
+                        party: party,
+                        source: source,
+                        fields: $selfSpotFields,
+                        onSend: { fields in
+                            showSelfSpot = false
+                            Task { await hubSpotClient.selfSpot(fields, source: source, party: party) }
+                        },
+                        onCancel: { showSelfSpot = false }
+                    )
+                }
             }
             .sheet(item: $editingQSO) { qso in
                 EditQSOSheet(
@@ -260,6 +281,7 @@ struct MainView: View {
             spotStore.purge(now: Date())
         }
         .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
+        .onChange(of: document.log.myLocation.sentExchanges) { offerReSpotOnCountyChange() }
         // The QSO number needs no re-seeding here: `EntryState.serialSent`
         // follows the log until the operator types over it, so a document that
         // is still `ksqp` when the entry appears picks up the real party's
@@ -359,6 +381,17 @@ struct MainView: View {
             }
             .keyboardShortcut("e", modifiers: [.command, .shift])
             .help("Export Cabrillo (⇧⌘E)")
+
+            Button {
+                beginSelfSpot()
+            } label: {
+                Label("Spot Myself", systemImage: "dot.radiowaves.left.and.right")
+            }
+            .keyboardShortcut("s", modifiers: [.command, .shift])
+            .disabled(!canSelfSpot)
+            .help(canSelfSpot
+                  ? "Post your own spot to the QSO Party Hub (⇧⌘S) — confirmed before it sends"
+                  : "This party isn't on the QSO Party Hub, or your callsign isn't set")
 
             Button {
                 showMessagesEditor = true
@@ -778,6 +811,50 @@ struct MainView: View {
         entry.call = spot.call
         focusedField = .call
         revalidate()
+    }
+
+    /// Whether self-spotting is available at all: the hub has to serve this
+    /// party, and there has to be a callsign to post under.
+    private var canSelfSpot: Bool {
+        party?.hubSpots != nil && !document.log.station.callsign.isEmpty
+    }
+
+    /// Open the self-spot sheet, pre-filled from live state.
+    ///
+    /// Everything here is already known — the call from the station profile,
+    /// the frequency from the radio, the county from the log — and retyping it
+    /// mid-run is exactly why operators stop self-spotting.
+    private func beginSelfSpot() {
+        guard canSelfSpot else { return }
+        let call = document.log.station.callsign.uppercased()
+        selfSpotFields = HubSelfSpot.Fields(
+            station: call,
+            // To 10 Hz — finer than that is noise on a spot, and the hub's
+            // frequency field only accepts ten characters.
+            frequencyKHz: radio.radioState
+                .map { (Double($0.frequencyHz) / 10).rounded() / 100 }
+                ?? Double(currentBand.defaultFreqKHz),
+            county: document.log.myLocation.sentExchanges.first,
+            comment: "",
+            poster: call
+        )
+        showSelfSpot = true
+    }
+
+    /// Prompt a rover to re-spot when it changes county. A mobile has to
+    /// re-spot on every county change, and the app knows the exact moment it
+    /// happens — but it still only opens the sheet, never posts by itself.
+    private func offerReSpotOnCountyChange() {
+        guard canSelfSpot, settings.hubSpotsEnabled,
+              let county = document.log.myLocation.sentExchanges.first,
+              !county.isEmpty,
+              let previous = lastSelfSpotCounty, previous != county
+        else {
+            lastSelfSpotCounty = document.log.myLocation.sentExchanges.first
+            return
+        }
+        lastSelfSpotCounty = county
+        beginSelfSpot()
     }
 
     /// Start, restart or stop hub polling to match the setting and the party.
