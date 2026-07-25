@@ -1,0 +1,455 @@
+{
+  "schemaVersion": 1,
+  "id": "iaqp",
+  "name": "Iowa QSO Party",
+  "cabrilloContest": "IAQP",
+  "homeState": "IA",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m",
+    "70cm"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "token",
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "maxSimultaneousCounties": 4,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-09-19T14:00:00Z",
+      "end": "2026-09-20T02:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ADR",
+      "name": "Adair"
+    },
+    {
+      "abbr": "ADM",
+      "name": "Adams"
+    },
+    {
+      "abbr": "ALL",
+      "name": "Allamakee"
+    },
+    {
+      "abbr": "APP",
+      "name": "Appanoose"
+    },
+    {
+      "abbr": "AUD",
+      "name": "Audubon"
+    },
+    {
+      "abbr": "BEN",
+      "name": "Benton"
+    },
+    {
+      "abbr": "BKH",
+      "name": "Black Hawk"
+    },
+    {
+      "abbr": "BOO",
+      "name": "Boone"
+    },
+    {
+      "abbr": "BRE",
+      "name": "Bremer"
+    },
+    {
+      "abbr": "BUC",
+      "name": "Buchanan"
+    },
+    {
+      "abbr": "BNV",
+      "name": "Buena Vista"
+    },
+    {
+      "abbr": "BTL",
+      "name": "Butler"
+    },
+    {
+      "abbr": "CAL",
+      "name": "Calhoun"
+    },
+    {
+      "abbr": "CAR",
+      "name": "Carroll"
+    },
+    {
+      "abbr": "CAS",
+      "name": "Cass"
+    },
+    {
+      "abbr": "CED",
+      "name": "Cedar"
+    },
+    {
+      "abbr": "CEG",
+      "name": "Cerro Gordo"
+    },
+    {
+      "abbr": "CHE",
+      "name": "Cherokee"
+    },
+    {
+      "abbr": "CHI",
+      "name": "Chickasaw"
+    },
+    {
+      "abbr": "CLR",
+      "name": "Clarke"
+    },
+    {
+      "abbr": "CLA",
+      "name": "Clay"
+    },
+    {
+      "abbr": "CLT",
+      "name": "Clayton"
+    },
+    {
+      "abbr": "CLN",
+      "name": "Clinton"
+    },
+    {
+      "abbr": "CRF",
+      "name": "Crawford"
+    },
+    {
+      "abbr": "DAL",
+      "name": "Dallas"
+    },
+    {
+      "abbr": "DAV",
+      "name": "Davis"
+    },
+    {
+      "abbr": "DEC",
+      "name": "Decatur"
+    },
+    {
+      "abbr": "DEL",
+      "name": "Delaware"
+    },
+    {
+      "abbr": "DSM",
+      "name": "Des Moines"
+    },
+    {
+      "abbr": "DIC",
+      "name": "Dickinson"
+    },
+    {
+      "abbr": "DUB",
+      "name": "Dubuque"
+    },
+    {
+      "abbr": "EMM",
+      "name": "Emmet"
+    },
+    {
+      "abbr": "FAY",
+      "name": "Fayette"
+    },
+    {
+      "abbr": "FLO",
+      "name": "Floyd"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "FRE",
+      "name": "Fremont"
+    },
+    {
+      "abbr": "GRE",
+      "name": "Greene"
+    },
+    {
+      "abbr": "GRU",
+      "name": "Grundy"
+    },
+    {
+      "abbr": "GUT",
+      "name": "Guthrie"
+    },
+    {
+      "abbr": "HAM",
+      "name": "Hamilton"
+    },
+    {
+      "abbr": "HAN",
+      "name": "Hancock"
+    },
+    {
+      "abbr": "HDN",
+      "name": "Hardin"
+    },
+    {
+      "abbr": "HRS",
+      "name": "Harrison"
+    },
+    {
+      "abbr": "HEN",
+      "name": "Henry"
+    },
+    {
+      "abbr": "HOW",
+      "name": "Howard"
+    },
+    {
+      "abbr": "HUM",
+      "name": "Humboldt"
+    },
+    {
+      "abbr": "IDA",
+      "name": "Ida"
+    },
+    {
+      "abbr": "IOW",
+      "name": "Iowa"
+    },
+    {
+      "abbr": "JAC",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JAS",
+      "name": "Jasper"
+    },
+    {
+      "abbr": "JEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JOH",
+      "name": "Johnson"
+    },
+    {
+      "abbr": "JON",
+      "name": "Jones"
+    },
+    {
+      "abbr": "KEO",
+      "name": "Keokuk"
+    },
+    {
+      "abbr": "KOS",
+      "name": "Kossuth"
+    },
+    {
+      "abbr": "LEE",
+      "name": "Lee"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Linn"
+    },
+    {
+      "abbr": "LOU",
+      "name": "Louisa"
+    },
+    {
+      "abbr": "LUC",
+      "name": "Lucas"
+    },
+    {
+      "abbr": "LYN",
+      "name": "Lyon"
+    },
+    {
+      "abbr": "MAD",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MAH",
+      "name": "Mahaska"
+    },
+    {
+      "abbr": "MRN",
+      "name": "Marion"
+    },
+    {
+      "abbr": "MSL",
+      "name": "Marshall"
+    },
+    {
+      "abbr": "MIL",
+      "name": "Mills"
+    },
+    {
+      "abbr": "MIT",
+      "name": "Mitchell"
+    },
+    {
+      "abbr": "MNA",
+      "name": "Monona"
+    },
+    {
+      "abbr": "MOE",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MTG",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "MUS",
+      "name": "Muscatine"
+    },
+    {
+      "abbr": "OBR",
+      "name": "O'Brien"
+    },
+    {
+      "abbr": "OSC",
+      "name": "Osceola"
+    },
+    {
+      "abbr": "PAG",
+      "name": "Page"
+    },
+    {
+      "abbr": "PLA",
+      "name": "Palo Alto"
+    },
+    {
+      "abbr": "PLY",
+      "name": "Plymouth"
+    },
+    {
+      "abbr": "POC",
+      "name": "Pocahontas"
+    },
+    {
+      "abbr": "POL",
+      "name": "Polk"
+    },
+    {
+      "abbr": "POT",
+      "name": "Pottawattamie"
+    },
+    {
+      "abbr": "POW",
+      "name": "Poweshiek"
+    },
+    {
+      "abbr": "RIN",
+      "name": "Ringgold"
+    },
+    {
+      "abbr": "SAC",
+      "name": "Sac"
+    },
+    {
+      "abbr": "SCO",
+      "name": "Scott"
+    },
+    {
+      "abbr": "SHE",
+      "name": "Shelby"
+    },
+    {
+      "abbr": "SIO",
+      "name": "Sioux"
+    },
+    {
+      "abbr": "STR",
+      "name": "Story"
+    },
+    {
+      "abbr": "TAM",
+      "name": "Tama"
+    },
+    {
+      "abbr": "TAY",
+      "name": "Taylor"
+    },
+    {
+      "abbr": "UNI",
+      "name": "Union"
+    },
+    {
+      "abbr": "VAN",
+      "name": "Van Buren"
+    },
+    {
+      "abbr": "WAP",
+      "name": "Wapello"
+    },
+    {
+      "abbr": "WAR",
+      "name": "Warren"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAY",
+      "name": "Wayne"
+    },
+    {
+      "abbr": "WEB",
+      "name": "Webster"
+    },
+    {
+      "abbr": "WNB",
+      "name": "Winnebago"
+    },
+    {
+      "abbr": "WNS",
+      "name": "Winneshiek"
+    },
+    {
+      "abbr": "WOO",
+      "name": "Woodbury"
+    },
+    {
+      "abbr": "WOR",
+      "name": "Worth"
+    },
+    {
+      "abbr": "WRI",
+      "name": "Wright"
+    }
+  ],
+  "notes": "verified: partial — rules from the Story County Amateur Radio Club's page (w0yl.com/IAQP, captured 2026-07-23, re-checked live 2026-07-24). Counties generated from the sponsor's official county list (iaqp_county_list.txt, updated 08 JUNE 2018) — never hand-typed; Iowa's codes cluster badly and the generator pins 32 of them, including BTL Butler (not BUT), HDN Hardin, CLR/CLA/CLT/CLN Clarke/Clay/Clayton/Clinton, MNA/MOE/MTG Monona/Monroe/Montgomery, MRN/MSL Marion/Marshall, DSM Des Moines, BKH Black Hawk, BNV Buena Vista, PLA Palo Alto, WNB/WNS Winnebago/Winneshiek, and OBR O'Brien with its apostrophe. Phone 1 pt, CW and digital 2 pts. Multipliers are applied ONCE ONLY, explicitly 'NOT per Band, and NOT per Mode'. Iowa stations count Iowa counties plus each state INCLUDING IOWA plus Canadian provinces — Iowa itself is earned via an Iowa county, since Iowa stations send a county and never the token IA. Iowa stations get NO multiplier for DX, though DX contacts still score QSO points ('definitely DO work them'), which is why dx is absent from the multiplier classes. The sponsor's official state list prints 'MD Maryland and DC', so DC is credited as Maryland; the province list uses the standard 13 with the modern NL spelling, unlike NJQP's NF. Iowa mobiles, rovers and portables may sit on a county line or junction and claim ALL intersecting counties in a single exchange, up to four. No bonus points and no bonus stations. No power or category multiplier. Cabrillo CONTEST value IAQP per WA7BNM. OPEN QUESTIONS (why this is partial): (1) The published rules page is still titled for 2025 and its rules PDF is dated 12 AUG 2018; only the 2026 DATE (September 19, third weekend, 1400Z-0200Z) is announced, so re-check w0yl.com/IAQP in early September for a 2026 revision. (2) No rule states whether stations outside Iowa may work only Iowa stations. The Objective says 'Stations outside Iowa work as many Iowa stations as possible' — an aim, not a limit — and the dupe list's 'Non-Iowa stations may be worked ONCE per MODE per BAND' is not scoped to Iowa entrants, which arguably cuts the other way. Shipped with the restriction ON for consistency with every other bundled party and because a stray non-Iowa contact is then visibly flagged NO CREDIT rather than silently adding points; if the sponsor scores those QSOs, this under-counts and the flag makes that obvious. Confirm with iowaqsoparty@hotmail.com. (3) IAQP permits 1.25 m and suggests 222.150/223.450; this app has no 222 MHz band, so those QSOs cannot be logged on that band. Not modeled: satellite QSOs being allowed, and the club competition."
+}

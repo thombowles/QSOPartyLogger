@@ -33,8 +33,10 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**9 remaining** of the 16 in scope; 9 parties bundled (ALQP, MDC, HQP, OhQP, KSQP, TnQP, COQP, NJQP, TQP).
-Rows are in contest-date order — the top unstruck row is what's next.
+**9 remaining** of the 16 in scope (7 built so far: MDC, HQP, OhQP, TnQP, COQP,
+NJQP, IAQP); 10 parties bundled in total, those 7 plus the pre-existing ALQP,
+KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
+next, and the count above must equal the number of unstruck rows below.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
@@ -45,7 +47,7 @@ Rows are in contest-date order — the top unstruck row is what's next.
 | ~~Tennessee~~ | Sep 6 1700Z → Sep 7 0300Z | [`tnqp_rules.md`](../research/tnqp_rules.md) + [`tnqp_counties.tsv`](../research/tnqp_counties.tsv) | **done** (`verified: partial`) |
 | ~~New Jersey~~ | Sep 12 1400Z → Sep 13 0200Z ✅ date settled by sponsor | [`njqp_rules.md`](../research/njqp_rules.md) + [`njqp_counties.tsv`](../research/njqp_counties.tsv) | **done** (`verified: partial`) |
 | ~~Colorado~~ | Sep 12 1400Z → Sep 13 0400Z | [`coqp_rules.md`](../research/coqp_rules.md) + [`coqp_src_counties.txt`](../research/coqp_src_counties.txt) | **done** |
-| **Iowa** | Sep 19 1400Z → Sep 20 0200Z | [`iaqp_page.txt`](../research/iaqp_page.txt), [`iaqp_county_list.txt`](../research/iaqp_county_list.txt), [`iaqp_state_prov.txt`](../research/iaqp_state_prov.txt) | raw sources only |
+| ~~Iowa~~ | Sep 19 1400Z → Sep 20 0200Z | [`iaqp_rules.md`](../research/iaqp_rules.md) + [`iaqp_county_list.txt`](../research/iaqp_county_list.txt) | **done** (`verified: partial`) |
 | **New Hampshire** | Sep 19 1600Z → Sep 20 0400Z; Sep 20 1200–2200Z | [`nhqp_rules.md`](../research/nhqp_rules.md) + [`nhqp_counties.tsv`](../research/nhqp_counties.tsv) | research banked |
 | **Washington Salmon Run** | Sep 19 1600Z → Sep 20 0700Z; Sep 20 1600–2400Z | [`warun_rules.md`](../research/warun_rules.md) + [`warun_counties.tsv`](../research/warun_counties.tsv) | research banked |
 | ~~Texas~~ | Sep 19 1400Z → Sep 20 0200Z; Sep 20 1400–2000Z | [`tqp_verify.md`](../research/tqp_verify.md) | **done** (`verified: partial`) |
@@ -79,9 +81,11 @@ Rows are in contest-date order — the top unstruck row is what's next.
    Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
    **Email `info@hawaiiqsoparty.org` to settle it.** See
    [`hqp_rules.md` §2](../research/hqp_rules.md).
-4. **Iowa has raw sponsor text but no write-up.**
-   Each still needs its 14-section research doc before any JSON (Article 15).
-   Do not shortcut from raw text straight to a party file.
+4. **Every banked raw source is now written up.** Of the 9 remaining, only two —
+   New Hampshire and Washington Salmon Run — have full research banked. The other
+   seven (Maine, California, Arizona, Pennsylvania, South Dakota, New York,
+   Illinois) start from their sponsors' sites with nothing captured, so expect
+   those iterations to be research-heavy, as Hawaii was.
 5. **Read every sponsor's own Canada list — they differ in both directions.**
    OhQP counts only 11 provinces and folds Yukon/NWT/Nunavut into one `NT`
    multiplier, so `YT`/`NU` are invalid there. NJQP counts all 13 but spells
@@ -102,9 +106,10 @@ party; each would be its own commit (Article 4).
   out **not** to need it — its activation rule is a bonus only — so TnQP is the
   sole user so far, and the field is not yet worth building. Revisit if a second
   party wants it.
-- **No 222 MHz band.** `Band` has no 1.25 m case, but TnQP permits it and its
-  rules suggest 223.50. Adding it touches `Band`, the band map and ADIF, so it
-  is a standalone change.
+- **No 222 MHz band.** `Band` has no 1.25 m case, but **TnQP and IAQP both
+  permit it** and both tabulate suggested 222/223 MHz frequencies. Two users now,
+  so this is worth building: it touches `Band`, the band map and ADIF, and belongs
+  in its own commit.
 - **Late re-verification pass.** TnQP ships against a rules document titled for
   2025 (no 2026 revision posted). Sponsors commonly post revisions weeks before
   the event, so every `verified: partial` party wants one re-check in the fortnight
