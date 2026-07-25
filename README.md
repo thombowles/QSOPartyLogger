@@ -332,7 +332,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `F12` | Wipe the entry fields and start the contact over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
 | `⇧⌘R` | Restore the party’s default CW messages (Messages editor) |
-| `Esc` | Abort CW + stop repeat-CQ |
+| `Esc` | Abort CW + stop repeat-CQ — and close the sheet, when one is open |
 | `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
 | `⌘←` / `⌘→` | Tune to previous / next unworked spot on the band |
 | `⌘R` | Toggle Run / Search & Pounce |
@@ -344,6 +344,12 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `⌘[` / `⌘]` | Dashboard: previous / next year |
 | `⌘R` | Dashboard: re-read the history file |
 | `Return` on a dashboard row | Open that contest's log |
+
+These keys belong to the log window that has focus. While a sheet is open —
+Setup, the Messages editor, Edit QSO — the sheet owns the keyboard: `Esc` closes
+it and `F1`–`F8` do not transmit, so revising F2 and pressing it never keys the
+old message. `Esc` still aborts CW instantly in either place (Article 11). With
+two logs open, the F-keys act on the one you are typing in.
 
 ## K3 wiring for direct CW keying
 
@@ -473,13 +479,14 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 755 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 765 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, cluster
 history, the band map scale and its column stacking, the band plan and its
-CW/phone crossovers, typed QSY commands, keyer timing, keyer labelling, the
+CW/phone crossovers, typed QSY commands, the key-monitor focus gate and its key
+table, keyer timing, keyer labelling, the
 contest history archive (snapshot parity with the engine, two-Mac merge,
 unknown-field preservation, coordinated store), season stats, the SQP
 Challenge formula and calendar resource, and the upcoming-contest engine.
