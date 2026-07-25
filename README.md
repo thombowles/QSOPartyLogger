@@ -480,17 +480,28 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 765 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 811 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, cluster
 history, the band map scale and its column stacking, the band plan and its
 CW/phone crossovers, typed QSY commands, the key-monitor focus gate and its key
-table, keyer timing, keyer labelling, the
-contest history archive (snapshot parity with the engine, two-Mac merge,
-unknown-field preservation, coordinated store), season stats, the SQP
-Challenge formula and calendar resource, and the upcoming-contest engine.
+table, what the radio keys on every step of the entry flow, the CW messages
+editor's Restore Defaults and exchange-mismatch banner, keyer timing, keyer
+labelling, the contest history archive (snapshot parity with the engine,
+two-Mac merge, unknown-field preservation, coordinated store), season stats,
+the SQP Challenge formula and calendar resource, and the upcoming-contest
+engine.
+
+What goes on the air is decided by
+[`EntryFlow`](Sources/App/EntryFlow.swift), not by the view. It returns the
+string it would key and `MainView` hands that to the radio, so a test can drive
+the real sequences — Contest Setup changes the party, then F2; ESM Return in
+Search & Pounce, then compare the keyed number against the one written to the
+log. Two 2026-07-25 bugs that put both stations out of each other's logs went
+through eight review rounds undetected because this code was private to a
+SwiftUI `View`; `Tests/App/EntryFlowTests.swift` reproduces both.
 
 The test bundle is hosted inside the app executable, so `UserDefaults.standard`
 inside a test would be the real `org.b5n.QSOPartyLogger` preference domain.
