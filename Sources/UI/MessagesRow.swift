@@ -27,7 +27,20 @@ struct MessagesRow: View {
             }
             .pickerStyle(.segmented)
             .fixedSize()
-            .help("Run = calling CQ; S&P = search and pounce. Each has its own F1–F8 set.")
+            .help("Run = calling CQ; S&P = search and pounce. Each has its own F1–F8 set. Toggle Run / Search & Pounce (⌘R)")
+            // Article 7 — keyboard-first. An out-of-state log opens in S&P, and
+            // ⌘J only reaches Run once a CQ frequency has been captured, which
+            // needs Run already. A picker carries no shortcut of its own, so an
+            // invisible button behind it carries one. It toggles rather than
+            // jumping to Run so the single key serves both directions.
+            .background {
+                Button("Toggle Run / Search & Pounce") {
+                    operatingMode = operatingMode == .run ? .searchPounce : .run
+                }
+                .keyboardShortcut("r", modifiers: .command)
+                .opacity(0)
+                .accessibilityHidden(true)
+            }
 
             ForEach(Array(messages.prefix(8).enumerated()), id: \.offset) { index, template in
                 Button {

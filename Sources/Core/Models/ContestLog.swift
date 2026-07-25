@@ -110,12 +110,14 @@ struct MessageSets: Codable, Equatable, Sendable {
         func warning(partyName: String) -> String {
             switch self {
             case .missingSerial:
-                "\(partyName) sends a QSO number, but no message uses {SERIAL}."
+                "\(partyName) sends a QSO number, but not every message that "
+                    + "sends the exchange uses {SERIAL}."
             case .extraneousRST:
                 "\(partyName)'s exchange does not include a signal report, "
                     + "but a message still sends {RST}."
             case .missingRST:
-                "\(partyName) sends a signal report, but no message uses {RST}."
+                "\(partyName) sends a signal report, but not every message that "
+                    + "sends the exchange uses {RST}."
             }
         }
     }

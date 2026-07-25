@@ -202,6 +202,11 @@ struct MainView: View {
         }
         .onChange(of: document.log.partyID) {
             bandMapModel?.partyBands = party?.validBands ?? Band.allCases
+            // A new document is `ksqp` until Contest Setup runs, so the entry
+            // was seeded with no number. Re-seed once the real party is known,
+            // or the first contact of a CQP log transmits a blank where the
+            // QSO number should be.
+            entry.syncSerial(next: nextSerialIfUsed)
         }
     }
 
@@ -612,8 +617,13 @@ struct MainView: View {
                 )
             }
         case .logAndSend(let index):
+            // Expand before logging: logContact() advances the entry to the
+            // next QSO number, so expanding afterwards would key a number one
+            // higher than the one just written to the log — and the other
+            // station would log that, putting both of us NIL.
+            let pending = expandedMessage(at: index)
             logContact()
-            sendMessageAt(index)
+            if !pending.isEmpty { radio.sendCW(pending, settings: settings) }
         case .none:
             logContact()
         }
@@ -626,14 +636,21 @@ struct MainView: View {
         revalidate()
     }
 
-    private func sendMessageAt(_ index: Int) {
+    /// The text F<index+1> would key right now, or "" when that slot is empty.
+    private func expandedMessage(at index: Int) -> String {
         let set = activeMessages
-        guard set.indices.contains(index), !set[index].isEmpty else { return }
+        guard set.indices.contains(index), !set[index].isEmpty else { return "" }
+        return expandMacros(set[index])
+    }
+
+    private func sendMessageAt(_ index: Int) {
+        let message = expandedMessage(at: index)
+        guard !message.isEmpty else { return }
         // F1 in Run mode is the CQ — remember where we're running from.
         if operatingMode.wrappedValue == .run, index == 0 {
             captureCQFrequency()
         }
-        sendMessage(set[index])
+        radio.sendCW(message, settings: settings)
     }
 
     // MARK: Typed QSY commands + spot tuning
@@ -894,10 +911,6 @@ struct MainView: View {
             cutNumbers: settings.cwCutNumbers && currentModeClass == .cw,
             cutOne: settings.cwCutNumberOne
         )
-    }
-
-    private func sendMessage(_ template: String) {
-        radio.sendCW(expandMacros(template), settings: settings)
     }
 
     // MARK: F-key handling (AppKit monitor — reliable across macOS versions)

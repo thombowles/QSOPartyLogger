@@ -303,6 +303,20 @@ final class SerialExchangeTests: XCTestCase {
         XCTAssertNil(entry.serials(party: cqp).rcvd)
     }
 
+    /// Why ESM must expand before it logs: clearing for the next contact
+    /// advances the number, so a message expanded afterwards would carry n+1
+    /// while the logged row carries n — and the other station would log the
+    /// number they heard, putting both of us out of the log.
+    func testClearingForTheNextContactAdvancesTheNumberBeforeAnySend() {
+        let entry = EntryState()
+        entry.syncSerial(next: 7)
+        XCTAssertEqual(entry.serialSent, "7")
+
+        entry.clearForNextContact(modeClass: .cw, nextSerial: 8)
+        XCTAssertEqual(entry.serialSent, "8",
+                       "so expanding {SERIAL} after logging keys the wrong number")
+    }
+
     func testClearForNextContactCarriesTheNextNumber() {
         let entry = EntryState()
         entry.call = "W6ABC"

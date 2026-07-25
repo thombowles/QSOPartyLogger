@@ -220,7 +220,8 @@ final class MessageDefaultsTests: XCTestCase {
     func testWarningNamesThePartyAndTheMissingMacro() {
         XCTAssertEqual(
             MessageSets.ExchangeMismatch.missingSerial.warning(partyName: "California QSO Party"),
-            "California QSO Party sends a QSO number, but no message uses {SERIAL}."
+            "California QSO Party sends a QSO number, but not every message that "
+                + "sends the exchange uses {SERIAL}."
         )
         XCTAssertEqual(
             MessageSets.ExchangeMismatch.extraneousRST.warning(partyName: "Maryland-DC QSO Party"),
@@ -228,7 +229,8 @@ final class MessageDefaultsTests: XCTestCase {
         )
         XCTAssertEqual(
             MessageSets.ExchangeMismatch.missingRST.warning(partyName: "Kansas QSO Party"),
-            "Kansas QSO Party sends a signal report, but no message uses {RST}."
+            "Kansas QSO Party sends a signal report, but not every message that "
+                + "sends the exchange uses {RST}."
         )
     }
 
@@ -251,7 +253,8 @@ final class MessageDefaultsTests: XCTestCase {
             let party = try XCTUnwrap(PartyCatalog.party(id: id))
             let mismatch = try XCTUnwrap(MessageSets.standard.exchangeMismatch(with: party), id)
             XCTAssertEqual(mismatch.warning(partyName: party.name),
-                           "\(party.name) sends a QSO number, but no message uses {SERIAL}.")
+                           "\(party.name) sends a QSO number, but not every message that "
+                               + "sends the exchange uses {SERIAL}.")
         }
     }
 
