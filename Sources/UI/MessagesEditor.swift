@@ -15,11 +15,29 @@ struct MessagesEditor: View {
     /// user parties folder on every call, which a view body must not do.
     @State private var party: PartyDefinition?
 
+    /// The caption under the title — the one place an operator can discover
+    /// what they may type into an F-key. A named constant, and derived from
+    /// `MacroToken.allCases` rather than written out, because the hand-written
+    /// version omitted `{SERIAL}` for as long as that macro existed and
+    /// nothing could see it: a `Text` literal inside a view body is not
+    /// reachable from a test.
+    static let macroHelp =
+        "Stored in this log file, so each contest keeps its own macros. "
+        + "Macros: \(MacroToken.helpList) — prosigns: ( KN + AR = BT * SK"
+
+    /// The cut-number toggle's tooltip. A `String` constant rather than an
+    /// interpolated literal at the call site so it resolves to `help`'s
+    /// `StringProtocol` overload: interpolating a `MacroToken` straight into a
+    /// `LocalizedStringKey` compiles, renders the same, and is deprecated.
+    static let cutNumbersHelp =
+        "Replaces 0→T and 9→N in the \(MacroToken.rst) and \(MacroToken.serial) "
+        + "macros when keying CW. Callsigns and county codes are never altered."
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("CW Messages — \(party?.name ?? document.log.partyID)")
                 .font(.title3.weight(.semibold))
-            Text("Stored in this log file, so each contest keeps its own macros. Macros: {MYCALL} {CALL} {RST} {SERIAL} {EXCH} — prosigns: ( KN + AR = BT * SK")
+            Text(Self.macroHelp)
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -57,7 +75,7 @@ struct MessagesEditor: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Toggle("Send cut numbers (599 → 5NN, 40 → 4T)", isOn: $settings.cwCutNumbers)
-                    .help("Replaces 0→T and 9→N in the {RST} and {SERIAL} macros when keying CW. Callsigns and county codes are never altered.")
+                    .help(Self.cutNumbersHelp)
                 Toggle("Also cut 1 → A (199 → ANN)", isOn: $settings.cwCutNumberOne)
                     .help("Less universal than 0→T and 9→N — leave off if stations ask for repeats.")
                     .disabled(!settings.cwCutNumbers)

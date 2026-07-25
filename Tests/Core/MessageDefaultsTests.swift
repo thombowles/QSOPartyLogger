@@ -49,7 +49,7 @@ final class MessageDefaultsTests: XCTestCase {
             XCTAssertEqual(sets.run[1], "{CALL} {SERIAL} {EXCH}", id)
             XCTAssertEqual(sets.searchPounce[1], "{SERIAL} {EXCH}", id)
             XCTAssertEqual(sets.searchPounce[6], "R {SERIAL} {EXCH}", id)
-            XCTAssertFalse(sets.mentions("{RST}"), "\(id) exchanges no report")
+            XCTAssertFalse(sets.mentions(.rst), "\(id) exchanges no report")
         }
     }
 
@@ -58,8 +58,8 @@ final class MessageDefaultsTests: XCTestCase {
         XCTAssertEqual(sets.run[1], "{CALL} {EXCH}")
         XCTAssertEqual(sets.searchPounce[1], "{EXCH}")
         XCTAssertEqual(sets.searchPounce[6], "R {EXCH}")
-        XCTAssertFalse(sets.mentions("{RST}"), "MDC's exchange is call + location")
-        XCTAssertFalse(sets.mentions("{SERIAL}"), "and carries no number either")
+        XCTAssertFalse(sets.mentions(.rst), "MDC's exchange is call + location")
+        XCTAssertFalse(sets.mentions(.serial), "and carries no number either")
     }
 
     /// No bundled party sends both. The order is pinned here so a future one
@@ -128,15 +128,15 @@ final class MessageDefaultsTests: XCTestCase {
     // MARK: mentions
 
     func testMentionsScansBothSets() {
-        XCTAssertTrue(MessageSets.standard.mentions("{RST}"))
-        XCTAssertTrue(MessageSets.standard.mentions("{MYCALL}"))
-        XCTAssertFalse(MessageSets.standard.mentions("{SERIAL}"))
+        XCTAssertTrue(MessageSets.standard.mentions(.rst))
+        XCTAssertTrue(MessageSets.standard.mentions(.myCall))
+        XCTAssertFalse(MessageSets.standard.mentions(.serial))
         // S&P-only reference still counts.
         let sp = MessageSets(run: ["CQ"], searchPounce: ["{SERIAL} {EXCH}"])
-        XCTAssertTrue(sp.mentions("{SERIAL}"))
+        XCTAssertTrue(sp.mentions(.serial))
         // ...and the mirror, so neither array can be silently dropped.
         XCTAssertTrue(
-            MessageSets(run: ["{SERIAL} {EXCH}"], searchPounce: ["CQ"]).mentions("{SERIAL}")
+            MessageSets(run: ["{SERIAL} {EXCH}"], searchPounce: ["CQ"]).mentions(.serial)
         )
     }
 
