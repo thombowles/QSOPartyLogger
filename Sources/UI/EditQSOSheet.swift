@@ -26,7 +26,7 @@ struct EditQSOSheet: View {
             Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 8) {
                 GridRow {
                     Text("Call")
-                    TextField("", text: $call)
+                    TextField("", text: $call.uppercasing)
                         .font(.body.monospaced())
                         .frame(width: 140)
                 }
@@ -68,13 +68,13 @@ struct EditQSOSheet: View {
                 }
                 GridRow {
                     Text("My exchange")
-                    TextField("", text: $myLoc)
+                    TextField("", text: $myLoc.uppercasing)
                         .font(.body.monospaced())
                         .frame(width: 100)
                 }
                 GridRow {
                     Text("Their exchange")
-                    TextField("", text: $theirLoc)
+                    TextField("", text: $theirLoc.uppercasing)
                         .font(.body.monospaced())
                         .frame(width: 100)
                 }

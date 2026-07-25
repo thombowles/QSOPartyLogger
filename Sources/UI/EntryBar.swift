@@ -36,8 +36,7 @@ struct EntryBar: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 10) {
-                field("Call", text: $entry.call, width: 140, focusTag: .call)
-                    .textCase(.uppercase)
+                field("Call", text: $entry.call.uppercasing, width: 140, focusTag: .call)
                 if party?.exchangeIncludesRST ?? true {
                     field("RST S", text: $entry.rstSent, width: 60, focusTag: .rstSent)
                     field("RST R", text: $entry.rstRcvd, width: 60, focusTag: .rstRcvd)
@@ -46,7 +45,7 @@ struct EntryBar: View {
                     field("Ser S", text: $entry.serialSent, width: 60, focusTag: .serialSent)
                     field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
                 }
-                field(exchangeLabel, text: $entry.exchange, width: 170, focusTag: .exchange)
+                field(exchangeLabel, text: $entry.exchange.uppercasing, width: 170, focusTag: .exchange)
                 statusBadge
                 Spacer()
                 Button("Log", action: onLog)
