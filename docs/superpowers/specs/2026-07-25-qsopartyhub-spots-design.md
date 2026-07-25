@@ -271,7 +271,63 @@ not volume — a complement to cluster spotting, not a replacement.
 
 ---
 
-## 10. Header contract
+## 10. Running alongside a DX cluster
+
+This is the **default mode**, not a special case. Both sources feed the same
+`spotStore.add(spot)` sink (`Sources/UI/MainView.swift:557`), so a hub client is
+simply a second producer: one band map, one filter set, one ⌘←/⌘→ rotation, and
+automatic de-duplication because same `call|band` is a single entry.
+
+### 10.1 Per-source age-out — blocking defect
+
+`spotMaxAgeMinutes` defaults to 15, tuned for cluster spots. Measured against
+the live ALQP table at poll time 22:34:12Z:
+
+| spot | spotted at | age | survives 15-min age-out |
+| --- | --- | --- | --- |
+| W4NBS | 22:15:25 | 18.8 min | no — purged on arrival |
+| N4NM | 22:08:43 | 25.5 min | no — purged on arrival |
+| KC4TEO | 22:01:10 | 33.0 min | no — purged on arrival |
+| KC4TE | 21:57:30 | 36.7 min | no — purged on arrival |
+
+**0 of 4.** Shipped as originally designed, the hub contributes nothing at all,
+presenting as a broken parser rather than a misconfigured lifetime.
+
+The two sources differ in kind. Cluster spots stream continuously from skimmers,
+so 15 minutes is generous. Hub spots are hand-posted and sparse, and the hub
+retains them a full 60 minutes because a mobile parked in a county stays
+workable far longer than a skimmer decode stays fresh.
+
+**Design:** `spotMaxAgeMinutes` becomes cluster-only; hub spots get an
+independent lifetime defaulting to **60 minutes**, matching the source's own
+retention. `SpotStore.purge` applies the limit per `Spot.source`.
+
+### 10.2 Volume asymmetry
+
+Hundreds of cluster spots against 4 from the hub. The county-bearing spots — the
+entire point of the feature — get buried. Mitigations: a source badge on the
+band map, and a **hub-only filter axis** for hunting counties specifically.
+
+### 10.3 Merge, and why it protects rover un-hiding
+
+Same `call|band` from both sources collapses to one entry, newest winning on
+frequency, time, comment and spotter. The county carry-forward rule in §6 does
+double duty here: without it a cluster spot arriving after a hub spot would strip
+the county and silently re-hide a rover that had just been un-hidden.
+
+**Cross-source corroboration** is a confidence signal worth surfacing — a station
+seen on both the cluster and the hub is independently confirmed. Not a fix for
+busted calls, but had the cluster carried `KC4TEO` and not `KC4TE`, it would have
+indicated which was real.
+
+### 10.4 Independent failure
+
+Separate clients, separate status and error surfaces. A hub outage never
+disturbs the cluster feed, and vice versa (§9).
+
+---
+
+## 11. Header contract
 
 Rows are parsed positionally, so the header is a **hard gate**: the six columns
 must be exactly `TIME (UTC)`, `SPOT`, `FREQ`, `QTH`, `COMMENT`, `POSTER`. Any
@@ -284,7 +340,7 @@ rather than presenting as an unexplained empty band map.
 
 ---
 
-## 11. Testing
+## 12. Testing
 
 Per `CLAUDE.md`, tests run with no network. All fixtures are saved HTML.
 
@@ -303,27 +359,37 @@ rover un-hiding on county change; empty table → 0 spots, no error; 404 and
 garbage → 0 spots, no crash; header mismatch → 0 spots plus warning; a golden
 multipart body; and county preservation when a cluster spot overwrites a hub spot.
 
-Per `prove-regression-tests-red-first`: the §5 mode-inference and §6 rover tests
-must be shown failing against current behavior before the fix lands.
+Concurrent-source cases (§10): all four live ALQP spots survive the hub's own
+60-minute lifetime while a 15-minute cluster spot in the same store ages out
+(§10.1 regression); a cluster spot overwriting a hub spot does not re-hide an
+un-hidden rover (§10.3).
+
+Per `prove-regression-tests-red-first`: the §5 mode-inference, §6 rover, and
+§10.1 age-out tests must be shown failing against current behavior before their
+fixes land. The §10.1 test is the sharpest of the three — it fails with an empty
+band map, which is exactly how the defect would present in the field.
 
 ---
 
-## 12. Commit sequence
+## 13. Commit sequence
 
 One spec, staged commits — each independently bisectable:
 
 1. **Schema + generator + banked mapping + provenance doc.** Data only, no behavior.
 2. **Party-aware mode inference** (§5). Own commit; fixes cluster spots too.
-3. **Parser + frequency ladder + fixtures and tests.** Pure Core, no network.
-4. **Client + schedule-gated polling + ATS + county/mult badge + rover un-hiding + README.**
-5. **Self-spot poster + confirm sheet + autofill + re-spot prompt + README.**
+3. **Per-source spot lifetime** (§10.1). Own commit; cluster default unchanged
+   at 15 minutes, so existing behavior is identical until a hub source exists.
+4. **Parser + frequency ladder + fixtures and tests.** Pure Core, no network.
+5. **Client + schedule-gated polling + ATS + county/mult badge + rover un-hiding
+   + source badge + hub-only filter + README.**
+6. **Self-spot poster + confirm sheet + autofill + re-spot prompt + README.**
 
 Docs ship in the same commit as behavior (Article 8): README features, keyboard
 table (⌘⇧S), test count, and the 17-of-19 coverage caveat.
 
 ---
 
-## 13. Deferred
+## 14. Deferred
 
 - **Needed-mult-only ⌘←/⌘→ navigation** — considered, not selected.
 - **Fuzz/property testing** the parser against invariants — worth revisiting once
