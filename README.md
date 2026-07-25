@@ -214,6 +214,13 @@ parties, and the remaining engine gaps. Adding a party is governed by
   survive the current party's own exchange parser before it is offered.
   Pre-filled text is greyed until you type over it, and it withdraws itself if
   the call changes.
+- **Copied, not lost**: a station you can hear but who cannot hear you takes an
+  exchange to copy and gives no contact for it. Moving to the next spot clears
+  the field so nothing is logged against the wrong station, and keeps what you
+  copied under his call — land back on him, by spot, by ⌘arrow, or by typing his
+  call, and it is there again. Typing is untouched: only a deliberate move to
+  another station stashes, so fixing a typo in a call never costs the exchange
+  underneath it.
 - **Elecraft K3/K3S/KX3/KX2 CAT** over serial (4800–38400 baud): live
   frequency/mode/TX polling (`IF;` — verified against Programmer's Reference
   revs F2 and G5), band stamped onto each QSO.
@@ -499,7 +506,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 811 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 843 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,

@@ -474,4 +474,88 @@ final class EntryFlowTests: XCTestCase {
         flow.callChanged(context())
         XCTAssertEqual(flow.entry.exchange, "")
     }
+
+    // MARK: Pending exchanges across spot moves
+
+    /// The niggle itself: a county copied for a station who never came back
+    /// must not follow you to the next spot and get logged against him.
+    func testMovingToAnotherStationClearsWhatWasCopied() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.entry.call = "K5NA"
+        flow.entry.exchangeTyped = "JOH"
+        flow.entry.serialRcvd = "42"
+
+        flow.stationChanged(to: "W0BH", context())
+
+        XCTAssertEqual(flow.entry.call, "W0BH")
+        XCTAssertEqual(flow.entry.exchange, "")
+        XCTAssertEqual(flow.entry.serialRcvd, "")
+    }
+
+    func testComingBackRestoresWhatWasCopied() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.entry.call = "K5NA"
+        flow.entry.exchangeTyped = "JOH"
+        flow.entry.serialRcvd = "42"
+
+        flow.stationChanged(to: "W0BH", context())
+        flow.stationChanged(to: "K5NA", context())
+
+        XCTAssertEqual(flow.entry.exchange, "JOH")
+        XCTAssertEqual(flow.entry.serialRcvd, "42")
+        XCTAssertFalse(
+            flow.entry.exchangeIsAutoFilled,
+            "restored text is the operator's, not the app's"
+        )
+    }
+
+    /// The restore hangs off the call, not off the navigation.
+    func testTypingTheCallBackRestoresWhatWasCopied() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.entry.call = "K5NA"
+        flow.entry.exchangeTyped = "JOH"
+        flow.stationChanged(to: "W0BH", context())
+
+        flow.entry.call = "K5NA"
+        flow.callChanged(context())
+
+        XCTAssertEqual(flow.entry.exchange, "JOH")
+    }
+
+    /// Auto-filled text regenerates from the log, so stashing it would only
+    /// make a typed-looking copy of something the app already knows.
+    func testAutoFilledTextIsNeverStashed() {
+        let flow = EntryFlow(document: ksqpDocumentWorking("K5NA", as: "JOH"))
+        flow.entry.call = "K5NA"
+        flow.callChanged(context())
+        XCTAssertTrue(flow.entry.exchangeIsAutoFilled)
+
+        flow.stationChanged(to: "W0BH", context())
+        XCTAssertNil(flow.entry.pendingExchanges["K5NA"])
+    }
+
+    func testLoggingAContactDropsItsPendingExchange() {
+        let doc = ksqpDocument()
+        let flow = EntryFlow(document: doc)
+        flow.entry.call = "K5NA"
+        flow.entry.exchangeTyped = "JOH"
+        flow.stationChanged(to: "W0BH", context())
+        XCTAssertNotNil(flow.entry.pendingExchanges["K5NA"])
+
+        flow.stationChanged(to: "K5NA", context())
+        _ = flow.logContact(context(), undoManager: nil)
+
+        XCTAssertEqual(doc.log.qsos.count, 1)
+        XCTAssertNil(
+            flow.entry.pendingExchanges["K5NA"],
+            "he is in the log now — there is nothing pending about him"
+        )
+    }
+
+    func testAnEmptyExchangeIsNotStashed() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.entry.call = "K5NA"
+        flow.stationChanged(to: "W0BH", context())
+        XCTAssertTrue(flow.entry.pendingExchanges.isEmpty)
+    }
 }

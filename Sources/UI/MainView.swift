@@ -794,9 +794,10 @@ struct MainView: View {
         }
         spotCursorKHz = spot.freqKHz
         applyBandPlanMode(kHz: spot.freqKHz)
-        entry.call = spot.call
+        // Not a plain assignment: arriving at a station takes whatever was
+        // copied for the last one off the row and keeps it under his call.
+        flow.stationChanged(to: spot.call, operatingContext)
         focusedField = .call
-        revalidate()
     }
 
     /// ⌘← / ⌘→ / ⌘↑ / ⌘↓. Worked stations stay on the band map, greyed, but there is

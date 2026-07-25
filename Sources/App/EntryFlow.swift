@@ -287,6 +287,8 @@ final class EntryFlow {
             theirLocs: theirLocs
         )
         document.append(qsos: rows, undoManager: undoManager)
+        // He is in the log now; there is nothing pending about him.
+        entry.pendingExchanges.removeValue(forKey: entry.callNormalized)
         entry.clearForNextContact(modeClass: context.modeClass)
         return .logged(rows: rows, text: "")
     }
@@ -310,6 +312,32 @@ final class EntryFlow {
         revalidate(context)
     }
 
+    /// A different station, chosen whole — a spot click or ⌘← / ⌘→ / ⌘↑ / ⌘↓.
+    ///
+    /// Distinct from `callChanged` on purpose. Typing is incremental and must
+    /// never cost the operator text they typed; arriving at a new station is a
+    /// deliberate move away, so what was copied for the last one comes off the
+    /// row — kept under his call, not thrown away.
+    func stationChanged(to call: String, _ context: Context) {
+        stashPending()
+        entry.exchangeTyped = ""
+        entry.serialRcvd = ""
+        entry.call = call
+        refreshPrefill(context)
+        revalidate(context)
+    }
+
+    private func stashPending() {
+        let outgoing = entry.callNormalized
+        guard !outgoing.isEmpty, !entry.exchangeIsAutoFilled else { return }
+        let pending = EntryState.Pending(
+            exchange: entry.exchange,
+            serialRcvd: entry.serialRcvd
+        )
+        guard !pending.isEmpty else { return }
+        entry.pendingExchanges[outgoing] = pending
+    }
+
     /// Offer what we know about the call now in the field, or take back what we
     /// offered for the last one.
     private func refreshPrefill(_ context: Context) {
@@ -319,6 +347,12 @@ final class EntryFlow {
         let call = entry.callNormalized
         guard !call.isEmpty else {
             entry.clearAutoFilledExchange()
+            return
+        }
+
+        // What the operator copied outranks anything the app can derive.
+        if let pending = entry.pendingExchanges[call] {
+            entry.restorePending(pending)
             return
         }
 

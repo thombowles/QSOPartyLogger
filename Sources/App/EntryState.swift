@@ -31,6 +31,29 @@ final class EntryState {
         exchangeIsAutoFilled = true
     }
 
+    /// What the operator copied for a station and never logged. Hunting a
+    /// station who can be heard but cannot hear you means copying his exchange
+    /// with nothing to show for it; moving to the next spot must not carry that
+    /// to the next station, and coming back must not mean copying it twice.
+    struct Pending: Equatable {
+        var exchange: String
+        var serialRcvd: String
+
+        var isEmpty: Bool {
+            exchange.trimmingCharacters(in: .whitespaces).isEmpty
+                && serialRcvd.trimmingCharacters(in: .whitespaces).isEmpty
+        }
+    }
+
+    var pendingExchanges: [String: Pending] = [:]
+
+    /// Put back what was copied for this station, as the operator's own text.
+    func restorePending(_ pending: Pending) {
+        exchange = pending.exchange
+        serialRcvd = pending.serialRcvd
+        exchangeIsAutoFilled = false
+    }
+
     /// Take back text the app put there. Text the operator typed is untouched.
     func clearAutoFilledExchange() {
         guard exchangeIsAutoFilled else { return }
