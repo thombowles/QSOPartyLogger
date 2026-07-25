@@ -50,11 +50,11 @@ final class CountyLineExpanderTests: XCTestCase {
         XCTAssertEqual(Set(rows.map(\.groupID)).count, 1)
     }
 
-    /// End-to-end: a typed county list (comma, space, or slash) crossed with
-    /// my own county line produces one row per pair — 2 × 2 = 4.
+    /// End-to-end: a typed county list (comma or slash) crossed with my own
+    /// county line produces one row per pair — 2 × 2 = 4.
     func testTypedSeparatorsAllProduceTheFullCrossProduct() throws {
         let ksqp = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
-        for typed in ["LIN/AND", "LIN AND", "LIN,AND", "lin, and"] {
+        for typed in ["LIN/AND", "LIN,AND", "lin, and"] {
             let parsed = try ExchangeParser.parse(typed, party: ksqp).get()
             XCTAssertEqual(parsed.locations, ["LIN", "AND"], "separator '\(typed)' should split")
 

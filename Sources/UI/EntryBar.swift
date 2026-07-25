@@ -10,9 +10,11 @@ struct EntryBar: View {
     enum Field: Hashable {
         case call, rstSent, rstRcvd, serialSent, serialRcvd, exchange
 
-        /// Where Space (and ESM's Return) moves next. Call jumps straight to
-        /// the exchange because the RSTs are pre-filled — Tab still walks
-        /// every field for the rare 579.
+        /// Where Space moves next, cycling back to the call from the exchange.
+        /// Call jumps straight to the exchange because the RSTs are pre-filled
+        /// — Tab still walks every field for the rare 579, which is how N1MM
+        /// splits the two keys ("the spacebar … skips over signal report
+        /// fields"; Tab walks them all).
         ///
         /// A received QSO number is the one numeric field an operator *must*
         /// type every contact, so where a party exchanges one, Call lands there
@@ -120,10 +122,10 @@ struct EntryBar: View {
                 .focused($focus, equals: focusTag)
                 .onSubmit(onLog)
                 .autocorrectionDisabled()
-                // Space advances instead of typing a space — except in the
-                // exchange, where it separates county-line entries ("LIN AND").
+                // Space advances rather than typing one, in every field — from
+                // the exchange it wraps back to the call, so the row cycles.
+                // Mults are separated with "/" or "," instead.
                 .onKeyPress(.space) {
-                    guard focusTag != .exchange else { return .ignored }
                     focus = focusTag.next(
                         includesRST: party?.exchangeIncludesRST ?? true,
                         includesSerial: party?.exchangeIncludesSerial ?? false

@@ -182,7 +182,9 @@ parties, and the remaining engine gaps. Adding a party is governed by
 - **County abbreviation validation** against each party's official list
   (KSQP: 105 3-letter, TQP: 254 4-letter, both generated from the sponsors'
   official files). Typos get suggestions (`LNI` → `LIN`); the home-state token
-  is rejected (Kansas stations always send a county).
+  is rejected (Kansas stations always send a county). County lines are typed
+  `LIN/AND` or `LIN,AND` — **space is not a separator**, because Space moves
+  the cursor.
 - **Live scoring per party rules**: points by mode, single-count multipliers,
   KSQP's first-KS-county-counts-as-KS-state rule, dupes flagged but kept
   (sponsors want them), KS0KS +100 bonus, TQP mobile 5-county bonuses, and a
@@ -260,7 +262,8 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | Keys | Action |
 | --- | --- |
 | `Enter` | Log (or ESM next-message; or execute a typed QSY command) |
-| `Space` | Jump to the next entry field (Call → Exchange, or → QSO nr rcvd where the party sends one) |
+| `Space` | Cycle the entry fields — Call → Exchange → Call, via QSO nr rcvd where the party sends one. Signal reports are stepped over |
+| `Tab` | Walk every entry field, signal reports included |
 | `F12` | Wipe the entry fields and start the contact over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
 | `Esc` | Abort CW + stop repeat-CQ |
@@ -391,7 +394,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 593 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 594 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,

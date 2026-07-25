@@ -23,8 +23,20 @@ final class ExchangeParserTests: XCTestCase {
 
     func testCountyLineSeparators() throws {
         XCTAssertEqual(try parse("LIN/AND", ksqp).get().locations, ["LIN", "AND"])
-        XCTAssertEqual(try parse("lin and", ksqp).get().locations, ["LIN", "AND"])
         XCTAssertEqual(try parse("LIN,AND", ksqp).get().locations, ["LIN", "AND"])
+        XCTAssertEqual(
+            try parse("lin, and", ksqp).get().locations, ["LIN", "AND"],
+            "a comma typed with a space after it is still two counties"
+        )
+    }
+
+    /// Space moves the entry row's cursor, so it can no longer be typed into
+    /// the exchange at all — and is no longer a separator.
+    func testSpaceIsNotASeparator() {
+        XCTAssertEqual(
+            parse("LIN AND", ksqp),
+            .failure(.unknownAbbreviation("LIN AND", suggestions: []))
+        )
     }
 
     func testFourCountiesAllowedFiveRejected() throws {
@@ -56,7 +68,7 @@ final class ExchangeParserTests: XCTestCase {
 
     func testMixedTypesRejected() {
         XCTAssertEqual(parse("LIN/TX", ksqp), .failure(.mixedTypes))
-        XCTAssertEqual(parse("TX MO", ksqp), .failure(.mixedTypes))
+        XCTAssertEqual(parse("TX/MO", ksqp), .failure(.mixedTypes))
     }
 
     func testEmptyRejected() {

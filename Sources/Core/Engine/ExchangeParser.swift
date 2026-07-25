@@ -35,9 +35,13 @@ enum ExchangeParser {
     /// Absolute ceiling; parties usually cap lower via `maxSimultaneousCounties`.
     static let maxCounties = 4
 
+    /// County-line entries are separated with "/" or "," only. Space is not a
+    /// separator: it advances the entry row's cursor, so it cannot be typed
+    /// here at all. Tokens are trimmed so "lin, and" still reads as two.
     static func tokenize(_ raw: String) -> [String] {
         raw.uppercased()
-            .components(separatedBy: CharacterSet(charactersIn: "/, \t"))
+            .components(separatedBy: CharacterSet(charactersIn: "/,"))
+            .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
     }
 
