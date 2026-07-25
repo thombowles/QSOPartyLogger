@@ -7,14 +7,34 @@ import Observation
 @Observable
 final class SpotStore {
 
-    /// How long a spot stays before ageing out, in minutes (operator setting).
+    /// How long a cluster spot stays before ageing out, in minutes (operator
+    /// setting).
     var maxAgeMinutes: Int = 15
 
+    /// The same for hub spots, which are hand-posted rather than skimmer-fed
+    /// and stay useful much longer — the hub itself keeps them 60 minutes.
+    var hubMaxAgeMinutes: Int = 60
+
     private var maxAge: TimeInterval { Double(max(1, maxAgeMinutes)) * 60 }
+
+    private func maxAge(for source: SpotSource) -> TimeInterval {
+        switch source {
+        case .cluster: maxAge
+        case .hub: Double(max(1, hubMaxAgeMinutes)) * 60
+        }
+    }
 
     private(set) var all: [Spot] = []
 
     func add(_ spot: Spot) {
+        var spot = spot
+        // A cluster re-spot of a station the hub already placed in a county
+        // must not strip that county: it is what un-hides a rover that has
+        // moved, so losing it silently re-hides the best multiplier on the
+        // band. The newer report still wins on everything it actually knows.
+        if spot.county == nil, let known = all.first(where: { $0.id == spot.id })?.county {
+            spot.county = known
+        }
         all.removeAll { $0.id == spot.id }
         all.append(spot)
         // Age out relative to the newest spot we know about, not this one —
@@ -23,7 +43,7 @@ final class SpotStore {
     }
 
     func purge(now: Date) {
-        all.removeAll { now.timeIntervalSince($0.receivedAt) > maxAge }
+        all.removeAll { now.timeIntervalSince($0.receivedAt) > maxAge(for: $0.source) }
     }
 
     /// Spots on one band, sorted by frequency (the band-map order).
