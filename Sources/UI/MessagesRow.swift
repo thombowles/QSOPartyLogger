@@ -74,7 +74,7 @@ struct MessagesRow: View {
             }
             .toggleStyle(.button)
             .tint(.purple)
-            .help("Enter Sends Message: Return steps through the contact — CQ, his report, log and TU when running; your call, then your report and the log when pouncing. The outlined key is what Return sends next.")
+            .help("Enter Sends Message: with the cursor in the call field Return only calls — it never logs. Move to the exchange and Return logs and sends your report. The outlined key is what Return sends next.")
 
             Toggle(isOn: $repeatEnabled) {
                 Label("Repeat CQ", systemImage: "repeat")

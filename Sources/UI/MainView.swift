@@ -584,21 +584,10 @@ struct MainView: View {
 
         switch esmAction {
         case .sendMessage(let index):
+            // The cursor is never moved for you. Wherever it is, that is where
+            // it stays, so a Return that called once calls again — Space is
+            // what advances, when the operator decides the contact has.
             sendMessageAt(index)
-            // Remember who this contact's middle message went to, so the next
-            // Return logs instead of calling again. An empty call (Run's CQ)
-            // stores nothing a callsign can match, which is what we want.
-            entry.esmSentTo = entry.callNormalized
-            // Their report has just gone out, so his exchange is what gets
-            // typed next. Only in Run, and only from the call field: in S&P
-            // the cursor stays put so repeat Returns keep calling, which is
-            // N1MM's default (its "Big Gun" switch is what moves it).
-            if operatingMode == .run, index == 1, focusedField == .call {
-                focusedField = EntryBar.Field.call.next(
-                    includesRST: party?.exchangeIncludesRST ?? true,
-                    includesSerial: party?.exchangeIncludesSerial ?? false
-                )
-            }
         case .logAndSend(let index):
             logContact()
             sendMessageAt(index)
@@ -626,7 +615,7 @@ struct MainView: View {
             mode: operatingMode,
             callEmpty: entry.callNormalized.isEmpty,
             exchangeValid: exchangeIsValid,
-            middleSent: entry.esmMiddleSent
+            cursorInCall: focusedField == .call
         )
     }
 

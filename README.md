@@ -206,14 +206,16 @@ parties, and the remaining engine gaps. Adding a party is governed by
   `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}` macros; **Esc aborts instantly**.
   Optional cut numbers for RST and QSO numbers (599 → 5NN) in the CW Messages
   editor.
-- **ESM (Enter Sends Message)** toggle right on the message row, working the
-  way N1MM's does. Return steps through the contact in sequence — running,
-  that's CQ, then his report, then log and TU; pouncing, your call, then your
-  report and the log — and the F-key Return will key next is **outlined**, so
-  the step you are on is visible rather than guessed at. Because the sequence
-  remembers that your call actually went out, an exchange prefilled from a
-  spot before you pounce can never log a QSO you have not made. In S&P the
-  cursor stays in the callsign field, so repeat Returns keep calling.
+- **ESM (Enter Sends Message)** toggle right on the message row, and **the
+  call field never logs**. While the cursor is in it Return only ever calls —
+  your call pouncing, his call and report running — however complete the row
+  looks. Move to the exchange and the same Return logs and sends your report.
+  That is what a **prefilled exchange** needs: hunting a station whose county
+  you copied off his last QSO, the row holds a call and a valid exchange
+  before you have worked him, and keeps holding them while he works three
+  other people. Every one of those Returns keeps calling. ESM never moves the
+  cursor for you — Space does — and the F-key Return will key next is
+  **outlined**, so what it is about to do is visible rather than guessed at.
 - **DX cluster spotting**: connect to any DXSpider/AR-Cluster telnet node
   (toolbar antenna icon), optionally **automatically when a contest opens**.
   Nodes you've used are remembered in a Recent Clusters menu, and the
@@ -394,7 +396,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 594 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 592 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,

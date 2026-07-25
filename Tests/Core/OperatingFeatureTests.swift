@@ -7,72 +7,83 @@ final class OperatingFeatureTests: XCTestCase {
 
     func testESMRunMode() {
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: true, exchangeValid: false, middleSent: false),
+            ESM.nextAction(mode: .run, callEmpty: true, exchangeValid: false, cursorInCall: true),
             .sendMessage(index: 0), "empty call → CQ"
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: false, middleSent: false),
-            .sendMessage(index: 1), "call typed → send his report"
+            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: false, cursorInCall: true),
+            .sendMessage(index: 1), "call typed → send his call and report"
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: true, middleSent: true),
-            .logAndSend(index: 2), "his report sent, exchange copied → log + TU"
+            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: true, cursorInCall: false),
+            .logAndSend(index: 2), "exchange copied, cursor moved on → log + TU"
         )
     }
 
     func testESMSearchPounceMode() {
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: true, exchangeValid: false, middleSent: false),
+            ESM.nextAction(mode: .searchPounce, callEmpty: true, exchangeValid: false, cursorInCall: true),
             .sendMessage(index: 0), "answer CQ with my call"
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: false, middleSent: false),
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: false, cursorInCall: true),
             .sendMessage(index: 0)
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: true, middleSent: true),
-            .logAndSend(index: 1), "my call sent, they answered → my report + log"
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: true, cursorInCall: false),
+            .logAndSend(index: 1), "they answered, cursor on the exchange → my report + log"
         )
     }
 
-    /// The reason ESM is a sequence rather than a reading of the fields: a
-    /// county prefilled from a spot before pouncing must not log a QSO that
-    /// was never made.
-    func testESMNeverLogsBeforeTheMiddleMessageHasBeenSent() {
+    /// Hunting N4RT, whose county was copied off his QSO with someone else and
+    /// typed in before ever calling him. He then works three other stations.
+    /// Every Return with the cursor in the call field has to keep calling —
+    /// the row holds a call and a valid exchange the whole time, and looks
+    /// exactly like a completed QSO.
+    func testESMKeepsCallingWhileTheCursorIsInTheCallField() {
+        for _ in 1...3 {
+            XCTAssertEqual(
+                ESM.nextAction(
+                    mode: .searchPounce, callEmpty: false, exchangeValid: true, cursorInCall: true
+                ),
+                .sendMessage(index: 0),
+                "S&P: prefilled exchange, cursor in the call field → send my call, never log"
+            )
+        }
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: true, middleSent: false),
-            .sendMessage(index: 0),
-            "S&P: exchange prefilled but he has not been called → send my call, do not log"
-        )
-        XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: true, middleSent: false),
+            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: true, cursorInCall: true),
             .sendMessage(index: 1),
-            "Run: exchange prefilled but his report has not gone out → send it, do not log"
+            "Run: same rule — the call field sends his call and report, never logs"
         )
     }
 
-    /// Calling a station that has not come back yet: Return repeats the middle
-    /// message instead of advancing.
-    func testESMRepeatsTheMiddleMessageUntilTheExchangeIsCopied() {
+    /// Moving to the exchange is the operator saying the contact happened.
+    /// Only then does the same row log.
+    func testESMLogsOnlyOnceTheCursorHasLeftTheCallField() {
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: false, middleSent: true),
-            .sendMessage(index: 0), "S&P: no answer yet → call again"
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: true, cursorInCall: false),
+            .logAndSend(index: 1)
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: false, middleSent: true),
-            .sendMessage(index: 1), "Run: he did not copy → send his report again"
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: false, cursorInCall: false),
+            .sendMessage(index: 0),
+            "off the call field but nothing copied yet → still calling"
+        )
+        XCTAssertEqual(
+            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: false, cursorInCall: false),
+            .sendMessage(index: 1)
         )
     }
 
-    /// Run's CQ wins over everything: a stale sequence flag from the previous
-    /// contact cannot turn an empty call field into a log.
-    func testESMCQTakesPrecedenceOverAStaleSequence() {
+    /// Run's CQ outranks the cursor rule: an empty call field cannot log, and
+    /// cannot send a report to nobody.
+    func testESMCQOutranksEverything() {
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: true, exchangeValid: true, middleSent: true),
+            ESM.nextAction(mode: .run, callEmpty: true, exchangeValid: true, cursorInCall: false),
             .sendMessage(index: 0)
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: true, exchangeValid: true, middleSent: true),
+            ESM.nextAction(mode: .searchPounce, callEmpty: true, exchangeValid: true, cursorInCall: false),
             .sendMessage(index: 0)
         )
     }
@@ -85,45 +96,20 @@ final class OperatingFeatureTests: XCTestCase {
         XCTAssertNil(ESM.Action.none.messageIndex)
     }
 
-    // MARK: The sequence flag's lifetime
-
-    func testESMSequenceFollowsTheCallsignInTheField() {
-        let entry = EntryState()
-        XCTAssertFalse(entry.esmMiddleSent, "nothing sent yet")
-
-        entry.call = "W1AW"
-        entry.esmSentTo = entry.callNormalized
-        XCTAssertTrue(entry.esmMiddleSent)
-
-        entry.call = "w1aw"
-        XCTAssertTrue(entry.esmMiddleSent, "case and the stored call are both normalized")
-
-        entry.call = "K5XYZ"
-        XCTAssertFalse(
-            entry.esmMiddleSent,
-            "retyping the call is a different station — the sequence restarts by itself"
-        )
-    }
-
-    func testESMSequenceIsClearedForTheNextContact() {
-        let entry = EntryState()
-        entry.call = "W1AW"
-        entry.esmSentTo = entry.callNormalized
-        XCTAssertTrue(entry.esmMiddleSent)
-
-        entry.clearForNextContact(modeClass: .cw)
-        XCTAssertNil(entry.esmSentTo)
-        XCTAssertFalse(entry.esmMiddleSent)
-    }
-
-    /// Run's CQ stores an empty callsign; that must not read back as "sent".
-    func testESMEmptyCallsignNeverCountsAsSent() {
-        let entry = EntryState()
-        entry.esmSentTo = ""
-        XCTAssertFalse(entry.esmMiddleSent)
-
-        entry.call = "W1AW"
-        XCTAssertFalse(entry.esmMiddleSent)
+    /// Nothing in the row's contents separates "about to call him" from "just
+    /// worked him" when the exchange was prefilled — only the cursor does. So
+    /// for every state of the row, the call field sends and the exchange logs.
+    func testESMCursorAloneDecidesWhetherTheSameRowLogs() {
+        for exchangeValid in [true, false] {
+            for mode in OperatingMode.allCases {
+                let inCall = ESM.nextAction(
+                    mode: mode, callEmpty: false, exchangeValid: exchangeValid, cursorInCall: true
+                )
+                if case .logAndSend = inCall {
+                    XCTFail("\(mode) with the cursor in the call field must never log")
+                }
+            }
+        }
     }
 
     // MARK: Per-document message sets

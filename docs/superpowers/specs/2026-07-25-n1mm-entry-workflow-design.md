@@ -56,94 +56,88 @@ rather than quoted; each claim traces to its page.
 | Tab walks every field **including** the signal reports, with the "S" digit selected for overtyping (599 → 579) | [Key Assignments](https://n1mmwp.hamdocs.com/setup/keyboard-shortcuts/) |
 | Enter logs when ESM is off, and sends a message when ESM is on | [Key Assignments](https://n1mmwp.hamdocs.com/setup/keyboard-shortcuts/) |
 
-Two conclusions drive the design.
+One conclusion drives the design: **field contents alone cannot express where
+a contact has got to.** A prefilled exchange looks identical before and after
+you have called. "Sends your call *once*" is only meaningful against some state
+outside the row.
 
-**ESM is a sequence, not a predicate.** "Sends your call *once*" is only
-meaningful if the program remembers that it already went out. Field contents
-alone cannot express it — a prefilled exchange looks identical before and after
-you have called.
+### Correction, same day
 
-**The cursor is an output of that sequence, not an input to it.** N1MM moves the
-cursor as a consequence of the step it just performed, and the Big Gun switch
-chooses how far. Nothing in the manual makes the cursor decide *which* message
-is sent; the F-keys work from any field.
+The first implementation took that state to be a sequence flag — *has this
+contact's middle message gone out* — and let a valid exchange log as soon as it
+had. That is wrong, and operating found it within minutes:
 
-This supersedes the first sketch of this feature, which read the focused field
-to pick the message. Cursor-driven selection produces the right result in the
-common case by accident, and diverges as soon as the operator moves the cursor
-for any other reason.
+> "here's a case where I'm hunting N4RT, I prefilled his county based on what
+> he already shared with another operator. I hit space to go back to the call
+> field and hit enter to send my call but he picked someone else. I want to hit
+> enter again to keep sending my call but it wants to now send my exchange."
+
+Calling a station is not a step you take once. He answers someone else, you
+call again, he answers someone else again. The flag latched on the first call
+and never unlatched, so the second Return tried to log a QSO that had not
+happened — the very fault the flag was added to prevent, moved one keypress
+later.
+
+The state that actually distinguishes the two is **where the operator is
+looking**. The call field means *I am still trying to raise him*; the exchange
+field means *I have him*. So:
+
+**The call field never logs.** While the cursor is in it, Return only ever
+calls — your call in S&P, his call and report in Run. Logging happens once the
+cursor has moved off it and the exchange is valid.
+
+**ESM never moves the cursor.** Space does. A Return that called once calls
+again, in both modes, for as long as the operator leaves the cursor where it
+is. This is also the effect of N1MM's Big Gun switch left unchecked, which is
+its default.
 
 ## Design
 
-### A two-step sequence per contact
+### The cursor decides
 
-`EntryState` gains one property:
-
-```swift
-/// The station the in-progress ESM sequence belongs to — set when the
-/// middle message of a contact goes out, cleared on log and on F12.
-var esmSentTo: String?
-```
-
-and one derived flag:
-
-```swift
-/// True once this contact's middle message (S&P: my call; Run: their
-/// report) has been sent to the callsign currently in the field.
-var esmMiddleSent: Bool {
-    guard let esmSentTo, !esmSentTo.isEmpty else { return false }
-    return esmSentTo == callNormalized
-}
-```
-
-Storing the callsign rather than a bare `Bool` makes the reset automatic:
-retype the call and the flag stops matching, so the sequence restarts for the
-new station without any explicit invalidation. `clearForNextContact` nils it,
-which covers both logging and F12.
-
-`ESM.nextAction` takes the flag instead of reading focus. No default value —
-every call site updates deliberately, and the existing tests are rewritten
-rather than silently passing.
+`ESM.nextAction` takes where the cursor is. No new state is stored anywhere —
+`EntryState` is untouched, because the entry row already knows everything the
+decision needs.
 
 ```swift
 static func nextAction(
     mode: OperatingMode,
     callEmpty: Bool,
     exchangeValid: Bool,
-    middleSent: Bool
+    cursorInCall: Bool
 ) -> Action
 ```
 
-| Mode | State | Enter sends | Marks sent | Cursor after |
-| --- | --- | --- | --- | --- |
-| Run | call empty | F1 — CQ | no | stays in Call |
-| Run | middle not sent | F2 — their report | yes | → Exchange |
-| Run | middle sent, exchange invalid | F2 — repeat | yes | → Exchange |
-| Run | middle sent, exchange valid | log + F3 — TU | cleared | → Call |
-| S&P | call empty | F1 — my call | no | stays in Call |
-| S&P | middle not sent | F1 — my call | yes | stays in Call |
-| S&P | middle sent, exchange invalid | F1 — call again | yes | stays in Call |
-| S&P | middle sent, exchange valid | log + F2 — my report | cleared | → Call |
+| Mode | State | Enter sends |
+| --- | --- | --- |
+| Run | call empty | F1 — CQ |
+| Run | cursor in the call field | F2 — his call and report |
+| Run | exchange not valid | F2 — his call and report |
+| Run | cursor elsewhere, exchange valid | log + F3 — TU |
+| S&P | call empty | F1 — my call |
+| S&P | cursor in the call field | F1 — my call |
+| S&P | exchange not valid | F1 — my call |
+| S&P | cursor elsewhere, exchange valid | log + F2 — my report |
 
-Both modes collapse to one shape: **log only when the middle message has
-already gone out and the exchange is valid; otherwise send the middle message**
-(or CQ, when Run has no call yet).
+Both modes collapse to one shape: **the call field sends, everywhere else logs
+once the exchange is valid.** Run's CQ outranks the rule, since an empty call
+field can neither log nor report to anybody.
 
-The prefill case now reads correctly. S&P with the county already typed: first
-Return sends your call and marks the contact; he answers; Return sends your
-report and logs. Two presses, and no press before the first one can log
-anything.
+"Cursor elsewhere" is deliberately every field except the call — not the
+exchange specifically — so parties that exchange a QSO number can log from the
+received-number field without a detour.
 
-### Cursor: little pistol, hard-coded
+### ESM never moves the cursor
 
-The Big Gun switch is deliberately not built. ESM moves the cursor in exactly
-one case — Run, after their report — because that is the only moment where the
-next thing the operator types is the other station's data. Everywhere else the
-cursor stays and Space moves it.
+Space moves it; ESM does not. This follows from the rule above: any automatic
+advance out of the call field would end the operator's ability to keep calling,
+which is the whole point. It also fixes a fault that predates this work — Run's
+CQ used to drop the cursor into the exchange field, so the answering station's
+callsign got typed into the wrong box.
 
-In S&P this is the manual's unchecked default: repeat Enters keep calling,
-which is the behaviour a hundred-watt station wants. If it ever wants to become
-a setting, this is the value the checkbox would toggle.
+The cost is one Space per run QSO, after his report goes out and before his
+exchange is typed. That press is the operator saying the contact happened,
+which is exactly the signal the log needs.
 
 ### The pending message is visible
 
@@ -208,8 +202,9 @@ Everything except the two AppKit-touching items is pure and testable.
 
 | Test | File |
 | --- | --- |
-| The full ESM table above — both modes × `middleSent` × `exchangeValid` × `callEmpty` | `Tests/Core/OperatingFeatureTests.swift` |
-| `esmMiddleSent` resets when the callsign is retyped, and after `clearForNextContact` | `Tests/Core/OperatingFeatureTests.swift` |
+| The full ESM table above — both modes × `cursorInCall` × `exchangeValid` × `callEmpty` | `Tests/Core/OperatingFeatureTests.swift` |
+| The N4RT case: a prefilled exchange plus the cursor in the call field keeps calling, three Returns running | `Tests/Core/OperatingFeatureTests.swift` |
+| No state of the row makes the call field log, in either mode | `Tests/Core/OperatingFeatureTests.swift` |
 | Action → message index mapping, so the highlight tracks the key | `Tests/Core/OperatingFeatureTests.swift` |
 | Space no longer separates; `/`, `,` and `, ` still do | `Tests/Core/ExchangeParserTests.swift` |
 | `"LIN AND"` now fails; the other three forms still expand | `Tests/Core/CountyLineExpanderTests.swift` |
@@ -228,8 +223,10 @@ caret behaviour under forced uppercase cannot be asserted from XCTest.
 
 One concern each, in dependency order.
 
-1. **Sequence-driven ESM** — `ESM.swift`, `EntryState.esmSentTo`, the cursor
-   rule in `MainView`, the pending highlight in `MessagesRow`, tests, README.
+1. **ESM follows the cursor** — `ESM.swift`, the cursor rule in `MainView`,
+   the pending highlight in `MessagesRow`, tests, README. Shipped first as a
+   sequence flag; corrected in a fifth commit once operating showed the flag
+   latched on the first call and never unlatched.
 2. **Space cycles, separators shrink** — `EntryBar`, `ExchangeParser`, tests,
    README keyboard table.
 3. **Uppercase entry fields** — the shared binding, `EntryBar`, `EditQSOSheet`.
@@ -239,14 +236,13 @@ One concern each, in dependency order.
 ## Docs
 
 README changes ship with the commit that causes them: the ESM feature bullet
-(sequence, not field contents; visible pending message), the `Space` row of the
+(the call field never logs; visible pending message), the `Space` row of the
 keyboard table (cycles and wraps; reports skipped), the county-line separator,
 the `Tab` row, and the test count.
 
 ## Verification to perform during implementation
 
-- Confirm F1–F8 fire regardless of which field has focus — the sequence design
-  assumes the operator can always re-send a message by its own key, which is
-  how the manual describes calling again under the Big Gun setting. If the key
-  monitor gates on focus, that is a defect to fix in commit 1.
+- Confirm F1–F8 fire regardless of which field has focus, so a message can
+  always be re-sent by its own key. **Verified**: the F-keys are handled by a
+  window-level `NSEvent` monitor that does not consult focus.
 - `xcodegen generate` before building if any test file is added.
