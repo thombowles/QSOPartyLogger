@@ -7,7 +7,7 @@ import Observation
 final class AppSettings {
     @MainActor static let shared = AppSettings()
 
-    private let defaults = UserDefaults.standard
+    private let defaults: UserDefaults
 
     var radioID: String {
         didSet { defaults.set(radioID, forKey: "radioID") }
@@ -190,7 +190,11 @@ final class AppSettings {
         }
     }
 
-    init() {
+    /// `defaults` is injected so a test can exercise settings against a scratch
+    /// suite. It defaults to `Preferences.store`, which is `.standard` in the
+    /// app — production behaviour is unchanged.
+    init(defaults: UserDefaults = Preferences.store) {
+        self.defaults = defaults
         radioID = defaults.string(forKey: "radioID") ?? "elecraft-k3"
         portPath = defaults.string(forKey: "portPath") ?? ""
         baudRate = defaults.object(forKey: "baudRate") as? Int ?? 38400

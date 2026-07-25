@@ -21,14 +21,17 @@ final class CloudMirrorTests: XCTestCase {
         } catch {
             throw XCTSkip("cannot mint security-scoped bookmark in this environment: \(error)")
         }
-        UserDefaults.standard.set(bookmark, forKey: "iCloudFolderBookmark")
-        UserDefaults.standard.set(true, forKey: "iCloudMirrorEnabled")
+        // Into the redirected test suite, never `.standard` — the teardown
+        // below removes these keys, which against the real domain would delete
+        // the operator's configured iCloud logs folder.
+        Preferences.store.set(bookmark, forKey: "iCloudFolderBookmark")
+        Preferences.store.set(true, forKey: "iCloudMirrorEnabled")
         CloudMirror._resetHeldAccessForTesting()
     }
 
     override func tearDownWithError() throws {
-        UserDefaults.standard.removeObject(forKey: "iCloudFolderBookmark")
-        UserDefaults.standard.removeObject(forKey: "iCloudMirrorEnabled")
+        Preferences.store.removeObject(forKey: "iCloudFolderBookmark")
+        Preferences.store.removeObject(forKey: "iCloudMirrorEnabled")
         CloudMirror._resetHeldAccessForTesting()
         try? FileManager.default.removeItem(at: folder)
     }

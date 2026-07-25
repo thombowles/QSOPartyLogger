@@ -20,12 +20,12 @@ enum CloudMirror {
     nonisolated(unsafe) private static var heldFolderURL: URL?
 
     nonisolated static var isConfigured: Bool {
-        UserDefaults.standard.data(forKey: bookmarkKey) != nil
+        Preferences.store.data(forKey: bookmarkKey) != nil
     }
 
     nonisolated static var isEnabled: Bool {
-        get { isConfigured && UserDefaults.standard.bool(forKey: enabledKey) }
-        set { UserDefaults.standard.set(newValue, forKey: enabledKey) }
+        get { isConfigured && Preferences.store.bool(forKey: enabledKey) }
+        set { Preferences.store.set(newValue, forKey: enabledKey) }
     }
 
     nonisolated static var folderDisplayPath: String? {
@@ -38,7 +38,7 @@ enum CloudMirror {
         defer { lock.unlock() }
         if let held = heldFolderURL { return held }
 
-        guard let bookmark = UserDefaults.standard.data(forKey: bookmarkKey) else { return nil }
+        guard let bookmark = Preferences.store.data(forKey: bookmarkKey) else { return nil }
         var stale = false
         guard let url = try? URL(
             resolvingBookmarkData: bookmark,
@@ -52,7 +52,7 @@ enum CloudMirror {
             includingResourceValuesForKeys: nil,
             relativeTo: nil
         ) {
-            UserDefaults.standard.set(fresh, forKey: bookmarkKey)
+            Preferences.store.set(fresh, forKey: bookmarkKey)
         }
         heldFolderURL = url
         return url
@@ -88,8 +88,8 @@ enum CloudMirror {
             heldFolderURL?.stopAccessingSecurityScopedResource()
             heldFolderURL = nil
             lock.unlock()
-            UserDefaults.standard.set(bookmark, forKey: bookmarkKey)
-            UserDefaults.standard.set(true, forKey: enabledKey)
+            Preferences.store.set(bookmark, forKey: bookmarkKey)
+            Preferences.store.set(true, forKey: enabledKey)
             _ = activeFolder()
             return true
         } catch {
