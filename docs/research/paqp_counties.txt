@@ -1,0 +1,25 @@
+                   PA QSO Party County Abbreviations
+ADA   Adams            ELK Elk                   MTR   Montour
+ALL   Allegheny        ERI   Erie                NHA   Northampton
+ARM   Armstrong        FAY Fayette               NUM   Northumberland
+BEA   Beaver           FUL Fulton                PER   Perry
+BED   Bedford          FOR Forest                PHI   Philadelphia
+BER   Berks            FRA Franklin              PIK   Pike
+BLA   Blair            GRE Greene                POT   Potter
+BRA   Bradford         HUN Huntingdon            SCH   Schuylkill
+BUX   Bucks            INN Indiana               SNY   Snyder
+BUT   Butler           JEF   Jefferson           SOM   Somerset
+CMB   Cambria          JUN Juniata               SUL   Sullivan
+CRN   Cameron          LAC Lackawanna            SUS   Susquehanna
+CAR   Carbon           LAN Lancaster             TIO   Tioga
+CEN   Centre           LAW Lawrence              UNI   Union
+CHE   Chester          LEB Lebanon               VEN   Venango
+CLA   Clarion          LEH Lehigh                WAR   Warren
+CLE   Clearfield       LUZ Luzerne               WAS   Washington
+CLI   Clinton          LYC Lycoming              WAY   Wayne
+COL   Columbia         MCK McKean                WES   Westmoreland
+CRA   Crawford         MER Mercer                WYO   Wyoming
+CUM   Cumberland       MIF Mifflin               YOR   York
+DAU   Dauphin          MOE Monroe
+DCO   Delaware         MGY Montgomery
+
