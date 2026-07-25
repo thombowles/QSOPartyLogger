@@ -237,6 +237,7 @@ struct ScoreSidebar: View {
         case .county: "Counties"
         case .state: "States"
         case .province: "Provinces"
+        case .section: "Sections"
         case .dx: "DX"
         }
     }

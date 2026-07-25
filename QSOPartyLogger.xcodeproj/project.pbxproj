@@ -70,6 +70,7 @@
 		A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC43C19DF629A758F1B4641 /* ContestLog.swift */; };
 		A4276D42A299E140C2F6C501 /* CountyLineExpanderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */; };
 		A632469108D3943D5C878CD7 /* SpottingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2215D1E38A85D6578624B1D /* SpottingTests.swift */; };
+		A9FC2E13D5AAAFEDD440F60F /* SectionMultiplierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B143A6F4360839CB52EFA48 /* SectionMultiplierTests.swift */; };
 		AC51CD88CDF9CBFA21C5C25F /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD300005CA528B8CA373476 /* Spot.swift */; };
 		AE2D036E6F83E9F0F1141634 /* QSOPartyLoggerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C2D0EBC8E5FC6F24E96A7A /* QSOPartyLoggerApp.swift */; };
 		AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A15E4511652305732261EE /* SetupSheet.swift */; };
@@ -169,6 +170,7 @@
 		8CE0321C50DA1A9D4AEB58D0 /* County.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = County.swift; sourceTree = "<group>"; };
 		91AE54A60C33CC8614CCB97C /* RadioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioController.swift; sourceTree = "<group>"; };
 		95D6B397C7B014ACA6232F8F /* CountyLineExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountyLineExpander.swift; sourceTree = "<group>"; };
+		9B143A6F4360839CB52EFA48 /* SectionMultiplierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionMultiplierTests.swift; sourceTree = "<group>"; };
 		9CDA62C0033DE71F4781CC89 /* PartyCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCatalog.swift; sourceTree = "<group>"; };
 		9EB6B05C56CE99064611E6B6 /* ESM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESM.swift; sourceTree = "<group>"; };
 		A212165D3C12989B35E8EB28 /* EntryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryState.swift; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 				6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */,
 				EBD1F2D81475C7AC090117A5 /* SalmonRunTests.swift */,
 				29960406C674052D5117926D /* ScoreEngineTests.swift */,
+				9B143A6F4360839CB52EFA48 /* SectionMultiplierTests.swift */,
 				14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */,
 				04053E0272A2391F55417D60 /* SpotFilterTests.swift */,
 				A2215D1E38A85D6578624B1D /* SpottingTests.swift */,
@@ -615,6 +618,7 @@
 				632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */,
 				36855A41F241A73EAF900267 /* SalmonRunTests.swift in Sources */,
 				4499E2CE096927357D50EABF /* ScoreEngineTests.swift in Sources */,
+				A9FC2E13D5AAAFEDD440F60F /* SectionMultiplierTests.swift in Sources */,
 				00C7117A6FF2B28F0F627443 /* SerialExchangeTests.swift in Sources */,
 				5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */,
 				D92268C1083B39CB08B32393 /* SpotFilterTests.swift in Sources */,

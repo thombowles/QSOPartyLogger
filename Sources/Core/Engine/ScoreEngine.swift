@@ -80,6 +80,15 @@ enum ScoreEngine {
         result.multiplierCap = rule.maxScoredMultipliers
         var dxCount = 0
 
+        // Multipliers the party hands over without them being worked (PAQP's
+        // EPA and WPA, which no station ever sends). Scoped once, since the
+        // sponsor adds them to the tally rather than to a QSO.
+        for granted in rule.granted where wantedClasses.contains(granted.multClass) {
+            result.multiplierKeys.insert(
+                MultKey(multClass: granted.multClass, value: granted.value, scope: "")
+            )
+        }
+
         for row in contestRows {
             guard firstIDs.contains(row.id) else {
                 result.dupeCount += 1
@@ -182,6 +191,18 @@ enum ScoreEngine {
                 out.append((.state, party.homeState))
             }
             return out
+        }
+        // A section party counts sections and nothing else alongside them, so
+        // this returns before the state/province tables are consulted: in PAQP
+        // "NTX" is a section and "TX" is not a token at all.
+        if party.usesSections {
+            if party.sections.contains(theirLoc) {
+                return [(.section, theirLoc)]
+            }
+            if theirLoc == MultClass.dxToken {
+                return [(.dx, MultClass.dxToken)]
+            }
+            return []
         }
         if let aliased = party.stateAliases[theirLoc] {
             return [(.state, aliased)]

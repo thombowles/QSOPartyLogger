@@ -9,10 +9,12 @@ Ordered by contest date, so the next contest to run is always the next one built
 and you have everything; nothing important lives only in a chat log.
 
 - **Next party:** the top unstruck row of the table below — currently
-  **Pennsylvania**, which starts from the sponsor's site with nothing captured.
-  Check first whether PAQP uses a **QSO number** in its exchange: if it does, it
-  is the second user of the serial-number gap below, which would settle that
-  design and argue for building it before the party.
+  **Pennsylvania**, whose research is already banked
+  ([`paqp_rules.md`](../research/paqp_rules.md)) and whose two engine
+  prerequisites are already built: serial numbers, and ARRL/RAC section
+  multipliers with the "granted multipliers" shape its rule 12.d needs. What
+  remains is the party itself — `gen_paqp.py` parsing the 67 counties and 85
+  sections out of the committed source text, the JSON, and its test file.
 - **Process per party:** the Article 22 definition of done at the bottom of this
   file. One party per commit (Article 9). Research doc *before* JSON (Article 15).
 - **To restart the build loop**, self-paced, one party per iteration:
@@ -88,7 +90,7 @@ next, and the count above must equal the number of unstruck rows below.
 | ~~Maine~~ | Sep 26 1200Z → Sep 27 1200Z ✅ sponsor confirms it runs | [`meqp_rules.md`](../research/meqp_rules.md) + [`meqp_rules_2026.txt`](../research/meqp_rules_2026.txt) + [`meqp_page.txt`](../research/meqp_page.txt) | **done** (`verified: partial`) |
 | ~~California~~ | Oct 3 1600Z → Oct 4 2200Z | [`cqp_rules.md`](../research/cqp_rules.md) + [`cqp_rules_2026.txt`](../research/cqp_rules_2026.txt) + [`cqp_multipliers.txt`](../research/cqp_multipliers.txt) | **done** |
 | ~~Arizona~~ | Oct 10 1500Z → Oct 11 0500Z | [`azqp_rules.md`](../research/azqp_rules.md) + [`azqp_rules_pdf.txt`](../research/azqp_rules_pdf.txt) + [`azqp_counties_page.txt`](../research/azqp_counties_page.txt) | **done** (`verified: partial`) |
-| **Pennsylvania** | Oct 10 1600Z → Oct 11 0400Z; Oct 11 1300–2200Z | — | not started |
+| **Pennsylvania** | Oct 10 1600Z → Oct 11 0400Z; Oct 11 1300–2200Z | [`paqp_rules.md`](../research/paqp_rules.md) + [`paqp_rules_2025.txt`](../research/paqp_rules_2025.txt) + [`paqp_counties.txt`](../research/paqp_counties.txt) + [`paqp_arrl_sections.txt`](../research/paqp_arrl_sections.txt) | **research banked**; both engine shapes it needed are built |
 | **South Dakota** | Oct 10 1800Z → Oct 11 1800Z | — | not started |
 | **New York** | Oct 17 1400Z → Oct 18 0200Z | — | not started |
 | **Illinois** | Oct 18 1700Z → Oct 19 0100Z | — | not started |

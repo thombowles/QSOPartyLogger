@@ -58,6 +58,19 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     }
     private let provincesRaw: [String]?
 
+    /// ARRL/RAC section tokens, for a party whose exchange carries a section
+    /// rather than a state or province (PAQP). **When present this list
+    /// supplants the state and province token sets entirely** — `NTX` becomes
+    /// valid and `TX` becomes invalid — because a party that counts sections
+    /// counts nothing else alongside them. `nil` everywhere else, which leaves
+    /// every existing party on states + provinces exactly as before.
+    var sections: Set<String> { sectionsRaw.map(Set.init) ?? [] }
+    private let sectionsRaw: [String]?
+
+    /// Whether this party's non-county exchange is a section rather than a
+    /// state/province.
+    var usesSections: Bool { !(sectionsRaw ?? []).isEmpty }
+
     /// Whether the exchange carries RST (MDC exchanges call + location only).
     var exchangeIncludesRST: Bool { exchangeIncludesRSTRaw ?? true }
     private let exchangeIncludesRSTRaw: Bool?
@@ -172,25 +185,46 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         var maxScoredMultipliers: Int? { maxScoredMultipliersRaw }
         private let maxScoredMultipliersRaw: Int?
 
+        /// Multipliers credited outright, because the party's own exchange makes
+        /// them unreachable by working anyone. PAQP 12.d: "EPA and WPA
+        /// multipliers are automatically added during the rescore process —
+        /// there is no need to enter them", Pennsylvania stations sending a
+        /// county so the two PA section tokens are never transmitted.
+        ///
+        /// Credited once, with no band or mode scope: the sponsor adds them to
+        /// the tally rather than to any particular QSO. Only counted if the
+        /// class is one this side actually counts.
+        var granted: [GrantedMultiplier] { grantedRaw ?? [] }
+        private let grantedRaw: [GrantedMultiplier]?
+
         init(
             classes: [MultClass],
             homeStateCountsViaCounty: Bool,
             countScope: CountScope,
             dxMultCap: Int? = nil,
-            maxScoredMultipliers: Int? = nil
+            maxScoredMultipliers: Int? = nil,
+            granted: [GrantedMultiplier]? = nil
         ) {
             self.classes = classes
             self.homeStateCountsViaCounty = homeStateCountsViaCounty
             self.countScope = countScope
             self.dxMultCapRaw = dxMultCap
             self.maxScoredMultipliersRaw = maxScoredMultipliers
+            self.grantedRaw = granted
         }
 
         private enum CodingKeys: String, CodingKey {
             case classes, homeStateCountsViaCounty, countScope
             case dxMultCapRaw = "dxMultCap"
             case maxScoredMultipliersRaw = "maxScoredMultipliers"
+            case grantedRaw = "grantedMultipliers"
         }
+    }
+
+    /// One multiplier a party hands over without it being worked.
+    struct GrantedMultiplier: Codable, Equatable, Sendable {
+        let multClass: MultClass
+        let value: String
     }
 
     enum CountScope: String, Codable, Sendable {
@@ -260,12 +294,18 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     }
 
     /// Valid non-county location tokens: states (less exclusions, plus alias
-    /// keys like DC), provinces, and the DX token when the party uses it.
+    /// keys like DC), provinces, and the DX token when the party uses it — or,
+    /// for a section party, its sections instead of all of that.
     var validOutStateTokens: Set<String> {
-        var tokens = MultClass.acceptedStateTokens
-            .subtracting(excludedStateTokens)
-            .union(provinces)
-        tokens.formUnion(stateAliases.keys)
+        var tokens: Set<String>
+        if usesSections {
+            tokens = sections
+        } else {
+            tokens = MultClass.acceptedStateTokens
+                .subtracting(excludedStateTokens)
+                .union(provinces)
+            tokens.formUnion(stateAliases.keys)
+        }
         if dxStyle == .token {
             tokens.insert(MultClass.dxToken)
         }
@@ -288,6 +328,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         guard !MultClass.acceptedStateTokens.contains(token) else { return false }
         guard !MultClass.canadianProvinces.contains(token) else { return false }
         guard !provinces.contains(token) else { return false }
+        guard !sections.contains(token) else { return false }
         guard token != MultClass.dxToken else { return false }
         return true
     }
@@ -317,6 +358,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case stateAliasesRaw = "stateAliases"
         case excludedStateTokensRaw = "excludedStateTokens"
         case provincesRaw = "provinces"
+        case sectionsRaw = "sections"
         case exchangeIncludesRSTRaw = "exchangeIncludesRST"
         case exchangeIncludesSerialRaw = "exchangeIncludesSerial"
         case outStateWorksHomeStationsOnlyRaw = "outStateWorksHomeStationsOnly"
