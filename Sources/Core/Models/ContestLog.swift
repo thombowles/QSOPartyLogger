@@ -203,6 +203,10 @@ struct ContestLog: Codable, Equatable, Sendable {
     var qsos: [QSO]
     /// Per-contest CW macros (Run + S&P sets).
     var messages: MessageSets
+    /// Run vs Search & Pounce. Persisted so reopening a log mid-contest
+    /// restores the mode the operator was actually in, rather than snapping
+    /// back to Run.
+    var operatingMode: OperatingMode
     /// Whether the operator has been through Contest Setup for this log —
     /// new documents prompt for setup immediately.
     var setupCompleted: Bool
@@ -217,12 +221,29 @@ struct ContestLog: Codable, Equatable, Sendable {
         (qsos.compactMap(\.serialSent).max() ?? 0) + 1
     }
 
+    /// The rule for a log with no stored mode: the in-state station is the
+    /// multiplier everyone is chasing, so it runs; the out-of-state station
+    /// is doing the chasing, so it searches. The single copy of that rule —
+    /// `derivedOperatingMode`, the memberwise init, and `init(from:)` all
+    /// need it, and unlike an instance computed property, a `static func`
+    /// takes no `self`, so it is callable from both inits before `self` is
+    /// fully initialized.
+    private static func deriveOperatingMode(from location: MyLocation) -> OperatingMode {
+        location.isInState ? .run : .searchPounce
+    }
+
+    /// The mode this log should start in when none is stored.
+    var derivedOperatingMode: OperatingMode {
+        Self.deriveOperatingMode(from: myLocation)
+    }
+
     init(
         partyID: String,
         station: StationProfile = StationProfile(),
         myLocation: MyLocation = .outOfState(location: ""),
         qsos: [QSO] = [],
         messages: MessageSets = .standard,
+        operatingMode: OperatingMode? = nil,
         setupCompleted: Bool = false
     ) {
         self.partyID = partyID
@@ -230,11 +251,12 @@ struct ContestLog: Codable, Equatable, Sendable {
         self.myLocation = myLocation
         self.qsos = qsos
         self.messages = messages
+        self.operatingMode = operatingMode ?? Self.deriveOperatingMode(from: myLocation)
         self.setupCompleted = setupCompleted
     }
 
     private enum CodingKeys: String, CodingKey {
-        case schemaVersion, partyID, station, myLocation, qsos, messages, setupCompleted
+        case schemaVersion, partyID, station, myLocation, qsos, messages, operatingMode, setupCompleted
     }
 
     init(from decoder: Decoder) throws {
@@ -246,6 +268,10 @@ struct ContestLog: Codable, Equatable, Sendable {
         qsos = try c.decode([QSO].self, forKey: .qsos)
         // Documents written before per-contest macros existed get the defaults.
         messages = try c.decodeIfPresent(MessageSets.self, forKey: .messages) ?? .standard
+        // Logs written before the mode was persisted derive one from location
+        // rather than defaulting an out-of-state operator into Run.
+        operatingMode = try c.decodeIfPresent(OperatingMode.self, forKey: .operatingMode)
+            ?? Self.deriveOperatingMode(from: myLocation)
         // Legacy docs in active use (callsign set) count as already set up.
         setupCompleted = try c.decodeIfPresent(Bool.self, forKey: .setupCompleted)
             ?? !station.callsign.isEmpty

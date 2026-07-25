@@ -93,4 +93,64 @@ final class ModelTests: XCTestCase {
         XCTAssertEqual(decoded.qsos.count, 1)
         XCTAssertEqual(decoded.qsos[0].theirLoc, "MRN")
     }
+
+    // MARK: Operating mode (2026-07-25)
+
+    /// The in-state station is the multiplier everyone is chasing, so it runs.
+    /// The out-of-state station is doing the chasing, so it searches.
+    func testOperatingModeDefaultsFromLocation() {
+        var inState = ContestLog(partyID: "ksqp")
+        inState.myLocation = .inState(counties: ["SED"])
+        XCTAssertEqual(inState.derivedOperatingMode, .run)
+
+        var outOfState = ContestLog(partyID: "ksqp")
+        outOfState.myLocation = .outOfState(location: "TX")
+        XCTAssertEqual(outOfState.derivedOperatingMode, .searchPounce)
+    }
+
+    /// A log written before the mode was persisted derives one rather than
+    /// falling back to Run for an operator who will never call CQ.
+    ///
+    /// The fixture is built by encoding a real log and deleting the key, not
+    /// hand-typed: `StationProfile` has eighteen fields and a hand-written
+    /// stand-in would drift from the model the first time one is added.
+    func testLogWithoutAStoredModeDerivesItFromLocation() throws {
+        var log = ContestLog(partyID: "ksqp")
+        log.myLocation = .outOfState(location: "TX")
+        log.operatingMode = .run
+        var object = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: log.encoded()) as? [String: Any]
+        )
+        XCTAssertNotNil(
+            object.removeValue(forKey: "operatingMode"),
+            "the key must exist before removing it, or this proves nothing"
+        )
+        let legacy = try JSONSerialization.data(withJSONObject: object)
+
+        let decoded = try ContestLog.decode(from: legacy)
+        XCTAssertEqual(decoded.operatingMode, .searchPounce,
+                       "out of state, so S&P — not the old unconditional Run")
+    }
+
+    /// A stored mode wins, so reopening a log mid-contest restores the mode
+    /// the operator was actually in.
+    func testStoredModeSurvivesARoundTrip() throws {
+        var log = ContestLog(partyID: "ksqp")
+        log.myLocation = .outOfState(location: "TX")
+        log.operatingMode = .run
+        let reloaded = try ContestLog.decode(from: log.encoded())
+        XCTAssertEqual(reloaded.operatingMode, .run,
+                       "an out-of-state op who moved to Run stays in Run")
+    }
+
+    func testNewLogTakesTheDerivedModeAtInit() {
+        XCTAssertEqual(
+            ContestLog(partyID: "ksqp", myLocation: .inState(counties: ["SED"])).operatingMode,
+            .run
+        )
+        XCTAssertEqual(
+            ContestLog(partyID: "ksqp", myLocation: .outOfState(location: "TX")).operatingMode,
+            .searchPounce
+        )
+    }
 }
