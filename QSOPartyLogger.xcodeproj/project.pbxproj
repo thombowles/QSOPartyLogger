@@ -20,6 +20,7 @@
 		0BDF37DDAEF9B4C38487684E /* DashboardChallengeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325FD0771FF575D22B87A0E4 /* DashboardChallengeSection.swift */; };
 		0C98121EB0A1EFAF11C23781 /* CaliforniaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC2AC0C0FD0301DA7FF0B /* CaliforniaQSOPartyTests.swift */; };
 		0DEA3D34B4EF4162D9FC21D9 /* SpotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65578A775A74FB103913C439 /* SpotStore.swift */; };
+		0E122728DD4F2CC234B5E788 /* BandPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1075185DDB395E700E24AA /* BandPlan.swift */; };
 		0F87B0740AE33C79FF082253 /* TennesseeQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */; };
 		12C6DC13CA936881DB5F134C /* ScoreSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA812496670164897C4A0447 /* ScoreSidebar.swift */; };
 		198B4CCE041337F320053AA5 /* ChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA71198926002262F846473 /* ChallengeTests.swift */; };
@@ -66,6 +67,7 @@
 		62EAF9049A238A064611FDEE /* BandMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF27EC7CAEAE6E71B85FD5E9 /* BandMap.swift */; };
 		632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */; };
 		654D25391076282E66654B42 /* ChallengeCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2811B1BB0F44782A35E7B4E /* ChallengeCalendar.swift */; };
+		65E5DFBFDD4BE2CD4549A134 /* BandMapLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C1B0D852691D58AD871CC /* BandMapLayout.swift */; };
 		65EA39B0B0AE20B7666BF414 /* SpotFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14042D5B6DD33CC2A46A276C /* SpotFilter.swift */; };
 		688F883E10245C3D0543C4F7 /* NewHampshireQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3451A53ECE9C61AD37E8E16C /* NewHampshireQSOPartyTests.swift */; };
 		698B227926FB01BE3C96A295 /* SerialTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87C8AFF4402D21D499C37A /* SerialTransport.swift */; };
@@ -87,6 +89,7 @@
 		9B4A72F7E86D2137C804DF43 /* RadioDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF00103007CE54AA22F0DCF9 /* RadioDriver.swift */; };
 		9D4334638CD4522FBB86EDD3 /* SeasonStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3B5E5F871969EC7046D82E /* SeasonStatsTests.swift */; };
 		9DA45D4E865C553118FE4CD1 /* ArchiveStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172209629CABE8C51196517E /* ArchiveStoreTests.swift */; };
+		9ECF4B187A1C5F95F20C0C4C /* BandMapLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256735340D033423D4396DBA /* BandMapLayoutTests.swift */; };
 		A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC43C19DF629A758F1B4641 /* ContestLog.swift */; };
 		A4276D42A299E140C2F6C501 /* CountyLineExpanderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */; };
 		A632469108D3943D5C878CD7 /* SpottingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2215D1E38A85D6578624B1D /* SpottingTests.swift */; };
@@ -124,6 +127,7 @@
 		E19F4F34905150E1AC1CB86F /* ContestArchiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC488FDCD9B9458276688D9 /* ContestArchiveTests.swift */; };
 		E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52BEC7154012161AF51ED0 /* CWSender.swift */; };
 		EA548A4E8ACEAACF1F2452DC /* MessagesRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D2158467D3A61358A399D7 /* MessagesRow.swift */; };
+		EC56BDD4BA4DD578EFC84597 /* BandPlanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F437B56480EB7F8E109AF5 /* BandPlanTests.swift */; };
 		ED5F3D5F6931292ADBF3E385 /* MorseCodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6989E84D7AABBEB0B1451F /* MorseCodeTests.swift */; };
 		EFF567B7FAA9F043F72398D2 /* ExchangeParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EE6994E490B94BF6B0B2F7 /* ExchangeParserTests.swift */; };
 		F067C727C4F4076315B221F1 /* RadioState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C366652F539E9935BD0A4502 /* RadioState.swift */; };
@@ -165,6 +169,7 @@
 		1EEDB395B8108B260AD62BD1 /* UppercasingBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UppercasingBinding.swift; sourceTree = "<group>"; };
 		245471C16B083B398057F4A0 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 		2559BE76C4D55ED692590BD6 /* MultClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultClass.swift; sourceTree = "<group>"; };
+		256735340D033423D4396DBA /* BandMapLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapLayoutTests.swift; sourceTree = "<group>"; };
 		273A1C77EBE557460270764F /* IowaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IowaQSOPartyTests.swift; sourceTree = "<group>"; };
 		28174F39D351A29CC80B77F2 /* QSO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSO.swift; sourceTree = "<group>"; };
 		2987B08876C368111B9A3EF9 /* ScoreSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreSnapshot.swift; sourceTree = "<group>"; };
@@ -172,6 +177,7 @@
 		29C2D0EBC8E5FC6F24E96A7A /* QSOPartyLoggerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSOPartyLoggerApp.swift; sourceTree = "<group>"; };
 		2B632B0C39468C5E56F37CB5 /* ScoreEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEngine.swift; sourceTree = "<group>"; };
 		2E700FD390A66A174C5681EA /* ContestHistorianTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestHistorianTests.swift; sourceTree = "<group>"; };
+		2F1075185DDB395E700E24AA /* BandPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandPlan.swift; sourceTree = "<group>"; };
 		306444778B57CE85A2F717FA /* ContestHistorian.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestHistorian.swift; sourceTree = "<group>"; };
 		311E0EE90DBA33F96AC71E69 /* BandMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapTests.swift; sourceTree = "<group>"; };
 		325FD0771FF575D22B87A0E4 /* DashboardChallengeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardChallengeSection.swift; sourceTree = "<group>"; };
@@ -211,6 +217,7 @@
 		797C5CEFFBDB939E217C6D60 /* OperatingFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatingFeatureTests.swift; sourceTree = "<group>"; };
 		7CC43C19DF629A758F1B4641 /* ContestLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestLog.swift; sourceTree = "<group>"; };
 		82A15E4511652305732261EE /* SetupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupSheet.swift; sourceTree = "<group>"; };
+		831C1B0D852691D58AD871CC /* BandMapLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapLayout.swift; sourceTree = "<group>"; };
 		8C7C1B661CE889D39EFE333E /* ContestArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestArchive.swift; sourceTree = "<group>"; };
 		8CE0321C50DA1A9D4AEB58D0 /* County.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = County.swift; sourceTree = "<group>"; };
 		91AE54A60C33CC8614CCB97C /* RadioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioController.swift; sourceTree = "<group>"; };
@@ -237,6 +244,7 @@
 		B49AC8D775ABBA76B9D43CD0 /* UpcomingContestsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingContestsTests.swift; sourceTree = "<group>"; };
 		B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyDefinition.swift; sourceTree = "<group>"; };
 		B598E336484B5D8CC5B9A2F9 /* ChallengeStanding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeStanding.swift; sourceTree = "<group>"; };
+		B8F437B56480EB7F8E109AF5 /* BandPlanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandPlanTests.swift; sourceTree = "<group>"; };
 		BE87C8AFF4402D21D499C37A /* SerialTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialTransport.swift; sourceTree = "<group>"; };
 		BF00103007CE54AA22F0DCF9 /* RadioDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioDriver.swift; sourceTree = "<group>"; };
 		C2811B1BB0F44782A35E7B4E /* ChallengeCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeCalendar.swift; sourceTree = "<group>"; };
@@ -337,6 +345,7 @@
 			isa = PBXGroup;
 			children = (
 				D9CC975E303DB2512FF84C86 /* Band.swift */,
+				2F1075185DDB395E700E24AA /* BandPlan.swift */,
 				7CC43C19DF629A758F1B4641 /* ContestLog.swift */,
 				009080AA1C81D0A7D94FA410 /* ModeClass.swift */,
 				FC2368B3BCDC5B105D90A366 /* MyLocation.swift */,
@@ -361,7 +370,9 @@
 				F208CF00E5CDC47B602583B8 /* AlabamaQSOPartyTests.swift */,
 				172209629CABE8C51196517E /* ArchiveStoreTests.swift */,
 				E77F88B8469172A628005C61 /* ArizonaQSOPartyTests.swift */,
+				256735340D033423D4396DBA /* BandMapLayoutTests.swift */,
 				311E0EE90DBA33F96AC71E69 /* BandMapTests.swift */,
+				B8F437B56480EB7F8E109AF5 /* BandPlanTests.swift */,
 				AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */,
 				715DC2AC0C0FD0301DA7FF0B /* CaliforniaQSOPartyTests.swift */,
 				5BA71198926002262F846473 /* ChallengeTests.swift */,
@@ -495,6 +506,7 @@
 		A4FC771F41DA0C324D3383D9 /* Spotting */ = {
 			isa = PBXGroup;
 			children = (
+				831C1B0D852691D58AD871CC /* BandMapLayout.swift */,
 				33BC43AE60F2FE1CE974FFF5 /* BandMapScale.swift */,
 				C4EE8FFEB31D798C6454C83D /* ClusterHistory.swift */,
 				A8F09518732D969C418274DB /* ClusterProtocol.swift */,
@@ -690,7 +702,9 @@
 				FBF94AC519A65928C7634BA7 /* AlabamaQSOPartyTests.swift in Sources */,
 				9DA45D4E865C553118FE4CD1 /* ArchiveStoreTests.swift in Sources */,
 				D651FE7522402EF4958CD65B /* ArizonaQSOPartyTests.swift in Sources */,
+				9ECF4B187A1C5F95F20C0C4C /* BandMapLayoutTests.swift in Sources */,
 				83FA7452B5CF0039189A7995 /* BandMapTests.swift in Sources */,
+				EC56BDD4BA4DD578EFC84597 /* BandPlanTests.swift in Sources */,
 				74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */,
 				0C98121EB0A1EFAF11C23781 /* CaliforniaQSOPartyTests.swift in Sources */,
 				198B4CCE041337F320053AA5 /* ChallengeTests.swift in Sources */,
@@ -748,7 +762,9 @@
 				2BE2738C1B1EF3016138FB64 /* ArchiveStore.swift in Sources */,
 				1E7FDC4C244F2B6F88CA2229 /* Band.swift in Sources */,
 				62EAF9049A238A064611FDEE /* BandMap.swift in Sources */,
+				65E5DFBFDD4BE2CD4549A134 /* BandMapLayout.swift in Sources */,
 				4B8F195A6C31CC6820EDE455 /* BandMapScale.swift in Sources */,
+				0E122728DD4F2CC234B5E788 /* BandPlan.swift in Sources */,
 				C6FA714C3CDFA18E1988D2E3 /* CWKeyer.swift in Sources */,
 				E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */,
 				07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */,
