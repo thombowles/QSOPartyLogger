@@ -160,12 +160,14 @@ A new radio consists of **exactly**:
 2. one `RadioDescriptor` appended to `RadioRegistry.all`,
 3. one test file in `Tests/Hardware/`.
 
-Nothing else changes. No model name, model number, or radio `id` may appear
-anywhere in `Sources/App/` or `Sources/UI/`. The registry descriptor is how the
+Nothing else changes. **No model name, model number, radio `id`, driver type, or
+model-specific constant may appear in executable code or in operator-visible
+text under `Sources/App/` or `Sources/UI/`.** The registry descriptor is how the
 UI learns what the radio can do — `connection` decides serial-port picker vs.
-host/port fields, `keyerLabel` supplies the picker's name for this radio's own
-keyer (Article 11), and `supportsDirectKeying` decides whether the keyer group
-is shown at all:
+host/port fields, `baudRates` and `defaultNetworkPort` fill those fields and
+their hints, `keyerLabel` supplies the picker's name for this radio's own keyer
+(Article 11), `supportsDirectKeying` decides whether the keyer group is shown at
+all, and `RadioRegistry.defaultRadioID` is the radio a fresh install starts on:
 
 ```swift
 if descriptor?.supportsDirectKeying ?? true {
@@ -177,11 +179,54 @@ If a radio cannot be added inside that boundary, **the protocol is wrong** —
 widen `RadioDriver` or `RadioDescriptor` in a separate commit (Article 4), then
 add the radio. Do not smuggle a special case into the app layer.
 
+**Two things are not violations, and the check must not flag them:**
+
+- **Comments.** Naming the radio an observation came from is provenance
+  (Article 1); deleting the model name deletes the evidence. What the rule
+  actually forbids is the app *behaving* differently per model, and a comment
+  cannot. A comment must still describe the general rule the code follows —
+  `RadioController`'s note that a rig in QSK drops its TX flag between CW
+  elements explains why the TX badge is held for the estimated send duration,
+  and that guard is unconditional, which is the part that matters. A comment
+  implying the app special-cases a model is wrong even when it greps clean.
+  (Keep such a note on its own line; the check reads only the start of a line,
+  so a model named in a trailing comment is flagged.)
+- **Frozen `UserDefaults` tokens.** `AppSettings.KeyerBackend`'s raw values are
+  storage, never display (Article 11). `case radioInternal = "K3 internal (KY)"`
+  is load-bearing: change that string and an existing operator's keyer choice
+  silently resets to `.direct` on next launch. It is pinned by
+  `KeyerBackendLabelTests.testStoredDefaultsStillDecode`.
+
 Enforcement check before committing — this must return nothing:
 
 ```bash
-grep -rniE "k3|kx3|kx2|flex|icom|yaesu|kenwood|ci-v" Sources/App Sources/UI
+grep -rniE "k3|kx3|kx2|flex|icom|yaesu|kenwood|elecraft|ci-v" Sources/App Sources/UI \
+  | grep -vE ':[0-9]+: *(//|\*)' \
+  | grep -vE ':[0-9]+: *case [A-Za-z]+ = "'
 ```
+
+**The grep is necessary, not sufficient.** It matches names, so it is blind to a
+model-specific *number*: `4992` (the Flex CAT port) and `38400` (the K3's baud)
+sat in `RadioBar`'s help text and baud fallback the whole time the unfiltered
+check was being run, and never once appeared in its output. Every such constant
+comes from the descriptor. Two tests do the half the grep cannot:
+`RadioRegistryTests` asserts the registry supplies the app layer's defaults, and
+`KeyerBackendLabelTests.testNoDisplayedLabelNamesAManufacturer` asserts that no
+string an operator can actually see names a manufacturer — which is also what
+stops the frozen-token exemption above from being used to smuggle in a label.
+
+> **Amended 2026-07-25.** The original check was `grep -rniE
+> "k3|kx3|kx2|flex|icom|yaesu|kenwood|ci-v" Sources/App Sources/UI` with no
+> filters and the instruction that it "must return nothing". It returned eight
+> hits, and could not return zero without breaking something: one of them,
+> `AppSettings.KeyerBackend`'s frozen raw value, is *required* by Article 11 and
+> resets an operator's keyer choice if changed. An article that cannot be
+> satisfied gets ignored, so the check was narrowed to what is actually
+> forbidden — and, in the same pass, found to be missing two real violations it
+> had no way to see (`4992`, `38400`). Three of the eight were genuine, and are
+> fixed in the commits that follow this one: a radio `id` literal and a driver
+> type reference in `AppSettings.init`, and a help string naming a vendor's
+> client software in `RadioBar`.
 
 ### Article 11 — Direct CW keying is the preferred path
 

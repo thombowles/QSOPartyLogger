@@ -473,8 +473,9 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 749 unit tests cover the scoring engine, county
-data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
+(`brew install xcodegen`). 755 unit tests cover the scoring engine, county
+data, exporters, K3 and FlexRadio protocols and the radio registry's
+app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, cluster
 history, the band map scale and its column stacking, the band plan and its

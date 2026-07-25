@@ -20,6 +20,16 @@ struct RadioBar: View {
         if case .network = descriptor?.connection { true } else { false }
     }
 
+    /// The selected radio's own CAT port, quoted from its descriptor — the
+    /// number itself never appears in this layer (Article 10).
+    private var portHelp: String {
+        if let port = descriptor?.defaultNetworkPort {
+            "TCP port — \(port) unless you've changed it"
+        } else {
+            "TCP port for the radio's CAT interface"
+        }
+    }
+
     var body: some View {
         FlowLayout(horizontalSpacing: 10, verticalSpacing: 6) {
             radioGroup
@@ -70,12 +80,12 @@ struct RadioBar: View {
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 140)
                     .disabled(radio.isConnected)
-                    .help("FlexRadio IP address or hostname (SmartSDR API)")
+                    .help("Radio IP address or hostname")
                 TextField("Port", value: $settings.tcpPort, format: .number.grouping(.never))
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 54)
                     .disabled(radio.isConnected)
-                    .help("TCP port — 4992 unless you've changed it")
+                    .help(portHelp)
             }
         }
     }
@@ -108,7 +118,7 @@ struct RadioBar: View {
     private var baudGroup: some View {
         captioned("Baud") {
             Picker("", selection: $settings.baudRate) {
-                ForEach(RadioRegistry.descriptor(id: settings.radioID)?.baudRates ?? [38400], id: \.self) { rate in
+                ForEach(descriptor?.baudRates ?? [], id: \.self) { rate in
                     Text(String(rate)).tag(rate)
                 }
             }

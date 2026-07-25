@@ -11,8 +11,8 @@ final class RadioController {
     private(set) var radioState: RadioState?
     private(set) var lastError: String?
     private(set) var nowSending: String?
-    /// Keyer speed the radio last reported (K3 front-panel knob) — observed
-    /// by the UI to sync `AppSettings.wpm`.
+    /// Keyer speed the radio last reported (its front-panel speed knob) —
+    /// observed by the UI to sync `AppSettings.wpm`.
     private(set) var radioReportedWPM: Int?
 
     var availablePorts: [SerialPortInfo] = []
@@ -25,9 +25,12 @@ final class RadioController {
     private var validationTask: Task<Void, Never>?
     private(set) var connectedDescriptor: RadioDescriptor?
 
-    /// The K3 drops its TX flag between CW elements (QSK), which made the TX
-    /// badge flicker during macros. Treat "app is sending a macro" as
-    /// transmitting for the whole estimated duration.
+    /// True while the radio reports TX, or while the app is sending a macro.
+    /// A rig in QSK drops its TX flag between CW elements — first seen on a K3,
+    /// but a property of QSK rather than of that model — which made the badge
+    /// flicker mid-macro. Holding it for the estimated send duration is
+    /// unconditional: no radio is special-cased here, and one that reports TX
+    /// continuously is unaffected, since it is transmitting either way.
     var isTransmitting: Bool {
         (radioState?.isTransmitting ?? false) || nowSending != nil
     }
@@ -159,8 +162,10 @@ final class RadioController {
 
         validationTask?.cancel()
         validationTask = Task { [weak self] in
-            // Serial: first poll at +0.2 s, repeating 0.5 s. Flex: status
-            // arrives right after the subscribe. 4 s is generous for both.
+            // Serial radios: first poll at +0.2 s, repeating 0.5 s. Network
+            // radios: status arrives right after the subscribe. 4 s is
+            // generous for both, and is app-layer policy — how long to wait
+            // before warning the operator — not a per-radio constant.
             let deadline = Date().addingTimeInterval(4)
             while Date() < deadline {
                 try? await Task.sleep(nanoseconds: 200_000_000)
@@ -207,7 +212,9 @@ final class RadioController {
 
     private func activeSender(_ settings: AppSettings) -> (any CWSender)? {
         switch settings.keyerBackend {
-        case .direct: directKeyer ?? internalKeyer  // network radios: CWX only
+        // A radio with no control lines has no direct keyer, so it falls back
+        // to its own keyer — `supportsDirectKeying` decided that at connect.
+        case .direct: directKeyer ?? internalKeyer
         case .radioInternal: internalKeyer
         }
     }
