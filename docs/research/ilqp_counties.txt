@@ -1,0 +1,46 @@
+A Adams        ADAM   I Iroquois     IROQ   O Ogle          OGLE
+  Alexander    ALEX
+                      J Jackson      JACK   P Peoria        PEOR
+B Bond         BOND     Jasper       JASP     Perry         PERR
+  Boone        BOON     Jefferson    JEFF     Piatt         PIAT
+  Brown        BROW     Jersey       JERS     Pike          PIKE
+  Bureau       BURO     JoDaviess    JODA
+                        Johnson      JOHN     Pope          POPE
+C Calhoun      CALH                           Pulaski       PULA
+  Carroll      CARR   K Kane         KANE     Putnam        PUTN
+  Cass         CASS     Kankakee     KANK
+  Champaign    CHAM     Kendall      KEND
+  Christian    CHRS     Knox         KNOX
+                                            R Randolph      RAND
+  Clark        CLRK   L Lake         LAKE     Richland      RICH
+  Clay         CLAY     LaSalle      LASA     Rock Island   ROCK
+  Clinton      CLNT     Lawrence     LAWR
+  Coles        COLE     Lee          LEE    S Saline        SALI
+  Cook         COOK     Livingston   LIVG     Sangamon      SANG
+  Crawford     CRAW     Logan        LOGN     Schuyler      SCHY
+  Cumberland   CUMB                           Scott         SCOT
+                      M Macon        MACN
+D DeKalb       DEKA     Macoupin     MCPN     Shelby        SHEL
+  DeWitt       DEWT     Madison      MADN     Stark         STAR
+  Douglas      DOUG     Marion       MARI     St. Clair     SCLA
+  DuPage       DUPG     Marshall     MSHL     Stephenson    STEP
+                        Mason        MASN
+E Edgar        EDGR     Massac       MSSC   T Tazewell      TAZW
+  Edwards      EDWA
+  Effingham    EFFG     McDonough    MCDN   U Union         UNIO
+                        McHenry      MCHE
+F Fayette      FAYE     McLean       MCLN   V Vermilion     VERM
+  Ford         FORD
+  Franklin     FRNK     Menard       MNRD   W Wabash        WABA
+  Fulton       FULT     Mercer       MRCR     Warren        WARR
+                                              Washington    WASH
+G Gallatin     GALL     Monroe       MNRO     Wayne         WAYN
+  Greene       GREE     Montgomery   MNTG
+  Grundy       GRUN     Morgan       MORG     White         WHIT
+                        Moultrie     MOUL     Whiteside     WTSD
+H Hamilton     HAML
+  Hancock      HANC      ILQP COUNTIES        Will          WILL
+  Hardin       HARD          CHART            Williamson    WMSN
+  Henderson    HNDR     N9CDX 10-18-2014      Winnebago     WBGO
+  Henry        HENR                           Woodford      WOOD
+

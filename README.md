@@ -147,10 +147,24 @@ Built for KE5CW. Bundled parties, all with official county data:
   and the only party permitting **60 m**. `verified: partial` — the rules are the
   2025 edition.
 
-The remaining 2026 parties are tracked in
-[`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md) in contest-date
-order — the season ends with Illinois on Oct 18. All banked research is now
-used; Illinois alone remains, and starts from its sponsor's site. Adding a party is governed by
+- **Illinois QSO Party** (Oct 18, 2026) — the season's last, and its shortest:
+  **8 hours, Sunday only**. 102 counties with mixed 3/4 codes (`LEE` alone is
+  three), and the rules name their own worst traps — `WHIT`/`WTSD`,
+  `MASN`/`MACN` — which became the spot checks. Phone 1 / CW and digital 2,
+  mults **once** with a **five-entity DX cap** that actually binds, county
+  corners worth **2/3/4 counties as 2/3/4 QSOs**, and both club calls (`W9AWE`,
+  `W9OAB`) paying 100 once each for 200 maximum. Eight bands — and unlike NYQP
+  the sponsor **excludes 60 m**, counting it among the WARC bands.
+  `verified: partial`, with two limitations recorded: ILQP's mode split is
+  two-way (CW and digital are one mode for dupes, which this app doesn't flag),
+  and FT4/FT8 earn no sponsor credit.
+
+**Every US state and regional QSO party running through 2026-12-31 is now
+bundled.** The season closed with Illinois on Oct 18; two independent calendars
+agree there is no state or provincial party in November or December.
+[`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md) keeps the
+per-party status, the late re-verification schedule for the `verified: partial`
+parties, and the remaining engine gaps. Adding a party is governed by
 [`docs/CONSTITUTION.md`](docs/CONSTITUTION.md).
 
 ## Features
@@ -372,7 +386,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 562 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 586 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -548,6 +562,18 @@ typed QSY commands, keyer timing, and keyer labelling.
   30/17/12 m, which no other bundled party does; and the sponsor's sample log
   contains 902 MHz, 1.2 GHz and 10 GHz QSOs, which `Band` cannot express, so
   microwave contacts cannot be logged.
+- ILQP: rules from the Western Illinois ARC's official PDF ("Announcing the 2025
+  Illinois QSO Party") plus the club's official county abbreviation PDF, both read
+  verbatim 2026-07-24. **A secondary source was wrong and it mattered:** a web
+  search reported that ILQP awards "one extra multiplier for every eight QSOs made
+  with the same Illinois county". No such rule is in the sponsor's rules, and
+  taking it on trust would have inflated every ILQP score —
+  [`gen_ilqp.py`](docs/research/gen_ilqp.py) asserts the phrase is still absent.
+  The generator also asserts the two abbreviation traps the rules name themselves,
+  `WHIT`/`WTSD` and `MASN`/`MACN`; that second pair settles a conflict between two
+  sponsor documents, since the site's FAQ says Macon is `MCON` while the county
+  list and the rules both say `MACN`. *Retrieval note:* the rules PDF is on page 2
+  of the site's file browser, which paginates in JavaScript with no link href.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows

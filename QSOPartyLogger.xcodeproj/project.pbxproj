@@ -23,6 +23,7 @@
 		1A483EEB4F78C27DB1D7EC6D /* MorseCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE5CDC2177C8552E1D6426F /* MorseCode.swift */; };
 		1DAC9D9495B4F17E4872E359 /* PartyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */; };
 		1E7FDC4C244F2B6F88CA2229 /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9CC975E303DB2512FF84C86 /* Band.swift */; };
+		209C0DA71AC3EE5A16488856 /* IllinoisQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8008DF74BE1374A98273ECC /* IllinoisQSOPartyTests.swift */; };
 		2AAD513E3761DAD300741555 /* TCPTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522A7E3D7B2C6485763680DB /* TCPTransport.swift */; };
 		2B2A1A856A6A6B9837A2EFB1 /* ElecraftK3Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6991F8344C755AD580ADCF48 /* ElecraftK3Driver.swift */; };
 		2FADB97332AC9D40282F9897 /* RadioBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771A2A2E70C2A91608F19549 /* RadioBar.swift */; };
@@ -201,6 +202,7 @@
 		C366652F539E9935BD0A4502 /* RadioState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioState.swift; sourceTree = "<group>"; };
 		C37D026EFBE941E3104530AE /* SerialPortEnumerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialPortEnumerator.swift; sourceTree = "<group>"; };
 		C4EE8FFEB31D798C6454C83D /* ClusterHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterHistory.swift; sourceTree = "<group>"; };
+		C8008DF74BE1374A98273ECC /* IllinoisQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllinoisQSOPartyTests.swift; sourceTree = "<group>"; };
 		CA4CFCAA1F93033279C3D7CF /* DupeCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DupeCheckerTests.swift; sourceTree = "<group>"; };
 		D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDocumentTests.swift; sourceTree = "<group>"; };
 		D6D2158467D3A61358A399D7 /* MessagesRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesRow.swift; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 				6BA4D636DCF7164283660F61 /* EntryCommandTests.swift */,
 				A3EE6994E490B94BF6B0B2F7 /* ExchangeParserTests.swift */,
 				F8EB12C03231B219068E0737 /* HawaiiQSOPartyTests.swift */,
+				C8008DF74BE1374A98273ECC /* IllinoisQSOPartyTests.swift */,
 				273A1C77EBE557460270764F /* IowaQSOPartyTests.swift */,
 				464472573FD7960DD5AC5B7B /* MaineQSOPartyTests.swift */,
 				5892A4EA032BA925FA66EA70 /* MarylandDCQSOPartyTests.swift */,
@@ -610,6 +613,7 @@
 				EFF567B7FAA9F043F72398D2 /* ExchangeParserTests.swift in Sources */,
 				60A60A674801918D78F66985 /* FlexRadioDriverTests.swift in Sources */,
 				2FB28E2BB6D45DB0A743B1FB /* HawaiiQSOPartyTests.swift in Sources */,
+				209C0DA71AC3EE5A16488856 /* IllinoisQSOPartyTests.swift in Sources */,
 				7C432C2A33658F48ADF44099 /* IowaQSOPartyTests.swift in Sources */,
 				097E888A0ACA42B4ED11F066 /* K3ProtocolTests.swift in Sources */,
 				56D6E0AE92BDE099E45F7C53 /* KeyerBackendLabelTests.swift in Sources */,

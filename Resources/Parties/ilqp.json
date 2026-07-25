@@ -1,0 +1,484 @@
+{
+  "schemaVersion": 1,
+  "id": "ilqp",
+  "name": "Illinois QSO Party",
+  "cabrilloContest": "IL-QSO-PARTY",
+  "homeState": "IL",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once",
+      "dxMultCap": 5
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "W9AWE",
+      "points": 100,
+      "scope": "once"
+    },
+    {
+      "type": "workStation",
+      "call": "W9OAB",
+      "points": 100,
+      "scope": "once"
+    }
+  ],
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "maxSimultaneousCounties": 4,
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-10-18T17:00:00Z",
+      "end": "2026-10-19T01:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ADAM",
+      "name": "Adams"
+    },
+    {
+      "abbr": "ALEX",
+      "name": "Alexander"
+    },
+    {
+      "abbr": "BOND",
+      "name": "Bond"
+    },
+    {
+      "abbr": "BOON",
+      "name": "Boone"
+    },
+    {
+      "abbr": "BROW",
+      "name": "Brown"
+    },
+    {
+      "abbr": "BURO",
+      "name": "Bureau"
+    },
+    {
+      "abbr": "WMSN",
+      "name": "CHART            Williamson"
+    },
+    {
+      "abbr": "CALH",
+      "name": "Calhoun"
+    },
+    {
+      "abbr": "CARR",
+      "name": "Carroll"
+    },
+    {
+      "abbr": "CASS",
+      "name": "Cass"
+    },
+    {
+      "abbr": "CHAM",
+      "name": "Champaign"
+    },
+    {
+      "abbr": "CHRS",
+      "name": "Christian"
+    },
+    {
+      "abbr": "CLRK",
+      "name": "Clark"
+    },
+    {
+      "abbr": "CLAY",
+      "name": "Clay"
+    },
+    {
+      "abbr": "CLNT",
+      "name": "Clinton"
+    },
+    {
+      "abbr": "COLE",
+      "name": "Coles"
+    },
+    {
+      "abbr": "COOK",
+      "name": "Cook"
+    },
+    {
+      "abbr": "CRAW",
+      "name": "Crawford"
+    },
+    {
+      "abbr": "CUMB",
+      "name": "Cumberland"
+    },
+    {
+      "abbr": "DEKA",
+      "name": "DeKalb"
+    },
+    {
+      "abbr": "DEWT",
+      "name": "DeWitt"
+    },
+    {
+      "abbr": "DOUG",
+      "name": "Douglas"
+    },
+    {
+      "abbr": "DUPG",
+      "name": "DuPage"
+    },
+    {
+      "abbr": "EDGR",
+      "name": "Edgar"
+    },
+    {
+      "abbr": "EDWA",
+      "name": "Edwards"
+    },
+    {
+      "abbr": "EFFG",
+      "name": "Effingham"
+    },
+    {
+      "abbr": "FAYE",
+      "name": "Fayette"
+    },
+    {
+      "abbr": "FORD",
+      "name": "Ford"
+    },
+    {
+      "abbr": "FRNK",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "FULT",
+      "name": "Fulton"
+    },
+    {
+      "abbr": "GALL",
+      "name": "Gallatin"
+    },
+    {
+      "abbr": "GREE",
+      "name": "Greene"
+    },
+    {
+      "abbr": "GRUN",
+      "name": "Grundy"
+    },
+    {
+      "abbr": "HAML",
+      "name": "Hamilton"
+    },
+    {
+      "abbr": "HANC",
+      "name": "Hancock"
+    },
+    {
+      "abbr": "HARD",
+      "name": "Hardin"
+    },
+    {
+      "abbr": "HNDR",
+      "name": "Henderson"
+    },
+    {
+      "abbr": "HENR",
+      "name": "Henry"
+    },
+    {
+      "abbr": "WILL",
+      "name": "ILQP COUNTIES        Will"
+    },
+    {
+      "abbr": "IROQ",
+      "name": "Iroquois"
+    },
+    {
+      "abbr": "JACK",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JASP",
+      "name": "Jasper"
+    },
+    {
+      "abbr": "JEFF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JERS",
+      "name": "Jersey"
+    },
+    {
+      "abbr": "JODA",
+      "name": "JoDaviess"
+    },
+    {
+      "abbr": "JOHN",
+      "name": "Johnson"
+    },
+    {
+      "abbr": "KANE",
+      "name": "Kane"
+    },
+    {
+      "abbr": "KANK",
+      "name": "Kankakee"
+    },
+    {
+      "abbr": "KEND",
+      "name": "Kendall"
+    },
+    {
+      "abbr": "KNOX",
+      "name": "Knox"
+    },
+    {
+      "abbr": "LASA",
+      "name": "LaSalle"
+    },
+    {
+      "abbr": "LAKE",
+      "name": "Lake"
+    },
+    {
+      "abbr": "LAWR",
+      "name": "Lawrence"
+    },
+    {
+      "abbr": "LEE",
+      "name": "Lee"
+    },
+    {
+      "abbr": "LIVG",
+      "name": "Livingston"
+    },
+    {
+      "abbr": "LOGN",
+      "name": "Logan"
+    },
+    {
+      "abbr": "MACN",
+      "name": "Macon"
+    },
+    {
+      "abbr": "MCPN",
+      "name": "Macoupin"
+    },
+    {
+      "abbr": "MADN",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MARI",
+      "name": "Marion"
+    },
+    {
+      "abbr": "MSHL",
+      "name": "Marshall"
+    },
+    {
+      "abbr": "MASN",
+      "name": "Mason"
+    },
+    {
+      "abbr": "MSSC",
+      "name": "Massac"
+    },
+    {
+      "abbr": "MCDN",
+      "name": "McDonough"
+    },
+    {
+      "abbr": "MCHE",
+      "name": "McHenry"
+    },
+    {
+      "abbr": "MCLN",
+      "name": "McLean"
+    },
+    {
+      "abbr": "MNRD",
+      "name": "Menard"
+    },
+    {
+      "abbr": "MRCR",
+      "name": "Mercer"
+    },
+    {
+      "abbr": "MNRO",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MNTG",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "MORG",
+      "name": "Morgan"
+    },
+    {
+      "abbr": "MOUL",
+      "name": "Moultrie"
+    },
+    {
+      "abbr": "OGLE",
+      "name": "Ogle"
+    },
+    {
+      "abbr": "PEOR",
+      "name": "Peoria"
+    },
+    {
+      "abbr": "PERR",
+      "name": "Perry"
+    },
+    {
+      "abbr": "PIAT",
+      "name": "Piatt"
+    },
+    {
+      "abbr": "PIKE",
+      "name": "Pike"
+    },
+    {
+      "abbr": "POPE",
+      "name": "Pope"
+    },
+    {
+      "abbr": "PULA",
+      "name": "Pulaski"
+    },
+    {
+      "abbr": "PUTN",
+      "name": "Putnam"
+    },
+    {
+      "abbr": "RAND",
+      "name": "Randolph"
+    },
+    {
+      "abbr": "RICH",
+      "name": "Richland"
+    },
+    {
+      "abbr": "ROCK",
+      "name": "Rock Island"
+    },
+    {
+      "abbr": "SALI",
+      "name": "Saline"
+    },
+    {
+      "abbr": "SANG",
+      "name": "Sangamon"
+    },
+    {
+      "abbr": "SCHY",
+      "name": "Schuyler"
+    },
+    {
+      "abbr": "SCOT",
+      "name": "Scott"
+    },
+    {
+      "abbr": "SHEL",
+      "name": "Shelby"
+    },
+    {
+      "abbr": "SCLA",
+      "name": "St. Clair"
+    },
+    {
+      "abbr": "STAR",
+      "name": "Stark"
+    },
+    {
+      "abbr": "STEP",
+      "name": "Stephenson"
+    },
+    {
+      "abbr": "TAZW",
+      "name": "Tazewell"
+    },
+    {
+      "abbr": "UNIO",
+      "name": "Union"
+    },
+    {
+      "abbr": "VERM",
+      "name": "Vermilion"
+    },
+    {
+      "abbr": "WABA",
+      "name": "Wabash"
+    },
+    {
+      "abbr": "WARR",
+      "name": "Warren"
+    },
+    {
+      "abbr": "WASH",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAYN",
+      "name": "Wayne"
+    },
+    {
+      "abbr": "WHIT",
+      "name": "White"
+    },
+    {
+      "abbr": "WTSD",
+      "name": "Whiteside"
+    },
+    {
+      "abbr": "WBGO",
+      "name": "Winnebago"
+    },
+    {
+      "abbr": "WOOD",
+      "name": "Woodford"
+    }
+  ],
+  "notes": "verified: partial — rules from the Western Illinois Amateur Radio Club's official PDF ('Announcing the 2025 Illinois QSO Party') and the club's official county abbreviation PDF, both read verbatim 2026-07-24, plus the ILQP page for the date formula. PROVENANCE NOTE WORTH KEEPING: a web search reported that ILQP awards 'one extra multiplier for every eight QSOs made with the same Illinois county'. NO SUCH RULE IS IN THE SPONSOR'S RULES - the multiplier paragraph is a plain sum with a DX cap - and taking it on trust would have inflated every ILQP score. The generator asserts the phrase is still absent. Retrieval note: the rules PDF sits on page 2 of the site's file browser, which paginates in JavaScript with no link href, so a plain fetch of w9awe.org/ilqp/ never reveals it. Phone 1 point, CW and digital 2. IL stations count IL counties + US states + VE provinces + DXCC countries with a cap of FIVE DX entities, all counted ONCE; non-IL stations count the 102 IL counties, once each. 'Canada, KH6 and KL7 do not count as DX entities', which is how this app already treats them - provinces and states respectively. Eight bands, 160 m through 2 m; note the sponsor counts 60 m among the 'WARC bands' it excludes, which is loose but unambiguous, and the opposite of NYQP, which includes 60 m by excluding only three bands. County corners count 2, 3 or 4 counties as 2, 3 or 4 QSOs, stated numerically, so the county-line limit is four; county lines formed by waterways may not be activated. Both club callsigns, W9AWE and W9OAB, pay a 100-point bonus once each for a maximum of 200. KNOWN LIMITATION 1 - DUPES ACROSS CW AND DIGITAL ARE NOT FLAGGED. The sponsor's mode split is TWO-WAY: 'Stations may be worked once per band and mode (phone and CW/digital)'. This app keys dupes on three mode classes, so working one station on CW and again on RTTY on the same band shows as two valid QSOs when ILQP counts the second as a duplicate. Multipliers are unaffected - they count once regardless - and the sponsor's stated penalty is loss of the QSO with no further deduction, but the extra QSO points will not survive adjudication. KNOWN LIMITATION 2 - 'FT4 and FT8 contacts will receive no contact credit. Other digital modes are encouraged.' That distinction is below the granularity of this app's mode classes, so an FT8 QSO logs and scores here and earns nothing from the sponsor. No final-score multiplier; power classes and the new Unlimited class decide awards only, and the high/low boundary moved to 100 W for 2025 (it was 200 W). Cabrillo CONTEST value IL-QSO-PARTY per WA7BNM; the sponsor prefers Cabrillo but explicitly accepts an Excel or hand-written paper log, and prints no header token. Counties are 102 with MIXED 3- AND 4-CHARACTER abbreviations - the rules say 'Each Illinois county has an established 4 letter abbreviation (Lee County excepted)', so LEE is the only 3-letter code. The rules name their own worst traps and the generator asserts both pairs: 'White (WHIT) and Whiteside (WTSD)' and 'Mason (MASN) and Macon (MACN)'. That second pair also settles a conflict between two sponsor documents - the website FAQ says Macon should be MCON, while the county list and the rules both say MACN, so MACN ships. OPEN QUESTIONS (why this is partial): (1) The published rules are the 2025 edition and the site's banner still reads 'Next Date for the ILQP: October 19, 2025'. The DATE is not in doubt - the sponsor's page prints the formula 'Held Annually on Sunday the third full weekend of October', 18 October 2026 is that Sunday, and the same formula reproduces the 2025 date the rules print - but no 2026 rule revision has been posted, and in particular the bonus stations are marked 'NEW FOR 2025' and have run only once. Re-check w9awe.org/ilqp before 18 October 2026 (the rules PDF is on page 2 of the file browser) and re-run gen_ilqp.py, whose quoted-sentence assertions fail loudly if the text moved. (2) Whether Illinois itself counts as a state multiplier for IL entrants is not stated, and there is no in-state maximum to settle it by arithmetic; shipped as NOT counting, the same call as NHQP, MEQP and SDQP. (3) No rule states whether stations outside Illinois may work only Illinois stations; out-of-state multipliers are IL counties only, and the restriction ships ON as for six other parties, so a stray non-IL contact is visibly flagged NO CREDIT. Confirm all three with the sponsor (n9jf@arrl.net) before submitting a log."
+}

@@ -8,9 +8,10 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **Next party:** the top unstruck row of the table below — **Illinois**, the
-  last party of the 2026 season, which starts from its sponsor's site with
-  nothing captured.
+- **No parties remain.** Every US state and regional QSO party running through
+  2026-12-31 is bundled. What is left is not new parties but **maintenance**: the
+  late re-verification pass on the `verified: partial` parties (below), the
+  standing debts under *Also outstanding*, and the remaining engine gaps.
 - **Process per party:** the Article 22 definition of done at the bottom of this
   file. One party per commit (Article 9). Research doc *before* JSON (Article 15).
 - **To restart the build loop**, self-paced, one party per iteration:
@@ -34,6 +35,10 @@ and you have everything; nothing important lives only in a chat log.
   parties each want a re-check shortly before they run — see *Late re-verification
   pass* under Deferred engine gaps. Nearest are Hawaii (Aug 22, and its window
   question needs an email) and Tennessee (Sep 6, rules still the 2025 edition).
+  **Five parties now ship against a stale-year rules document** — TnQP, IAQP, AZQP,
+  PAQP, SDQP's sub-site hazard, NYQP and ILQP — and two carry a bonus-station
+  question: PAQP's 2026 station is unannounced (worth 200 points per QSO), and
+  ILQP's two club calls are marked "NEW FOR 2025" and have run only once.
 
 **The 2026 state QSO party season ends Sunday 18 October 2026.** Two independent
 calendars agree there is no state or provincial QSO party in November or
@@ -65,10 +70,10 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**1 remaining** of the 16 in scope (15 built so far: MDC, HQP, OhQP, TnQP, COQP,
-NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP); 18 parties
-bundled in total, those 15 plus the pre-existing ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
-next, and the count above must equal the number of unstruck rows below.
+**0 remaining.** All 16 in scope are built (MDC, HQP, OhQP, TnQP, COQP, NJQP,
+IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP); **19 parties
+bundled** in total, those 16 plus the pre-existing ALQP, KSQP and TQP. Every row
+below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
@@ -89,7 +94,7 @@ next, and the count above must equal the number of unstruck rows below.
 | ~~Pennsylvania~~ | Oct 10 1600Z → Oct 11 0400Z; Oct 11 1300–2200Z | [`paqp_rules.md`](../research/paqp_rules.md) + [`paqp_counties.txt`](../research/paqp_counties.txt) + [`paqp_arrl_sections.txt`](../research/paqp_arrl_sections.txt) | **done** (`verified: partial`) |
 | ~~South Dakota~~ | Oct 10 1800Z → Oct 11 1800Z | [`sdqp_rules.md`](../research/sdqp_rules.md) + [`sdqp_rules_page.txt`](../research/sdqp_rules_page.txt) + [`sdqp_counties.txt`](../research/sdqp_counties.txt) | **done** (`verified: partial`) |
 | ~~New York~~ | Oct 17 1400Z → Oct 18 0200Z | [`nyqp_rules.md`](../research/nyqp_rules.md) + [`nyqp_rules_2025.txt`](../research/nyqp_rules_2025.txt) + [`nyqp_counties.csv`](../research/nyqp_counties.csv) | **done** (`verified: partial`) |
-| **Illinois** | Oct 18 1700Z → Oct 19 0100Z | — | not started |
+| ~~Illinois~~ | Oct 18 1700Z → Oct 19 0100Z | [`ilqp_rules.md`](../research/ilqp_rules.md) + [`ilqp_rules_2025.txt`](../research/ilqp_rules_2025.txt) + [`ilqp_counties.txt`](../research/ilqp_counties.txt) | **done** (`verified: partial`) |
 
 ## Open questions carried by this worklist
 
@@ -121,10 +126,10 @@ next, and the count above must equal the number of unstruck rows below.
    Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
    **Email `info@hawaiiqsoparty.org` to settle it.** See
    [`hqp_rules.md` §2](../research/hqp_rules.md).
-4. **All banked research is used up.** Illinois, the last one, starts from its
-   sponsor's site with nothing captured. *(SDQP and NYQP are the evidence that the
-   schema has settled: after four consecutive parties that each needed an engine
-   change, both were data only.)*
+4. ~~**All banked research is used up.**~~ **Moot — nothing is left to research.**
+   *(SDQP, NYQP and ILQP are the evidence that the schema settled: after four
+   consecutive parties that each needed an engine change, the last three were data
+   only.)*
 5. **Banked research has mislabelled `homeStateCountsViaCounty` twice.**
    *(CQP is the counter-example worth knowing: its sponsor states the rule
    outright — "The first valid CA QSO logged with 4-letter county abbreviation
@@ -170,6 +175,24 @@ its own commit (Article 4).
   *Still worth checking when Pennsylvania is built: if PAQP also exchanges a QSO
   number, it now just sets the flag.*
 
+- **Mode-class grouping for dupes.** ILQP's mode split is **two-way** — "Stations
+  may be worked once per band and mode (**phone and CW/digital**)" — while
+  `DupeChecker` keys on all three `ModeClass` cases. So a station worked on CW and
+  again on RTTY on one band is not flagged, and the sponsor counts the second as a
+  duplicate. Scoring is otherwise unaffected: ILQP multipliers count once
+  regardless, and the sponsor's stated penalty is loss of the QSO with no further
+  deduction. Sketch: a party-level `dupeModeGroups: [["cw", "digital"]]` consulted
+  by `DupeChecker` (and by nothing else, since no party groups modes for
+  multiplier purposes). **One user so far**, so it wants a second before the shape
+  is fixed — the repo's own bar. Recorded in `ilqp.json`'s notes as KNOWN
+  LIMITATION 1 so an operator sees it.
+- **FT4/FT8 cannot be excluded while other digital modes are allowed.** ILQP:
+  "FT4 and FT8 contacts will receive no contact credit. Other digital modes are
+  encouraged." That is below the granularity of `ModeClass`, which has one
+  `.digital` case. `QSO.rawMode` carries the concrete mode, so a fix is possible —
+  a party-level list of excluded raw modes — but one party wants it and the harm
+  is small (an FT8 QSO scores locally and earns nothing from the sponsor).
+  Recorded in `ilqp.json` as KNOWN LIMITATION 2.
 - **Self-activation multipliers.** TnQP: "Tennessee mobiles and rovers may claim
   one multiplier for any Tennessee county from which they complete at least 10
   QSOs if they do not earn a multiplier for that county otherwise." The matching
