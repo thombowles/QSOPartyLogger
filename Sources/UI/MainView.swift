@@ -282,6 +282,12 @@ struct MainView: View {
         }
         .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
         .onChange(of: document.log.myLocation.sentExchanges) { offerReSpotOnCountyChange() }
+        // Setup is where a rover changes county, so the offer waits for it to
+        // close rather than stacking a sheet on top of it.
+        .onChange(of: showSetup) { _, isOpen in
+            guard !isOpen else { return }
+            offerReSpotOnCountyChange()
+        }
         // The QSO number needs no re-seeding here: `EntryState.serialSent`
         // follows the log until the operator types over it, so a document that
         // is still `ksqp` when the entry appears picks up the real party's
@@ -850,12 +856,25 @@ struct MainView: View {
     /// re-spot on every county change, and the app knows the exact moment it
     /// happens — but it still only opens the sheet, never posts by itself.
     private func offerReSpotOnCountyChange() {
+        // Only an in-state operator has a county to re-spot from — an
+        // out-of-state entrant's "location" is a state, which is not a token
+        // the hub's form would accept.
+        //
+        // Never while Contest Setup is open. That sheet is where the county
+        // gets edited, so this fires mid-edit, and a second sheet over the
+        // first is either dropped or lands on a half-finished change. The
+        // county is deliberately *not* recorded in that case, so the change is
+        // still pending when Setup closes and the offer follows then.
+        guard !showSetup else { return }
         guard canSelfSpot, settings.hubSpotsEnabled,
+              document.log.myLocation.isInState,
               let county = document.log.myLocation.sentExchanges.first,
               !county.isEmpty,
               let previous = lastSelfSpotCounty, previous != county
         else {
-            lastSelfSpotCounty = document.log.myLocation.sentExchanges.first
+            lastSelfSpotCounty = document.log.myLocation.isInState
+                ? document.log.myLocation.sentExchanges.first
+                : nil
             return
         }
         lastSelfSpotCounty = county
