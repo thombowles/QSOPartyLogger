@@ -158,32 +158,19 @@ next, and the count above must equal the number of unstruck rows below.
 Recorded when a party needed something the schema does not model. Each would be
 its own commit (Article 4).
 
-- **⚠️ SERIAL NUMBERS — the first gap that actually blocks a submission.** CQP's
-  exchange is "**QSO number** and 4-letter county abbreviation" (or QSO number and
-  state/province/DX) with **no RST at all**, and `QSO` has `rstSent`/`rstRcvd` and
-  no serial field. Scoring is unaffected — points and multipliers never depend on
-  the serial — but `CabrilloExporter.qsoLine` writes `rstSent`/`rstRcvd` into the
-  exchange slots, so a CQP log exports with the QSO-number element **empty**, and
-  CQP accepts Cabrillo only. CQP ships with a `KNOWN LIMITATION` note under
-  [Article 17](../CONSTITUTION.md#article-17--mapping-rules-to-the-schema)
-  ("a note in `notes` if you ship before the field exists"), but this one should
-  be built rather than carried.
-
-  Sketch, all additive: `PartyDefinition.exchangeIncludesSerial` (default false);
-  `QSO.serialSent`/`serialRcvd` as optionals so existing logs decode unchanged;
-  `EntryBar` swaps the RST pair for a sent serial (auto, next in sequence) and a
-  typed received serial; the Cabrillo exchange slots take the serial where the
-  party uses one; ADIF gets `stx`/`srx` rather than `rst_sent`/`rst_rcvd`.
-
-  **Answer this before writing any of it:** what serial does a *county-line*
-  contact carry? CQP sends `DELN/SISK/HUMB` as **one exchange**, so it is one
-  QSO number — but this app expands a county line into one row per county
-  (KSQP rule 11), and those rows must not each burn a serial. The sponsor's own
-  guide is [`cqp_countyline_logging.txt`](../research/cqp_countyline_logging.txt).
-  Rows already share a `groupID`, which is the natural hook.
-
-  Likely second user: **Pennsylvania** (Oct 10) is believed to use a QSO number
-  too — worth checking first, since two users would settle the design.
+- ~~**SERIAL NUMBERS.**~~ **Done 2026-07-24.** `QSO.serialSent`/`serialRcvd`,
+  `PartyDefinition.exchangeIncludesSerial`, a QSO-number pair in the entry bar
+  and the edit sheet, the numbers in Cabrillo's exchange columns and ADIF's
+  `STX`/`SRX`, and a `{SERIAL}` CW macro. CQP carries it now, in its own commit
+  (Article 9). The county-line question the sketch said to answer first is
+  settled and tested: CQP sends its counties "in a single exchange", so **one
+  contact carries one number** and every row of a county-line contact shares it —
+  which fell out of `CountyLineExpander`'s existing shared `groupID` rather than
+  needing new machinery. The next number is `max(serialSent) + 1`, not the row
+  count, and deleting a QSO never renumbers the rest.
+  Design: [`2026-07-24-serial-number-exchanges-design.md`](../superpowers/specs/2026-07-24-serial-number-exchanges-design.md).
+  *Still worth checking when Pennsylvania is built: if PAQP also exchanges a QSO
+  number, it now just sets the flag.*
 
 - **Self-activation multipliers.** TnQP: "Tennessee mobiles and rovers may claim
   one multiplier for any Tennessee county from which they complete at least 10

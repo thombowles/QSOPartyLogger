@@ -114,9 +114,50 @@ final class CaliforniaQSOPartyTests: XCTestCase {
     }
 
     /// "California stations send QSO number and 4-letter county abbreviation" —
-    /// no RST anywhere in the exchange, the second party after MDC.
-    func testExchangeCarriesNoRST() {
+    /// no RST anywhere in the exchange, the second party after MDC, and the
+    /// first to send a QSO number instead.
+    func testExchangeIsAQSONumberAndNoRST() {
         XCTAssertFalse(cqp.exchangeIncludesRST)
+        XCTAssertTrue(cqp.exchangeIncludesSerial,
+                      "'QSO number = contact serial number starting with 1'")
+    }
+
+    /// The numbers reach the Cabrillo exchange columns, which is the whole point
+    /// — CQP accepts Cabrillo only, and the log checker reads that element.
+    func testCabrilloCarriesTheQSONumbers() {
+        var q = qso(call: "W6XYZ", their: "SCLA")
+        q.serialSent = 12
+        q.serialRcvd = 345
+        let line = CabrilloExporter.qsoLine(q, myCall: "KE5CW")
+        let fields = line.split(separator: " ").map(String.init)
+        XCTAssertTrue(fields.contains("12"), line)
+        XCTAssertTrue(fields.contains("345"), line)
+        XCTAssertTrue(fields.contains("SCLA"), line)
+        XCTAssertFalse(line.contains("599"), "there is no signal report in a CQP exchange")
+    }
+
+    /// "sending all such counties in a single exchange" — so a county-line
+    /// contact is one QSO number, however many rows it becomes.
+    func testCountyLineContactCarriesOneQSONumber() {
+        let rows = CountyLineExpander.expand(
+            entry: .init(
+                call: "W6CL", rstSent: "", rstRcvd: "",
+                serialSent: 7, serialRcvd: 123,
+                band: .m20, modeClass: .cw, rawMode: "CW",
+                freqKHz: nil, timestampUTC: Date(timeIntervalSince1970: 1_791_000_000)
+            ),
+            myLocs: ["TX"],
+            theirLocs: ["DELN", "SISK", "HUMB"]
+        )
+        XCTAssertEqual(rows.count, 3, "the sponsor's own worked example")
+        XCTAssertEqual(Set(rows.map(\.serialSent)), [7])
+        XCTAssertEqual(Set(rows.map(\.serialRcvd)), [123])
+
+        var log = outLog(rows)
+        XCTAssertEqual(log.nextSerial, 8, "one number was sent, not three")
+        log.qsos = rows
+        XCTAssertEqual(ScoreEngine.score(log: log, party: cqp).multiplierCount, 3,
+                       "still three county multipliers")
     }
 
     // MARK: Points — 3 and 3 after the 2026 change
@@ -422,10 +463,11 @@ final class CaliforniaQSOPartyTests: XCTestCase {
 
     /// The serial-number gap must stay visible until it is fixed: CQP accepts
     /// Cabrillo only, and the QSO-number element is part of its exchange.
-    func testNotesRecordTheSerialNumberLimitationAndThe2026PointsChange() throws {
+    func testNotesDescribeTheExchangeAndThe2026PointsChange() throws {
         let notes = try XCTUnwrap(cqp.notes)
-        XCTAssertTrue(notes.contains("KNOWN LIMITATION"),
-                      "serial numbers are unmodelled — that must not be buried")
+        XCTAssertTrue(notes.contains("THE EXCHANGE IS A QSO NUMBER"))
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION"),
+                       "the serial-number gap is closed; the warning must not outlive it")
         XCTAssertTrue(notes.contains("RULE CHANGE FOR 2026"))
         XCTAssertNil(cqp.openQuestions, "nothing about the rules themselves is unresolved")
     }

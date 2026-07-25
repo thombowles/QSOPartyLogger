@@ -93,9 +93,10 @@ Built for KE5CW. Bundled parties, all with official county data:
   counties**, capped at **58 scored out of 63 possible**, with California itself
   earned via the first CA county worked — the first party to state that rule
   outright. Everyone else counts the 58 counties once each. DX scores points for
-  California stations but is never a multiplier for anyone. No RST in the
-  exchange. **Known limitation:** CQP's exchange carries a serial number, which
-  this app does not yet model — see provenance below before submitting a log.
+  California stations but is never a multiplier for anyone. **The exchange is a
+  QSO number, not a signal report** — the entry bar shows a QSO-number pair
+  instead of RSTs, and a county-line contact carries one number across all its
+  rows.
 
 - **Arizona QSO Party** (Oct 10, 2026) — the first party whose two sides use
   **different multiplier scopes**: Arizona stations count states, provinces and
@@ -333,7 +334,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 479 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 481 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -449,11 +450,11 @@ typed QSY commands, keyer timing, and keyer labelling.
   to match. **Rule change for 2026:** phone QSOs went from 2 points to 3, marked
   "**NEW in 2026**" by the sponsor; a full diff against the still-published 2025
   revision (Last Update 05-July-2025) shows it is the only substantive change.
-  **Known limitation:** the CQP exchange is "QSO number and 4-letter county
-  abbreviation" — it carries no RST, and this app does not model serial numbers,
-  so the exported Cabrillo leaves the QSO-number element empty. Scoring is
-  unaffected (points and multipliers never depend on the serial), but CQP accepts
-  Cabrillo only, so serials must be added before submitting.
+  The exchange is "QSO number and 4-letter county abbreviation" and carries no
+  RST; the QSO numbers reach Cabrillo's exchange columns, which is what CQP's log
+  checker reads. Per the sponsor, county-line counties are sent "in a single
+  exchange", so a county-line contact carries **one** number however many rows it
+  logs.
 - AZQP: rules from azqp.org/rules and the rules PDF linked there, read verbatim
   2026-07-24. `verified: partial` — **both are still the 2025 revision** (headed
   "2025 Arizona QSO Party", footer "Rev: 2501 6/23/2025"), so a 2026 rule change

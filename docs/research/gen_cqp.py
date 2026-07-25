@@ -125,6 +125,7 @@ for quote in [
     "Begins: 1600 UTC - 03 October 2026",
     "Ends: 2200 UTC - 04 October 2026",
     "California stations send QSO number and 4-letter county abbreviation",
+    "QSO number = contact serial number starting with 1 for the first contact",
     "Each complete non-duplicate Phone contact is worth 3 points. **NEW in 2026**",
     "Each complete non-duplicate CW contact is worth 3 points",
     "Maximum of 58 Scored Multipliers out of 63 Total Multipliers",
@@ -213,8 +214,11 @@ cqp = {
     # "Canadian provinces/territories = 13" — the standard 13, unlike OhQP (11),
     # NJQP (NF for NL) or MEQP (14, NF and LB split). Left at the default.
     # "California stations send QSO number and 4-letter county abbreviation" —
-    # there is no RST anywhere in the CQP exchange.
+    # there is no RST anywhere in the CQP exchange, only a QSO number.
     "exchangeIncludesRST": False,
+    # "QSO number = contact serial number starting with 1 for the first contact,
+    # progressing to 2 for the next contact, and so on."
+    "exchangeIncludesSerial": True,
     # "Non-CA to non-CA contacts do not count for QSO credit."
     "outStateWorksHomeStationsOnly": True,
     # "Begins: 1600 UTC - 03 October 2026  Ends: 2200 UTC - 04 October 2026"
@@ -227,12 +231,15 @@ cqp = {
         "multipliers page (cqp.org/cqp_multipliers.html) which alone carries the county "
         "table, the DC/MD fold and the 'first CA county counts as CA' rule. All read "
         "verbatim 2026-07-24. "
-        "KNOWN LIMITATION - READ BEFORE SUBMITTING A LOG: the CQP exchange is 'QSO number "
-        "and 4-letter county abbreviation' (or QSO number and state/province/DX). It "
-        "carries NO RST, and this app does not yet model serial numbers at all. Scoring is "
-        "unaffected - points and multipliers never depend on the serial - but the exported "
-        "Cabrillo leaves the QSO-number element EMPTY, and CQP accepts Cabrillo only. Add "
-        "serial numbers before submitting, or wait for serial support. "
+        "THE EXCHANGE IS A QSO NUMBER, NOT A SIGNAL REPORT: 'California stations send QSO "
+        "number and 4-letter county abbreviation'; stations outside California send a QSO "
+        "number and their state, province or DX. There is no RST anywhere in it. 'QSO number "
+        "= contact serial number starting with 1 for the first contact, progressing to 2 for "
+        "the next contact, and so on. It is unnecessary to send leading zeros.' The entry bar "
+        "therefore shows a QSO-number pair rather than RSTs, pre-filling the outgoing number, "
+        "and both numbers reach the Cabrillo exchange columns. A COUNTY-LINE CONTACT CARRIES "
+        "ONE NUMBER: the rules send all such counties 'in a single exchange', so although this "
+        "app logs a row per county, every row shares the one number that went out on the air. "
         "RULE CHANGE FOR 2026: phone QSOs are now worth 3 points, up from 2; the sponsor "
         "marks it '**NEW in 2026**'. CW was and remains 3. A full diff against the still-"
         "published 2025 revision (cqp.org/pdf/CQP_2025_Rules.pdf, Last Update 05-July-2025) "
