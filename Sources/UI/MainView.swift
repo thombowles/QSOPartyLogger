@@ -7,8 +7,20 @@ struct MainView: View {
 
     @State private var settings = AppSettings.shared
     @State private var radio = RadioController()
-    @State private var entry = EntryState()
+    /// Everything the radio keys goes through here. This view builds the
+    /// context, calls the flow, and hands the returned text to the radio — it
+    /// never decides what that text is.
+    @State private var flow: EntryFlow
     @FocusState private var focusedField: EntryBar.Field?
+
+    init(document: LogDocument) {
+        self.document = document
+        // Built once with the document, not per body pass: the flow caches the
+        // party lookup and owns the entry row's link to the log's QSO number.
+        _flow = State(initialValue: EntryFlow(document: document))
+    }
+
+    private var entry: EntryState { flow.entry }
 
     @State private var manualBand: Band = .m20
     @State private var manualRawMode = "CW"
@@ -40,7 +52,22 @@ struct MainView: View {
     @State private var bandMapPanel: NSPanel?
 
     private var party: PartyDefinition? {
-        document.party
+        flow.party
+    }
+
+    /// The one place the view describes "right now" to the flow. Built in a
+    /// single property so there is a single place it can be got wrong, and so a
+    /// test constructs the same value rather than reproducing the wiring.
+    private var operatingContext: EntryFlow.Context {
+        EntryFlow.Context(
+            band: currentBand,
+            modeClass: currentModeClass,
+            rawMode: currentRawMode,
+            freqKHz: radio.radioState?.frequencyKHz,
+            radioConnected: radio.isConnected,
+            cursor: esmCursor,
+            keying: settings.keying
+        )
     }
 
     /// The document owns the mode so it survives a reopen. Writes go straight
@@ -172,8 +199,8 @@ struct MainView: View {
 
             MessagesRow(
                 operatingMode: operatingMode,
-                messages: activeMessages,
-                expand: expandMacros,
+                messages: flow.activeMessages,
+                expand: { flow.expandMacros($0, context: operatingContext) },
                 onSend: sendMessageAt,
                 enabled: radio.isConnected && currentModeClass == .cw,
                 pendingIndex: pendingMessageIndex,
@@ -205,13 +232,12 @@ struct MainView: View {
             spotStore.maxAgeMinutes = settings.spotMaxAgeMinutes
             spotStore.purge(now: Date())
         }
+        // The QSO number needs no re-seeding here: `EntryState.serialSent`
+        // follows the log until the operator types over it, so a document that
+        // is still `ksqp` when the entry appears picks up the real party's
+        // numbering the moment Contest Setup chooses it.
         .onChange(of: document.log.partyID) {
             bandMapModel?.partyBands = party?.validBands ?? Band.allCases
-            // A new document is `ksqp` until Contest Setup runs, so the entry
-            // was seeded with no number. Re-seed once the real party is known,
-            // or the first contact of a CQP log transmits a blank where the
-            // QSO number should be.
-            entry.syncSerial(next: nextSerialIfUsed)
         }
     }
 
@@ -518,18 +544,13 @@ struct MainView: View {
 
     // MARK: Actions
 
-    private var activeMessages: [String] {
-        document.log.messages.messages(for: operatingMode.wrappedValue)
-    }
-
     private func onAppear() {
         // New (or never-configured) contests go straight to Contest Setup.
         if !document.log.setupCompleted {
             showSetup = true
         }
         focusedField = .call
-        entry.applyDefaults(modeClass: currentModeClass)
-        entry.syncSerial(next: nextSerialIfUsed)
+        flow.onAppear(operatingContext)
         installKeyMonitor()
         radio.connectAndValidate(settings: settings)
 
@@ -578,61 +599,39 @@ struct MainView: View {
     /// Mode changes (radio or manual): swap pre-filled RST defaults
     /// (599 ↔ 59) and re-check validation/dupes for the new mode.
     private func modeChanged() {
-        entry.syncRSTDefaults(modeClass: currentModeClass)
-        revalidate()
+        flow.modeChanged(operatingContext)
     }
 
-    /// Return key: typed QSY commands first, then plain logging or the ESM
-    /// state machine.
+    /// Return key. The flow decides what happens and what goes on the air; this
+    /// only carries the decision out to the radio, the focus ring and the setup
+    /// sheet. Nothing here may re-expand a message — expansion order is exactly
+    /// what the flow exists to pin down.
     private func returnPressed() {
-        // "14025", "40M", "CW"… in the call field tunes instead of logging —
-        // hands stay on the keyboard.
-        if let command = EntryCommand.parse(entry.call) {
+        apply(flow.returnPressed(operatingContext, undoManager: undoManager))
+    }
+
+    private func apply(_ outcome: EntryFlow.Outcome) {
+        switch outcome {
+        case .qsy(let command):
             execute(command)
-            entry.call = ""
-            revalidate()
-            return
-        }
-
-        entry.applyDefaults(modeClass: currentModeClass)
-        revalidate()
-
-        guard esmDrivesReturn else {
-            logContact()
-            return
-        }
-
-        switch esmAction {
-        case .sendMessage(let index):
-            // The cursor is never moved for you. Wherever it is, that is where
-            // it stays, so a Return that called once calls again — Space is
-            // what advances, when the operator decides the contact has.
-            sendMessageAt(index)
-        case .logAndSend(let index):
-            // Expand before logging: logContact() advances the entry to the
-            // next QSO number, so expanding afterwards would key a number one
-            // higher than the one just written to the log — and the other
-            // station would log that, putting both of us NIL.
-            let pending = expandedMessage(at: index)
-            logContact()
-            if !pending.isEmpty { radio.sendCW(pending, settings: settings) }
-        case .none:
-            logContact()
+        case .send(let index, let text):
+            keyed(text, fromMessageAt: index)
+        case .logged(_, let text):
+            focusedField = .call
+            if !text.isEmpty { radio.sendCW(text, settings: settings) }
+        case .needsSetup:
+            showSetup = true
+        case .nothing:
+            break
         }
     }
 
-    /// ESM only drives Return on CW with the radio connected — otherwise
-    /// Return is a plain log key.
-    private var esmDrivesReturn: Bool {
-        settings.esmEnabled && radio.isConnected && currentModeClass == .cw
-    }
-
-    private var esmExchangeState: ESM.ExchangeState {
-        switch entry.exchangeStatus {
-        case .idle: .empty
-        case .valid: .valid
-        case .invalid: .unmatched
+    private func keyed(_ text: String, fromMessageAt index: Int) {
+        // F1 in Run mode is the CQ — remember where we're running from.
+        if operatingMode.wrappedValue == .run, index == 0 {
+            captureCQFrequency()
         }
+        radio.sendCW(text, settings: settings)
     }
 
     /// Only the call and exchange fields change what Return does; the signal
@@ -645,45 +644,22 @@ struct MainView: View {
         }
     }
 
-    /// What Return would do right now. Read both by the Return key and by the
-    /// messages row's highlight, so the two can never disagree about which
-    /// message is next.
-    private var esmAction: ESM.Action {
-        ESM.nextAction(
-            mode: operatingMode.wrappedValue,
-            callEmpty: entry.callNormalized.isEmpty,
-            exchange: esmExchangeState,
-            cursor: esmCursor
-        )
-    }
-
     /// The F-key slot Return will send next, or nil when ESM isn't driving it.
     private var pendingMessageIndex: Int? {
-        esmDrivesReturn ? esmAction.messageIndex : nil
+        flow.pendingMessageIndex(operatingContext)
     }
 
     /// F12 — wipe a half-typed contact and get back to the call field.
     private func clearEntry() {
-        entry.clearForNextContact(modeClass: currentModeClass, nextSerial: nextSerialIfUsed)
+        flow.clearEntry(operatingContext)
         focusedField = .call
-        revalidate()
-    }
-
-    /// The text F<index+1> would key right now, or "" when that slot is empty.
-    private func expandedMessage(at index: Int) -> String {
-        let set = activeMessages
-        guard set.indices.contains(index), !set[index].isEmpty else { return "" }
-        return expandMacros(set[index])
     }
 
     private func sendMessageAt(_ index: Int) {
-        let message = expandedMessage(at: index)
+        let context = operatingContext
+        let message = flow.expandedMessage(at: index, context: context)
         guard !message.isEmpty else { return }
-        // F1 in Run mode is the CQ — remember where we're running from.
-        if operatingMode.wrappedValue == .run, index == 0 {
-            captureCQFrequency()
-        }
-        radio.sendCW(message, settings: settings)
+        keyed(message, fromMessageAt: index)
     }
 
     // MARK: Typed QSY commands + spot tuning
@@ -830,7 +806,7 @@ struct MainView: View {
         captureCQFrequency()
         repeatTask = Task {
             while !Task.isCancelled && repeatCQ {
-                let text = expandMacros(cq)
+                let text = flow.expandMacros(cq, context: operatingContext)
                 radio.sendCW(text, settings: settings)
                 let onAir = radio.estimatedSendDuration(text, settings: settings)
                 let wait = onAir + settings.repeatIntervalSeconds
@@ -913,75 +889,12 @@ struct MainView: View {
     }
 
     private func revalidate() {
-        entry.revalidate(
-            party: party,
-            log: document.log,
-            band: currentBand,
-            modeClass: currentModeClass
-        )
+        flow.revalidate(operatingContext)
     }
 
+    /// The Log button and any Return that is not driven by ESM.
     private func logContact() {
-        guard let party else { return }
-        entry.applyDefaults(modeClass: currentModeClass)
-        revalidate()
-        guard case .valid(let theirLocs) = entry.exchangeStatus,
-              !entry.callNormalized.isEmpty else { return }
-
-        let myLocs = document.log.myLocation.sentExchanges.filter { !$0.isEmpty }
-        guard !myLocs.isEmpty else {
-            showSetup = true
-            return
-        }
-
-        // One contact, one QSO number — every row of a county-line contact
-        // carries the same pair. A blank sent field falls back to the log's next
-        // number so a submittable log never ends up with a hole in it.
-        let serials = entry.serials(party: party)
-        let sentSerial = (party.exchangeIncludesSerial)
-            ? (serials.sent ?? document.log.nextSerial)
-            : nil
-
-        let rows = CountyLineExpander.expand(
-            entry: .init(
-                call: entry.callNormalized,
-                rstSent: entry.rstSent.isEmpty ? currentModeClass.defaultRST : entry.rstSent,
-                rstRcvd: entry.rstRcvd.isEmpty ? currentModeClass.defaultRST : entry.rstRcvd,
-                serialSent: sentSerial,
-                serialRcvd: serials.rcvd,
-                band: currentBand,
-                modeClass: currentModeClass,
-                rawMode: currentRawMode,
-                freqKHz: radio.radioState?.frequencyKHz,
-                timestampUTC: Date()
-            ),
-            myLocs: myLocs,
-            theirLocs: theirLocs
-        )
-        document.append(qsos: rows, undoManager: undoManager)
-        _ = party
-        entry.clearForNextContact(modeClass: currentModeClass, nextSerial: nextSerialIfUsed)
-        focusedField = .call
-    }
-
-    /// The QSO number to show in the entry bar, or nil for the parties that
-    /// exchange none. Read after every append so the field always shows what
-    /// the *next* contact will send.
-    private var nextSerialIfUsed: Int? {
-        (party?.exchangeIncludesSerial ?? false) ? document.log.nextSerial : nil
-    }
-
-    private func expandMacros(_ template: String) -> String {
-        AppSettings.expandMacros(
-            template,
-            myCall: document.log.station.callsign.uppercased(),
-            call: entry.callNormalized,
-            rst: entry.rstSent.isEmpty ? currentModeClass.defaultRST : entry.rstSent,
-            exchange: document.log.myLocation.displayText,
-            serial: entry.serialSent,
-            cutNumbers: settings.cwCutNumbers && currentModeClass == .cw,
-            cutOne: settings.cwCutNumberOne
-        )
+        apply(flow.logContact(operatingContext, undoManager: undoManager))
     }
 
     // MARK: F-key handling (AppKit monitor — reliable across macOS versions)

@@ -286,9 +286,10 @@ final class SerialExchangeTests: XCTestCase {
 
     func testEntryStateShowsTheNextNumberAndParsesWhatWasTyped() throws {
         let entry = EntryState()
-        entry.syncSerial(next: 7)
+        var next: Int? = 7
+        entry.nextSerial = { next }
         XCTAssertEqual(entry.serialSent, "7")
-        entry.syncSerial(next: nil)
+        next = nil
         XCTAssertEqual(entry.serialSent, "", "parties without a number show no field")
 
         let cqp = try XCTUnwrap(PartyCatalog.party(id: "cqp"))
@@ -303,27 +304,36 @@ final class SerialExchangeTests: XCTestCase {
         XCTAssertNil(entry.serials(party: cqp).rcvd)
     }
 
-    /// Why ESM must expand before it logs: clearing for the next contact
-    /// advances the number, so a message expanded afterwards would carry n+1
+    /// Why ESM must expand before it logs: the number follows the log, and
+    /// logging advances it. A message expanded after the append carries n+1
     /// while the logged row carries n — and the other station would log the
     /// number they heard, putting both of us out of the log.
-    func testClearingForTheNextContactAdvancesTheNumberBeforeAnySend() {
+    /// `EntryFlowTests` drives the real sequence; this pins the mechanism.
+    func testTheNumberAdvancesTheMomentTheLogDoes() {
         let entry = EntryState()
-        entry.syncSerial(next: 7)
+        var next = 7
+        entry.nextSerial = { next }
         XCTAssertEqual(entry.serialSent, "7")
 
-        entry.clearForNextContact(modeClass: .cw, nextSerial: 8)
+        next = 8  // the append
         XCTAssertEqual(entry.serialSent, "8",
                        "so expanding {SERIAL} after logging keys the wrong number")
     }
 
-    func testClearForNextContactCarriesTheNextNumber() {
+    /// A number the operator typed belongs to the contact it was typed for.
+    /// Carrying it into the next one would send the same number twice.
+    func testClearForNextContactDropsTheOperatorsOwnNumber() {
         let entry = EntryState()
+        entry.nextSerial = { 8 }
         entry.call = "W6ABC"
         entry.serialRcvd = "345"
-        entry.clearForNextContact(modeClass: .cw, nextSerial: 8)
+        entry.serialSent = "17"
+        XCTAssertTrue(entry.hasSerialOverride, "precondition")
+
+        entry.clearForNextContact(modeClass: .cw)
         XCTAssertEqual(entry.call, "")
-        XCTAssertEqual(entry.serialSent, "8", "ready for the next contact")
+        XCTAssertFalse(entry.hasSerialOverride)
+        XCTAssertEqual(entry.serialSent, "8", "back to following the log")
         XCTAssertEqual(entry.serialRcvd, "", "theirs is always typed fresh")
     }
 

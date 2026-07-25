@@ -7,12 +7,34 @@ final class EntryState {
     var call = ""
     var rstSent = ""
     var rstRcvd = ""
-    /// QSO numbers, for parties whose exchange carries one. `serialSent` is
-    /// pre-filled with the log's next number and stays editable so a
-    /// mis-sent number can be recorded as it actually went out.
-    var serialSent = ""
     var serialRcvd = ""
     var exchange = ""
+
+    /// What the operator typed into Ser S, or nil to follow the log.
+    ///
+    /// An override rather than a seeded value because seeding needs a moment to
+    /// happen at, and on 2026-07-25 the moment was missed: a new document is
+    /// `ksqp` until Contest Setup runs, so the seed ran against a party that
+    /// exchanges no number, and nothing re-ran it when the real party arrived.
+    /// The first contact of a CQP log keyed a blank where the number should be.
+    /// Derived, there is no moment left to miss.
+    private var serialOverride: String?
+
+    /// The log's next QSO number, or nil for the parties that exchange none.
+    /// Supplied by `EntryFlow`; nil until then, which reads as "no number".
+    @ObservationIgnored var nextSerial: () -> Int? = { nil }
+
+    /// The number this contact will send. Follows the log until the operator
+    /// types over it, which is how a mis-sent number gets recorded as it
+    /// actually went out.
+    var serialSent: String {
+        get { serialOverride ?? nextSerial().map(String.init) ?? "" }
+        set { serialOverride = newValue }
+    }
+
+    /// Whether the operator has typed a number of their own. Distinct from
+    /// `serialSent` being non-empty, which is true of the log's own number too.
+    var hasSerialOverride: Bool { serialOverride != nil }
 
     enum ExchangeStatus: Equatable {
         case idle
@@ -31,12 +53,6 @@ final class EntryState {
     func applyDefaults(modeClass: ModeClass) {
         if rstSent.isEmpty { rstSent = modeClass.defaultRST }
         if rstRcvd.isEmpty { rstRcvd = modeClass.defaultRST }
-    }
-
-    /// Show the number this contact will send. `nil` for the parties that
-    /// exchange no QSO number, which clears the field.
-    func syncSerial(next: Int?) {
-        serialSent = next.map(String.init) ?? ""
     }
 
     /// The typed numbers, or nil where the party exchanges none / nothing was
@@ -114,11 +130,14 @@ final class EntryState {
         if rstRcvd.isEmpty || defaults.contains(rstRcvd) { rstRcvd = modeClass.defaultRST }
     }
 
-    func clearForNextContact(modeClass: ModeClass, nextSerial: Int? = nil) {
+    func clearForNextContact(modeClass: ModeClass) {
         call = ""
         rstSent = modeClass.defaultRST
         rstRcvd = modeClass.defaultRST
-        syncSerial(next: nextSerial)
+        // Back to following the log, which has just advanced past the contact
+        // that was logged. A number the operator typed belonged to that
+        // contact, not this one.
+        serialOverride = nil
         serialRcvd = ""
         exchange = ""
         exchangeStatus = .idle
