@@ -148,8 +148,8 @@ party; each would be its own commit (Article 4).
   222000–225000 kHz, default 222100 — ADIF 3.1.4 for the band string and edges,
   47 CFR §97.301(a) as cross-check, ARRL band plan for the calling frequency.
   `222` typed in the call field QSYs there; `1.25M` works too. TnQP and IAQP
-  follow in their own commits (Article 9), each dropping the open question that
-  said the band did not exist.
+  both carry the band now, each in its own commit (Article 9), and the open
+  question that said the band did not exist is gone from both.
   Design: [`2026-07-24-222mhz-band-design.md`](../superpowers/specs/2026-07-24-222mhz-band-design.md).
 - **Cabrillo writes raw kHz for VHF and up.** `CabrilloExporter.qsoLine` emits
   `String(q.freqKHz ?? q.band.defaultFreqKHz)`, so a 2 m QSO exports as
