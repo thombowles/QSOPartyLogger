@@ -65,6 +65,59 @@ final class ClusterProtocolTests: XCTestCase {
         XCTAssertTrue(ClusterProtocol.isAwaitingLogin("login: "), "re-prompt is detectable")
     }
 
+    // MARK: Newline-terminated prompts
+
+    /// SDC's telnet server ends its prompt with CRLF, so `takeLines` consumes
+    /// it as an ordinary line and the remainder is empty — checking only the
+    /// remainder meant the callsign was never sent and the client sat at
+    /// "Connecting…" until the watchdog wrongly blamed the host and port.
+    /// Bytes captured verbatim from SDC on localhost:7373.
+    func testDetectsCRLFTerminatedLoginPrompt() {
+        var buffer = "Welcome to SDC Telnet Server\r\nPlease enter your callsign:\r\n"
+        let lines = ClusterProtocol.takeLines(from: &buffer)
+        XCTAssertEqual(lines, ["Welcome to SDC Telnet Server", "Please enter your callsign:"])
+        XCTAssertEqual(buffer, "", "a terminated prompt leaves nothing behind")
+        XCTAssertTrue(ClusterProtocol.isAwaitingLogin(lines: lines, remainder: buffer))
+    }
+
+    /// DXSpider's unterminated "login: " must still be answered — it lives in
+    /// the remainder, never in the consumed lines.
+    func testDetectsUnterminatedPromptInTheRemainder() {
+        var buffer = "Welcome to the WA9PIE-2 cluster\r\n===\r\nlogin: "
+        let lines = ClusterProtocol.takeLines(from: &buffer)
+        XCTAssertEqual(buffer, "login: ")
+        XCTAssertTrue(ClusterProtocol.isAwaitingLogin(lines: lines, remainder: buffer))
+    }
+
+    func testTerminatedPromptFollowedByMoreOutputIsStale() {
+        var buffer = "login:\r\nWelcome, spots follow\r\n"
+        let lines = ClusterProtocol.takeLines(from: &buffer)
+        XCTAssertFalse(
+            ClusterProtocol.isAwaitingLogin(lines: lines, remainder: buffer),
+            "the node moved on — only the last thing it said counts"
+        )
+    }
+
+    /// A partial spot line trailing a prompt means the node is streaming, not
+    /// asking.
+    func testRemainderWinsOverAnEarlierPromptLine() {
+        XCTAssertFalse(
+            ClusterProtocol.isAwaitingLogin(lines: ["login:"], remainder: "DX de W3LPL:  140")
+        )
+    }
+
+    /// SDC's post-login command prompt ends in ">", not ":" — answering it
+    /// would burn a login attempt on every command.
+    func testSDCCommandPromptIsNotALoginPrompt() {
+        XCTAssertFalse(
+            ClusterProtocol.isAwaitingLogin(lines: ["KE5CW de SDC Server >"], remainder: "")
+        )
+    }
+
+    func testNoOutputIsNotAPrompt() {
+        XCTAssertFalse(ClusterProtocol.isAwaitingLogin(lines: [], remainder: ""))
+    }
+
     // MARK: Line splitting
 
     /// Swift stores "\r\n" as ONE Character, so a naive

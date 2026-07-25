@@ -341,7 +341,9 @@ retrying while the prompt is up, so approving it connects immediately.
 ## DX cluster spots
 
 Toolbar → antenna icon → enter a cluster host/port → Connect. The app waits
-for the node's actual login prompt, answers with your contest callsign, runs
+for the node's actual login prompt — whether the node leaves it unterminated
+(`login: `) or ends it with a newline, as local skimmer feeds tend to —
+answers with your contest callsign, runs
 the startup commands (`sh/dx 30` unless you change them), and filters the
 stream to real spots on amateur bands — both live `DX de …` broadcasts and
 the columnar `sh/dx` reply format. Spots carry their own timestamp, so a
@@ -368,8 +370,14 @@ Tick **Connect automatically when a contest opens** to have every contest
 window come up already spotting. Previously used nodes are listed under
 Recent Clusters.
 
-Node notes: verified end-to-end against `dxc.wa9pie.net:8000` (DXSpider) and
-`dxc.nc7j.com:7373` (AR-Cluster). `ve7cc.net:23` accepts the connection and
+A cluster on the same Mac works the same way: point it at
+`localhost` and the port your feed serves — a local SDC skimmer collector on
+`localhost:7373`, say — and it logs in, backfills with `sh/dx`, and streams
+live decodes like any remote node.
+
+Node notes: verified end-to-end against `dxc.wa9pie.net:8000` (DXSpider),
+`dxc.nc7j.com:7373` (AR-Cluster), and SDC's telnet server on
+`localhost:7373`. `ve7cc.net:23` accepts the connection and
 prints its banner, but never answers the login from this client — nothing
 sent to it gets a reply — so use another node if you hit that.
 
@@ -434,7 +442,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 652 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 660 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
