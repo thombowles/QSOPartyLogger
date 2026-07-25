@@ -174,6 +174,7 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     func updateStation(_ station: StationProfile, location: MyLocation, partyID: String, undoManager: UndoManager?) {
         let (oldStation, oldLoc, oldParty) = (log.station, log.myLocation, log.partyID)
         let oldMessages = log.messages
+        let oldMode = log.operatingMode
         log.station = station
         log.myLocation = location
         log.partyID = partyID
@@ -184,16 +185,28 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         if oldMessages == MessageSets.defaults(for: PartyCatalog.party(id: oldParty)) {
             log.messages = MessageSets.defaults(for: PartyCatalog.party(id: partyID))
         }
+        // Crossing the state line is the one location change that implies a
+        // different operating style — the in-state station is the multiplier
+        // being chased and runs, the out-of-state station chases. Any other
+        // edit (a callsign typo, a different county, a different state) must
+        // not overwrite a deliberate mid-contest switch.
+        if oldLoc.isInState != location.isInState {
+            log.operatingMode = log.derivedOperatingMode
+        }
         AppSettings.shared.lastStationProfile = station
         undoManager?.registerUndo(withTarget: self) { doc in
             MainActor.assumeIsolated {
                 doc.updateStation(oldStation, location: oldLoc, partyID: oldParty, undoManager: undoManager)
-                // Restore the exact macros afterwards, whatever the
-                // re-derivation inside that call decided: for the macro set,
-                // undo is an exact inverse rather than a second guess.
+                // Restore the macros and the mode exactly afterwards, whatever
+                // the nested call's own re-derivation decided: both are
+                // conditionally re-derived above, so without this, undo would
+                // be a second guess rather than an exact inverse — and for the
+                // mode, that guess is silent, because the value it lands on
+                // is often the same one the operator chose by hand.
                 // `setupCompleted` is deliberately not restored — a draft that
                 // has been through Contest Setup stays through it.
                 doc.log.messages = oldMessages
+                doc.log.operatingMode = oldMode
             }
         }
         undoManager?.setActionName("Change Station Setup")

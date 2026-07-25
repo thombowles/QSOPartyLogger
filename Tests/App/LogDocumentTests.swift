@@ -210,4 +210,113 @@ final class LogDocumentTests: XCTestCase {
             "new-document party and its default macros must agree"
         )
     }
+
+    // MARK: Operating mode re-derivation (2026-07-25)
+
+    @MainActor
+    func testSetupPicksTheModeForAnOutOfStateOperator() throws {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "ksqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.operatingMode, .searchPounce)
+    }
+
+    @MainActor
+    func testSetupPicksTheModeForAnInStateOperator() throws {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(), location: .inState(counties: ["SED"]),
+            partyID: "ksqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.operatingMode, .run)
+    }
+
+    /// Reopening Contest Setup to fix a callsign typo must not undo a
+    /// deliberate mid-contest switch to Run.
+    @MainActor
+    func testAnEditOnTheSameSideOfTheLineKeepsADeliberateSwitch() throws {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "ksqp", undoManager: nil
+        )
+        doc.log.operatingMode = .run  // the operator switches by hand
+
+        var fixed = StationProfile()
+        fixed.callsign = "KE5CW"
+        doc.updateStation(
+            fixed, location: .outOfState(location: "TX"),
+            partyID: "ksqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.operatingMode, .run, "still out of state — nothing flipped")
+
+        // Still out of state, different state: also not a flip.
+        doc.updateStation(
+            fixed, location: .outOfState(location: "OK"),
+            partyID: "ksqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.operatingMode, .run)
+    }
+
+    /// Crossing the state line is the one location change that implies a
+    /// different operating style.
+    @MainActor
+    func testCrossingTheStateLineReDerivesTheMode() throws {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "ksqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.operatingMode, .searchPounce, "precondition")
+
+        doc.updateStation(
+            StationProfile(), location: .inState(counties: ["SED"]),
+            partyID: "ksqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.operatingMode, .run)
+    }
+
+    /// A county change within the state is not a flip.
+    @MainActor
+    func testChangingCountyWithinTheStateKeepsTheMode() throws {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(), location: .inState(counties: ["SED"]),
+            partyID: "ksqp", undoManager: nil
+        )
+        doc.log.operatingMode = .searchPounce  // deliberate
+
+        doc.updateStation(
+            StationProfile(), location: .inState(counties: ["BUT"]),
+            partyID: "ksqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.operatingMode, .searchPounce)
+    }
+
+    /// Undo restores the mode the operator actually had, not what the old
+    /// location would derive. An out-of-state operator who switched to Run by
+    /// hand and then crossed the line must get Run back on undo — re-deriving
+    /// would silently discard a deliberate choice they never see reverted.
+    @MainActor
+    func testUndoRestoresAManuallyChosenModeAcrossAFlip() throws {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "ksqp", undoManager: nil
+        )
+        doc.log.operatingMode = .run  // by hand, and deliberately not undoable
+
+        let undo = UndoManager()
+        doc.updateStation(
+            StationProfile(), location: .inState(counties: ["SED"]),
+            partyID: "ksqp", undoManager: undo
+        )
+
+        undo.undo()
+        XCTAssertFalse(doc.log.myLocation.isInState, "precondition: back out of state")
+        XCTAssertEqual(doc.log.operatingMode, .run,
+                       "the manual choice survives; re-deriving would give S&P")
+    }
 }

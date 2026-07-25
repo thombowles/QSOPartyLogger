@@ -22,7 +22,6 @@ struct MainView: View {
     @State private var isExporting = false
     @State private var keyMonitor: Any?
 
-    @State private var operatingMode: OperatingMode = .run
     @State private var repeatCQ = false
     @State private var repeatTask: Task<Void, Never>?
     @State private var hostWindow: NSWindow?
@@ -42,6 +41,18 @@ struct MainView: View {
 
     private var party: PartyDefinition? {
         document.party
+    }
+
+    /// The document owns the mode so it survives a reopen. Writes go straight
+    /// to `log` without registering undo — ⌘Z belongs to log edits, and an
+    /// operator who toggles Run/S&P four times should not have to press it
+    /// four times to reach a deleted QSO. The change rides along with the next
+    /// save, which the QSO-append autosave triggers on the next contact.
+    private var operatingMode: Binding<OperatingMode> {
+        Binding(
+            get: { document.log.operatingMode },
+            set: { document.log.operatingMode = $0 }
+        )
     }
 
     private var score: ScoreEngine.ScoreBreakdown {
@@ -156,7 +167,7 @@ struct MainView: View {
                 .onChange(of: entry.call) { revalidate() }
 
             MessagesRow(
-                operatingMode: $operatingMode,
+                operatingMode: operatingMode,
                 messages: activeMessages,
                 expand: expandMacros,
                 onSend: sendMessageAt,
@@ -498,7 +509,7 @@ struct MainView: View {
     // MARK: Actions
 
     private var activeMessages: [String] {
-        document.log.messages.messages(for: operatingMode)
+        document.log.messages.messages(for: operatingMode.wrappedValue)
     }
 
     private func onAppear() {
@@ -586,7 +597,7 @@ struct MainView: View {
         }
 
         switch ESM.nextAction(
-            mode: operatingMode,
+            mode: operatingMode.wrappedValue,
             callEmpty: entry.callNormalized.isEmpty,
             exchangeValid: exchangeValid
         ) {
@@ -619,7 +630,7 @@ struct MainView: View {
         let set = activeMessages
         guard set.indices.contains(index), !set[index].isEmpty else { return }
         // F1 in Run mode is the CQ — remember where we're running from.
-        if operatingMode == .run, index == 0 {
+        if operatingMode.wrappedValue == .run, index == 0 {
             captureCQFrequency()
         }
         sendMessage(set[index])
@@ -696,7 +707,7 @@ struct MainView: View {
         guard let hz = cqFrequencyHz else { return }
         radio.setFrequency(kHz: Double(hz) / 1000)
         spotCursorKHz = Double(hz) / 1000
-        operatingMode = .run
+        operatingMode.wrappedValue = .run
     }
 
     // MARK: CW speed

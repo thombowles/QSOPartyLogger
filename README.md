@@ -179,6 +179,11 @@ parties, and the remaining engine gaps. Adding a party is governed by
   columns and ADIF's `STX`/`SRX`. **A county-line contact is one contact and
   carries one number**, shared by every row it expands into — the operator sent
   one number on the air. Deleting a QSO never renumbers the others.
+- **Run vs Search & Pounce follows your location.** An in-state log opens in
+  Run — in-state stations are the multiplier everyone is chasing — and an
+  out-of-state log opens in S&P. The mode is stored in the log, so reopening
+  mid-contest restores the mode you were actually in, and it is only
+  re-derived if you cross the state line.
 - **County abbreviation validation** against each party's official list
   (KSQP: 105 3-letter, TQP: 254 4-letter, both generated from the sponsors'
   official files). Typos get suggestions (`LNI` → `LIN`); the home-state token
@@ -391,7 +396,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 633 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 643 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
