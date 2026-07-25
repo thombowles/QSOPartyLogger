@@ -353,7 +353,7 @@ struct MainView: View {
                 )
                 .foregroundStyle(spotClient.status == .connected ? .green : .primary)
             }
-            .help("DX cluster connection for spots — click a spot to tune, ⌘←/⌘→ to step")
+            .help("DX cluster connection for spots — click a spot to tune, ⌘← / ⌘→ / ⌘↑ / ⌘↓ to step")
             .popover(isPresented: $showClusterPopover) {
                 clusterPopover
             }
@@ -471,7 +471,7 @@ struct MainView: View {
             if spotClient.status != .disconnected || !spotClient.console.isEmpty {
                 nodeConsole
             }
-            Text("Logs in with your callsign. Spots for the current band appear in the sidebar and band map — click to tune, ⌘← / ⌘→ to step through them.")
+            Text("Logs in with your callsign. Spots for the current band appear in the sidebar and band map — click to tune, ⌘← / ⌘→ / ⌘↑ / ⌘↓ to step through them.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 250, alignment: .leading)
@@ -739,7 +739,7 @@ struct MainView: View {
         revalidate()
     }
 
-    /// ⌘← / ⌘→. Worked stations stay on the band map, greyed, but there is
+    /// ⌘← / ⌘→ / ⌘↑ / ⌘↓. Worked stations stay on the band map, greyed, but there is
     /// nothing left to work on them so the keys step over them.
     private func jumpToSpot(_ direction: SpotStore.Direction) {
         let bandSpots = visibleSpotsOnBand
@@ -953,7 +953,7 @@ struct MainView: View {
         switch action {
         // ⌘= / ⌘+ and ⌘- (plus keypad variants): CW speed ±2 WPM.
         case .adjustWPM(let delta): adjustWPM(by: delta)
-        // ⌘←/⌘→: previous/next spot on the band. ⌘J: back to CQ frequency.
+        // ⌘←/⌘→ and ⌘↓/⌘↑: previous/next spot on the band. ⌘J: back to CQ.
         case .previousSpot: jumpToSpot(.down)
         case .nextSpot: jumpToSpot(.up)
         case .jumpToCQFrequency: jumpToCQFrequency()

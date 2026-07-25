@@ -238,7 +238,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
   commands run at login are configurable — `sh/dx 30` by default, so the
   band map is populated with recent spots the moment you connect instead of
   starting empty. Click a spot to tune and pre-fill the call, or step
-  spot-to-spot with ⌘← / ⌘→.
+  spot-to-spot with ⌘← / ⌘→ or ⌘↓ / ⌘↑.
 - **Band map window (⌘B)**: floating N1MM-style panel — vertical frequency
   ruler for the current band with spots plotted where they live, a red VFO
   marker tracking the radio, and a dashed CQ line marking your run
@@ -254,13 +254,13 @@ parties, and the remaining engine gaps. Adding a party is governed by
   ever dropped: twenty calls on one frequency show all twenty.
 - **Worked stations stay visible**: a call already in the log on this
   band+mode is greyed and struck through rather than removed, so you can see
-  the band filling up — and ⌘← / ⌘→ steps straight over it, because there is
+  the band filling up — and ⌘← / ⌘→ / ⌘↑ / ⌘↓ steps straight over it, because there is
   nothing left to work there. If every spot on the band is worked, the keys
   leave the radio where it is.
 - **Band-plan-aware mode switching**: tune into the phone portion of a band
   and the radio goes to SSB; tune into the CW portion and it goes to CW. It
   fires only when *the app* moves you — clicking a spot, typing a frequency
-  or band, ⌘← / ⌘→, ⌘J — so your own VFO knob never triggers a mode change
+  or band, ⌘← / ⌘→ / ⌘↑ / ⌘↓, ⌘J — so your own VFO knob never triggers a mode change
   mid-QSO. It never selects a digital mode, never fights a RTTY operator
   working the data segment, and never picks a mode the party doesn't score.
   Crossovers come from 47 CFR §97.305(c) (with §97.301(a) for the 80/75 m
@@ -275,7 +275,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
   inferred from the spotter's comment first and the band plan second),
   per-band, and how long spots live before ageing out (5 min – 2 hr,
   default 15). It's a panel, not a menu — tick as many boxes as you like in
-  one visit — and everything applies instantly to the map and to ⌘← / ⌘→.
+  one visit — and everything applies instantly to the map and to the spot keys.
   All filters off by default; **Reset All** puts them back.
 - **CQ frequency memory**: sending F1 (or starting repeat-CQ) in Run mode
   remembers the run frequency; ⌘J — or the chip next to Repeat — jumps back
@@ -338,6 +338,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `Esc` | Abort CW + stop repeat-CQ — and close the sheet, when one is open |
 | `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
 | `⌘←` / `⌘→` | Tune to previous / next unworked spot on the band |
+| `⌘↓` / `⌘↑` | The same, on the vertical axis — `⌘↑` goes up the band map |
 | `⌘R` | Toggle Run / Search & Pounce |
 | `⌘J` | Jump back to your CQ run frequency (Run mode) |
 | `⌘B` | Toggle the band map window |

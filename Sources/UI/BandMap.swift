@@ -135,7 +135,7 @@ struct BandMapView: View {
             Toggle("North American spotters only", isOn: $settings.northAmericanSpottersOnly)
                 .help("Hide spots posted from outside North America")
             Toggle("Hide stations already worked", isOn: $settings.hideWorkedSpots)
-                .help("Drop worked calls from the map entirely — off, they stay greyed out and ⌘← / ⌘→ steps over them")
+                .help("Drop worked calls from the map entirely — off, they stay greyed out and ⌘← / ⌘→ / ⌘↑ / ⌘↓ steps over them")
             Toggle("Hide RBN / skimmer spots", isOn: $settings.hideSkimmerSpots)
                 .help("Drop automated skimmer spots (\"-#\" nodes and dB/WPM reports)")
 
@@ -183,7 +183,7 @@ struct BandMapView: View {
                 .font(.caption.weight(.bold))
                 .foregroundStyle(.secondary)
             Toggle("Follow band plan on QSY", isOn: $settings.followBandPlan)
-                .help("Switch the radio between CW and SSB to match the band plan when you tune from the app — clicking a spot, typing a frequency, ⌘← / ⌘→, ⌘J. Turning the VFO knob never changes your mode.")
+                .help("Switch the radio between CW and SSB to match the band plan when you tune from the app — clicking a spot, typing a frequency, ⌘← / ⌘→ / ⌘↑ / ⌘↓, ⌘J. Turning the VFO knob never changes your mode.")
 
             Divider()
             HStack {

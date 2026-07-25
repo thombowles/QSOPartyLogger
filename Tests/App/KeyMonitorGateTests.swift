@@ -155,4 +155,30 @@ final class KeyMonitorGateTests: XCTestCase {
             XCTAssertNil(KeyMonitorGate.action(keyCode: code, command: false), "keyCode \(code)")
         }
     }
+
+    // MARK: Vertical spot stepping
+
+    /// The band map draws high frequency at the top, so ⌘↑ means "up the map",
+    /// which is the higher frequency — the same station ⌘→ lands on.
+    func testCommandUpAndDownStepSpotsLikeCommandRightAndLeft() {
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 126, command: true), .nextSpot)
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 125, command: true), .previousSpot)
+        XCTAssertEqual(
+            KeyMonitorGate.action(keyCode: 126, command: true),
+            KeyMonitorGate.action(keyCode: 124, command: true),
+            "⌘↑ and ⌘→ are the same action"
+        )
+        XCTAssertEqual(
+            KeyMonitorGate.action(keyCode: 125, command: true),
+            KeyMonitorGate.action(keyCode: 123, command: true),
+            "⌘↓ and ⌘← are the same action"
+        )
+    }
+
+    /// Without ⌘ the arrows belong to whatever has focus — a text field, the
+    /// log table — and the monitor must not consume them.
+    func testPlainArrowsAreNotOurs() {
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 126, command: false))
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 125, command: false))
+    }
 }
