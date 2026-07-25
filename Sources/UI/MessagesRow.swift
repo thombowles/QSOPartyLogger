@@ -9,6 +9,9 @@ struct MessagesRow: View {
     /// Send the message in F-key slot `index` (0-based).
     let onSend: (Int) -> Void
     let enabled: Bool
+    /// The slot Return will send next under ESM, outlined so the sequence the
+    /// program is stepping through is visible rather than guessed at.
+    let pendingIndex: Int?
 
     @Binding var repeatEnabled: Bool
     @Binding var repeatInterval: Double
@@ -44,7 +47,13 @@ struct MessagesRow: View {
                     .frame(minWidth: 62)
                 }
                 .disabled(!enabled || template.isEmpty)
-                .help(expand(template))
+                .overlay {
+                    if index == pendingIndex {
+                        RoundedRectangle(cornerRadius: 5)
+                            .strokeBorder(.purple, lineWidth: 2)
+                    }
+                }
+                .help(index == pendingIndex ? "Return sends this: \(expand(template))" : expand(template))
             }
 
             Spacer()
@@ -65,7 +74,7 @@ struct MessagesRow: View {
             }
             .toggleStyle(.button)
             .tint(.purple)
-            .help("Enter Sends Message: Return sends CQ / exchange / TU based on the entry fields, and logs automatically after the exchange.")
+            .help("Enter Sends Message: Return steps through the contact — CQ, his report, log and TU when running; your call, then your report and the log when pouncing. The outlined key is what Return sends next.")
 
             Toggle(isOn: $repeatEnabled) {
                 Label("Repeat CQ", systemImage: "repeat")

@@ -161,6 +161,7 @@ struct MainView: View {
                 expand: expandMacros,
                 onSend: sendMessageAt,
                 enabled: radio.isConnected && currentModeClass == .cw,
+                pendingIndex: pendingMessageIndex,
                 repeatEnabled: $repeatCQ,
                 repeatInterval: $settings.repeatIntervalSeconds,
                 esmEnabled: $settings.esmEnabled,
@@ -575,27 +576,25 @@ struct MainView: View {
 
         entry.applyDefaults(modeClass: currentModeClass)
         revalidate()
-        let exchangeValid: Bool = {
-            if case .valid = entry.exchangeStatus { return true }
-            return false
-        }()
 
-        guard settings.esmEnabled, radio.isConnected, currentModeClass == .cw else {
+        guard esmDrivesReturn else {
             logContact()
             return
         }
 
-        switch ESM.nextAction(
-            mode: operatingMode,
-            callEmpty: entry.callNormalized.isEmpty,
-            exchangeValid: exchangeValid
-        ) {
+        switch esmAction {
         case .sendMessage(let index):
             sendMessageAt(index)
-            // Sending his report means the exchange is what's needed next —
-            // move the cursor there so Return keeps the QSO flowing.
-            if let current = focusedField {
-                focusedField = current.next(
+            // Remember who this contact's middle message went to, so the next
+            // Return logs instead of calling again. An empty call (Run's CQ)
+            // stores nothing a callsign can match, which is what we want.
+            entry.esmSentTo = entry.callNormalized
+            // Their report has just gone out, so his exchange is what gets
+            // typed next. Only in Run, and only from the call field: in S&P
+            // the cursor stays put so repeat Returns keep calling, which is
+            // N1MM's default (its "Big Gun" switch is what moves it).
+            if operatingMode == .run, index == 1, focusedField == .call {
+                focusedField = EntryBar.Field.call.next(
                     includesRST: party?.exchangeIncludesRST ?? true,
                     includesSerial: party?.exchangeIncludesSerial ?? false
                 )
@@ -606,6 +605,34 @@ struct MainView: View {
         case .none:
             logContact()
         }
+    }
+
+    /// ESM only drives Return on CW with the radio connected — otherwise
+    /// Return is a plain log key.
+    private var esmDrivesReturn: Bool {
+        settings.esmEnabled && radio.isConnected && currentModeClass == .cw
+    }
+
+    private var exchangeIsValid: Bool {
+        if case .valid = entry.exchangeStatus { return true }
+        return false
+    }
+
+    /// What Return would do right now. Read both by the Return key and by the
+    /// messages row's highlight, so the two can never disagree about which
+    /// message is next.
+    private var esmAction: ESM.Action {
+        ESM.nextAction(
+            mode: operatingMode,
+            callEmpty: entry.callNormalized.isEmpty,
+            exchangeValid: exchangeIsValid,
+            middleSent: entry.esmMiddleSent
+        )
+    }
+
+    /// The F-key slot Return will send next, or nil when ESM isn't driving it.
+    private var pendingMessageIndex: Int? {
+        esmDrivesReturn ? esmAction.messageIndex : nil
     }
 
     /// F12 — wipe a half-typed contact and get back to the call field.

@@ -24,8 +24,24 @@ final class EntryState {
     var dupeWarning: String?
     var isNewMult = false
 
+    /// The station this contact's ESM sequence has already called — set when
+    /// the middle message goes out (S&P your call, Run their report), cleared
+    /// when the contact is logged or wiped. Holding the callsign rather than a
+    /// bare flag means retyping the call restarts the sequence by itself, with
+    /// nothing to invalidate.
+    var esmSentTo: String?
+
     var callNormalized: String {
         call.trimmingCharacters(in: .whitespaces).uppercased()
+    }
+
+    /// True once this contact's middle message has gone out to the callsign
+    /// now in the field. Until it has, Return sends instead of logging — which
+    /// is what keeps an exchange prefilled from a spot from logging a QSO that
+    /// was never made.
+    var esmMiddleSent: Bool {
+        guard let esmSentTo, !esmSentTo.isEmpty else { return false }
+        return esmSentTo == callNormalized
     }
 
     func applyDefaults(modeClass: ModeClass) {
@@ -123,5 +139,6 @@ final class EntryState {
         exchangeStatus = .idle
         dupeWarning = nil
         isNewMult = false
+        esmSentTo = nil
     }
 }

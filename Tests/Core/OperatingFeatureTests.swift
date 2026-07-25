@@ -7,32 +7,123 @@ final class OperatingFeatureTests: XCTestCase {
 
     func testESMRunMode() {
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: true, exchangeValid: false),
+            ESM.nextAction(mode: .run, callEmpty: true, exchangeValid: false, middleSent: false),
             .sendMessage(index: 0), "empty call → CQ"
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: false),
-            .sendMessage(index: 1), "call typed → send exchange"
+            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: false, middleSent: false),
+            .sendMessage(index: 1), "call typed → send his report"
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: true),
-            .logAndSend(index: 2), "exchange copied → log + TU"
+            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: true, middleSent: true),
+            .logAndSend(index: 2), "his report sent, exchange copied → log + TU"
         )
     }
 
     func testESMSearchPounceMode() {
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: true, exchangeValid: false),
+            ESM.nextAction(mode: .searchPounce, callEmpty: true, exchangeValid: false, middleSent: false),
             .sendMessage(index: 0), "answer CQ with my call"
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: false),
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: false, middleSent: false),
             .sendMessage(index: 0)
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: true),
-            .logAndSend(index: 1), "they answered → my report + log"
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: true, middleSent: true),
+            .logAndSend(index: 1), "my call sent, they answered → my report + log"
         )
+    }
+
+    /// The reason ESM is a sequence rather than a reading of the fields: a
+    /// county prefilled from a spot before pouncing must not log a QSO that
+    /// was never made.
+    func testESMNeverLogsBeforeTheMiddleMessageHasBeenSent() {
+        XCTAssertEqual(
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: true, middleSent: false),
+            .sendMessage(index: 0),
+            "S&P: exchange prefilled but he has not been called → send my call, do not log"
+        )
+        XCTAssertEqual(
+            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: true, middleSent: false),
+            .sendMessage(index: 1),
+            "Run: exchange prefilled but his report has not gone out → send it, do not log"
+        )
+    }
+
+    /// Calling a station that has not come back yet: Return repeats the middle
+    /// message instead of advancing.
+    func testESMRepeatsTheMiddleMessageUntilTheExchangeIsCopied() {
+        XCTAssertEqual(
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: false, middleSent: true),
+            .sendMessage(index: 0), "S&P: no answer yet → call again"
+        )
+        XCTAssertEqual(
+            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: false, middleSent: true),
+            .sendMessage(index: 1), "Run: he did not copy → send his report again"
+        )
+    }
+
+    /// Run's CQ wins over everything: a stale sequence flag from the previous
+    /// contact cannot turn an empty call field into a log.
+    func testESMCQTakesPrecedenceOverAStaleSequence() {
+        XCTAssertEqual(
+            ESM.nextAction(mode: .run, callEmpty: true, exchangeValid: true, middleSent: true),
+            .sendMessage(index: 0)
+        )
+        XCTAssertEqual(
+            ESM.nextAction(mode: .searchPounce, callEmpty: true, exchangeValid: true, middleSent: true),
+            .sendMessage(index: 0)
+        )
+    }
+
+    /// The messages row highlights whatever Return would key, so the two are
+    /// read from the same action rather than computed twice.
+    func testESMActionReportsItsMessageIndex() {
+        XCTAssertEqual(ESM.Action.sendMessage(index: 0).messageIndex, 0)
+        XCTAssertEqual(ESM.Action.logAndSend(index: 2).messageIndex, 2)
+        XCTAssertNil(ESM.Action.none.messageIndex)
+    }
+
+    // MARK: The sequence flag's lifetime
+
+    func testESMSequenceFollowsTheCallsignInTheField() {
+        let entry = EntryState()
+        XCTAssertFalse(entry.esmMiddleSent, "nothing sent yet")
+
+        entry.call = "W1AW"
+        entry.esmSentTo = entry.callNormalized
+        XCTAssertTrue(entry.esmMiddleSent)
+
+        entry.call = "w1aw"
+        XCTAssertTrue(entry.esmMiddleSent, "case and the stored call are both normalized")
+
+        entry.call = "K5XYZ"
+        XCTAssertFalse(
+            entry.esmMiddleSent,
+            "retyping the call is a different station — the sequence restarts by itself"
+        )
+    }
+
+    func testESMSequenceIsClearedForTheNextContact() {
+        let entry = EntryState()
+        entry.call = "W1AW"
+        entry.esmSentTo = entry.callNormalized
+        XCTAssertTrue(entry.esmMiddleSent)
+
+        entry.clearForNextContact(modeClass: .cw)
+        XCTAssertNil(entry.esmSentTo)
+        XCTAssertFalse(entry.esmMiddleSent)
+    }
+
+    /// Run's CQ stores an empty callsign; that must not read back as "sent".
+    func testESMEmptyCallsignNeverCountsAsSent() {
+        let entry = EntryState()
+        entry.esmSentTo = ""
+        XCTAssertFalse(entry.esmMiddleSent)
+
+        entry.call = "W1AW"
+        XCTAssertFalse(entry.esmMiddleSent)
     }
 
     // MARK: Per-document message sets
