@@ -53,16 +53,18 @@ final class SerialExchangeTests: XCTestCase {
         XCTAssertEqual(decoded.rstSent, "599")
     }
 
-    /// Exactly one bundled party sends a QSO number. Every other must opt in
-    /// deliberately, not incidentally.
-    func testOnlyCQPExchangesASerial() throws {
+    /// The bundled parties that send a QSO number, named so a party cannot gain
+    /// one incidentally.
+    func testOnlyCQPAndPAQPExchangeASerial() throws {
         var withSerials: Set<String> = []
         for id in PartyCatalog.loadBundled().map(\.id) {
             if try XCTUnwrap(PartyCatalog.party(id: id)).exchangeIncludesSerial {
                 withSerials.insert(id)
             }
         }
-        XCTAssertEqual(withSerials, ["cqp"])
+        XCTAssertEqual(withSerials, ["cqp", "paqp"],
+                       "CQP sends 'QSO number and 4-letter county'; PAQP a "
+                           + "'Sequential serial number plus PA county, ARRL section'")
     }
 
     func testFlagDecodesFromJSON() throws {

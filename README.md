@@ -109,10 +109,23 @@ Built for KE5CW. Bundled parties, all with official county data:
   one-time 100-point bonus; DC is *not* folded into Maryland. `verified: partial`
   — the published rules are still the 2025 revision under a 2026 banner.
 
+- **Pennsylvania QSO Party** (Oct 10–11, 2026) — the first party whose
+  non-county exchange is an **ARRL/RAC section**, not a state: `NTX` is valid and
+  `TX` is not, `PA` itself is `EPA`/`WPA`, and Canada is **14 sections** where
+  Ontario alone is four tokens (`GH`, `ONE`, `ONN`, `ONS`) and the territories
+  are one (`TER`). PA stations count 67 counties + all 85 sections + **exactly
+  1 DX**, everyone else the 67 counties, all **once** — and **EPA and WPA are
+  granted outright**, since PA stations send a county so neither is ever
+  transmitted. Serial-number exchange with no RST, QRP as a **×2 final-score
+  multiplier**, 500 points per county a PA mobile activates with 10+ QSOs, and
+  ten valid bands — the widest list here. `verified: partial` — the rules are the
+  2025 revision and **the 2026 bonus station is not yet announced**, so none
+  ships rather than crediting last year's call.
+
 The remaining 2026 parties are tracked in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md) in contest-date
 order — the season ends with Illinois on Oct 18. All banked research is now
-used; the remaining four start from their sponsors' sites. Adding a party is governed by
+used; the remaining three start from their sponsors' sites. Adding a party is governed by
 [`docs/CONSTITUTION.md`](docs/CONSTITUTION.md).
 
 ## Features
@@ -334,7 +347,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 494 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 518 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -470,6 +483,23 @@ typed QSY commands, keyer timing, and keyer labelling.
   three ways — same codes in the same order from both sources, names
   alphabetical, and every code a subsequence of its county name (`CNO` ⊂
   `COCONINO`, `SCZ` ⊂ `SANTACRUZ`).
+- PAQP: rules from the PA QSO Party Association's official PDF
+  (paqso.org/files/PAQSO_Rules.pdf, 13 pages, footer "Revision: 08/19/25"), plus
+  the sponsor's two official abbreviation PDFs — 67 counties and 85 ARRL/RAC
+  sections — all read verbatim 2026-07-24. Both lists are parsed from the
+  committed source text by [`gen_paqp.py`](docs/research/gen_paqp.py) with hard
+  count assertions, and the rules state both counts independently (rule 10.b's
+  "67 PA Counties", rule 16.a's "The 14 Canadian Sections"). `verified: partial`
+  for two reasons: the rules are still the 2025 revision, and **the 2026 bonus
+  station is unannounced**. Its value is not in doubt — the 2025 station N3XF
+  published "1796 QSO's which results in 359,200 bonus points", exactly 200 per
+  QSO — but shipping last year's call would credit a phantom bonus, so none
+  ships. The **dates** are settled: the sponsor's banner says Oct 10 & 11 2026,
+  the rules' own formula is "Always the 2nd Full Weekend in October", and their
+  EDT parentheticals (1600Z = 1200EDT, 0400Z = midnight, …) still hold in 2026.
+  **Known limitation:** the rules permit 630 m, 2200 m and microwave, which
+  `Band` cannot express, so those QSOs cannot be logged; the sponsor itself
+  describes typical activity as 160 m through 2 m.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows

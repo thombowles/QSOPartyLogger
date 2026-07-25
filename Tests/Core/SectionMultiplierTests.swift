@@ -224,14 +224,21 @@ final class SectionMultiplierTests: XCTestCase {
 
     // MARK: Every existing party is untouched
 
-    func testBundledPartiesStillUseStatesAndProvinces() throws {
+    /// Exactly one bundled party counts sections; every other must opt in
+    /// deliberately, not incidentally.
+    func testOnlyPAQPUsesSections() throws {
+        var sectionParties: Set<String> = []
+        var grantParties: Set<String> = []
         for id in PartyCatalog.loadBundled().map(\.id) {
             let party = try XCTUnwrap(PartyCatalog.party(id: id))
-            XCTAssertFalse(party.usesSections, "\(id) must opt in deliberately")
-            XCTAssertTrue(party.sections.isEmpty, id)
-            XCTAssertTrue(party.multipliers.inState.granted.isEmpty, id)
-            XCTAssertTrue(party.multipliers.outState.granted.isEmpty, id)
+            if party.usesSections { sectionParties.insert(id) }
+            if !party.multipliers.inState.granted.isEmpty
+                || !party.multipliers.outState.granted.isEmpty { grantParties.insert(id) }
+            XCTAssertTrue(party.multipliers.outState.granted.isEmpty,
+                          "\(id): nothing is granted to an out-of-state entrant")
         }
+        XCTAssertEqual(sectionParties, ["paqp"])
+        XCTAssertEqual(grantParties, ["paqp"])
     }
 
     /// A non-section party's tokens keep resolving exactly as before — the new

@@ -1,0 +1,446 @@
+{
+  "schemaVersion": 1,
+  "id": "paqp",
+  "name": "Pennsylvania QSO Party",
+  "cabrilloContest": "PA-QSO-PARTY",
+  "homeState": "PA",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m",
+    "1.25m",
+    "70cm"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "section",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once",
+      "dxMultCap": 1,
+      "grantedMultipliers": [
+        {
+          "multClass": "section",
+          "value": "EPA"
+        },
+        {
+          "multClass": "section",
+          "value": "WPA"
+        }
+      ]
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "activatedCountyCount",
+      "minQSOs": 10,
+      "points": 500
+    }
+  ],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 4,
+  "sections": [
+    "CO",
+    "EB",
+    "IA",
+    "LAX",
+    "KS",
+    "ORG",
+    "MN",
+    "PAC",
+    "MO",
+    "SB",
+    "ND",
+    "SCV",
+    "NE",
+    "SDG",
+    "SD",
+    "SF",
+    "SJV",
+    "SV",
+    "CT",
+    "EMA",
+    "ME",
+    "AK",
+    "NH",
+    "AZ",
+    "RI",
+    "EWA",
+    "VT",
+    "ID",
+    "WMA",
+    "MT",
+    "NV",
+    "OR",
+    "ENY",
+    "UT",
+    "NLI",
+    "WWA",
+    "NNJ",
+    "WY",
+    "NNY",
+    "SNJ",
+    "WNY",
+    "MI",
+    "OH",
+    "WV",
+    "DE",
+    "EPA",
+    "MDC",
+    "IL",
+    "WPA",
+    "IN",
+    "WI",
+    "AL",
+    "GA",
+    "AB",
+    "KY",
+    "BC",
+    "NC",
+    "GH",
+    "NFL",
+    "MB",
+    "PR",
+    "NB",
+    "SC",
+    "NL",
+    "SFL",
+    "NS",
+    "TN",
+    "ONE",
+    "VA",
+    "ONN",
+    "VI",
+    "ONS",
+    "WCF",
+    "PE",
+    "QC",
+    "SK",
+    "AR",
+    "TER",
+    "LA",
+    "MS",
+    "NM",
+    "NTX",
+    "OK",
+    "STX",
+    "WTX"
+  ],
+  "exchangeIncludesRST": false,
+  "exchangeIncludesSerial": true,
+  "outStateWorksHomeStationsOnly": true,
+  "scoreMultipliers": {
+    "power": {
+      "HIGH": 1,
+      "LOW": 1,
+      "QRP": 2
+    }
+  },
+  "schedule": [
+    {
+      "start": "2026-10-10T16:00:00Z",
+      "end": "2026-10-11T04:00:00Z"
+    },
+    {
+      "start": "2026-10-11T13:00:00Z",
+      "end": "2026-10-11T22:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ADA",
+      "name": "Adams"
+    },
+    {
+      "abbr": "ALL",
+      "name": "Allegheny"
+    },
+    {
+      "abbr": "ARM",
+      "name": "Armstrong"
+    },
+    {
+      "abbr": "BEA",
+      "name": "Beaver"
+    },
+    {
+      "abbr": "BED",
+      "name": "Bedford"
+    },
+    {
+      "abbr": "BER",
+      "name": "Berks"
+    },
+    {
+      "abbr": "BLA",
+      "name": "Blair"
+    },
+    {
+      "abbr": "BRA",
+      "name": "Bradford"
+    },
+    {
+      "abbr": "BUX",
+      "name": "Bucks"
+    },
+    {
+      "abbr": "BUT",
+      "name": "Butler"
+    },
+    {
+      "abbr": "CMB",
+      "name": "Cambria"
+    },
+    {
+      "abbr": "CRN",
+      "name": "Cameron"
+    },
+    {
+      "abbr": "CAR",
+      "name": "Carbon"
+    },
+    {
+      "abbr": "CEN",
+      "name": "Centre"
+    },
+    {
+      "abbr": "CHE",
+      "name": "Chester"
+    },
+    {
+      "abbr": "CLA",
+      "name": "Clarion"
+    },
+    {
+      "abbr": "CLE",
+      "name": "Clearfield"
+    },
+    {
+      "abbr": "CLI",
+      "name": "Clinton"
+    },
+    {
+      "abbr": "COL",
+      "name": "Columbia"
+    },
+    {
+      "abbr": "CRA",
+      "name": "Crawford"
+    },
+    {
+      "abbr": "CUM",
+      "name": "Cumberland"
+    },
+    {
+      "abbr": "DAU",
+      "name": "Dauphin"
+    },
+    {
+      "abbr": "DCO",
+      "name": "Delaware"
+    },
+    {
+      "abbr": "ELK",
+      "name": "Elk"
+    },
+    {
+      "abbr": "ERI",
+      "name": "Erie"
+    },
+    {
+      "abbr": "FAY",
+      "name": "Fayette"
+    },
+    {
+      "abbr": "FOR",
+      "name": "Forest"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "FUL",
+      "name": "Fulton"
+    },
+    {
+      "abbr": "GRE",
+      "name": "Greene"
+    },
+    {
+      "abbr": "HUN",
+      "name": "Huntingdon"
+    },
+    {
+      "abbr": "INN",
+      "name": "Indiana"
+    },
+    {
+      "abbr": "JEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JUN",
+      "name": "Juniata"
+    },
+    {
+      "abbr": "LAC",
+      "name": "Lackawanna"
+    },
+    {
+      "abbr": "LAN",
+      "name": "Lancaster"
+    },
+    {
+      "abbr": "LAW",
+      "name": "Lawrence"
+    },
+    {
+      "abbr": "LEB",
+      "name": "Lebanon"
+    },
+    {
+      "abbr": "LEH",
+      "name": "Lehigh"
+    },
+    {
+      "abbr": "LUZ",
+      "name": "Luzerne"
+    },
+    {
+      "abbr": "LYC",
+      "name": "Lycoming"
+    },
+    {
+      "abbr": "MCK",
+      "name": "McKean"
+    },
+    {
+      "abbr": "MER",
+      "name": "Mercer"
+    },
+    {
+      "abbr": "MIF",
+      "name": "Mifflin"
+    },
+    {
+      "abbr": "MOE",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MGY",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "MTR",
+      "name": "Montour"
+    },
+    {
+      "abbr": "NHA",
+      "name": "Northampton"
+    },
+    {
+      "abbr": "NUM",
+      "name": "Northumberland"
+    },
+    {
+      "abbr": "PER",
+      "name": "Perry"
+    },
+    {
+      "abbr": "PHI",
+      "name": "Philadelphia"
+    },
+    {
+      "abbr": "PIK",
+      "name": "Pike"
+    },
+    {
+      "abbr": "POT",
+      "name": "Potter"
+    },
+    {
+      "abbr": "SCH",
+      "name": "Schuylkill"
+    },
+    {
+      "abbr": "SNY",
+      "name": "Snyder"
+    },
+    {
+      "abbr": "SOM",
+      "name": "Somerset"
+    },
+    {
+      "abbr": "SUL",
+      "name": "Sullivan"
+    },
+    {
+      "abbr": "SUS",
+      "name": "Susquehanna"
+    },
+    {
+      "abbr": "TIO",
+      "name": "Tioga"
+    },
+    {
+      "abbr": "UNI",
+      "name": "Union"
+    },
+    {
+      "abbr": "VEN",
+      "name": "Venango"
+    },
+    {
+      "abbr": "WAR",
+      "name": "Warren"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAY",
+      "name": "Wayne"
+    },
+    {
+      "abbr": "WES",
+      "name": "Westmoreland"
+    },
+    {
+      "abbr": "WYO",
+      "name": "Wyoming"
+    },
+    {
+      "abbr": "YOR",
+      "name": "York"
+    }
+  ],
+  "notes": "verified: partial — rules from the PA QSO Party Association's official PDF (paqso.org/files/PAQSO_Rules.pdf, 13 pages, footer 'Revision: 08/19/25'), plus the sponsor's two official abbreviation PDFs for the 67 counties and the 85 ARRL/RAC sections, all read verbatim 2026-07-24. THE EXCHANGE IS A SERIAL NUMBER PLUS A SECTION, NOT A STATE: 'Sequential serial number plus PA county, ARRL section, Canadian section, or \"DX\"'. There is no RST. Non-PA stations send their ARRL/RAC SECTION, so NTX, STX and WTX are valid and TX is NOT a PAQP token; likewise ENY/NLI/NNY/WNY rather than NY, and EPA/WPA rather than PA. Canada is 14 SECTIONS rather than 13 provinces and differs in kind: Ontario alone is four tokens (GH Golden Horseshoe, ONE, ONN, ONS) and NT, NU and YT do not exist - they are TER. Multipliers count ONCE, not per band, on both sides, which the sponsor clarified deliberately in 2023. PA stations count PA counties + all 85 sections + exactly 1 DX ('+ 1 DX', the tightest DX cap of any bundled party, and one the literal 'DX' token satisfies exactly since every DX station sends the same thing). Non-PA stations count the 67 PA counties and nothing else. EPA AND WPA ARE GRANTED OUTRIGHT to PA entrants: rule 12.d says 'EPA and WPA multipliers are automatically added during the rescore process - there is no need to enter them', because PA stations send a county and so neither PA section token is ever transmitted. CW 2 points, phone 1; there is no digital mode at all - the change log records 'Removed digital modes. Deleted 4.c and 6.b' - so a digital QSO is invalid rather than zero-point. QRP is a FINAL-SCORE MULTIPLIER of 2 ('QRP Operation Multiplier: Multiply QSO Points times 2'), applied only to QRP-specific entry divisions. PA mobiles and rovers earn 500 points per PA county worked from with 10 or more valid QSOs. County lines are ONE exchange with several counties ('sends a single report with the multiple county abbreviations (CAR/LEH)'), logged as a QSO per county, with no stated maximum, so the app's ceiling of four applies; a county-line station is fixed for the whole party, and mobiles, rovers and bonus stations may not be county-line stations. KNOWN LIMITATION: the rules permit 630 m and 2200 m and any VHF/UHF/microwave frequency, but this app's band list stops at 70 cm, so QSOs on 630 m, 2200 m or above 70 cm cannot be logged. The sponsor itself describes typical activity as 160 m through 2 m, so this is recorded rather than fixed. Ten bands ship: 160, 80, 40, 20, 15, 10, 6, 2, 1.25 m and 70 cm - everything but the WARC bands the rules exclude. Cabrillo CONTEST value PA-QSO-PARTY per WA7BNM; the sponsor mandates Cabrillo 3.0 and cites the Cabrillo QSO-data spec but prints no header token. County and section lists are parsed from the sponsor's own PDFs with hard count assertions (67 and 85, both of which the rules state independently in 10.b and 16.a). OPEN QUESTIONS (why this is partial): (1) The published rules are the 2025 revision ('Pennsylvania QSO Party 2025 Rules', Revision 08/19/25), so a 2026 rule change would not be visible. The DATES are not in doubt - the sponsor's banner says 'October 10 & 11, 2026', the rules' own formula is 'Always the 2nd Full Weekend in October', and the rules' EDT parentheticals (1600Z = 1200EDT, 0400Z = midnight, 1300Z = 0900EDT, 2200Z = 1800EDT) all still hold in 2026 since DST ends 1 November. Re-check paqso.org before 10 October 2026 and re-run gen_paqp.py, whose quoted-sentence assertions fail loudly if the text moved. (2) THE 2026 BONUS STATION IS NOT ANNOUNCED. Valid QSOs with it are worth 200 points each - confirmed by the sponsor's own published arithmetic, the 2025 station N3XF reporting '1796 QSO's which results in 359,200 bonus points', exactly 200 per QSO - but the rules still name the 2025 station and the bonus-station page still describes 2025. NO BONUS STATION SHIPS, because shipping last year's call would credit a phantom 200 points per QSO. Add one as a user file (Article 21) once it is named. (3) No rule states whether a non-PA station may work only PA stations. Rule 1.b frames the party as 'Non-Pennsylvania Amateurs try to contact as many Pennsylvania Amateurs as possible' and out-of-state multipliers are PA counties only, but neither is a prohibition. Shipped with the restriction ON, as for NJQP, IAQP and NHQP, so a stray non-PA contact is visibly flagged NO CREDIT rather than silently scoring. Confirm all three with the sponsor (info@paqso.org) before submitting a log."
+}
