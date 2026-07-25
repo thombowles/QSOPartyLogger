@@ -214,4 +214,44 @@ final class MessageDefaultsTests: XCTestCase {
                          "\(p.id)'s own defaults must never trip our warning")
         }
     }
+
+    // MARK: The operator-facing warning
+
+    func testWarningNamesThePartyAndTheMissingMacro() {
+        XCTAssertEqual(
+            MessageSets.ExchangeMismatch.missingSerial.warning(partyName: "California QSO Party"),
+            "California QSO Party sends a QSO number, but no message uses {SERIAL}."
+        )
+        XCTAssertEqual(
+            MessageSets.ExchangeMismatch.extraneousRST.warning(partyName: "Maryland-DC QSO Party"),
+            "Maryland-DC QSO Party's exchange does not include a signal report, but a message still sends {RST}."
+        )
+        XCTAssertEqual(
+            MessageSets.ExchangeMismatch.missingRST.warning(partyName: "Kansas QSO Party"),
+            "Kansas QSO Party sends a signal report, but no message uses {RST}."
+        )
+    }
+
+    /// Every case must supply its own wording — a `default:` arm here would let
+    /// a future case inherit another's copy and tell the operator the wrong thing.
+    func testEveryMismatchCaseHasDistinctWording() {
+        let cases: [MessageSets.ExchangeMismatch] = [.missingSerial, .extraneousRST, .missingRST]
+        let texts = cases.map { $0.warning(partyName: "P") }
+        XCTAssertEqual(Set(texts).count, cases.count, "each case needs its own sentence")
+        for text in texts {
+            XCTAssertTrue(text.hasPrefix("P"), "the party's name leads: \(text)")
+            XCTAssertTrue(text.hasSuffix("."), "a full sentence: \(text)")
+        }
+    }
+
+    /// The warning an operator actually sees for the shipped defaults on the
+    /// two parties that were wrong before this change.
+    func testWarningForTheRealPartiesThatWereWrong() throws {
+        for id in ["cqp", "paqp"] {
+            let party = try XCTUnwrap(PartyCatalog.party(id: id))
+            let mismatch = try XCTUnwrap(MessageSets.standard.exchangeMismatch(with: party), id)
+            XCTAssertEqual(mismatch.warning(partyName: party.name),
+                           "\(party.name) sends a QSO number, but no message uses {SERIAL}.")
+        }
+    }
 }

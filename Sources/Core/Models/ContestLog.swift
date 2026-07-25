@@ -103,6 +103,21 @@ struct MessageSets: Codable, Equatable, Sendable {
         /// reachable when an operator types `{SERIAL}` into a report party's
         /// macros, where it expands to nothing because no number is assigned.
         case missingRST
+
+        /// What the messages editor tells the operator. Exhaustive on purpose:
+        /// a new case must supply its own sentence rather than inherit one that
+        /// describes a different mistake.
+        func warning(partyName: String) -> String {
+            switch self {
+            case .missingSerial:
+                "\(partyName) sends a QSO number, but no message uses {SERIAL}."
+            case .extraneousRST:
+                "\(partyName)'s exchange does not include a signal report, "
+                    + "but a message still sends {RST}."
+            case .missingRST:
+                "\(partyName) sends a signal report, but no message uses {RST}."
+            }
+        }
     }
 
     /// The first way these macros disagree with the party's exchange, or nil

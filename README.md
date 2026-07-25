@@ -201,9 +201,12 @@ parties, and the remaining engine gaps. Adding a party is governed by
 - **CW keying two ways**: direct DTR/RTS line keying with sub-millisecond
   software timing (8–50 WPM, optional PTT line with lead/tail), or the
   radio's internal keyer (K3 `KY` / Flex CWX). F1–F8 messages with
-  `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}` macros; **Esc aborts instantly**.
-  Optional cut numbers for RST and QSO numbers (599 → 5NN) in the CW Messages
-  editor.
+  `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}` macros, **defaulting to the party's
+  own exchange shape** — CQP and PAQP send `{SERIAL}` where the report would
+  go, MDC sends call and location only, and the messages editor warns (with a
+  one-key fix, ⇧⌘D) when a log's macros contradict its party. **Esc aborts
+  instantly.** Optional cut numbers for RST and QSO numbers (599 → 5NN) in the
+  CW Messages editor.
 - **ESM (Enter Sends Message)** toggle right on the message row: Return
   sends CQ / exchange / TU based on what's filled in, and logs automatically
   after the exchange — N1MM muscle memory intact.
@@ -258,6 +261,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `Space` | Jump to the next entry field (Call → Exchange, or → QSO nr rcvd where the party sends one) |
 | `F12` | Wipe the entry fields and start the contact over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
+| `⇧⌘D` | Restore the party's default CW messages (Messages editor) |
 | `Esc` | Abort CW + stop repeat-CQ |
 | `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
 | `⌘←` / `⌘→` | Tune to previous / next spot on the band |
@@ -386,7 +390,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 586 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 618 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
