@@ -28,6 +28,16 @@ final class PartyCatalogTests: XCTestCase {
                        "a non-Texas entrant's only multiplier is Texas counties")
     }
 
+    /// KSQP states it as the party's OBJECT, naming both sides: "Stations
+    /// outside of Kansas work as many Kansas stations in as many Kansas
+    /// counties as possible. Stations in Kansas work everyone."
+    func testKansasRestrictsOutOfStateCreditToKansasContacts() throws {
+        let ksqp = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        XCTAssertTrue(ksqp.outStateWorksHomeStationsOnly)
+        XCTAssertEqual(ksqp.multipliers.outState.classes, [.county],
+                       "\"Non-Kansas Stations – maximum of 105 Kansas county multipliers\"")
+    }
+
     // MARK: Verification status (constitution Article 3)
 
     /// Every bundled party is either fully verified or explicitly marked

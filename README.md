@@ -402,7 +402,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 605 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 606 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -482,6 +482,15 @@ typed QSY commands, keyer timing, and keyer labelling.
   same literal token "DX", so without a DXCC prefix table this app credits DX as
   one multiplier and an NH entrant's count can run up to 9 low. Out-of-state
   entrants are unaffected — DX is not one of their multiplier classes.
+- KSQP: the **2026 rules PDF** (ksqsoparty.org, fetched 2026-07-25, extracted to
+  [`ksqp_rules_2026.txt`](docs/research/ksqp_rules_2026.txt)) states the
+  restriction as the party's OBJECT and names both sides — "Stations outside of
+  Kansas work as many Kansas stations in as many Kansas counties as possible.
+  Stations in Kansas work everyone" — with the multiplier table capping
+  non-Kansas entrants at "105 Kansas county multipliers". Resolved as for the
+  other aim-not-prohibition parties; analysis in
+  [`ksqp_out_of_state_credit.md`](docs/research/ksqp_out_of_state_credit.md).
+  That PDF also carries an **FT4/8 category** the bundled definition predates.
 - TQP: the **operating rules** at txqp.net (fetched 2026-07-25, extracted to
   [`tqp_operating_rules.txt`](docs/research/tqp_operating_rules.txt)) write the
   out-of-state restriction into the QSO points rule itself — a non-Texas station
