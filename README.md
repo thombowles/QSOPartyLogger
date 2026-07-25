@@ -270,8 +270,10 @@ parties, and the remaining engine gaps. Adding a party is governed by
   exchange from), **North American spotters only**, **hide stations already
   worked** on this band+mode (off by default — worked calls normally stay
   greyed), **hide RBN/skimmer spots**, per-mode (CW / phone / digital,
-  inferred from the spotter's comment first and the band plan second),
-  per-band, and how long spots live before ageing out (5 min – 2 hr,
+  inferred from the spotter's comment first and the band plan second, then
+  held to the modes the active party actually permits — in a party with no
+  digital class, the digital sub-band is CW, which is where that activity
+  really sits), per-band, and how long spots live before ageing out (5 min – 2 hr,
   default 15). It's a panel, not a menu — tick as many boxes as you like in
   one visit — and everything applies instantly to the map and to ⌘← / ⌘→.
   All filters off by default; **Reset All** puts them back.

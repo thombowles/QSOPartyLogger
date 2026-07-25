@@ -133,6 +133,45 @@ enum SpotFilter {
         return .phone
     }
 
+    /// Sub-bands run CW, then digital, then phone up from the bottom of each
+    /// band — the order a disallowed mode has to be redistributed along.
+    private static let segmentOrder: [ModeClass] = [.cw, .digital, .phone]
+
+    /// Mode inference held to the modes a party actually permits.
+    ///
+    /// The band plan above is tuned for DX cluster spots, where the FT8
+    /// watering holes are real. A QSO party that forbids digital has no such
+    /// segment: its CW activity simply runs further up the band (ALQP's
+    /// reaches about 7060, well past the generic 7045 boundary). Left
+    /// unconstrained the inference is not merely cosmetic — `wouldAddMultiplier`
+    /// rejects any mode the party disallows, so the multiplier badge vanishes
+    /// on every station in the phantom segment.
+    ///
+    /// A forbidden mode is folded into its neighbour, preferring the lower
+    /// segment, which is where the activity it displaced actually sits. An
+    /// empty allow-list means no constraint.
+    static func modeClass(
+        freqKHz: Double,
+        comment: String,
+        allowedModes: [ModeClass]
+    ) -> ModeClass {
+        let inferred = modeClass(freqKHz: freqKHz, comment: comment)
+        guard !allowedModes.isEmpty, !allowedModes.contains(inferred) else { return inferred }
+        guard let index = segmentOrder.firstIndex(of: inferred) else { return inferred }
+
+        for distance in 1..<segmentOrder.count {
+            let below = index - distance
+            if below >= 0, allowedModes.contains(segmentOrder[below]) {
+                return segmentOrder[below]
+            }
+            let above = index + distance
+            if above < segmentOrder.count, allowedModes.contains(segmentOrder[above]) {
+                return segmentOrder[above]
+            }
+        }
+        return inferred
+    }
+
     // MARK: Combined filtering
 
     /// Every axis the band map can filter on. Defaults keep everything;
@@ -148,6 +187,10 @@ enum SpotFilter {
         var hideSkimmer = false
         var modes: Set<ModeClass> = []
         var bands: Set<Band> = []
+        /// Modes the active party permits, so a spot's inferred mode is held
+        /// to the same rules that decide whether it can be a multiplier.
+        /// Empty means no constraint.
+        var allowedModes: [ModeClass] = []
         /// Calls counted as worked when `hideWorked` is on.
         var workedCalls: Set<String> = []
 
@@ -165,7 +208,8 @@ enum SpotFilter {
         if options.hideSkimmer, isSkimmer(spot) { return false }
         if !options.bands.isEmpty, let band = spot.band, !options.bands.contains(band) { return false }
         if !options.modes.isEmpty,
-           !options.modes.contains(modeClass(freqKHz: spot.freqKHz, comment: spot.comment)) {
+           !options.modes.contains(modeClass(freqKHz: spot.freqKHz, comment: spot.comment,
+                                             allowedModes: options.allowedModes)) {
             return false
         }
         return true

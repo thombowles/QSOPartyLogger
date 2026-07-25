@@ -155,7 +155,10 @@ struct MainView: View {
     private var visibleSpotsOnBand: [Spot] {
         SpotFilter.filter(
             spotStore.spots(band: currentBand),
-            options: settings.spotFilterOptions(workedCalls: workedCallsOnCurrentBandMode)
+            options: settings.spotFilterOptions(
+                workedCalls: workedCallsOnCurrentBandMode,
+                allowedModes: party?.allowedModeClasses ?? []
+            )
         )
     }
 
@@ -238,6 +241,7 @@ struct MainView: View {
         // numbering the moment Contest Setup chooses it.
         .onChange(of: document.log.partyID) {
             bandMapModel?.partyBands = party?.validBands ?? Band.allCases
+            bandMapModel?.allowedModes = party?.allowedModeClasses ?? []
         }
     }
 
@@ -577,6 +581,7 @@ struct MainView: View {
             model.band = currentBand
             model.workedCalls = workedCallsOnCurrentBandMode
             model.partyBands = party?.validBands ?? Band.allCases
+            model.allowedModes = party?.allowedModeClasses ?? []
             model.onTuneSpot = { tune(to: $0) }
             model.onTuneKHz = { qsyTo(kHz: $0) }
             bandMapModel = model

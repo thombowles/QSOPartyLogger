@@ -11,6 +11,9 @@ final class BandMapModel {
     var cqKHz: Double?
     /// Bands the party allows — what the band filter menu offers.
     var partyBands: [Band] = Band.allCases
+    /// Modes the active party permits — a spot's mode is inferred against
+    /// these, not the generic band plan.
+    var allowedModes: [ModeClass] = []
     var onTuneSpot: ((Spot) -> Void)?
     var onTuneKHz: ((Double) -> Void)?
 
@@ -34,12 +37,12 @@ final class BandMapModel {
     var spots: [Spot] {
         SpotFilter.filter(
             spotStore.spots(band: band),
-            options: settings.spotFilterOptions(workedCalls: workedCalls)
+            options: settings.spotFilterOptions(workedCalls: workedCalls, allowedModes: allowedModes)
         )
     }
 
     var filtersActive: Bool {
-        settings.spotFilterOptions(workedCalls: workedCalls).isActive
+        settings.spotFilterOptions(workedCalls: workedCalls, allowedModes: allowedModes).isActive
     }
 
     /// Already in the log on this band and mode. `workedCalls` is uppercased at

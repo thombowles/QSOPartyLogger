@@ -99,9 +99,13 @@ final class AppSettings {
         didSet { defaults.set(spotBands.map(\.rawValue), forKey: "spotBands") }
     }
 
-    /// The spot filters as the engine wants them. `workedCalls` is supplied
-    /// by the caller, which is the only part that isn't a stored preference.
-    func spotFilterOptions(workedCalls: Set<String>) -> SpotFilter.Options {
+    /// The spot filters as the engine wants them. `workedCalls` and
+    /// `allowedModes` are supplied by the caller — they come from the log and
+    /// the active party, not from stored preferences.
+    func spotFilterOptions(
+        workedCalls: Set<String>,
+        allowedModes: [ModeClass] = []
+    ) -> SpotFilter.Options {
         SpotFilter.Options(
             northAmericanSpottersOnly: northAmericanSpottersOnly,
             northAmericanStationsOnly: northAmericanStationsOnly,
@@ -109,6 +113,7 @@ final class AppSettings {
             hideSkimmer: hideSkimmerSpots,
             modes: spotModes,
             bands: spotBands,
+            allowedModes: allowedModes,
             workedCalls: workedCalls
         )
     }
