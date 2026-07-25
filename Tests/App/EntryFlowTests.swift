@@ -408,4 +408,70 @@ final class EntryFlowTests: XCTestCase {
             undoManager: nil
         )
     }
+
+    // MARK: Exchange prefill
+
+    /// A KSQP log, out-of-state TX — the seat that receives Kansas counties.
+    func ksqpDocument() -> LogDocument {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(callsign: "KE5CW"),
+            location: .outOfState(location: "TX"),
+            partyID: "ksqp",
+            undoManager: nil
+        )
+        return doc
+    }
+
+    /// The same, with one contact already in the log.
+    func ksqpDocumentWorking(_ call: String, as loc: String) -> LogDocument {
+        let doc = ksqpDocument()
+        doc.append(
+            qsos: [
+                QSO(
+                    call: call, band: .m40, modeClass: .cw, rawMode: "CW",
+                    rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: loc
+                )
+            ],
+            undoManager: nil
+        )
+        return doc
+    }
+
+    func testTypingAKnownCallFillsTheExchange() {
+        let flow = EntryFlow(document: ksqpDocumentWorking("K5NA", as: "JOH"))
+        flow.entry.call = "K5NA"
+        flow.callChanged(context())
+        XCTAssertEqual(flow.entry.exchange, "JOH")
+        XCTAssertTrue(flow.entry.exchangeIsAutoFilled)
+    }
+
+    func testAutoFillNeverOverwritesTypedText() {
+        let flow = EntryFlow(document: ksqpDocumentWorking("K5NA", as: "JOH"))
+        flow.entry.exchangeTyped = "MIA"
+        flow.entry.call = "K5NA"
+        flow.callChanged(context())
+        XCTAssertEqual(flow.entry.exchange, "MIA", "what the operator typed stands")
+        XCTAssertFalse(flow.entry.exchangeIsAutoFilled)
+    }
+
+    /// Auto-filled text is the app's, so the app takes it back the moment the
+    /// call it belonged to is no longer in the field.
+    func testAutoFillWithdrawsWhenTheCallStopsMatching() {
+        let flow = EntryFlow(document: ksqpDocumentWorking("K5NA", as: "JOH"))
+        flow.entry.call = "K5NA"
+        flow.callChanged(context())
+        XCTAssertEqual(flow.entry.exchange, "JOH")
+
+        flow.entry.call = "K5NAX"
+        flow.callChanged(context())
+        XCTAssertEqual(flow.entry.exchange, "", "the fill belonged to K5NA")
+    }
+
+    func testUnknownCallFillsNothing() {
+        let flow = EntryFlow(document: ksqpDocumentWorking("K5NA", as: "JOH"))
+        flow.entry.call = "W1ABC"
+        flow.callChanged(context())
+        XCTAssertEqual(flow.entry.exchange, "")
+    }
 }

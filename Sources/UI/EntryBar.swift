@@ -45,7 +45,13 @@ struct EntryBar: View {
                     field("Ser S", text: $entry.serialSent, width: 60, focusTag: .serialSent)
                     field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
                 }
-                field(exchangeLabel, text: $entry.exchange.uppercasing, width: 170, focusTag: .exchange)
+                field(
+                    exchangeLabel,
+                    text: $entry.exchangeTyped.uppercasing,
+                    width: 170,
+                    focusTag: .exchange,
+                    provisional: entry.exchangeIsAutoFilled
+                )
                 statusBadge
                 Spacer()
                 Button("Log", action: onLog)
@@ -127,11 +133,14 @@ struct EntryBar: View {
         }
     }
 
+    /// `provisional` greys the text: the app put it there from what it knows
+    /// about the station, and the first keystroke makes it the operator's.
     private func field(
         _ label: String,
         text: Binding<String>,
         width: CGFloat,
-        focusTag: Field
+        focusTag: Field,
+        provisional: Bool = false
     ) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
@@ -140,6 +149,7 @@ struct EntryBar: View {
             TextField("", text: text)
                 .textFieldStyle(.roundedBorder)
                 .font(.system(.body, design: .monospaced))
+                .foregroundStyle(provisional ? AnyShapeStyle(.secondary) : AnyShapeStyle(.primary))
                 .frame(width: width)
                 .focused($focus, equals: focusTag)
                 .onSubmit(onLog)

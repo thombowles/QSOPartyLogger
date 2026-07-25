@@ -10,6 +10,34 @@ final class EntryState {
     var serialRcvd = ""
     var exchange = ""
 
+    /// Whether `exchange` holds text the app put there rather than text the
+    /// operator typed. Auto-fill only ever writes into a field it already owns,
+    /// so it can never destroy a copied exchange — and it takes its own text
+    /// back when the call it belonged to leaves the field.
+    private(set) var exchangeIsAutoFilled = false
+
+    /// The exchange as the operator edits it. Writing through here is what
+    /// marks the text as theirs; the view binds to this, never to `exchange`.
+    var exchangeTyped: String {
+        get { exchange }
+        set {
+            exchange = newValue
+            exchangeIsAutoFilled = false
+        }
+    }
+
+    func autoFillExchange(_ text: String) {
+        exchange = text
+        exchangeIsAutoFilled = true
+    }
+
+    /// Take back text the app put there. Text the operator typed is untouched.
+    func clearAutoFilledExchange() {
+        guard exchangeIsAutoFilled else { return }
+        exchange = ""
+        exchangeIsAutoFilled = false
+    }
+
     /// What the operator typed into Ser S, or nil to follow the log.
     ///
     /// An override rather than a seeded value because seeding needs a moment to
@@ -140,6 +168,7 @@ final class EntryState {
         serialOverride = nil
         serialRcvd = ""
         exchange = ""
+        exchangeIsAutoFilled = false
         exchangeStatus = .idle
         dupeWarning = nil
         isNewMult = false

@@ -205,6 +205,15 @@ parties, and the remaining engine gaps. Adding a party is governed by
   is one row, not two. It takes no space at all for a station you have not
   worked, and the room comes out of the log table rather than out of the window,
   so nothing resizes.
+- **Exchange pre-fill**: work a station on a new band and his county or state is
+  already in the field, taken from your most recent contact with him — or, when
+  this contest has never worked him, from previous contests in the history
+  archive. A county only carries over within the same sponsor's party: Colorado
+  and Kansas both abbreviate Jefferson County `JEF`, so a Colorado exchange
+  parses perfectly as a Kansas county and is still wrong. Every candidate has to
+  survive the current party's own exchange parser before it is offered.
+  Pre-filled text is greyed until you type over it, and it withdraws itself if
+  the call changes.
 - **Elecraft K3/K3S/KX3/KX2 CAT** over serial (4800–38400 baud): live
   frequency/mode/TX polling (`IF;` — verified against Programmer's Reference
   revs F2 and G5), band stamped onto each QSO.

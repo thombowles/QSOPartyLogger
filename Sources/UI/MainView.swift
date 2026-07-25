@@ -165,8 +165,21 @@ struct MainView: View {
         DupeChecker.workedContacts(call: entry.callNormalized, log: document.log.qsos)
     }
 
+    /// "KSQP 2025 — JOH" when previous contests know the station and this one
+    /// does not. It is where a pre-filled exchange came from, which is why it
+    /// belongs on screen rather than only in the field.
+    private var workedBeforeArchiveLine: String? {
+        guard workedBefore.isEmpty, !entry.callNormalized.isEmpty,
+              let seen = flow.archiveIndex.entries(for: entry.callNormalized).first
+        else { return nil }
+        return "\(seen.partyID.uppercased()) \(seen.year) — \(seen.theirLoc)"
+    }
+
     private var workedBeforeHeight: CGFloat {
-        WorkedBeforeTable.height(contacts: workedBefore.count, hasArchiveLine: false)
+        WorkedBeforeTable.height(
+            contacts: workedBefore.count,
+            hasArchiveLine: workedBeforeArchiveLine != nil
+        )
     }
 
     /// Calls already in the log on the current band+mode — grays their spots.
@@ -205,7 +218,7 @@ struct MainView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .onChange(of: entry.exchange) { revalidate() }
-                .onChange(of: entry.call) { revalidate() }
+                .onChange(of: entry.call) { flow.callChanged(operatingContext) }
 
             MessagesRow(
                 operatingMode: operatingMode,
@@ -225,8 +238,7 @@ struct MainView: View {
                 WorkedBeforeTable(
                     call: entry.callNormalized,
                     contacts: workedBefore,
-                    // The archive index supplies this once it has loaded.
-                    archiveLine: nil,
+                    archiveLine: workedBeforeArchiveLine,
                     currentBand: currentBand,
                     currentModeClass: currentModeClass
                 )
@@ -594,6 +606,7 @@ struct MainView: View {
         }
 
         spotStore.maxAgeMinutes = settings.spotMaxAgeMinutes
+        loadArchiveIndex()
 
         if bandMapModel == nil {
             let model = BandMapModel(radio: radio, spotStore: spotStore, settings: settings)
@@ -603,6 +616,30 @@ struct MainView: View {
             model.onTuneSpot = { tune(to: $0) }
             model.onTuneKHz = { qsyTo(kHz: $0) }
             bandMapModel = model
+        }
+    }
+
+    /// Previous contests, read once and indexed by call — what a prefill falls
+    /// back on when this log has never worked the station. Off the main actor
+    /// because the archive holds every QSO of every contest ever logged, and a
+    /// failure is silent: this is a convenience, not a correctness path.
+    private func loadArchiveIndex() {
+        Task {
+            let index = await Task.detached(priority: .userInitiated) {
+                () -> StationMemory.Index in
+                let folder = ContestHistorian.resolveFolder()
+                guard let archive = try? ArchiveStore(folder: folder).load() else {
+                    return .empty
+                }
+                var counties: [String: Set<String>] = [:]
+                for id in Set(archive.records.map(\.partyID)) {
+                    counties[id] = Set(
+                        PartyCatalog.party(id: id)?.counties.map(\.abbr) ?? []
+                    )
+                }
+                return StationMemory.Index.build(archive, countiesByParty: counties)
+            }.value
+            flow.archiveIndex = index
         }
     }
 
