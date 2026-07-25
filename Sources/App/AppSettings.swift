@@ -82,6 +82,13 @@ final class AppSettings {
         didSet { defaults.set(spotMaxAgeMinutes, forKey: "spotMaxAgeMinutes") }
     }
 
+    /// Switch the radio between CW and SSB to match the band plan when the app
+    /// moves the frequency. Never applies to the VFO knob — see
+    /// `BandPlan` and `MainView.applyBandPlanMode`.
+    var followBandPlan: Bool {
+        didSet { defaults.set(followBandPlan, forKey: "followBandPlan") }
+    }
+
     /// Mode classes to show; empty means every mode.
     var spotModes: Set<ModeClass> {
         didSet { defaults.set(spotModes.map(\.rawValue), forKey: "spotModes") }
@@ -188,6 +195,7 @@ final class AppSettings {
         hideWorkedSpots = defaults.object(forKey: "hideWorkedSpots") as? Bool ?? false
         hideSkimmerSpots = defaults.object(forKey: "hideSkimmerSpots") as? Bool ?? false
         spotMaxAgeMinutes = defaults.object(forKey: "spotMaxAgeMinutes") as? Int ?? 15
+        followBandPlan = defaults.object(forKey: "followBandPlan") as? Bool ?? true
         spotModes = Set((defaults.stringArray(forKey: "spotModes") ?? []).compactMap(ModeClass.init(rawValue:)))
         spotBands = Set((defaults.stringArray(forKey: "spotBands") ?? []).compactMap(Band.init(rawValue:)))
         wpm = defaults.object(forKey: "wpm") as? Int ?? 22

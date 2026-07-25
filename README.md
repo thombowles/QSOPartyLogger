@@ -227,24 +227,44 @@ parties, and the remaining engine gaps. Adding a party is governed by
   Nodes you've used are remembered in a Recent Clusters menu, and the
   commands run at login are configurable — `sh/dx 30` by default, so the
   band map is populated with recent spots the moment you connect instead of
-  starting empty. Current-band spots appear in the sidebar sorted by
-  frequency, gray when already worked on this band+mode; click one to tune
-  and pre-fill the call, or step spot-to-spot with ⌘← / ⌘→.
+  starting empty. Click a spot to tune and pre-fill the call, or step
+  spot-to-spot with ⌘← / ⌘→.
 - **Band map window (⌘B)**: floating N1MM-style panel — vertical frequency
   ruler for the current band with spots plotted where they live, a red VFO
   marker tracking the radio, and a dashed CQ line marking your run
   frequency. Zoom 25/50/100 kHz or the whole band; click a spot to tune +
   fill the call, click empty map to QSY there. Remembers its position. This
   is the only place spots are shown — the score panel stays about scoring.
+- **Stacked spots**: a pile-up no longer shoves labels off frequency. Spots
+  too close to plot separately fan out **sideways** into a second and third
+  column, each one still drawn at its own frequency, and the column count
+  follows the panel width — widen the panel to spread a pile-up. Nothing is
+  ever dropped: twenty calls on one frequency show all twenty.
+- **Worked stations stay visible**: a call already in the log on this
+  band+mode is greyed and struck through rather than removed, so you can see
+  the band filling up — and ⌘← / ⌘→ steps straight over it, because there is
+  nothing left to work there. If every spot on the band is worked, the keys
+  leave the radio where it is.
+- **Band-plan-aware mode switching**: tune into the phone portion of a band
+  and the radio goes to SSB; tune into the CW portion and it goes to CW. It
+  fires only when *the app* moves you — clicking a spot, typing a frequency
+  or band, ⌘← / ⌘→, ⌘J — so your own VFO knob never triggers a mode change
+  mid-QSO. It never selects a digital mode, never fights a RTTY operator
+  working the data segment, and never picks a mode the party doesn't score.
+  Crossovers come from 47 CFR §97.305(c) (with §97.301(a) for the 80/75 m
+  split and the ARRL band plan for 160 m); 60 m, 1.25 m and 70 cm have no
+  defensible CW/phone boundary, so there the mode is left alone. On by
+  default — untick **Follow band plan on QSY** in the band map popover.
 - **Spot filters** (funnel button in the band map), built for QSO party
   operating: **North American stations only** (drop DX you can't get an
   exchange from), **North American spotters only**, **hide stations already
-  worked** on this band+mode, **hide RBN/skimmer spots**, per-mode (CW /
-  phone / digital, inferred from the spotter's comment first and the band
-  plan second), per-band, and how long spots live before ageing out
-  (5 min – 2 hr, default 15). It's a panel, not a menu — tick as many boxes
-  as you like in one visit — and everything applies instantly to the map and
-  to ⌘← / ⌘→. All off by default; **Reset All** puts them back.
+  worked** on this band+mode (off by default — worked calls normally stay
+  greyed), **hide RBN/skimmer spots**, per-mode (CW / phone / digital,
+  inferred from the spotter's comment first and the band plan second),
+  per-band, and how long spots live before ageing out (5 min – 2 hr,
+  default 15). It's a panel, not a menu — tick as many boxes as you like in
+  one visit — and everything applies instantly to the map and to ⌘← / ⌘→.
+  All filters off by default; **Reset All** puts them back.
 - **CQ frequency memory**: sending F1 (or starting repeat-CQ) in Run mode
   remembers the run frequency; ⌘J — or the chip next to Repeat — jumps back
   and flips you to Run after an S&P excursion.
@@ -304,7 +324,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `F1`–`F8` | Send CW message (Run or S&P set) |
 | `Esc` | Abort CW + stop repeat-CQ |
 | `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
-| `⌘←` / `⌘→` | Tune to previous / next spot on the band |
+| `⌘←` / `⌘→` | Tune to previous / next unworked spot on the band |
 | `⌘J` | Jump back to your CQ run frequency (Run mode) |
 | `⌘B` | Toggle the band map window |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
@@ -442,14 +462,15 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 660 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 691 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
-worked, skimmer), spot navigation, cluster history, the band map scale,
-typed QSY commands, keyer timing, keyer labelling, the contest history
-archive (snapshot parity with the engine, two-Mac merge, unknown-field
-preservation, coordinated store), season stats, the SQP Challenge formula
-and calendar resource, and the upcoming-contest engine.
+worked, skimmer), spot navigation including worked-station skipping, cluster
+history, the band map scale and its column stacking, the band plan and its
+CW/phone crossovers, typed QSY commands, keyer timing, keyer labelling, the
+contest history archive (snapshot parity with the engine, two-Mac merge,
+unknown-field preservation, coordinated store), season stats, the SQP
+Challenge formula and calendar resource, and the upcoming-contest engine.
 
 ## Data provenance
 
@@ -675,6 +696,25 @@ and calendar resource, and the upcoming-contest engine.
   (arrl.org/band-plan, same date). 1.25 m is 222–225 MHz only: the US 219–220
   MHz point-to-point digital allocation is outside the ADIF band and is
   deliberately not loggable.
+- Band plan (the CW→phone crossovers that drive automatic mode switching):
+  **47 CFR §97.305(c)**, the authorized-emission-types table, read 2026-07-25
+  via Cornell LII because ecfr.gov 302-redirects to an interstitial;
+  **§97.301(a)** for the one boundary §97.305(c) names without a number
+  (80 m is 3.500–3.600 and 75 m 3.600–4.000 in ITU Region 2, so the crossover
+  is 3600 kHz); and the **ARRL band plan** (arrl.org/band-plan, same date) for
+  160 m alone, where §97.305(c) permits phone band-wide and so supplies no
+  crossover — the plan reads "1.843-2.000 SSB, SSTV and other wideband modes".
+  Excerpts banked in
+  [`band_plan_sources.md`](docs/research/band_plan_sources.md). The
+  emission-type edges are used deliberately in place of §97.301(a)'s stricter
+  license-class phone edges: the logger does not know the operator's class, and
+  putting a radio in SSB is not itself an unlawful act. 30 m has an RTTY/data
+  row and no phone row, so it is treated as CW throughout; 60 m, 1.25 m and
+  70 cm have no defensible CW/phone split and the mode is left alone there.
+  This table is **separate from the spot mode-inference table** in
+  `SpotFilter`, on purpose — that one guesses what mode a cluster spot is in
+  and is allowed to be wrong, this one decides what mode your radio is put in
+  and is not.
 - DC is accepted as a loggable state token (counted with states); strictly,
   KSQP rules enumerate 50 states — sponsors' checkers accept DC.
 - State QSO Party Challenge: rules from the official 2026 PDF
