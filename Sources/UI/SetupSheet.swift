@@ -32,7 +32,10 @@ struct SetupSheet: View {
                 Section("QSO Party") {
                     Picker("Party", selection: $partyID) {
                         ForEach(parties) { party in
-                            Text(party.name).tag(party.id)
+                            // Flag partial verification in the list itself, so
+                            // it is visible before committing to a party.
+                            Text(party.isPartiallyVerified ? "\(party.name)  ⚠︎" : party.name)
+                                .tag(party.id)
                         }
                     }
                     if let windows = party?.schedule, !windows.isEmpty {
@@ -40,10 +43,8 @@ struct SetupSheet: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    if let notes = party?.notes, notes.lowercased().contains("partial") {
-                        Label(notes, systemImage: "info.circle")
-                            .font(.caption)
-                            .foregroundStyle(.orange)
+                    if let party {
+                        verificationNotice(party)
                     }
                 }
 
@@ -116,6 +117,42 @@ struct SetupSheet: View {
         }
         .frame(width: 560, height: 640)
         .onAppear(perform: load)
+    }
+
+    /// Verification status for the selected party. A `verified: partial` party
+    /// gets a warning plus its open questions inline — those are what an
+    /// operator has to act on. The full provenance paragraph sits behind a
+    /// disclosure so it is auditable without swamping the sheet, and is offered
+    /// for every party, not only the partial ones.
+    @ViewBuilder
+    private func verificationNotice(_ party: PartyDefinition) -> some View {
+        if party.isPartiallyVerified {
+            Label(
+                "Rules verified: partial — check the open questions below before submitting a log.",
+                systemImage: "exclamationmark.triangle.fill"
+            )
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(.orange)
+
+            if let questions = party.openQuestions {
+                Text(questions)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .textSelection(.enabled)
+            }
+        }
+
+        if let notes = party.notes {
+            DisclosureGroup("Rules provenance") {
+                Text(notes)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .textSelection(.enabled)
+            }
+            .font(.caption)
+        }
     }
 
     @ViewBuilder

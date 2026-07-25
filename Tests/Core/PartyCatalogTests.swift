@@ -16,6 +16,71 @@ final class PartyCatalogTests: XCTestCase {
         )
     }
 
+    // MARK: Verification status (constitution Article 3)
+
+    /// Every bundled party is either fully verified or explicitly marked
+    /// `verified: partial` — the setup sheet drives its warning off this, so a
+    /// party silently changing status would silently change the UI.
+    func testPartialVerificationStatusPerParty() throws {
+        let expectedPartial: Set<String> = ["hqp", "tnqp", "tqp"]
+        for party in PartyCatalog.loadBundled() {
+            XCTAssertEqual(
+                party.isPartiallyVerified,
+                expectedPartial.contains(party.id),
+                "\(party.id) partial-verification status changed — update the setup sheet "
+                    + "expectations and this list deliberately, not incidentally"
+            )
+        }
+    }
+
+    /// Provenance prose must not be able to raise a false warning: the marker is
+    /// matched literally, not by searching for the word "partial".
+    func testPartialMarkerIsMatchedLiterallyNotByWordSearch() throws {
+        let alqp = try loadedParty("alqp")
+        XCTAssertFalse(alqp.isPartiallyVerified)
+
+        func party(notes: String) throws -> PartyDefinition {
+            let json = """
+            {"schemaVersion":1,"id":"n","name":"N","cabrilloContest":"N","homeState":"KS",
+            "countyAbbrLength":3,"validBands":["40m"],"points":{"phone":1,"cw":1,"digital":1},
+            "dupeScope":"bandMode",
+            "multipliers":{"inState":{"classes":["state"],"homeStateCountsViaCounty":false,"countScope":"once"},
+            "outState":{"classes":["county"],"homeStateCountsViaCounty":false,"countScope":"once"}},
+            "bonuses":[],"counties":[{"abbr":"ALL","name":"Allen"}],
+            "notes":"\(notes)"}
+            """
+            return try PartyCatalog.decode(Data(json.utf8))
+        }
+
+        XCTAssertFalse(
+            try party(notes: "Counties partially rebuilt from the partial county map.")
+                .isPartiallyVerified,
+            "the word 'partial' in prose must not trigger the warning"
+        )
+        XCTAssertTrue(try party(notes: "verified: partial - band list unconfirmed.").isPartiallyVerified)
+        XCTAssertTrue(try party(notes: "VERIFIED: PARTIAL - shouting still counts.").isPartiallyVerified)
+    }
+
+    /// The setup sheet shows the open-question tail inline and hides the
+    /// provenance paragraph behind a disclosure, so the split has to be real.
+    func testOpenQuestionsAreSeparatedFromProvenance() throws {
+        let hqp = try loadedParty("hqp")
+        let questions = try XCTUnwrap(hqp.openQuestions, "HQP's window conflict is an open question")
+        XCTAssertTrue(questions.hasPrefix("OPEN QUESTION"))
+        XCTAssertTrue(questions.contains("info@hawaiiqsoparty.org"))
+        XCTAssertFalse(
+            questions.contains("Multiplier entities are the 14"),
+            "the provenance paragraph must not leak into the inline warning"
+        )
+
+        let tnqp = try loadedParty("tnqp")
+        XCTAssertTrue(try XCTUnwrap(tnqp.openQuestions).contains("late August 2026"))
+
+        // Fully verified parties have provenance but nothing to act on.
+        XCTAssertNil(try loadedParty("mdc").openQuestions)
+        XCTAssertNil(try loadedParty("ohqp").openQuestions)
+    }
+
     func testKSQPCountyData() throws {
         let ksqp = try loadedParty("ksqp")
         XCTAssertEqual(ksqp.counties.count, 105)

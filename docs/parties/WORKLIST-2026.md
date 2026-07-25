@@ -117,6 +117,12 @@ party; each would be its own commit (Article 4).
   is self-contained and runs from committed data — the pattern to follow. Folding
   the older three into runnable per-party generators is a refactor and belongs in
   its own commit (Article 4).
+- **TQP's notes have no `OPEN QUESTION` section.** It is marked
+  `verified: partial`, so the setup sheet warns on it, but its caveat ("Confirm
+  band list and current-year details before submitting") is written as prose
+  inside the provenance paragraph rather than under the marker Article 3 now
+  requires. The operator therefore sees a warning with nothing actionable beside
+  it. Fix when resolving the Cabrillo question below, in the same commit.
 - **TQP Cabrillo name** — `tqp.json` ships the `TX-QSO-PARTY` alias while
   `tqp_verify.md` concludes `TXQP` is the safe export value
   ([Appendix A.2](../CONSTITUTION.md#appendix-a--known-violations)). Resolve

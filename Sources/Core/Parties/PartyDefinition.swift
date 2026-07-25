@@ -165,6 +165,27 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         let wildcard: String?
     }
 
+    // MARK: Verification status (constitution Article 3)
+
+    /// Whether this party shipped with rules that could not be fully confirmed
+    /// from an official source. Matched on the literal `verified: partial`
+    /// marker rather than a loose word search, so provenance prose that merely
+    /// mentions "partial" cannot raise a false warning.
+    var isPartiallyVerified: Bool {
+        notes?.range(of: "verified: partial", options: .caseInsensitive) != nil
+    }
+
+    /// The `OPEN QUESTION…` tail of `notes` — the part an operator actually
+    /// needs to act on before submitting a log, separated from the provenance
+    /// paragraph that precedes it. `nil` when the notes carry no such section.
+    var openQuestions: String? {
+        guard let notes,
+              let marker = notes.range(of: "OPEN QUESTION", options: .caseInsensitive)
+        else { return nil }
+        let tail = notes[marker.lowerBound...].trimmingCharacters(in: .whitespacesAndNewlines)
+        return tail.isEmpty ? nil : tail
+    }
+
     // MARK: Lookup
 
     var countiesByAbbr: [String: County] {

@@ -70,6 +70,21 @@ Partial ships. Unlabeled uncertainty does not. "I could not find the band list"
 is an acceptable outcome recorded in `notes`; quietly guessing the band list is
 not.
 
+**The marker is load-bearing, not decorative.** `PartyDefinition.isPartiallyVerified`
+matches the literal string `verified: partial`, and the setup sheet raises a
+warning on it — in the party picker and again under it. So:
+
+- Write the marker exactly. A party whose rules are unconfirmed but whose notes
+  paraphrase it ("mostly verified", "some details unclear") ships looking
+  trustworthy.
+- Introduce the open questions with the literal words **`OPEN QUESTION`** (or
+  `OPEN QUESTIONS`). `PartyDefinition.openQuestions` splits the notes there, and
+  the setup sheet shows that tail inline while the provenance paragraph before it
+  goes behind a disclosure. Without the marker the operator sees a warning with
+  nothing actionable next to it.
+- Both properties are covered by `PartyCatalogTests`, including a per-party
+  roster of which parties are partial — so a status change has to be deliberate.
+
 ### Article 4 — The schema evolves additively; refactors are quarantined
 
 New rule shapes arrive as **optional fields with a computed accessor whose
