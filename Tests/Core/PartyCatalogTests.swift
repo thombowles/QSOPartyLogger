@@ -17,6 +17,17 @@ final class PartyCatalogTests: XCTestCase {
         )
     }
 
+    /// TQP writes the restriction into the QSO points rule itself: a non-Texas
+    /// station counts points only "with any Texas station". A non-Texas contact
+    /// is therefore worth nothing, and the flag suppresses points, multipliers
+    /// and dupe accounting for it.
+    func testTexasRestrictsOutOfStateCreditToTexasContacts() throws {
+        let tqp = try XCTUnwrap(PartyCatalog.party(id: "tqp"))
+        XCTAssertTrue(tqp.outStateWorksHomeStationsOnly)
+        XCTAssertEqual(tqp.multipliers.outState.classes, [.county],
+                       "a non-Texas entrant's only multiplier is Texas counties")
+    }
+
     // MARK: Verification status (constitution Article 3)
 
     /// Every bundled party is either fully verified or explicitly marked

@@ -402,7 +402,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 604 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 605 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -482,6 +482,14 @@ typed QSY commands, keyer timing, and keyer labelling.
   same literal token "DX", so without a DXCC prefix table this app credits DX as
   one multiplier and an NH entrant's count can run up to 9 low. Out-of-state
   entrants are unaffected — DX is not one of their multiplier classes.
+- TQP: the **operating rules** at txqp.net (fetched 2026-07-25, extracted to
+  [`tqp_operating_rules.txt`](docs/research/tqp_operating_rules.txt)) write the
+  out-of-state restriction into the QSO points rule itself — a non-Texas station
+  counts points only "with any Texas station" — so a non-Texas entrant earns
+  nothing for working another non-Texas station. Best-evidenced instance of that
+  rule in the catalogue after MDC 10b; analysis in
+  [`tqp_out_of_state_credit.md`](docs/research/tqp_out_of_state_credit.md). Note
+  `txqp.net/rules/` 404s; the rules live under the Joomla `index.php` path.
 - **DX prefixes, all parties.** Where DX stations send a prefix rather than the
   literal `DX` (`alqp`, `azqp`, `ilqp`, `mdc`, `sdqp`, `tnqp`, `warun`), a token
   matching no county, state or section is guessed at as a DXCC prefix, because
