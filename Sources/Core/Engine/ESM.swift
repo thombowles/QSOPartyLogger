@@ -15,11 +15,39 @@ import Foundation
 /// keep calling. Nothing about the *contents* of the row distinguishes that
 /// from a completed QSO — only where the operator is looking does.
 ///
+/// Sitting in the exchange field with something that matches no county is its
+/// own case: you are copying him and did not get it, so Return asks him to
+/// repeat (F5, AGN?) rather than calling a station already talking to you.
+///
 /// Run:  empty call → F1 (CQ); cursor in the call field → F2 (their call and
-///       report); otherwise a valid exchange logs and sends F3 (TU).
-/// S&P:  cursor in the call field → F1 (my call); otherwise a valid exchange
-///       logs and sends F2 (my report).
+///       report); cursor in the exchange with an unmatched one → F5 (AGN?);
+///       otherwise a valid exchange logs and sends F3 (TU).
+/// S&P:  cursor in the call field → F1 (my call); cursor in the exchange with
+///       an unmatched one → F5 (AGN?); otherwise a valid exchange logs and
+///       sends F2 (my report).
 enum ESM {
+
+    /// Where the operator is looking, which is what separates "still trying to
+    /// raise him" from "I have him and am copying".
+    enum Cursor: Equatable {
+        case call
+        case exchange
+        /// Signal reports, QSO numbers — anything that is neither.
+        case other
+    }
+
+    /// What the exchange field holds. `unmatched` is text that matches no
+    /// county, state or prefix; `empty` is nothing typed yet, which is not the
+    /// same thing and does not ask him to repeat.
+    enum ExchangeState: Equatable {
+        case empty
+        case unmatched
+        case valid
+    }
+
+    /// F5 in both default sets. Kept here so the one place that decides also
+    /// names the slot.
+    static let againIndex = 4
 
     enum Action: Equatable {
         case sendMessage(index: Int)
@@ -39,17 +67,25 @@ enum ESM {
     static func nextAction(
         mode: OperatingMode,
         callEmpty: Bool,
-        exchangeValid: Bool,
-        cursorInCall: Bool
+        exchange: ExchangeState,
+        cursor: Cursor
     ) -> Action {
+        // No callsign is no contact: there is nobody to report to or ask.
+        if callEmpty { return .sendMessage(index: 0) }
+
+        if cursor == .exchange, exchange == .unmatched {
+            return .sendMessage(index: againIndex)
+        }
+
+        // The call field only ever calls, and nothing logs until the exchange
+        // actually matches something.
+        let stillCalling = cursor == .call || exchange != .valid
+
         switch mode {
         case .run:
-            if callEmpty { return .sendMessage(index: 0) }
-            if cursorInCall || !exchangeValid { return .sendMessage(index: 1) }
-            return .logAndSend(index: 2)
+            return stillCalling ? .sendMessage(index: 1) : .logAndSend(index: 2)
         case .searchPounce:
-            if callEmpty || cursorInCall || !exchangeValid { return .sendMessage(index: 0) }
-            return .logAndSend(index: 1)
+            return stillCalling ? .sendMessage(index: 0) : .logAndSend(index: 1)
         }
     }
 }

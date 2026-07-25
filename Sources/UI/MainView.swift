@@ -602,9 +602,22 @@ struct MainView: View {
         settings.esmEnabled && radio.isConnected && currentModeClass == .cw
     }
 
-    private var exchangeIsValid: Bool {
-        if case .valid = entry.exchangeStatus { return true }
-        return false
+    private var esmExchangeState: ESM.ExchangeState {
+        switch entry.exchangeStatus {
+        case .idle: .empty
+        case .valid: .valid
+        case .invalid: .unmatched
+        }
+    }
+
+    /// Only the call and exchange fields change what Return does; the signal
+    /// reports and QSO numbers behave like the exchange without being it.
+    private var esmCursor: ESM.Cursor {
+        switch focusedField {
+        case .call: .call
+        case .exchange: .exchange
+        default: .other
+        }
     }
 
     /// What Return would do right now. Read both by the Return key and by the
@@ -614,8 +627,8 @@ struct MainView: View {
         ESM.nextAction(
             mode: operatingMode,
             callEmpty: entry.callNormalized.isEmpty,
-            exchangeValid: exchangeIsValid,
-            cursorInCall: focusedField == .call
+            exchange: esmExchangeState,
+            cursor: esmCursor
         )
     }
 

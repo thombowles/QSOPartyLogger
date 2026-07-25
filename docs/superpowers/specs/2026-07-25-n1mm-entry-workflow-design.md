@@ -110,11 +110,11 @@ static func nextAction(
 
 | Mode | State | Enter sends |
 | --- | --- | --- |
-| Run | call empty | F1 — CQ |
+| both | call empty | F1 — CQ / my call |
+| both | cursor in the exchange, exchange matches nothing | F5 — AGN? |
 | Run | cursor in the call field | F2 — his call and report |
 | Run | exchange not valid | F2 — his call and report |
 | Run | cursor elsewhere, exchange valid | log + F3 — TU |
-| S&P | call empty | F1 — my call |
 | S&P | cursor in the call field | F1 — my call |
 | S&P | exchange not valid | F1 — my call |
 | S&P | cursor elsewhere, exchange valid | log + F2 — my report |
@@ -122,6 +122,31 @@ static func nextAction(
 Both modes collapse to one shape: **the call field sends, everywhere else logs
 once the exchange is valid.** Run's CQ outranks the rule, since an empty call
 field can neither log nor report to anybody.
+
+### A bad copy asks him to repeat
+
+Sitting in the exchange field with text that matches no county, state or
+prefix is its own case. He is already talking to you — calling him again is
+the wrong thing on the air; asking him to repeat is the right one. So that
+combination sends F5, AGN?.
+
+The exchange field carries three states, not two, and the third matters:
+
+| Exchange | From the exchange field |
+| --- | --- |
+| `valid` | log and send my report |
+| `unmatched` | F5 — AGN? |
+| `empty` | keep calling — nothing has been heard, so there is nothing to repeat |
+
+`empty` is deliberately not AGN?. Landing in the field before he has sent
+anything is not a bad copy. Only the call and exchange fields change what
+Return does; QSO-number and signal-report fields count as neither, so an
+unmatched exchange there keeps calling rather than asking.
+
+`ESM.againIndex` names the F5 slot in the one place that decides, and a test
+pins it to the `AGN?` entry in both default message sets — so the constant and
+the message cannot drift apart. If the operator has blanked F5, `sendMessageAt`
+already declines to key an empty message and Return does nothing.
 
 "Cursor elsewhere" is deliberately every field except the call — not the
 exchange specifically — so parties that exchange a QSO number can log from the

@@ -213,9 +213,12 @@ parties, and the remaining engine gaps. Adding a party is governed by
   That is what a **prefilled exchange** needs: hunting a station whose county
   you copied off his last QSO, the row holds a call and a valid exchange
   before you have worked him, and keeps holding them while he works three
-  other people. Every one of those Returns keeps calling. ESM never moves the
-  cursor for you — Space does — and the F-key Return will key next is
-  **outlined**, so what it is about to do is visible rather than guessed at.
+  other people. Every one of those Returns keeps calling. Sitting in the
+  exchange field with a county that matches nothing, Return sends **AGN?** —
+  he is already talking to you, so the thing to do is ask him to repeat, not
+  call him again. ESM never moves the cursor for you (Space does), and the
+  F-key Return will key next is **outlined**, so what it is about to do is
+  visible rather than guessed at.
 - **DX cluster spotting**: connect to any DXSpider/AR-Cluster telnet node
   (toolbar antenna icon), optionally **automatically when a contest opens**.
   Nodes you've used are remembered in a Recent Clusters menu, and the
@@ -396,7 +399,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 592 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 597 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
