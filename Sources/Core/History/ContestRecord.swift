@@ -36,10 +36,7 @@ struct ContestRecord: Codable, Equatable, Sendable, Identifiable {
 
     /// UTC year of the log's earliest QSO; nil for an empty log.
     static func year(of log: ContestLog) -> Int? {
-        guard let first = log.qsos.map(\.timestampUTC).min() else { return nil }
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "UTC")!
-        return calendar.component(.year, from: first)
+        log.qsos.map(\.timestampUTC).min()?.utcYear
     }
 
     /// nil when the log can't be archived yet: no QSOs (nothing to track)
