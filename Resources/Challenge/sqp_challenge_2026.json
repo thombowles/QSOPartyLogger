@@ -1,0 +1,533 @@
+{
+ "schemaVersion": 1,
+ "year": 2026,
+ "source": "stateqsoparty.com 2026 calendar PDF (fetched 2026-07-24) + homepage approved list (read 2026-07-25); docs/research/sqp_challenge_rules.md. Bundled parties keep their own sponsor-verified schedules \u2014 these windows are display data for non-bundled contests (the calendar's NJQP row is known-wrong; the sponsor says Sep 12).",
+ "approvedContests": [
+  {
+   "name": "Vermont QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-02-07T00:00:00Z",
+     "end": "2026-02-09T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Minnesota QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-02-07T14:00:00Z",
+     "end": "2026-02-08T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "British Columbia QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-02-07T16:00:00Z",
+     "end": "2026-02-08T03:59:00Z"
+    },
+    {
+     "start": "2026-02-08T16:00:00Z",
+     "end": "2026-02-08T23:59:00Z"
+    }
+   ]
+  },
+  {
+   "name": "South Carolina QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-02-28T15:00:00Z",
+     "end": "2026-03-01T01:59:00Z"
+    }
+   ]
+  },
+  {
+   "name": "North Carolina QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-03-01T15:00:00Z",
+     "end": "2026-03-02T01:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Oklahoma QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-03-14T14:00:00Z",
+     "end": "2026-03-15T02:00:00Z"
+    },
+    {
+     "start": "2026-03-15T14:00:00Z",
+     "end": "2026-03-15T22:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Idaho QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-03-14T16:00:00Z",
+     "end": "2026-03-15T04:00:00Z"
+    },
+    {
+     "start": "2026-03-15T14:00:00Z",
+     "end": "2026-03-16T02:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Wisconsin QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-03-15T18:00:00Z",
+     "end": "2026-03-16T01:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Virginia QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-03-21T14:00:00Z",
+     "end": "2026-03-22T04:00:00Z"
+    },
+    {
+     "start": "2026-03-22T12:00:00Z",
+     "end": "2026-03-23T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Louisiana QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-04T14:00:00Z",
+     "end": "2026-04-05T02:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Mississippi QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-04T14:00:00Z",
+     "end": "2026-04-05T02:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Missouri QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-11T14:00:00Z",
+     "end": "2026-04-12T04:00:00Z"
+    },
+    {
+     "start": "2026-04-12T14:00:00Z",
+     "end": "2026-04-12T20:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "New Mexico QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-11T14:00:00Z",
+     "end": "2026-04-12T02:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "North Dakota QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-11T18:00:00Z",
+     "end": "2026-04-12T18:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Georgia QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-11T18:00:00Z",
+     "end": "2026-04-12T03:59:00Z"
+    },
+    {
+     "start": "2026-04-12T14:00:00Z",
+     "end": "2026-04-12T23:59:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Michigan QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-18T16:00:00Z",
+     "end": "2026-04-19T04:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Ontario QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-18T18:00:00Z",
+     "end": "2026-04-19T03:00:00Z"
+    },
+    {
+     "start": "2026-04-19T12:00:00Z",
+     "end": "2026-04-19T20:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Quebec QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-19T13:00:00Z",
+     "end": "2026-04-20T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Nebraska QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-25T14:00:00Z",
+     "end": "2026-04-26T02:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Florida QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-04-25T16:00:00Z",
+     "end": "2026-04-26T01:59:00Z"
+    },
+    {
+     "start": "2026-04-26T12:00:00Z",
+     "end": "2026-04-26T21:59:00Z"
+    }
+   ]
+  },
+  {
+   "name": "7th Call Area QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-05-02T13:00:00Z",
+     "end": "2026-05-03T07:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Indiana QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-05-02T15:00:00Z",
+     "end": "2026-05-03T02:59:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Delaware QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-05-02T17:00:00Z",
+     "end": "2026-05-03T23:59:00Z"
+    }
+   ]
+  },
+  {
+   "name": "New England QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-05-02T20:00:00Z",
+     "end": "2026-05-03T05:00:00Z"
+    },
+    {
+     "start": "2026-05-03T13:00:00Z",
+     "end": "2026-05-04T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Canadian Prairies QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-05-09T17:00:00Z",
+     "end": "2026-05-10T03:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Arkansas QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-05-16T14:00:00Z",
+     "end": "2026-05-17T02:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Kentucky QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-06-06T13:00:00Z",
+     "end": "2026-06-07T01:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Atlantic Canada QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-06-07T14:00:00Z",
+     "end": "2026-06-08T01:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "West Virginia QSO Party",
+   "partyID": null,
+   "windows": [
+    {
+     "start": "2026-06-20T16:00:00Z",
+     "end": "2026-06-21T04:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Alabama QSO Party",
+   "partyID": "alqp",
+   "windows": [
+    {
+     "start": "2026-07-25T15:00:00Z",
+     "end": "2026-07-26T03:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Maryland/DC QSO Party",
+   "partyID": "mdc",
+   "windows": [
+    {
+     "start": "2026-08-08T14:00:00Z",
+     "end": "2026-08-09T03:59:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Hawaii QSO Party",
+   "partyID": "hqp",
+   "windows": [
+    {
+     "start": "2026-08-22T16:00:00Z",
+     "end": "2026-08-24T02:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Ohio QSO Party",
+   "partyID": "ohqp",
+   "windows": [
+    {
+     "start": "2026-08-22T16:00:00Z",
+     "end": "2026-08-23T04:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Kansas QSO Party",
+   "partyID": "ksqp",
+   "windows": [
+    {
+     "start": "2026-08-29T14:00:00Z",
+     "end": "2026-08-30T02:00:00Z"
+    },
+    {
+     "start": "2026-08-30T14:00:00Z",
+     "end": "2026-08-30T20:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Tennessee QSO Party",
+   "partyID": "tnqp",
+   "windows": [
+    {
+     "start": "2026-09-06T17:00:00Z",
+     "end": "2026-09-07T03:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Colorado QSO Party",
+   "partyID": "coqp",
+   "windows": [
+    {
+     "start": "2026-09-12T14:00:00Z",
+     "end": "2026-09-13T03:59:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Texas QSO Party",
+   "partyID": "tqp",
+   "windows": [
+    {
+     "start": "2026-09-19T14:00:00Z",
+     "end": "2026-09-20T02:00:00Z"
+    },
+    {
+     "start": "2026-09-20T14:00:00Z",
+     "end": "2026-09-20T20:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Iowa QSO Party",
+   "partyID": "iaqp",
+   "windows": [
+    {
+     "start": "2026-09-19T14:00:00Z",
+     "end": "2026-09-20T02:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "New Jersey QSO Party",
+   "partyID": "njqp",
+   "windows": [
+    {
+     "start": "2026-09-19T14:00:00Z",
+     "end": "2026-09-20T02:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "New Hampshire QSO Party",
+   "partyID": "nhqp",
+   "windows": [
+    {
+     "start": "2026-09-19T16:00:00Z",
+     "end": "2026-09-20T04:00:00Z"
+    },
+    {
+     "start": "2026-09-20T12:00:00Z",
+     "end": "2026-09-20T22:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Washington State Salmon Run",
+   "partyID": "warun",
+   "windows": [
+    {
+     "start": "2026-09-19T16:00:00Z",
+     "end": "2026-09-20T07:00:00Z"
+    },
+    {
+     "start": "2026-09-20T16:00:00Z",
+     "end": "2026-09-21T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "California QSO Party",
+   "partyID": "cqp",
+   "windows": [
+    {
+     "start": "2026-10-03T16:00:00Z",
+     "end": "2026-10-04T22:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Arizona QSO Party",
+   "partyID": "azqp",
+   "windows": [
+    {
+     "start": "2026-10-10T15:00:00Z",
+     "end": "2026-10-11T05:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Pennsylvania QSO Party",
+   "partyID": "paqp",
+   "windows": [
+    {
+     "start": "2026-10-10T16:00:00Z",
+     "end": "2026-10-11T04:00:00Z"
+    },
+    {
+     "start": "2026-10-11T13:00:00Z",
+     "end": "2026-10-11T22:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "South Dakota QSO Party",
+   "partyID": "sdqp",
+   "windows": [
+    {
+     "start": "2026-10-10T18:00:00Z",
+     "end": "2026-10-11T18:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "New York QSO Party",
+   "partyID": "nyqp",
+   "windows": [
+    {
+     "start": "2026-10-17T14:00:00Z",
+     "end": "2026-10-18T02:00:00Z"
+    }
+   ]
+  },
+  {
+   "name": "Illinois QSO Party",
+   "partyID": "ilqp",
+   "windows": [
+    {
+     "start": "2026-10-18T17:00:00Z",
+     "end": "2026-10-19T01:00:00Z"
+    }
+   ]
+  }
+ ]
+}
