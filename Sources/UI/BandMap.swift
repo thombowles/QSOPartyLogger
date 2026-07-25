@@ -25,7 +25,16 @@ final class BandMapModel {
     var log: ContestLog? {
         didSet { neededMultiplierCache = [:] }
     }
-    private var neededMultiplierCache: [String: Bool] = [:]
+    /// Deliberately **not** observed. `isNeededMultiplier` runs once per spot
+    /// inside the band map's body, and memoises as it goes. Were this an
+    /// observed stored property, each render would write it, the write would
+    /// invalidate the view, and SwiftUI would render again — a loop that spun
+    /// until the stack was gone. It crashed the app on 2026-07-25 with
+    /// EXC_BAD_ACCESS between `AppGraph.graphDidChange()` and
+    /// `scenesDidChange`. The cache is derived data, so nothing should ever
+    /// redraw because it changed; `party` and `log` are observed, and dropping
+    /// the cache in their `didSet` is what keeps it honest.
+    @ObservationIgnored private var neededMultiplierCache: [String: Bool] = [:]
     var onTuneSpot: ((Spot) -> Void)?
     var onTuneKHz: ((Double) -> Void)?
 
