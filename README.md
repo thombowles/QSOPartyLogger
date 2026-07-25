@@ -56,14 +56,22 @@ Built for KE5CW. Bundled parties, all with official county data:
   exchange, DC counts as Maryland, and Iowa itself is a multiplier earned via a
   county. First party where **DX scores points but is never a multiplier**.
   `verified: partial` — the posted rules are still the 2025 edition.
+- **New Hampshire QSO Party** (Sep 19–20, 2026) — only 10 counties, and the
+  multiplier scope runs **opposite** to most parties: out-of-state count NH
+  counties **per band** (stated ceiling 50 = 10 × 5), while NH stations count one
+  combined list **once**. Two operating windows totalling the rules' stated 22
+  hours. `verified: partial` — and note the rules allow NH stations "up to 10
+  DXCC country" while the exchange is the literal word "DX", so this app can only
+  credit DX once (see provenance below).
 - **Texas QSO Party** (Sep 19–20, 2026) — rules verified against txqp.net
   2026 (bands: all except 60/30/17/12; Cabrillo name `TXQP` per WA7BNM;
   robot site not yet live).
 
 The remaining 2026 parties are tracked in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md) in contest-date
-order — the season ends with Illinois on Oct 18. Two of them have full rules
-research banked in `docs/research/`; the rest start from the sponsors' sites. Adding a party is governed by
+order — the season ends with Illinois on Oct 18. One of them (Washington Salmon
+Run) has full rules research banked in `docs/research/`; the rest start from the
+sponsors' sites. Adding a party is governed by
 [`docs/CONSTITUTION.md`](docs/CONSTITUTION.md).
 
 ## Features
@@ -277,7 +285,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 339 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 355 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -349,5 +357,13 @@ typed QSY commands, and keyer timing.
   badly. `verified: partial` — the page is still titled for 2025 and its rules
   PDF is dated 2018, with only the 2026 date announced; re-check in early
   September.
+- NHQP: rules from w1wqm.org (revision "August 19, 2025", the one carrying the
+  2026 dates), read verbatim 2026-07-24. The generator asserts the rules' own
+  stated figures — a 50-multiplier out-of-state ceiling (10 counties × 5 bands)
+  and a 22-hour total across two windows. **Known scoring limitation:** NH
+  stations may count "up to 10 DXCC country", but every DX station sends the
+  same literal token "DX", so without a DXCC prefix table this app credits DX as
+  one multiplier and an NH entrant's count can run up to 9 low. Out-of-state
+  entrants are unaffected — DX is not one of their multiplier classes.
 - DC is accepted as a loggable state token (counted with states); strictly,
   KSQP rules enumerate 50 states — sponsors' checkers accept DC.

@@ -35,7 +35,13 @@ The web page text and the Aug 2025 PDF are the same revision (page says Aug 19, 
 ## Multipliers
 - NH (in-state) stations: "NH Stations – one multiplier only: Each NH county, each state, each Canadian province and up to 10 DXCC country once."
   - Single combined multiplier list, each counted ONCE for the whole contest (not per band, not per mode).
-  - Home-state-via-county: YES — NH stations count NH counties as multipliers (alongside states/provinces/DXCC).
+  - NH stations count NH counties as multipliers, alongside states/provinces/DXCC — i.e. `county` is in the in-state class list.
+    **Correction (2026-07-24):** this line originally read "Home-state-via-county: YES", which mislabels the schema flag.
+    `homeStateCountsViaCounty` means "a home-state county *also* yields the home state's own state multiplier". NHQP's rule
+    is "Each NH county, each state, each Canadian province and up to 10 DXCC country once" — it never says NH itself counts
+    as a state, and NH stations send a county so the token `NH` is never received. There is no stated in-state maximum to
+    settle it by arithmetic either, so the flag ships `false` (asserting no multiplier the sponsor did not describe). This is
+    the same mislabel that appeared in `tnqp_rules.md`; `warun_rules.md` reasons it correctly ("WA itself is NOT a state mult").
   - DXCC entities are capped at 10 for NH stations ("up to 10 DXCC country").
 - Non-NH (out-of-state) stations: "Non-NH Stations: Each NH county once per band. Maximum multiplier count: 50 (10 counties per band, 5 bands)"
   - Counties count PER BAND (not per mode). Theoretical max 50.
