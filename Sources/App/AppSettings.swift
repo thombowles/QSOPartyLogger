@@ -94,6 +94,13 @@ final class AppSettings {
         didSet { defaults.set(hubSpotsEnabled, forKey: "hubSpotsEnabled") }
     }
 
+    /// Offer a hub spot's county in the exchange field when tuning to it.
+    /// The value arrives marked unconfirmed — it is a spotter's claim, not
+    /// something copied off the air.
+    var prefillExchangeFromSpots: Bool {
+        didSet { defaults.set(prefillExchangeFromSpots, forKey: "prefillExchangeFromSpots") }
+    }
+
     /// Feeds to show on the band map; empty means every feed.
     var spotSources: Set<SpotSource> {
         didSet { defaults.set(spotSources.map(\.rawValue), forKey: "spotSources") }
@@ -241,6 +248,8 @@ final class AppSettings {
         spotMaxAgeMinutes = defaults.object(forKey: "spotMaxAgeMinutes") as? Int ?? 15
         hubSpotMaxAgeMinutes = defaults.object(forKey: "hubSpotMaxAgeMinutes") as? Int ?? 60
         hubSpotsEnabled = defaults.object(forKey: "hubSpotsEnabled") as? Bool ?? true
+        prefillExchangeFromSpots =
+            defaults.object(forKey: "prefillExchangeFromSpots") as? Bool ?? true
         spotSources = Set((defaults.stringArray(forKey: "spotSources") ?? [])
             .compactMap(SpotSource.init(rawValue:)))
         followBandPlan = defaults.object(forKey: "followBandPlan") as? Bool ?? true

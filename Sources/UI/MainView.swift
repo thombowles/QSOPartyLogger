@@ -809,6 +809,11 @@ struct MainView: View {
         spotCursorKHz = spot.freqKHz
         applyBandPlanMode(kHz: spot.freqKHz)
         entry.call = spot.call
+        // Only a hub spot names a county, and only as a third party's claim —
+        // it lands marked unconfirmed until the operator copies it themselves.
+        if settings.prefillExchangeFromSpots, let county = spot.county {
+            entry.prefillExchange(county)
+        }
         focusedField = .call
         revalidate()
     }

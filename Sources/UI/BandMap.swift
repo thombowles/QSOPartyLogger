@@ -188,6 +188,11 @@ struct BandMapView: View {
             Toggle("QSO Party Hub spots only", isOn: hubOnlyBinding(settings: settings))
                 .help("A cluster carries hundreds of spots against the hub's handful — "
                     + "this isolates the ones that name a county when you're hunting multipliers")
+            Toggle("Offer the spotted county as the exchange",
+                   isOn: $settings.prefillExchangeFromSpots)
+                .help("Tuning to a hub spot puts its county in the exchange field, shown "
+                    + "as unconfirmed until you copy it yourself — a spotter's county is "
+                    + "their claim, and a wrong one is cross-checked against the other log")
 
             Divider()
             Text("MODES")

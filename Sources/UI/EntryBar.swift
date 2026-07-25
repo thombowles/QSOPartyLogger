@@ -45,7 +45,25 @@ struct EntryBar: View {
                     field("Ser S", text: $entry.serialSent, width: 60, focusTag: .serialSent)
                     field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
                 }
-                field(exchangeLabel, text: $entry.exchange.uppercasing, width: 170, focusTag: .exchange)
+                field(exchangeLabel, text: $entry.exchange.uppercasing, width: 170,
+                      focusTag: .exchange)
+                    // A county taken from a spot is a third party's claim, not
+                    // something copied. Dashed and dimmed until the operator
+                    // types it, so what was heard is never confused with what
+                    // was merely asserted.
+                    .overlay {
+                        if entry.exchangeIsUnconfirmed {
+                            RoundedRectangle(cornerRadius: 5)
+                                .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                                .foregroundStyle(.orange)
+                                .padding(.top, 16)
+                                .allowsHitTesting(false)
+                        }
+                    }
+                    .opacity(entry.exchangeIsUnconfirmed ? 0.75 : 1)
+                    .help(entry.exchangeIsUnconfirmed
+                          ? "From a spot, not copied — confirm it before logging"
+                          : "")
                 statusBadge
                 Spacer()
                 Button("Log", action: onLog)
@@ -61,6 +79,11 @@ struct EntryBar: View {
                 Label(message, systemImage: "xmark.circle.fill")
                     .font(.callout)
                     .foregroundStyle(.red)
+            } else if entry.exchangeIsUnconfirmed {
+                Label("Exchange came from a spot — confirm it on the air before logging",
+                      systemImage: "dot.radiowaves.left.and.right")
+                    .font(.callout)
+                    .foregroundStyle(.orange)
             }
         }
         .onChange(of: focus) { _, landed in

@@ -8,7 +8,40 @@ final class EntryState {
     var rstSent = ""
     var rstRcvd = ""
     var serialRcvd = ""
-    var exchange = ""
+
+    /// The exchange as it will be logged. Assigning marks it confirmed: the
+    /// only way text gets here is the operator putting it here.
+    var exchange: String {
+        get { exchangeStorage }
+        set {
+            exchangeStorage = newValue
+            exchangeIsUnconfirmed = false
+        }
+    }
+    private var exchangeStorage = ""
+
+    /// The exchange came from a spot and has not been copied yet.
+    ///
+    /// A hub spot names the county, but that is a third party's claim. The
+    /// captured corpus shows those can be wrong — a busted call, a frequency
+    /// 29 kHz off, an unparseable typo — and a wrong county is cross-checked
+    /// against the other station's log and costs the contact. So the value is
+    /// offered, and shown as provisional until the operator stands behind it.
+    private(set) var exchangeIsUnconfirmed = false
+
+    /// Offer an exchange taken from a spot rather than copied off the air.
+    ///
+    /// Never overwrites what the operator typed — stepping through spots with
+    /// ⌘←/⌘→ must not replace an exchange already being copied. One offered
+    /// value does replace another, so stepping keeps up instead of sticking on
+    /// the first county seen.
+    func prefillExchange(_ county: String) {
+        let county = county.trimmingCharacters(in: .whitespaces).uppercased()
+        guard !county.isEmpty else { return }
+        guard exchangeStorage.isEmpty || exchangeIsUnconfirmed else { return }
+        exchangeStorage = county
+        exchangeIsUnconfirmed = true
+    }
 
     /// What the operator typed into Ser S, or nil to follow the log.
     ///

@@ -247,6 +247,12 @@ parties, and the remaining engine gaps. Adding a party is governed by
   multipliers. 17 of the 19 bundled parties are covered (California's page is
   an unfinished stub and WA Salmon Run has none). Polling only runs inside the
   party's own operating window.
+- **Exchange pre-fill from a spot**: tuning to a hub spot puts its county
+  straight into the exchange field — but shown **unconfirmed** (dashed, dimmed,
+  with a reminder) until you copy it on the air. A spotter's county is their
+  claim, not something you heard, and a wrong one is cross-checked against the
+  other station's log. Typing over it confirms it; it never overwrites an
+  exchange you're already typing. Toggle in the band map funnel.
 - **Rovers stop hiding**: a mobile that changes county is a new contact, and
   now the band map knows it. Work a rover in one county and it greys out; the
   moment it spots from a county you still need it comes back, un-greyed and
