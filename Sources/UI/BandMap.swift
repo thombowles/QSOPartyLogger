@@ -363,6 +363,10 @@ enum BandMapPanel {
         panel.title = "Band Map"
         panel.isReleasedWhenClosed = false
         panel.becomesKeyOnlyIfNeeded = true  // spot clicks don't steal typing focus
+        // AppKit defaults this to true for panels, which is why the map vanished
+        // the moment SmartSDR took focus. A band map is for reading while you
+        // work another app's panadapter, so it outlives our own activation.
+        panel.hidesOnDeactivate = false
         panel.level = .floating
         panel.contentView = NSHostingView(rootView: BandMapView(model: model))
 

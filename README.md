@@ -243,8 +243,10 @@ parties, and the remaining engine gaps. Adding a party is governed by
   ruler for the current band with spots plotted where they live, a red VFO
   marker tracking the radio, and a dashed CQ line marking your run
   frequency. Zoom 25/50/100 kHz or the whole band; click a spot to tune +
-  fill the call, click empty map to QSY there. Remembers its position. This
-  is the only place spots are shown — the score panel stays about scoring.
+  fill the call, click empty map to QSY there. Remembers its position, and
+  stays on screen when another app takes focus, so it can sit beside a
+  panadapter in SmartSDR rather than disappearing the moment you click one.
+  This is the only place spots are shown — the score panel stays about scoring.
 - **Stacked spots**: a pile-up no longer shoves labels off frequency. Spots
   too close to plot separately fan out **sideways** into a second and third
   column, each one still drawn at its own frequency, and the column count
