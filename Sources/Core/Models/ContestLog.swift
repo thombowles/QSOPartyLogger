@@ -1,5 +1,12 @@
 import Foundation
 
+private extension String {
+    /// Whether this one message references a macro. The `MessageSets` method
+    /// of the same name asks it of a whole set; the mismatch checks below ask
+    /// it message by message.
+    func mentions(_ macro: MacroToken) -> Bool { contains(macro.rawValue) }
+}
+
 /// F1–F8 CW message sets, one per operating style. Stored per document so
 /// each contest (window) carries its own macros — running two parties at
 /// once means two logs with independent messages.
@@ -37,6 +44,12 @@ struct MessageSets: Codable, Equatable, Sendable {
     /// a literal here rather than be re-expressed as `defaults(for: nil)` —
     /// even though the two currently compute the same value, collapsing them
     /// would erase the sentinel a pre-change log is recognised by.
+    ///
+    /// This is also why the two arrays above spell their tokens out instead of
+    /// interpolating `MacroToken`, alone in this file: they record what disk
+    /// already holds. Renaming a macro must leave them reading `{RST}` and
+    /// `{EXCH}`, or every log written before the rename stops being
+    /// recognised as untouched.
     static let standard = MessageSets(run: defaultRun, searchPounce: defaultSearchPounce)
 
     /// The default macros for a party's exchange shape. Derived rather than
@@ -50,44 +63,45 @@ struct MessageSets: Codable, Equatable, Sendable {
         let includesRST = party?.exchangeIncludesRST ?? true
         let includesSerial = party?.exchangeIncludesSerial ?? false
         // Report, then number, then location — the order they are sent in.
-        let exchange = [
-            includesRST ? "{RST}" : nil,
-            includesSerial ? "{SERIAL}" : nil,
-            "{EXCH}",
+        let exchange: [MacroToken?] = [
+            includesRST ? .rst : nil,
+            includesSerial ? .serial : nil,
+            .exchange,
         ]
-        .compactMap { $0 }
-        .joined(separator: " ")
+        let sent = exchange.compactMap { $0?.rawValue }.joined(separator: " ")
 
         return MessageSets(
             run: [
-                "CQ TEST {MYCALL}",
-                "{CALL} \(exchange)",
-                "TU {MYCALL}",
-                "{MYCALL}",
+                "CQ TEST \(MacroToken.myCall)",
+                "\(MacroToken.call) \(sent)",
+                "TU \(MacroToken.myCall)",
+                "\(MacroToken.myCall)",
                 "AGN?",
                 "?",
                 "B4",
-                "73 TU {MYCALL}",
+                "73 TU \(MacroToken.myCall)",
             ],
             searchPounce: [
-                "{MYCALL}",
-                exchange,
+                "\(MacroToken.myCall)",
+                sent,
                 "TU",
-                "{MYCALL}",
+                "\(MacroToken.myCall)",
                 "AGN?",
                 "?",
-                "R \(exchange)",
+                "R \(sent)",
                 "73",
             ]
         )
     }
 
-    /// Whether any message in either set references a macro. `macro` is a
-    /// braced token such as `{SERIAL}`, matched literally and
-    /// case-sensitively as a substring — e.g. `mentions("R")` matches the
-    /// bare "R" in "R {RST} {EXCH}", so always pass the full `{TOKEN}`.
-    func mentions(_ macro: String) -> Bool {
-        (run + searchPounce).contains { $0.contains(macro) }
+    /// Whether any message in either set references a macro.
+    ///
+    /// Takes a `MacroToken` rather than a string so the two ways of getting
+    /// this wrong cannot be written: `mentions("R")` used to answer true off
+    /// the bare "R" in "R {RST} {EXCH}", and `mentions("{rst}")` false,
+    /// because the match is a literal case-sensitive substring.
+    func mentions(_ macro: MacroToken) -> Bool {
+        (run + searchPounce).contains { $0.mentions(macro) }
     }
 
     /// How a message set can disagree with its party's exchange. Each case is
@@ -111,13 +125,13 @@ struct MessageSets: Codable, Equatable, Sendable {
             switch self {
             case .missingSerial:
                 "\(partyName) sends a QSO number, but not every message that "
-                    + "sends the exchange uses {SERIAL}."
+                    + "sends the exchange uses \(MacroToken.serial)."
             case .extraneousRST:
                 "\(partyName)'s exchange does not include a signal report, "
-                    + "but a message still sends {RST}."
+                    + "but a message still sends \(MacroToken.rst)."
             case .missingRST:
                 "\(partyName) sends a signal report, but not every message that "
-                    + "sends the exchange uses {RST}."
+                    + "sends the exchange uses \(MacroToken.rst)."
             }
         }
     }
@@ -158,24 +172,24 @@ struct MessageSets: Codable, Equatable, Sendable {
         // is judged as though its exchange message existed and were blank, since
         // it cannot send the exchange either. ("Sends no {EXCH}" is a fourth
         // kind of mistake, outside this enum's three.)
-        let carriers = live.filter { $0.contains("{EXCH}") }
+        let carriers = live.filter { $0.mentions(.exchange) }
         let judged = carriers.isEmpty ? [""] : carriers
 
         // A *missing* token is judged per exchange-bearing message, because
         // CQP's Search & Pounce defaults carry the exchange twice — the answer
         // and the repeat-back — so a set-wide check lets an intact F7 mask an
         // F2 the operator has broken.
-        if party.exchangeIncludesSerial, judged.contains(where: { !$0.contains("{SERIAL}") }) {
+        if party.exchangeIncludesSerial, judged.contains(where: { !$0.mentions(.serial) }) {
             return .missingSerial
         }
         // An *extraneous* report is judged across every live message instead:
         // unlike a missing token, it is a should-never-appear check. `{RST}`
         // fat-fingered into F5 ("AGN? {RST}") still keys a literal report every
         // time F5 is pressed, for a party whose exchange has no room for one.
-        if !party.exchangeIncludesRST, live.contains(where: { $0.contains("{RST}") }) {
+        if !party.exchangeIncludesRST, live.contains(where: { $0.mentions(.rst) }) {
             return .extraneousRST
         }
-        if party.exchangeIncludesRST, judged.contains(where: { !$0.contains("{RST}") }) {
+        if party.exchangeIncludesRST, judged.contains(where: { !$0.mentions(.rst) }) {
             return .missingRST
         }
         return nil

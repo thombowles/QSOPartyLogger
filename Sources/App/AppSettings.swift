@@ -250,15 +250,26 @@ final class AppSettings {
         func cut(_ value: String) -> String {
             cutNumbers ? applyCutNumbers(value, cutOne: cutOne) : value
         }
-        return template
-            .replacingOccurrences(of: "{MYCALL}", with: myCall)
-            .replacingOccurrences(of: "{CALL}", with: call)
-            .replacingOccurrences(of: "{RST}", with: cut(rst))
-            // The QSO number, for parties that exchange one instead of a report
-            // (CQP). Defaults to empty, so message sets that never mention it
-            // expand exactly as before.
-            .replacingOccurrences(of: "{SERIAL}", with: cut(serial))
-            .replacingOccurrences(of: "{EXCH}", with: exchange)
-            .trimmingCharacters(in: .whitespaces)
+        func value(for token: MacroToken) -> String {
+            switch token {
+            case .myCall: myCall
+            case .call: call
+            case .rst: cut(rst)
+            // The QSO number, for parties that exchange one instead of a
+            // report (CQP). Defaults to empty, so message sets that never
+            // mention it expand exactly as before.
+            case .serial: cut(serial)
+            case .exchange: exchange
+            }
+        }
+        // Iterating the cases rather than chaining one `replacingOccurrences`
+        // per token: a new macro is then a new case, and this file stops
+        // compiling until the switch above gives it a value — where a
+        // forgotten link in a chain would silently key the token literally.
+        // `allCases` order is expansion order.
+        let expanded = MacroToken.allCases.reduce(template) {
+            $0.replacingOccurrences(of: $1.rawValue, with: value(for: $1))
+        }
+        return expanded.trimmingCharacters(in: .whitespaces)
     }
 }

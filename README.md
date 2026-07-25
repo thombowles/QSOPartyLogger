@@ -211,7 +211,8 @@ parties, and the remaining engine gaps. Adding a party is governed by
 - **CW keying two ways**: direct DTR/RTS line keying with sub-millisecond
   software timing (8–50 WPM, optional PTT line with lead/tail), or the
   radio's internal keyer (K3 `KY` / Flex CWX). F1–F8 messages with
-  `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}` macros, **defaulting to the party's
+  `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}` macros (defined once, in
+  `MacroToken` — the editor lists whatever that enum holds), **defaulting to the party's
   own exchange shape** — CQP and PAQP send `{SERIAL}` where the report would
   go, MDC sends call and location only, and the messages editor warns (with a
   one-key fix, ⇧⌘R) when any message in either set contradicts its party's
@@ -473,7 +474,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 749 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 753 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, cluster
