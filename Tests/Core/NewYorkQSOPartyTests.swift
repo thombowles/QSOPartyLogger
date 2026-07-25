@@ -246,12 +246,12 @@ final class NewYorkQSOPartyTests: XCTestCase {
     func testCountyLineLimitIsTwo() throws {
         XCTAssertEqual(nyqp.maxSimultaneousCounties, 2)
         XCTAssertEqual(
-            try ExchangeParser.parse("DUT/PUT", party: nyqp).get().locations,
+            try ExchangeParser.parse("DUT/PUT", party: nyqp, role: .inState).get().locations,
             ["DUT", "PUT"],
             "the sponsor's own CW example, 'KX2NY 599 DUT/PUT'"
         )
         XCTAssertEqual(
-            ExchangeParser.parse("DUT/PUT/ORA", party: nyqp),
+            ExchangeParser.parse("DUT/PUT/ORA", party: nyqp, role: .inState),
             .failure(.tooManyCounties(3)),
             "three or more counties still credit only two at a time"
         )
@@ -300,13 +300,13 @@ final class NewYorkQSOPartyTests: XCTestCase {
     }
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("mon", party: nyqp).get().locations, ["MON"])
-        XCTAssertEqual(try ExchangeParser.parse("STL", party: nyqp).get().locations, ["STL"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: nyqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("ON", party: nyqp).get().locations, ["ON"],
+        XCTAssertEqual(try ExchangeParser.parse("mon", party: nyqp, role: .inState).get().locations, ["MON"])
+        XCTAssertEqual(try ExchangeParser.parse("STL", party: nyqp, role: .inState).get().locations, ["STL"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: nyqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("ON", party: nyqp, role: .inState).get().locations, ["ON"],
                        "the standard 13 provinces")
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: nyqp).get().locations, ["DX"])
-        guard case .failure = ExchangeParser.parse("NY", party: nyqp) else {
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: nyqp, role: .inState).get().locations, ["DX"])
+        guard case .failure = ExchangeParser.parse("NY", party: nyqp, role: .inState) else {
             return XCTFail("NY must be rejected — New York stations send a county")
         }
     }

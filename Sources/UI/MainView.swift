@@ -73,7 +73,11 @@ struct MainView: View {
                 MessagesEditor(document: document, settings: settings)
             }
             .sheet(item: $editingQSO) { qso in
-                EditQSOSheet(original: qso, party: party) { updated in
+                EditQSOSheet(
+                    original: qso,
+                    party: party,
+                    role: document.log.myLocation.isInState ? .inState : .outOfState
+                ) { updated in
                     document.update(qso: updated, undoManager: undoManager)
                 }
             }
@@ -161,6 +165,7 @@ struct MainView: View {
                 expand: expandMacros,
                 onSend: sendMessageAt,
                 enabled: radio.isConnected && currentModeClass == .cw,
+                pendingIndex: pendingMessageIndex,
                 repeatEnabled: $repeatCQ,
                 repeatInterval: $settings.repeatIntervalSeconds,
                 esmEnabled: $settings.esmEnabled,
@@ -575,37 +580,65 @@ struct MainView: View {
 
         entry.applyDefaults(modeClass: currentModeClass)
         revalidate()
-        let exchangeValid: Bool = {
-            if case .valid = entry.exchangeStatus { return true }
-            return false
-        }()
 
-        guard settings.esmEnabled, radio.isConnected, currentModeClass == .cw else {
+        guard esmDrivesReturn else {
             logContact()
             return
         }
 
-        switch ESM.nextAction(
-            mode: operatingMode,
-            callEmpty: entry.callNormalized.isEmpty,
-            exchangeValid: exchangeValid
-        ) {
+        switch esmAction {
         case .sendMessage(let index):
+            // The cursor is never moved for you. Wherever it is, that is where
+            // it stays, so a Return that called once calls again — Space is
+            // what advances, when the operator decides the contact has.
             sendMessageAt(index)
-            // Sending his report means the exchange is what's needed next —
-            // move the cursor there so Return keeps the QSO flowing.
-            if let current = focusedField {
-                focusedField = current.next(
-                    includesRST: party?.exchangeIncludesRST ?? true,
-                    includesSerial: party?.exchangeIncludesSerial ?? false
-                )
-            }
         case .logAndSend(let index):
             logContact()
             sendMessageAt(index)
         case .none:
             logContact()
         }
+    }
+
+    /// ESM only drives Return on CW with the radio connected — otherwise
+    /// Return is a plain log key.
+    private var esmDrivesReturn: Bool {
+        settings.esmEnabled && radio.isConnected && currentModeClass == .cw
+    }
+
+    private var esmExchangeState: ESM.ExchangeState {
+        switch entry.exchangeStatus {
+        case .idle: .empty
+        case .valid: .valid
+        case .invalid: .unmatched
+        }
+    }
+
+    /// Only the call and exchange fields change what Return does; the signal
+    /// reports and QSO numbers behave like the exchange without being it.
+    private var esmCursor: ESM.Cursor {
+        switch focusedField {
+        case .call: .call
+        case .exchange: .exchange
+        default: .other
+        }
+    }
+
+    /// What Return would do right now. Read both by the Return key and by the
+    /// messages row's highlight, so the two can never disagree about which
+    /// message is next.
+    private var esmAction: ESM.Action {
+        ESM.nextAction(
+            mode: operatingMode,
+            callEmpty: entry.callNormalized.isEmpty,
+            exchange: esmExchangeState,
+            cursor: esmCursor
+        )
+    }
+
+    /// The F-key slot Return will send next, or nil when ESM isn't driving it.
+    private var pendingMessageIndex: Int? {
+        esmDrivesReturn ? esmAction.messageIndex : nil
     }
 
     /// F12 — wipe a half-typed contact and get back to the call field.

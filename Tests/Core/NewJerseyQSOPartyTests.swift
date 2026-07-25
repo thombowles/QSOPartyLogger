@@ -153,7 +153,7 @@ final class NewJerseyQSOPartyTests: XCTestCase {
 
         XCTAssertTrue(njqp.validOutStateTokens.contains("NF"))
         XCTAssertFalse(njqp.validOutStateTokens.contains("NL"))
-        guard case .failure = ExchangeParser.parse("NL", party: njqp) else {
+        guard case .failure = ExchangeParser.parse("NL", party: njqp, role: .inState) else {
             return XCTFail("NL must be rejected — NJQP's official token is NF")
         }
     }
@@ -165,7 +165,7 @@ final class NewJerseyQSOPartyTests: XCTestCase {
         XCTAssertEqual(njqp.excludedStateTokens.sorted(), ["DC", "NJ"])
         XCTAssertFalse(njqp.validOutStateTokens.contains("DC"))
         XCTAssertTrue(njqp.stateAliases.isEmpty, "no DC-counts-as-Maryland rule exists here")
-        guard case .failure = ExchangeParser.parse("DC", party: njqp) else {
+        guard case .failure = ExchangeParser.parse("DC", party: njqp, role: .inState) else {
             return XCTFail("DC must be rejected — it is absent from the official table")
         }
     }
@@ -260,15 +260,15 @@ final class NewJerseyQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("burl", party: njqp).get().locations, ["BURL"])
-        XCTAssertEqual(try ExchangeParser.parse("CMDN", party: njqp).get().locations, ["CMDN"])
-        XCTAssertEqual(try ExchangeParser.parse("PA", party: njqp).get().locations, ["PA"])
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: njqp).get().locations, ["DX"])
-        guard case .failure = ExchangeParser.parse("NJ", party: njqp) else {
+        XCTAssertEqual(try ExchangeParser.parse("burl", party: njqp, role: .inState).get().locations, ["BURL"])
+        XCTAssertEqual(try ExchangeParser.parse("CMDN", party: njqp, role: .inState).get().locations, ["CMDN"])
+        XCTAssertEqual(try ExchangeParser.parse("PA", party: njqp, role: .inState).get().locations, ["PA"])
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: njqp, role: .inState).get().locations, ["DX"])
+        guard case .failure = ExchangeParser.parse("NJ", party: njqp, role: .inState) else {
             return XCTFail("NJ must be rejected — 'NJ : use counties'")
         }
         XCTAssertEqual(
-            ExchangeParser.parse("OCEA/MONM", party: njqp),
+            ExchangeParser.parse("OCEA/MONM", party: njqp, role: .inState),
             .failure(.tooManyCounties(2)),
             "no simultaneous operation in more than one county"
         )

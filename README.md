@@ -182,7 +182,12 @@ parties, and the remaining engine gaps. Adding a party is governed by
 - **County abbreviation validation** against each party's official list
   (KSQP: 105 3-letter, TQP: 254 4-letter, both generated from the sponsors'
   official files). Typos get suggestions (`LNI` → `LIN`); the home-state token
-  is rejected (Kansas stations always send a county).
+  is rejected (Kansas stations always send a county). County lines are typed
+  `LIN/AND` or `LIN,AND` — **space is not a separator**, because Space moves
+  the cursor. Validation follows **where you are operating from**: an
+  out-of-state entrant is checked against what it can actually receive, so on
+  the seven parties where DX sends a prefix a mistyped county is an error
+  rather than being read as a DX entity.
 - **Live scoring per party rules**: points by mode, single-count multipliers,
   KSQP's first-KS-county-counts-as-KS-state rule, dupes flagged but kept
   (sponsors want them), KS0KS +100 bonus, TQP mobile 5-county bonuses, and a
@@ -204,9 +209,19 @@ parties, and the remaining engine gaps. Adding a party is governed by
   `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}` macros; **Esc aborts instantly**.
   Optional cut numbers for RST and QSO numbers (599 → 5NN) in the CW Messages
   editor.
-- **ESM (Enter Sends Message)** toggle right on the message row: Return
-  sends CQ / exchange / TU based on what's filled in, and logs automatically
-  after the exchange — N1MM muscle memory intact.
+- **ESM (Enter Sends Message)** toggle right on the message row, and **the
+  call field never logs**. While the cursor is in it Return only ever calls —
+  your call pouncing, his call and report running — however complete the row
+  looks. Move to the exchange and the same Return logs and sends your report.
+  That is what a **prefilled exchange** needs: hunting a station whose county
+  you copied off his last QSO, the row holds a call and a valid exchange
+  before you have worked him, and keeps holding them while he works three
+  other people. Every one of those Returns keeps calling. Sitting in the
+  exchange field with a county that matches nothing, Return sends **AGN?** —
+  he is already talking to you, so the thing to do is ask him to repeat, not
+  call him again. ESM never moves the cursor for you (Space does), and the
+  F-key Return will key next is **outlined**, so what it is about to do is
+  visible rather than guessed at.
 - **DX cluster spotting**: connect to any DXSpider/AR-Cluster telnet node
   (toolbar antenna icon), optionally **automatically when a contest opens**.
   Nodes you've used are remembered in a Recent Clusters menu, and the
@@ -255,7 +270,8 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | Keys | Action |
 | --- | --- |
 | `Enter` | Log (or ESM next-message; or execute a typed QSY command) |
-| `Space` | Jump to the next entry field (Call → Exchange, or → QSO nr rcvd where the party sends one) |
+| `Space` | Cycle the entry fields — Call → Exchange → Call, via QSO nr rcvd where the party sends one. Signal reports are stepped over |
+| `Tab` | Walk every entry field, signal reports included — landing in one selects the S digit, so 599 → 579 is a single keystroke |
 | `F12` | Wipe the entry fields and start the contact over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
 | `Esc` | Abort CW + stop repeat-CQ |
@@ -386,7 +402,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 586 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 607 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -466,6 +482,41 @@ typed QSY commands, keyer timing, and keyer labelling.
   same literal token "DX", so without a DXCC prefix table this app credits DX as
   one multiplier and an NH entrant's count can run up to 9 low. Out-of-state
   entrants are unaffected — DX is not one of their multiplier classes.
+- ALQP: the **2026 rules page** (alabamacontestgroup.org/aqp/rules/, fetched
+  2026-07-25, extracted to [`alqp_rules_2026.txt`](docs/research/alqp_rules_2026.txt))
+  states it as the party Object — "Stations outside of Alabama make contact with
+  Alabama amateur radio stations and as many Alabama counties as possible" —
+  with out-of-state multipliers capped at "Maximum of 67 Alabama counties".
+  Resolved as for the other aim-not-prohibition parties; analysis in
+  [`alqp_out_of_state_credit.md`](docs/research/alqp_out_of_state_credit.md).
+  The short `/aqp-rules/` path 404s; the rules are at `/aqp/rules/`.
+- KSQP: the **2026 rules PDF** (ksqsoparty.org, fetched 2026-07-25, extracted to
+  [`ksqp_rules_2026.txt`](docs/research/ksqp_rules_2026.txt)) states the
+  restriction as the party's OBJECT and names both sides — "Stations outside of
+  Kansas work as many Kansas stations in as many Kansas counties as possible.
+  Stations in Kansas work everyone" — with the multiplier table capping
+  non-Kansas entrants at "105 Kansas county multipliers". Resolved as for the
+  other aim-not-prohibition parties; analysis in
+  [`ksqp_out_of_state_credit.md`](docs/research/ksqp_out_of_state_credit.md).
+  That PDF also carries an **FT4/8 category** the bundled definition predates.
+- TQP: the **operating rules** at txqp.net (fetched 2026-07-25, extracted to
+  [`tqp_operating_rules.txt`](docs/research/tqp_operating_rules.txt)) write the
+  out-of-state restriction into the QSO points rule itself — a non-Texas station
+  counts points only "with any Texas station" — so a non-Texas entrant earns
+  nothing for working another non-Texas station. Best-evidenced instance of that
+  rule in the catalogue after MDC 10b; analysis in
+  [`tqp_out_of_state_credit.md`](docs/research/tqp_out_of_state_credit.md). Note
+  `txqp.net/rules/` 404s; the rules live under the Joomla `index.php` path.
+- **DX prefixes, all parties.** Where DX stations send a prefix rather than the
+  literal `DX` (`alqp`, `azqp`, `ilqp`, `mdc`, `sdqp`, `tnqp`, `warun`), a token
+  matching no county, state or section is guessed at as a DXCC prefix, because
+  a prefix really can be almost any short string and there is no DXCC table
+  here to check against. The guess now runs **only where DX is a multiplier
+  class for the operator's own role**, which removes it entirely for
+  out-of-state entrants and makes their typos errors again. **Known limitation:**
+  an *in-state* entrant on those parties still has the loose guess, so a
+  mistyped county can still be accepted as a DX entity. Only a real DXCC prefix
+  table fixes that, and it would also close the NHQP and MEQP limitations below.
 - Salmon Run: rules from salmonrun.wwdxc.org ("Updated – July 22, 2024",
   re-read verbatim 2026-07-24); 2026 dates from the site-wide sidebar. Counties
   generated by [`gen_warun.py`](docs/research/gen_warun.py), which asserts the

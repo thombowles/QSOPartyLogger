@@ -101,7 +101,7 @@ final class ArizonaQSOPartyTests: XCTestCase {
     /// six bundled parties that fold it into Maryland.
     func testNoDCAlias() throws {
         XCTAssertTrue(azqp.stateAliases.isEmpty)
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: azqp).get().locations, ["DC"])
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: azqp, role: .inState).get().locations, ["DC"])
         let s = ScoreEngine.score(log: inLog([
             qso(call: "W3A", my: "MCP", their: "MD"),
             qso(call: "W3B", my: "MCP", their: "DC"),
@@ -322,17 +322,17 @@ final class ArizonaQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("mcp", party: azqp).get().locations, ["MCP"])
-        XCTAssertEqual(try ExchangeParser.parse("CNO", party: azqp).get().locations, ["CNO"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: azqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("NL", party: azqp).get().locations, ["NL"],
+        XCTAssertEqual(try ExchangeParser.parse("mcp", party: azqp, role: .inState).get().locations, ["MCP"])
+        XCTAssertEqual(try ExchangeParser.parse("CNO", party: azqp, role: .inState).get().locations, ["CNO"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: azqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("NL", party: azqp, role: .inState).get().locations, ["NL"],
                        "the standard 13 provinces")
-        XCTAssertEqual(try ExchangeParser.parse("DL", party: azqp).get().locations, ["DL"],
+        XCTAssertEqual(try ExchangeParser.parse("DL", party: azqp, role: .inState).get().locations, ["DL"],
                        "a DXCC prefix, this party's DX form")
-        guard case .failure = ExchangeParser.parse("AZ", party: azqp) else {
+        guard case .failure = ExchangeParser.parse("AZ", party: azqp, role: .inState) else {
             return XCTFail("AZ must be rejected — Arizona stations send a county")
         }
-        guard case .failure = ExchangeParser.parse("DX", party: azqp) else {
+        guard case .failure = ExchangeParser.parse("DX", party: azqp, role: .inState) else {
             return XCTFail("the literal token DX is not AZQP's DX form")
         }
     }
@@ -341,7 +341,7 @@ final class ArizonaQSOPartyTests: XCTestCase {
     /// as multiple contacts" — so a county-line entry is refused.
     func testCountyLineEntriesAreRejected() {
         XCTAssertEqual(
-            ExchangeParser.parse("APH/CHS", party: azqp),
+            ExchangeParser.parse("APH/CHS", party: azqp, role: .inState),
             .failure(.tooManyCounties(2)),
             "two counties are two contacts in AZQP"
         )

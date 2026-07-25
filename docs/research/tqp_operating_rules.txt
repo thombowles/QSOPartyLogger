@@ -1,0 +1,110 @@
+Texas QSO Party — Operating Rules
+Source: https://www.txqp.net/index.php/rules/operating-rules
+Fetched: 2026-07-25
+
+sponsored by Texas DX Society
+Skip to content
+Jump to main navigation and login
+Nav view search
+Navigation
+Home
+Rules
+Contest Dates
+Operating Rules
+Contest Scoring
+Spotting
+Resources
+Routes
+Results
+Awards
+Committee
+Web Links
+Archive
+Username
+Password
+Remember Me
+Forgot your password?
+Forgot your username?
+Search
+Rules
+Operating Rules
+Texas QSO Party (TQP) Contest Rules
+All operation must follow current FCC rules or your country’s rules.
+The use of spotting nets on repeaters, packet nodes, simplex operation, telephone or by any other means is permissible.
+Operation on all Amateur bands is permitted, except on 60 meters, 30 meters, 17 meters and 12 meters.
+Operation in all modes (Phone, CW, Digital) is permitted in all contest categories except for the CW Only, Phone Only, and Digital Only categories. For duping purposes, all digital sub modes are considered to be the same mode (Digital). So, working a fixed given station on RTTY and again on JT65 or FT8 on the same band will result in credit for one QSO. ***Digital modes must be capable of sending and receiving the full contest exchange. A special fork of WSJT-X that supports this for FT-4/8 will be released prior to the 2026 TQP.***
+Contacts made through repeaters, digipeaters, internet, or gateways are not permitted.
+Stations may be worked only once per band per mode for QSO count.
+Texas mobiles may be worked only once per band per mode from each county for QSO count.
+Texas mobiles may work other stations only once per band per mode from each county covered for QSO count.
+If a Texas mobile and/or a portable station is on a county line or junction between 2 or more Texas counties, a separate QSO and exchange must be logged for each county worked (e.g. SSB: NM5G 59 HARR, 59 MGMY). Note that the actual exchange may be grouped or done with separate transmissions at the discretion of the operator. The station located at the county line does not need to be on the line but must have visual contact with a county line marker.  This provides operation from a safe location in case the county line is on a bridge or other hazardous location.
+IMPORTANT
+: Mobile operators considering county line operations should keep safety in mind. Operators must obtain permission to enter private property when such entrance is required to reach a county line(s).
+All logs must be submitted no later than two weeks immediately following the QSO party.
+Texas mobiles must submit a single log of all contacts.
+Contacts made with captive stations do not support the stated purpose of the QSO party and will not be counted. This includes contacts made with other passengers in a mobile as well as so-called California Train operations wherein a group of mobiles travel together for purposes of making contacts within the group.
+The Texas QSO Party is SCHEDULED TO OCCUR ANNUALLY ON THE THIRD WEEKEND (SATURDAY AND SUNDAY) IN SEPTEMBER.
+Operating times are from 1400Z on SATURDAY to 0200Z on SUNDAY and from 1400Z to 2000Z on SUNDAY. Stations may work the entire contest period.
+Exchanges
+Stations outside Texas use RS/T and State, Country, Canadian Province, or maritime region. DX stations should send the primary prefix assigned to their country.
+Texas stations use RS/T and Texas County using the TQP standard abbreviations available on the TQP web site Resource's link.
+Categories
+Texas QSO Party Summary Sheets and Logs must be submitted for one (1) of the following contest categories.
+Texas Fixed Operation Categories
+TX SO LP — Single Operator Mixed Mode (150 watts power limit)
+TX SO HP — Single Operator Mixed Mode High-Power (>150 watts power)
+TX MO LP — Multi Operators (150 watts power limit)
+TX MO HP — Multi Operators High-Power (>150 watts power)
+TX QRP SO — QRP Single Operator (10 watts or less phone and 5 watts or less CW and other modes)
+TX CWO SO LP — CW Only Single Operator (150 watts power limit)
+TX CWO SO HP — CW Only Single Operator High-Power (>150 watts power)
+TX PHO SO LP — Phone Only Single Operator (150 watts power limit)
+TX PHO SO HP — Phone Only Single Operator High-Power (>150 watts power)
+TX DIG SO — Digital Only Single Operator ***New for 2026***
+Texas Mobile Operation Categories
+TXM SO — Texas Mobile Single Operator Mixed Mode–may be assisted (no contest power limit)
+TXM MO — Texas Mobile Multi Operators (no contest power limit)
+TXM SO CWO — Texas Mobile CW Only Single Operator–may be assisted (no contest power limit)
+TXM SO PHO — Texas Mobile Phone Only Single Operator–may be assisted (no contest power limit)
+Non-Texas Fixed Operation Categories
+NTX SO — Single Operator Mixed Mode (no contest power limits)
+NTX SO QRP — QRP Single Operator (10 watts or less phone and 5 watts or less CW and other modes)
+NTX SO CWO — CW Only Single Operator (no contest power limits)
+NTX SO PHO — Phone Only Single Operator (no contest power limits)
+NTX DIG SO — Digital Only Single Operator ***New for 2026***
+DX Categories
+DX SO — Single Operator Mixed (no contest power limits)
+Texas Club Aggregate Award
+This award goes to the Texas club with the highest total score from the sum of all logs submitted across all categories. The club name and call sign must be identified in the header section of each stations Cabrillo log to be included in the count.  All participating stations must be in Texas.
+Scoring
+Texas Stations
+Count two (2) points per phone QSO with any station.
+Count three (3) points per CW and other digital mode QSOs with any station.
+Non - Texas Stations
+Count two (2) points per phone QSO with any Texas station
+Count three (3) points per CW and other digital mode QSOs with any Texas Station.
+Multipliers
+Non - Texas stations— Your multiplier is the number of Texas counties worked. The maximum possible multiplier is 254.
+Texas Stations— Your multipliers are the number of states worked (not including Texas) plus the number of Texas counties worked plus each Canadian province worked (13 total) plus each DXCC country worked excluding USA, Canada, Alaska and Hawaii.
+All additional DXCC contacts worked count for points.
+Washington DC QSOs count as Maryland contacts.
+Multipliers are counted once for the QSO Party. For example, if you work NC on SSB and on CW that counts as one multiplier.
+Final Score
+Multiply the total QSO points times your multiplier to arrive at your final score.
+Bonus Points
+Non - Texas Stations—Add five hundred (500) bonus points to your FINAL SCORE for each Texas mobile worked in five (5) different counties regardless of band or mode. If you work the same Texas mobile in five (5) additional counties, you add an additional five hundred (500) bonus points to your FINAL SCORE, etc. However, for bonus points you can only count one (1) contact per county per mobile.
+Texas Stations—Add five hundred (500) bonus points to your FINAL SCORE for each Texas mobile worked in five (5) different counties regardless of band or mode. If you work the same Texas mobile in five (5) additional counties, you add an additional five hundred (500) bonus points to your FINAL SCORE, etc. However, for bonus points you can only count one (1) contact per county per mobile.
+Texas Mobiles—Add one thousand (1000) points to your FINAL SCORE per every county covered with at least five non-duplicate Add five hundred (500) bonus points to your FINAL SCORE for each Texas mobile worked in five (5) different counties regardless of band or mode. If you work the same Texas mobile in five (5) additional counties, you add an additional five hundred (500) bonus points to your FINAL SCORE, etc. However, for bonus points you can only count one (1) contact per county per mobile.
+Final-Final Score
+Add bonus points to your Final score.
+Log Submission
+Logs must be submitted within two weeks following contest end date.
+NEW FOR 2026:
+E-mail and paper log submissions will no longer be accepted. Logs must be submmitted online at
+https://txqp.contesting.com/
+(site coming soon).
+Results will be posted on the TQP web site.
+Suggested Frequencies
+CW—20 kHz to 40 kHz up from the bottom of the band.
+PHONE—25 kHz up in General segments and 28.300 - 28.500
+VHF—50.200 MHz and 144.200 MHz

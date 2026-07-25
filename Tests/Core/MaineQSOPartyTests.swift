@@ -236,7 +236,7 @@ final class MaineQSOPartyTests: XCTestCase {
 
     func testNLIsNotAValidMEQPToken() {
         XCTAssertFalse(meqp.validOutStateTokens.contains("NL"))
-        guard case .failure = ExchangeParser.parse("NL", party: meqp) else {
+        guard case .failure = ExchangeParser.parse("NL", party: meqp, role: .inState) else {
             return XCTFail("NL must be rejected — MEQP splits it into NF and LB")
         }
     }
@@ -301,13 +301,13 @@ final class MaineQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("cbl", party: meqp).get().locations, ["CBL"])
-        XCTAssertEqual(try ExchangeParser.parse("PSQ", party: meqp).get().locations, ["PSQ"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: meqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: meqp).get().locations, ["DC"])
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: meqp).get().locations, ["DX"])
-        XCTAssertEqual(try ExchangeParser.parse("LB", party: meqp).get().locations, ["LB"])
-        guard case .failure = ExchangeParser.parse("ME", party: meqp) else {
+        XCTAssertEqual(try ExchangeParser.parse("cbl", party: meqp, role: .inState).get().locations, ["CBL"])
+        XCTAssertEqual(try ExchangeParser.parse("PSQ", party: meqp, role: .inState).get().locations, ["PSQ"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: meqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: meqp, role: .inState).get().locations, ["DC"])
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: meqp, role: .inState).get().locations, ["DX"])
+        XCTAssertEqual(try ExchangeParser.parse("LB", party: meqp, role: .inState).get().locations, ["LB"])
+        guard case .failure = ExchangeParser.parse("ME", party: meqp, role: .inState) else {
             return XCTFail("ME must be rejected — Maine stations send a county")
         }
     }
@@ -317,7 +317,7 @@ final class MaineQSOPartyTests: XCTestCase {
     func testCountyLineEntriesAreRejected() {
         XCTAssertEqual(meqp.maxSimultaneousCounties, 1)
         XCTAssertEqual(
-            ExchangeParser.parse("CBL/YOR", party: meqp),
+            ExchangeParser.parse("CBL/YOR", party: meqp, role: .inState),
             .failure(.tooManyCounties(2)),
             "two counties are two QSOs in MEQP, not one two-county QSO"
         )

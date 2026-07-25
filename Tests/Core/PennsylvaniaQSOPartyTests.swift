@@ -338,7 +338,7 @@ final class PennsylvaniaQSOPartyTests: XCTestCase {
     /// for each county." One exchange, one serial, several rows.
     func testCountyLineIsOneExchangeWithOneSerial() throws {
         XCTAssertEqual(
-            try ExchangeParser.parse("CAR/LEH", party: paqp).get().locations,
+            try ExchangeParser.parse("CAR/LEH", party: paqp, role: .inState).get().locations,
             ["CAR", "LEH"],
             "the sponsor's own worked example"
         )
@@ -365,15 +365,15 @@ final class PennsylvaniaQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("all", party: paqp).get().locations, ["ALL"])
-        XCTAssertEqual(try ExchangeParser.parse("NHA", party: paqp).get().locations, ["NHA"])
-        XCTAssertEqual(try ExchangeParser.parse("EMA", party: paqp).get().locations, ["EMA"])
-        XCTAssertEqual(try ExchangeParser.parse("NTX", party: paqp).get().locations, ["NTX"])
-        XCTAssertEqual(try ExchangeParser.parse("TER", party: paqp).get().locations, ["TER"])
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: paqp).get().locations, ["DX"])
+        XCTAssertEqual(try ExchangeParser.parse("all", party: paqp, role: .inState).get().locations, ["ALL"])
+        XCTAssertEqual(try ExchangeParser.parse("NHA", party: paqp, role: .inState).get().locations, ["NHA"])
+        XCTAssertEqual(try ExchangeParser.parse("EMA", party: paqp, role: .inState).get().locations, ["EMA"])
+        XCTAssertEqual(try ExchangeParser.parse("NTX", party: paqp, role: .inState).get().locations, ["NTX"])
+        XCTAssertEqual(try ExchangeParser.parse("TER", party: paqp, role: .inState).get().locations, ["TER"])
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: paqp, role: .inState).get().locations, ["DX"])
         // The tokens every other party would accept, rejected here.
         for bad in ["TX", "PA", "ON", "NT", "DC"] {
-            guard case .failure = ExchangeParser.parse(bad, party: paqp) else {
+            guard case .failure = ExchangeParser.parse(bad, party: paqp, role: .inState) else {
                 return XCTFail("'\(bad)' is not a PAQP token — PAQP counts sections")
             }
         }

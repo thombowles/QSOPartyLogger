@@ -4,6 +4,19 @@ import Foundation
 /// against a party's county list and out-of-state tokens.
 enum ExchangeParser {
 
+    /// Where the operator is entered from, which decides what can legitimately
+    /// arrive in the exchange field.
+    ///
+    /// An in-state station works all comers, so every token the party can
+    /// produce is valid for it. An out-of-state entrant hears a much narrower
+    /// set — under most sponsors' rules, only home-state stations count at all
+    /// — and validating against the wider set turns typos into valid
+    /// exchanges.
+    enum Role: Equatable, Sendable {
+        case inState
+        case outOfState
+    }
+
     struct ParsedExchange: Equatable {
         /// County abbreviations (1–4, county-line) or a single out-of-state token.
         let locations: [String]
@@ -35,18 +48,48 @@ enum ExchangeParser {
     /// Absolute ceiling; parties usually cap lower via `maxSimultaneousCounties`.
     static let maxCounties = 4
 
+    /// County-line entries are separated with "/" or "," only. Space is not a
+    /// separator: it advances the entry row's cursor, so it cannot be typed
+    /// here at all. Tokens are trimmed so "lin, and" still reads as two.
     static func tokenize(_ raw: String) -> [String] {
         raw.uppercased()
-            .components(separatedBy: CharacterSet(charactersIn: "/, \t"))
+            .components(separatedBy: CharacterSet(charactersIn: "/,"))
+            .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
     }
 
-    static func parse(_ raw: String, party: PartyDefinition) -> Result<ParsedExchange, ExchangeError> {
+    /// Whether an out-of-state entrant can receive anything but a home-state
+    /// county. False only where the sponsor's own rules restrict them to
+    /// home-state contacts — the flag carries that rule text per party.
+    static func acceptsOutStateTokens(party: PartyDefinition, role: Role) -> Bool {
+        role == .inState || !party.outStateWorksHomeStationsOnly
+    }
+
+    /// Whether a token that matches nothing may be guessed at as a DXCC prefix.
+    ///
+    /// The guess exists so DX entities can be counted as multipliers, and it is
+    /// necessarily loose — a prefix really can be almost any short string, and
+    /// there is no DXCC table here to check it against. Loose is tolerable only
+    /// where it buys something: if DX is not a multiplier class for this
+    /// operator, the guess buys nothing and costs everything, silently turning
+    /// every mistyped county into a valid exchange.
+    static func acceptsDXPrefix(party: PartyDefinition, role: Role) -> Bool {
+        let rule = role == .inState ? party.multipliers.inState : party.multipliers.outState
+        return rule.classes.contains(.dx)
+    }
+
+    static func parse(
+        _ raw: String,
+        party: PartyDefinition,
+        role: Role
+    ) -> Result<ParsedExchange, ExchangeError> {
         let tokens = tokenize(raw)
         guard !tokens.isEmpty else { return .failure(.empty) }
 
         let countyAbbrs = Set(party.counties.map(\.abbr))
-        let outTokens = party.validOutStateTokens
+        let outTokens = acceptsOutStateTokens(party: party, role: role)
+            ? party.validOutStateTokens
+            : []
 
         let counties = tokens.filter { countyAbbrs.contains($0) }
         let outs = tokens.filter { outTokens.contains($0) }
@@ -68,8 +111,11 @@ enum ExchangeParser {
         }
 
         // DX prefix (ALQP/TQP/TnQP/WA/MDC style): single unknown token that
-        // plausibly is a DXCC prefix.
-        if tokens.count == 1, party.isPlausibleDXPrefix(tokens[0]) {
+        // plausibly is a DXCC prefix — but only where DX is a multiplier for
+        // this operator, or every typo becomes a valid exchange.
+        if tokens.count == 1,
+           acceptsDXPrefix(party: party, role: role),
+           party.isPlausibleDXPrefix(tokens[0]) {
             return .success(ParsedExchange(locations: [tokens[0]], isInStateCounties: false))
         }
 
@@ -78,12 +124,19 @@ enum ExchangeParser {
         }
 
         let bad = tokens.first { !countyAbbrs.contains($0) && !outTokens.contains($0) } ?? tokens[0]
-        return .failure(.unknownAbbreviation(bad, suggestions: suggestions(for: bad, party: party)))
+        return .failure(
+            .unknownAbbreviation(bad, suggestions: suggestions(for: bad, party: party, role: role))
+        )
     }
 
-    /// Prefix matches plus edit-distance-1 candidates, capped at 3.
-    static func suggestions(for token: String, party: PartyDefinition) -> [String] {
-        let all = party.counties.map(\.abbr) + party.validOutStateTokens.sorted()
+    /// Prefix matches plus edit-distance-1 candidates, capped at 3. Drawn from
+    /// what this operator can actually receive, so an out-of-state entrant is
+    /// never pointed at a state token it cannot log.
+    static func suggestions(for token: String, party: PartyDefinition, role: Role) -> [String] {
+        let outTokens = acceptsOutStateTokens(party: party, role: role)
+            ? party.validOutStateTokens.sorted()
+            : []
+        let all = party.counties.map(\.abbr) + outTokens
         var out: [String] = []
         for abbr in all where abbr.hasPrefix(token) && abbr != token {
             out.append(abbr)

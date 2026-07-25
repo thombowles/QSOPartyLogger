@@ -17,6 +17,49 @@ final class PartyCatalogTests: XCTestCase {
         )
     }
 
+    /// TQP writes the restriction into the QSO points rule itself: a non-Texas
+    /// station counts points only "with any Texas station". A non-Texas contact
+    /// is therefore worth nothing, and the flag suppresses points, multipliers
+    /// and dupe accounting for it.
+    func testTexasRestrictsOutOfStateCreditToTexasContacts() throws {
+        let tqp = try XCTUnwrap(PartyCatalog.party(id: "tqp"))
+        XCTAssertTrue(tqp.outStateWorksHomeStationsOnly)
+        XCTAssertEqual(tqp.multipliers.outState.classes, [.county],
+                       "a non-Texas entrant's only multiplier is Texas counties")
+    }
+
+    /// Which parties restrict an out-of-state entrant to home-state contacts.
+    /// The flag suppresses points, multipliers and dupe accounting for every
+    /// other row, so a party joining or leaving this list moves scores — it
+    /// must be a deliberate edit backed by rule text, never incidental.
+    ///
+    /// Maine is the standing exception: its out-of-state entrants score each
+    /// other, in the sponsor's own wording.
+    func testOutOfStateCreditRestrictionPerParty() {
+        let unrestricted: Set<String> = ["meqp"]
+        for party in PartyCatalog.loadBundled() {
+            XCTAssertEqual(
+                party.outStateWorksHomeStationsOnly,
+                !unrestricted.contains(party.id),
+                "\(party.id) changed who an out-of-state entrant may work for credit"
+            )
+        }
+    }
+
+    /// The three parties whose restriction was researched last, each quoting the
+    /// sentence that backs it. TQP's is a points rule; the other two are the
+    /// party Object, resolved by the standing precedent.
+    func testLatelyResearchedRestrictionsKeepTheirMultiplierShape() throws {
+        for id in ["alqp", "ksqp", "tqp"] {
+            let party = try XCTUnwrap(PartyCatalog.party(id: id))
+            XCTAssertTrue(party.outStateWorksHomeStationsOnly, id)
+            XCTAssertEqual(
+                party.multipliers.outState.classes, [.county],
+                "\(id): an out-of-state entrant's only multiplier is a home-state county"
+            )
+        }
+    }
+
     // MARK: Verification status (constitution Article 3)
 
     /// Every bundled party is either fully verified or explicitly marked

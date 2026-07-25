@@ -213,18 +213,18 @@ final class IowaQSOPartyTests: XCTestCase {
     /// Hardin HDN counties".
     func testThreeCountyJunctionFromTheRulesExample() throws {
         XCTAssertEqual(
-            try ExchangeParser.parse("STR/MSL/HDN", party: iaqp).get().locations,
+            try ExchangeParser.parse("STR/MSL/HDN", party: iaqp, role: .inState).get().locations,
             ["STR", "MSL", "HDN"]
         )
     }
 
     func testFourCountyJunctionIsTheLimit() throws {
         XCTAssertEqual(
-            try ExchangeParser.parse("STR/MSL/HDN/BOO", party: iaqp).get().locations,
+            try ExchangeParser.parse("STR/MSL/HDN/BOO", party: iaqp, role: .inState).get().locations,
             ["STR", "MSL", "HDN", "BOO"]
         )
         XCTAssertEqual(
-            ExchangeParser.parse("STR/MSL/HDN/BOO/POL", party: iaqp),
+            ExchangeParser.parse("STR/MSL/HDN/BOO/POL", party: iaqp, role: .inState),
             .failure(.tooManyCounties(5))
         )
     }
@@ -260,13 +260,13 @@ final class IowaQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("str", party: iaqp).get().locations, ["STR"])
-        XCTAssertEqual(try ExchangeParser.parse("OBR", party: iaqp).get().locations, ["OBR"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: iaqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: iaqp).get().locations, ["DX"])
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: iaqp).get().locations, ["DC"],
+        XCTAssertEqual(try ExchangeParser.parse("str", party: iaqp, role: .inState).get().locations, ["STR"])
+        XCTAssertEqual(try ExchangeParser.parse("OBR", party: iaqp, role: .inState).get().locations, ["OBR"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: iaqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: iaqp, role: .inState).get().locations, ["DX"])
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: iaqp, role: .inState).get().locations, ["DC"],
                        "loggable, credited as Maryland")
-        guard case .failure = ExchangeParser.parse("IA", party: iaqp) else {
+        guard case .failure = ExchangeParser.parse("IA", party: iaqp, role: .inState) else {
             return XCTFail("IA must be rejected — Iowa stations send a county")
         }
     }
