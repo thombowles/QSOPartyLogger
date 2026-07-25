@@ -880,7 +880,8 @@ struct MainView: View {
             rst: entry.rstSent.isEmpty ? currentModeClass.defaultRST : entry.rstSent,
             exchange: document.log.myLocation.displayText,
             serial: entry.serialSent,
-            cutNumbers: settings.cwCutNumbers && currentModeClass == .cw
+            cutNumbers: settings.cwCutNumbers && currentModeClass == .cw,
+            cutOne: settings.cwCutNumberOne
         )
     }
 

@@ -205,8 +205,9 @@ parties, and the remaining engine gaps. Adding a party is governed by
   own exchange shape** — CQP and PAQP send `{SERIAL}` where the report would
   go, MDC sends call and location only, and the messages editor warns (with a
   one-key fix, ⇧⌘D) when any message in either set contradicts its party's
-  exchange. **Esc aborts instantly.** Optional cut numbers for RST and QSO
-  numbers (599 → 5NN) in the CW Messages editor.
+  exchange. **Esc aborts instantly.** Optional cut numbers for reports and QSO
+  numbers (0→T, 9→N: 599 → 5NN, 40 → 4T) in the CW Messages editor, with 1→A
+  available separately for operators who cut harder.
 - **ESM (Enter Sends Message)** toggle right on the message row: Return
   sends CQ / exchange / TU based on what's filled in, and logs automatically
   after the exchange — N1MM muscle memory intact.

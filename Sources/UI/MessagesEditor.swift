@@ -55,8 +55,14 @@ struct MessagesEditor: View {
                 .background(Color.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 6))
             }
 
-            Toggle("Send cut numbers for RST (599 → 5NN)", isOn: $settings.cwCutNumbers)
-                .help("Replaces 9→N and 0→T in the {RST} macro when keying CW. Callsigns and county codes are never altered.")
+            VStack(alignment: .leading, spacing: 4) {
+                Toggle("Send cut numbers (599 → 5NN, 40 → 4T)", isOn: $settings.cwCutNumbers)
+                    .help("Replaces 0→T and 9→N in the {RST} and {SERIAL} macros when keying CW. Callsigns and county codes are never altered.")
+                Toggle("Also cut 1 → A (199 → ANN)", isOn: $settings.cwCutNumberOne)
+                    .help("Less universal than 0→T and 9→N — leave off if stations ask for repeats.")
+                    .disabled(!settings.cwCutNumbers)
+                    .padding(.leading, 20)
+            }
 
             HStack {
                 Button("Restore Defaults", action: applyPartyDefaults)
