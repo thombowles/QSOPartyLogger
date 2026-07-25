@@ -204,9 +204,9 @@ parties, and the remaining engine gaps. Adding a party is governed by
   `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}` macros, **defaulting to the party's
   own exchange shape** — CQP and PAQP send `{SERIAL}` where the report would
   go, MDC sends call and location only, and the messages editor warns (with a
-  one-key fix, ⇧⌘D) when a log's macros contradict its party. **Esc aborts
-  instantly.** Optional cut numbers for RST and QSO numbers (599 → 5NN) in the
-  CW Messages editor.
+  one-key fix, ⇧⌘D) when any message in either set contradicts its party's
+  exchange. **Esc aborts instantly.** Optional cut numbers for RST and QSO
+  numbers (599 → 5NN) in the CW Messages editor.
 - **ESM (Enter Sends Message)** toggle right on the message row: Return
   sends CQ / exchange / TU based on what's filled in, and logs automatically
   after the exchange — N1MM muscle memory intact.
@@ -390,7 +390,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 618 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 627 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,

@@ -123,11 +123,59 @@ struct MessageSets: Codable, Equatable, Sendable {
     /// The first way these macros disagree with the party's exchange, or nil
     /// when they agree. Drives the messages editor's warning, which needs the
     /// reason and not merely the fact.
+    ///
+    /// **Each set is judged separately, and within a set each message is judged
+    /// on its own.** An operator who fixes Run but not Search & Pounce is still
+    /// sending the wrong exchange on every contact they answer rather than call,
+    /// and a single OR across both sets would call that agreement. A set with
+    /// nothing in it is skipped instead of judged: plenty of operators never
+    /// call CQ, and an empty message cannot send a wrong exchange.
     func exchangeMismatch(with party: PartyDefinition?) -> ExchangeMismatch? {
         guard let party else { return nil }
-        if party.exchangeIncludesSerial, !mentions("{SERIAL}") { return .missingSerial }
-        if !party.exchangeIncludesRST, mentions("{RST}") { return .extraneousRST }
-        if party.exchangeIncludesRST, !mentions("{RST}") { return .missingRST }
+        for messages in [run, searchPounce] {
+            if let mismatch = Self.mismatch(in: messages, with: party) { return mismatch }
+        }
+        return nil
+    }
+
+    /// The mismatch within one message set, or nil for a set that agrees — or
+    /// that has no messages to disagree with.
+    ///
+    /// Judged per message rather than per set. CQP's Search & Pounce defaults
+    /// carry the exchange twice — the answer and the repeat-back — so asking
+    /// only whether the set mentions `{SERIAL}` *somewhere* lets an intact F7
+    /// mask an F2 the operator has broken, which is the same defect as ORing
+    /// the two sets together.
+    private static func mismatch(
+        in messages: [String], with party: PartyDefinition
+    ) -> ExchangeMismatch? {
+        let live = messages.filter { !$0.isEmpty }
+        guard !live.isEmpty else { return nil }
+
+        // The messages that send the exchange. A populated set with none of them
+        // is judged as though its exchange message existed and were blank, since
+        // it cannot send the exchange either. ("Sends no {EXCH}" is a fourth
+        // kind of mistake, outside this enum's three.)
+        let carriers = live.filter { $0.contains("{EXCH}") }
+        let judged = carriers.isEmpty ? [""] : carriers
+
+        // A *missing* token is judged per exchange-bearing message, because
+        // CQP's Search & Pounce defaults carry the exchange twice — the answer
+        // and the repeat-back — so a set-wide check lets an intact F7 mask an
+        // F2 the operator has broken.
+        if party.exchangeIncludesSerial, judged.contains(where: { !$0.contains("{SERIAL}") }) {
+            return .missingSerial
+        }
+        // An *extraneous* report is judged across every live message instead:
+        // unlike a missing token, it is a should-never-appear check. `{RST}`
+        // fat-fingered into F5 ("AGN? {RST}") still keys a literal report every
+        // time F5 is pressed, for a party whose exchange has no room for one.
+        if !party.exchangeIncludesRST, live.contains(where: { $0.contains("{RST}") }) {
+            return .extraneousRST
+        }
+        if party.exchangeIncludesRST, judged.contains(where: { !$0.contains("{RST}") }) {
+            return .missingRST
+        }
         return nil
     }
 

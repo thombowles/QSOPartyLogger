@@ -254,4 +254,119 @@ final class MessageDefaultsTests: XCTestCase {
                            "\(party.name) sends a QSO number, but no message uses {SERIAL}.")
         }
     }
+
+    // MARK: Each message set is judged on its own (2026-07-25)
+
+    /// The gap this closes. An operator who fixes Run but retypes S&P F2 to
+    /// drop the number is still sending no QSO number on every search-and-
+    /// pounce contact, and CQP accepts Cabrillo only — so the log is
+    /// unsubmittable. A single OR across both sets called this agreement.
+    func testAnEditToOnlyTheSearchPounceSetStillWarns() throws {
+        let cqp = try XCTUnwrap(PartyCatalog.party(id: "cqp"))
+        var macros = MessageSets.defaults(for: cqp)
+        macros.searchPounce[1] = "{EXCH}"
+        XCTAssertEqual(macros.exchangeMismatch(with: cqp), .missingSerial,
+                       "the Run set still has {SERIAL}; S&P does not")
+    }
+
+    /// Symmetric: the Run set is not privileged.
+    func testAnEditToOnlyTheRunSetStillWarns() throws {
+        let cqp = try XCTUnwrap(PartyCatalog.party(id: "cqp"))
+        var macros = MessageSets.defaults(for: cqp)
+        macros.run = macros.run.map { $0.replacingOccurrences(of: "{SERIAL} ", with: "") }
+        XCTAssertEqual(macros.exchangeMismatch(with: cqp), .missingSerial)
+    }
+
+    /// Also symmetric for the report cases, so neither set is special-cased.
+    func testAStrayReportInOnlyOneSetWarns() throws {
+        let mdc = try XCTUnwrap(PartyCatalog.party(id: "mdc"))
+        var macros = MessageSets.defaults(for: mdc)
+        macros.searchPounce[1] = "{RST} {EXCH}"
+        XCTAssertEqual(macros.exchangeMismatch(with: mdc), .extraneousRST)
+    }
+
+    /// The trap: an operator who never calls CQ has no Run messages, and an
+    /// empty message cannot send the wrong exchange. Judging a blank set would
+    /// nag them permanently with nothing to fix.
+    func testAnEmptySetIsSkippedRatherThanJudged() throws {
+        let cqp = try XCTUnwrap(PartyCatalog.party(id: "cqp"))
+        let correct = MessageSets.defaults(for: cqp)
+
+        let noRun = MessageSets(run: Array(repeating: "", count: 8),
+                                searchPounce: correct.searchPounce)
+        XCTAssertNil(noRun.exchangeMismatch(with: cqp), "no Run messages to be wrong")
+
+        let noSP = MessageSets(run: correct.run,
+                               searchPounce: Array(repeating: "", count: 8))
+        XCTAssertNil(noSP.exchangeMismatch(with: cqp), "no S&P messages to be wrong")
+    }
+
+    /// And a set of nothing at all warns about nothing.
+    func testEntirelyEmptyMacrosDoNotWarn() throws {
+        let cqp = try XCTUnwrap(PartyCatalog.party(id: "cqp"))
+        let blank = MessageSets(run: Array(repeating: "", count: 8),
+                                searchPounce: Array(repeating: "", count: 8))
+        XCTAssertNil(blank.exchangeMismatch(with: cqp))
+    }
+
+    /// Only a truly empty message counts as absent: the skip test is plain
+    /// emptiness, not a trim. A set of spaces is therefore judged rather than
+    /// skipped, and warns.
+    ///
+    /// Nothing reaches the air either way — `AppSettings.expandMacros` trims,
+    /// so `"   "` sends nothing — which makes this a warning about a set that
+    /// is broken in a slightly different way than the text describes. It is
+    /// the deliberate trade for a simpler predicate, and it costs an operator
+    /// nothing unless they type spaces into all eight fields.
+    func testAWhitespaceOnlySetIsJudgedRatherThanSkipped() throws {
+        let cqp = try XCTUnwrap(PartyCatalog.party(id: "cqp"))
+        let correct = MessageSets.defaults(for: cqp)
+        let spaces = MessageSets(run: Array(repeating: "   ", count: 8),
+                                 searchPounce: correct.searchPounce)
+        XCTAssertEqual(spaces.exchangeMismatch(with: cqp), .missingSerial,
+                       "spaces are content as far as the emptiness check is concerned")
+    }
+
+    /// The masking case. CQP's S&P defaults carry the exchange twice, so an
+    /// intact repeat-back at F7 must not excuse a broken answer at F2. Judging
+    /// the set as a whole rather than message by message misses this.
+    func testAnIntactRepeatBackDoesNotMaskABrokenAnswer() throws {
+        let cqp = try XCTUnwrap(PartyCatalog.party(id: "cqp"))
+        var macros = MessageSets.defaults(for: cqp)
+        XCTAssertEqual(macros.searchPounce[6], "R {SERIAL} {EXCH}", "precondition: F7 also carries it")
+
+        macros.searchPounce[1] = "{EXCH}"
+        XCTAssertEqual(macros.exchangeMismatch(with: cqp), .missingSerial,
+                       "F7 still carries {SERIAL}; F2 does not, and F2 is what answers a CQ")
+    }
+
+    /// A populated set that sends no exchange at all cannot be right either, so
+    /// it is judged rather than skipped — the distinction from a blank set.
+    func testAPopulatedSetThatSendsNoExchangeIsStillJudged() throws {
+        let cqp = try XCTUnwrap(PartyCatalog.party(id: "cqp"))
+        let noExchange = MessageSets(
+            run: ["CQ TEST {MYCALL}", "{CALL}", "TU {MYCALL}", "", "", "", "", ""],
+            searchPounce: MessageSets.defaults(for: cqp).searchPounce
+        )
+        XCTAssertEqual(noExchange.exchangeMismatch(with: cqp), .missingSerial,
+                       "nothing in the Run set sends the exchange")
+
+        let ksqp = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        XCTAssertEqual(noExchange.exchangeMismatch(with: ksqp), .missingRST,
+                       "same set, report party: the report is what is missing")
+    }
+
+    /// Missing and extraneous are not symmetric. A missing token is a property
+    /// of the exchange message, but an extraneous report is a should-never-
+    /// appear check: `{RST}` fat-fingered into F5 keys a literal report every
+    /// time F5 is pressed, for a party whose exchange has no room for one.
+    func testAStrayReportOutsideTheExchangeMessageStillWarns() throws {
+        let mdc = try XCTUnwrap(PartyCatalog.party(id: "mdc"))
+        var macros = MessageSets.defaults(for: mdc)
+        XCTAssertNil(macros.exchangeMismatch(with: mdc), "precondition: MDC's defaults agree")
+
+        macros.searchPounce[4] = "AGN? {RST}"
+        XCTAssertEqual(macros.exchangeMismatch(with: mdc), .extraneousRST,
+                       "F5 is not an exchange message, but it still sends a report")
+    }
 }
