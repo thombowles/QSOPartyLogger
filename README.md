@@ -263,7 +263,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | --- | --- |
 | `Enter` | Log (or ESM next-message; or execute a typed QSY command) |
 | `Space` | Cycle the entry fields — Call → Exchange → Call, via QSO nr rcvd where the party sends one. Signal reports are stepped over |
-| `Tab` | Walk every entry field, signal reports included |
+| `Tab` | Walk every entry field, signal reports included — landing in one selects the S digit, so 599 → 579 is a single keystroke |
 | `F12` | Wipe the entry fields and start the contact over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
 | `Esc` | Abort CW + stop repeat-CQ |

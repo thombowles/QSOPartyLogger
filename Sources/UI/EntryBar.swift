@@ -63,6 +63,29 @@ struct EntryBar: View {
                     .foregroundStyle(.red)
             }
         }
+        .onChange(of: focus) { _, landed in
+            guard landed == .rstSent || landed == .rstRcvd else { return }
+            selectStrengthDigit()
+        }
+    }
+
+    /// Landing in a signal report selects the S digit alone, so 599 → 579 is
+    /// one keystroke rather than retyping the group — the behaviour the N1MM
+    /// manual describes for Tab.
+    ///
+    /// SwiftUI's TextField exposes no selection, so this reaches the window's
+    /// field editor, which becomes first responder a runloop turn after the
+    /// focus change lands.
+    private func selectStrengthDigit() {
+        DispatchQueue.main.async {
+            MainActor.assumeIsolated {
+                guard let editor = NSApp.keyWindow?.firstResponder as? NSTextView else { return }
+                // R S T — the strength digit is the middle one, and the second
+                // character in both the CW (599) and phone (59) forms.
+                guard editor.string.count >= 2 else { return }
+                editor.setSelectedRange(NSRange(location: 1, length: 1))
+            }
+        }
     }
 
     private var exchangeLabel: String {
