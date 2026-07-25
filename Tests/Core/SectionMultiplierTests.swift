@@ -89,13 +89,13 @@ final class SectionMultiplierTests: XCTestCase {
 
     func testExchangeParserAcceptsSectionsAndRejectsStates() throws {
         let party = try sectionParty()
-        XCTAssertEqual(try ExchangeParser.parse("ntx", party: party).get().locations, ["NTX"])
-        XCTAssertEqual(try ExchangeParser.parse("EMA", party: party).get().locations, ["EMA"])
-        XCTAssertEqual(try ExchangeParser.parse("TER", party: party).get().locations, ["TER"])
-        XCTAssertEqual(try ExchangeParser.parse("ADA", party: party).get().locations, ["ADA"])
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: party).get().locations, ["DX"])
+        XCTAssertEqual(try ExchangeParser.parse("ntx", party: party, role: .inState).get().locations, ["NTX"])
+        XCTAssertEqual(try ExchangeParser.parse("EMA", party: party, role: .inState).get().locations, ["EMA"])
+        XCTAssertEqual(try ExchangeParser.parse("TER", party: party, role: .inState).get().locations, ["TER"])
+        XCTAssertEqual(try ExchangeParser.parse("ADA", party: party, role: .inState).get().locations, ["ADA"])
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: party, role: .inState).get().locations, ["DX"])
         for bad in ["TX", "MA", "ON", "PA"] {
-            guard case .failure = ExchangeParser.parse(bad, party: party) else {
+            guard case .failure = ExchangeParser.parse(bad, party: party, role: .inState) else {
                 return XCTFail("'\(bad)' is a state/province code, not a section")
             }
         }
@@ -245,9 +245,9 @@ final class SectionMultiplierTests: XCTestCase {
     /// branch must be unreachable for them.
     func testNonSectionPartiesResolveStatesAsBefore() throws {
         let nhqp = try XCTUnwrap(PartyCatalog.party(id: "nhqp"))
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: nhqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("ON", party: nhqp).get().locations, ["ON"])
-        guard case .failure = ExchangeParser.parse("NTX", party: nhqp) else {
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: nhqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("ON", party: nhqp, role: .inState).get().locations, ["ON"])
+        guard case .failure = ExchangeParser.parse("NTX", party: nhqp, role: .inState) else {
             return XCTFail("NTX is a section and means nothing in NHQP")
         }
     }

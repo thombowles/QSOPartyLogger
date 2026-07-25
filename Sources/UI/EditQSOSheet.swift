@@ -4,6 +4,9 @@ import SwiftUI
 struct EditQSOSheet: View {
     let original: QSO
     let party: PartyDefinition?
+    /// Where the log says this station is operating from — the edit sheet
+    /// validates against exactly what the entry bar accepts.
+    let role: ExchangeParser.Role
     let onSave: (QSO) -> Void
     @Environment(\.dismiss) private var dismiss
 
@@ -26,7 +29,7 @@ struct EditQSOSheet: View {
             Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 8) {
                 GridRow {
                     Text("Call")
-                    TextField("", text: $call)
+                    TextField("", text: $call.uppercasing)
                         .font(.body.monospaced())
                         .frame(width: 140)
                 }
@@ -68,13 +71,13 @@ struct EditQSOSheet: View {
                 }
                 GridRow {
                     Text("My exchange")
-                    TextField("", text: $myLoc)
+                    TextField("", text: $myLoc.uppercasing)
                         .font(.body.monospaced())
                         .frame(width: 100)
                 }
                 GridRow {
                     Text("Their exchange")
-                    TextField("", text: $theirLoc)
+                    TextField("", text: $theirLoc.uppercasing)
                         .font(.body.monospaced())
                         .frame(width: 100)
                 }
@@ -113,7 +116,7 @@ struct EditQSOSheet: View {
         let theirTrimmed = theirLoc.trimmingCharacters(in: .whitespaces).uppercased()
         if let party {
             // A row holds exactly one location per side.
-            let parsed = ExchangeParser.parse(theirTrimmed, party: party)
+            let parsed = ExchangeParser.parse(theirTrimmed, party: party, role: role)
             switch parsed {
             case .failure(let error):
                 validationMessage = error.localizedDescription

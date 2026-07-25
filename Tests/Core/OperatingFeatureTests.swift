@@ -7,32 +7,164 @@ final class OperatingFeatureTests: XCTestCase {
 
     func testESMRunMode() {
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: true, exchangeValid: false),
+            ESM.nextAction(mode: .run, callEmpty: true, exchange: .empty, cursor: .call),
             .sendMessage(index: 0), "empty call → CQ"
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: false),
-            .sendMessage(index: 1), "call typed → send exchange"
+            ESM.nextAction(mode: .run, callEmpty: false, exchange: .empty, cursor: .call),
+            .sendMessage(index: 1), "call typed → send his call and report"
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .run, callEmpty: false, exchangeValid: true),
-            .logAndSend(index: 2), "exchange copied → log + TU"
+            ESM.nextAction(mode: .run, callEmpty: false, exchange: .valid, cursor: .exchange),
+            .logAndSend(index: 2), "exchange copied, cursor moved on → log + TU"
         )
     }
 
     func testESMSearchPounceMode() {
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: true, exchangeValid: false),
+            ESM.nextAction(mode: .searchPounce, callEmpty: true, exchange: .empty, cursor: .call),
             .sendMessage(index: 0), "answer CQ with my call"
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: false),
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchange: .empty, cursor: .call),
             .sendMessage(index: 0)
         )
         XCTAssertEqual(
-            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchangeValid: true),
-            .logAndSend(index: 1), "they answered → my report + log"
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchange: .valid, cursor: .exchange),
+            .logAndSend(index: 1), "they answered, cursor on the exchange → my report + log"
         )
+    }
+
+    /// Hunting N4RT, whose county was copied off his QSO with someone else and
+    /// typed in before ever calling him. He then works three other stations.
+    /// Every Return with the cursor in the call field has to keep calling —
+    /// the row holds a call and a valid exchange the whole time, and looks
+    /// exactly like a completed QSO.
+    func testESMKeepsCallingWhileTheCursorIsInTheCallField() {
+        for _ in 1...3 {
+            XCTAssertEqual(
+                ESM.nextAction(
+                    mode: .searchPounce, callEmpty: false, exchange: .valid, cursor: .call
+                ),
+                .sendMessage(index: 0),
+                "S&P: prefilled exchange, cursor in the call field → send my call, never log"
+            )
+        }
+        XCTAssertEqual(
+            ESM.nextAction(mode: .run, callEmpty: false, exchange: .valid, cursor: .call),
+            .sendMessage(index: 1),
+            "Run: same rule — the call field sends his call and report, never logs"
+        )
+    }
+
+    /// Moving to the exchange is the operator saying the contact happened.
+    /// Only then does the same row log.
+    func testESMLogsOnlyOnceTheCursorHasLeftTheCallField() {
+        XCTAssertEqual(
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchange: .valid, cursor: .exchange),
+            .logAndSend(index: 1)
+        )
+        XCTAssertEqual(
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchange: .empty, cursor: .exchange),
+            .sendMessage(index: 0),
+            "off the call field but nothing copied yet → still calling"
+        )
+        XCTAssertEqual(
+            ESM.nextAction(mode: .run, callEmpty: false, exchange: .empty, cursor: .exchange),
+            .sendMessage(index: 1)
+        )
+    }
+
+    /// Run's CQ outranks the cursor rule: an empty call field cannot log, and
+    /// cannot send a report to nobody.
+    func testESMCQOutranksEverything() {
+        XCTAssertEqual(
+            ESM.nextAction(mode: .run, callEmpty: true, exchange: .valid, cursor: .exchange),
+            .sendMessage(index: 0)
+        )
+        XCTAssertEqual(
+            ESM.nextAction(mode: .searchPounce, callEmpty: true, exchange: .valid, cursor: .exchange),
+            .sendMessage(index: 0)
+        )
+    }
+
+    /// Copying his county and getting something that matches nothing: he is
+    /// already talking to you, so Return asks him to repeat rather than
+    /// calling him again.
+    func testESMAsksAgainForAnUnmatchedExchange() {
+        for mode in OperatingMode.allCases {
+            XCTAssertEqual(
+                ESM.nextAction(mode: mode, callEmpty: false, exchange: .unmatched, cursor: .exchange),
+                .sendMessage(index: ESM.againIndex),
+                "\(mode): garbled copy in the exchange field → AGN?"
+            )
+        }
+    }
+
+    /// AGN? is the exchange field's answer only. Elsewhere an unmatched
+    /// exchange is just an incomplete contact, and Return goes on calling.
+    func testESMAsksAgainOnlyFromTheExchangeField() {
+        for mode in OperatingMode.allCases {
+            for cursor in [ESM.Cursor.call, .other] {
+                XCTAssertNotEqual(
+                    ESM.nextAction(mode: mode, callEmpty: false, exchange: .unmatched, cursor: cursor),
+                    .sendMessage(index: ESM.againIndex),
+                    "\(mode) from \(cursor): not the exchange field, so not AGN?"
+                )
+            }
+        }
+    }
+
+    /// An empty exchange is not a bad copy — nothing has been heard yet, so
+    /// there is nothing to ask him to repeat.
+    func testESMEmptyExchangeDoesNotAskAgain() {
+        XCTAssertEqual(
+            ESM.nextAction(mode: .searchPounce, callEmpty: false, exchange: .empty, cursor: .exchange),
+            .sendMessage(index: 0), "S&P: still calling"
+        )
+        XCTAssertEqual(
+            ESM.nextAction(mode: .run, callEmpty: false, exchange: .empty, cursor: .exchange),
+            .sendMessage(index: 1), "Run: still sending his report"
+        )
+    }
+
+    /// No callsign means no contact — there is nobody to ask.
+    func testESMDoesNotAskAgainWithoutACallsign() {
+        XCTAssertEqual(
+            ESM.nextAction(mode: .run, callEmpty: true, exchange: .unmatched, cursor: .exchange),
+            .sendMessage(index: 0)
+        )
+    }
+
+    /// The messages row highlights whatever Return would key, so the two are
+    /// read from the same action rather than computed twice.
+    func testESMActionReportsItsMessageIndex() {
+        XCTAssertEqual(ESM.Action.sendMessage(index: 0).messageIndex, 0)
+        XCTAssertEqual(ESM.Action.logAndSend(index: 2).messageIndex, 2)
+        XCTAssertNil(ESM.Action.none.messageIndex)
+    }
+
+    /// Nothing in the row's contents separates "about to call him" from "just
+    /// worked him" when the exchange was prefilled — only the cursor does. So
+    /// for every state of the row, the call field sends and the exchange logs.
+    func testESMCursorAloneDecidesWhetherTheSameRowLogs() {
+        for exchange in [ESM.ExchangeState.valid, .empty, .unmatched] {
+            for mode in OperatingMode.allCases {
+                let inCall = ESM.nextAction(
+                    mode: mode, callEmpty: false, exchange: exchange, cursor: .call
+                )
+                if case .logAndSend = inCall {
+                    XCTFail("\(mode) with the cursor in the call field must never log")
+                }
+            }
+        }
+    }
+
+    /// ESM.againIndex has to be the slot the default sets actually put AGN? in,
+    /// or Return asks him to repeat by keying something else entirely.
+    func testAgainIndexIsTheAgainMessageInBothDefaultSets() {
+        XCTAssertEqual(MessageSets.defaultRun[ESM.againIndex], "AGN?")
+        XCTAssertEqual(MessageSets.defaultSearchPounce[ESM.againIndex], "AGN?")
     }
 
     // MARK: Per-document message sets

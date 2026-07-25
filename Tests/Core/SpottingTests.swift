@@ -81,6 +81,32 @@ final class SpottingTests: XCTestCase {
         XCTAssertEqual(spot?.comment, "")
     }
 
+    /// SDC pushes live decodes as ordinary `DX de …` broadcasts, with the
+    /// skimmer tag in place of a spotter callsign. Captured verbatim from SDC
+    /// on localhost:7373.
+    func testParseSDCBroadcastLine() {
+        let line = "DX de SKM-A-#:  14001.98  W4RN           CW  -2 dB 28 WPM  CQ  SDC    1925Z"
+        let spot = SpotParser.parse(line, receivedAt: Date())
+        XCTAssertEqual(spot?.call, "W4RN")
+        XCTAssertEqual(spot?.freqKHz ?? 0, 14001.98, accuracy: 0.001)
+        XCTAssertEqual(spot?.spotter, "SKM-A-#")
+        XCTAssertEqual(spot?.comment, "CW -2 dB 28 WPM CQ SDC")
+        XCTAssertEqual(spot?.band, .m20)
+    }
+
+    /// A local skimmer collector (SDC) answers `sh/dx` in the same columnar
+    /// layout, with the skimmer's own tag as the spotter and a signal/speed
+    /// comment. Captured verbatim from SDC on localhost:7373.
+    func testParseSDCSkimmerLine() {
+        let line = "14045.08  KC4TEO      25-Jul-2026 1923Z  CW  31 dB 22 WPM <SKM-A-#>"
+        let spot = SpotParser.parse(line, receivedAt: Date())
+        XCTAssertEqual(spot?.call, "KC4TEO")
+        XCTAssertEqual(spot?.freqKHz ?? 0, 14045.08, accuracy: 0.001)
+        XCTAssertEqual(spot?.spotter, "SKM-A-#")
+        XCTAssertEqual(spot?.comment, "CW 31 dB 22 WPM")
+        XCTAssertEqual(spot?.band, .m20)
+    }
+
     func testShowDXHeaderAndChatterRejected() {
         XCTAssertNil(SpotParser.parse("Callsign   Frequency   Date      Time", receivedAt: Date()))
         XCTAssertNil(SpotParser.parse("  599.0  K5ABC   24-Jul-2026 1523Z  x   <W3LPL>", receivedAt: Date()))
@@ -155,5 +181,66 @@ final class SpottingTests: XCTestCase {
         let only = [spot(call: "A1AA", freqKHz: 14005.0)]
         XCTAssertEqual(SpotStore.next(in: only, afterKHz: 14005.0, direction: .up)?.call, "A1AA")
         XCTAssertEqual(SpotStore.next(in: only, afterKHz: 14005.0, direction: .down)?.call, "A1AA")
+    }
+
+    // MARK: Worked stations are stepped over
+
+    private var threeSpots: [Spot] {
+        [
+            spot(call: "A1AA", freqKHz: 14005.0),
+            spot(call: "B1BB", freqKHz: 14026.1),
+            spot(call: "C1CC", freqKHz: 14040.0),
+        ]
+    }
+
+    /// Worked stations stay on the band map, greyed, but ⌘← / ⌘→ passes them —
+    /// there is nothing left to work there.
+    func testNextSpotSkipsWorkedStations() {
+        let worked: Set<String> = ["B1BB"]
+        XCTAssertEqual(
+            SpotStore.next(in: threeSpots, afterKHz: 14005.0, direction: .up, workedCalls: worked)?.call,
+            "C1CC", "steps over the worked B1BB"
+        )
+        XCTAssertEqual(
+            SpotStore.next(in: threeSpots, afterKHz: 14040.0, direction: .down, workedCalls: worked)?.call,
+            "A1AA", "steps over it going down too"
+        )
+    }
+
+    func testNextSpotWrapsPastWorkedStations() {
+        let worked: Set<String> = ["A1AA"]
+        XCTAssertEqual(
+            SpotStore.next(in: threeSpots, afterKHz: 14040.0, direction: .up, workedCalls: worked)?.call,
+            "B1BB", "wrapping lands on the first workable spot, not the worked one"
+        )
+        XCTAssertEqual(
+            SpotStore.next(in: threeSpots, afterKHz: 14005.0, direction: .down, workedCalls: worked)?.call,
+            "C1CC"
+        )
+    }
+
+    /// Everything on the band is in the log already: stay put rather than
+    /// tuning to a station that cannot be worked again.
+    func testNextSpotReturnsNilWhenEverySpotIsWorked() {
+        let worked: Set<String> = ["A1AA", "B1BB", "C1CC"]
+        XCTAssertNil(SpotStore.next(in: threeSpots, afterKHz: 14005.0, direction: .up, workedCalls: worked))
+        XCTAssertNil(SpotStore.next(in: threeSpots, afterKHz: 14005.0, direction: .down, workedCalls: worked))
+    }
+
+    /// The worked set is built uppercased from the log; a cluster spot that
+    /// arrives in mixed case still has to match it.
+    func testWorkedSkippingIsCaseInsensitive() {
+        let spots = [spot(call: "a1aa", freqKHz: 14005.0), spot(call: "C1CC", freqKHz: 14040.0)]
+        XCTAssertEqual(
+            SpotStore.next(in: spots, afterKHz: 14000.0, direction: .up, workedCalls: ["A1AA"])?.call,
+            "C1CC"
+        )
+    }
+
+    func testEmptyWorkedSetChangesNothing() {
+        XCTAssertEqual(
+            SpotStore.next(in: threeSpots, afterKHz: 14005.0, direction: .up, workedCalls: [])?.call,
+            "B1BB"
+        )
     }
 }

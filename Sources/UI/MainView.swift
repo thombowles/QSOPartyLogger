@@ -84,7 +84,11 @@ struct MainView: View {
                 MessagesEditor(document: document, settings: settings)
             }
             .sheet(item: $editingQSO) { qso in
-                EditQSOSheet(original: qso, party: party) { updated in
+                EditQSOSheet(
+                    original: qso,
+                    party: party,
+                    role: document.log.myLocation.isInState ? .inState : .outOfState
+                ) { updated in
                     document.update(qso: updated, undoManager: undoManager)
                 }
             }
@@ -172,6 +176,7 @@ struct MainView: View {
                 expand: expandMacros,
                 onSend: sendMessageAt,
                 enabled: radio.isConnected && currentModeClass == .cw,
+                pendingIndex: pendingMessageIndex,
                 repeatEnabled: $repeatCQ,
                 repeatInterval: $settings.repeatIntervalSeconds,
                 esmEnabled: $settings.esmEnabled,
@@ -591,31 +596,18 @@ struct MainView: View {
 
         entry.applyDefaults(modeClass: currentModeClass)
         revalidate()
-        let exchangeValid: Bool = {
-            if case .valid = entry.exchangeStatus { return true }
-            return false
-        }()
 
-        guard settings.esmEnabled, radio.isConnected, currentModeClass == .cw else {
+        guard esmDrivesReturn else {
             logContact()
             return
         }
 
-        switch ESM.nextAction(
-            mode: operatingMode.wrappedValue,
-            callEmpty: entry.callNormalized.isEmpty,
-            exchangeValid: exchangeValid
-        ) {
+        switch esmAction {
         case .sendMessage(let index):
+            // The cursor is never moved for you. Wherever it is, that is where
+            // it stays, so a Return that called once calls again — Space is
+            // what advances, when the operator decides the contact has.
             sendMessageAt(index)
-            // Sending his report means the exchange is what's needed next —
-            // move the cursor there so Return keeps the QSO flowing.
-            if let current = focusedField {
-                focusedField = current.next(
-                    includesRST: party?.exchangeIncludesRST ?? true,
-                    includesSerial: party?.exchangeIncludesSerial ?? false
-                )
-            }
         case .logAndSend(let index):
             // Expand before logging: logContact() advances the entry to the
             // next QSO number, so expanding afterwards would key a number one
@@ -627,6 +619,47 @@ struct MainView: View {
         case .none:
             logContact()
         }
+    }
+
+    /// ESM only drives Return on CW with the radio connected — otherwise
+    /// Return is a plain log key.
+    private var esmDrivesReturn: Bool {
+        settings.esmEnabled && radio.isConnected && currentModeClass == .cw
+    }
+
+    private var esmExchangeState: ESM.ExchangeState {
+        switch entry.exchangeStatus {
+        case .idle: .empty
+        case .valid: .valid
+        case .invalid: .unmatched
+        }
+    }
+
+    /// Only the call and exchange fields change what Return does; the signal
+    /// reports and QSO numbers behave like the exchange without being it.
+    private var esmCursor: ESM.Cursor {
+        switch focusedField {
+        case .call: .call
+        case .exchange: .exchange
+        default: .other
+        }
+    }
+
+    /// What Return would do right now. Read both by the Return key and by the
+    /// messages row's highlight, so the two can never disagree about which
+    /// message is next.
+    private var esmAction: ESM.Action {
+        ESM.nextAction(
+            mode: operatingMode.wrappedValue,
+            callEmpty: entry.callNormalized.isEmpty,
+            exchange: esmExchangeState,
+            cursor: esmCursor
+        )
+    }
+
+    /// The F-key slot Return will send next, or nil when ESM isn't driving it.
+    private var pendingMessageIndex: Int? {
+        esmDrivesReturn ? esmAction.messageIndex : nil
     }
 
     /// F12 — wipe a half-typed contact and get back to the call field.
@@ -679,6 +712,34 @@ struct MainView: View {
             manualBand = band
         }
         spotCursorKHz = kHz
+        applyBandPlanMode(kHz: kHz)
+    }
+
+    /// Put the radio in the mode the band plan expects at a frequency.
+    ///
+    /// Called only from the paths where *the app* moved the frequency — a spot
+    /// click, a typed QSY, ⌘←/⌘→, ⌘J, a click on empty map. Frequency changes
+    /// the operator makes on the VFO knob arrive through `radio.radioState` and
+    /// deliberately never reach here: an automatic mode change mid-QSO, because
+    /// you drifted across a sub-band edge, is the radio fighting you.
+    ///
+    /// `BandPlan` decides whether there is a change to make at all — it holds
+    /// back on the bands with no defensible CW/phone split, when the mode is
+    /// already right, and when a digital operator is moving inside the
+    /// CW/data portion of a band. A mode the party does not score is never
+    /// selected either: a CW-only sponsor's band plan has no phone segment as
+    /// far as this contest is concerned.
+    private func applyBandPlanMode(kHz: Double) {
+        guard settings.followBandPlan,
+              let target = BandPlan.modeChange(toKHz: kHz, currentMode: currentModeClass),
+              party?.allowedModeClasses.contains(target) ?? true,
+              let rawMode = BandPlan.rawMode(for: target)
+        else { return }
+        if radio.isConnected {
+            radio.setMode(rawMode: rawMode)
+        } else {
+            manualRawMode = manualToken(for: rawMode)
+        }
     }
 
     /// Map any typed mode onto the manual picker's CW/SSB/RTTY tokens.
@@ -696,17 +757,25 @@ struct MainView: View {
             manualBand = band
         }
         spotCursorKHz = spot.freqKHz
+        applyBandPlanMode(kHz: spot.freqKHz)
         entry.call = spot.call
         focusedField = .call
         revalidate()
     }
 
+    /// ⌘← / ⌘→. Worked stations stay on the band map, greyed, but there is
+    /// nothing left to work on them so the keys step over them.
     private func jumpToSpot(_ direction: SpotStore.Direction) {
         let bandSpots = visibleSpotsOnBand
         let reference = radio.radioState.map { Double($0.frequencyHz) / 1000 }
             ?? spotCursorKHz
             ?? Double(currentBand.defaultFreqKHz)
-        guard let spot = SpotStore.next(in: bandSpots, afterKHz: reference, direction: direction) else {
+        guard let spot = SpotStore.next(
+            in: bandSpots,
+            afterKHz: reference,
+            direction: direction,
+            workedCalls: workedCallsOnCurrentBandMode
+        ) else {
             return
         }
         tune(to: spot)
@@ -722,8 +791,10 @@ struct MainView: View {
 
     private func jumpToCQFrequency() {
         guard let hz = cqFrequencyHz else { return }
-        radio.setFrequency(kHz: Double(hz) / 1000)
-        spotCursorKHz = Double(hz) / 1000
+        let kHz = Double(hz) / 1000
+        radio.setFrequency(kHz: kHz)
+        spotCursorKHz = kHz
+        applyBandPlanMode(kHz: kHz)
         operatingMode.wrappedValue = .run
     }
 

@@ -29,6 +29,25 @@ enum ClusterProtocol {
         return lines
     }
 
+    /// Is the node waiting for a login, given the complete lines just taken
+    /// from the stream and the unterminated text trailing them?
+    ///
+    /// Both halves matter, because nodes disagree about the prompt's line
+    /// ending. DXSpider writes "login: " with no newline, so it survives in
+    /// `remainder`; SDC's telnet server sends "Please enter your callsign:\r\n",
+    /// which `takeLines` has already consumed — looking only at `remainder`
+    /// there finds nothing, the callsign is never sent, and the session hangs
+    /// before the first spot.
+    ///
+    /// The prompt still only counts as the *last* thing the node said: text
+    /// trailing it means the node moved on.
+    static func isAwaitingLogin(lines: [String], remainder: String) -> Bool {
+        if !remainder.trimmingCharacters(in: .whitespaces).isEmpty {
+            return isAwaitingLogin(remainder)
+        }
+        return lines.last.map(isAwaitingLogin) ?? false
+    }
+
     /// Is the node sitting at a login prompt right now?
     ///
     /// Only the tail of the stream counts, and only a genuine prompt: CC

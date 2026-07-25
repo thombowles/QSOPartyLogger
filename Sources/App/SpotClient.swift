@@ -155,24 +155,36 @@ final class SpotClient {
         buffer += text
 
         // Complete lines go to the console and the spot parser.
-        for line in ClusterProtocol.takeLines(from: &buffer) {
+        let lines = ClusterProtocol.takeLines(from: &buffer)
+        for line in lines {
             log(line)
             if let spot = SpotParser.parse(line, receivedAt: Date()) {
                 spotsReceived += 1
-                if status != .connected {
-                    status = .connected
-                    lastError = nil
-                }
+                markConnected()
                 onSpot?(spot)
             }
         }
 
-        // The prompt arrives without a trailing newline, so it sits in the
-        // buffer remainder — answer it there.
-        if ClusterProtocol.isAwaitingLogin(buffer) {
+        // The prompt may trail the last newline (DXSpider's "login: ") or be a
+        // whole CRLF-terminated line (SDC's "Please enter your callsign:") —
+        // by this point `takeLines` has consumed the second kind, so both the
+        // lines and the remainder have to be offered to the check.
+        if ClusterProtocol.isAwaitingLogin(lines: lines, remainder: buffer) {
             answerLoginPrompt()
+        } else if status == .loggingIn, !lines.isEmpty {
+            // The node answered the callsign with something other than another
+            // prompt, so it took us. Waiting for a first spot instead would
+            // leave a quiet feed — a local skimmer between decodes — stuck on
+            // "Logging in…" and trip the watchdog's login-rejected warning.
+            markConnected()
         }
         if buffer.count > 4096 { buffer = "" }
+    }
+
+    private func markConnected() {
+        guard status != .connected else { return }
+        status = .connected
+        lastError = nil
     }
 
     private func answerLoginPrompt() {

@@ -22,6 +22,9 @@ targets:
       - path: Resources/Parties
         type: folder
         buildPhase: resources
+      - path: Resources/Challenge
+        type: folder
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: org.b5n.QSOPartyLogger

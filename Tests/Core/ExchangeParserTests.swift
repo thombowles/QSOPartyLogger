@@ -11,8 +11,62 @@ final class ExchangeParserTests: XCTestCase {
         tqp = try XCTUnwrap(PartyCatalog.party(id: "tqp"))
     }
 
-    func parse(_ s: String, _ party: PartyDefinition) -> Result<ExchangeParser.ParsedExchange, ExchangeParser.ExchangeError> {
-        ExchangeParser.parse(s, party: party)
+    func parse(
+        _ s: String,
+        _ party: PartyDefinition,
+        role: ExchangeParser.Role = .inState
+    ) -> Result<ExchangeParser.ParsedExchange, ExchangeParser.ExchangeError> {
+        ExchangeParser.parse(s, party: party, role: role)
+    }
+
+    // MARK: What the operator's own location makes valid
+
+    /// Where the sponsor restricts out-of-state entrants to home-state
+    /// contacts, a state token is not something they can ever receive — so it
+    /// is a typo, not an exchange.
+    func testRestrictedPartiesRejectStateTokensFromOutOfState() throws {
+        let warun = try XCTUnwrap(PartyCatalog.party(id: "warun"))
+        XCTAssertTrue(warun.outStateWorksHomeStationsOnly)
+
+        XCTAssertEqual(
+            try parse("KING", warun, role: .outOfState).get().locations, ["KING"],
+            "a Washington county is what an out-of-state entrant hears"
+        )
+        guard case .failure = parse("TX", warun, role: .outOfState) else {
+            return XCTFail("TX is not loggable by an out-of-state Salmon Run entrant")
+        }
+        XCTAssertEqual(
+            try parse("TX", warun, role: .inState).get().locations, ["TX"],
+            "the same token is exactly what a Washington station works"
+        )
+    }
+
+    /// Maine is the one party whose out-of-state entrants score each other, and
+    /// its definition says so — so the wider set stays valid for them.
+    func testMaineOutOfStateEntrantsKeepTheWiderSet() throws {
+        let meqp = try XCTUnwrap(PartyCatalog.party(id: "meqp"))
+        XCTAssertFalse(meqp.outStateWorksHomeStationsOnly)
+
+        XCTAssertEqual(try parse("TX", meqp, role: .outOfState).get().locations, ["TX"])
+        XCTAssertEqual(try parse("DX", meqp, role: .outOfState).get().locations, ["DX"])
+    }
+
+    /// The DX-prefix guess is gated on DX actually being a multiplier for this
+    /// operator, in every party that uses prefixes.
+    func testDXPrefixGuessFollowsTheMultiplierClasses() throws {
+        for id in ["alqp", "azqp", "ilqp", "mdc", "sdqp", "tnqp", "warun"] {
+            let party = try XCTUnwrap(PartyCatalog.party(id: id))
+            XCTAssertEqual(
+                ExchangeParser.acceptsDXPrefix(party: party, role: .outOfState),
+                party.multipliers.outState.classes.contains(.dx),
+                "\(id) out of state"
+            )
+            XCTAssertEqual(
+                ExchangeParser.acceptsDXPrefix(party: party, role: .inState),
+                party.multipliers.inState.classes.contains(.dx),
+                "\(id) in state"
+            )
+        }
     }
 
     func testSingleCountyLowercase() throws {
@@ -23,8 +77,20 @@ final class ExchangeParserTests: XCTestCase {
 
     func testCountyLineSeparators() throws {
         XCTAssertEqual(try parse("LIN/AND", ksqp).get().locations, ["LIN", "AND"])
-        XCTAssertEqual(try parse("lin and", ksqp).get().locations, ["LIN", "AND"])
         XCTAssertEqual(try parse("LIN,AND", ksqp).get().locations, ["LIN", "AND"])
+        XCTAssertEqual(
+            try parse("lin, and", ksqp).get().locations, ["LIN", "AND"],
+            "a comma typed with a space after it is still two counties"
+        )
+    }
+
+    /// Space moves the entry row's cursor, so it can no longer be typed into
+    /// the exchange at all — and is no longer a separator.
+    func testSpaceIsNotASeparator() {
+        XCTAssertEqual(
+            parse("LIN AND", ksqp),
+            .failure(.unknownAbbreviation("LIN AND", suggestions: []))
+        )
     }
 
     func testFourCountiesAllowedFiveRejected() throws {
@@ -56,7 +122,7 @@ final class ExchangeParserTests: XCTestCase {
 
     func testMixedTypesRejected() {
         XCTAssertEqual(parse("LIN/TX", ksqp), .failure(.mixedTypes))
-        XCTAssertEqual(parse("TX MO", ksqp), .failure(.mixedTypes))
+        XCTAssertEqual(parse("TX/MO", ksqp), .failure(.mixedTypes))
     }
 
     func testEmptyRejected() {

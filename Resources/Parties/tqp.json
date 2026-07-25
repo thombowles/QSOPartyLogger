@@ -1075,5 +1075,6 @@
       "name": "Zavala"
     }
   ],
-  "notes": "verified: partial — points/mults/bonus from txqp.net rules; counties from official txcounty.zip (2014 file, fetched 2026-07-23). Confirm band list and current-year rules before submitting."
+  "outStateWorksHomeStationsOnly": true,
+  "notes": "verified: partial — out-of-state entrants earn credit only for Texas contacts (operating rules, QSO points, fetched 2026-07-25); points/mults/bonus from txqp.net rules; counties from official txcounty.zip (2014 file, fetched 2026-07-23). Confirm band list and current-year rules before submitting."
 }

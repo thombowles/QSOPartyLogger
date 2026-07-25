@@ -180,7 +180,7 @@ final class OhioQSOPartyTests: XCTestCase {
         XCTAssertFalse(ohqp.validOutStateTokens.contains("YT"),
                        "a Yukon station sends NT per the official list")
         XCTAssertFalse(ohqp.validOutStateTokens.contains("NU"))
-        guard case .failure = ExchangeParser.parse("YT", party: ohqp) else {
+        guard case .failure = ExchangeParser.parse("YT", party: ohqp, role: .inState) else {
             return XCTFail("YT must be rejected — the official list folds it into NT")
         }
     }
@@ -245,18 +245,18 @@ final class OhioQSOPartyTests: XCTestCase {
     // MARK: Exchange parsing
 
     func testExchangeParsing() throws {
-        XCTAssertEqual(try ExchangeParser.parse("cuya", party: ohqp).get().locations, ["CUYA"])
-        XCTAssertEqual(try ExchangeParser.parse("TX", party: ohqp).get().locations, ["TX"])
-        XCTAssertEqual(try ExchangeParser.parse("DC", party: ohqp).get().locations, ["DC"],
+        XCTAssertEqual(try ExchangeParser.parse("cuya", party: ohqp, role: .inState).get().locations, ["CUYA"])
+        XCTAssertEqual(try ExchangeParser.parse("TX", party: ohqp, role: .inState).get().locations, ["TX"])
+        XCTAssertEqual(try ExchangeParser.parse("DC", party: ohqp, role: .inState).get().locations, ["DC"],
                        "DC is its own multiplier")
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: ohqp).get().locations, ["DX"])
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: ohqp, role: .inState).get().locations, ["DX"])
         // "Ohio stations must list county abbreviation and NOT OH or OHIO!"
-        guard case .failure = ExchangeParser.parse("OH", party: ohqp) else {
+        guard case .failure = ExchangeParser.parse("OH", party: ohqp, role: .inState) else {
             return XCTFail("OH token must be rejected")
         }
         // Simultaneous multi-county operation is forbidden.
         XCTAssertEqual(
-            ExchangeParser.parse("LUCA/WOOD", party: ohqp),
+            ExchangeParser.parse("LUCA/WOOD", party: ohqp, role: .inState),
             .failure(.tooManyCounties(2))
         )
     }

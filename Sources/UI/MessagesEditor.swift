@@ -47,7 +47,7 @@ struct MessagesEditor: View {
                 HStack(spacing: 8) {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundStyle(.orange)
-                    Text("\(mismatch.warning(partyName: party.name)) Restore Defaults (⇧⌘D) fixes it.")
+                    Text("\(mismatch.warning(partyName: party.name)) Restore Defaults (⇧⌘R) fixes it.")
                         .font(.caption)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -66,8 +66,12 @@ struct MessagesEditor: View {
 
             HStack {
                 Button("Restore Defaults", action: applyPartyDefaults)
-                    .keyboardShortcut("d", modifiers: [.command, .shift])
-                    .help("Replace all 16 messages with \(party?.name ?? "this party")'s defaults (⇧⌘D)")
+                    // ⇧⌘R, not ⇧⌘D: the Contest Dashboard window claims ⇧⌘D
+                    // as a `Window` scene shortcut, which lives in the Window
+                    // menu and stays active whichever window is key — it would
+                    // shadow this button entirely.
+                    .keyboardShortcut("r", modifiers: [.command, .shift])
+                    .help("Replace all 16 messages with \(party?.name ?? "this party")'s defaults (⇧⌘R)")
                 Spacer()
                 Button("Cancel") { dismiss() }
                     .keyboardShortcut(.cancelAction)

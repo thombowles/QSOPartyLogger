@@ -187,7 +187,12 @@ parties, and the remaining engine gaps. Adding a party is governed by
 - **County abbreviation validation** against each party's official list
   (KSQP: 105 3-letter, TQP: 254 4-letter, both generated from the sponsors'
   official files). Typos get suggestions (`LNI` → `LIN`); the home-state token
-  is rejected (Kansas stations always send a county).
+  is rejected (Kansas stations always send a county). County lines are typed
+  `LIN/AND` or `LIN,AND` — **space is not a separator**, because Space moves
+  the cursor. Validation follows **where you are operating from**: an
+  out-of-state entrant is checked against what it can actually receive, so on
+  the seven parties where DX sends a prefix a mistyped county is an error
+  rather than being read as a DX entity.
 - **Live scoring per party rules**: points by mode, single-count multipliers,
   KSQP's first-KS-county-counts-as-KS-state rule, dupes flagged but kept
   (sponsors want them), KS0KS +100 bonus, TQP mobile 5-county bonuses, and a
@@ -209,36 +214,66 @@ parties, and the remaining engine gaps. Adding a party is governed by
   `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}` macros, **defaulting to the party's
   own exchange shape** — CQP and PAQP send `{SERIAL}` where the report would
   go, MDC sends call and location only, and the messages editor warns (with a
-  one-key fix, ⇧⌘D) when any message in either set contradicts its party's
+  one-key fix, ⇧⌘R) when any message in either set contradicts its party's
   exchange. **Esc aborts instantly.** Optional cut numbers for reports and QSO
   numbers (0→T, 9→N: 599 → 5NN, 40 → 4T) in the CW Messages editor, with 1→A
   available separately for operators who cut harder.
-- **ESM (Enter Sends Message)** toggle right on the message row: Return
-  sends CQ / exchange / TU based on what's filled in, and logs automatically
-  after the exchange — N1MM muscle memory intact.
+- **ESM (Enter Sends Message)** toggle right on the message row, and **the
+  call field never logs**. While the cursor is in it Return only ever calls —
+  your call pouncing, his call and report running — however complete the row
+  looks. Move to the exchange and the same Return logs and sends your report.
+  That is what a **prefilled exchange** needs: hunting a station whose county
+  you copied off his last QSO, the row holds a call and a valid exchange
+  before you have worked him, and keeps holding them while he works three
+  other people. Every one of those Returns keeps calling. Sitting in the
+  exchange field with a county that matches nothing, Return sends **AGN?** —
+  he is already talking to you, so the thing to do is ask him to repeat, not
+  call him again. ESM never moves the cursor for you (Space does), and the
+  F-key Return will key next is **outlined**, so what it is about to do is
+  visible rather than guessed at.
 - **DX cluster spotting**: connect to any DXSpider/AR-Cluster telnet node
   (toolbar antenna icon), optionally **automatically when a contest opens**.
   Nodes you've used are remembered in a Recent Clusters menu, and the
   commands run at login are configurable — `sh/dx 30` by default, so the
   band map is populated with recent spots the moment you connect instead of
-  starting empty. Current-band spots appear in the sidebar sorted by
-  frequency, gray when already worked on this band+mode; click one to tune
-  and pre-fill the call, or step spot-to-spot with ⌘← / ⌘→.
+  starting empty. Click a spot to tune and pre-fill the call, or step
+  spot-to-spot with ⌘← / ⌘→.
 - **Band map window (⌘B)**: floating N1MM-style panel — vertical frequency
   ruler for the current band with spots plotted where they live, a red VFO
   marker tracking the radio, and a dashed CQ line marking your run
   frequency. Zoom 25/50/100 kHz or the whole band; click a spot to tune +
   fill the call, click empty map to QSY there. Remembers its position. This
   is the only place spots are shown — the score panel stays about scoring.
+- **Stacked spots**: a pile-up no longer shoves labels off frequency. Spots
+  too close to plot separately fan out **sideways** into a second and third
+  column, each one still drawn at its own frequency, and the column count
+  follows the panel width — widen the panel to spread a pile-up. Nothing is
+  ever dropped: twenty calls on one frequency show all twenty.
+- **Worked stations stay visible**: a call already in the log on this
+  band+mode is greyed and struck through rather than removed, so you can see
+  the band filling up — and ⌘← / ⌘→ steps straight over it, because there is
+  nothing left to work there. If every spot on the band is worked, the keys
+  leave the radio where it is.
+- **Band-plan-aware mode switching**: tune into the phone portion of a band
+  and the radio goes to SSB; tune into the CW portion and it goes to CW. It
+  fires only when *the app* moves you — clicking a spot, typing a frequency
+  or band, ⌘← / ⌘→, ⌘J — so your own VFO knob never triggers a mode change
+  mid-QSO. It never selects a digital mode, never fights a RTTY operator
+  working the data segment, and never picks a mode the party doesn't score.
+  Crossovers come from 47 CFR §97.305(c) (with §97.301(a) for the 80/75 m
+  split and the ARRL band plan for 160 m); 60 m, 1.25 m and 70 cm have no
+  defensible CW/phone boundary, so there the mode is left alone. On by
+  default — untick **Follow band plan on QSY** in the band map popover.
 - **Spot filters** (funnel button in the band map), built for QSO party
   operating: **North American stations only** (drop DX you can't get an
   exchange from), **North American spotters only**, **hide stations already
-  worked** on this band+mode, **hide RBN/skimmer spots**, per-mode (CW /
-  phone / digital, inferred from the spotter's comment first and the band
-  plan second), per-band, and how long spots live before ageing out
-  (5 min – 2 hr, default 15). It's a panel, not a menu — tick as many boxes
-  as you like in one visit — and everything applies instantly to the map and
-  to ⌘← / ⌘→. All off by default; **Reset All** puts them back.
+  worked** on this band+mode (off by default — worked calls normally stay
+  greyed), **hide RBN/skimmer spots**, per-mode (CW / phone / digital,
+  inferred from the spotter's comment first and the band plan second),
+  per-band, and how long spots live before ageing out (5 min – 2 hr,
+  default 15). It's a panel, not a menu — tick as many boxes as you like in
+  one visit — and everything applies instantly to the map and to ⌘← / ⌘→.
+  All filters off by default; **Reset All** puts them back.
 - **CQ frequency memory**: sending F1 (or starting repeat-CQ) in Run mode
   remembers the run frequency; ⌘J — or the chip next to Repeat — jumps back
   and flips you to Run after an S&P excursion.
@@ -258,24 +293,57 @@ parties, and the remaining engine gaps. Adding a party is governed by
   auto-save into your logs folder on setup, then **every QSO change writes
   straight to disk** (and mirrors to iCloud Drive if configured) — a crash
   never costs contacts.
+- **Contest Dashboard (⌘⇧D)**: your whole season in one window. Pick a year
+  (⌘[ / ⌘]) and see totals, every contest's claimed score exactly as the
+  score sidebar computed it (QSOs, mults, bonus, on-air time with ≥30-min
+  breaks excluded), QSO and score charts, and each party's year-over-year
+  trend with your personal best flagged. Return (or double-click) on a row
+  reopens that contest's `.qplog`.
+- **State QSO Party Challenge tracker**: estimated standing by the sponsor's
+  own formula — total QSOs × parties entered, with the official ≥2-QSO
+  multiplier floor and the Bronze 500 → Diamond 100,000 ladder (levels
+  require two qualifying parties). A 1-QSO party shows "1 more QSO to
+  count"; parties logged but not on the 2026 approved list (Maine) are shown
+  and excluded rather than silently dropped. Labeled an estimate: the
+  official score comes from what you post to 3830scores.com.
+- **Upcoming contests**: everything left this season, soonest first — an ON
+  AIR badge while a window is open, countdowns, "entered ✓" once you've
+  logged it, and all 47 SQP-Challenge-approved parties included: bundled
+  ones use the sponsor's verified schedule, the rest are dated from the
+  challenge's calendar and labeled so (that calendar has been wrong before —
+  NJQP 2026 — so the sponsor always wins where this app has rules).
+- **One history file in iCloud**: every save also archives the full log +
+  score snapshot into `Contest History.qphistory` in your logs folder, so
+  the dashboard — logs and statistics both — follows you to any Mac. Edits
+  from two Macs merge by QSO (the later save wins conflicts, nothing is
+  lost); iCloud conflict copies fold in automatically; a corrupt file is
+  never overwritten. "Import Existing Logs" (or first launch with an empty
+  history) rebuilds the archive from the `.qplog` files already in the
+  folder, idempotently. Snapshots freeze each score as computed that season,
+  so next year's rule updates never rewrite history.
 
 ## Keyboard reference
 
 | Keys | Action |
 | --- | --- |
 | `Enter` | Log (or ESM next-message; or execute a typed QSY command) |
-| `Space` | Jump to the next entry field (Call → Exchange, or → QSO nr rcvd where the party sends one) |
+| `Space` | Cycle the entry fields — Call → Exchange → Call, via QSO nr rcvd where the party sends one. Signal reports are stepped over |
+| `Tab` | Walk every entry field, signal reports included — landing in one selects the S digit, so 599 → 579 is a single keystroke |
 | `F12` | Wipe the entry fields and start the contact over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
-| `⇧⌘D` | Restore the party's default CW messages (Messages editor) |
+| `⇧⌘R` | Restore the party’s default CW messages (Messages editor) |
 | `Esc` | Abort CW + stop repeat-CQ |
 | `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
-| `⌘←` / `⌘→` | Tune to previous / next spot on the band |
+| `⌘←` / `⌘→` | Tune to previous / next unworked spot on the band |
 | `⌘R` | Toggle Run / Search & Pounce |
 | `⌘J` | Jump back to your CQ run frequency (Run mode) |
 | `⌘B` | Toggle the band map window |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
+| `⌘⇧D` | Contest Dashboard (season history + SQP Challenge) |
+| `⌘[` / `⌘]` | Dashboard: previous / next year |
+| `⌘R` | Dashboard: re-read the history file |
+| `Return` on a dashboard row | Open that contest's log |
 
 ## K3 wiring for direct CW keying
 
@@ -304,7 +372,9 @@ retrying while the prompt is up, so approving it connects immediately.
 ## DX cluster spots
 
 Toolbar → antenna icon → enter a cluster host/port → Connect. The app waits
-for the node's actual login prompt, answers with your contest callsign, runs
+for the node's actual login prompt — whether the node leaves it unterminated
+(`login: `) or ends it with a newline, as local skimmer feeds tend to —
+answers with your contest callsign, runs
 the startup commands (`sh/dx 30` unless you change them), and filters the
 stream to real spots on amateur bands — both live `DX de …` broadcasts and
 the columnar `sh/dx` reply format. Spots carry their own timestamp, so a
@@ -331,8 +401,14 @@ Tick **Connect automatically when a contest opens** to have every contest
 window come up already spotting. Previously used nodes are listed under
 Recent Clusters.
 
-Node notes: verified end-to-end against `dxc.wa9pie.net:8000` (DXSpider) and
-`dxc.nc7j.com:7373` (AR-Cluster). `ve7cc.net:23` accepts the connection and
+A cluster on the same Mac works the same way: point it at
+`localhost` and the port your feed serves — a local SDC skimmer collector on
+`localhost:7373`, say — and it logs in, backfills with `sh/dx`, and streams
+live decodes like any remote node.
+
+Node notes: verified end-to-end against `dxc.wa9pie.net:8000` (DXSpider),
+`dxc.nc7j.com:7373` (AR-Cluster), and SDC's telnet server on
+`localhost:7373`. `ve7cc.net:23` accepts the connection and
 prints its banner, but never answers the login from this client — nothing
 sent to it gets a reply — so use another node if you hit that.
 
@@ -397,11 +473,15 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 644 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 749 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
-worked, skimmer), spot navigation, cluster history, the band map scale,
-typed QSY commands, keyer timing, and keyer labelling.
+worked, skimmer), spot navigation including worked-station skipping, cluster
+history, the band map scale and its column stacking, the band plan and its
+CW/phone crossovers, typed QSY commands, keyer timing, keyer labelling, the
+contest history archive (snapshot parity with the engine, two-Mac merge,
+unknown-field preservation, coordinated store), season stats, the SQP
+Challenge formula and calendar resource, and the upcoming-contest engine.
 
 ## Data provenance
 
@@ -477,6 +557,41 @@ typed QSY commands, keyer timing, and keyer labelling.
   same literal token "DX", so without a DXCC prefix table this app credits DX as
   one multiplier and an NH entrant's count can run up to 9 low. Out-of-state
   entrants are unaffected — DX is not one of their multiplier classes.
+- ALQP: the **2026 rules page** (alabamacontestgroup.org/aqp/rules/, fetched
+  2026-07-25, extracted to [`alqp_rules_2026.txt`](docs/research/alqp_rules_2026.txt))
+  states it as the party Object — "Stations outside of Alabama make contact with
+  Alabama amateur radio stations and as many Alabama counties as possible" —
+  with out-of-state multipliers capped at "Maximum of 67 Alabama counties".
+  Resolved as for the other aim-not-prohibition parties; analysis in
+  [`alqp_out_of_state_credit.md`](docs/research/alqp_out_of_state_credit.md).
+  The short `/aqp-rules/` path 404s; the rules are at `/aqp/rules/`.
+- KSQP: the **2026 rules PDF** (ksqsoparty.org, fetched 2026-07-25, extracted to
+  [`ksqp_rules_2026.txt`](docs/research/ksqp_rules_2026.txt)) states the
+  restriction as the party's OBJECT and names both sides — "Stations outside of
+  Kansas work as many Kansas stations in as many Kansas counties as possible.
+  Stations in Kansas work everyone" — with the multiplier table capping
+  non-Kansas entrants at "105 Kansas county multipliers". Resolved as for the
+  other aim-not-prohibition parties; analysis in
+  [`ksqp_out_of_state_credit.md`](docs/research/ksqp_out_of_state_credit.md).
+  That PDF also carries an **FT4/8 category** the bundled definition predates.
+- TQP: the **operating rules** at txqp.net (fetched 2026-07-25, extracted to
+  [`tqp_operating_rules.txt`](docs/research/tqp_operating_rules.txt)) write the
+  out-of-state restriction into the QSO points rule itself — a non-Texas station
+  counts points only "with any Texas station" — so a non-Texas entrant earns
+  nothing for working another non-Texas station. Best-evidenced instance of that
+  rule in the catalogue after MDC 10b; analysis in
+  [`tqp_out_of_state_credit.md`](docs/research/tqp_out_of_state_credit.md). Note
+  `txqp.net/rules/` 404s; the rules live under the Joomla `index.php` path.
+- **DX prefixes, all parties.** Where DX stations send a prefix rather than the
+  literal `DX` (`alqp`, `azqp`, `ilqp`, `mdc`, `sdqp`, `tnqp`, `warun`), a token
+  matching no county, state or section is guessed at as a DXCC prefix, because
+  a prefix really can be almost any short string and there is no DXCC table
+  here to check against. The guess now runs **only where DX is a multiplier
+  class for the operator's own role**, which removes it entirely for
+  out-of-state entrants and makes their typos errors again. **Known limitation:**
+  an *in-state* entrant on those parties still has the loose guess, so a
+  mistyped county can still be accepted as a DX entity. Only a real DXCC prefix
+  table fixes that, and it would also close the NHQP and MEQP limitations below.
 - Salmon Run: rules from salmonrun.wwdxc.org ("Updated – July 22, 2024",
   re-read verbatim 2026-07-24); 2026 dates from the site-wide sidebar. Counties
   generated by [`gen_warun.py`](docs/research/gen_warun.py), which asserts the
@@ -592,5 +707,38 @@ typed QSY commands, keyer timing, and keyer labelling.
   (arrl.org/band-plan, same date). 1.25 m is 222–225 MHz only: the US 219–220
   MHz point-to-point digital allocation is outside the ADIF band and is
   deliberately not loggable.
+- Band plan (the CW→phone crossovers that drive automatic mode switching):
+  **47 CFR §97.305(c)**, the authorized-emission-types table, read 2026-07-25
+  via Cornell LII because ecfr.gov 302-redirects to an interstitial;
+  **§97.301(a)** for the one boundary §97.305(c) names without a number
+  (80 m is 3.500–3.600 and 75 m 3.600–4.000 in ITU Region 2, so the crossover
+  is 3600 kHz); and the **ARRL band plan** (arrl.org/band-plan, same date) for
+  160 m alone, where §97.305(c) permits phone band-wide and so supplies no
+  crossover — the plan reads "1.843-2.000 SSB, SSTV and other wideband modes".
+  Excerpts banked in
+  [`band_plan_sources.md`](docs/research/band_plan_sources.md). The
+  emission-type edges are used deliberately in place of §97.301(a)'s stricter
+  license-class phone edges: the logger does not know the operator's class, and
+  putting a radio in SSB is not itself an unlawful act. 30 m has an RTTY/data
+  row and no phone row, so it is treated as CW throughout; 60 m, 1.25 m and
+  70 cm have no defensible CW/phone split and the mode is left alone there.
+  This table is **separate from the spot mode-inference table** in
+  `SpotFilter`, on purpose — that one guesses what mode a cluster spot is in
+  and is allowed to be wrong, this one decides what mode your radio is put in
+  and is not.
 - DC is accepted as a loggable state token (counted with states); strictly,
   KSQP rules enumerate 50 states — sponsors' checkers accept DC.
+- State QSO Party Challenge: rules from the official 2026 PDF
+  (stateqsoparty.com, fetched 2026-07-25, committed verbatim in
+  `docs/research/`), scoring formula and award levels quoted in
+  [`sqp_challenge_rules.md`](docs/research/sqp_challenge_rules.md). The
+  approved-contest resource is **generated** by
+  [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
+  challenge's own calendar (fetched 2026-07-24) and homepage list (read
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 18 mapped to
+  bundled parties. **Maine QSO Party is not on the 2026 approved list**
+  (verified twice), so the dashboard shows MEQP logs but excludes them from
+  challenge scoring, saying so. The calendar's NJQP row is known-wrong
+  (Sep 19; the sponsor says Sep 12) — bundled sponsor schedules always
+  supersede calendar dates, which are used only for parties this app has no
+  rules for, labeled as calendar-sourced.

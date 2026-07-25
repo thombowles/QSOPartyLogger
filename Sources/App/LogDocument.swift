@@ -86,6 +86,13 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
                 CloudMirror.mirror(data: data, fileName: name)
             }
         }
+        // Keep the contest history archive current on every save (debounced
+        // per contest inside the historian; value snapshot, so safe here).
+        ContestHistorian.shared.noteSaved(
+            log: snapshot,
+            sourceFileName: knownFileURL?.lastPathComponent
+                ?? LogDocument.mirrorFileName(for: snapshot) + ".qplog"
+        )
         return FileWrapper(regularFileWithContents: data)
     }
 

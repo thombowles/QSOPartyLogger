@@ -41,6 +41,13 @@ final class BandMapModel {
     var filtersActive: Bool {
         settings.spotFilterOptions(workedCalls: workedCalls).isActive
     }
+
+    /// Already in the log on this band and mode. `workedCalls` is uppercased at
+    /// the source, so the spot's call has to be too — a cluster spot arriving
+    /// in mixed case used to slip past this and never grey out.
+    func isWorked(_ spot: Spot) -> Bool {
+        workedCalls.contains(spot.call.uppercased())
+    }
 }
 
 /// N1MM-style band map: vertical frequency ruler for the current band, spots
@@ -108,7 +115,7 @@ struct BandMapView: View {
                 : "line.3.horizontal.decrease.circle")
         }
         .buttonStyle(.borderless)
-        .help("Filter spots by spotter continent, mode, and band; set how long spots live")
+        .help("Filter spots by spotter continent, mode, and band; set how long spots live and whether QSY follows the band plan")
         .popover(isPresented: $showFilters, arrowEdge: .bottom) {
             filtersPopover
         }
@@ -117,15 +124,18 @@ struct BandMapView: View {
     private var filtersPopover: some View {
         @Bindable var settings = model.settings
         return VStack(alignment: .leading, spacing: 10) {
-            Text("Spot Filters")
+            Text("Band Map")
                 .font(.headline)
 
+            Text("SPOT FILTERS")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(.secondary)
             Toggle("North American stations only", isOn: $settings.northAmericanStationsOnly)
                 .help("Hide spots of DX stations — a state QSO party exchange comes from NA")
             Toggle("North American spotters only", isOn: $settings.northAmericanSpottersOnly)
                 .help("Hide spots posted from outside North America")
             Toggle("Hide stations already worked", isOn: $settings.hideWorkedSpots)
-                .help("Drop spots for calls already in the log on this band and mode")
+                .help("Drop worked calls from the map entirely — off, they stay greyed out and ⌘← / ⌘→ steps over them")
             Toggle("Hide RBN / skimmer spots", isOn: $settings.hideSkimmerSpots)
                 .help("Drop automated skimmer spots (\"-#\" nodes and dB/WPM reports)")
 
@@ -168,6 +178,14 @@ struct BandMapView: View {
                 .frame(width: 96)
             }
 
+            Divider()
+            Text("BAND PLAN")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(.secondary)
+            Toggle("Follow band plan on QSY", isOn: $settings.followBandPlan)
+                .help("Switch the radio between CW and SSB to match the band plan when you tune from the app — clicking a spot, typing a frequency, ⌘← / ⌘→, ⌘J. Turning the VFO knob never changes your mode.")
+
+            Divider()
             HStack {
                 Button("Reset All") {
                     settings.northAmericanSpottersOnly = false
@@ -177,8 +195,9 @@ struct BandMapView: View {
                     settings.spotModes = []
                     settings.spotBands = []
                     settings.spotMaxAgeMinutes = 15
+                    settings.followBandPlan = true
                 }
-                .disabled(!model.filtersActive && settings.spotMaxAgeMinutes == 15)
+                .disabled(!model.filtersActive && settings.spotMaxAgeMinutes == 15 && settings.followBandPlan)
                 Spacer()
                 Button("Done") { showFilters = false }
                     .keyboardShortcut(.defaultAction)
@@ -281,8 +300,9 @@ struct BandMapView: View {
                     .position(x: rulerWidth - 10, y: y)
             }
 
-            // Spots, de-collided so labels never overlap.
-            ForEach(spotRows(scale: scale, height: h)) { row in
+            // Spots, stacked sideways where they collide (see BandMapLayout).
+            ForEach(placements(scale: scale, size: size)) { row in
+                let worked = model.isWorked(row.spot)
                 Button {
                     model.onTuneSpot?(row.spot)
                 } label: {
@@ -290,39 +310,41 @@ struct BandMapView: View {
                         Circle().frame(width: 5, height: 5)
                         Text(row.spot.call)
                             .font(.system(size: 10, design: .monospaced).weight(.semibold))
+                            .strikethrough(worked)
                     }
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .foregroundStyle(model.workedCalls.contains(row.spot.call) ? Color.secondary : Color.primary)
-                .offset(x: rulerWidth + 8, y: CGFloat(row.y) - 6)
-                .help(String(format: "%.1f de %@%@ — click to tune",
+                .foregroundStyle(worked ? Color.secondary : Color.primary)
+                .offset(
+                    x: rulerWidth + labelInset + CGFloat(row.column) * Self.columnWidth,
+                    y: CGFloat(row.y) - 6
+                )
+                .help(String(format: "%.1f de %@%@ — %@",
                              row.spot.freqKHz, row.spot.spotter,
-                             row.spot.comment.isEmpty ? "" : " (\(row.spot.comment))"))
+                             row.spot.comment.isEmpty ? "" : " (\(row.spot.comment))",
+                             worked ? "already worked on this band and mode" : "click to tune"))
             }
         }
         .clipped()
     }
 
-    private struct SpotRow: Identifiable {
-        let spot: Spot
-        let y: Double
-        var id: String { spot.id }
-    }
+    /// Horizontal pitch of the label columns — a six-character call at 10 pt
+    /// monospaced plus its dot, with room to breathe.
+    private static let columnWidth: CGFloat = 60
+    /// Clearance one label needs vertically before the next may share a column.
+    private static let rowHeight: Double = 13
+    private let labelInset: CGFloat = 8
 
-    /// Spots in view, top→bottom, nudged apart so labels stay readable.
-    private func spotRows(scale: BandMapScale, height: Double) -> [SpotRow] {
-        let visible = model.spots
-            .filter { $0.freqKHz >= scale.lowKHz && $0.freqKHz <= scale.highKHz }
-            .sorted { $0.freqKHz > $1.freqKHz }
-        var rows: [SpotRow] = []
-        var lastY = -Double.infinity
-        for spot in visible {
-            let y = max(scale.y(forKHz: spot.freqKHz, height: height), lastY + 13)
-            lastY = y
-            rows.append(SpotRow(spot: spot, y: y))
-        }
-        return rows
+    private func placements(scale: BandMapScale, size: CGSize) -> [BandMapLayout.Placement] {
+        BandMapLayout.place(
+            spots: model.spots,
+            scale: scale,
+            height: Double(size.height),
+            rowHeight: Self.rowHeight,
+            columnWidth: Double(Self.columnWidth),
+            availableWidth: Double(size.width - rulerWidth - labelInset)
+        )
     }
 }
 

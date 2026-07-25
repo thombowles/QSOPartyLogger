@@ -66,7 +66,8 @@ final class EntryState {
             return
         }
 
-        switch ExchangeParser.parse(trimmedExchange, party: party) {
+        let role: ExchangeParser.Role = log.myLocation.isInState ? .inState : .outOfState
+        switch ExchangeParser.parse(trimmedExchange, party: party, role: role) {
         case .success(let parsed):
             exchangeStatus = .valid(parsed.locations)
             isNewMult = ScoreEngine.wouldAddMultiplier(
