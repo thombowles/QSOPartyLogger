@@ -239,6 +239,19 @@ parties, and the remaining engine gaps. Adding a party is governed by
   band map is populated with recent spots the moment you connect instead of
   starting empty. Click a spot to tune and pre-fill the call, or step
   spot-to-spot with ⌘← / ⌘→.
+- **QSO Party Hub spots**: several sponsors point their operators at
+  [qsopartyhub.com](http://qsopartyhub.com) to self-spot, and unlike a cluster
+  spot those carry the **county** — the multiplier the party is actually
+  scored on. The app polls the active party's page alongside your cluster,
+  badges each spot with its county, and highlights the ones that are still
+  multipliers. 17 of the 19 bundled parties are covered (California's page is
+  an unfinished stub and WA Salmon Run has none). Polling only runs inside the
+  party's own operating window.
+- **Rovers stop hiding**: a mobile that changes county is a new contact, and
+  now the band map knows it. Work a rover in one county and it greys out; the
+  moment it spots from a county you still need it comes back, un-greyed and
+  back in the ⌘← / ⌘→ rotation. Cluster spots never carried a county, so this
+  was invisible before.
 - **Band map window (⌘B)**: floating N1MM-style panel — vertical frequency
   ruler for the current band with spots plotted where they live, a red VFO
   marker tracking the radio, and a dashed CQ line marking your run
@@ -414,6 +427,42 @@ A cluster on the same Mac works the same way: point it at
 `localhost` and the port your feed serves — a local SDC skimmer collector on
 `localhost:7373`, say — and it logs in, backfills with `sh/dx`, and streams
 live decodes like any remote node.
+
+## QSO Party Hub spots
+
+Several sponsors — South Dakota, Iowa and Pennsylvania among them — tell their
+operators to self-spot at [qsopartyhub.com](http://qsopartyhub.com) rather than
+on a cluster. Those spots carry something no cluster spot ever does: the
+**county**. That is the multiplier a state QSO party is scored on, so the app
+polls the active party's page and puts the county straight on the band map,
+highlighted when it is still a multiplier worth chasing.
+
+It runs **alongside** your cluster, not instead of it. Both feeds land in the
+same band map with the same filters and the same ⌘← / ⌘→ rotation, and a spot
+seen on both is a single entry. Be realistic about volume: the hub is a
+volunteer-run board that may hold a handful of spots where a cluster holds
+hundreds. Its value is the county, not the count — the funnel panel has a
+**QSO Party Hub spots only** filter for when you are hunting multipliers and
+the cluster is drowning them out.
+
+Because those spots are hand-posted rather than skimmer-fed, they live longer:
+60 minutes by default against the cluster's 15, matching what the hub itself
+keeps. At the cluster's setting a typical hub table would empty on arrival.
+
+Polling only happens inside the party's own operating window (plus half an
+hour either side), one request a minute — lighter than leaving the page open
+in a browser tab, which refreshes itself every 53 seconds.
+
+Two of the 19 bundled parties are not covered, and the app says so rather than
+polling a dead page: California's hub page is an unfinished sponsor template,
+and WA Salmon Run has no page at all.
+
+What the app will not do is guess. The table's columns are read by position,
+so if the hub ever changes them the app stops reading rather than showing you
+a county from the wrong column. Rows it cannot parse are listed rather than
+silently dropped, a frequency it had to reconstruct from a malformed entry is
+flagged before you tune there, and a call the board has already corrected —
+these boards keep the typo alongside the fix — is greyed and stepped over.
 
 Node notes: verified end-to-end against `dxc.wa9pie.net:8000` (DXSpider),
 `dxc.nc7j.com:7373` (AR-Cluster), and SDC's telnet server on

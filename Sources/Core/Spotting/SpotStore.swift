@@ -59,19 +59,26 @@ final class SpotStore {
     /// the band edges (⌘→ / ⌘← navigation). The tolerance skips the spot the
     /// operator is already sitting on.
     ///
-    /// Stations in `workedCalls` are stepped over — they stay on the band map,
-    /// greyed, but there is nothing left to work on them so the keys do not
-    /// stop there. When every spot in the list is worked the result is `nil`
-    /// and the radio stays put.
+    /// Worked stations are stepped over — they stay on the band map, greyed,
+    /// but there is nothing left to work on them so the keys do not stop
+    /// there. When every spot in the list is worked the result is `nil` and
+    /// the radio stays put.
+    ///
+    /// A spot reporting a county is judged on call+county, so a rover that has
+    /// moved comes back into the rotation. A call the board has already
+    /// corrected is skipped outright — it is not somewhere to send the radio.
     nonisolated static func next(
         in sorted: [Spot],
         afterKHz: Double,
         direction: Direction,
-        workedCalls: Set<String> = []
+        workedCalls: Set<String> = [],
+        workedCallCounties: Set<String> = []
     ) -> Spot? {
-        let workable = workedCalls.isEmpty
-            ? sorted
-            : sorted.filter { !workedCalls.contains($0.call.uppercased()) }
+        let workable = sorted.filter {
+            !$0.isSuperseded
+                && !SpotFilter.isWorked($0, workedCalls: workedCalls,
+                                        workedCallCounties: workedCallCounties)
+        }
         guard !workable.isEmpty else { return nil }
         let tolerance = 0.05
         switch direction {

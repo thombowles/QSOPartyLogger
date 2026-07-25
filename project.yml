@@ -47,6 +47,14 @@ targets:
         LSMinimumSystemVersion: "15.0"
         NSHumanReadableCopyright: "© 2026 Tom Bowles, KE5CW"
         NSLocalNetworkUsageDescription: "QSO Party Logger connects to your FlexRadio and DX cluster spotting nodes on your local network."
+        # qsopartyhub.com serves a self-signed certificate on 443, so the spot
+        # tables are reachable over HTTP only. Scoped to that one host — never
+        # NSAllowsArbitraryLoads. See docs/research/qsopartyhub.md.
+        NSAppTransportSecurity:
+          NSExceptionDomains:
+            qsopartyhub.com:
+              NSExceptionAllowsInsecureHTTPLoads: true
+              NSIncludesSubdomains: true
         CFBundleDocumentTypes:
           - CFBundleTypeName: QSO Party Log
             CFBundleTypeRole: Editor

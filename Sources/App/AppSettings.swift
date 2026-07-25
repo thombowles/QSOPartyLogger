@@ -77,9 +77,26 @@ final class AppSettings {
         didSet { defaults.set(hideSkimmerSpots, forKey: "hideSkimmerSpots") }
     }
 
-    /// Drop spots older than this (minutes) — contest spots go stale fast.
+    /// Drop cluster spots older than this (minutes) — they go stale fast.
     var spotMaxAgeMinutes: Int {
         didSet { defaults.set(spotMaxAgeMinutes, forKey: "spotMaxAgeMinutes") }
+    }
+
+    /// The same for hub spots, which are hand-posted rather than skimmer-fed
+    /// and stay useful much longer. The hub itself keeps them an hour, and at
+    /// the cluster's 15 minutes a typical hub table empties on arrival.
+    var hubSpotMaxAgeMinutes: Int {
+        didSet { defaults.set(hubSpotMaxAgeMinutes, forKey: "hubSpotMaxAgeMinutes") }
+    }
+
+    /// Poll qsopartyhub.com for the active party, when the hub serves it.
+    var hubSpotsEnabled: Bool {
+        didSet { defaults.set(hubSpotsEnabled, forKey: "hubSpotsEnabled") }
+    }
+
+    /// Feeds to show on the band map; empty means every feed.
+    var spotSources: Set<SpotSource> {
+        didSet { defaults.set(spotSources.map(\.rawValue), forKey: "spotSources") }
     }
 
     /// Switch the radio between CW and SSB to match the band plan when the app
@@ -104,7 +121,8 @@ final class AppSettings {
     /// the active party, not from stored preferences.
     func spotFilterOptions(
         workedCalls: Set<String>,
-        allowedModes: [ModeClass] = []
+        allowedModes: [ModeClass] = [],
+        workedCallCounties: Set<String> = []
     ) -> SpotFilter.Options {
         SpotFilter.Options(
             northAmericanSpottersOnly: northAmericanSpottersOnly,
@@ -114,7 +132,9 @@ final class AppSettings {
             modes: spotModes,
             bands: spotBands,
             allowedModes: allowedModes,
-            workedCalls: workedCalls
+            sources: spotSources,
+            workedCalls: workedCalls,
+            workedCallCounties: workedCallCounties
         )
     }
 
@@ -219,6 +239,10 @@ final class AppSettings {
         hideWorkedSpots = defaults.object(forKey: "hideWorkedSpots") as? Bool ?? false
         hideSkimmerSpots = defaults.object(forKey: "hideSkimmerSpots") as? Bool ?? false
         spotMaxAgeMinutes = defaults.object(forKey: "spotMaxAgeMinutes") as? Int ?? 15
+        hubSpotMaxAgeMinutes = defaults.object(forKey: "hubSpotMaxAgeMinutes") as? Int ?? 60
+        hubSpotsEnabled = defaults.object(forKey: "hubSpotsEnabled") as? Bool ?? true
+        spotSources = Set((defaults.stringArray(forKey: "spotSources") ?? [])
+            .compactMap(SpotSource.init(rawValue:)))
         followBandPlan = defaults.object(forKey: "followBandPlan") as? Bool ?? true
         spotModes = Set((defaults.stringArray(forKey: "spotModes") ?? []).compactMap(ModeClass.init(rawValue:)))
         spotBands = Set((defaults.stringArray(forKey: "spotBands") ?? []).compactMap(Band.init(rawValue:)))

@@ -14,6 +14,18 @@ final class BandMapModel {
     /// Modes the active party permits — a spot's mode is inferred against
     /// these, not the generic band plan.
     var allowedModes: [ModeClass] = []
+    /// `CALL|COUNTY` pairs already worked on this band and mode.
+    var workedCallCounties: Set<String> = []
+
+    /// The active party and log, for deciding whether a spot's county is a
+    /// multiplier still worth chasing. Setting either drops the cache.
+    var party: PartyDefinition? {
+        didSet { neededMultiplierCache = [:] }
+    }
+    var log: ContestLog? {
+        didSet { neededMultiplierCache = [:] }
+    }
+    private var neededMultiplierCache: [String: Bool] = [:]
     var onTuneSpot: ((Spot) -> Void)?
     var onTuneKHz: ((Double) -> Void)?
 
@@ -37,19 +49,51 @@ final class BandMapModel {
     var spots: [Spot] {
         SpotFilter.filter(
             spotStore.spots(band: band),
-            options: settings.spotFilterOptions(workedCalls: workedCalls, allowedModes: allowedModes)
+            options: settings.spotFilterOptions(
+                workedCalls: workedCalls, allowedModes: allowedModes,
+                workedCallCounties: workedCallCounties
+            )
         )
     }
 
     var filtersActive: Bool {
-        settings.spotFilterOptions(workedCalls: workedCalls, allowedModes: allowedModes).isActive
+        settings.spotFilterOptions(
+            workedCalls: workedCalls, allowedModes: allowedModes,
+            workedCallCounties: workedCallCounties
+        ).isActive
     }
 
     /// Already in the log on this band and mode. `workedCalls` is uppercased at
     /// the source, so the spot's call has to be too — a cluster spot arriving
     /// in mixed case used to slip past this and never grey out.
+    ///
+    /// A spot reporting a county is judged on call+county: a mobile that has
+    /// moved is a new contact, so it un-greys rather than staying struck
+    /// through for the rest of the contest.
     func isWorked(_ spot: Spot) -> Bool {
-        workedCalls.contains(spot.call.uppercased())
+        SpotFilter.isWorked(spot, workedCalls: workedCalls,
+                            workedCallCounties: workedCallCounties)
+    }
+
+    /// Whether this spot's county is a multiplier still worth chasing.
+    ///
+    /// Only hub spots carry a county, and there are few of them next to a
+    /// cluster's hundreds, so the scoring call below is reached rarely — and
+    /// memoised per county+band+mode besides. `wouldAddMultiplier` honours the
+    /// party's scored-multiplier ceiling, so this never sends the operator
+    /// after a multiplier that pays nothing.
+    func isNeededMultiplier(_ spot: Spot) -> Bool {
+        guard let county = spot.county, !county.isEmpty,
+              let party, let log, let band = spot.band else { return false }
+        let mode = SpotFilter.modeClass(freqKHz: spot.freqKHz, comment: spot.comment,
+                                        allowedModes: allowedModes)
+        let key = "\(county)|\(band.rawValue)|\(mode.rawValue)"
+        if let cached = neededMultiplierCache[key] { return cached }
+        let needed = ScoreEngine.wouldAddMultiplier(
+            theirLocs: [county], band: band, modeClass: mode, log: log, party: party
+        )
+        neededMultiplierCache[key] = needed
+        return needed
     }
 }
 
@@ -141,6 +185,9 @@ struct BandMapView: View {
                 .help("Drop worked calls from the map entirely — off, they stay greyed out and ⌘← / ⌘→ steps over them")
             Toggle("Hide RBN / skimmer spots", isOn: $settings.hideSkimmerSpots)
                 .help("Drop automated skimmer spots (\"-#\" nodes and dB/WPM reports)")
+            Toggle("QSO Party Hub spots only", isOn: hubOnlyBinding(settings: settings))
+                .help("A cluster carries hundreds of spots against the hub's handful — "
+                    + "this isolates the ones that name a county when you're hunting multipliers")
 
             Divider()
             Text("MODES")
@@ -219,6 +266,15 @@ struct BandMapView: View {
 
     /// Empty set means "all", so materialise the full set before removing an
     /// entry — otherwise unticking the first item would do nothing.
+    /// Restricting to the hub is a one-way toggle rather than a per-source
+    /// checklist: "cluster only" is what turning the hub off already does.
+    private func hubOnlyBinding(settings: AppSettings) -> Binding<Bool> {
+        Binding(
+            get: { settings.spotSources == [.hub] },
+            set: { settings.spotSources = $0 ? [.hub] : [] }
+        )
+    }
+
     private func modeBinding(_ mode: ModeClass, settings: AppSettings) -> Binding<Bool> {
         Binding(
             get: { settings.spotModes.isEmpty || settings.spotModes.contains(mode) },
@@ -306,6 +362,7 @@ struct BandMapView: View {
             // Spots, stacked sideways where they collide (see BandMapLayout).
             ForEach(placements(scale: scale, size: size)) { row in
                 let worked = model.isWorked(row.spot)
+                let needed = model.isNeededMultiplier(row.spot)
                 Button {
                     model.onTuneSpot?(row.spot)
                 } label: {
@@ -313,23 +370,61 @@ struct BandMapView: View {
                         Circle().frame(width: 5, height: 5)
                         Text(row.spot.call)
                             .font(.system(size: 10, design: .monospaced).weight(.semibold))
-                            .strikethrough(worked)
+                            .strikethrough(worked || row.spot.isSuperseded)
+                        // The county is the whole reason the hub feed exists —
+                        // a cluster spot never carries one.
+                        if let county = row.spot.county, !county.isEmpty {
+                            Text(county)
+                                .font(.system(size: 8, design: .monospaced))
+                                .padding(.horizontal, 3)
+                                .padding(.vertical, 1)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .fill(needed ? Color.accentColor.opacity(0.25)
+                                                     : Color.secondary.opacity(0.15))
+                                )
+                                .foregroundStyle(needed ? Color.accentColor : Color.secondary)
+                        }
                     }
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .foregroundStyle(worked ? Color.secondary : Color.primary)
+                .foregroundStyle(spotColor(worked: worked, spot: row.spot))
+                .opacity(row.spot.isSuperseded ? 0.45 : 1)
                 .offset(
                     x: rulerWidth + labelInset + CGFloat(row.column) * Self.columnWidth,
                     y: CGFloat(row.y) - 6
                 )
-                .help(String(format: "%.1f de %@%@ — %@",
-                             row.spot.freqKHz, row.spot.spotter,
-                             row.spot.comment.isEmpty ? "" : " (\(row.spot.comment))",
-                             worked ? "already worked on this band and mode" : "click to tune"))
+                .help(helpText(for: row.spot, worked: worked, needed: needed))
             }
         }
         .clipped()
+    }
+
+    private func spotColor(worked: Bool, spot: Spot) -> Color {
+        if spot.isSuperseded || worked { return .secondary }
+        return .primary
+    }
+
+    /// Everything the label had no room for. The reconstructed-frequency and
+    /// superseded notes are warnings, not decoration: one means the frequency
+    /// was inferred rather than read, the other that the board has already
+    /// corrected this call.
+    private func helpText(for spot: Spot, worked: Bool, needed: Bool) -> String {
+        var parts = [String(format: "%.1f de %@", spot.freqKHz, spot.spotter)]
+        if !spot.comment.isEmpty { parts.append("(\(spot.comment))") }
+        if let county = spot.county, !county.isEmpty {
+            parts.append(needed ? "\(county) — NEW MULTIPLIER" : "\(county) — already counted")
+        }
+        if spot.source == .hub { parts.append("via QSO Party Hub") }
+        if spot.frequencyConfidence == .reconstructed {
+            parts.append("frequency reconstructed from a malformed entry — verify before calling")
+        }
+        if spot.isSuperseded {
+            parts.append("a later spot on this frequency corrected this call")
+        }
+        parts.append(worked ? "already worked on this band and mode" : "click to tune")
+        return parts.joined(separator: " — ")
     }
 
     /// Horizontal pitch of the label columns — a six-character call at 10 pt

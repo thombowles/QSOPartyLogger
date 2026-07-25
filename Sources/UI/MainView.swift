@@ -40,6 +40,7 @@ struct MainView: View {
 
     @State private var spotStore = SpotStore()
     @State private var spotClient = SpotClient()
+    @State private var hubSpotClient = HubSpotClient()
     @State private var spotPurgeTask: Task<Void, Never>?
     @State private var showClusterPopover = false
     @State private var clusterCommand = ""
@@ -157,7 +158,8 @@ struct MainView: View {
             spotStore.spots(band: currentBand),
             options: settings.spotFilterOptions(
                 workedCalls: workedCallsOnCurrentBandMode,
-                allowedModes: party?.allowedModeClasses ?? []
+                allowedModes: party?.allowedModeClasses ?? [],
+                workedCallCounties: workedCallCountiesOnCurrentBandMode
             )
         )
     }
@@ -168,6 +170,19 @@ struct MainView: View {
             document.log.qsos
                 .filter { $0.band == currentBand && $0.modeClass == currentModeClass }
                 .map { $0.call.uppercased() }
+        )
+    }
+
+    /// The same, but paired with the county each contact was made in, so a
+    /// mobile that has moved is not mistaken for a station already worked.
+    /// `DupeChecker.DupeKey` counts a new county as a new contact; without
+    /// this the band map would keep hiding a rover through every county it
+    /// drives into, which is exactly where the multipliers are.
+    private var workedCallCountiesOnCurrentBandMode: Set<String> {
+        Set(
+            document.log.qsos
+                .filter { $0.band == currentBand && $0.modeClass == currentModeClass }
+                .map { "\($0.call.uppercased())|\($0.theirLoc.uppercased())" }
         )
     }
 
@@ -228,6 +243,11 @@ struct MainView: View {
         .onChange(of: workedCallsOnCurrentBandMode) {
             bandMapModel?.workedCalls = workedCallsOnCurrentBandMode
         }
+        .onChange(of: workedCallCountiesOnCurrentBandMode) {
+            bandMapModel?.workedCallCounties = workedCallCountiesOnCurrentBandMode
+            // The log changed, so which counties are still multipliers has too.
+            bandMapModel?.log = document.log
+        }
         .onChange(of: cqFrequencyHz) {
             bandMapModel?.cqKHz = cqFrequencyHz.map { Double($0) / 1000 }
         }
@@ -235,6 +255,11 @@ struct MainView: View {
             spotStore.maxAgeMinutes = settings.spotMaxAgeMinutes
             spotStore.purge(now: Date())
         }
+        .onChange(of: settings.hubSpotMaxAgeMinutes) {
+            spotStore.hubMaxAgeMinutes = settings.hubSpotMaxAgeMinutes
+            spotStore.purge(now: Date())
+        }
+        .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
         // The QSO number needs no re-seeding here: `EntryState.serialSent`
         // follows the log until the operator types over it, so a document that
         // is still `ksqp` when the entry appears picks up the real party's
@@ -242,6 +267,8 @@ struct MainView: View {
         .onChange(of: document.log.partyID) {
             bandMapModel?.partyBands = party?.validBands ?? Band.allCases
             bandMapModel?.allowedModes = party?.allowedModeClasses ?? []
+            bandMapModel?.party = party
+            syncHubSpotClient()
         }
     }
 
@@ -561,6 +588,12 @@ struct MainView: View {
         spotClient.onSpot = { spot in
             spotStore.add(spot)
         }
+        // Hub spots land in the same store, so the band map, filters, stacking
+        // and ⌘←/⌘→ treat them exactly like any other spot.
+        hubSpotClient.onSpots = { spots in
+            for spot in spots { spotStore.add(spot) }
+        }
+        syncHubSpotClient()
         if settings.clusterAutoConnect,
            !settings.clusterHost.trimmingCharacters(in: .whitespaces).isEmpty,
            !document.log.station.callsign.isEmpty,
@@ -582,6 +615,9 @@ struct MainView: View {
             model.workedCalls = workedCallsOnCurrentBandMode
             model.partyBands = party?.validBands ?? Band.allCases
             model.allowedModes = party?.allowedModeClasses ?? []
+            model.workedCallCounties = workedCallCountiesOnCurrentBandMode
+            model.party = party
+            model.log = document.log
             model.onTuneSpot = { tune(to: $0) }
             model.onTuneKHz = { qsyTo(kHz: $0) }
             bandMapModel = model
@@ -744,6 +780,17 @@ struct MainView: View {
         revalidate()
     }
 
+    /// Start, restart or stop hub polling to match the setting and the party.
+    /// Two of the nineteen bundled parties have no hub page at all, so this
+    /// quietly does nothing for them rather than polling a dead URL.
+    private func syncHubSpotClient() {
+        guard settings.hubSpotsEnabled, let party, let source = party.hubSpots else {
+            hubSpotClient.stop()
+            return
+        }
+        hubSpotClient.start(source: source, party: party)
+    }
+
     /// ⌘← / ⌘→. Worked stations stay on the band map, greyed, but there is
     /// nothing left to work on them so the keys step over them.
     private func jumpToSpot(_ direction: SpotStore.Direction) {
@@ -755,7 +802,8 @@ struct MainView: View {
             in: bandSpots,
             afterKHz: reference,
             direction: direction,
-            workedCalls: workedCallsOnCurrentBandMode
+            workedCalls: workedCallsOnCurrentBandMode,
+            workedCallCounties: workedCallCountiesOnCurrentBandMode
         ) else {
             return
         }

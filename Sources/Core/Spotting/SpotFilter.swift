@@ -191,20 +191,54 @@ enum SpotFilter {
         /// to the same rules that decide whether it can be a multiplier.
         /// Empty means no constraint.
         var allowedModes: [ModeClass] = []
+        /// Which feeds to show. Empty means no restriction. A cluster carries
+        /// hundreds of spots against the hub's handful, so isolating the
+        /// county-bearing feed is the difference between using it and losing
+        /// it in the noise.
+        var sources: Set<SpotSource> = []
         /// Calls counted as worked when `hideWorked` is on.
         var workedCalls: Set<String> = []
+        /// `CALL|COUNTY` pairs already worked. A spot that reports a county is
+        /// judged on these instead of the callsign, because a mobile in a new
+        /// county is a new contact — `DupeChecker.DupeKey` says so. Without
+        /// this a worked rover stays hidden through every county it drives
+        /// into, which is where the multipliers are.
+        var workedCallCounties: Set<String> = []
 
         /// Any filter narrowing the list (age is separate — it's not a view filter).
         var isActive: Bool {
             northAmericanSpottersOnly || northAmericanStationsOnly
                 || hideWorked || hideSkimmer || !modes.isEmpty || !bands.isEmpty
+                || !sources.isEmpty
         }
+    }
+
+    /// Whether there is anything left to work on this spot.
+    ///
+    /// A spot that reports a county is judged on call+county; one that does
+    /// not can only be judged on the call, which is every cluster spot and so
+    /// preserves the original behaviour exactly.
+    static func isWorked(
+        _ spot: Spot,
+        workedCalls: Set<String>,
+        workedCallCounties: Set<String>
+    ) -> Bool {
+        let call = spot.call.uppercased()
+        guard let county = spot.county, !county.isEmpty else {
+            return workedCalls.contains(call)
+        }
+        return workedCallCounties.contains("\(call)|\(county.uppercased())")
     }
 
     static func matches(_ spot: Spot, options: Options) -> Bool {
         if options.northAmericanSpottersOnly, !isNorthAmerican(call: spot.spotter) { return false }
         if options.northAmericanStationsOnly, !isNorthAmerican(call: spot.call) { return false }
-        if options.hideWorked, options.workedCalls.contains(spot.call.uppercased()) { return false }
+        if !options.sources.isEmpty, !options.sources.contains(spot.source) { return false }
+        if options.hideWorked,
+           isWorked(spot, workedCalls: options.workedCalls,
+                    workedCallCounties: options.workedCallCounties) {
+            return false
+        }
         if options.hideSkimmer, isSkimmer(spot) { return false }
         if !options.bands.isEmpty, let band = spot.band, !options.bands.contains(band) { return false }
         if !options.modes.isEmpty,
