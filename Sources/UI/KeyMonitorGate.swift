@@ -127,6 +127,9 @@ enum KeyMonitorGate {
         case 27, 78: return .adjustWPM(by: -2)  // '-' / keypad '-'
         case 123: return .previousSpot  // ←
         case 124: return .nextSpot  // →
+        // The map draws high frequency at the top, so up the map is up the band.
+        case 126: return .nextSpot  // ↑
+        case 125: return .previousSpot  // ↓
         case 38: return .jumpToCQFrequency  // 'j'
         case 11: return .toggleBandMap  // 'b'
         default: return nil

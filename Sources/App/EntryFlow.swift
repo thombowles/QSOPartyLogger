@@ -51,6 +51,10 @@ final class EntryFlow {
     let entry: EntryState
     let document: LogDocument
 
+    /// Previous contests, indexed by call. Empty until the load finishes, which
+    /// costs nothing but a missed prefill in the first second of a contest.
+    var archiveIndex = StationMemory.Index.empty
+
     /// Everything that changes between one Return and the next and is owned by
     /// the view — the radio's band and mode, where the cursor is, whether the
     /// radio is connected at all.
@@ -283,6 +287,8 @@ final class EntryFlow {
             theirLocs: theirLocs
         )
         document.append(qsos: rows, undoManager: undoManager)
+        // He is in the log now; there is nothing pending about him.
+        entry.pendingExchanges.removeValue(forKey: entry.callNormalized)
         entry.clearForNextContact(modeClass: context.modeClass)
         return .logged(rows: rows, text: "")
     }
@@ -296,6 +302,73 @@ final class EntryFlow {
             band: context.band,
             modeClass: context.modeClass
         )
+    }
+
+    /// The call field changed by typing. Refresh what the app is offering for
+    /// this station, then revalidate. Safe on every keystroke: the only text it
+    /// can overwrite is text it wrote itself.
+    func callChanged(_ context: Context) {
+        refreshPrefill(context)
+        revalidate(context)
+    }
+
+    /// A different station, chosen whole — a spot click or ⌘← / ⌘→ / ⌘↑ / ⌘↓.
+    ///
+    /// Distinct from `callChanged` on purpose. Typing is incremental and must
+    /// never cost the operator text they typed; arriving at a new station is a
+    /// deliberate move away, so what was copied for the last one comes off the
+    /// row — kept under his call, not thrown away.
+    func stationChanged(to call: String, _ context: Context) {
+        stashPending()
+        entry.exchangeTyped = ""
+        entry.serialRcvd = ""
+        entry.call = call
+        refreshPrefill(context)
+        revalidate(context)
+    }
+
+    private func stashPending() {
+        let outgoing = entry.callNormalized
+        guard !outgoing.isEmpty, !entry.exchangeIsAutoFilled else { return }
+        let pending = EntryState.Pending(
+            exchange: entry.exchange,
+            serialRcvd: entry.serialRcvd
+        )
+        guard !pending.isEmpty else { return }
+        entry.pendingExchanges[outgoing] = pending
+    }
+
+    /// Offer what we know about the call now in the field, or take back what we
+    /// offered for the last one.
+    private func refreshPrefill(_ context: Context) {
+        guard let party,
+              entry.exchange.isEmpty || entry.exchangeIsAutoFilled else { return }
+
+        let call = entry.callNormalized
+        guard !call.isEmpty else {
+            entry.clearAutoFilledExchange()
+            return
+        }
+
+        // What the operator copied outranks anything the app can derive.
+        if let pending = entry.pendingExchanges[call] {
+            entry.restorePending(pending)
+            return
+        }
+
+        let role: ExchangeParser.Role =
+            document.log.myLocation.isInState ? .inState : .outOfState
+        guard let candidate = StationMemory.candidate(
+            call: call,
+            log: document.log.qsos,
+            index: archiveIndex,
+            party: party,
+            role: role
+        ) else {
+            entry.clearAutoFilledExchange()
+            return
+        }
+        entry.autoFillExchange(candidate.text)
     }
 
     /// Mode changes (radio or manual): swap pre-filled RST defaults (599 ↔ 59)
