@@ -153,9 +153,20 @@ final class AppSettings {
         didSet { defaults.set(esmEnabled, forKey: "esmEnabled") }
     }
 
-    /// Send cut numbers in the {RST} macro when keying CW (599 → 5NN).
+    /// Send cut numbers when keying CW: 0→T and 9→N, in both the {RST} and
+    /// {SERIAL} macros (599 → 5NN, 40 → 4T). (See `cwCutNumberOne`.)
     var cwCutNumbers: Bool {
         didSet { defaults.set(cwCutNumbers, forKey: "cwCutNumbers") }
+    }
+
+    /// Also cut 1→A. Opt-in and off by default: 1→A has real currency in
+    /// contest CW but is not universal, and a number cut in a way the
+    /// receiving operator does not expect costs a repeat. A second Bool
+    /// rather than folding both into an enum, because `cwCutNumbers` is a live
+    /// UserDefaults token — migrating it would silently reset the choice of
+    /// anyone who had already turned cut numbers on.
+    var cwCutNumberOne: Bool {
+        didSet { defaults.set(cwCutNumberOne, forKey: "cwCutNumberOne") }
     }
 
     /// Gap between repeat-CQ transmissions, in seconds.
@@ -197,18 +208,21 @@ final class AppSettings {
             ?? KeyerLineConfig()
         esmEnabled = defaults.object(forKey: "esmEnabled") as? Bool ?? false
         cwCutNumbers = defaults.object(forKey: "cwCutNumbers") as? Bool ?? false
+        cwCutNumberOne = defaults.object(forKey: "cwCutNumberOne") as? Bool ?? false
         repeatIntervalSeconds = defaults.object(forKey: "repeatIntervalSeconds") as? Double ?? 3.0
         lastStationProfile = defaults.data(forKey: "lastStationProfile")
             .flatMap { try? JSONDecoder().decode(StationProfile.self, from: $0) }
     }
 
-    /// CW cut numbers for signal reports: 9→N, 0→T (599 → 5NN). Applied only
-    /// to the {RST} value — callsigns and exchanges are never altered.
-    static func applyCutNumbers(_ value: String) -> String {
+    /// CW cut numbers: 0→T and 9→N always, 1→A when `cutOne` is set
+    /// (599 → 5NN, 199 → ANN). Applied to the {RST} and {SERIAL} values only —
+    /// callsigns and exchanges are never altered.
+    static func applyCutNumbers(_ value: String, cutOne: Bool = false) -> String {
         String(value.map { c -> Character in
             switch c {
             case "9": "N"
             case "0": "T"
+            case "1": cutOne ? "A" : c
             default: c
             }
         })
@@ -222,16 +236,20 @@ final class AppSettings {
         rst: String,
         exchange: String,
         serial: String = "",
-        cutNumbers: Bool = false
+        cutNumbers: Bool = false,
+        cutOne: Bool = false
     ) -> String {
-        template
+        func cut(_ value: String) -> String {
+            cutNumbers ? applyCutNumbers(value, cutOne: cutOne) : value
+        }
+        return template
             .replacingOccurrences(of: "{MYCALL}", with: myCall)
             .replacingOccurrences(of: "{CALL}", with: call)
-            .replacingOccurrences(of: "{RST}", with: cutNumbers ? applyCutNumbers(rst) : rst)
+            .replacingOccurrences(of: "{RST}", with: cut(rst))
             // The QSO number, for parties that exchange one instead of a report
             // (CQP). Defaults to empty, so message sets that never mention it
             // expand exactly as before.
-            .replacingOccurrences(of: "{SERIAL}", with: cutNumbers ? applyCutNumbers(serial) : serial)
+            .replacingOccurrences(of: "{SERIAL}", with: cut(serial))
             .replacingOccurrences(of: "{EXCH}", with: exchange)
             .trimmingCharacters(in: .whitespaces)
     }

@@ -370,4 +370,66 @@ final class SerialExchangeTests: XCTestCase {
         XCTAssertEqual(s.validQSOs, 2, "both stations sent 5; neither is a dupe")
         XCTAssertEqual(s.dupeCount, 0)
     }
+
+    // MARK: Cut numbers (2026-07-25)
+
+    /// 0→T and 9→N are near-universal in contest CW and are unconditional.
+    func testStandardCutsAreAlwaysApplied() {
+        XCTAssertEqual(AppSettings.applyCutNumbers("599"), "5NN")
+        XCTAssertEqual(AppSettings.applyCutNumbers("40"), "4T")
+        XCTAssertEqual(AppSettings.applyCutNumbers("100"), "1TT")
+        XCTAssertEqual(AppSettings.applyCutNumbers("1780"), "178T")
+    }
+
+    /// 1→A has real currency but is not universal — a number cut in a way the
+    /// receiving operator does not expect costs a repeat, so it is opt-in.
+    func testCutOneIsOptIn() {
+        XCTAssertEqual(AppSettings.applyCutNumbers("199", cutOne: false), "1NN")
+        XCTAssertEqual(AppSettings.applyCutNumbers("199", cutOne: true), "ANN")
+        XCTAssertEqual(AppSettings.applyCutNumbers("1780", cutOne: true), "A78T")
+        XCTAssertEqual(AppSettings.applyCutNumbers("11", cutOne: true), "AA")
+    }
+
+    /// The digits nobody agreed to cut stay digits.
+    func testOtherDigitsAreNeverCut() {
+        XCTAssertEqual(AppSettings.applyCutNumbers("2345678", cutOne: true), "2345678")
+    }
+
+    func testCutNumbersReachBothTheReportAndTheNumber() {
+        XCTAssertEqual(
+            AppSettings.expandMacros(
+                "{RST} {SERIAL} {EXCH}",
+                myCall: "KE5CW", call: "W6A", rst: "599", exchange: "SCLA",
+                serial: "109", cutNumbers: true, cutOne: true
+            ),
+            "5NN ATN SCLA"
+        )
+    }
+
+    /// Callsigns and county codes carry digits that are not numbers to be cut.
+    /// The values here are chosen to contain 0, 1 and 9 — with `KE5CW` as the
+    /// operator's own call, cutting `{MYCALL}` would pass unnoticed.
+    func testCutNumbersNeverTouchCallsignsOrExchanges() {
+        XCTAssertEqual(
+            AppSettings.expandMacros(
+                "{CALL} {RST} {EXCH} DE {MYCALL}",
+                myCall: "K9CT", call: "W0BH", rst: "599", exchange: "MRN90",
+                cutNumbers: true, cutOne: true
+            ),
+            "W0BH 5NN MRN90 DE K9CT"
+        )
+    }
+
+    /// Two independent Bools make `cutOne` without `cwCutNumbers` a
+    /// representable state, and it must cut nothing at all — the sub-toggle
+    /// never overrides the master.
+    func testCutOneAloneCutsNothing() {
+        XCTAssertEqual(
+            AppSettings.expandMacros(
+                "{RST} {SERIAL}", myCall: "K", call: "C", rst: "599", exchange: "X",
+                serial: "199", cutNumbers: false, cutOne: true
+            ),
+            "599 199", "the master toggle is off, so nothing is cut"
+        )
+    }
 }
