@@ -56,17 +56,20 @@ A history table between the messages row and the log table, listing every prior
 contact with the call in the entry field:
 
 ```
-Worked K5NA
-Band  Mode  Time    Loc
-20m   SSB   1531Z   JO
+Band  Mode  Time    Worked K5NA as
+20m   CW    1531Z   JO              ← bold + orange: the radio is on 20m CW
+20m   SSB   1554Z   JO
 40m   CW    1402Z   JO
 80m   CW    2210Z   JO
-15m   CW    1846Z   JO
-KSQP 2025 — JO
+KSQP 2025               JO
 ```
 
 - It exists only while there is history to show. An unworked call costs no
   vertical space at all; the log table takes the room back.
+- The fourth column header names the station — `Worked K5NA as` — so the table
+  needs no separate title line, which would cost a row to say nothing.
+- A tinted, rounded surface separates it from the log table below. Two tables
+  stacked on the same background read as one continuous list.
 - One entry per on-air contact, not per logged row: a county-line group collapses
   to a single entry whose locations join with `/`.
 - Most recent first. Entries on the **current band and mode** render bold and
@@ -107,6 +110,13 @@ rarer condition — the exchange has parsed and this specific contact, same call
 band, mode, my location and theirs, is already in the log. That one is worth
 interrupting for, it is already built and tested, and removing it would be a
 safety regression.
+
+The two therefore overlap in one state — an exact dupe with the exchange filled
+shows both the highlighted row and the warning line. That redundancy is
+deliberate: the table sits above the log, away from the fields, while the
+warning sits directly under them at the moment a finger is on Return. It is the
+last thing between the operator and a duplicate contact, and it is not the
+call-only nag that prompted this work.
 
 Logging is never blocked. A rover who has moved county is a new contact under
 KSQP rule 10, and `DupeChecker` already keys on both locations.
