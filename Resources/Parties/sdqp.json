@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "id": "sdqp",
+  "name": "South Dakota QSO Party",
+  "cabrilloContest": "SDQSOP",
+  "homeState": "SD",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m",
+    "1.25m",
+    "70cm"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "W0OJY",
+      "points": 100,
+      "scope": "once"
+    }
+  ],
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-10-10T18:00:00Z",
+      "end": "2026-10-11T18:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "AURO",
+      "name": "Aurora"
+    },
+    {
+      "abbr": "BEAD",
+      "name": "Beadle"
+    },
+    {
+      "abbr": "BENN",
+      "name": "Bennett"
+    },
+    {
+      "abbr": "BONH",
+      "name": "Bon Homme"
+    },
+    {
+      "abbr": "BROO",
+      "name": "Brookings"
+    },
+    {
+      "abbr": "BRWN",
+      "name": "Brown"
+    },
+    {
+      "abbr": "BRUL",
+      "name": "Brule"
+    },
+    {
+      "abbr": "BUFF",
+      "name": "Buffalo"
+    },
+    {
+      "abbr": "BUTT",
+      "name": "Butte"
+    },
+    {
+      "abbr": "CAMP",
+      "name": "Campbell"
+    },
+    {
+      "abbr": "CHAR",
+      "name": "Charles Mix"
+    },
+    {
+      "abbr": "CLRK",
+      "name": "Clark"
+    },
+    {
+      "abbr": "CLAY",
+      "name": "Clay"
+    },
+    {
+      "abbr": "CODI",
+      "name": "Codington"
+    },
+    {
+      "abbr": "CORS",
+      "name": "Corson"
+    },
+    {
+      "abbr": "CUST",
+      "name": "Custer"
+    },
+    {
+      "abbr": "DAVI",
+      "name": "Davison"
+    },
+    {
+      "abbr": "DAY",
+      "name": "Day"
+    },
+    {
+      "abbr": "DEUE",
+      "name": "Deuel"
+    },
+    {
+      "abbr": "DEWY",
+      "name": "Dewey"
+    },
+    {
+      "abbr": "DGLS",
+      "name": "Douglas"
+    },
+    {
+      "abbr": "EDMU",
+      "name": "Edmunds"
+    },
+    {
+      "abbr": "FALL",
+      "name": "Fall River"
+    },
+    {
+      "abbr": "FAUL",
+      "name": "Faulk"
+    },
+    {
+      "abbr": "GRAN",
+      "name": "Grant"
+    },
+    {
+      "abbr": "GREG",
+      "name": "Gregory"
+    },
+    {
+      "abbr": "HAAK",
+      "name": "Haakon"
+    },
+    {
+      "abbr": "HAML",
+      "name": "Hamlin"
+    },
+    {
+      "abbr": "HAND",
+      "name": "Hand"
+    },
+    {
+      "abbr": "HNSN",
+      "name": "Hanson"
+    },
+    {
+      "abbr": "HRDG",
+      "name": "Harding"
+    },
+    {
+      "abbr": "HUGH",
+      "name": "Hughes"
+    },
+    {
+      "abbr": "HUTC",
+      "name": "Hutchinson"
+    },
+    {
+      "abbr": "HYDE",
+      "name": "Hyde"
+    },
+    {
+      "abbr": "JKSN",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JERA",
+      "name": "Jerauld"
+    },
+    {
+      "abbr": "JONE",
+      "name": "Jones"
+    },
+    {
+      "abbr": "KING",
+      "name": "Kingsbury"
+    },
+    {
+      "abbr": "LAKE",
+      "name": "Lake"
+    },
+    {
+      "abbr": "LAWR",
+      "name": "Lawrence"
+    },
+    {
+      "abbr": "LINC",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "LYMA",
+      "name": "Lyman"
+    },
+    {
+      "abbr": "MRSH",
+      "name": "Marshall"
+    },
+    {
+      "abbr": "MCOO",
+      "name": "McCook"
+    },
+    {
+      "abbr": "MCPH",
+      "name": "McPherson"
+    },
+    {
+      "abbr": "MEAD",
+      "name": "Meade"
+    },
+    {
+      "abbr": "MELL",
+      "name": "Mellette"
+    },
+    {
+      "abbr": "MINE",
+      "name": "Miner"
+    },
+    {
+      "abbr": "MINN",
+      "name": "Minnehaha"
+    },
+    {
+      "abbr": "MOOD",
+      "name": "Moody"
+    },
+    {
+      "abbr": "OGLA",
+      "name": "Oglala Lakota"
+    },
+    {
+      "abbr": "PENN",
+      "name": "Pennington"
+    },
+    {
+      "abbr": "PERK",
+      "name": "Perkins"
+    },
+    {
+      "abbr": "POTT",
+      "name": "Potter"
+    },
+    {
+      "abbr": "ROBE",
+      "name": "Roberts"
+    },
+    {
+      "abbr": "SANB",
+      "name": "Sanborn"
+    },
+    {
+      "abbr": "SPIN",
+      "name": "Spink"
+    },
+    {
+      "abbr": "STAN",
+      "name": "Stanley"
+    },
+    {
+      "abbr": "SULL",
+      "name": "Sully"
+    },
+    {
+      "abbr": "TODD",
+      "name": "Todd"
+    },
+    {
+      "abbr": "TRIP",
+      "name": "Tripp"
+    },
+    {
+      "abbr": "TURN",
+      "name": "Turner"
+    },
+    {
+      "abbr": "UNIO",
+      "name": "Union"
+    },
+    {
+      "abbr": "WALW",
+      "name": "Walworth"
+    },
+    {
+      "abbr": "YANK",
+      "name": "Yankton"
+    },
+    {
+      "abbr": "ZIEB",
+      "name": "Ziebach"
+    }
+  ],
+  "notes": "verified: partial — rules from the Prairie Dog Amateur Radio Club's official page (sdqsoparty.com, headed 'South Dakota QSO Party - October 10 & 11, 2026'), read verbatim 2026-07-24, with the county list from the sponsor's own county page. PROVENANCE HAZARD FOR RE-VERIFICATION: sdqsoparty.com serves TWO rule pages. The root is current for 2026; the /23-2/ sub-site is a stale WordPress copy still headed 'OCTOBER 14 - 15, 2023' and '2022 CONTEST RULES', still reachable and still linked from search results. Read the root. Nothing scoring-related differs between them - points, multipliers, bands, modes, classes, power and the mobile rule are word for word identical - so this is not an Article 20 rule change; the current page merely adds the explicit no-digital clause, a worked final-score example, fuller bonus wording and a spotting section. Counties are 66 with MIXED 3- AND 4-CHARACTER abbreviations - DAY (Day) is the only 3-letter code and the other 65 are 4, so this is the second party after the Salmon Run where a single abbreviation length cannot describe the data. Several codes drop vowels to break collisions: BRWN Brown against BROO Brookings, CLRK Clark, DEWY Dewey, DGLS Douglas, HNSN Hanson against HAND Hand, HRDG Harding, JKSN Jackson, MRSH Marshall; MCOO McCook and MCPH McPherson carry internal capitals; BONH Bon Homme, CHAR Charles Mix and FALL Fall River are two-word names. NAMING NOTE: the sponsor prints 'OGLA Oglala Lakota (Former Shannon county)' - Shannon County was renamed Oglala Lakota County in 2015, the display name is Oglala Lakota, and the parenthetical is the sponsor's aid to operators with old county lists. Multipliers count ONCE on both sides, stated outright ('South Dakota counties may only be used ONCE as a multiplier'): out-of-state count the 66 SD counties, SD stations count SD counties plus US states, provinces and DXCC countries. Phone 1 point, CW 2, no digital modes at all. Ten bands - 160 m through 70 cm excluding the WARC bands - which ties PAQP for the widest list here and is cross-checked against the sponsor's own suggested-frequency table, row for row. W0OJY pays a 100-point bonus ONCE for the contest, stated twice ('may only be used once' and 'may only be worked once regardless of mode'); further W0OJY contacts score as ordinary QSOs. County lines are logged as SEPARATE contacts, so a county-line entry is refused; an SD mobile changing county is a new contact. No final-score multiplier - power classes decide the award, and note the unusual 150 W boundary between high and low rather than the customary 100 W. No DC rule is stated, so DC is loggable as its own token and is NOT folded into Maryland. The sponsor's own worked example is reproduced end-to-end in the tests: 'QSO Points x Multipliers = Total + Bonus = Grand Total (Example 50 contacts SSB x 20 counties = 1,000 points + 100 bonus = 1,100 points grand total)', which also confirms the bonus is added after the multiply. Cabrillo CONTEST value SDQSOP per WA7BNM - the short form, like TQP's TXQP rather than the usual XX-QSO-PARTY, and not a typo. OPEN QUESTIONS (why this is partial): (1) Whether South Dakota itself counts as a state multiplier for SD entrants is not stated. In-state multipliers include 'US States', but SD stations send a county so the token SD is never received, and there is no in-state maximum to settle it by arithmetic the way KSQP, COQP, IAQP and AZQP have one. Shipped as NOT counting, so as not to credit a multiplier the sponsor never described - the same call as NHQP and MEQP. (2) No rule states whether stations outside South Dakota may work only SD stations. The Object reads 'Stations outside South Dakota work as many South Dakota stations and counties as possible', which is an aim rather than a limit, and out-of-state multipliers are SD counties only. Shipped with the restriction ON, as for NJQP, IAQP, NHQP and PAQP, so a stray non-SD contact is visibly flagged NO CREDIT rather than silently adding points. Confirm both with the sponsor (w0ej@arrl.net) before submitting a log."
+}
