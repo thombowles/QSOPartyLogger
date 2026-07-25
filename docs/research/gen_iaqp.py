@@ -76,10 +76,12 @@ iaqp = {
     "cabrilloContest": "IAQP",
     "homeState": "IA",
     "countyAbbrLength": 3,
-    # "any amateur band EXCEPT the 60m, 30m, 17m, and 12m bands." 1.25 m is
-    # legal and the rules suggest 222.150/223.450, but this app has no 222 MHz
-    # band (see notes).
-    "validBands": ["160m", "80m", "40m", "20m", "15m", "10m", "6m", "2m", "70cm"],
+    # "any amateur band EXCEPT the 60m, 30m, 17m, and 12m bands." That includes
+    # 1.25 m, for which the rules tabulate 222.150/223.450; the app gained the
+    # band on 2026-07-24.
+    "validBands": [
+        "160m", "80m", "40m", "20m", "15m", "10m", "6m", "2m", "1.25m", "70cm",
+    ],
     # phone 1, CW 2, digital 2
     "points": {"phone": 1, "cw": 2, "digital": 2},
     # "Non-Iowa stations may be worked ONCE per MODE per BAND. Iowa stations may
@@ -138,7 +140,10 @@ iaqp = {
         "the standard 13 with the modern NL spelling, unlike NJQP's NF. Iowa mobiles, rovers "
         "and portables may sit on a county line or junction and claim ALL intersecting "
         "counties in a single exchange, up to four. No bonus points and no bonus stations. "
-        "No power or category multiplier. Cabrillo CONTEST value IAQP per WA7BNM. "
+        "No power or category multiplier. Cabrillo CONTEST value IAQP per WA7BNM. Any "
+        "amateur band except 60, 30, 17 and 12 m — 1.25 m included, shipped since "
+        "2026-07-24 when the app gained the band; the sponsor's rule itself never "
+        "changed. "
         "OPEN QUESTIONS (why this is partial): (1) The published rules page is still titled "
         "for 2025 and its rules PDF is dated 12 AUG 2018; only the 2026 DATE (September 19, "
         "third weekend, 1400Z-0200Z) is announced, so re-check w0yl.com/IAQP in early "
@@ -150,8 +155,7 @@ iaqp = {
         "with every other bundled party and because a stray non-Iowa contact is then visibly "
         "flagged NO CREDIT rather than silently adding points; if the sponsor scores those "
         "QSOs, this under-counts and the flag makes that obvious. Confirm with "
-        "iowaqsoparty@hotmail.com. (3) IAQP permits 1.25 m and suggests 222.150/223.450; "
-        "this app has no 222 MHz band, so those QSOs cannot be logged on that band. "
+        "iowaqsoparty@hotmail.com. "
         "Not modeled: satellite QSOs being allowed, and the club competition."
     ),
 }

@@ -93,6 +93,8 @@ final class TennesseeQSOPartyTests: XCTestCase {
         XCTAssertTrue(tnqp.validBands.contains(.m160))
         XCTAssertTrue(tnqp.validBands.contains(.m6), "VHF/UHF are in play")
         XCTAssertTrue(tnqp.validBands.contains(.cm70))
+        XCTAssertTrue(tnqp.validBands.contains(.cm125),
+                      "1.25 m is valid — the suggested-frequency list gives 223.50")
     }
 
     // MARK: Points — flat 3 regardless of mode

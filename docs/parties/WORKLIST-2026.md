@@ -144,10 +144,20 @@ party; each would be its own commit (Article 4).
   out **not** to need it — its activation rule is a bonus only — so TnQP is the
   sole user so far, and the field is not yet worth building. Revisit if a second
   party wants it.
-- **No 222 MHz band.** `Band` has no 1.25 m case, but **TnQP and IAQP both
-  permit it** and both tabulate suggested 222/223 MHz frequencies. Two users now,
-  so this is worth building: it touches `Band`, the band map and ADIF, and belongs
-  in its own commit.
+- ~~**No 222 MHz band.**~~ **Done 2026-07-24.** `Band.cm125` = `1.25m`,
+  222000–225000 kHz, default 222100 — ADIF 3.1.4 for the band string and edges,
+  47 CFR §97.301(a) as cross-check, ARRL band plan for the calling frequency.
+  `222` typed in the call field QSYs there; `1.25M` works too. TnQP and IAQP
+  both carry the band now, each in its own commit (Article 9), and the open
+  question that said the band did not exist is gone from both.
+  Design: [`2026-07-24-222mhz-band-design.md`](../superpowers/specs/2026-07-24-222mhz-band-design.md).
+- **Cabrillo writes raw kHz for VHF and up.** `CabrilloExporter.qsoLine` emits
+  `String(q.freqKHz ?? q.band.defaultFreqKHz)`, so a 2 m QSO exports as
+  `144200`. Cabrillo V3 specifies bare band designators above 50 MHz — `50`,
+  `144`, `222`, `432` — not kHz. Pre-existing and wrong for 2 m and 70 cm
+  today; 1.25 m simply joins them. Found while adding the band and left alone
+  deliberately: fixing it changes every existing party's exported log, so it
+  needs its own commit and its own exporter-test updates (Article 9).
 - **DXCC prefixes shadowed by state/province codes.** `isPlausibleDXPrefix`
   rejects any token matching a US state or Canadian province code, so real DXCC
   prefixes that collide are credited as the state/province: PA (Netherlands) as

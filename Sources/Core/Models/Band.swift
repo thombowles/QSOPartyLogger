@@ -14,11 +14,18 @@ enum Band: String, Codable, CaseIterable, Sendable, Identifiable {
     case m10 = "10m"
     case m6 = "6m"
     case m2 = "2m"
+    case cm125 = "1.25m"
     case cm70 = "70cm"
 
     var id: String { rawValue }
 
-    /// US band edges in kHz (inclusive).
+    /// US band edges in kHz (inclusive), per the ADIF 3.1.4 Band Enumeration
+    /// (adif.org/314/ADIF_314.htm, read 2026-07-24) — the same table the raw
+    /// values above come from — cross-checked against 47 CFR §97.301(a).
+    ///
+    /// 1.25 m is 222–225 MHz only. US amateurs also hold 219–220 MHz, but ADIF
+    /// excludes it from the band and it is restricted to point-to-point digital
+    /// links, so it is deliberately outside these edges.
     private static let edges: [(Band, ClosedRange<Int>)] = [
         (.m160, 1800...2000),
         (.m80, 3500...4000),
@@ -32,6 +39,7 @@ enum Band: String, Codable, CaseIterable, Sendable, Identifiable {
         (.m10, 28000...29700),
         (.m6, 50000...54000),
         (.m2, 144000...148000),
+        (.cm125, 222000...225000),
         (.cm70, 420000...450000),
     ]
 
@@ -44,7 +52,9 @@ enum Band: String, Codable, CaseIterable, Sendable, Identifiable {
         Self.edges.first { $0.0 == self }!.1
     }
 
-    /// Fallback frequency for Cabrillo rows logged without CAT data.
+    /// Fallback frequency for Cabrillo rows logged without CAT data. At VHF and
+    /// up these are the weak-signal calling frequencies from the ARRL band plan
+    /// (arrl.org/band-plan, read 2026-07-24): 50.095, 144.200, 222.100, 432.100.
     var defaultFreqKHz: Int {
         switch self {
         case .m160: 1815
@@ -59,6 +69,7 @@ enum Band: String, Codable, CaseIterable, Sendable, Identifiable {
         case .m10: 28040
         case .m6: 50095
         case .m2: 144200
+        case .cm125: 222100
         case .cm70: 432100
         }
     }

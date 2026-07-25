@@ -126,8 +126,8 @@ S1: "Contacts may be made on any amateur band EXCEPT the 60m, 30m, 17m, and 12m
 bands." Suggested frequencies are tabulated for 160, 80, 40, 20, 15, 10, 6, 2,
 **1.25 m** and 70 cm.
 
-Shipped: 160, 80, 40, 20, 15, 10, 6, 2 m and 70 cm. The app has no 222 MHz band
-(see §14).
+Shipped: 160, 80, 40, 20, 15, 10, 6, 2, 1.25 m and 70 cm — the sponsor's full
+list. 1.25 m was absent until 2026-07-24, when the app gained the band.
 
 ## 11. Categories
 
@@ -168,8 +168,10 @@ the generator's name pattern has to allow one.
 4. **`DC → MD`** because the sponsor's own state list prints "Maryland and DC".
 5. **Multipliers once only**, stated in the rules rather than inferred from a
    stated ceiling — a welcome change from COQP and NJQP.
-6. **No 222 MHz band** in this app, though IAQP permits 1.25 m and tabulates
-   222.150 / 223.450. Same gap TnQP raised; recorded in the worklist.
+6. **1.25 m is in play** — IAQP permits it and tabulates 222.150 / 223.450. The
+   app had no 222 MHz band when IAQP was built, which is why the first shipped
+   band list omitted it; `Band.cm125` landed 2026-07-24 and the band list now
+   matches the sponsor's. The rule never changed on the sponsor's side.
 7. **Whether out-of-state entrants may work only Iowa stations is not stated.**
    The Objective reads "Iowa stations work everybody, including other Iowa
    stations. Stations outside Iowa work as many Iowa stations as possible" — an

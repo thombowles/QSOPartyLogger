@@ -17,6 +17,24 @@ final class ModelTests: XCTestCase {
         XCTAssertNil(Band.from(freqKHz: 2))
     }
 
+    /// 1.25 m is 222.000–225.000 per ADIF 3.1.4 and 47 CFR §97.301(a). The
+    /// 219–220 MHz digital allocation is deliberately not part of the band.
+    func testBand125MetersEdges() {
+        XCTAssertEqual(Band.from(freqKHz: 222000), .cm125)
+        XCTAssertEqual(Band.from(freqKHz: 223500), .cm125)
+        XCTAssertEqual(Band.from(freqKHz: 225000), .cm125)
+        XCTAssertNil(Band.from(freqKHz: 221999))
+        XCTAssertNil(Band.from(freqKHz: 225001))
+        XCTAssertNil(Band.from(freqKHz: 219500), "219–220 MHz is not part of 1.25 m")
+    }
+
+    /// The raw value doubles as the ADIF band string, so it must match the
+    /// ADIF 3.1.4 Band Enumeration exactly — "1.25m", not "222" or "1.25M".
+    func testBand125MetersADIFString() {
+        XCTAssertEqual(Band.cm125.adif, "1.25m")
+        XCTAssertEqual(Band.cm125.rawValue, "1.25m")
+    }
+
     func testBandDefaultFrequenciesLandInBand() {
         for band in Band.allCases {
             XCTAssertEqual(Band.from(freqKHz: band.defaultFreqKHz), band, "default freq for \(band.rawValue)")

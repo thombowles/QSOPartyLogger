@@ -96,7 +96,8 @@ final class IowaQSOPartyTests: XCTestCase {
         for excluded in [Band.m60, .m30, .m17, .m12] {
             XCTAssertFalse(iaqp.validBands.contains(excluded), "\(excluded) is excluded")
         }
-        for included in [Band.m160, .m80, .m40, .m20, .m15, .m10, .m6, .m2, .cm70] {
+        // 1.25 m included — the rules tabulate 222.150 / 223.450 for it.
+        for included in [Band.m160, .m80, .m40, .m20, .m15, .m10, .m6, .m2, .cm125, .cm70] {
             XCTAssertTrue(iaqp.validBands.contains(included), "\(included) is valid")
         }
     }
