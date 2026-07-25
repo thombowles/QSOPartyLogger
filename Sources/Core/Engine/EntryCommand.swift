@@ -10,6 +10,13 @@ enum EntryCommand: Equatable {
 
     static let modeTokens: Set<String> = ["CW", "SSB", "USB", "LSB", "RTTY", "AM", "FM", "DIGI"]
 
+    /// Spoken band names that are not the ADIF band string. Only 1.25 m needs
+    /// one: nobody says "one point two five meters" on the air, and "222" is
+    /// otherwise read as 222 kHz and rejected as out of band. Bare band numbers
+    /// deliberately do not work for the other bands — "160" stays an unparsed
+    /// token, exactly as before.
+    static let bandAliases: [String: Band] = ["222": .cm125]
+
     static func parse(_ text: String) -> EntryCommand? {
         let token = text.trimmingCharacters(in: .whitespaces).uppercased()
         guard !token.isEmpty else { return nil }
@@ -18,6 +25,11 @@ enum EntryCommand: Equatable {
             return .mode(token)
         }
         if let band = Band.allCases.first(where: { $0.rawValue.uppercased() == token }) {
+            return .band(band)
+        }
+        // Before the numeric branch below — "222" is numeric and would
+        // otherwise be read as a frequency and rejected.
+        if let band = bandAliases[token] {
             return .band(band)
         }
 

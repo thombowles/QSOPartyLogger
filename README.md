@@ -139,7 +139,8 @@ used; the remaining seven start from their sponsors' sites. Adding a party is go
   remembers the run frequency; ⌘J — or the chip next to Repeat — jumps back
   and flips you to Run after an S&P excursion.
 - **Type-to-QSY in the call field**: `14025` or `14.025` tunes (kHz/MHz),
-  `40M` jumps bands, `CW`/`SSB`/`USB`/`RTTY` switches mode — Enter executes.
+  `40M` (or `222` for 1.25 m) jumps bands, `CW`/`SSB`/`USB`/`RTTY` switches
+  mode — Enter executes.
   Anything that could be a callsign is treated as one; out-of-band numbers
   (like an RST) are ignored.
 - **Score sidebar**: running total, QSOs-by-band/mode matrix, county grid
@@ -167,7 +168,7 @@ used; the remaining seven start from their sponsors' sites. Adding a party is go
 | `⌘←` / `⌘→` | Tune to previous / next spot on the band |
 | `⌘J` | Jump back to your CQ run frequency (Run mode) |
 | `⌘B` | Toggle the band map window |
-| `14025`, `7.040`, `40M`, `CW`, `SSB` in the call field | QSY / band / mode |
+| `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
 
 ## K3 wiring for direct CW keying
@@ -290,7 +291,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 381 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 384 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -378,5 +379,12 @@ typed QSY commands, keyer timing, and keyer labelling.
   or province code is read as that state — `PA` (Netherlands) counts as
   Pennsylvania, `ON` (Belgium) as Ontario — the same resolution sponsors' log
   checkers apply, but it can leave the 10-DXCC allowance under-used.
+- Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
+  (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
+  47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
+  logged without CAT data — are the ARRL band plan's calling frequencies
+  (arrl.org/band-plan, same date). 1.25 m is 222–225 MHz only: the US 219–220
+  MHz point-to-point digital allocation is outside the ADIF band and is
+  deliberately not loggable.
 - DC is accepted as a loggable state token (counted with states); strictly,
   KSQP rules enumerate 50 states — sponsors' checkers accept DC.

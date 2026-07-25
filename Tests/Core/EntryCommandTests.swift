@@ -30,6 +30,17 @@ final class EntryCommandTests: XCTestCase {
         XCTAssertEqual(EntryCommand.parse("20m"), .band(.m20))
         XCTAssertEqual(EntryCommand.parse("160M"), .band(.m160))
         XCTAssertEqual(EntryCommand.parse("70CM"), .band(.cm70))
+        XCTAssertEqual(EntryCommand.parse("1.25M"), .band(.cm125))
+    }
+
+    /// "222" is what an operator types for 1.25 m — the only band whose spoken
+    /// name is not its ADIF string. It has to beat the numeric branch, which
+    /// would otherwise read it as 222 kHz and reject it.
+    func testParse222AliasFor125Meters() {
+        XCTAssertEqual(EntryCommand.parse("222"), .band(.cm125))
+        XCTAssertEqual(EntryCommand.parse(" 222 "), .band(.cm125))
+        XCTAssertEqual(EntryCommand.parse("223500"), .frequency(kHz: 223500))
+        XCTAssertNil(EntryCommand.parse("160"), "bare band numbers stay unparsed for every other band")
     }
 
     func testParseMode() {
