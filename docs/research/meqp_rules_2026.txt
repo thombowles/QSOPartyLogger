@@ -1,0 +1,137 @@
+Maine QSO Party © Wireless Society of Southern Maine
+
+
+
+
+                                                                   Maine QSO Party
+                                                                     2026 Official Rules
+
+
+Contest Period: 1200 UTC 26 September to 1200 UTC 27 September 2025.
+
+Bands and Modes: 160, 80, 40, 20, 15, and 10, CW and phone (SSB, FM, AM).
+
+Suggested frequencies: CW – 25 kHz up from the band edge and for SSB – 1850, 3850, 7280, 14280,
+21250, 28450 kHz. Check for CW activity on the half-hour.
+
+Exchange: Stations in Maine send signal report and county. Stations outside Maine, but within either
+the United States or Canada, send signal report and state/province. DX stations send signal report and
+“DX.”
+
+QSOs: Contacts with stations in Maine are worth 2 points. Contacts with stations outside Maine are
+worth 1 point.
+
+Multipliers are the same for all participants: Use Maine counties (16), States (50) , Canadian Provinces
+(14), and DXCC countries as multipliers. You may work any station once on each of the two modes, on
+each of the six contest bands.
+
+Maine County Abbreviations: Sixteen in total, (Maine’s counties). Each multiplier may be counted once
+on each mode on each of the six contest bands. The counties are: Androscoggin (AND), Aroostook (ARO),
+Cumberland (CBL), Franklin (FRA), Hancock (HAN), Kennebec (KEN), Knox (KNO), Lincoln (LIN), Oxford
+(OXF), Penobscot (PEN), Piscataquis (PSQ), Sagadahoc (SAG), Somerset (SOM), Waldo (WAL),
+Washington (WAS), York (YOR).
+
+Mobiles count QSO points per county. Mobiles that change counties are considered to be new stations,
+and can be worked for both multiplier and QSO point credit. County line QSO’s should be logged as two
+separate QSO’s.
+
+Cross-mode, cross-band and repeater QSO’s are not permitted.
+
+Use of a DX spotting system, including Skimmer and similar technologies or any type of Packet Cluster
+network during the contest is encouraged.
+
+It is prohibited to make CW contacts in the conventional phone sub-bands and phone contacts in the
+conventional CW sub-bands. Soliciting QSOs through a repeater during the contest period is not allowed.
+
+Final Score: The total QSO points from all bands multiplied by the total number of multipliers from all
+bands.
+
+                                                                                               1|P a g e
+Maine QSO Party © Wireless Society of Southern Maine
+
+
+
+
+Categories: The following categories are eligible for certificates as detailed in the Awards section of the
+rules.
+
+Single Operator High Power (>100 Watts)
+Single Operator Low Power (max. 100 Watts output)
+Single Operator QRP (max. 5 Watt output)
+Single Operator Mobile (max. 100 Watts output)
+Multi-Operator Single Transmitter High Power (>100 Watts) *
+Multi-Operator Single Transmitter Low Power (max. 100 Watts output)
+Multi-Operator Multi-Transmitter, any authorized power
+
+
+Awards will be given for the highest scoring station overall, as well as the top scorers in category from
+each Maine County, U.S. State, Canadian Province, and DXCC entity. Stations must log 50 or more QSOs
+to be eligible for awards.
+
+Category notes:
+
+1. The contents of a log that is submitted for a specific category must reflect that category. In the event
+of a conflict between the actual content of the log and the stated category in the Cabrillo header or
+contained in other elements of the entry material, the actual contents of the log will be used to
+determine the category of entry where possible. In the event this cannot be determined or in the event
+where a log does not identify the entry category, the entry will be classified into the Multi-Operator,
+Multi-Transmitter, any authorized power category.
+
+2. Where the categories have a power class and the submitted log does not clearly identify the power
+class entered, then the log will be treated as if the highest power class for that category was entered.
+
+3. Mobile applies to car, truck, RV, motorcycle, boat, airplane, or other mode of transportation. Use of a
+base station antenna, amplifier, or commercial power is not permitted. Operating while your vehicle is
+parked across a county line, occupying two counties, counts as two counties and two contacts. Marine
+and aeronautical mobiles must be able to establish their counties of operation. Mobile stations will
+receive awards within their own category and will not be included in the individual sections.
+
+4. Multi-Single category stations are restricted to one transmitter.
+
+5. Multi-Multi category stations may operate on several bands simultaneously, with multiple
+transmitters.
+
+6. To facilitate the proper allocation of certificates, all Maine stations should indicate their county, based
+on their actual address, as provided in the Cabrillo header.
+
+7. Results: Will be published in The Radiogram, and on the official contest web page.
+
+
+
+
+                                                                                                     2|P a g e
+Maine QSO Party © Wireless Society of Southern Maine
+
+
+8. Log Submission – The entry deadline for logs is October 12, 2026.
+
+
+Send email entries to: maineqsoparty@gmail.com
+
+Send paper entries to:               Wireless Society of Southern Maine
+                                     Maine QSO Party Log
+                                     P.O. Box 1603
+                                     Scarborough, ME 04070
+
+
+
+Paper mail entries must contain a summary sheet showing score calculation, multiplier check, and a
+dupe sheet listing calls worked on each mode on each band. Log sheets must show time, band,
+mode, call sign of station worked, exchanges sent and received and claimed for each QSO. New
+multipliers must be clearly marked in the log. Contest entry forms are also available on the WSSM
+website.
+
+Logs shall be forwarded to the QSO party at the address listed above. It is strongly suggested that logs
+be sent as soon as possible after the close of the event. It is also recommended that DX logs be sent via
+AIR MAIL to ensure that they are received in good time. Any logs received with a post mark dated after
+the deadline date will be handled as a check log. Any logs received more than 15 days after the
+entry deadline, regardless of postmark, will be discarded.
+
+Any entry with 10 or more contacts must be submitted electronically in Cabrillo format. Electronic
+entries will be confirmed by return email.
+
+
+
+
+                                                                                                3|P a g e
+

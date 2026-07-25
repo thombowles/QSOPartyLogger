@@ -122,6 +122,12 @@ struct LogTable: View {
         if score.dupeRowIDs.contains(q.id)
             || score.invalidRowIDs.contains(q.id)
             || score.outOfScopeRowIDs.contains(q.id) { return "0" }
-        return String(party.points.points(for: q.modeClass))
+        // Parties that pay by who was worked (MEQP) need the row's location,
+        // not just its mode — otherwise a 2-point Maine QSO displays as 1.
+        let table = party.pointsTable(
+            forTheirLoc: q.theirLoc,
+            countyAbbrs: Set(party.counties.map(\.abbr))
+        )
+        return String(table.points(for: q.modeClass))
     }
 }

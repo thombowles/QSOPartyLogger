@@ -5,7 +5,7 @@ import Foundation
 enum ScoreEngine {
 
     /// One counted multiplier. `scope` is "" (once), a mode raw value
-    /// (perMode), or a band raw value (perBand).
+    /// (perMode), a band raw value (perBand), or "band/mode" (perBandMode).
     struct MultKey: Hashable, Sendable {
         let multClass: MultClass
         let value: String
@@ -78,7 +78,9 @@ enum ScoreEngine {
                 continue
             }
             result.validQSOs += 1
-            result.qsoPoints += party.points.points(for: row.modeClass)
+            result.qsoPoints += party
+                .pointsTable(forTheirLoc: row.theirLoc, countyAbbrs: countyAbbrs)
+                .points(for: row.modeClass)
 
             for (multClass, value) in multContributions(
                 theirLoc: row.theirLoc.uppercased(),
@@ -136,10 +138,17 @@ enum ScoreEngine {
     }
 
     private static func scopeComponent(_ scope: PartyDefinition.CountScope, row: QSO) -> String {
+        scopeComponent(scope, band: row.band, modeClass: row.modeClass)
+    }
+
+    private static func scopeComponent(
+        _ scope: PartyDefinition.CountScope, band: Band, modeClass: ModeClass
+    ) -> String {
         switch scope {
         case .once: ""
-        case .perMode: row.modeClass.rawValue
-        case .perBand: row.band.rawValue
+        case .perMode: modeClass.rawValue
+        case .perBand: band.rawValue
+        case .perBandMode: "\(band.rawValue)/\(modeClass.rawValue)"
         }
     }
 
@@ -277,11 +286,7 @@ enum ScoreEngine {
         let rule = log.myLocation.isInState ? party.multipliers.inState : party.multipliers.outState
         let wantedClasses = Set(rule.classes)
         let countyAbbrs = Set(party.counties.map(\.abbr))
-        let scope: String = switch rule.countScope {
-        case .once: ""
-        case .perMode: modeClass.rawValue
-        case .perBand: band.rawValue
-        }
+        let scope = scopeComponent(rule.countScope, band: band, modeClass: modeClass)
 
         for loc in theirLocs {
             for (multClass, value) in multContributions(

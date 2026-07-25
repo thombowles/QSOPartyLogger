@@ -80,6 +80,26 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     /// station category). Keys are the Cabrillo raw values ("QRP", "ROVER"…).
     let scoreMultipliers: ScoreMultipliers?
 
+    /// Points for a contact with a **home-state** station, where the party pays
+    /// by *who was worked* rather than by mode. MEQP: "Contacts with stations in
+    /// Maine are worth 2 points. Contacts with stations outside Maine are worth
+    /// 1 point." — CW and phone pay alike, and the received location decides.
+    ///
+    /// `nil` (every other bundled party) means `points` applies to every row,
+    /// which is how definitions written before this field existed keep scoring
+    /// identically (constitution Article 4).
+    let homeStationPoints: PointsTable?
+
+    /// The points table governing a contact whose received location is
+    /// `theirLoc`. Home-state stations are recognised the only way the exchange
+    /// allows — they send a county — so `countyAbbrs` is the party's county set.
+    func pointsTable(forTheirLoc theirLoc: String, countyAbbrs: Set<String>) -> PointsTable {
+        guard let homeStationPoints,
+              countyAbbrs.contains(theirLoc.uppercased())
+        else { return points }
+        return homeStationPoints
+    }
+
     enum DXStyle: String, Codable, Sendable {
         case token
         case prefix
@@ -158,6 +178,9 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case perMode
         /// …once per band (TnQP; NHQP/HQP out-of-state).
         case perBand
+        /// …once per band *and* per mode (MEQP: "Each multiplier may be counted
+        /// once on each mode on each of the six contest bands").
+        case perBandMode
     }
 
     struct OneByOneConfig: Codable, Equatable, Sendable {
@@ -265,7 +288,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     private enum CodingKeys: String, CodingKey {
         case schemaVersion, id, name, cabrilloContest, homeState, countyAbbrLength
         case validBands, points, dupeScope, multipliers, bonuses, oneByOne
-        case schedule, counties, notes, scoreMultipliers
+        case schedule, counties, notes, scoreMultipliers, homeStationPoints
         case dxStyleRaw = "dxStyle"
         case allowedModeClassesRaw = "allowedModes"
         case maxSimultaneousCountiesRaw = "maxSimultaneousCounties"

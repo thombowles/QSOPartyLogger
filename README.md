@@ -72,11 +72,22 @@ Built for KE5CW. Bundled parties, all with official county data:
   mults once each, W7DX pays 500 **per mode** capped at 1000, and two windows
   totalling the rules' stated 23 hours. The only party where the 10-DXCC cap
   actually binds, because DX stations send their prefix rather than "DX".
+- **Maine QSO Party** (Sep 26–27, 2026) — the party that breaks the most
+  patterns. Points go by **who you worked, not how**: a Maine station is 2
+  points and everyone else 1, CW and phone alike. Multipliers are the **same for
+  everyone** — no in-state/out-of-state split — and count **once per band *and*
+  per mode**, the first party needing that scope. Out-of-state entrants score
+  non-Maine QSOs too, in the sponsor's own words. Canada is **14** tokens, not
+  13, because Newfoundland (`NF`) and Labrador (`LB`) count separately and `NL`
+  is invalid. 16 counties (`CBL` Cumberland, not `CUM`), six bands including
+  160 m, no digital, and a county line is **two QSOs rather than one two-county
+  QSO**. `verified: partial` — whether Maine itself is a state multiplier for
+  Maine entrants is not stated.
 
 The remaining 2026 parties are tracked in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md) in contest-date
 order — the season ends with Illinois on Oct 18. All banked research is now
-used; the remaining seven start from their sponsors' sites. Adding a party is governed by
+used; the remaining six start from their sponsors' sites. Adding a party is governed by
 [`docs/CONSTITUTION.md`](docs/CONSTITUTION.md).
 
 ## Features
@@ -291,7 +302,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 384 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 405 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -379,6 +390,24 @@ typed QSY commands, keyer timing, and keyer labelling.
   or province code is read as that state — `PA` (Netherlands) counts as
   Pennsylvania, `ON` (Belgium) as Ontario — the same resolution sponsors' log
   checkers apply, but it can leave the 10-DXCC allowance under-used.
+- MEQP: rules from the Wireless Society of Southern Maine's official PDF
+  (ws1sm.com/Images/Maine_QSO_Party_Rules.pdf, title block "2026 Official
+  Rules") **and** rules page (ws1sm.com/MEQP.html), both read verbatim
+  2026-07-24 — the two are not redundant, since the Canadian province list and
+  the DC→MD note appear only on the page and the county-line rule only in the
+  PDF. Counties and the 14 province tokens are parsed out of the committed
+  source text by [`gen_meqp.py`](docs/research/gen_meqp.py); nothing is retyped.
+  The sponsor publishes no multiplier ceiling, so the per-band-**and**-mode
+  scope is verified against the sponsor's **own published results** instead: the
+  2024 winner's 494,834 points on 1,212 QSOs factors only as 1,234 × 401, and
+  401 multipliers is unreachable from a pool counted once or per mode. Those
+  same numbers confirm the points rule (1,234 points on 1,212 QSOs = exactly 22
+  two-point Maine contacts). The PDF's contest-period line misprints the year as
+  2025; its own title block, its Oct 12 2026 deadline, the "last full weekend in
+  September" formula, and the fact that 2025-09-26 was a Friday all settle it.
+  **Known scoring limitation:** DXCC entities are multipliers for every entrant
+  and uncapped, but the exchange is the literal token "DX" — the same missing
+  prefix table that limits NHQP, biting harder here.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows

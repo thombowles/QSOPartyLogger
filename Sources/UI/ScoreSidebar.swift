@@ -220,6 +220,7 @@ struct ScoreSidebar: View {
         case .once: ""
         case .perMode: " (per mode)"
         case .perBand: " (per band)"
+        case .perBandMode: " (per band/mode)"
         }
     }
 

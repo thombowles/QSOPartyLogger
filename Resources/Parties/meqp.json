@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "id": "meqp",
+  "name": "Maine QSO Party",
+  "cabrilloContest": "ME-QSO-PARTY",
+  "homeState": "ME",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 1,
+    "digital": 1
+  },
+  "homeStationPoints": {
+    "phone": 2,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBandMode"
+    },
+    "outState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBandMode"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "provinces": [
+    "NB",
+    "NS",
+    "QC",
+    "ON",
+    "MB",
+    "SK",
+    "AB",
+    "BC",
+    "NT",
+    "NF",
+    "LB",
+    "YT",
+    "PE",
+    "NU"
+  ],
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": false,
+  "schedule": [
+    {
+      "start": "2026-09-26T12:00:00Z",
+      "end": "2026-09-27T12:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "AND",
+      "name": "Androscoggin"
+    },
+    {
+      "abbr": "ARO",
+      "name": "Aroostook"
+    },
+    {
+      "abbr": "CBL",
+      "name": "Cumberland"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "HAN",
+      "name": "Hancock"
+    },
+    {
+      "abbr": "KEN",
+      "name": "Kennebec"
+    },
+    {
+      "abbr": "KNO",
+      "name": "Knox"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "OXF",
+      "name": "Oxford"
+    },
+    {
+      "abbr": "PEN",
+      "name": "Penobscot"
+    },
+    {
+      "abbr": "PSQ",
+      "name": "Piscataquis"
+    },
+    {
+      "abbr": "SAG",
+      "name": "Sagadahoc"
+    },
+    {
+      "abbr": "SOM",
+      "name": "Somerset"
+    },
+    {
+      "abbr": "WAL",
+      "name": "Waldo"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "YOR",
+      "name": "York"
+    }
+  ],
+  "notes": "verified: partial — rules from the Wireless Society of Southern Maine's official PDF (ws1sm.com/Images/Maine_QSO_Party_Rules.pdf, title block '2026 Official Rules') and rules page (ws1sm.com/MEQP.html), both read verbatim 2026-07-24. The two are not redundant: the Canadian province list and the DC/MD note appear only on the page, the mobile/county-line rule only in the PDF. POINTS ARE BY LOCATION, NOT MODE: 'Contacts with stations in Maine are worth 2 points. Contacts with stations outside Maine are worth 1 point.' CW and phone pay alike. MULTIPLIERS ARE SYMMETRIC — 'Multipliers are the same for all participants: Use Maine counties (16), States (50), Canadian Provinces (14), and DXCC countries as multipliers' — and are counted ONCE PER BAND PER MODE: 'Each multiplier may be counted once on each mode on each of the six contest bands.' That scope is confirmed by the sponsor's own published results: the 2024 winner scored 494,834 points on 1,212 QSOs, which factors only as 1,234 QSO points x 401 multipliers, and 401 is unreachable from a pool of 16 counties + 50 states + 14 provinces + DXCC counted once or per mode. Those same numbers confirm the points rule (1,234 points from 1,212 QSOs = exactly 22 two-point Maine contacts) and that a non-Maine contact scores at all. OUT-OF-STATE ENTRANTS SCORE NON-MAINE QSOs, which is unusual and explicit: 'all QSOs made during the contest period that meet MEQP criteria are eligible for points-not just contacts with Maine stations.' CANADA IS 14 TOKENS, NOT THE USUAL 13: 'Please note that Newfoundland (NF) and Labrador (LB) will count seperately' [sic], so NF and LB are two multipliers and the usual NL is NOT a valid MEQP token. DC counts as MD. KNOWN SCORING LIMITATION: DXCC entities are multipliers for every entrant with no cap, but the exchange is 'DX stations send signal report and \"DX\"' — every DX station sends the same literal token, so this app cannot tell one DXCC entity from another and credits DX as a SINGLE multiplier per band/mode. Anyone working several DX countries will see a multiplier count low by one per extra entity per band/mode slot. This is the same missing DXCC prefix table that limits NHQP, but it bites harder here: there it affected in-state entrants only and was capped at 10, while MEQP gives DXCC to everyone, uncapped. Six bands including 160 m, no WARC, no VHF. CW and phone only - a digital QSO is invalid, not zero-point. County-line operation is permitted but 'County line QSO's should be logged as two separate QSO's', so a county-line entry is refused; a mobile changing county is a new station for both multiplier and point credit. No bonus stations, no bonus points, no final-score multiplier. Cabrillo CONTEST value ME-QSO-PARTY per WA7BNM; the sponsor requires Cabrillo but prints no header token. The PDF's contest-period sentence misprints the year as 2025 - its own title block says 2026, its deadline says October 12 2026, the rules' formula is 'the last full weekend in September', and 2025-09-26 was a Friday, so the 2026-09-26 date is not in doubt. OPEN QUESTION (why this is partial): whether Maine itself counts as a state multiplier for Maine entrants. The rules list 'States (50)' as a class but never say a Maine county also yields the ME state multiplier, Maine stations always send a county so the token ME is never received, and there is no stated multiplier maximum to settle it by arithmetic. Shipped as NOT counting, so as not to credit a multiplier the sponsor never described - the same call as NHQP. Affects Maine entrants only; confirm with the sponsor (maineqsoparty@gmail.com) before submitting a log."
+}

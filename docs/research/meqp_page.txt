@@ -1,0 +1,201 @@
+ 
+ Maine
+QSO Party, Maine's Premier International HF Contest, which takes place
+annually in September. Maine Radiosport, Maine ham radio, amateur radio
+HF contesting 
+ Home 
+ Meetings 
+ Topics
+& Links Meeting
+Locations 
+ Join Today 
+ Members 
+ Membership
+Application 
+ Ham Radio 
+ About
+Ham Radio Awards CW
+Page Digital
+Modes DMR D-STAR Lighthouse
+Activations Projects 
+ QSLing Summits
+on the Air System
+Fusion Writing
+Reception Reports 
+ Contests 
+ Maine
+2 Meter FM Simplex Challenge Maine
+QSO Party 
+ Public Service 
+ SKYWARN Emergency
+Communications Team Message
+Handling Winlink 
+ Newsletter 
+ Newsletter Blog 
+ Contact
+Us 
+ Maine's
+Premier International HF Contest! 
+Mission: 
+The Maine QSO Party is designed to encourage Maine stations to expand
+their knowledge of DX propagation on the HF and MF bands, improve their
+operating skills, and improve station capability by creating a
+competition in which W/VE, and DX stations have the incentive to work
+Maine. 
+ Contest
+Period: 1200
+UTC Saturday, September 26 to 1200 UTC Sunday, September 27, 2026 .
+ Bands
+and Modes: 160, 80,
+40, 20, 15, and 10, CW, and phone (SSB, FM, AM). 
+ Exchange: 
+Stations in Maine send signal report and county. Stations outside of
+Maine, but within either the United States or Canada, send signal
+report and state/province. DX stations send signal report and "DX."
+ QSO's: 
+Contacts with
+stations in Maine are worth 2 points. Contacts with stations outside
+Maine are worth 1 point. 
+ Multipliers 
+are the same for all participants: Use Maine counties (16), States
+(50), Canadian Provinces (14), and DXCC entities as multipliers. You
+may work any station once on each of the two modes, on each of the six
+contest bands.
+ Multiplier notes: For U.S.
+states, DC and MD will be counted as a single multiplier. For Canadian
+Provinces, use the following abbreviations: NB, NS, QC, ON, MB, SK, AB,
+BC, NT, NF, LB, YT, PE, NU. Please note that Newfoundland (NF) and
+Labrador (LB) will count seperately.
+ Maine
+County Abbreviations: 
+Sixteen in
+total, (Maine's counties). Each multiplier may be counted once on each
+mode on each of the six contest bands. The counties are: Androscoggin
+(AND), Aroostook (ARO), Cumberland (CBL), Franklin (FRA), Hancock
+(HAN), Kennebec (KEN), Knox (KNO), Lincoln (LIN), Oxford (OXF),
+Penobscot (PEN), Piscataquis (PSQ), Sagadahoc (SAG), Somerset (SOM),
+Waldo (WAL),
+Washington (WAS), York (YOR). 
+ Cross-mode,
+cross-band, and repeater QSO's are not permitted. 
+ Use
+of a DX spotting system, including Skimmer and similar technologies or
+any type of Packet Cluster network during the contest is encouraged. 
+ It
+is prohibited to make CW contacts in the conventional phone sub-bands
+and phone contacts in the conventional CW sub-bands. Soliciting QSO's
+through a repeater during the contest period is not allowed. 
+ Final
+Score: The total QSO
+points from all bands multiplied by the total number of multipliers
+from all bands. 
+ Categories: 
+ Single
+Operator High Power (>100 watts) 
+ Single
+Operator Low Power (max. 100 watts output) 
+ Single
+Operator QRP (max. 5 watts output) 
+ Single
+Operator Mobile (max. 100 watts output) 
+ Multi-Operator
+Single Transmitter High Power (>100 watts) 
+ Multi-Operator
+Single Transmitter Low Power (max. 100 watts output) 
+ Multi-Operator
+Multi-Transmitter, any authorized power 
+ Entry
+Deadline for logs : October 12, 2026
+Entries with 10 or more contacts must be submitted electronically
+in Cabrillo format to: maineqsoparty@gmail.com 
+ The
+contest committee
+recommends the N3FJP Maine QSO Party software, as
+well as N1MM + logger, with the Maine QSO
+Party update, and EI5DI's SD
+log . All are available as downloads. Special thanks to all
+the programmers who included Maine QSO
+Party updates in their softwares and to those who continue to
+support our contest.
+ Paper
+mail entries must contain a summary sheet showing score calculation,
+multiplier check, and a dupe sheet listing calls worked on each mode on
+each band. Log sheets must show time, band, mode, call sign of station
+worked, exchanges sent and received and claimed for each QSO. New
+multipliers must be clearly marked in the log. Contest entry forms will
+be available on the WSSM website. 
+ Send
+paper entries to: 
+ Wireless
+Society of Southern Maine
+Maine QSO Party
+P.O. Box 1603
+Scarborough, ME 04070 USA
+It
+is strongly suggested that logs be sent as soon as possible after the
+close of the event. It is also recommended that DX logs be sent via AIR
+MAIL to ensure that they are received in good time. Any logs received
+with a post mark date after the deadline date will be handled as a
+check log. Any logs received more than 15 days after the entry
+deadline, regardless of postmark, will be discarded.
+ Notes 
+We continue to receive a small number of logs submitted in formats
+intended for other QSO parties, as well as instances where the
+incorrect MEQP log type is used (e.g., in-state logs submitted by
+out-of-state operators, and vice versa). These submissions require
+manual review and scoring, which is time-consuming. We also
+occasionally receive logs that list ARRL sections instead of states,
+though these are generally easier to correct. To streamline log
+processing and to ensure fairness to all participants, please ensure
+your submission follows MEQP guidelines. Moving forward, logs submitted
+in an incorrect format will be classified as check logs and not
+eligible for scoring.
+We would also like to remind participants that all QSOs made during the
+contest period that meet MEQP criteria are eligible for points—not just
+contacts with Maine stations. We continue to receive logs that include
+only a handful of Maine QSOs and no additional contacts. While we
+appreciate the effort it takes to log and submit these entries, this
+approach significantly limits your potential score. We strongly
+encourage participants to log all qualifying QSOs to ensure an accurate
+and competitive result. 
+ FUTURE DATES: 
+The Maine QSO Party always takes place the last full weekend in
+September:
+ 1200 UTC Saturday
+25 September to 1200 UTC Sunday 26 September 2027
+1200 UTC Saturday 23 September to 1200 UTC Sunday 24 September 2028
+1200 UTC Saturday 29 September to 1200 UTC Sunday 30 September 2029
+1200 UTC Saturday 28 September to 1200 UTC Sunday 29 September 2030
+1200 UTC Saturday 27 September to 1200 UTC Sunday 28 September 2031
+ Rules in
+other languages: 
+ Supported
+logging programs: 
+ MEQP
+Results: 
+ Click here for
+2013 MEQP Results 
+ Click here for
+2014 MEQP Results 
+ Click here for
+2015 MEQP Results 
+ Click here for
+2016 MEQP Results 
+ Click here for
+2017 MEQP Results 
+ Click here for
+2018 MEQP Results 
+ Click here for
+2019 MEQP Results 
+ Click here for 2020 MEQP Results 
+ Click here for
+2021 MEQP Results 
+ Click here for
+2022 MEQP Results 
+ Click here for
+2023 MEQP Results 
+ Click here for
+2024 MEQP Results 
+ Click here for
+2025 MEQP Results 
+ 

@@ -8,8 +8,8 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **Next party:** the top unstruck row of the table below — currently **Maine**,
-  which first needs open question 2 answered (does it run in 2026 at all?).
+- **Next party:** the top unstruck row of the table below — currently
+  **California**, which starts from the sponsor's site with nothing captured.
 - **Process per party:** the Article 22 definition of done at the bottom of this
   file. One party per commit (Article 9). Research doc *before* JSON (Article 15).
 - **To restart the build loop**, self-paced, one party per iteration:
@@ -64,9 +64,9 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**7 remaining** of the 16 in scope (9 built so far: MDC, HQP, OhQP, TnQP, COQP,
-NJQP, IAQP, NHQP, Salmon Run); 12 parties bundled in total, those 9 plus the
-pre-existing ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
+**6 remaining** of the 16 in scope (10 built so far: MDC, HQP, OhQP, TnQP, COQP,
+NJQP, IAQP, NHQP, Salmon Run, MEQP); 13 parties bundled in total, those 10 plus
+the pre-existing ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
 next, and the count above must equal the number of unstruck rows below.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
@@ -82,7 +82,7 @@ next, and the count above must equal the number of unstruck rows below.
 | ~~New Hampshire~~ | Sep 19 1600Z → Sep 20 0400Z; Sep 20 1200–2200Z | [`nhqp_rules.md`](../research/nhqp_rules.md) + [`nhqp_counties.tsv`](../research/nhqp_counties.tsv) | **done** (`verified: partial`) |
 | ~~Washington Salmon Run~~ | Sep 19 1600Z → Sep 20 0700Z; Sep 20 1600–2400Z | [`warun_rules.md`](../research/warun_rules.md) + [`warun_counties.tsv`](../research/warun_counties.tsv) | **done** |
 | ~~Texas~~ | Sep 19 1400Z → Sep 20 0200Z; Sep 20 1400–2000Z | [`tqp_verify.md`](../research/tqp_verify.md) | **done** (`verified: partial`) |
-| **Maine** | Sep 26 1200Z → Sep 27 1200Z ⚠️ **not on the Challenge calendar** | — | not started |
+| ~~Maine~~ | Sep 26 1200Z → Sep 27 1200Z ✅ sponsor confirms it runs | [`meqp_rules.md`](../research/meqp_rules.md) + [`meqp_rules_2026.txt`](../research/meqp_rules_2026.txt) + [`meqp_page.txt`](../research/meqp_page.txt) | **done** (`verified: partial`) |
 | **California** | Oct 3 1600Z → Oct 4 2200Z | — | not started |
 | **Arizona** | Oct 10 1500Z → Oct 11 0500Z | — | not started |
 | **Pennsylvania** | Oct 10 1600Z → Oct 11 0400Z; Oct 11 1300–2200Z | — | not started |
@@ -101,9 +101,17 @@ next, and the count above must equal the number of unstruck rows below.
    the table above: they order the work, they do not decide it. Every remaining
    party's `schedule` must come from the sponsor, and a disagreement between
    aggregators is not resolved by counting them.
-2. **Maine is absent from the Challenge calendar** but listed by WA7BNM for
-   Sep 26–27. Confirm the party runs in 2026 from the sponsor before building it;
-   if it does not, strike it from this list rather than shipping a guess.
+2. ~~**Maine is absent from the Challenge calendar.**~~ **RESOLVED 2026-07-24 —
+   the party runs, and the primary calendar was again the wrong one.** The
+   sponsor's own rules PDF is titled "2026 Official Rules" and both it and the
+   rules page print **1200 UTC Sat Sep 26 → 1200 UTC Sun Sep 27**, matching
+   WA7BNM and the sponsor's stated formula ("the last full weekend in
+   September"). The Challenge calendar simply omits the event. Companion lesson
+   to open question 1: an aggregator's **silence** is no more evidence than an
+   aggregator's date. *(The sponsor's PDF misprints the contest-period year as
+   2025; its own title block, its Oct 12 2026 deadline, the formula, and the
+   fact that 2025-09-26 was a Friday all settle it on 2026 —
+   [`meqp_rules.md` §2](../research/meqp_rules.md).)*
 3. **Hawaii's operating window — unresolved with the sponsor.** HQP shipped
    `verified: partial` because rules rule 1 contradicts itself: "36 hours from
    1800 UTC Aug 22 through 0359 UTC Aug 24" *and* "6am Saturday … to 6pm Sunday
@@ -112,10 +120,10 @@ next, and the count above must equal the number of unstruck rows below.
    Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
    **Email `info@hawaiiqsoparty.org` to settle it.** See
    [`hqp_rules.md` §2](../research/hqp_rules.md).
-4. **All banked research is used up.** Every one of the 7 remaining — Maine,
+4. **All banked research is used up.** Every one of the 6 remaining —
    California, Arizona, Pennsylvania, South Dakota, New York, Illinois — starts
    from its sponsor's site with nothing captured, so expect each iteration to be
-   research-heavy, as Hawaii was. Maine also carries the open question above.
+   research-heavy, as Hawaii and Maine were.
 5. **Banked research has mislabelled `homeStateCountsViaCounty` twice.** Both
    `tnqp_rules.md` and `nhqp_rules.md` claimed "home-state-via-county: YES" when
    the sponsor only meant that home-state counties are in the in-state class list.
@@ -128,8 +136,12 @@ next, and the count above must equal the number of unstruck rows below.
    OhQP counts only 11 provinces and folds Yukon/NWT/Nunavut into one `NT`
    multiplier, so `YT`/`NU` are invalid there. NJQP counts all 13 but spells
    Newfoundland **`NF`**, the legacy abbreviation, where this repo's default is
-   `NL` — so `NL` is invalid there. Two parties, two different deviations from the
-   default. Never assume the standard 13, and never assume the standard spellings.
+   `NL` — so `NL` is invalid there. **MEQP counts 14**, splitting Newfoundland
+   (`NF`) and Labrador (`LB`) into two multipliers — "Please note that
+   Newfoundland (NF) and Labrador (LB) will count seperately" [sic] — so `NL` is
+   invalid there too, for a different reason than NJQP. Three parties, three
+   different deviations: 11, 13-with-`NF`, and 14. Never assume the standard 13,
+   and never assume the standard spellings.
 
 ## Deferred engine gaps
 
@@ -171,19 +183,32 @@ party; each would be its own commit (Article 4).
   multipliers, but its exchange is the literal token "DX", so distinguishing DXCC
   entities requires deriving country from the callsign. `dxMultCap` records the
   rule and can never bind. Fixing it means a prefix→DXCC table plus wiring
-  `multContributions` to use the `call` parameter it currently ignores. Affects
-  in-state NHQP entrants only; WA may want the same when it lands.
+  `multContributions` to use the `call` parameter it currently ignores.
+  **MEQP raises the stakes:** it gives DXCC entities to *every* entrant with *no*
+  cap, and counts them per band per mode, so the undercount is now the largest
+  single scoring gap in the repo rather than an in-state edge case. This is the
+  strongest case yet for building the table — the second party wanting it, and
+  the first where it costs everyone.
 - **Late re-verification pass.** TnQP ships against a rules document titled for
   2025 (no 2026 revision posted). Sponsors commonly post revisions weeks before
   the event, so every `verified: partial` party wants one re-check in the fortnight
   before it runs — TnQP in late August, and HQP's window question settled by email.
+  **MEQP needs one too** (mid-September): the sponsor edits its rules PDF in place
+  at a stable URL with no revision marker, so the only way to detect a change is
+  to re-fetch and re-run `gen_meqp.py`, whose quoted-sentence assertions fail
+  loudly if the text moved. Its open question (is Maine itself a state multiplier
+  for Maine entrants?) is one email to `maineqsoparty@gmail.com`.
 
 ## Also outstanding
 
 - **Review `outStateWorksHomeStationsOnly` for the parties that predate it.**
-  MDC introduced this field (rules 10b), and **every party built since has needed
-  it** — nine for nine. Six state it outright (MDC, HQP, OhQP, TnQP, COQP, and the
-  Salmon Run's "Stations outside Washington state work only Washington state
+  MDC introduced this field (rules 10b), and every party built since had needed
+  it — until **MEQP, the first to answer no, and to say so outright**: "all QSOs
+  made during the contest period that meet MEQP criteria are eligible for
+  points—not just contacts with Maine stations." So the run is nine for ten, and
+  the field is genuinely per-party rather than a near-universal default. Six
+  state the restriction outright (MDC, HQP, OhQP, TnQP, COQP, and the Salmon
+  Run's "Stations outside Washington state work only Washington state
   stations"); three more (NJQP, IAQP, NHQP) only imply it and ship it on with an
   open question. ALQP/KSQP/TQP are very likely wrong to have it off.
   It defaults to `false` so those three keep scoring exactly as before per
