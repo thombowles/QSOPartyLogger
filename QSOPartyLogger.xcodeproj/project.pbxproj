@@ -24,6 +24,7 @@
 		0E122728DD4F2CC234B5E788 /* BandPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1075185DDB395E700E24AA /* BandPlan.swift */; };
 		0F87B0740AE33C79FF082253 /* TennesseeQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */; };
 		12C6DC13CA936881DB5F134C /* ScoreSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA812496670164897C4A0447 /* ScoreSidebar.swift */; };
+		151F7624A914409CC5E9DAA5 /* MessageSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B4B1D3D7E785B3640D0399 /* MessageSets.swift */; };
 		198B4CCE041337F320053AA5 /* ChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA71198926002262F846473 /* ChallengeTests.swift */; };
 		1A483EEB4F78C27DB1D7EC6D /* MorseCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE5CDC2177C8552E1D6426F /* MorseCode.swift */; };
 		1DAC9D9495B4F17E4872E359 /* PartyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */; };
@@ -208,6 +209,7 @@
 		658A13A0105A3055F65F9C60 /* DupeChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DupeChecker.swift; sourceTree = "<group>"; };
 		663F629E69E4BCAFF3D76139 /* MessageDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDefaultsTests.swift; sourceTree = "<group>"; };
 		6991F8344C755AD580ADCF48 /* ElecraftK3Driver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElecraftK3Driver.swift; sourceTree = "<group>"; };
+		69B4B1D3D7E785B3640D0399 /* MessageSets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSets.swift; sourceTree = "<group>"; };
 		6BA4D636DCF7164283660F61 /* EntryCommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryCommandTests.swift; sourceTree = "<group>"; };
 		6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCatalogTests.swift; sourceTree = "<group>"; };
 		6C32262E99EC74EB6D9BC74D /* AdifExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdifExporterTests.swift; sourceTree = "<group>"; };
@@ -349,6 +351,7 @@
 				D9CC975E303DB2512FF84C86 /* Band.swift */,
 				2F1075185DDB395E700E24AA /* BandPlan.swift */,
 				7CC43C19DF629A758F1B4641 /* ContestLog.swift */,
+				69B4B1D3D7E785B3640D0399 /* MessageSets.swift */,
 				009080AA1C81D0A7D94FA410 /* ModeClass.swift */,
 				FC2368B3BCDC5B105D90A366 /* MyLocation.swift */,
 				28174F39D351A29CC80B77F2 /* QSO.swift */,
@@ -803,6 +806,7 @@
 				CEACC3EEBBF6A962A00C0F48 /* LogDocument.swift in Sources */,
 				D733F370D91E26789F664325 /* LogTable.swift in Sources */,
 				C4A0BBE3CA76C438A158B860 /* MainView.swift in Sources */,
+				151F7624A914409CC5E9DAA5 /* MessageSets.swift in Sources */,
 				54C22E5CBC85F00E72EBE2E6 /* MessagesEditor.swift in Sources */,
 				EA548A4E8ACEAACF1F2452DC /* MessagesRow.swift in Sources */,
 				92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */,
