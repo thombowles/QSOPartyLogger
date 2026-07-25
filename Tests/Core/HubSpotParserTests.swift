@@ -94,6 +94,65 @@ final class HubSpotParserTests: XCTestCase {
                        "the county in the comment column is still a county")
     }
 
+    // MARK: The busy live capture
+
+    /// A later, busier capture from the same contest, with six spotters
+    /// instead of one — the hub is a general spotting board, not a
+    /// self-spot-only one.
+    func testBusyLiveCaptureUsesEverySpotter() throws {
+        let result = HubSpotParser.parse(html: try fixture("alqp-table-2026-07-25-busy"),
+                                         party: try party("alqp"))
+        XCTAssertEqual(Set(result.spots.map(\.spotter)),
+                       ["NI8W", "KB9LGS", "W1SSN", "N9DEK", "W6ECK"])
+    }
+
+    /// `NI8W` typed `1042.3`, then re-posted `14042.3` twenty-five seconds
+    /// later. The typo is not a frequency under any reading — 1042.3 kHz is
+    /// below 160 m, 1.0423 GHz is nothing, 104.23 kHz is nothing — so it is
+    /// refused and surfaced, while the corrected spot parses normally.
+    func testSpottersTypoIsRejectedWhileTheCorrectionParses() throws {
+        let result = HubSpotParser.parse(html: try fixture("alqp-table-2026-07-25-busy"),
+                                         party: try party("alqp"))
+        let n4uc = result.spots.filter { $0.call == "N4UC" }
+        XCTAssertEqual(n4uc.count, 1, "only the corrected spot survives")
+        XCTAssertEqual(try XCTUnwrap(n4uc.first).freqKHz, 14042.3, accuracy: 0.001)
+        XCTAssertTrue(result.rejected.contains { $0.contains("1042.3") },
+                      "the unreadable row is surfaced, never silently dropped")
+    }
+
+    /// `W1SSN` posted `7.0745` — MHz to four decimals. It resolves, and is
+    /// flagged reconstructed because it was not a frequency as written.
+    func testMegahertzToFourDecimalsResolves() throws {
+        let result = HubSpotParser.parse(html: try fixture("alqp-table-2026-07-25-busy"),
+                                         party: try party("alqp"))
+        let spot = try XCTUnwrap(result.spots.first { $0.spotter == "W1SSN" })
+        XCTAssertEqual(spot.freqKHz, 7074.5, accuracy: 0.001)
+        XCTAssertEqual(spot.frequencyConfidence, .reconstructed)
+    }
+
+    /// A portable callsign keeps its suffix — `WA1FCN/4` is who to call.
+    func testPortableCallsignSurvivesIntact() throws {
+        let result = HubSpotParser.parse(html: try fixture("alqp-table-2026-07-25-busy"),
+                                         party: try party("alqp"))
+        let portable = try XCTUnwrap(result.spots.first { $0.call.contains("/") })
+        XCTAssertEqual(portable.call, "WA1FCN/4")
+        XCTAssertEqual(portable.county, "WLKR")
+    }
+
+    /// Every county token in the busy capture is a real Alabama county, so the
+    /// multiplier badge is working from the party's own list throughout.
+    func testEveryCountyInTheBusyCaptureIsRealForThatParty() throws {
+        let alqp = try party("alqp")
+        let result = HubSpotParser.parse(html: try fixture("alqp-table-2026-07-25-busy"),
+                                         party: alqp)
+        let abbrs = Set(alqp.counties.map(\.abbr))
+        XCTAssertFalse(result.spots.isEmpty)
+        for spot in result.spots {
+            XCTAssertTrue(abbrs.contains(try XCTUnwrap(spot.county)),
+                          "\(spot.call) reported \(spot.county ?? "nil")")
+        }
+    }
+
     // MARK: Frequency ladder
 
     /// Every operator-typed frequency in the corpus, and how it must resolve.

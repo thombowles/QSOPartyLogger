@@ -3,7 +3,9 @@
 Parse the per-party spot tables at `qsopartyhub.com` into the active party's
 band map, and post self-spots back to it.
 
-**Status:** design approved 2026-07-25. Implementation not started.
+**Status:** implemented 2026-07-25, across the six commits in §13. 875 tests
+pass, up from 811 at the start. Provenance stays `verified: partial` — §6's
+open questions are unchanged, and no test post was ever made to the live board.
 
 ---
 

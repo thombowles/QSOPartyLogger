@@ -107,10 +107,21 @@ board immediately, and a repeated submit posts twice.
 
 ## 6. Open questions (`verified: partial`)
 
-1. **Row format** is confirmed against two populated captures — SDQP
-   2024-10-12 (Wayback, the only populated page in 551 archived snapshots) and
-   a live 2026-07-25 ALQP capture series. It is **not** confirmed against a
-   high-volume party, a county-line spot, or a DX spot.
+1. **Row format** is confirmed against the SDQP 2024-10-12 capture (Wayback,
+   the only populated page in 551 archived snapshots) and a live 2026-07-25
+   ALQP capture series of 19 snapshots holding 13 distinct rows from six
+   spotters. It is **not** confirmed against a high-volume party, a
+   county-line spot, or a DX spot.
+
+   That live series exercised, unprompted, several things worth recording:
+
+   | Observed | Handling |
+   | --- | --- |
+   | `N4UC 1042.3` then `N4UC 14042.3` 25 s later | The typo is not a frequency under any reading, so it is refused and surfaced; the correction parses |
+   | `N4RT 7.0745` | MHz to four decimals — resolves, flagged reconstructed |
+   | `WA1FCN/4` | Portable suffix kept intact |
+   | `KB3A 7252` from two spotters | Same spot corroborated across spotters |
+   | `W5LNX … 59 CA` | An exchange in the comment; not mistaken for a county |
 2. **The POST contract is derived from form markup only.** No test post was
    made to the live public board. The first real send must be verified against
    the following poll rather than assumed from an HTTP 200.
