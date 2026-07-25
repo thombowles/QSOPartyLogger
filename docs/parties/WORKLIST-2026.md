@@ -33,7 +33,7 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**12 remaining** of the 16 in scope; 6 parties bundled (ALQP, MDC, HQP, OhQP, KSQP, TQP).
+**11 remaining** of the 16 in scope; 7 parties bundled (ALQP, MDC, HQP, OhQP, KSQP, TnQP, TQP).
 Rows are in contest-date order — the top unstruck row is what's next.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
@@ -42,7 +42,7 @@ Rows are in contest-date order — the top unstruck row is what's next.
 | ~~Hawaii~~ | Aug 22 1600Z → Aug 24 0400Z ⚠️ see below | [`hqp_rules.md`](../research/hqp_rules.md) + [`hqp_districts.tsv`](../research/hqp_districts.tsv) | **done** (`verified: partial`) |
 | ~~Ohio~~ | Aug 22 1600Z → Aug 23 0400Z | [`ohqp_rules.md`](../research/ohqp_rules.md) + [`ohqp_mults_ohio.html`](../research/ohqp_mults_ohio.html) | **done** |
 | ~~Kansas~~ | Aug 29 1400Z → Aug 30 0200Z; Aug 30 1400–2000Z | official PDFs | **done** |
-| **Tennessee** | Sep 6 1700Z → Sep 7 0300Z | [`tnqp_rules.md`](../research/tnqp_rules.md) + [`tnqp_counties.tsv`](../research/tnqp_counties.tsv) | research banked |
+| ~~Tennessee~~ | Sep 6 1700Z → Sep 7 0300Z | [`tnqp_rules.md`](../research/tnqp_rules.md) + [`tnqp_counties.tsv`](../research/tnqp_counties.tsv) | **done** (`verified: partial`) |
 | **Colorado** | Sep 12 1400Z → Sep 13 0359Z | [`coqp_src_rules.txt`](../research/coqp_src_rules.txt), [`coqp_src_counties.txt`](../research/coqp_src_counties.txt) | raw sources only |
 | **New Jersey** | Sep 19 1400Z → Sep 20 0200Z ⚠️ **date disputed** | [`njqp_2026rules.txt`](../research/njqp_2026rules.txt) | raw sources only |
 | **Iowa** | Sep 19 1400Z → Sep 20 0200Z | [`iaqp_page.txt`](../research/iaqp_page.txt), [`iaqp_county_list.txt`](../research/iaqp_county_list.txt), [`iaqp_state_prov.txt`](../research/iaqp_state_prov.txt) | raw sources only |
@@ -82,6 +82,25 @@ Rows are in contest-date order — the top unstruck row is what's next.
    NWT and Nunavut into a single `NT` multiplier, so `YT`/`NU` are invalid
    tokens there. Sponsors abbreviate Canada inconsistently — read each one's own
    list rather than assuming the standard 13 provinces.
+
+## Deferred engine gaps
+
+Recorded when a party needed something the schema does not model. None blocks a
+party; each would be its own commit (Article 4).
+
+- **Self-activation multipliers.** TnQP: "Tennessee mobiles and rovers may claim
+  one multiplier for any Tennessee county from which they complete at least 10
+  QSOs if they do not earn a multiplier for that county otherwise." The matching
+  500-point *bonus* is modeled (`activatedCountyCount`); the extra *multiplier*
+  is not, so a TN mobile/rover sees a slightly low multiplier count. COQP may
+  want the same shape — check when it lands, and build the field once for both.
+- **No 222 MHz band.** `Band` has no 1.25 m case, but TnQP permits it and its
+  rules suggest 223.50. Adding it touches `Band`, the band map and ADIF, so it
+  is a standalone change.
+- **Late re-verification pass.** TnQP ships against a rules document titled for
+  2025 (no 2026 revision posted). Sponsors commonly post revisions weeks before
+  the event, so every `verified: partial` party wants one re-check in the fortnight
+  before it runs — TnQP in late August, and HQP's window question settled by email.
 
 ## Also outstanding
 

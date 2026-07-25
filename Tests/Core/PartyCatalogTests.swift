@@ -10,7 +10,10 @@ final class PartyCatalogTests: XCTestCase {
 
     func testBundledPartiesLoad() throws {
         let parties = PartyCatalog.loadBundled()
-        XCTAssertEqual(Set(parties.map(\.id)), ["alqp", "hqp", "ksqp", "mdc", "ohqp", "tqp"])
+        XCTAssertEqual(
+            Set(parties.map(\.id)),
+            ["alqp", "hqp", "ksqp", "mdc", "ohqp", "tnqp", "tqp"]
+        )
     }
 
     func testKSQPCountyData() throws {

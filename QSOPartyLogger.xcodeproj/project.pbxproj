@@ -15,6 +15,7 @@
 		0B84F1968593931579E19473 /* EntryCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2436011194157AC1F402566 /* EntryCommand.swift */; };
 		0B9D330021B44D8F26900857 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C918A35B84A46D9369272 /* AppSettings.swift */; };
 		0DEA3D34B4EF4162D9FC21D9 /* SpotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65578A775A74FB103913C439 /* SpotStore.swift */; };
+		0F87B0740AE33C79FF082253 /* TennesseeQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */; };
 		12C6DC13CA936881DB5F134C /* ScoreSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA812496670164897C4A0447 /* ScoreSidebar.swift */; };
 		1A483EEB4F78C27DB1D7EC6D /* MorseCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE5CDC2177C8552E1D6426F /* MorseCode.swift */; };
 		1DAC9D9495B4F17E4872E359 /* PartyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */; };
@@ -196,6 +197,7 @@
 		FC2368B3BCDC5B105D90A366 /* MyLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLocation.swift; sourceTree = "<group>"; };
 		FD32257D3D8870AAFF61403B /* ExchangeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeParser.swift; sourceTree = "<group>"; };
 		FF2C8D6694C9F0C035095796 /* FlexRadioDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexRadioDriver.swift; sourceTree = "<group>"; };
+		FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennesseeQSOPartyTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -285,6 +287,7 @@
 				29960406C674052D5117926D /* ScoreEngineTests.swift */,
 				04053E0272A2391F55417D60 /* SpotFilterTests.swift */,
 				A2215D1E38A85D6578624B1D /* SpottingTests.swift */,
+				FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -576,6 +579,7 @@
 				5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */,
 				D92268C1083B39CB08B32393 /* SpotFilterTests.swift in Sources */,
 				A632469108D3943D5C878CD7 /* SpottingTests.swift in Sources */,
+				0F87B0740AE33C79FF082253 /* TennesseeQSOPartyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

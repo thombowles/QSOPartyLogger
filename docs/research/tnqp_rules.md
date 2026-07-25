@@ -53,7 +53,10 @@ The 2026 date is confirmed by the tnqp.org home page.
 Both in-state and out-of-state: **multipliers count per band** (NOT per mode).
 - **Out-of-state:** > "Multipliers accumulate on a per band basis. Multipliers are Tennessee counties (95 max/band). For example, if you work all 95 Tennessee counties on 40M and again on 20M you earn 190 multipliers." Counties only — no states/provinces/DX mults for out-of-state entrants.
 - **In-state (TN stations)**, per band:
-  - Tennessee counties (95 max/band) — **yes, TN stations DO count TN counties worked** (home-state-via-county applies).
+  - Tennessee counties (95 max/band) — **yes, TN stations DO count TN counties worked** (so `county` is in the in-state class list).
+    Note: this is *not* the schema's `homeStateCountsViaCounty`, which means "a home-state county also yields the home state's own
+    state multiplier". TnQP says the opposite — "do not count Tennessee as a state" — so that flag stays `false` and `TN` is an
+    excluded state token. (Corrected 2026-07-24; the original note here mislabelled the flag.)
   - U.S. states: "49 max/band – do not count Tennessee as a state, District of Columbia counts as Maryland".
   - Canadian provinces/territories: "13 max/band: British Columbia, Alberta, Manitoba, Saskatchewan, Ontario, Quebec, New Brunswick, Nova Scotia, Prince Edward Island, Newfoundland & Labrador, Yukon, NWT and Nunavut".
   - DXCC entities: "see ARRL DXCC list – less USA, Canada, Alaska & Hawaii — Do not count USA nor Canada as countries; Alaska & Hawaii count as states only".
