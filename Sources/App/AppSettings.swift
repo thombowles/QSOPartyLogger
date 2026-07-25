@@ -191,11 +191,15 @@ final class AppSettings {
     }
 
     init() {
-        radioID = defaults.string(forKey: "radioID") ?? "elecraft-k3"
+        radioID = defaults.string(forKey: "radioID") ?? RadioRegistry.defaultRadioID
         portPath = defaults.string(forKey: "portPath") ?? ""
-        baudRate = defaults.object(forKey: "baudRate") as? Int ?? 38400
+        baudRate = defaults.object(forKey: "baudRate") as? Int ?? RadioRegistry.defaultBaud
         tcpHost = defaults.string(forKey: "tcpHost") ?? ""
-        tcpPort = defaults.object(forKey: "tcpPort") as? Int ?? Int(FlexRadioDriver.defaultPort)
+        // 0 only in a serial-only catalog, where the host/port fields are never
+        // shown; `RadioController.connect` substitutes the connected radio's
+        // own port for any value outside 1...65535 regardless.
+        tcpPort = defaults.object(forKey: "tcpPort") as? Int
+            ?? RadioRegistry.defaultNetworkPort.map { Int($0) } ?? 0
         clusterHost = defaults.string(forKey: "clusterHost") ?? ""
         clusterPort = defaults.object(forKey: "clusterPort") as? Int ?? 7300
         clusterAutoConnect = defaults.object(forKey: "clusterAutoConnect") as? Bool ?? false
