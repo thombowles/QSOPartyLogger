@@ -12,7 +12,7 @@ final class PartyCatalogTests: XCTestCase {
         let parties = PartyCatalog.loadBundled()
         XCTAssertEqual(
             Set(parties.map(\.id)),
-            ["alqp", "hqp", "ksqp", "mdc", "ohqp", "tnqp", "tqp"]
+            ["alqp", "coqp", "hqp", "ksqp", "mdc", "ohqp", "tnqp", "tqp"]
         )
     }
 

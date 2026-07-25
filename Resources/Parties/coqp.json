@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "id": "coqp",
+  "name": "Colorado QSO Party",
+  "cabrilloContest": "COQP",
+  "homeState": "CO",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 2,
+    "digital": 0
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "perMode"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perMode"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "activatedCountyCount",
+      "minQSOs": 15,
+      "points": 500
+    }
+  ],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "maxSimultaneousCounties": 2,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-09-12T14:00:00Z",
+      "end": "2026-09-13T04:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ADA",
+      "name": "Adams"
+    },
+    {
+      "abbr": "ALA",
+      "name": "Alamosa"
+    },
+    {
+      "abbr": "ARA",
+      "name": "Arapahoe"
+    },
+    {
+      "abbr": "ARC",
+      "name": "Archuleta"
+    },
+    {
+      "abbr": "BAC",
+      "name": "Baca"
+    },
+    {
+      "abbr": "BEN",
+      "name": "Bent"
+    },
+    {
+      "abbr": "BOU",
+      "name": "Boulder"
+    },
+    {
+      "abbr": "BRO",
+      "name": "Broomfield"
+    },
+    {
+      "abbr": "CHA",
+      "name": "Chaffee"
+    },
+    {
+      "abbr": "CHE",
+      "name": "Cheyenne"
+    },
+    {
+      "abbr": "CLC",
+      "name": "Clear Creek"
+    },
+    {
+      "abbr": "CON",
+      "name": "Conejos"
+    },
+    {
+      "abbr": "COS",
+      "name": "Costilla"
+    },
+    {
+      "abbr": "CRO",
+      "name": "Crowley"
+    },
+    {
+      "abbr": "CUS",
+      "name": "Custer"
+    },
+    {
+      "abbr": "DEL",
+      "name": "Delta"
+    },
+    {
+      "abbr": "DEN",
+      "name": "Denver"
+    },
+    {
+      "abbr": "DOL",
+      "name": "Dolores"
+    },
+    {
+      "abbr": "DOU",
+      "name": "Douglas"
+    },
+    {
+      "abbr": "EAG",
+      "name": "Eagle"
+    },
+    {
+      "abbr": "ELP",
+      "name": "El Paso"
+    },
+    {
+      "abbr": "ELB",
+      "name": "Elbert"
+    },
+    {
+      "abbr": "FRE",
+      "name": "Fremont"
+    },
+    {
+      "abbr": "GAR",
+      "name": "Garfield"
+    },
+    {
+      "abbr": "GIL",
+      "name": "Gilpin"
+    },
+    {
+      "abbr": "GRA",
+      "name": "Grand"
+    },
+    {
+      "abbr": "GUN",
+      "name": "Gunnison"
+    },
+    {
+      "abbr": "HIN",
+      "name": "Hinsdale"
+    },
+    {
+      "abbr": "HUE",
+      "name": "Huerfano"
+    },
+    {
+      "abbr": "JAC",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "KIO",
+      "name": "Kiowa"
+    },
+    {
+      "abbr": "KIC",
+      "name": "Kit Carson"
+    },
+    {
+      "abbr": "LAP",
+      "name": "La Plata"
+    },
+    {
+      "abbr": "LAK",
+      "name": "Lake"
+    },
+    {
+      "abbr": "LAR",
+      "name": "Larimer"
+    },
+    {
+      "abbr": "LAA",
+      "name": "Las Animas"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "LOG",
+      "name": "Logan"
+    },
+    {
+      "abbr": "MES",
+      "name": "Mesa"
+    },
+    {
+      "abbr": "MIN",
+      "name": "Mineral"
+    },
+    {
+      "abbr": "MOF",
+      "name": "Moffat"
+    },
+    {
+      "abbr": "MON",
+      "name": "Montezuma"
+    },
+    {
+      "abbr": "MOT",
+      "name": "Montrose"
+    },
+    {
+      "abbr": "MOR",
+      "name": "Morgan"
+    },
+    {
+      "abbr": "OTE",
+      "name": "Otero"
+    },
+    {
+      "abbr": "OUR",
+      "name": "Ouray"
+    },
+    {
+      "abbr": "PAR",
+      "name": "Park"
+    },
+    {
+      "abbr": "PHI",
+      "name": "Phillips"
+    },
+    {
+      "abbr": "PIT",
+      "name": "Pitkin"
+    },
+    {
+      "abbr": "PRO",
+      "name": "Prowers"
+    },
+    {
+      "abbr": "PUE",
+      "name": "Pueblo"
+    },
+    {
+      "abbr": "RIB",
+      "name": "Rio Blanco"
+    },
+    {
+      "abbr": "RIG",
+      "name": "Rio Grande"
+    },
+    {
+      "abbr": "ROU",
+      "name": "Routt"
+    },
+    {
+      "abbr": "SAG",
+      "name": "Saguache"
+    },
+    {
+      "abbr": "SAJ",
+      "name": "San Juan"
+    },
+    {
+      "abbr": "SAM",
+      "name": "San Miguel"
+    },
+    {
+      "abbr": "SED",
+      "name": "Sedgwick"
+    },
+    {
+      "abbr": "SUM",
+      "name": "Summit"
+    },
+    {
+      "abbr": "TEL",
+      "name": "Teller"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WEL",
+      "name": "Weld"
+    },
+    {
+      "abbr": "YUM",
+      "name": "Yuma"
+    }
+  ],
+  "notes": "Verified against the sponsor's official 2026 rules (coloradoqsoparty.org/rules/, captured 2026-07-23 and re-fetched verbatim 2026-07-24). The page is titled 'Colorado QSO Party 2026 Rules' and carries its own revision note — 'revised as of July 15, 2026: Rule 7 (Entry Categories); Rule 12 (scoring mixed entries), and Rule 15 (Awards)' — so it is an explicitly dated current-year revision. Host changed for 2026 to the Grand Mesa Contesters of Colorado, and 2026 is the FIRST year on the new second-Saturday-in-September date, so older calendars and logger presets may disagree. Counties generated from the sponsor's official abbreviation page — never hand-typed; Colorado's codes collide heavily and MON is Montezuma, NOT Montrose (also MOT Montrose, MOF Moffat, MOR Morgan; LAK/LAP/LAR/LAA; ELP/ELB; SAG/SAJ/SAM; KIO/KIC; RIB/RIG). Flat 2 points per QSO; no digital modes. Multipliers count PER MODE, so a county worked on CW and again on phone is two multipliers. The rules' in-state ceiling of 128 per mode (64 counties + 50 states + 13 provinces + 1 DX) is asserted by the generator and is what establishes that Colorado itself counts as a state multiplier, earned via a Colorado county. DC counts as Maryland; AK/HI count only as states; neither USA nor Canada counts as DX. No 160 m. County lines are logged as two rows. Mobile and portable Colorado stations earn 500 bonus points per county with at least 15 QSOs (note: 15, where TnQP requires 10). No power or category multiplier. Cabrillo CONTEST value COQP per WA7BNM; the sponsor requires Cabrillo but prints no header token. Not modeled: cross-mode/cross-band/repeater/satellite QSOs not counting, and the one-transmitter-at-a-time rule."
+}

@@ -33,7 +33,7 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**11 remaining** of the 16 in scope; 7 parties bundled (ALQP, MDC, HQP, OhQP, KSQP, TnQP, TQP).
+**10 remaining** of the 16 in scope; 8 parties bundled (ALQP, MDC, HQP, OhQP, KSQP, TnQP, COQP, TQP).
 Rows are in contest-date order — the top unstruck row is what's next.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
@@ -43,7 +43,7 @@ Rows are in contest-date order — the top unstruck row is what's next.
 | ~~Ohio~~ | Aug 22 1600Z → Aug 23 0400Z | [`ohqp_rules.md`](../research/ohqp_rules.md) + [`ohqp_mults_ohio.html`](../research/ohqp_mults_ohio.html) | **done** |
 | ~~Kansas~~ | Aug 29 1400Z → Aug 30 0200Z; Aug 30 1400–2000Z | official PDFs | **done** |
 | ~~Tennessee~~ | Sep 6 1700Z → Sep 7 0300Z | [`tnqp_rules.md`](../research/tnqp_rules.md) + [`tnqp_counties.tsv`](../research/tnqp_counties.tsv) | **done** (`verified: partial`) |
-| **Colorado** | Sep 12 1400Z → Sep 13 0359Z | [`coqp_src_rules.txt`](../research/coqp_src_rules.txt), [`coqp_src_counties.txt`](../research/coqp_src_counties.txt) | raw sources only |
+| ~~Colorado~~ | Sep 12 1400Z → Sep 13 0400Z | [`coqp_rules.md`](../research/coqp_rules.md) + [`coqp_src_counties.txt`](../research/coqp_src_counties.txt) | **done** |
 | **New Jersey** | Sep 19 1400Z → Sep 20 0200Z ⚠️ **date disputed** | [`njqp_2026rules.txt`](../research/njqp_2026rules.txt) | raw sources only |
 | **Iowa** | Sep 19 1400Z → Sep 20 0200Z | [`iaqp_page.txt`](../research/iaqp_page.txt), [`iaqp_county_list.txt`](../research/iaqp_county_list.txt), [`iaqp_state_prov.txt`](../research/iaqp_state_prov.txt) | raw sources only |
 | **New Hampshire** | Sep 19 1600Z → Sep 20 0400Z; Sep 20 1200–2200Z | [`nhqp_rules.md`](../research/nhqp_rules.md) + [`nhqp_counties.tsv`](../research/nhqp_counties.tsv) | research banked |
@@ -75,7 +75,7 @@ Rows are in contest-date order — the top unstruck row is what's next.
    Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
    **Email `info@hawaiiqsoparty.org` to settle it.** See
    [`hqp_rules.md` §2](../research/hqp_rules.md).
-4. **Colorado, New Jersey, Iowa have raw sponsor text but no write-up.**
+4. **New Jersey and Iowa have raw sponsor text but no write-up.**
    Each still needs its 14-section research doc before any JSON (Article 15).
    Do not shortcut from raw text straight to a party file.
 5. **Watch for combined multiplier entities.** OhQP's official list folds Yukon,
@@ -92,8 +92,10 @@ party; each would be its own commit (Article 4).
   one multiplier for any Tennessee county from which they complete at least 10
   QSOs if they do not earn a multiplier for that county otherwise." The matching
   500-point *bonus* is modeled (`activatedCountyCount`); the extra *multiplier*
-  is not, so a TN mobile/rover sees a slightly low multiplier count. COQP may
-  want the same shape — check when it lands, and build the field once for both.
+  is not, so a TN mobile/rover sees a slightly low multiplier count. COQP turned
+  out **not** to need it — its activation rule is a bonus only — so TnQP is the
+  sole user so far, and the field is not yet worth building. Revisit if a second
+  party wants it.
 - **No 222 MHz band.** `Band` has no 1.25 m case, but TnQP permits it and its
   rules suggest 223.50. Adding it touches `Band`, the band map and ADIF, so it
   is a standalone change.
@@ -105,12 +107,14 @@ party; each would be its own commit (Article 4).
 ## Also outstanding
 
 - **Review `outStateWorksHomeStationsOnly` for the parties that predate it.**
-  MDC introduced this field (rules 10b) and HQP is already its second user
-  ("Hawai'i stations work anyone – non-Hawai'i stations work only Hawai'i"),
-  which suggests it is the norm rather than the exception. It defaults to `false`
-  so ALQP/KSQP/TQP keep scoring exactly as before, per Article 4. When each is
-  next re-verified, check its rule text and turn the field on where the sponsor
-  says so.
+  MDC introduced this field (rules 10b), and **every party built since has needed
+  it** — HQP, OhQP, TnQP and COQP all state the restriction outright
+  ("QSOs must include at least one Colorado station"). Five for five: this is the
+  norm, not the exception, and ALQP/KSQP/TQP are very likely wrong to have it off.
+  It defaults to `false` so those three keep scoring exactly as before per
+  Article 4, but each should be re-read and switched on where the sponsor says so
+  — ideally in one deliberate commit covering all three, with their own tests
+  updated to prove the change.
 - **Generator consolidation.** `gen_parties.py` is not runnable: it reads
   `KSQP-Mults.txt`, `TX_county_abbrevs.txt`, and
   `research/alqp_counties_text.txt`, none of which are committed. `gen_mdc.py`
