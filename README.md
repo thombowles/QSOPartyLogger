@@ -249,6 +249,34 @@ parties, and the remaining engine gaps. Adding a party is governed by
   auto-save into your logs folder on setup, then **every QSO change writes
   straight to disk** (and mirrors to iCloud Drive if configured) — a crash
   never costs contacts.
+- **Contest Dashboard (⌘⇧D)**: your whole season in one window. Pick a year
+  (⌘[ / ⌘]) and see totals, every contest's claimed score exactly as the
+  score sidebar computed it (QSOs, mults, bonus, on-air time with ≥30-min
+  breaks excluded), QSO and score charts, and each party's year-over-year
+  trend with your personal best flagged. Return (or double-click) on a row
+  reopens that contest's `.qplog`.
+- **State QSO Party Challenge tracker**: estimated standing by the sponsor's
+  own formula — total QSOs × parties entered, with the official ≥2-QSO
+  multiplier floor and the Bronze 500 → Diamond 100,000 ladder (levels
+  require two qualifying parties). A 1-QSO party shows "1 more QSO to
+  count"; parties logged but not on the 2026 approved list (Maine) are shown
+  and excluded rather than silently dropped. Labeled an estimate: the
+  official score comes from what you post to 3830scores.com.
+- **Upcoming contests**: everything left this season, soonest first — an ON
+  AIR badge while a window is open, countdowns, "entered ✓" once you've
+  logged it, and all 47 SQP-Challenge-approved parties included: bundled
+  ones use the sponsor's verified schedule, the rest are dated from the
+  challenge's calendar and labeled so (that calendar has been wrong before —
+  NJQP 2026 — so the sponsor always wins where this app has rules).
+- **One history file in iCloud**: every save also archives the full log +
+  score snapshot into `Contest History.qphistory` in your logs folder, so
+  the dashboard — logs and statistics both — follows you to any Mac. Edits
+  from two Macs merge by QSO (the later save wins conflicts, nothing is
+  lost); iCloud conflict copies fold in automatically; a corrupt file is
+  never overwritten. "Import Existing Logs" (or first launch with an empty
+  history) rebuilds the archive from the `.qplog` files already in the
+  folder, idempotently. Snapshots freeze each score as computed that season,
+  so next year's rule updates never rewrite history.
 
 ## Keyboard reference
 
@@ -265,6 +293,10 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `⌘B` | Toggle the band map window |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
+| `⌘⇧D` | Contest Dashboard (season history + SQP Challenge) |
+| `⌘[` / `⌘]` | Dashboard: previous / next year |
+| `⌘R` | Dashboard: re-read the history file |
+| `Return` on a dashboard row | Open that contest's log |
 
 ## K3 wiring for direct CW keying
 
@@ -386,11 +418,14 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 586 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 631 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
-typed QSY commands, keyer timing, and keyer labelling.
+typed QSY commands, keyer timing, keyer labelling, the contest history
+archive (snapshot parity with the engine, two-Mac merge, unknown-field
+preservation, coordinated store), season stats, the SQP Challenge formula
+and calendar resource, and the upcoming-contest engine.
 
 ## Data provenance
 
@@ -583,3 +618,17 @@ typed QSY commands, keyer timing, and keyer labelling.
   deliberately not loggable.
 - DC is accepted as a loggable state token (counted with states); strictly,
   KSQP rules enumerate 50 states — sponsors' checkers accept DC.
+- State QSO Party Challenge: rules from the official 2026 PDF
+  (stateqsoparty.com, fetched 2026-07-25, committed verbatim in
+  `docs/research/`), scoring formula and award levels quoted in
+  [`sqp_challenge_rules.md`](docs/research/sqp_challenge_rules.md). The
+  approved-contest resource is **generated** by
+  [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
+  challenge's own calendar (fetched 2026-07-24) and homepage list (read
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 18 mapped to
+  bundled parties. **Maine QSO Party is not on the 2026 approved list**
+  (verified twice), so the dashboard shows MEQP logs but excludes them from
+  challenge scoring, saying so. The calendar's NJQP row is known-wrong
+  (Sep 19; the sponsor says Sep 12) — bundled sponsor schedules always
+  supersede calendar dates, which are used only for parties this app has no
+  rules for, labeled as calendar-sourced.
