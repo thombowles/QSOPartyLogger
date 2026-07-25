@@ -51,8 +51,11 @@ tnqp = {
     "homeState": "TN",
     "countyAbbrLength": 4,
     # "All amateur bands are valid, with the exception of 60, 30, 17 and 12
-    # meters." 1.25 m is legal too but this app has no 222 MHz band (see notes).
-    "validBands": ["160m", "80m", "40m", "20m", "15m", "10m", "6m", "2m", "70cm"],
+    # meters." That includes 1.25 m, which the suggested-frequency list gives as
+    # 223.50; the app gained the band on 2026-07-24.
+    "validBands": [
+        "160m", "80m", "40m", "20m", "15m", "10m", "6m", "2m", "1.25m", "70cm",
+    ],
     # "3 points per QSO regardless of mode."
     "points": {"phone": 3, "cw": 3, "digital": 3},
     # "Fixed Stations may be worked once per band/mode"; mobiles/rovers again on
@@ -112,16 +115,17 @@ tnqp = {
         "DXCC. Out-of-state stations work only Tennessee stations. County lines allowed up "
         "to 2 counties at once (three- and four-county lines are forbidden). K4TCG pays 100 "
         "bonus points PER QSO, and TN mobiles/rovers 500 per county with 10+ QSOs; bonuses "
-        "are added after the multiplier. No power or category multiplier. "
+        "are added after the multiplier. No power or category multiplier. All amateur "
+        "bands are valid except 60, 30, 17 and 12 m — 1.25 m included, shipped since "
+        "2026-07-24 when the app gained the band; the sponsor's rule itself never "
+        "changed. "
         "OPEN QUESTIONS (why this is partial): (1) the posted rules document is titled for "
         "2025 and no 2026-specific revision exists yet — re-check tnqp.org/rules/ in late "
         "August 2026. (2) Not modeled: 'Tennessee mobiles and rovers may claim one "
         "MULTIPLIER for any Tennessee county from which they complete at least 10 QSOs if "
         "they do not earn a multiplier for that county otherwise' — the matching 500-point "
         "BONUS is modeled, but this extra self-activation multiplier is not, so a TN "
-        "mobile/rover may see a slightly low multiplier count. (3) TnQP permits 1.25 m and "
-        "the rules suggest 223.50; this app has no 222 MHz band, so those QSOs cannot be "
-        "logged on that band."
+        "mobile/rover may see a slightly low multiplier count."
     ),
 }
 
