@@ -324,5 +324,9 @@
     }
   ],
   "outStateWorksHomeStationsOnly": true,
-  "notes": "Verified against official 2026 AQP rules (alabamacontestgroup.org, fetched 2026-07-23). Counties from official County Map and Counties page. County-line sitting is NOT permitted (rules Misc a). Out-of-state entrants work Alabama stations only, per the rules Object (fetched 2026-07-25). Mults count once per mode; DC counts as Maryland; DX mults are country prefixes."
+  "notes": "Verified against official 2026 AQP rules (alabamacontestgroup.org, fetched 2026-07-23). Counties from official County Map and Counties page. County-line sitting is NOT permitted (rules Misc a). Out-of-state entrants work Alabama stations only, per the rules Object (fetched 2026-07-25). Mults count once per mode; DC counts as Maryland; DX mults are country prefixes.",
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/alqp-table.php",
+    "postURL": "http://qsopartyhub.com/alqp-spots.php"
+  }
 }

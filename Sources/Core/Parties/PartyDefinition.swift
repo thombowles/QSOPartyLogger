@@ -24,6 +24,10 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     let schedule: [ScheduleWindow]?
     let counties: [County]
     let notes: String?
+    /// Where this party's spots live on qsopartyhub.com, when the hub serves
+    /// it. `nil` for the two it does not: California's page is an unfinished
+    /// stub, and WA Salmon Run has no page at all.
+    let hubSpots: HubSpotSource?
 
     // MARK: Optional rule shapes (defaults preserve original behavior)
 
@@ -352,6 +356,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case schemaVersion, id, name, cabrilloContest, homeState, countyAbbrLength
         case validBands, points, dupeScope, multipliers, bonuses, oneByOne
         case schedule, counties, notes, scoreMultipliers, homeStationPoints
+        case hubSpots
         case dxStyleRaw = "dxStyle"
         case allowedModeClassesRaw = "allowedModes"
         case maxSimultaneousCountiesRaw = "maxSimultaneousCounties"

@@ -1,0 +1,187 @@
+{
+  "detail": {
+    "alqp": {
+      "aliases": {},
+      "countyTokens": 67,
+      "officialCounties": 67,
+      "prefix": "alqp"
+    },
+    "azqp": {
+      "aliases": {},
+      "countyTokens": 15,
+      "officialCounties": 15,
+      "prefix": "azqp"
+    },
+    "coqp": {
+      "aliases": {},
+      "countyTokens": 64,
+      "officialCounties": 64,
+      "prefix": "coqp"
+    },
+    "hqp": {
+      "aliases": {},
+      "countyTokens": 14,
+      "officialCounties": 14,
+      "prefix": "hiqp"
+    },
+    "iaqp": {
+      "aliases": {},
+      "countyTokens": 99,
+      "officialCounties": 99,
+      "prefix": "iaqp"
+    },
+    "ilqp": {
+      "aliases": {
+        "PULS": "PULA"
+      },
+      "countyTokens": 102,
+      "officialCounties": 102,
+      "prefix": "ilqp"
+    },
+    "ksqp": {
+      "aliases": {},
+      "countyTokens": 105,
+      "officialCounties": 105,
+      "prefix": "ksqp"
+    },
+    "mdc": {
+      "aliases": {},
+      "countyTokens": 25,
+      "officialCounties": 25,
+      "prefix": "mdcqp"
+    },
+    "meqp": {
+      "aliases": {},
+      "countyTokens": 16,
+      "officialCounties": 16,
+      "prefix": "meqp"
+    },
+    "nhqp": {
+      "aliases": {},
+      "countyTokens": 10,
+      "officialCounties": 10,
+      "prefix": "nhqp"
+    },
+    "njqp": {
+      "aliases": {},
+      "countyTokens": 21,
+      "officialCounties": 21,
+      "prefix": "njqp"
+    },
+    "nyqp": {
+      "aliases": {},
+      "countyTokens": 62,
+      "officialCounties": 62,
+      "prefix": "nyqp"
+    },
+    "ohqp": {
+      "aliases": {},
+      "countyTokens": 88,
+      "officialCounties": 88,
+      "prefix": "ohqp"
+    },
+    "paqp": {
+      "aliases": {},
+      "countyTokens": 67,
+      "officialCounties": 67,
+      "prefix": "paqp"
+    },
+    "sdqp": {
+      "aliases": {},
+      "countyTokens": 66,
+      "officialCounties": 66,
+      "prefix": "sdqp"
+    },
+    "tnqp": {
+      "aliases": {},
+      "countyTokens": 95,
+      "officialCounties": 95,
+      "prefix": "tnqp"
+    },
+    "tqp": {
+      "aliases": {},
+      "countyTokens": 254,
+      "officialCounties": 254,
+      "prefix": "txqp"
+    }
+  },
+  "fetched": "2026-07-25",
+  "served": {
+    "alqp": {
+      "postURL": "http://qsopartyhub.com/alqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/alqp-table.php"
+    },
+    "azqp": {
+      "postURL": "http://qsopartyhub.com/azqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/azqp-table.php"
+    },
+    "coqp": {
+      "postURL": "http://qsopartyhub.com/coqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/coqp-table.php"
+    },
+    "hqp": {
+      "postURL": "http://qsopartyhub.com/hiqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/hiqp-table.php"
+    },
+    "iaqp": {
+      "postURL": "http://qsopartyhub.com/iaqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/iaqp-table.php"
+    },
+    "ilqp": {
+      "countyAliases": {
+        "PULS": "PULA"
+      },
+      "postURL": "http://qsopartyhub.com/ilqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/ilqp-table.php"
+    },
+    "ksqp": {
+      "postURL": "http://qsopartyhub.com/ksqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/ksqp-table.php"
+    },
+    "mdc": {
+      "postURL": "http://qsopartyhub.com/mdcqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/mdcqp-table.php"
+    },
+    "meqp": {
+      "postURL": "http://qsopartyhub.com/meqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/meqp-table.php"
+    },
+    "nhqp": {
+      "postURL": "http://qsopartyhub.com/nhqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/nhqp-table.php"
+    },
+    "njqp": {
+      "postURL": "http://qsopartyhub.com/njqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/njqp-table.php"
+    },
+    "nyqp": {
+      "postURL": "http://qsopartyhub.com/nyqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/nyqp-table.php"
+    },
+    "ohqp": {
+      "postURL": "http://qsopartyhub.com/ohqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/ohqp-table.php"
+    },
+    "paqp": {
+      "postURL": "http://qsopartyhub.com/paqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/paqp-table.php"
+    },
+    "sdqp": {
+      "postURL": "http://qsopartyhub.com/sdqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/sdqp-table.php"
+    },
+    "tnqp": {
+      "postURL": "http://qsopartyhub.com/tnqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/tnqp-table.php"
+    },
+    "tqp": {
+      "postURL": "http://qsopartyhub.com/txqp-spots.php",
+      "tableURL": "http://qsopartyhub.com/txqp-table.php"
+    }
+  },
+  "skipped": {
+    "cqp": "caqp-spots.php is an unfinished stub — embeds the shared qp-table.php, which redirects",
+    "warun": "waqp-spots.php returns 404 — no hub page"
+  },
+  "source": "http://qsopartyhub.com/{prefix}-spots.php"
+}

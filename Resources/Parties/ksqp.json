@@ -486,5 +486,9 @@
     }
   ],
   "outStateWorksHomeStationsOnly": true,
-  "notes": "Verified against official 2026 rules (ksqsoparty.org, fetched 2026-07-23). Counties from official KSQP-Mults PDF. Out-of-state entrants work Kansas stations only, per the rules OBJECT (2026 rules PDF, fetched 2026-07-25)."
+  "notes": "Verified against official 2026 rules (ksqsoparty.org, fetched 2026-07-23). Counties from official KSQP-Mults PDF. Out-of-state entrants work Kansas stations only, per the rules OBJECT (2026 rules PDF, fetched 2026-07-25).",
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/ksqp-table.php",
+    "postURL": "http://qsopartyhub.com/ksqp-spots.php"
+  }
 }
