@@ -22,6 +22,13 @@ struct Spot: Identifiable, Equatable, Sendable {
     /// hub spots usually do, and it is the multiplier the party is scored on.
     var county: String?
     var source: SpotSource = .cluster
+    /// Whether the frequency was read as typed or recovered from a value that
+    /// was not valid as written. A reconstructed frequency is inference, and
+    /// the operator should be told before the radio moves there.
+    var frequencyConfidence: HubFrequency.Confidence = .reported
+    /// A later spot on this frequency corrected this call. Marked rather than
+    /// dropped — the heuristic rests on few observed instances.
+    var isSuperseded: Bool = false
 
     var band: Band? {
         Band.from(freqKHz: Int(freqKHz.rounded()))
