@@ -402,7 +402,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 606 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 607 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -482,6 +482,14 @@ typed QSY commands, keyer timing, and keyer labelling.
   same literal token "DX", so without a DXCC prefix table this app credits DX as
   one multiplier and an NH entrant's count can run up to 9 low. Out-of-state
   entrants are unaffected — DX is not one of their multiplier classes.
+- ALQP: the **2026 rules page** (alabamacontestgroup.org/aqp/rules/, fetched
+  2026-07-25, extracted to [`alqp_rules_2026.txt`](docs/research/alqp_rules_2026.txt))
+  states it as the party Object — "Stations outside of Alabama make contact with
+  Alabama amateur radio stations and as many Alabama counties as possible" —
+  with out-of-state multipliers capped at "Maximum of 67 Alabama counties".
+  Resolved as for the other aim-not-prohibition parties; analysis in
+  [`alqp_out_of_state_credit.md`](docs/research/alqp_out_of_state_credit.md).
+  The short `/aqp-rules/` path 404s; the rules are at `/aqp/rules/`.
 - KSQP: the **2026 rules PDF** (ksqsoparty.org, fetched 2026-07-25, extracted to
   [`ksqp_rules_2026.txt`](docs/research/ksqp_rules_2026.txt)) states the
   restriction as the party's OBJECT and names both sides — "Stations outside of
