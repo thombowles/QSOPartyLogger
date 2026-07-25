@@ -81,6 +81,32 @@ final class SpottingTests: XCTestCase {
         XCTAssertEqual(spot?.comment, "")
     }
 
+    /// SDC pushes live decodes as ordinary `DX de …` broadcasts, with the
+    /// skimmer tag in place of a spotter callsign. Captured verbatim from SDC
+    /// on localhost:7373.
+    func testParseSDCBroadcastLine() {
+        let line = "DX de SKM-A-#:  14001.98  W4RN           CW  -2 dB 28 WPM  CQ  SDC    1925Z"
+        let spot = SpotParser.parse(line, receivedAt: Date())
+        XCTAssertEqual(spot?.call, "W4RN")
+        XCTAssertEqual(spot?.freqKHz ?? 0, 14001.98, accuracy: 0.001)
+        XCTAssertEqual(spot?.spotter, "SKM-A-#")
+        XCTAssertEqual(spot?.comment, "CW -2 dB 28 WPM CQ SDC")
+        XCTAssertEqual(spot?.band, .m20)
+    }
+
+    /// A local skimmer collector (SDC) answers `sh/dx` in the same columnar
+    /// layout, with the skimmer's own tag as the spotter and a signal/speed
+    /// comment. Captured verbatim from SDC on localhost:7373.
+    func testParseSDCSkimmerLine() {
+        let line = "14045.08  KC4TEO      25-Jul-2026 1923Z  CW  31 dB 22 WPM <SKM-A-#>"
+        let spot = SpotParser.parse(line, receivedAt: Date())
+        XCTAssertEqual(spot?.call, "KC4TEO")
+        XCTAssertEqual(spot?.freqKHz ?? 0, 14045.08, accuracy: 0.001)
+        XCTAssertEqual(spot?.spotter, "SKM-A-#")
+        XCTAssertEqual(spot?.comment, "CW 31 dB 22 WPM")
+        XCTAssertEqual(spot?.band, .m20)
+    }
+
     func testShowDXHeaderAndChatterRejected() {
         XCTAssertNil(SpotParser.parse("Callsign   Frequency   Date      Time", receivedAt: Date()))
         XCTAssertNil(SpotParser.parse("  599.0  K5ABC   24-Jul-2026 1523Z  x   <W3LPL>", receivedAt: Date()))
