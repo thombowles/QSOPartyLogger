@@ -198,6 +198,13 @@ parties, and the remaining engine gaps. Adding a party is governed by
   (sponsors want them), KS0KS +100 bonus, TQP mobile 5-county bonuses, and a
   "NEW MULT" badge before you log. KSQP 1×1 word tracker (KANSAS, QSOPARTY,
   SUNFLOWER, YELLOWBRICKROAD) with wildcard handling.
+- **Worked before**: type or tune to a call already in the log and a table
+  appears between the F-keys and the log listing every prior contact with him —
+  band, mode, time, and what he sent. The entry for the band and mode you are on
+  right now is bold and orange: nothing left to work here. A county-line contact
+  is one row, not two. It takes no space at all for a station you have not
+  worked, and the room comes out of the log table rather than out of the window,
+  so nothing resizes.
 - **Elecraft K3/K3S/KX3/KX2 CAT** over serial (4800–38400 baud): live
   frequency/mode/TX polling (`IF;` — verified against Programmer's Reference
   revs F2 and G5), band stamped onto each QSO.

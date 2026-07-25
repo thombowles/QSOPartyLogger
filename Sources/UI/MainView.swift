@@ -159,6 +159,16 @@ struct MainView: View {
         )
     }
 
+    /// Every prior contact with the call in the entry field — the history
+    /// table's contents, and the reason it is on screen at all.
+    private var workedBefore: [DupeChecker.WorkedContact] {
+        DupeChecker.workedContacts(call: entry.callNormalized, log: document.log.qsos)
+    }
+
+    private var workedBeforeHeight: CGFloat {
+        WorkedBeforeTable.height(contacts: workedBefore.count, hasArchiveLine: false)
+    }
+
     /// Calls already in the log on the current band+mode — grays their spots.
     private var workedCallsOnCurrentBandMode: Set<String> {
         Set(
@@ -210,6 +220,17 @@ struct MainView: View {
                 cqFrequencyLabel: cqFrequencyHz.map { String(format: "%.1f", Double($0) / 1000) },
                 onJumpToCQ: jumpToCQFrequency
             )
+
+            if workedBeforeHeight > 0 {
+                WorkedBeforeTable(
+                    call: entry.callNormalized,
+                    contacts: workedBefore,
+                    // The archive index supplies this once it has loaded.
+                    archiveLine: nil,
+                    currentBand: currentBand,
+                    currentModeClass: currentModeClass
+                )
+            }
             Divider()
 
             logTable
@@ -250,7 +271,9 @@ struct MainView: View {
             onDeleteGroup: { document.removeGroup(groupID: $0.groupID, undoManager: undoManager) },
             onEdit: { editingQSO = $0 }
         )
-        .frame(minHeight: 240)
+        // Whatever the history table takes, the log table gives back, so the
+        // pane's minimum content height — and the window — never moves.
+        .frame(minHeight: WorkedBeforeTable.logTableMin(tableHeight: workedBeforeHeight))
     }
 
     private func onDisappear() {

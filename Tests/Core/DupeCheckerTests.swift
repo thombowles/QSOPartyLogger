@@ -73,4 +73,43 @@ final class DupeCheckerTests: XCTestCase {
         XCTAssertEqual(dupes.count, 1)
         XCTAssertEqual(dupes[0].theirLoc, "LIN")
     }
+
+    // MARK: Prior contacts with a call
+
+    func testNoPriorContactsForACallNeverWorked() {
+        let log = [qso(call: "W0BH")]
+        XCTAssertTrue(DupeChecker.workedContacts(call: "K5NA", log: log).isEmpty)
+    }
+
+    func testCallMatchIsCaseInsensitiveAndTrimmed() {
+        let log = [qso(call: "K5NA")]
+        XCTAssertEqual(DupeChecker.workedContacts(call: " k5na ", log: log).count, 1)
+    }
+
+    /// A county-line contact is one contact that produced several rows. It is
+    /// one entry, and it names both counties the way the parser accepts them.
+    func testCountyLineGroupCollapsesToOneEntry() {
+        let group = UUID()
+        var a = qso(call: "K5NA", their: "JO"); a.groupID = group
+        var b = qso(call: "K5NA", their: "MI", t: 1); b.groupID = group
+        let entries = DupeChecker.workedContacts(call: "K5NA", log: [a, b])
+        XCTAssertEqual(entries.count, 1)
+        XCTAssertEqual(entries[0].theirLoc, "JO/MI")
+    }
+
+    func testEntriesAreMostRecentFirst() {
+        let early = qso(call: "K5NA", band: .m80, t: 0)
+        let late = qso(call: "K5NA", band: .m20, t: 3600)
+        let entries = DupeChecker.workedContacts(call: "K5NA", log: [early, late])
+        XCTAssertEqual(entries.map(\.band), [.m20, .m80])
+    }
+
+    func testEntryCarriesBandModeAndTime() {
+        let q = qso(call: "K5NA", band: .m40, mode: .phone, their: "JO")
+        let entries = DupeChecker.workedContacts(call: "K5NA", log: [q])
+        XCTAssertEqual(entries.first?.band, .m40)
+        XCTAssertEqual(entries.first?.modeClass, .phone)
+        XCTAssertEqual(entries.first?.timestampUTC, q.timestampUTC)
+        XCTAssertEqual(entries.first?.theirLoc, "JO")
+    }
 }
