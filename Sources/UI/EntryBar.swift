@@ -55,7 +55,7 @@ struct EntryBar: View {
     }
 
     private var exchangeLabel: String {
-        party.map { "County/State (\($0.homeState) Cty ×\($0.countyAbbrLength))" } ?? "Exchange"
+        party.map { "County/State (\($0.homeState) Cty ×\($0.countyAbbrLengthHint))" } ?? "Exchange"
     }
 
     private var canLog: Bool {

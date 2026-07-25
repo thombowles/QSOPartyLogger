@@ -33,9 +33,9 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**8 remaining** of the 16 in scope (8 built so far: MDC, HQP, OhQP, TnQP, COQP,
-NJQP, IAQP, NHQP); 11 parties bundled in total, those 8 plus the pre-existing
-ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
+**7 remaining** of the 16 in scope (9 built so far: MDC, HQP, OhQP, TnQP, COQP,
+NJQP, IAQP, NHQP, Salmon Run); 12 parties bundled in total, those 9 plus the
+pre-existing ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
 next, and the count above must equal the number of unstruck rows below.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
@@ -49,7 +49,7 @@ next, and the count above must equal the number of unstruck rows below.
 | ~~Colorado~~ | Sep 12 1400Z → Sep 13 0400Z | [`coqp_rules.md`](../research/coqp_rules.md) + [`coqp_src_counties.txt`](../research/coqp_src_counties.txt) | **done** |
 | ~~Iowa~~ | Sep 19 1400Z → Sep 20 0200Z | [`iaqp_rules.md`](../research/iaqp_rules.md) + [`iaqp_county_list.txt`](../research/iaqp_county_list.txt) | **done** (`verified: partial`) |
 | ~~New Hampshire~~ | Sep 19 1600Z → Sep 20 0400Z; Sep 20 1200–2200Z | [`nhqp_rules.md`](../research/nhqp_rules.md) + [`nhqp_counties.tsv`](../research/nhqp_counties.tsv) | **done** (`verified: partial`) |
-| **Washington Salmon Run** | Sep 19 1600Z → Sep 20 0700Z; Sep 20 1600–2400Z | [`warun_rules.md`](../research/warun_rules.md) + [`warun_counties.tsv`](../research/warun_counties.tsv) | research banked |
+| ~~Washington Salmon Run~~ | Sep 19 1600Z → Sep 20 0700Z; Sep 20 1600–2400Z | [`warun_rules.md`](../research/warun_rules.md) + [`warun_counties.tsv`](../research/warun_counties.tsv) | **done** |
 | ~~Texas~~ | Sep 19 1400Z → Sep 20 0200Z; Sep 20 1400–2000Z | [`tqp_verify.md`](../research/tqp_verify.md) | **done** (`verified: partial`) |
 | **Maine** | Sep 26 1200Z → Sep 27 1200Z ⚠️ **not on the Challenge calendar** | — | not started |
 | **California** | Oct 3 1600Z → Oct 4 2200Z | — | not started |
@@ -81,11 +81,10 @@ next, and the count above must equal the number of unstruck rows below.
    Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
    **Email `info@hawaiiqsoparty.org` to settle it.** See
    [`hqp_rules.md` §2](../research/hqp_rules.md).
-4. **Only one banked research doc is left.** Of the 8 remaining, only Washington
-   Salmon Run has research banked. The other seven (Maine, California, Arizona,
-   Pennsylvania, South Dakota, New York, Illinois) start from their sponsors'
-   sites with nothing captured, so expect those iterations to be research-heavy,
-   as Hawaii was.
+4. **All banked research is used up.** Every one of the 7 remaining — Maine,
+   California, Arizona, Pennsylvania, South Dakota, New York, Illinois — starts
+   from its sponsor's site with nothing captured, so expect each iteration to be
+   research-heavy, as Hawaii was. Maine also carries the open question above.
 5. **Banked research has mislabelled `homeStateCountsViaCounty` twice.** Both
    `tnqp_rules.md` and `nhqp_rules.md` claimed "home-state-via-county: YES" when
    the sponsor only meant that home-state counties are in the in-state class list.
@@ -118,6 +117,15 @@ party; each would be its own commit (Article 4).
   permit it** and both tabulate suggested 222/223 MHz frequencies. Two users now,
   so this is worth building: it touches `Band`, the band map and ADIF, and belongs
   in its own commit.
+- **DXCC prefixes shadowed by state/province codes.** `isPlausibleDXPrefix`
+  rejects any token matching a US state or Canadian province code, so real DXCC
+  prefixes that collide are credited as the state/province: PA (Netherlands) as
+  Pennsylvania, OK (Slovakia) as Oklahoma, LA (Norway) as Louisiana, ON (Belgium)
+  as Ontario. Sponsors' log checkers resolve them the same way, so this is
+  defensible — but it matters for the Salmon Run, the one party where DX prefixes
+  carry multiplier weight, because it can leave the 10-DXCC allowance under-used.
+  Fixing it properly needs the callsign, not the exchange token. A test in
+  `SalmonRunTests` pins the current behaviour so it stays deliberate.
 - **No DXCC prefix table.** NHQP gives NH stations "up to 10 DXCC country" as
   multipliers, but its exchange is the literal token "DX", so distinguishing DXCC
   entities requires deriving country from the callsign. `dxMultCap` records the
@@ -133,9 +141,10 @@ party; each would be its own commit (Article 4).
 
 - **Review `outStateWorksHomeStationsOnly` for the parties that predate it.**
   MDC introduced this field (rules 10b), and **every party built since has needed
-  it** — HQP, OhQP, TnQP and COQP all state the restriction outright
-  ("QSOs must include at least one Colorado station"). Five for five: this is the
-  norm, not the exception, and ALQP/KSQP/TQP are very likely wrong to have it off.
+  it** — nine for nine. Six state it outright (MDC, HQP, OhQP, TnQP, COQP, and the
+  Salmon Run's "Stations outside Washington state work only Washington state
+  stations"); three more (NJQP, IAQP, NHQP) only imply it and ship it on with an
+  open question. ALQP/KSQP/TQP are very likely wrong to have it off.
   It defaults to `false` so those three keep scoring exactly as before per
   Article 4, but each should be re-read and switched on where the sponsor says so
   — ideally in one deliberate commit covering all three, with their own tests

@@ -186,6 +186,24 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         return tail.isEmpty ? nil : tail
     }
 
+    // MARK: County abbreviation shape
+
+    /// Distinct abbreviation lengths actually present in the county data,
+    /// ascending. Most parties use one length; the Salmon Run mixes 3 and 4
+    /// (`CLAL`/`COL`, `KITS`/`KLI`), so a single `countyAbbrLength` cannot
+    /// describe it. Derived from the data rather than hand-maintained.
+    var countyAbbrLengths: [Int] {
+        Set(counties.map(\.abbr.count)).sorted()
+    }
+
+    /// Entry-field hint: `"3"` for a uniform party, `"3/4"` where lengths mix.
+    var countyAbbrLengthHint: String {
+        let lengths = countyAbbrLengths
+        return lengths.isEmpty
+            ? String(countyAbbrLength)
+            : lengths.map(String.init).joined(separator: "/")
+    }
+
     // MARK: Lookup
 
     var countiesByAbbr: [String: County] {

@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "id": "warun",
+  "name": "Washington Salmon Run",
+  "cabrilloContest": "WA-SALMON-RUN",
+  "homeState": "WA",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 3,
+    "digital": 0
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once",
+      "dxMultCap": 10
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "W7DX",
+      "points": 500,
+      "scope": "perMode"
+    }
+  ],
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "maxSimultaneousCounties": 2,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-09-19T16:00:00Z",
+      "end": "2026-09-20T07:00:00Z"
+    },
+    {
+      "start": "2026-09-20T16:00:00Z",
+      "end": "2026-09-21T00:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ADA",
+      "name": "Adams"
+    },
+    {
+      "abbr": "ASO",
+      "name": "Asotin"
+    },
+    {
+      "abbr": "BEN",
+      "name": "Benton"
+    },
+    {
+      "abbr": "CHE",
+      "name": "Chelan"
+    },
+    {
+      "abbr": "CLAL",
+      "name": "Clallam"
+    },
+    {
+      "abbr": "CLAR",
+      "name": "Clark"
+    },
+    {
+      "abbr": "COL",
+      "name": "Columbia"
+    },
+    {
+      "abbr": "COW",
+      "name": "Cowlitz"
+    },
+    {
+      "abbr": "DOU",
+      "name": "Douglas"
+    },
+    {
+      "abbr": "FER",
+      "name": "Ferry"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "GAR",
+      "name": "Garfield"
+    },
+    {
+      "abbr": "GRAN",
+      "name": "Grant"
+    },
+    {
+      "abbr": "GRAY",
+      "name": "Grays Harbor"
+    },
+    {
+      "abbr": "ISL",
+      "name": "Island"
+    },
+    {
+      "abbr": "JEFF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "KING",
+      "name": "King"
+    },
+    {
+      "abbr": "KITS",
+      "name": "Kitsap"
+    },
+    {
+      "abbr": "KITT",
+      "name": "Kittitas"
+    },
+    {
+      "abbr": "KLI",
+      "name": "Klickitat"
+    },
+    {
+      "abbr": "LEW",
+      "name": "Lewis"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "MAS",
+      "name": "Mason"
+    },
+    {
+      "abbr": "OKA",
+      "name": "Okanogan"
+    },
+    {
+      "abbr": "PAC",
+      "name": "Pacific"
+    },
+    {
+      "abbr": "PEND",
+      "name": "Pend Oreille"
+    },
+    {
+      "abbr": "PIE",
+      "name": "Pierce"
+    },
+    {
+      "abbr": "SAN",
+      "name": "San Juan"
+    },
+    {
+      "abbr": "SKAG",
+      "name": "Skagit"
+    },
+    {
+      "abbr": "SKAM",
+      "name": "Skamania"
+    },
+    {
+      "abbr": "SNO",
+      "name": "Snohomish"
+    },
+    {
+      "abbr": "SPO",
+      "name": "Spokane"
+    },
+    {
+      "abbr": "STE",
+      "name": "Stevens"
+    },
+    {
+      "abbr": "THU",
+      "name": "Thurston"
+    },
+    {
+      "abbr": "WAH",
+      "name": "Wahkiakum"
+    },
+    {
+      "abbr": "WAL",
+      "name": "Walla Walla"
+    },
+    {
+      "abbr": "WHA",
+      "name": "Whatcom"
+    },
+    {
+      "abbr": "WHI",
+      "name": "Whitman"
+    },
+    {
+      "abbr": "YAK",
+      "name": "Yakima"
+    }
+  ],
+  "notes": "Verified against the sponsor's official rules (salmonrun.wwdxc.org/rules/, 'Updated - July 22, 2024', re-read and quoted back verbatim 2026-07-24); the 2026 dates come from the site-wide sidebar, 'Salmon Run 2026: 1600Z Saturday, September 19, 2026 - 2359Z Sunday, September 20'. Sponsor is the Western Washington DX Club, club call W7DX. UNIQUE IN THIS REPO: Washington's county abbreviations are MIXED LENGTH, 3 and 4 characters, because the 4-character codes disambiguate same-prefix pairs — CLAL/CLAR (Clallam/Clark), GRAN/GRAY (Grant/Grays Harbor), KITS/KITT (Kitsap/Kittitas), SKAG/SKAM (Skagit/Skamania) — so countyAbbrLength records the maximum and the entry-field hint is derived from the county data instead. Counties generated from the sponsor's abbreviation page via warun_counties.tsv, never hand-typed. Phone 2 pts, CW 3 pts (older editions used 4 for CW — do NOT use 4); digital is not a contest mode at all, so digital rows are invalid rather than zero-scored ('We cannot accept WJST modes ... because they do not provide the proper exchange'). Multipliers count ONCE regardless of mode or band on both sides. The in-state ceiling of 111 (39 counties + 49 states less WA + 13 VE + 10 DXCC) is asserted by the generator. Washington itself is never a state multiplier ('US States less WA'), DC counts as MD, and AK/HI count as states. DX stations send their DXCC ENTITY PREFIX rather than a literal token, so unlike NHQP the 10-DXCC cap actually binds — this is the only bundled party where dxMultCap has an effect. Out-of-state stations may work only Washington stations, stated outright in the OBJECT section: 'Stations outside Washington state work only Washington state stations for QSO Points and County Multiplier credit.' County lines are logged as two QSOs and at most two counties may be run at once, even at a 3-county intersection. W7DX pays a 500-point bonus PER MODE, capped at 1000 for a mixed-mode entry and 500 for a single-mode entry, added after multiplication and never per band or per QSO; W7DX also counts for its normal county multiplier and normal QSO points. No power or category multiplier. Cabrillo CONTEST value WA-SALMON-RUN, which the sponsor calls 'our official name'. KNOWN LIMITATION, and it matters more here than anywhere else because this is the only party where DX prefixes carry multiplier weight: a real DXCC prefix that happens to equal a US state or Canadian province code is read as that state or province, not as DX. PA (Netherlands) is credited as Pennsylvania, OK (Slovakia) as Oklahoma, LA (Norway) as Louisiana, ON (Belgium) as Ontario. That is the same resolution sponsors' log checkers apply, but it means a WA station working those entities sees them as state/province multipliers rather than DXCC ones, which can leave the 10-DXCC allowance under-used. Not modeled: the single-mode-entry restriction (contacts on other modes earning no credit) is an entry-class matter this app does not track; mobile and expedition entrants counting multipliers only once across all counties activated, which matches the engine's behaviour anyway; and the requirement that claimed DXCC prefixes match the current ARRL DXCC Entities List."
+}
