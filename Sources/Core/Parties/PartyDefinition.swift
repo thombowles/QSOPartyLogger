@@ -62,6 +62,15 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     var exchangeIncludesRST: Bool { exchangeIncludesRSTRaw ?? true }
     private let exchangeIncludesRSTRaw: Bool?
 
+    /// Whether the exchange carries a QSO number. CQP: "California stations send
+    /// QSO number and 4-letter county abbreviation … QSO number = contact serial
+    /// number starting with 1 for the first contact."
+    ///
+    /// Independent of `exchangeIncludesRST` — all four combinations are real:
+    /// report only (most parties), number only (CQP), neither (MDC), or both.
+    var exchangeIncludesSerial: Bool { exchangeIncludesSerialRaw ?? false }
+    private let exchangeIncludesSerialRaw: Bool?
+
     /// Whether an out-of-state entrant earns credit *only* for contacts with
     /// home-state stations. MDC rule 10b: "Stations not located in the state of
     /// Maryland, or the District of Columbia may only receive credit for
@@ -309,6 +318,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case excludedStateTokensRaw = "excludedStateTokens"
         case provincesRaw = "provinces"
         case exchangeIncludesRSTRaw = "exchangeIncludesRST"
+        case exchangeIncludesSerialRaw = "exchangeIncludesSerial"
         case outStateWorksHomeStationsOnlyRaw = "outStateWorksHomeStationsOnly"
     }
 }

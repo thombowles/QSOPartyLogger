@@ -7,6 +7,11 @@ final class EntryState {
     var call = ""
     var rstSent = ""
     var rstRcvd = ""
+    /// QSO numbers, for parties whose exchange carries one. `serialSent` is
+    /// pre-filled with the log's next number and stays editable so a
+    /// mis-sent number can be recorded as it actually went out.
+    var serialSent = ""
+    var serialRcvd = ""
     var exchange = ""
 
     enum ExchangeStatus: Equatable {
@@ -26,6 +31,20 @@ final class EntryState {
     func applyDefaults(modeClass: ModeClass) {
         if rstSent.isEmpty { rstSent = modeClass.defaultRST }
         if rstRcvd.isEmpty { rstRcvd = modeClass.defaultRST }
+    }
+
+    /// Show the number this contact will send. `nil` for the parties that
+    /// exchange no QSO number, which clears the field.
+    func syncSerial(next: Int?) {
+        serialSent = next.map(String.init) ?? ""
+    }
+
+    /// The typed numbers, or nil where the party exchanges none / nothing was
+    /// entered. Non-numeric text yields nil rather than a wrong number.
+    func serials(party: PartyDefinition?) -> (sent: Int?, rcvd: Int?) {
+        guard party?.exchangeIncludesSerial ?? false else { return (nil, nil) }
+        return (Int(serialSent.trimmingCharacters(in: .whitespaces)),
+                Int(serialRcvd.trimmingCharacters(in: .whitespaces)))
     }
 
     /// Re-validate the exchange and refresh dupe/new-mult hints.
@@ -94,10 +113,12 @@ final class EntryState {
         if rstRcvd.isEmpty || defaults.contains(rstRcvd) { rstRcvd = modeClass.defaultRST }
     }
 
-    func clearForNextContact(modeClass: ModeClass) {
+    func clearForNextContact(modeClass: ModeClass, nextSerial: Int? = nil) {
         call = ""
         rstSent = modeClass.defaultRST
         rstRcvd = modeClass.defaultRST
+        syncSerial(next: nextSerial)
+        serialRcvd = ""
         exchange = ""
         exchangeStatus = .idle
         dupeWarning = nil

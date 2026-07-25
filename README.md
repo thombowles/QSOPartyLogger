@@ -120,6 +120,12 @@ used; the remaining four start from their sponsors' sites. Adding a party is gov
   location to up to 4 counties) and every county pair becomes its own log row —
   exactly what KSQP rule 11 requires ("a separate QSO must be logged for each
   county"). Rows share a group marker so they edit/delete together.
+- **Serial-number exchanges.** Where a party sends a QSO number instead of a
+  signal report, the entry bar shows the outgoing number (pre-filled with the
+  next in sequence) and a field for theirs, and both reach Cabrillo's exchange
+  columns and ADIF's `STX`/`SRX`. **A county-line contact is one contact and
+  carries one number**, shared by every row it expands into — the operator sent
+  one number on the air. Deleting a QSO never renumbers the others.
 - **County abbreviation validation** against each party's official list
   (KSQP: 105 3-letter, TQP: 254 4-letter, both generated from the sponsors'
   official files). Typos get suggestions (`LNI` → `LIN`); the home-state token
@@ -142,8 +148,9 @@ used; the remaining four start from their sponsors' sites. Adding a party is gov
 - **CW keying two ways**: direct DTR/RTS line keying with sub-millisecond
   software timing (8–50 WPM, optional PTT line with lead/tail), or the
   radio's internal keyer (K3 `KY` / Flex CWX). F1–F8 messages with
-  `{MYCALL} {CALL} {RST} {EXCH}` macros; **Esc aborts instantly**. Optional
-  cut numbers for RST (599 → 5NN) in the CW Messages editor.
+  `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}` macros; **Esc aborts instantly**.
+  Optional cut numbers for RST and QSO numbers (599 → 5NN) in the CW Messages
+  editor.
 - **ESM (Enter Sends Message)** toggle right on the message row: Return
   sends CQ / exchange / TU based on what's filled in, and logs automatically
   after the exchange — N1MM muscle memory intact.
@@ -195,7 +202,7 @@ used; the remaining four start from their sponsors' sites. Adding a party is gov
 | Keys | Action |
 | --- | --- |
 | `Enter` | Log (or ESM next-message; or execute a typed QSY command) |
-| `Space` | Jump to the next entry field (Call → Exchange) |
+| `Space` | Jump to the next entry field (Call → Exchange, or → QSO nr rcvd where the party sends one) |
 | `F12` | Wipe the entry fields and start the contact over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
 | `Esc` | Abort CW + stop repeat-CQ |
@@ -326,7 +333,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 457 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 479 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,

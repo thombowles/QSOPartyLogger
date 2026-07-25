@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		001422B5EA133D81250B56D7 /* Parties in Resources */ = {isa = PBXBuildFile; fileRef = E70A4C058DB0BE3BF9AA15BC /* Parties */; };
+		00C7117A6FF2B28F0F627443 /* SerialExchangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */; };
 		028946A7475AD006C593EF95 /* RadioInternalKeyer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3AC73A860763A7F9B91E4F5 /* RadioInternalKeyer.swift */; };
 		07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DA5A46F75BD3EFC70DC50D /* CabrilloExporter.swift */; };
 		097E888A0ACA42B4ED11F066 /* K3ProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53DC8597A1A918FA7CB32D4 /* K3ProtocolTests.swift */; };
@@ -123,6 +124,7 @@
 		093C918A35B84A46D9369272 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		0F52BEC7154012161AF51ED0 /* CWSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CWSender.swift; sourceTree = "<group>"; };
 		14042D5B6DD33CC2A46A276C /* SpotFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFilter.swift; sourceTree = "<group>"; };
+		14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialExchangeTests.swift; sourceTree = "<group>"; };
 		165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneByOneTrackerTests.swift; sourceTree = "<group>"; };
 		1A23E3ADEAE3B7F86B2A421E /* LogTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTable.swift; sourceTree = "<group>"; };
 		1D8C4419151BB1282C6E55EC /* SerialPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialPort.swift; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 				6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */,
 				EBD1F2D81475C7AC090117A5 /* SalmonRunTests.swift */,
 				29960406C674052D5117926D /* ScoreEngineTests.swift */,
+				14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */,
 				04053E0272A2391F55417D60 /* SpotFilterTests.swift */,
 				A2215D1E38A85D6578624B1D /* SpottingTests.swift */,
 				FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */,
@@ -612,6 +615,7 @@
 				632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */,
 				36855A41F241A73EAF900267 /* SalmonRunTests.swift in Sources */,
 				4499E2CE096927357D50EABF /* ScoreEngineTests.swift in Sources */,
+				00C7117A6FF2B28F0F627443 /* SerialExchangeTests.swift in Sources */,
 				5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */,
 				D92268C1083B39CB08B32393 /* SpotFilterTests.swift in Sources */,
 				A632469108D3943D5C878CD7 /* SpottingTests.swift in Sources */,

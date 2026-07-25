@@ -10,6 +10,8 @@ struct EditQSOSheet: View {
     @State private var call = ""
     @State private var rstSent = ""
     @State private var rstRcvd = ""
+    @State private var serialSent = ""
+    @State private var serialRcvd = ""
     @State private var theirLoc = ""
     @State private var myLoc = ""
     @State private var band: Band = .m20
@@ -43,11 +45,25 @@ struct EditQSOSheet: View {
                         .frame(width: 90)
                     }
                 }
-                GridRow {
-                    Text("RST sent / rcvd")
-                    HStack {
-                        TextField("", text: $rstSent).frame(width: 60)
-                        TextField("", text: $rstRcvd).frame(width: 60)
+                if party?.exchangeIncludesRST ?? true {
+                    GridRow {
+                        Text("RST sent / rcvd")
+                        HStack {
+                            TextField("", text: $rstSent).frame(width: 60)
+                            TextField("", text: $rstRcvd).frame(width: 60)
+                        }
+                    }
+                }
+                // A mistyped QSO number is the one thing an operator must be
+                // able to correct after the fact, since the log checker cross-
+                // references it against the other station's log.
+                if party?.exchangeIncludesSerial ?? false {
+                    GridRow {
+                        Text("QSO nr sent / rcvd")
+                        HStack {
+                            TextField("", text: $serialSent).frame(width: 60)
+                            TextField("", text: $serialRcvd).frame(width: 60)
+                        }
                     }
                 }
                 GridRow {
@@ -84,6 +100,8 @@ struct EditQSOSheet: View {
             call = original.call
             rstSent = original.rstSent
             rstRcvd = original.rstRcvd
+            serialSent = original.serialSent.map(String.init) ?? ""
+            serialRcvd = original.serialRcvd.map(String.init) ?? ""
             theirLoc = original.theirLoc
             myLoc = original.myLoc
             band = original.band
@@ -111,6 +129,8 @@ struct EditQSOSheet: View {
         updated.call = call.trimmingCharacters(in: .whitespaces).uppercased()
         updated.rstSent = rstSent.trimmingCharacters(in: .whitespaces)
         updated.rstRcvd = rstRcvd.trimmingCharacters(in: .whitespaces)
+        updated.serialSent = Int(serialSent.trimmingCharacters(in: .whitespaces))
+        updated.serialRcvd = Int(serialRcvd.trimmingCharacters(in: .whitespaces))
         updated.theirLoc = theirTrimmed
         updated.myLoc = myLoc.trimmingCharacters(in: .whitespaces).uppercased()
         updated.band = band

@@ -59,6 +59,16 @@ struct ContestLog: Codable, Equatable, Sendable {
     /// new documents prompt for setup immediately.
     var setupCompleted: Bool
 
+    /// The QSO number to send for the next contact, for parties whose exchange
+    /// carries one. Derived from the highest number already sent rather than
+    /// from the row count, because a county-line contact expands into several
+    /// rows that all share one number. Deleting a QSO deliberately does *not*
+    /// renumber the rest: those numbers went out on the air and the other
+    /// station logged them, so a gap in the sequence is the honest record.
+    var nextSerial: Int {
+        (qsos.compactMap(\.serialSent).max() ?? 0) + 1
+    }
+
     init(
         partyID: String,
         station: StationProfile = StationProfile(),

@@ -508,6 +508,7 @@ struct MainView: View {
         }
         focusedField = .call
         entry.applyDefaults(modeClass: currentModeClass)
+        entry.syncSerial(next: nextSerialIfUsed)
         installKeyMonitor()
         radio.connectAndValidate(settings: settings)
 
@@ -594,7 +595,10 @@ struct MainView: View {
             // Sending his report means the exchange is what's needed next —
             // move the cursor there so Return keeps the QSO flowing.
             if let current = focusedField {
-                focusedField = current.next(includesRST: party?.exchangeIncludesRST ?? true)
+                focusedField = current.next(
+                    includesRST: party?.exchangeIncludesRST ?? true,
+                    includesSerial: party?.exchangeIncludesSerial ?? false
+                )
             }
         case .logAndSend(let index):
             logContact()
@@ -606,7 +610,7 @@ struct MainView: View {
 
     /// F12 — wipe a half-typed contact and get back to the call field.
     private func clearEntry() {
-        entry.clearForNextContact(modeClass: currentModeClass)
+        entry.clearForNextContact(modeClass: currentModeClass, nextSerial: nextSerialIfUsed)
         focusedField = .call
         revalidate()
     }
@@ -831,11 +835,21 @@ struct MainView: View {
             return
         }
 
+        // One contact, one QSO number — every row of a county-line contact
+        // carries the same pair. A blank sent field falls back to the log's next
+        // number so a submittable log never ends up with a hole in it.
+        let serials = entry.serials(party: party)
+        let sentSerial = (party.exchangeIncludesSerial)
+            ? (serials.sent ?? document.log.nextSerial)
+            : nil
+
         let rows = CountyLineExpander.expand(
             entry: .init(
                 call: entry.callNormalized,
                 rstSent: entry.rstSent.isEmpty ? currentModeClass.defaultRST : entry.rstSent,
                 rstRcvd: entry.rstRcvd.isEmpty ? currentModeClass.defaultRST : entry.rstRcvd,
+                serialSent: sentSerial,
+                serialRcvd: serials.rcvd,
                 band: currentBand,
                 modeClass: currentModeClass,
                 rawMode: currentRawMode,
@@ -847,8 +861,15 @@ struct MainView: View {
         )
         document.append(qsos: rows, undoManager: undoManager)
         _ = party
-        entry.clearForNextContact(modeClass: currentModeClass)
+        entry.clearForNextContact(modeClass: currentModeClass, nextSerial: nextSerialIfUsed)
         focusedField = .call
+    }
+
+    /// The QSO number to show in the entry bar, or nil for the parties that
+    /// exchange none. Read after every append so the field always shows what
+    /// the *next* contact will send.
+    private var nextSerialIfUsed: Int? {
+        (party?.exchangeIncludesSerial ?? false) ? document.log.nextSerial : nil
     }
 
     private func expandMacros(_ template: String) -> String {
@@ -858,6 +879,7 @@ struct MainView: View {
             call: entry.callNormalized,
             rst: entry.rstSent.isEmpty ? currentModeClass.defaultRST : entry.rstSent,
             exchange: document.log.myLocation.displayText,
+            serial: entry.serialSent,
             cutNumbers: settings.cwCutNumbers && currentModeClass == .cw
         )
     }

@@ -16,6 +16,16 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
     var freqKHz: Int?
     var rstSent: String
     var rstRcvd: String
+    /// QSO numbers sent and received, for parties whose exchange carries one
+    /// (CQP: "QSO number = contact serial number starting with 1 for the first
+    /// contact"). `nil` wherever the exchange carries a signal report instead —
+    /// which is every party but CQP, and is why these are optional: logs written
+    /// before serial support decode unchanged.
+    ///
+    /// A county-line contact is **one** contact and carries **one** number,
+    /// shared by every row it expands into (see `CountyLineExpander`).
+    var serialSent: Int?
+    var serialRcvd: Int?
     /// My sent location for this row: county abbreviation (in-state) or state/province.
     var myLoc: String
     /// Their location for this row: county abbreviation, state, province, or "DX".
@@ -32,6 +42,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         freqKHz: Int? = nil,
         rstSent: String,
         rstRcvd: String,
+        serialSent: Int? = nil,
+        serialRcvd: Int? = nil,
         myLoc: String,
         theirLoc: String
     ) {
@@ -45,6 +57,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         self.freqKHz = freqKHz
         self.rstSent = rstSent
         self.rstRcvd = rstRcvd
+        self.serialSent = serialSent
+        self.serialRcvd = serialRcvd
         self.myLoc = myLoc
         self.theirLoc = theirLoc
     }

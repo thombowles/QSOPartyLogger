@@ -11,6 +11,12 @@ enum CountyLineExpander {
         var call: String
         var rstSent: String
         var rstRcvd: String
+        /// One contact, one QSO number. A county-line exchange sends its
+        /// counties "in a single exchange" (CQP), so every row this expands
+        /// into carries the same pair — the operator sent one number on the
+        /// air, and the log must not claim several.
+        var serialSent: Int?
+        var serialRcvd: Int?
         var band: Band
         var modeClass: ModeClass
         var rawMode: String
@@ -32,6 +38,8 @@ enum CountyLineExpander {
                     freqKHz: entry.freqKHz,
                     rstSent: entry.rstSent,
                     rstRcvd: entry.rstRcvd,
+                    serialSent: entry.serialSent,
+                    serialRcvd: entry.serialRcvd,
                     myLoc: mine,
                     theirLoc: theirs
                 )

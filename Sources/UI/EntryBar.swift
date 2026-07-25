@@ -8,16 +8,22 @@ struct EntryBar: View {
     let onLog: () -> Void
 
     enum Field: Hashable {
-        case call, rstSent, rstRcvd, exchange
+        case call, rstSent, rstRcvd, serialSent, serialRcvd, exchange
 
         /// Where Space (and ESM's Return) moves next. Call jumps straight to
         /// the exchange because the RSTs are pre-filled — Tab still walks
         /// every field for the rare 579.
-        func next(includesRST: Bool) -> Field {
+        ///
+        /// A received QSO number is the one numeric field an operator *must*
+        /// type every contact, so where a party exchanges one, Call lands there
+        /// first and it leads on to the exchange.
+        func next(includesRST: Bool, includesSerial: Bool = false) -> Field {
             switch self {
-            case .call: .exchange
+            case .call: includesSerial ? .serialRcvd : .exchange
             case .rstSent: includesRST ? .rstRcvd : .exchange
-            case .rstRcvd: .exchange
+            case .rstRcvd: includesSerial ? .serialRcvd : .exchange
+            case .serialSent: .serialRcvd
+            case .serialRcvd: .exchange
             case .exchange: .call
             }
         }
@@ -33,6 +39,10 @@ struct EntryBar: View {
                 if party?.exchangeIncludesRST ?? true {
                     field("RST S", text: $entry.rstSent, width: 60, focusTag: .rstSent)
                     field("RST R", text: $entry.rstRcvd, width: 60, focusTag: .rstRcvd)
+                }
+                if party?.exchangeIncludesSerial ?? false {
+                    field("Ser S", text: $entry.serialSent, width: 60, focusTag: .serialSent)
+                    field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
                 }
                 field(exchangeLabel, text: $entry.exchange, width: 170, focusTag: .exchange)
                 statusBadge
@@ -114,7 +124,10 @@ struct EntryBar: View {
                 // exchange, where it separates county-line entries ("LIN AND").
                 .onKeyPress(.space) {
                     guard focusTag != .exchange else { return .ignored }
-                    focus = focusTag.next(includesRST: party?.exchangeIncludesRST ?? true)
+                    focus = focusTag.next(
+                        includesRST: party?.exchangeIncludesRST ?? true,
+                        includesSerial: party?.exchangeIncludesSerial ?? false
+                    )
                     return .handled
                 }
         }

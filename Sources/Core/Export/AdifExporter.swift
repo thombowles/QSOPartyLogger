@@ -73,6 +73,11 @@ enum AdifExporter {
         r += field("mode", adifMode(q.rawMode))
         r += field("rst_sent", q.rstSent)
         r += field("rst_rcvd", q.rstRcvd)
+        // ADIF 3.1.4 keeps serials separate from reports: STX/SRX are the
+        // transmitted/received serial numbers. Written only where the party
+        // exchanges one, so every other party's ADIF is byte-identical.
+        if let stx = q.serialSent { r += field("stx", String(stx)) }
+        if let srx = q.serialRcvd { r += field("srx", String(srx)) }
         r += field("stx_string", q.myLoc.uppercased())
         r += field("srx_string", q.theirLoc.uppercased())
         r += field("contest_id", party.cabrilloContest)

@@ -221,12 +221,17 @@ final class AppSettings {
         call: String,
         rst: String,
         exchange: String,
+        serial: String = "",
         cutNumbers: Bool = false
     ) -> String {
         template
             .replacingOccurrences(of: "{MYCALL}", with: myCall)
             .replacingOccurrences(of: "{CALL}", with: call)
             .replacingOccurrences(of: "{RST}", with: cutNumbers ? applyCutNumbers(rst) : rst)
+            // The QSO number, for parties that exchange one instead of a report
+            // (CQP). Defaults to empty, so message sets that never mention it
+            // expand exactly as before.
+            .replacingOccurrences(of: "{SERIAL}", with: cutNumbers ? applyCutNumbers(serial) : serial)
             .replacingOccurrences(of: "{EXCH}", with: exchange)
             .trimmingCharacters(in: .whitespaces)
     }
