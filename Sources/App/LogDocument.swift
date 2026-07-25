@@ -43,7 +43,31 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         guard let data = configuration.file.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
-        self.log = try ContestLog.decode(from: data)
+        self.log = try LogDocument.decodeUpgrading(data)
+    }
+
+    /// Decode-then-upgrade, split out from `init(configuration:)` because
+    /// `ReadConfiguration` has no public initialiser and the open path's
+    /// upgrade would otherwise be untestable.
+    nonisolated static func decodeUpgrading(_ data: Data) throws -> ContestLog {
+        upgradingUntouchedMessages(try ContestLog.decode(from: data))
+    }
+
+    /// A log saved before default macros followed the party's exchange shape
+    /// carries the old fixed `{RST}` set. An untouched set — byte-identical to
+    /// what shipped — carries no operator intent, so it is upgraded to the
+    /// party's shape. An edited set is left alone for `MessagesEditor` to warn
+    /// about; rewriting a customised message set behind the operator's back is
+    /// worse than the bug.
+    ///
+    /// Separate from `ContestLog.init(from:)` on purpose: a `Codable` init must
+    /// not touch the filesystem, and `PartyCatalog.party(id:)` re-reads the
+    /// bundle and the user parties folder on every call.
+    nonisolated static func upgradingUntouchedMessages(_ log: ContestLog) -> ContestLog {
+        guard log.messages == MessageSets.standard else { return log }
+        var upgraded = log
+        upgraded.messages = MessageSets.defaults(for: PartyCatalog.party(id: log.partyID))
+        return upgraded
     }
 
     func snapshot(contentType: UTType) throws -> ContestLog {
@@ -149,14 +173,27 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     @MainActor
     func updateStation(_ station: StationProfile, location: MyLocation, partyID: String, undoManager: UndoManager?) {
         let (oldStation, oldLoc, oldParty) = (log.station, log.myLocation, log.partyID)
+        let oldMessages = log.messages
         log.station = station
         log.myLocation = location
         log.partyID = partyID
         log.setupCompleted = true
+        // Macros the operator never edited follow the new party's exchange
+        // shape — this is what gives a CQP log {SERIAL} instead of Kansas's
+        // {RST}. Anything customised is theirs and is left alone.
+        if oldMessages == MessageSets.defaults(for: PartyCatalog.party(id: oldParty)) {
+            log.messages = MessageSets.defaults(for: PartyCatalog.party(id: partyID))
+        }
         AppSettings.shared.lastStationProfile = station
         undoManager?.registerUndo(withTarget: self) { doc in
             MainActor.assumeIsolated {
                 doc.updateStation(oldStation, location: oldLoc, partyID: oldParty, undoManager: undoManager)
+                // Restore the exact macros afterwards, whatever the
+                // re-derivation inside that call decided: for the macro set,
+                // undo is an exact inverse rather than a second guess.
+                // `setupCompleted` is deliberately not restored — a draft that
+                // has been through Contest Setup stays through it.
+                doc.log.messages = oldMessages
             }
         }
         undoManager?.setActionName("Change Station Setup")

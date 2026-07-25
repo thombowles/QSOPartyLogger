@@ -28,4 +28,186 @@ final class LogDocumentTests: XCTestCase {
         }
         wait(for: [done], timeout: 5)
     }
+
+    // MARK: Message defaults follow the party (2026-07-25)
+
+    /// A new document starts at ksqp and the operator picks the real party in
+    /// Contest Setup, so the macros have to follow that choice — deriving them
+    /// at init alone would give a CQP operator Kansas's macros.
+    @MainActor
+    func testUntouchedMacrosFollowThePartyChosenInSetup() throws {
+        let doc = LogDocument()
+        XCTAssertEqual(doc.log.partyID, "ksqp")
+        XCTAssertEqual(doc.log.messages, MessageSets.standard, "precondition")
+
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.messages.run[1], "{CALL} {SERIAL} {EXCH}")
+        XCTAssertEqual(
+            doc.log.messages,
+            MessageSets.defaults(for: PartyCatalog.party(id: "cqp"))
+        )
+    }
+
+    @MainActor
+    func testCustomisedMacrosSurviveAPartyChange() throws {
+        let doc = LogDocument()
+        var custom = MessageSets.standard
+        custom.run[0] = "CQ CQP {MYCALL} {MYCALL}"
+        doc.log.messages = custom
+
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.messages, custom,
+                       "an edited set encodes an on-air habit; it is not ours to rewrite")
+    }
+
+    /// Undo must be an exact inverse: a Kansas log must not keep California
+    /// macros after the party change is undone.
+    @MainActor
+    func testUndoRestoresBothPartyAndMacros() throws {
+        let doc = LogDocument()
+        let undo = UndoManager()
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: undo
+        )
+        XCTAssertEqual(doc.log.messages.run[1], "{CALL} {SERIAL} {EXCH}", "precondition")
+
+        undo.undo()
+        XCTAssertEqual(doc.log.partyID, "ksqp")
+        XCTAssertEqual(doc.log.messages, MessageSets.standard)
+    }
+
+    /// The open path: a CQP log saved before this change carries the old fixed
+    /// report macros, and gets upgraded.
+    func testOpeningACQPLogUpgradesUntouchedMacros() {
+        var saved = ContestLog(partyID: "cqp")
+        saved.messages = MessageSets.standard
+        let opened = LogDocument.upgradingUntouchedMessages(saved)
+        XCTAssertEqual(opened.messages.run[1], "{CALL} {SERIAL} {EXCH}")
+    }
+
+    func testOpeningACQPLogLeavesEditedMacrosAlone() {
+        var saved = ContestLog(partyID: "cqp")
+        var custom = MessageSets.standard
+        custom.run[1] = "{CALL} 5NN {EXCH} HI HI"
+        saved.messages = custom
+        XCTAssertEqual(LogDocument.upgradingUntouchedMessages(saved).messages, custom)
+    }
+
+    func testOpeningAReportPartyLogChangesNothing() {
+        var saved = ContestLog(partyID: "ksqp")
+        saved.messages = MessageSets.standard
+        XCTAssertEqual(
+            LogDocument.upgradingUntouchedMessages(saved).messages, MessageSets.standard
+        )
+    }
+
+    /// Re-opening an already-upgraded log is a no-op, not a second rewrite.
+    func testOpeningAnAlreadyUpgradedLogIsIdempotent() {
+        var saved = ContestLog(partyID: "cqp")
+        saved.messages = MessageSets.defaults(for: PartyCatalog.party(id: "cqp"))
+        let once = LogDocument.upgradingUntouchedMessages(saved)
+        XCTAssertEqual(once.messages, saved.messages)
+        XCTAssertEqual(LogDocument.upgradingUntouchedMessages(once).messages, saved.messages)
+    }
+
+    /// Two party changes without an intervening report party. After the first
+    /// hop the stored set is untouched *for CQP* but is no longer `.standard`,
+    /// so only the `defaults(for: oldParty)` baseline still recognises it as
+    /// unedited. Comparing against `.standard` here would strand a CQP
+    /// operator's macros on a Kansas log.
+    @MainActor
+    func testUntouchedMacrosFollowAHopBetweenPartiesOfDifferentShape() throws {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: nil
+        )
+        XCTAssertEqual(
+            doc.log.messages, MessageSets.defaults(for: PartyCatalog.party(id: "cqp")),
+            "precondition: untouched, in CQP's shape, and no longer .standard"
+        )
+
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "ksqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.messages.run[1], "{CALL} {RST} {EXCH}")
+        XCTAssertEqual(doc.log.messages, MessageSets.standard,
+                       "a report party's macros must come back")
+    }
+
+    /// Undo's statement order is load-bearing: the nested `updateStation` may
+    /// re-derive, and the explicit restore afterwards is what makes undo exact.
+    /// Observable only here — macros that are customised relative to KSQP yet
+    /// identical to what CQP derives, so the nested call re-derives on the way
+    /// back and the restore has to overrule it.
+    @MainActor
+    func testUndoIsExactEvenWhenTheNestedCallWouldReDerive() throws {
+        let doc = LogDocument()
+        let serialForm = MessageSets.defaults(for: PartyCatalog.party(id: "cqp"))
+        doc.log.messages = serialForm
+
+        let undo = UndoManager()
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: undo
+        )
+        XCTAssertEqual(doc.log.messages, serialForm,
+                       "customised relative to KSQP, so left alone")
+
+        undo.undo()
+        XCTAssertEqual(doc.log.partyID, "ksqp")
+        XCTAssertEqual(doc.log.messages, serialForm,
+                       "restored exactly, not replaced by what KSQP would derive")
+    }
+
+    /// Pins the wiring itself, not just the transform: deleting the upgrade
+    /// call from the open path previously left the whole suite green.
+    func testDecodeUpgradingRoutesThroughTheUpgrade() throws {
+        var saved = ContestLog(partyID: "cqp")
+        saved.messages = MessageSets.standard
+        let opened = try LogDocument.decodeUpgrading(saved.encoded())
+        XCTAssertEqual(opened.messages,
+                       MessageSets.defaults(for: PartyCatalog.party(id: "cqp")))
+    }
+
+    /// The oldest real file on disk: written before per-contest macros existed,
+    /// so it carries no `messages` key at all. It decodes to `.standard` and
+    /// must then be upgraded — the full decode-then-upgrade chain, which no
+    /// test previously exercised. The fixture is derived from the model rather
+    /// than hand-typed, so it cannot drift from `StationProfile`.
+    func testOpeningALogPredatingPerContestMacrosUpgradesIt() throws {
+        let log = ContestLog(partyID: "cqp")
+        var object = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: log.encoded()) as? [String: Any]
+        )
+        XCTAssertNotNil(object.removeValue(forKey: "messages"),
+                        "the key must exist before removing it, or this proves nothing")
+        let legacy = try JSONSerialization.data(withJSONObject: object)
+
+        let opened = try LogDocument.decodeUpgrading(legacy)
+        XCTAssertEqual(opened.messages.run[1], "{CALL} {SERIAL} {EXCH}",
+                       "absent messages key decodes to .standard, then upgrades")
+    }
+
+    /// `init()` pairs a literal party id with `ContestLog`'s literal `.standard`
+    /// macros. That is correct only while the new-document party derives exactly
+    /// `.standard`; if it ever becomes a party that sends a QSO number, the
+    /// macros would be wrong *and* would then read as customised and never be
+    /// fixed.
+    func testNewDocumentsMacrosMatchItsParty() {
+        let doc = LogDocument()
+        XCTAssertEqual(
+            doc.log.messages,
+            MessageSets.defaults(for: PartyCatalog.party(id: doc.log.partyID)),
+            "new-document party and its default macros must agree"
+        )
+    }
 }
