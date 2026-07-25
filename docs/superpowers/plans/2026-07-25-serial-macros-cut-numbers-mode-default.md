@@ -37,6 +37,18 @@ Nothing else changes. No party JSON, no `ScoreEngine`, no exporter, no radio dri
 
 ### Task 1: `MessageSets.defaults(for:)`, `mentions(_:)`, `contradicts(_:)`
 
+> **Amended during execution, 2026-07-25.** Code review found that a `Bool`
+> return forces the consumer in Task 3 to re-derive *which* condition fired,
+> duplicating both clauses and silently mis-wording the warning if a third is
+> added. `contradicts(_:) -> Bool` therefore shipped as
+> `exchangeMismatch(with:) -> ExchangeMismatch?`, with cases `.missingSerial`,
+> `.extraneousRST`, and a third the review identified as reachable —
+> `.missingRST`, a report party whose macros send no report, which happens when
+> an operator types `{SERIAL}` into a report party's macros and it expands to
+> nothing. Task 3's `mismatchWarning` below switches exhaustively over it.
+> The `contradicts` signature in Step 4 and the five `testContradicts*` methods
+> in Step 1 are superseded; everything else in this task shipped as written.
+
 **Files:**
 - Modify: `Sources/Core/Models/ContestLog.swift:10-40`
 - Create: `Tests/Core/MessageDefaultsTests.swift`
@@ -572,12 +584,18 @@ Add these below `body`, before `private func binding(_:)`:
     }
 
     private var mismatchWarning: String? {
-        guard let party, edited.contradicts(party) else { return nil }
-        if party.exchangeIncludesSerial, !edited.mentions("{SERIAL}") {
+        guard let party, let mismatch = edited.exchangeMismatch(with: party) else { return nil }
+        // Exhaustive on purpose: a new mismatch case must force its own copy
+        // here rather than falling through to another case's wording.
+        switch mismatch {
+        case .missingSerial:
             return "\(party.name) sends a QSO number, but no message uses {SERIAL}."
+        case .extraneousRST:
+            return "\(party.name)'s exchange carries no signal report, "
+                + "but a message still sends {RST}."
+        case .missingRST:
+            return "\(party.name) sends a signal report, but no message uses {RST}."
         }
-        return "\(party.name)'s exchange carries no signal report, "
-            + "but a message still sends {RST}."
     }
 
     private func applyPartyDefaults() {
