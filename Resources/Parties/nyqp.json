@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "id": "nyqp",
+  "name": "New York QSO Party",
+  "cabrilloContest": "NY-QSO-PARTY",
+  "homeState": "NY",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "60m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m",
+    "1.25m",
+    "70cm"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 3
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "maxSimultaneousCounties": 2,
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-10-17T14:00:00Z",
+      "end": "2026-10-18T02:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ALB",
+      "name": "Albany"
+    },
+    {
+      "abbr": "ALL",
+      "name": "Allegany"
+    },
+    {
+      "abbr": "BRX",
+      "name": "Bronx"
+    },
+    {
+      "abbr": "BRM",
+      "name": "Broome"
+    },
+    {
+      "abbr": "CAT",
+      "name": "Cattaraugus"
+    },
+    {
+      "abbr": "CAY",
+      "name": "Cayuga"
+    },
+    {
+      "abbr": "CHA",
+      "name": "Chautauqua"
+    },
+    {
+      "abbr": "CHE",
+      "name": "Chemung"
+    },
+    {
+      "abbr": "CGO",
+      "name": "Chenango"
+    },
+    {
+      "abbr": "CLI",
+      "name": "Clinton"
+    },
+    {
+      "abbr": "COL",
+      "name": "Columbia"
+    },
+    {
+      "abbr": "COR",
+      "name": "Cortland"
+    },
+    {
+      "abbr": "DEL",
+      "name": "Delaware"
+    },
+    {
+      "abbr": "DUT",
+      "name": "Dutchess"
+    },
+    {
+      "abbr": "ERI",
+      "name": "Erie"
+    },
+    {
+      "abbr": "ESS",
+      "name": "Essex"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "FUL",
+      "name": "Fulton"
+    },
+    {
+      "abbr": "GEN",
+      "name": "Genesee"
+    },
+    {
+      "abbr": "GRE",
+      "name": "Greene"
+    },
+    {
+      "abbr": "HAM",
+      "name": "Hamilton"
+    },
+    {
+      "abbr": "HER",
+      "name": "Herkimer"
+    },
+    {
+      "abbr": "JEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "KIN",
+      "name": "Kings"
+    },
+    {
+      "abbr": "LEW",
+      "name": "Lewis"
+    },
+    {
+      "abbr": "LIV",
+      "name": "Livingston"
+    },
+    {
+      "abbr": "MAD",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MON",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MTG",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "NAS",
+      "name": "Nassau"
+    },
+    {
+      "abbr": "NEW",
+      "name": "New York"
+    },
+    {
+      "abbr": "NIA",
+      "name": "Niagara"
+    },
+    {
+      "abbr": "ONE",
+      "name": "Oneida"
+    },
+    {
+      "abbr": "ONO",
+      "name": "Onondaga"
+    },
+    {
+      "abbr": "ONT",
+      "name": "Ontario"
+    },
+    {
+      "abbr": "ORA",
+      "name": "Orange"
+    },
+    {
+      "abbr": "ORL",
+      "name": "Orleans"
+    },
+    {
+      "abbr": "OSW",
+      "name": "Oswego"
+    },
+    {
+      "abbr": "OTS",
+      "name": "Otsego"
+    },
+    {
+      "abbr": "PUT",
+      "name": "Putnam"
+    },
+    {
+      "abbr": "QUE",
+      "name": "Queens"
+    },
+    {
+      "abbr": "REN",
+      "name": "Rensselaer"
+    },
+    {
+      "abbr": "RIC",
+      "name": "Richmond"
+    },
+    {
+      "abbr": "ROC",
+      "name": "Rockland"
+    },
+    {
+      "abbr": "SAR",
+      "name": "Saratoga"
+    },
+    {
+      "abbr": "SCH",
+      "name": "Schenectady"
+    },
+    {
+      "abbr": "SCO",
+      "name": "Schoharie"
+    },
+    {
+      "abbr": "SCU",
+      "name": "Schuyler"
+    },
+    {
+      "abbr": "SEN",
+      "name": "Seneca"
+    },
+    {
+      "abbr": "STL",
+      "name": "St. Lawrence"
+    },
+    {
+      "abbr": "STE",
+      "name": "Steuben"
+    },
+    {
+      "abbr": "SUF",
+      "name": "Suffolk"
+    },
+    {
+      "abbr": "SUL",
+      "name": "Sullivan"
+    },
+    {
+      "abbr": "TIO",
+      "name": "Tioga"
+    },
+    {
+      "abbr": "TOM",
+      "name": "Tompkins"
+    },
+    {
+      "abbr": "ULS",
+      "name": "Ulster"
+    },
+    {
+      "abbr": "WAR",
+      "name": "Warren"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAY",
+      "name": "Wayne"
+    },
+    {
+      "abbr": "WES",
+      "name": "Westchester"
+    },
+    {
+      "abbr": "WYO",
+      "name": "Wyoming"
+    },
+    {
+      "abbr": "YAT",
+      "name": "Yates"
+    }
+  ],
+  "notes": "verified: partial — rules from the Rochester (NY) DX Association's official PDF ('2025 New York QSO Party', footer 'v1.2 FINAL 2025-10-01'), with the county codes cross-checked against the sponsor's official CSV, both read verbatim 2026-07-24. This is the best-documented party in the repo: the PDF carries a county table, a Canadian multiplier list, and a full Cabrillo specification with sample header and QSO lines - so the Cabrillo CONTEST value NY-QSO-PARTY comes from THE SPONSOR rather than from WA7BNM, the first party where that fallback is not needed. The sponsor's multiplier arithmetic closes exactly and is asserted by the generator: 'Count US states (50), New York Counties (62) and Canadian provinces (13) ... Maximum of 125 multipliers', and 50 + 62 + 13 = 125. Out-of-state entrants count the 62 counties. Everything counts ONCE, not per band. DX scores QSO points but is NEVER a multiplier for either side ('DX counts as QSO points but not multipliers'). NEW YORK ITSELF IS EARNED VIA A COUNTY, stated outright - 'The first valid New York county logged will count as the multiplier for New York' - and the 125 total only closes if it is, since NY stations send counties and the token NY is never received. Canada is the standard 13, listed twice. DIGITAL IS LEGAL AND PAYS MOST: phone 1 point, CW 2, RTTY/digital 3 - the first bundled party where digital outscores CW. All RTTY and digital modes count as one mode, and digital is permitted in the Mixed entry category only, which is an entry-class rule rather than a scoring one. County lines have a STATED numeric maximum of two: 'If the portable or mobile station is operating from the intersection of three or more NY counties, only two counties at a time may be counted for the same contact.' The separator is '/' and the sponsor expects 'County line exchanges should be logged as two separate QSOs', which is exactly what this app does with a DUT/PUT entry. Only Portable and stationary Mobile stations may operate a county line; a moving mobile changes county instead, and a New York station that changes county is a new station for points and multiplier credit. No bonus station, no bonus points, no final-score multiplier. ELEVEN VALID BANDS, the widest list of any bundled party: 'All FCC allocated amateur frequencies (excluding the 30, 17, and 12 meter bands)'. Note two consequences. First, 60 M IS INCLUDED on that literal reading - the rules exclude only the three WARC bands and 60 m is an FCC amateur allocation - which no other bundled party permits, so treat it as the sponsor's words rather than as settled convention. Second, KNOWN LIMITATION: the sponsor's own sample log contains QSOs on 902 MHz, 1.2 GHz and 10 GHz, and this app's band list stops at 70 cm, so microwave contacts cannot be logged. Recorded rather than built, as PAQP's 630 m and 2200 m are. OPEN QUESTIONS (why this is partial): (1) The published rules are the 2025 edition and no 2026 revision has been posted. The DATE is not in doubt: the formula is printed in the document's own title block ('Third Saturday in October'), 17 October 2026 is the third Saturday, and the rules' own parentheticals pin the offset - 1400 UTC = 10 AM Eastern and 01:59:59 UTC = 9:59:59 PM Eastern, both still true in 2026 since DST ends 1 November. What is unverified is whether any RULE changed for 2026. Re-check nyqp.org before 17 October 2026 and re-run gen_nyqp.py, whose quoted-sentence assertions fail loudly if the text moved. (2) No rule states whether stations outside New York may work only New York stations. The Objective reads 'Work as many New York stations and as many New York counties as possible', which is an aim rather than a limit, and out-of-state multipliers are NY counties only. Shipped with the restriction ON, as for NJQP, IAQP, NHQP, PAQP and SDQP, so a stray non-NY contact is visibly flagged NO CREDIT rather than silently adding points. Confirm both, and the 60 m reading, with the sponsor before submitting a log."
+}

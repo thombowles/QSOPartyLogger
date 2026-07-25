@@ -8,8 +8,9 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **Next party:** the top unstruck row of the table below — currently **New
-  York**, which starts from the sponsor's site with nothing captured.
+- **Next party:** the top unstruck row of the table below — **Illinois**, the
+  last party of the 2026 season, which starts from its sponsor's site with
+  nothing captured.
 - **Process per party:** the Article 22 definition of done at the bottom of this
   file. One party per commit (Article 9). Research doc *before* JSON (Article 15).
 - **To restart the build loop**, self-paced, one party per iteration:
@@ -64,9 +65,9 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**2 remaining** of the 16 in scope (14 built so far: MDC, HQP, OhQP, TnQP, COQP,
-NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP); 17 parties bundled in
-total, those 14 plus the pre-existing ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
+**1 remaining** of the 16 in scope (15 built so far: MDC, HQP, OhQP, TnQP, COQP,
+NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP); 18 parties
+bundled in total, those 15 plus the pre-existing ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
 next, and the count above must equal the number of unstruck rows below.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
@@ -87,7 +88,7 @@ next, and the count above must equal the number of unstruck rows below.
 | ~~Arizona~~ | Oct 10 1500Z → Oct 11 0500Z | [`azqp_rules.md`](../research/azqp_rules.md) + [`azqp_rules_pdf.txt`](../research/azqp_rules_pdf.txt) + [`azqp_counties_page.txt`](../research/azqp_counties_page.txt) | **done** (`verified: partial`) |
 | ~~Pennsylvania~~ | Oct 10 1600Z → Oct 11 0400Z; Oct 11 1300–2200Z | [`paqp_rules.md`](../research/paqp_rules.md) + [`paqp_counties.txt`](../research/paqp_counties.txt) + [`paqp_arrl_sections.txt`](../research/paqp_arrl_sections.txt) | **done** (`verified: partial`) |
 | ~~South Dakota~~ | Oct 10 1800Z → Oct 11 1800Z | [`sdqp_rules.md`](../research/sdqp_rules.md) + [`sdqp_rules_page.txt`](../research/sdqp_rules_page.txt) + [`sdqp_counties.txt`](../research/sdqp_counties.txt) | **done** (`verified: partial`) |
-| **New York** | Oct 17 1400Z → Oct 18 0200Z | — | not started |
+| ~~New York~~ | Oct 17 1400Z → Oct 18 0200Z | [`nyqp_rules.md`](../research/nyqp_rules.md) + [`nyqp_rules_2025.txt`](../research/nyqp_rules_2025.txt) + [`nyqp_counties.csv`](../research/nyqp_counties.csv) | **done** (`verified: partial`) |
 | **Illinois** | Oct 18 1700Z → Oct 19 0100Z | — | not started |
 
 ## Open questions carried by this worklist
@@ -120,11 +121,10 @@ next, and the count above must equal the number of unstruck rows below.
    Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
    **Email `info@hawaiiqsoparty.org` to settle it.** See
    [`hqp_rules.md` §2](../research/hqp_rules.md).
-4. **All banked research is used up.** Both remaining — New York and Illinois —
-   start from their sponsors' sites with nothing captured, so expect each
-   iteration to be research-heavy, as every party since Hawaii has been. *(SDQP
-   was the exception that proves the schema has settled: after four consecutive
-   parties that each needed an engine change, it was data only.)*
+4. **All banked research is used up.** Illinois, the last one, starts from its
+   sponsor's site with nothing captured. *(SDQP and NYQP are the evidence that the
+   schema has settled: after four consecutive parties that each needed an engine
+   change, both were data only.)*
 5. **Banked research has mislabelled `homeStateCountsViaCounty` twice.**
    *(CQP is the counter-example worth knowing: its sponsor states the rule
    outright — "The first valid CA QSO logged with 4-letter county abbreviation
