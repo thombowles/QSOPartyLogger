@@ -12,6 +12,7 @@
 		01606F1E31E5F998B5D4231E /* ContestHistorianTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E700FD390A66A174C5681EA /* ContestHistorianTests.swift */; };
 		028946A7475AD006C593EF95 /* RadioInternalKeyer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3AC73A860763A7F9B91E4F5 /* RadioInternalKeyer.swift */; };
 		035AFCF57A3A41C906E0EC90 /* MessageDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663F629E69E4BCAFF3D76139 /* MessageDefaultsTests.swift */; };
+		0589789400D49E118C812D8E /* KeyMonitorGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F8DCDD9B83142A28657268 /* KeyMonitorGate.swift */; };
 		07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DA5A46F75BD3EFC70DC50D /* CabrilloExporter.swift */; };
 		097E888A0ACA42B4ED11F066 /* K3ProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53DC8597A1A918FA7CB32D4 /* K3ProtocolTests.swift */; };
 		098B5B5D2F15D62548FB7A6B /* County.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE0321C50DA1A9D4AEB58D0 /* County.swift */; };
@@ -45,6 +46,7 @@
 		3BE9C47F0CF9E0AC8134E7FD /* DupeCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4CFCAA1F93033279C3D7CF /* DupeCheckerTests.swift */; };
 		3D1801F37FFEC64F2E540F52 /* SerialPortEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D026EFBE941E3104530AE /* SerialPortEnumerator.swift */; };
 		3E4CB50A4A38D69CDDF3CB6A /* EntryCommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA4D636DCF7164283660F61 /* EntryCommandTests.swift */; };
+		42E10D9D5426C54AFA9C6A23 /* KeyMonitorGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */; };
 		4499E2CE096927357D50EABF /* ScoreEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29960406C674052D5117926D /* ScoreEngineTests.swift */; };
 		451EEEAEAD526B20F82A3045 /* SpotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB030727FF0C38B6B3944150 /* SpotClient.swift */; };
 		45800F9A79A1866E099BDAB9 /* AdifExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C32262E99EC74EB6D9BC74D /* AdifExporterTests.swift */; };
@@ -197,6 +199,8 @@
 		57263564A0C38ADE1B3E1897 /* CloudMirrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudMirrorTests.swift; sourceTree = "<group>"; };
 		5779472576EDDB16AD912D7C /* QSOPartyLoggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QSOPartyLoggerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5892A4EA032BA925FA66EA70 /* MarylandDCQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarylandDCQSOPartyTests.swift; sourceTree = "<group>"; };
+		58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyMonitorGateTests.swift; sourceTree = "<group>"; };
+		58F8DCDD9B83142A28657268 /* KeyMonitorGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyMonitorGate.swift; sourceTree = "<group>"; };
 		5BA71198926002262F846473 /* ChallengeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeTests.swift; sourceTree = "<group>"; };
 		5BE5CDC2177C8552E1D6426F /* MorseCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCode.swift; sourceTree = "<group>"; };
 		5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryBar.swift; sourceTree = "<group>"; };
@@ -443,6 +447,7 @@
 				5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */,
 				A212165D3C12989B35E8EB28 /* EntryState.swift */,
 				F53E1CCA809156CAFA061676 /* FlowLayout.swift */,
+				58F8DCDD9B83142A28657268 /* KeyMonitorGate.swift */,
 				1A23E3ADEAE3B7F86B2A421E /* LogTable.swift */,
 				4617D5E5CB3103CD4E042746 /* MainView.swift */,
 				01C6419D10E7C381AE554C1B /* MessagesEditor.swift */,
@@ -527,6 +532,7 @@
 				57263564A0C38ADE1B3E1897 /* CloudMirrorTests.swift */,
 				2E700FD390A66A174C5681EA /* ContestHistorianTests.swift */,
 				A8888FFE8F08254615766C16 /* KeyerBackendLabelTests.swift */,
+				58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */,
 				D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */,
 			);
 			path = App;
@@ -726,6 +732,7 @@
 				209C0DA71AC3EE5A16488856 /* IllinoisQSOPartyTests.swift in Sources */,
 				7C432C2A33658F48ADF44099 /* IowaQSOPartyTests.swift in Sources */,
 				097E888A0ACA42B4ED11F066 /* K3ProtocolTests.swift in Sources */,
+				42E10D9D5426C54AFA9C6A23 /* KeyMonitorGateTests.swift in Sources */,
 				56D6E0AE92BDE099E45F7C53 /* KeyerBackendLabelTests.swift in Sources */,
 				0B13C9686C52A0FFC4FD1016 /* KeyerTimingTests.swift in Sources */,
 				36D1463B5DC69485948798D3 /* LogDocumentTests.swift in Sources */,
@@ -799,6 +806,7 @@
 				D712B3ED31FB2474F31BB481 /* FlexRadioDriver.swift in Sources */,
 				51CCF86780EC05B9994EBB7A /* FlowLayout.swift in Sources */,
 				4E0B4EB7497EBFFE66BA6F4B /* JSONValue.swift in Sources */,
+				0589789400D49E118C812D8E /* KeyMonitorGate.swift in Sources */,
 				BD620D19CDA5954AD41075B9 /* KeyerTiming.swift in Sources */,
 				CEACC3EEBBF6A962A00C0F48 /* LogDocument.swift in Sources */,
 				D733F370D91E26789F664325 /* LogTable.swift in Sources */,

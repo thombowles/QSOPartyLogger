@@ -989,55 +989,65 @@ struct MainView: View {
     private func installKeyMonitor() {
         guard keyMonitor == nil else { return }
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            // The monitor is app-wide, so the first question is always whether
+            // this keystroke is even ours — see `KeyMonitorGate`.
+            let focus = KeyMonitorGate.focus(currentWindows())
+            guard focus != .elsewhere else { return event }
+
             // Any keystroke cancels a running repeat-CQ loop (per Tom's spec:
-            // "typing anything cancels repeat").
+            // "typing anything cancels repeat"). Typing in *another* log's
+            // window no longer stops this one's CQ.
             if repeatTask != nil {
                 stopRepeat()
             }
 
-            // ⌘= / ⌘+ and ⌘- (plus keypad variants): CW speed ±2 WPM.
-            // ⌘←/⌘→: previous/next spot on the band. ⌘J: back to CQ frequency.
-            if event.modifierFlags.contains(.command) {
-                switch event.keyCode {
-                case 24, 69:  // '=' / keypad '+'
-                    adjustWPM(by: 2)
-                    return nil
-                case 27, 78:  // '-' / keypad '-'
-                    adjustWPM(by: -2)
-                    return nil
-                case 123:  // ←
-                    jumpToSpot(.down)
-                    return nil
-                case 124:  // →
-                    jumpToSpot(.up)
-                    return nil
-                case 38:  // 'j'
-                    jumpToCQFrequency()
-                    return nil
-                case 11:  // 'b'
-                    toggleBandMap()
-                    return nil
-                default:
-                    break
+            guard
+                let action = KeyMonitorGate.action(
+                    keyCode: event.keyCode,
+                    command: event.modifierFlags.contains(.command)
+                )
+            else { return event }
+
+            // A sheet owns the keyboard. Article 11 still holds — Esc aborts
+            // instantly wherever it is pressed — but the key is never consumed,
+            // so Esc also closes the sheet and F1–F8 cannot transmit a macro the
+            // operator is in the middle of editing.
+            if focus == .sheet {
+                if action == .abortCW {
+                    radio.abortCW(settings: settings)
                 }
+                return event
             }
 
-            let fKeyCodes: [UInt16: Int] = [
-                122: 0, 120: 1, 99: 2, 118: 3, 96: 4, 97: 5, 98: 6, 100: 7,
-            ]
-            if let index = fKeyCodes[event.keyCode] {
-                sendMessageAt(index)
-                return nil
-            }
-            if event.keyCode == 111 {  // F12: wipe the entry and start over
-                clearEntry()
-                return nil
-            }
-            if event.keyCode == 53 {  // Esc: abort CW + stop repeating
-                radio.abortCW(settings: settings)
-                return nil
-            }
-            return event
+            perform(action)
+            return nil
+        }
+    }
+
+    /// The live window state the gate reasons about.
+    private func currentWindows() -> KeyMonitorGate.Windows {
+        let key = NSApp.keyWindow
+        return KeyMonitorGate.Windows(
+            host: hostWindow?.windowNumber,
+            key: key?.windowNumber,
+            keySheetParent: key?.sheetParent?.windowNumber,
+            bandMap: bandMapPanel?.windowNumber,
+            hostHasAttachedSheet: hostWindow?.attachedSheet != nil
+        )
+    }
+
+    private func perform(_ action: KeyMonitorGate.Action) {
+        switch action {
+        // ⌘= / ⌘+ and ⌘- (plus keypad variants): CW speed ±2 WPM.
+        case .adjustWPM(let delta): adjustWPM(by: delta)
+        // ⌘←/⌘→: previous/next spot on the band. ⌘J: back to CQ frequency.
+        case .previousSpot: jumpToSpot(.down)
+        case .nextSpot: jumpToSpot(.up)
+        case .jumpToCQFrequency: jumpToCQFrequency()
+        case .toggleBandMap: toggleBandMap()
+        case .sendMessage(let index): sendMessageAt(index)
+        case .clearEntry: clearEntry()
+        case .abortCW: radio.abortCW(settings: settings)
         }
     }
 
