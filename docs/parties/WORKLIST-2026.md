@@ -3,6 +3,37 @@
 Per [Article 22](../CONSTITUTION.md#article-22--date-order-and-a-definition-of-done).
 Ordered by contest date, so the next contest to run is always the next one built.
 
+## Resuming this work in a new session
+
+**This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
+and you have everything; nothing important lives only in a chat log.
+
+- **Next party:** the top unstruck row of the table below — currently **Maine**,
+  which first needs open question 2 answered (does it run in 2026 at all?).
+- **Process per party:** the Article 22 definition of done at the bottom of this
+  file. One party per commit (Article 9). Research doc *before* JSON (Article 15).
+- **To restart the build loop**, self-paced, one party per iteration:
+
+  ```
+  /loop Add QSO party support for every US state/regional QSO party running through 2026-12-31, in contest-date order, following docs/CONSTITUTION.md exactly. One party per iteration, one commit each.
+  ```
+
+  The earlier run paced itself at roughly 5-minute ticks and landed one party per
+  iteration; a party built from scratch takes noticeably longer than one with
+  research already banked, and none is banked any more.
+
+- **Recurring judgement calls** worth knowing before starting, all learned the
+  hard way and recorded below: sponsors' dates beat every calendar (open question
+  1), sponsors' Canada lists differ in both directions (6), banked research has
+  twice mislabelled `homeStateCountsViaCounty` (5), and a sponsor's own stated
+  multiplier total or hour count is the cheapest verification available — look for
+  one in every rule set.
+
+- **Time-sensitive, independent of building new parties:** the `verified: partial`
+  parties each want a re-check shortly before they run — see *Late re-verification
+  pass* under Deferred engine gaps. Nearest are Hawaii (Aug 22, and its window
+  question needs an email) and Tennessee (Sep 6, rules still the 2025 edition).
+
 **The 2026 state QSO party season ends Sunday 18 October 2026.** Two independent
 calendars agree there is no state or provincial QSO party in November or
 December, so "through the end of the calendar year" closes with the Illinois QSO
