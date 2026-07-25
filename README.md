@@ -473,13 +473,14 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 767 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 780 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, cluster
 history, the band map scale and its column stacking, the band plan and its
 CW/phone crossovers, typed QSY commands, what the radio keys on every step of
-the entry flow, keyer timing, keyer labelling, the contest history archive
+the entry flow, the CW messages editor's Restore Defaults and exchange-mismatch
+banner, keyer timing, keyer labelling, the contest history archive
 (snapshot parity with the engine, two-Mac merge, unknown-field preservation,
 coordinated store), season stats, the SQP Challenge formula and calendar
 resource, and the upcoming-contest engine.

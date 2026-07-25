@@ -9,8 +9,9 @@ struct MessagesEditor: View {
     @Environment(\.undoManager) private var undoManager
 
     @State private var editMode: OperatingMode = .run
-    @State private var run: [String] = []
-    @State private var searchPounce: [String] = []
+    /// The edits so far. A value, so Restore Defaults and the warning banner
+    /// are testable — see `MessagesDraftTests`.
+    @State private var draft = MessagesDraft()
     /// Resolved once on appear — `document.party` re-reads the bundle and the
     /// user parties folder on every call, which a view body must not do.
     @State private var party: PartyDefinition?
@@ -31,7 +32,7 @@ struct MessagesEditor: View {
             .pickerStyle(.segmented)
 
             Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
-                ForEach(0..<8, id: \.self) { index in
+                ForEach(0..<MessagesDraft.slotCount, id: \.self) { index in
                     GridRow {
                         Text("F\(index + 1)")
                             .font(.callout.weight(.bold))
@@ -43,7 +44,7 @@ struct MessagesEditor: View {
                 }
             }
 
-            if let party, let mismatch = edited.exchangeMismatch(with: party) {
+            if let party, let mismatch = draft.mismatch(with: party) {
                 HStack(spacing: 8) {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundStyle(.orange)
@@ -76,7 +77,7 @@ struct MessagesEditor: View {
                 Button("Cancel") { dismiss() }
                     .keyboardShortcut(.cancelAction)
                 Button("Save") {
-                    document.updateMessages(edited, undoManager: undoManager)
+                    document.updateMessages(draft.edited, undoManager: undoManager)
                     dismiss()
                 }
                 .keyboardShortcut(.defaultAction)
@@ -91,53 +92,18 @@ struct MessagesEditor: View {
         .frame(minWidth: 740, minHeight: 500, alignment: .topLeading)
         .onAppear {
             party = document.party
-            run = pad(document.log.messages.run)
-            searchPounce = pad(document.log.messages.searchPounce)
+            draft = MessagesDraft(document.log.messages)
         }
     }
 
-    /// What this party's macros should be — for Restore Defaults and the fix
-    /// button.
-    private var partyDefaults: MessageSets {
-        MessageSets.defaults(for: party)
-    }
-
-    /// What is currently in the fields, not what is saved, so the warning
-    /// clears the moment the operator types a fix.
-    private var edited: MessageSets {
-        MessageSets(run: normalized(run), searchPounce: normalized(searchPounce))
-    }
-
     private func applyPartyDefaults() {
-        run = pad(partyDefaults.run)
-        searchPounce = pad(partyDefaults.searchPounce)
+        draft.restoreDefaults(for: party)
     }
 
     private func binding(_ index: Int) -> Binding<String> {
         Binding(
-            get: {
-                let set = editMode == .run ? run : searchPounce
-                return set.indices.contains(index) ? set[index] : ""
-            },
-            set: { newValue in
-                if editMode == .run {
-                    run = pad(run)
-                    run[index] = newValue
-                } else {
-                    searchPounce = pad(searchPounce)
-                    searchPounce[index] = newValue
-                }
-            }
+            get: { draft[editMode, index] },
+            set: { draft[editMode, index] = $0 }
         )
-    }
-
-    private func pad(_ set: [String]) -> [String] {
-        var out = set
-        while out.count < 8 { out.append("") }
-        return out
-    }
-
-    private func normalized(_ set: [String]) -> [String] {
-        pad(set).map { $0.trimmingCharacters(in: .whitespaces) }
     }
 }
