@@ -50,28 +50,56 @@ The monitor consumes the key inside the document window, so ⌘↑ / ⌘↓ no l
 reach a text field as move-to-start/end-of-document. That trade is already made
 for ⌘← / ⌘→ and is unchanged in kind.
 
-## 3. Worked-before strip
+## 3. Worked-before table
 
-A single line under the entry row listing prior contacts with the call in the
-field, most recent first:
+A history table between the messages row and the log table, listing every prior
+contact with the call in the entry field:
 
 ```
-Worked   20m SSB 1531Z JO · 40m CW 1402Z JO · 80m CW 2210Z JO   +2
+Worked K5NA
+Band  Mode  Time    Loc
+20m   SSB   1531Z   JO
+40m   CW    1402Z   JO
+80m   CW    2210Z   JO
+15m   CW    1846Z   JO
+KSQP 2025 — JO
 ```
 
+- It exists only while there is history to show. An unworked call costs no
+  vertical space at all; the log table takes the room back.
 - One entry per on-air contact, not per logged row: a county-line group collapses
   to a single entry whose locations join with `/`.
 - Most recent first. Entries on the **current band and mode** render bold and
   orange. Weight as well as colour, so the cue is not colour-alone.
-- At most **four** entries, then `+N` for the remainder. A fixed count rather
-  than a measured width — SwiftUI cannot cheaply measure the strip before laying
-  it out, and four covers every band a station is realistically worked on in one
-  weekend.
-- The line does not exist at all when there is nothing to show, so an unworked
-  call costs no vertical space.
 - One trailing grey line when the archive knows the station but this log does
   not: `KSQP 2025 — JO`. This is the same lookup that feeds §4, so it doubles
   as the prefill's provenance caption.
+- Rows are not interactive. There is nothing useful to click, and a clickable
+  row directly above the log table invites mis-clicks during a run.
+
+### The window never resizes
+
+The table takes its space from the log table, not from the window. Row height is
+a layout constant, so the table's height is arithmetic on the entry count rather
+than a measurement:
+
+```
+tableHeight(entries) = header + rowHeight × min(entries, 6)   [+ archive line]
+```
+
+and `logTable`'s `minHeight` is reduced by exactly that. The left pane's minimum
+content height is therefore identical whether the table is present or not, which
+is what stops macOS growing the window when a match appears. Past six entries
+the table scrolls — a station can only be worked bands × modes times, and six
+covers any realistic weekend.
+
+### No animation
+
+The table appears and disappears as calls come and go, including on a spot jump.
+Animating that would put motion under the operator's eye on every contact, so
+the transition is instant. Matching is on the whole callsign, not a prefix, so a
+station costs one appearance and one disappearance rather than flickering
+through the letters as they are typed.
 
 This replaces the "annoying dupe message" for the call-only case. **The existing
 hard `dupeWarning` stays exactly as it is**: it fires on a different and much
@@ -172,8 +200,9 @@ breath.
 | `Sources/Core/Engine/StationMemory.swift` | **new** — archive index, candidate order, parse guard |
 | `Sources/App/EntryState.swift` | auto-filled flag, `pendingExchanges`, worked-before list |
 | `Sources/App/EntryFlow.swift` | `callChanged(_:)`, `stationChanged(to:_:)` |
-| `Sources/UI/EntryBar.swift` | worked-before strip, `exchangeTyped` binding |
-| `Sources/UI/MainView.swift` | archive index load, `tune(to:)` funnel, ⌘↑/⌘↓ dispatch |
+| `Sources/UI/EntryBar.swift` | `exchangeTyped` binding |
+| `Sources/UI/WorkedBeforeTable.swift` | **new** — the history table and its height arithmetic |
+| `Sources/UI/MainView.swift` | table between messages and log, compensating `logTable` min height, archive index load, `tune(to:)` funnel, ⌘↑/⌘↓ dispatch |
 
 Nothing party-specific and nothing radio-specific enters `Sources/UI/`.
 
@@ -184,8 +213,13 @@ tested without hardware, network, or a screen.
 
 - `KeyMonitorGateTests` — ⌘↑ / ⌘↓ map to the same actions as ⌘→ / ⌘←, and the
   existing bindings are unchanged.
-- `DupeCheckerTests` — prior contacts for a call, ordering, band/mode marking;
-  the existing hard-dupe behavior is untouched and its tests must stay green.
+- `DupeCheckerTests` — prior contacts for a call, ordering, county-line groups
+  collapsing to one entry, band/mode marking; the existing hard-dupe behavior is
+  untouched and its tests must stay green.
+- `WorkedBeforeTableTests` — **new**: the height arithmetic, including that
+  table height plus the reduced log-table minimum equals the unreduced minimum
+  for every entry count from zero to past the six-row cap. That equality is what
+  keeps the window from resizing, so it is asserted rather than eyeballed.
 - `StationMemoryTests` — **new**: candidate order across log and archive; a
   county from another party is rejected; a state from another party is accepted;
   a candidate that fails the current party's parser is skipped; an empty archive
@@ -215,6 +249,6 @@ first two carry no risk to scoring:
 
 1. `fix:` band map panel survives app deactivation
 2. `feat:` ⌘↑ / ⌘↓ step spots
-3. `feat:` worked-before strip under the entry row
+3. `feat:` worked-before table above the log
 4. `feat:` exchange prefill from log and archive
 5. `feat:` pending exchange stashed per station across spot moves
