@@ -38,14 +38,27 @@ final class SpotStore {
     /// Next spot from a frequency within a frequency-sorted list, wrapping at
     /// the band edges (⌘→ / ⌘← navigation). The tolerance skips the spot the
     /// operator is already sitting on.
-    nonisolated static func next(in sorted: [Spot], afterKHz: Double, direction: Direction) -> Spot? {
-        guard !sorted.isEmpty else { return nil }
+    ///
+    /// Stations in `workedCalls` are stepped over — they stay on the band map,
+    /// greyed, but there is nothing left to work on them so the keys do not
+    /// stop there. When every spot in the list is worked the result is `nil`
+    /// and the radio stays put.
+    nonisolated static func next(
+        in sorted: [Spot],
+        afterKHz: Double,
+        direction: Direction,
+        workedCalls: Set<String> = []
+    ) -> Spot? {
+        let workable = workedCalls.isEmpty
+            ? sorted
+            : sorted.filter { !workedCalls.contains($0.call.uppercased()) }
+        guard !workable.isEmpty else { return nil }
         let tolerance = 0.05
         switch direction {
         case .up:
-            return sorted.first { $0.freqKHz > afterKHz + tolerance } ?? sorted.first
+            return workable.first { $0.freqKHz > afterKHz + tolerance } ?? workable.first
         case .down:
-            return sorted.last { $0.freqKHz < afterKHz - tolerance } ?? sorted.last
+            return workable.last { $0.freqKHz < afterKHz - tolerance } ?? workable.last
         }
     }
 }
