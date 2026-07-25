@@ -1,0 +1,35 @@
+# New Jersey QSO Party — 21 county multipliers, 4-character abbreviations.
+# Transcribed from the sponsor's official multiplier tables, which are published
+# ONLY as images on a Google Site:
+#   https://sites.google.com/view/k2td-bcrc/nj-qp/nj-mults
+#   committed copies: njqp_mults_counties_provinces.png, njqp_mults_states.png
+# Transcribed 2026-07-24. This file is the extracted text Article 2 requires
+# before generating the party JSON.
+#
+# Traps worth naming — these are NOT first-four-letters truncations:
+#   Camden  = CMDN  (not CAMD)
+#   Warren  = WRRN  (not WARR)
+#   Monmouth/Morris = MONM/MORR, Hudson/Hunterdon = HUDS/HUNT
+#
+# abbr	county
+ATLA	Atlantic
+BERG	Bergen
+BURL	Burlington
+CAPE	Cape May
+CMDN	Camden
+CUMB	Cumberland
+ESSE	Essex
+GLOU	Gloucester
+HUDS	Hudson
+HUNT	Hunterdon
+MERC	Mercer
+MIDD	Middlesex
+MONM	Monmouth
+MORR	Morris
+OCEA	Ocean
+PASS	Passaic
+SALE	Salem
+SOME	Somerset
+SUSS	Sussex
+UNIO	Union
+WRRN	Warren

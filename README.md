@@ -43,6 +43,13 @@ Built for KE5CW. Bundled parties, all with official county data:
   mults **per mode**, no 160 m, two-county lines, 500-point bonus per county
   activated with 15+ QSOs. **New date for 2026** — the second Saturday in
   September, so older calendars may disagree.
+- **New Jersey QSO Party** (Sep 12, 2026) — 21 counties (`CMDN` Camden, `WRRN`
+  Warren — not truncations), mults counted **once**, phone 1 / CW 2 / digital 2,
+  power as a **final-score multiplier** (High 1× / Low 2× / QRP 4×). All 13
+  provinces count but Newfoundland is **`NF`**, not `NL`. Both of the sponsor's
+  own worked score examples are reproduced in the tests. `verified: partial` —
+  DC has no row in the official tables, and the works-only-NJ rule is implied
+  rather than stated.
 - **Texas QSO Party** (Sep 19–20, 2026) — rules verified against txqp.net
   2026 (bands: all except 60/30/17/12; Cabrillo name `TXQP` per WA7BNM;
   robot site not yet live).
@@ -50,7 +57,7 @@ Built for KE5CW. Bundled parties, all with official county data:
 The remaining 2026 parties are tracked in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md) in contest-date
 order — the season ends with Illinois on Oct 18. Two of them have full rules
-research banked in `docs/research/` and two more have raw sponsor text
+research banked in `docs/research/` and one more has raw sponsor text
 captured; the rest start from the sponsors' sites. Adding a party is governed by
 [`docs/CONSTITUTION.md`](docs/CONSTITUTION.md).
 
@@ -265,7 +272,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 305 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 320 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -323,5 +330,12 @@ typed QSY commands, and keyer timing.
   `SAG`/`SAJ`/`SAM`, `KIO`/`KIC`, `RIB`/`RIG`) asserted. The generator also
   asserts the rules' in-state ceiling of 128 mults per mode, which is what
   establishes that Colorado counts as a state multiplier earned via a county.
+- NJQP: rules from the Burlington County Radio Club's official 2026 page
+  (version `2026rev0.5`, captured 2026-07-23, re-read live 2026-07-24).
+  **The sponsor's date contradicts the State QSO Party Challenge calendar** —
+  the sponsor says Sep 12, the calendar said Sep 19, and WA7BNM agreed with the
+  sponsor; Article 19 gives the sponsor authority. The multiplier tables exist
+  only as images, committed as `docs/research/njqp_mults_*.png` and transcribed
+  to [`njqp_counties.tsv`](docs/research/njqp_counties.tsv).
 - DC is accepted as a loggable state token (counted with states); strictly,
   KSQP rules enumerate 50 states — sponsors' checkers accept DC.

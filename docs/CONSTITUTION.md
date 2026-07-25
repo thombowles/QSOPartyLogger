@@ -358,6 +358,13 @@ both the sponsor's stated formula ("third weekend in September") **and** their
 printed dates. When the two disagree, that is an open question under Article 3
 — sponsors do publish wrong dates.
 
+**A majority of calendars is not evidence.** NJQP 2026 settled this concretely:
+the State QSO Party Challenge's official calendar PDF and a web search both put
+it on Sep 19, WA7BNM put it on Sep 12, and the sponsor's own rules say **Sep 12**
+— so two of three aggregators, including the one designated primary, were wrong.
+Calendars are for deciding *build order*. The date that ships comes from the
+sponsor, every time, even when every aggregator agrees against them.
+
 ### Article 20 — Updating an existing party
 
 A party is re-verified whenever the sponsor revises its rules, and at minimum

@@ -12,7 +12,7 @@ final class PartyCatalogTests: XCTestCase {
         let parties = PartyCatalog.loadBundled()
         XCTAssertEqual(
             Set(parties.map(\.id)),
-            ["alqp", "coqp", "hqp", "ksqp", "mdc", "ohqp", "tnqp", "tqp"]
+            ["alqp", "coqp", "hqp", "ksqp", "mdc", "njqp", "ohqp", "tnqp", "tqp"]
         )
     }
 
@@ -22,7 +22,7 @@ final class PartyCatalogTests: XCTestCase {
     /// `verified: partial` — the setup sheet drives its warning off this, so a
     /// party silently changing status would silently change the UI.
     func testPartialVerificationStatusPerParty() throws {
-        let expectedPartial: Set<String> = ["hqp", "tnqp", "tqp"]
+        let expectedPartial: Set<String> = ["hqp", "njqp", "tnqp", "tqp"]
         for party in PartyCatalog.loadBundled() {
             XCTAssertEqual(
                 party.isPartiallyVerified,

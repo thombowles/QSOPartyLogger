@@ -33,7 +33,7 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**10 remaining** of the 16 in scope; 8 parties bundled (ALQP, MDC, HQP, OhQP, KSQP, TnQP, COQP, TQP).
+**9 remaining** of the 16 in scope; 9 parties bundled (ALQP, MDC, HQP, OhQP, KSQP, TnQP, COQP, NJQP, TQP).
 Rows are in contest-date order — the top unstruck row is what's next.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
@@ -43,8 +43,8 @@ Rows are in contest-date order — the top unstruck row is what's next.
 | ~~Ohio~~ | Aug 22 1600Z → Aug 23 0400Z | [`ohqp_rules.md`](../research/ohqp_rules.md) + [`ohqp_mults_ohio.html`](../research/ohqp_mults_ohio.html) | **done** |
 | ~~Kansas~~ | Aug 29 1400Z → Aug 30 0200Z; Aug 30 1400–2000Z | official PDFs | **done** |
 | ~~Tennessee~~ | Sep 6 1700Z → Sep 7 0300Z | [`tnqp_rules.md`](../research/tnqp_rules.md) + [`tnqp_counties.tsv`](../research/tnqp_counties.tsv) | **done** (`verified: partial`) |
+| ~~New Jersey~~ | Sep 12 1400Z → Sep 13 0200Z ✅ date settled by sponsor | [`njqp_rules.md`](../research/njqp_rules.md) + [`njqp_counties.tsv`](../research/njqp_counties.tsv) | **done** (`verified: partial`) |
 | ~~Colorado~~ | Sep 12 1400Z → Sep 13 0400Z | [`coqp_rules.md`](../research/coqp_rules.md) + [`coqp_src_counties.txt`](../research/coqp_src_counties.txt) | **done** |
-| **New Jersey** | Sep 19 1400Z → Sep 20 0200Z ⚠️ **date disputed** | [`njqp_2026rules.txt`](../research/njqp_2026rules.txt) | raw sources only |
 | **Iowa** | Sep 19 1400Z → Sep 20 0200Z | [`iaqp_page.txt`](../research/iaqp_page.txt), [`iaqp_county_list.txt`](../research/iaqp_county_list.txt), [`iaqp_state_prov.txt`](../research/iaqp_state_prov.txt) | raw sources only |
 | **New Hampshire** | Sep 19 1600Z → Sep 20 0400Z; Sep 20 1200–2200Z | [`nhqp_rules.md`](../research/nhqp_rules.md) + [`nhqp_counties.tsv`](../research/nhqp_counties.tsv) | research banked |
 | **Washington Salmon Run** | Sep 19 1600Z → Sep 20 0700Z; Sep 20 1600–2400Z | [`warun_rules.md`](../research/warun_rules.md) + [`warun_counties.tsv`](../research/warun_counties.tsv) | research banked |
@@ -59,11 +59,15 @@ Rows are in contest-date order — the top unstruck row is what's next.
 
 ## Open questions carried by this worklist
 
-1. **New Jersey date conflict.** The Challenge calendar PDF and WA7BNM's own
-   listing disagree: the PDF puts NJQP on **Sep 19–20**, while WA7BNM's state
-   parties page renders it as **Sep 12–13**. Two of three sources say Sep 19.
-   Resolve from the sponsor's rules before writing `schedule`, and note the
-   conflict in the research doc per Article 19.
+1. ~~**New Jersey date conflict.**~~ **RESOLVED 2026-07-24 — and the primary
+   calendar was wrong.** The sponsor's own 2026 rules (version `2026rev0.5`,
+   read live) say **Saturday September 12, 1400Z–0200Z**. The Challenge calendar
+   PDF said Sep 19–20 and an initial web search agreed; WA7BNM said Sep 12–13.
+   **Two of three aggregators, including the one this worklist designates
+   primary, were wrong.** Treat this as the standing warning against the dates in
+   the table above: they order the work, they do not decide it. Every remaining
+   party's `schedule` must come from the sponsor, and a disagreement between
+   aggregators is not resolved by counting them.
 2. **Maine is absent from the Challenge calendar** but listed by WA7BNM for
    Sep 26–27. Confirm the party runs in 2026 from the sponsor before building it;
    if it does not, strike it from this list rather than shipping a guess.
@@ -75,13 +79,15 @@ Rows are in contest-date order — the top unstruck row is what's next.
    Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
    **Email `info@hawaiiqsoparty.org` to settle it.** See
    [`hqp_rules.md` §2](../research/hqp_rules.md).
-4. **New Jersey and Iowa have raw sponsor text but no write-up.**
+4. **Iowa has raw sponsor text but no write-up.**
    Each still needs its 14-section research doc before any JSON (Article 15).
    Do not shortcut from raw text straight to a party file.
-5. **Watch for combined multiplier entities.** OhQP's official list folds Yukon,
-   NWT and Nunavut into a single `NT` multiplier, so `YT`/`NU` are invalid
-   tokens there. Sponsors abbreviate Canada inconsistently — read each one's own
-   list rather than assuming the standard 13 provinces.
+5. **Read every sponsor's own Canada list — they differ in both directions.**
+   OhQP counts only 11 provinces and folds Yukon/NWT/Nunavut into one `NT`
+   multiplier, so `YT`/`NU` are invalid there. NJQP counts all 13 but spells
+   Newfoundland **`NF`**, the legacy abbreviation, where this repo's default is
+   `NL` — so `NL` is invalid there. Two parties, two different deviations from the
+   default. Never assume the standard 13, and never assume the standard spellings.
 
 ## Deferred engine gaps
 
