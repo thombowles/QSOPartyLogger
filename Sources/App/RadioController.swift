@@ -20,7 +20,7 @@ final class RadioController {
     private var transport: (any SerialTransport)?
     private var driver: (any RadioDriver)?
     private var directKeyer: CWKeyer?
-    private var internalKeyer: K3InternalKeyer?
+    private var internalKeyer: RadioInternalKeyer?
     private var sendingClearTask: Task<Void, Never>?
     private var validationTask: Task<Void, Never>?
     private(set) var connectedDescriptor: RadioDescriptor?
@@ -114,7 +114,7 @@ final class RadioController {
 
         transport = newTransport
         driver = newDriver
-        internalKeyer = K3InternalKeyer(driver: newDriver, wpm: settings.wpm)
+        internalKeyer = RadioInternalKeyer(driver: newDriver, wpm: settings.wpm)
         connectedDescriptor = descriptor
         isConnected = true
     }
@@ -229,7 +229,7 @@ final class RadioController {
         sender.send(text)
 
         // Show "sending" (and hold the TX badge) for the estimated on-air
-        // time — works identically for direct keying and the K3's KY keyer.
+        // time — works identically for direct keying and the radio's keyer.
         nowSending = text
         sendingClearTask?.cancel()
         let duration = estimatedSendDuration(text, settings: settings) + 0.2

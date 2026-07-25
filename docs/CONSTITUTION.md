@@ -163,8 +163,9 @@ A new radio consists of **exactly**:
 Nothing else changes. No model name, model number, or radio `id` may appear
 anywhere in `Sources/App/` or `Sources/UI/`. The registry descriptor is how the
 UI learns what the radio can do — `connection` decides serial-port picker vs.
-host/port fields, `supportsDirectKeying` decides whether the keyer group is
-shown at all:
+host/port fields, `keyerLabel` supplies the picker's name for this radio's own
+keyer (Article 11), and `supportsDirectKeying` decides whether the keyer group
+is shown at all:
 
 ```swift
 if descriptor?.supportsDirectKeying ?? true {
@@ -209,7 +210,13 @@ Therefore:
   `stopInternalKeyer` are not protocol members to stub out; an operator who
   prefers the radio's keyer weighting must be able to choose it.
 - **Keyer settings and labels stay radio-neutral.** A shared enum case must not
-  name one manufacturer's command (see Appendix A).
+  name one manufacturer's command. `AppSettings.KeyerBackend`'s raw values are
+  frozen `UserDefaults` tokens and are never displayed; the picker's label comes
+  from `KeyerBackend.displayName(for:)`, which reads the connected descriptor's
+  `keyerLabel` — "Radio keyer (CWX)" on a Flex, "Radio keyer (KY)" on a K3, and
+  a bare "Radio keyer" when nothing is connected. Likewise
+  `RadioInternalKeyer` is named for the protocol members it drives
+  (`sendInternalKeyerText` / `stopInternalKeyer`), not for a model.
 - **Never key on connect.** Deassert both control lines when the transport
   opens, before any polling starts, so the rig cannot transmit because the app
   launched. Abort must take effect immediately, not at the end of the current
@@ -420,12 +427,7 @@ documents its wiring or network setup.
 Standing debts against these articles. Fix on contact; do not let them become
 precedent.
 
-1. **`KeyerBackend.radioInternal` is labeled `"K3 internal (KY)"`**
-   ([`AppSettings.swift:115`](../Sources/App/AppSettings.swift#L115)) — a
-   manufacturer's command name in a shared, radio-neutral setting, violating
-   Article 11. A connected FlexRadio keys through CWX while the UI says "K3".
-   The label should come from the connected descriptor.
-2. **TQP is `verified: partial`** — band list and current-year details
+1. **TQP is `verified: partial`** — band list and current-year details
    unconfirmed against txqp.net. Separately, `tqp.json` ships
    `cabrilloContest: "TX-QSO-PARTY"`, which WA7BNM lists only as an *alias*,
    while [`tqp_verify.md`](research/tqp_verify.md) concludes `TXQP` is the safe
