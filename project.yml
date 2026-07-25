@@ -84,6 +84,11 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/QSOPartyLogger.app/Contents/MacOS/QSOPartyLogger"
         BUNDLE_LOADER: "$(TEST_HOST)"
+        # Runs before the first test and points `Preferences.store` at a
+        # throwaway suite. Because the bundle is hosted inside the app above,
+        # `UserDefaults.standard` here would otherwise be the operator's real
+        # preference domain — see Tests/TestBundleSetup.swift.
+        INFOPLIST_KEY_NSPrincipalClass: TestBundleSetup
 schemes:
   QSOPartyLogger:
     build:

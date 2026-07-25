@@ -484,6 +484,13 @@ contest history archive (snapshot parity with the engine, two-Mac merge,
 unknown-field preservation, coordinated store), season stats, the SQP
 Challenge formula and calendar resource, and the upcoming-contest engine.
 
+The test bundle is hosted inside the app executable, so `UserDefaults.standard`
+inside a test would be the real `org.b5n.QSOPartyLogger` preference domain.
+Every preference therefore goes through `Preferences.store`, which
+[`Tests/TestBundleSetup.swift`](Tests/TestBundleSetup.swift) points at a
+throwaway suite before the first test runs — a full run leaves your saved
+station profile, radio wiring and cluster history untouched.
+
 ## Data provenance
 
 - KSQP: rules + county abbreviations fetched from ksqsoparty.org (2026 rules
