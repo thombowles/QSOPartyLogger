@@ -80,7 +80,7 @@ struct RadioBar: View {
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 140)
                     .disabled(radio.isConnected)
-                    .help("FlexRadio IP address or hostname (SmartSDR API)")
+                    .help("Radio IP address or hostname")
                 TextField("Port", value: $settings.tcpPort, format: .number.grouping(.never))
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 54)

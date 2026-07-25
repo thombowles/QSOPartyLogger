@@ -21,7 +21,7 @@ final class AppSettings {
         didSet { defaults.set(baudRate, forKey: "baudRate") }
     }
 
-    /// Network CAT (FlexRadio): host/IP and TCP port.
+    /// Network CAT (radios reached over TCP): host/IP and port.
     var tcpHost: String {
         didSet { defaults.set(tcpHost, forKey: "tcpHost") }
     }
