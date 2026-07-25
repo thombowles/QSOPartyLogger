@@ -1,0 +1,108 @@
+                                     AZQP Rules
+                                2025 Arizona QSO Party
+ELIGIBILITY: All licensed Amateur Radio operators
+
+OBJECTIVE:
+    Arizona stations work everyone.
+    Stations outside of Arizona work as many AZ stations as possible.
+    Work stations once per band per mode per AZ county.
+
+CONTEST PERIOD:
+    1500z Oct 11 to 0500z Oct 12, 2025 (UTC)
+    [2nd October Saturday, 8 AM to 10 PM (AZ)]
+
+ENTRY CATEGORIES: (Spotting assistance & self-spotting permitted in all categories)
+    Mobile
+          No differentiated operators, power, or mode. An operation from a self-contained
+          station capable of motion in one or more AZ counties. For safety reasons, single-
+          ops should only operate while parked.
+    Expedition Multi-Op: County-line or Single-county
+          No differentiated transmitters, power, or mode. An operation from a temporary
+          location in one or more AZ counties using antennas installed for the contest
+          period, using temporary supports or trees.
+    Expedition Single-Op: County-line or Single-county
+          No differentiated power, or mode. An operation from a temporary location in one
+          or more AZ counties using antennas installed for the contest period, using
+          temporary supports or trees.
+    Multi-Op Unlimited Transmitters
+          No differentiated power or mode.
+    Multi-Op One Transmitter: High >100w; Low <=100w
+          No differentiated mode.
+    Single-Op: High >100w; Low <=100w; QRP <=5w
+          Mixed, CW, Phone.
+
+MODES: CW, Phone
+
+BANDS: 160, 80, 40, 20, 15, 10 meters (suggestions below)
+    Phone
+           1848, 3848, 7189, 14248, 21348, 28448
+           at top of the hour (for mixed mode entries).
+    CW
+           1812, 3548, 7048, 14048, 21048, 28048
+           at 1/2 past the hour (for mixed mode entries).
+
+EXCHANGE:
+    Arizona stations
+            Send signal report RS(T) and 3-letter county abbreviation:
+            (APH, CHS, CNO, GLA, GHM, GLE, LPZ, MCP, MHV, NVO, PMA, PNL, SCZ,
+            YVP, YMA).
+      Stations outside of Arizona
+            Send signal report RS(T) and 2-letter state or Canadian province / territory. DX
+            stations send signal report RS(T) and DXCC prefix.
+
+QSO POINTS: CW=2; Phone=1
+
+MULTIPLIERS:
+     Arizona stations
+           Multipliers are the 50 US states, the 13 Canadian provinces and territories, and
+           DXCC countries. Multipliers count again for each mode. Total possible multipliers
+           = (50 + 13 + DXCC) x 2.
+     Stations outside of Arizona
+           Multipliers are the 15 Arizona counties. Multipliers count again for each band and
+           mode. Total possible multipliers = 15 x 6 x 2 = 180.
+
+VALID CONTACT:
+A valid contact consists of the complete, correctly copied, two-way exchange between an
+Arizona station (AZ) and any other station (Non-AZ or AZ). Work stations once per band per
+mode per AZ county. Expeditions (or mobiles) spanning multiple county lines should be logged
+as multiple contacts, where each contact counts as both multiplier and QSO point credit. Mobiles
+that change counties are considered new stations and can be worked again for both multiplier
+and QSO point credit. A fixed single county station may be worked once on CW and once on
+Phone on each of the 6 bands (maximum of 12 contacts). CW contacts must not be made in the
+phone band segments. Crossmode, crossband and repeater contacts are not permitted. Spotting
+assistance and self-spotting are permitted in all categories. All operators must observe the
+limitations of their operator and station licenses.
+
+BONUS POINTS:
+Receive a one-time bonus of 100 points for a QSO with K7A on any band or mode during the
+contest.
+
+SCORING: Total Score = (QSO POINTS x MULTIPLIERS) + BONUS POINTS.
+
+LOG FORMATTING & SUBMISSION:
+Please update your logging software prior to the contest. Submit your Cabrillo-formatted log via
+the Log Submission Web App. You will receive immediate email confirmation and your callsign
+will be added to the logs received page.
+
+All logs must be received by 0000z October 22, 2025 (10 days after the contest).
+
+AWARDS:
+Certificates are awarded to all entrants. Plaques are awarded to all AZ & Non-AZ entry category
+winners, the top Canadian station, the top DX station, and the top AZ & Non-AZ Clubs. A
+minimum of 20 QSOs is required to qualify for a sponsored award plaque. Clubs must submit at
+least 3 entries to qualify for a plaque. The New Contester award is open to any station that
+submits an AZQP log indicating at least 10 QSOs. The station / operator must attest they have
+never previously submitted a log with more than 10 QSOs to any contest.
+
+MORE INFO:
+Check the Arizona QSO Party website www.azqp.org for up-to-date information on Activated
+Counties, Awards and Certificates, Resources, Logs Received, Results and more. Email:
+info@azqp.org
+
+LEGAL DISCLAIMER:
+The Arizona QSO Party, its Chairman, Associates, and Sponsors assume no liability or
+responsibility for any injury, illness, or harm (including death) to any person or property as a
+result of participating in the Arizona QSO Party.
+
+Rev: 2501 6/23/2025 1100
+

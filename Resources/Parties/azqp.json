@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "id": "azqp",
+  "name": "Arizona QSO Party",
+  "cabrilloContest": "AZ-QSO-PARTY",
+  "homeState": "AZ",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "perMode"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBandMode"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "K7A",
+      "points": 100,
+      "scope": "once"
+    }
+  ],
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-10-10T15:00:00Z",
+      "end": "2026-10-11T05:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "APH",
+      "name": "Apache"
+    },
+    {
+      "abbr": "CHS",
+      "name": "Cochise"
+    },
+    {
+      "abbr": "CNO",
+      "name": "Coconino"
+    },
+    {
+      "abbr": "GLA",
+      "name": "Gila"
+    },
+    {
+      "abbr": "GHM",
+      "name": "Graham"
+    },
+    {
+      "abbr": "GLE",
+      "name": "Greenlee"
+    },
+    {
+      "abbr": "LPZ",
+      "name": "La Paz"
+    },
+    {
+      "abbr": "MCP",
+      "name": "Maricopa"
+    },
+    {
+      "abbr": "MHV",
+      "name": "Mohave"
+    },
+    {
+      "abbr": "NVO",
+      "name": "Navajo"
+    },
+    {
+      "abbr": "PMA",
+      "name": "Pima"
+    },
+    {
+      "abbr": "PNL",
+      "name": "Pinal"
+    },
+    {
+      "abbr": "SCZ",
+      "name": "Santa Cruz"
+    },
+    {
+      "abbr": "YVP",
+      "name": "Yavapai"
+    },
+    {
+      "abbr": "YMA",
+      "name": "Yuma"
+    }
+  ],
+  "notes": "verified: partial — rules from azqp.org/rules and the rules PDF linked there, read verbatim 2026-07-24. Both are the SAME document and both are still last year's: headed '2025 Arizona QSO Party', footer 'Rev: 2501 6/23/2025 1100', log deadline '0000z October 22, 2025'. The 2026 date comes from the sponsor's own site-wide banner, '1500z Oct 10 to 0500z Oct 11, 2026 (UTC)', which agrees with the rules' own formula '2nd October Saturday, 8 AM to 10 PM (AZ)': 10 October 2026 is the second Saturday, and Arizona keeps MST (UTC-7) all year, so 8 AM is 1500Z and 10 PM is 0500Z next day - a 14-hour window. The DATE is therefore not in doubt; what is unverified is whether any RULE changed for 2026, since the sponsor has not re-issued the document. Multiplier scopes are asymmetric and BOTH sides differ: Arizona stations count states, provinces and DXCC countries ONCE PER MODE ('Total possible multipliers = (50 + 13 + DXCC) x 2'), while stations outside Arizona count the 15 Arizona counties ONCE PER BAND AND PER MODE ('Total possible multipliers = 15 x 6 x 2 = 180'). The generator asserts both of the sponsor's own totals, which between them pin the county count, the band count and the mode count. Counties are not an in-state multiplier class at all. DX stations send their DXCC PREFIX rather than the literal 'DX', so unlike NHQP and MEQP this app can tell entities apart - subject to the standing limitation that a prefix equal to a US state or Canadian province code (PA Netherlands, ON Belgium, LA Norway) is read as that state or province, the same way sponsors' log checkers resolve it. CW 2 points, phone 1. Six bands including 160 m, no WARC, no VHF; CW and phone only, so a digital QSO is invalid rather than zero-point. K7A pays a one-time 100-point bonus on any band or mode. County lines are logged as SEPARATE contacts ('Expeditions (or mobiles) spanning multiple county lines should be logged as multiple contacts'), so a county-line entry is refused; a mobile changing county is a new station for both point and multiplier credit. No DC rule is stated anywhere in the AZQP rules, so DC is loggable as its own token and is NOT folded into Maryland, unlike ALQP/TnQP/COQP/IAQP/MEQP/CQP. No final-score multiplier: 'Total Score = (QSO POINTS x MULTIPLIERS) + BONUS POINTS'. Cabrillo CONTEST value AZ-QSO-PARTY per WA7BNM; the sponsor requires Cabrillo but prints no header token. County names and abbreviations are published on two different pages as parallel lists rather than a paired table, so the generator verifies the positional pairing three ways: both sources must list the same 15 abbreviations in the same order, the names must be alphabetical, and every abbreviation must be a subsequence of its county name (CNO in COCONINO, LPZ in LAPAZ, SCZ in SANTACRUZ). OPEN QUESTIONS (why this is partial): (1) The published rules are the 2025 revision under a 2026 banner, so a 2026 rule change would not be visible. Re-check azqp.org in the fortnight before 10 October 2026, and re-run gen_azqp.py, whose quoted-sentence assertions fail loudly if the text moved. (2) Whether Arizona itself counts as a state multiplier for Arizona stations is not stated in words. It ships as counting, because an AZ station can never receive the token AZ and the sponsor's stated total of 50 states is otherwise unreachable - the same arithmetic that settles KSQP, COQP and IAQP, but an inference rather than a quotation. Confirm both with the sponsor (info@azqp.org) before submitting a log."
+}

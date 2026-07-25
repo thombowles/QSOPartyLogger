@@ -97,10 +97,21 @@ Built for KE5CW. Bundled parties, all with official county data:
   exchange. **Known limitation:** CQP's exchange carries a serial number, which
   this app does not yet model — see provenance below before submitting a log.
 
+- **Arizona QSO Party** (Oct 10, 2026) — the first party whose two sides use
+  **different multiplier scopes**: Arizona stations count states, provinces and
+  DXCC **per mode**, everyone else counts the 15 counties **per band and per
+  mode** (the sponsor's own `15 × 6 × 2 = 180`). Every one of the 15
+  abbreviations is irregular — `CHS`/`CNO` for Cochise/Coconino, `GHM`/`GLE`,
+  `PMA`/`PNL`, `YVP`/`YMA` — and the sponsor publishes names and codes on two
+  different pages as parallel lists, so the generator verifies the pairing three
+  ways. DX sends a **prefix**, so entities are distinguishable here. K7A pays a
+  one-time 100-point bonus; DC is *not* folded into Maryland. `verified: partial`
+  — the published rules are still the 2025 revision under a 2026 banner.
+
 The remaining 2026 parties are tracked in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md) in contest-date
 order — the season ends with Illinois on Oct 18. All banked research is now
-used; the remaining five start from their sponsors' sites. Adding a party is governed by
+used; the remaining four start from their sponsors' sites. Adding a party is governed by
 [`docs/CONSTITUTION.md`](docs/CONSTITUTION.md).
 
 ## Features
@@ -315,7 +326,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 432 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 457 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation, cluster history, the band map scale,
@@ -436,6 +447,21 @@ typed QSY commands, keyer timing, and keyer labelling.
   so the exported Cabrillo leaves the QSO-number element empty. Scoring is
   unaffected (points and multipliers never depend on the serial), but CQP accepts
   Cabrillo only, so serials must be added before submitting.
+- AZQP: rules from azqp.org/rules and the rules PDF linked there, read verbatim
+  2026-07-24. `verified: partial` — **both are still the 2025 revision** (headed
+  "2025 Arizona QSO Party", footer "Rev: 2501 6/23/2025"), so a 2026 rule change
+  would not be visible; re-check before Oct 10. The **date** is not in doubt: the
+  sponsor's site-wide banner gives "1500z Oct 10 to 0500z Oct 11, 2026 (UTC)",
+  which agrees with the rules' own formula "2nd October Saturday, 8 AM to 10 PM
+  (AZ)" — Arizona keeps MST year round, so 8 AM is 1500Z and 10 PM is 0500Z. The
+  generator asserts both of the sponsor's multiplier totals, `(50 + 13 + DXCC) ×
+  2` in-state and `15 × 6 × 2 = 180` out-of-state, which between them pin the
+  county count, the band count and the mode count. County names and codes are
+  published on two different pages as parallel lists, never paired, so
+  [`gen_azqp.py`](docs/research/gen_azqp.py) verifies the positional pairing
+  three ways — same codes in the same order from both sources, names
+  alphabetical, and every code a subsequence of its county name (`CNO` ⊂
+  `COCONINO`, `SCZ` ⊂ `SANTACRUZ`).
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows

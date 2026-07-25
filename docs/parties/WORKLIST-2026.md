@@ -9,7 +9,10 @@ Ordered by contest date, so the next contest to run is always the next one built
 and you have everything; nothing important lives only in a chat log.
 
 - **Next party:** the top unstruck row of the table below — currently
-  **Arizona**, which starts from the sponsor's site with nothing captured.
+  **Pennsylvania**, which starts from the sponsor's site with nothing captured.
+  Check first whether PAQP uses a **QSO number** in its exchange: if it does, it
+  is the second user of the serial-number gap below, which would settle that
+  design and argue for building it before the party.
 - **Process per party:** the Article 22 definition of done at the bottom of this
   file. One party per commit (Article 9). Research doc *before* JSON (Article 15).
 - **To restart the build loop**, self-paced, one party per iteration:
@@ -64,9 +67,9 @@ dates below decide *build order only*.
 
 ## Remaining, in contest-date order
 
-**5 remaining** of the 16 in scope (11 built so far: MDC, HQP, OhQP, TnQP, COQP,
-NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP); 14 parties bundled in total, those 11
-plus the pre-existing ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
+**4 remaining** of the 16 in scope (12 built so far: MDC, HQP, OhQP, TnQP, COQP,
+NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP); 15 parties bundled in total,
+those 12 plus the pre-existing ALQP, KSQP and TQP. Rows are in contest-date order — the top unstruck row is what's
 next, and the count above must equal the number of unstruck rows below.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
@@ -84,7 +87,7 @@ next, and the count above must equal the number of unstruck rows below.
 | ~~Texas~~ | Sep 19 1400Z → Sep 20 0200Z; Sep 20 1400–2000Z | [`tqp_verify.md`](../research/tqp_verify.md) | **done** (`verified: partial`) |
 | ~~Maine~~ | Sep 26 1200Z → Sep 27 1200Z ✅ sponsor confirms it runs | [`meqp_rules.md`](../research/meqp_rules.md) + [`meqp_rules_2026.txt`](../research/meqp_rules_2026.txt) + [`meqp_page.txt`](../research/meqp_page.txt) | **done** (`verified: partial`) |
 | ~~California~~ | Oct 3 1600Z → Oct 4 2200Z | [`cqp_rules.md`](../research/cqp_rules.md) + [`cqp_rules_2026.txt`](../research/cqp_rules_2026.txt) + [`cqp_multipliers.txt`](../research/cqp_multipliers.txt) | **done** |
-| **Arizona** | Oct 10 1500Z → Oct 11 0500Z | — | not started |
+| ~~Arizona~~ | Oct 10 1500Z → Oct 11 0500Z | [`azqp_rules.md`](../research/azqp_rules.md) + [`azqp_rules_pdf.txt`](../research/azqp_rules_pdf.txt) + [`azqp_counties_page.txt`](../research/azqp_counties_page.txt) | **done** (`verified: partial`) |
 | **Pennsylvania** | Oct 10 1600Z → Oct 11 0400Z; Oct 11 1300–2200Z | — | not started |
 | **South Dakota** | Oct 10 1800Z → Oct 11 1800Z | — | not started |
 | **New York** | Oct 17 1400Z → Oct 18 0200Z | — | not started |
@@ -120,10 +123,10 @@ next, and the count above must equal the number of unstruck rows below.
    Hawaii-time anchors; the Challenge calendar instead says 1600Z→0200Z (34h).
    **Email `info@hawaiiqsoparty.org` to settle it.** See
    [`hqp_rules.md` §2](../research/hqp_rules.md).
-4. **All banked research is used up.** Every one of the 5 remaining — Arizona,
+4. **All banked research is used up.** Every one of the 4 remaining —
    Pennsylvania, South Dakota, New York, Illinois — starts from its sponsor's
    site with nothing captured, so expect each iteration to be research-heavy, as
-   Hawaii, Maine and California were.
+   Hawaii, Maine, California and Arizona were.
 5. **Banked research has mislabelled `homeStateCountsViaCounty` twice.**
    *(CQP is the counter-example worth knowing: its sponsor states the rule
    outright — "The first valid CA QSO logged with 4-letter county abbreviation
@@ -227,6 +230,11 @@ its own commit (Article 4).
   2025 (no 2026 revision posted). Sponsors commonly post revisions weeks before
   the event, so every `verified: partial` party wants one re-check in the fortnight
   before it runs — TnQP in late August, and HQP's window question settled by email.
+  **AZQP is the same case as TnQP and wants the same treatment** (early October):
+  its published rules — page and PDF alike — are headed "2025 Arizona QSO Party"
+  with footer "Rev: 2501 6/23/2025", while only the site banner carries the 2026
+  date. The date itself is settled (the rules' own "2nd October Saturday" formula
+  agrees with the banner); what is unverified is whether any *rule* moved.
   **MEQP needs one too** (mid-September): the sponsor edits its rules PDF in place
   at a stable URL with no revision marker, so the only way to detect a change is
   to re-fetch and re-run `gen_meqp.py`, whose quoted-sentence assertions fail
