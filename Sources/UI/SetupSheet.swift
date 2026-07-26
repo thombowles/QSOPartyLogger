@@ -31,12 +31,24 @@ struct SetupSheet: View {
             Form {
                 Section("QSO Party") {
                     Picker("Party", selection: $partyID) {
-                        ForEach(parties) { party in
+                        ForEach(PartyCatalog.pickerEntries()) { entry in
                             // Flag partial verification in the list itself, so
-                            // it is visible before committing to a party.
-                            Text(party.isPartiallyVerified ? "\(party.name)  ⚠︎" : party.name)
-                                .tag(party.id)
+                            // it is visible before committing to a party. A
+                            // party that is part of a combined entry is nested
+                            // under it rather than listed on its own.
+                            Text(entry.isMember
+                                 ? "      ↳ \(entry.party.name)"
+                                 : entry.party.name
+                                    + (entry.party.isPartiallyVerified ? "  ⚠︎" : ""))
+                                .tag(entry.party.id)
                         }
+                    }
+                    if let party, !party.combines.isEmpty {
+                        Text("One log for all four. Use this only if you are outside "
+                             + "all four regions — otherwise choose your own party below it.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     if let windows = party?.schedule, !windows.isEmpty {
                         Text(scheduleText(windows))

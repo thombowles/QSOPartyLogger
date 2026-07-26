@@ -22,7 +22,7 @@ final class MultiStatePartyTests: XCTestCase {
     /// resolve exactly as it did before this schema existed, and a party joining
     /// this set is a decision, never an accident — which is why the list is
     /// asserted rather than derived.
-    static let multiState: Set<String> = ["sevenqp", "newenglandqp"]
+    static let multiState: Set<String> = ["sevenqp", "newenglandqp", "in7qpne"]
 
     func testOnlyTheIntendedPartiesAreMultiState() {
         let actual = Set(PartyCatalog.loadBundled()

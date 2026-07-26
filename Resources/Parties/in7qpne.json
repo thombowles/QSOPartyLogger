@@ -1,0 +1,2199 @@
+{
+  "schemaVersion": 1,
+  "id": "in7qpne",
+  "name": "Combined: Indiana + 7th Call Area + New England + Delaware",
+  "cabrilloContest": "IN7QPNE",
+  "homeState": "IN",
+  "combines": [
+    "inqp",
+    "sevenqp",
+    "newenglandqp",
+    "deqp"
+  ],
+  "homeStates": [
+    "AZ",
+    "CT",
+    "DE",
+    "ID",
+    "IN",
+    "MA",
+    "ME",
+    "MT",
+    "NH",
+    "NV",
+    "OR",
+    "RI",
+    "UT",
+    "VT",
+    "WA",
+    "WY"
+  ],
+  "inStateLabel": "the four-party region",
+  "countyAbbrLength": 5,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m",
+    "1.25m",
+    "70cm"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 1,
+    "digital": 1
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "maxSimultaneousCounties": 4,
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-05-02T13:00:00Z",
+      "end": "2026-05-04T00:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "AZAPH",
+      "name": "Apache",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZCHS",
+      "name": "Cochise",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZCNO",
+      "name": "Coconino",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZGHM",
+      "name": "Graham",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZGLA",
+      "name": "Gila",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZGLE",
+      "name": "Greenlee",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZLPZ",
+      "name": "La Paz",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZMCP",
+      "name": "Maricopa",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZMHV",
+      "name": "Mohave",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZNVO",
+      "name": "Navajo",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZPMA",
+      "name": "Pima",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZPNL",
+      "name": "Pinal",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZSCZ",
+      "name": "Santa Cruz",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZYMA",
+      "name": "Yuma",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZYVP",
+      "name": "Yavapai",
+      "state": "AZ"
+    },
+    {
+      "abbr": "CTCAP",
+      "name": "Capital Region",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTGBR",
+      "name": "Greater Bridgeport",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTLCR",
+      "name": "Lower CT River",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTNAU",
+      "name": "Naugatuck Valley",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTNOE",
+      "name": "Northeastern",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTNOW",
+      "name": "Northwest Hills",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTSOC",
+      "name": "South Central",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTSOE",
+      "name": "Southeastern",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTWES",
+      "name": "Western",
+      "state": "CT"
+    },
+    {
+      "abbr": "IDADA",
+      "name": "Ada",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDADM",
+      "name": "Adams",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBAN",
+      "name": "Bannock",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBEA",
+      "name": "Bear Lake",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBEN",
+      "name": "Benewah",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBIN",
+      "name": "Bingham",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBLA",
+      "name": "Blaine",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBNR",
+      "name": "Bonner",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBNV",
+      "name": "Bonneville",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBOI",
+      "name": "Boise",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBOU",
+      "name": "Boundary",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBUT",
+      "name": "Butte",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCAM",
+      "name": "Camas",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCAN",
+      "name": "Canyon",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCAR",
+      "name": "Caribou",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCAS",
+      "name": "Cassia",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCLA",
+      "name": "Clark",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCLE",
+      "name": "Clearwater",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCUS",
+      "name": "Custer",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDELM",
+      "name": "Elmore",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDFRA",
+      "name": "Franklin",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDFRE",
+      "name": "Fremont",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDGEM",
+      "name": "Gem",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDGOO",
+      "name": "Gooding",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDIDA",
+      "name": "Idaho",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDJEF",
+      "name": "Jefferson",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDJER",
+      "name": "Jerome",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDKOO",
+      "name": "Kootenai",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDLAT",
+      "name": "Latah",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDLEM",
+      "name": "Lemhi",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDLEW",
+      "name": "Lewis",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDLIN",
+      "name": "Lincoln",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDMAD",
+      "name": "Madison",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDMIN",
+      "name": "Minidoka",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDNEZ",
+      "name": "Nez Perce",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDONE",
+      "name": "Oneida",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDOWY",
+      "name": "Owyhee",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDPAY",
+      "name": "Payette",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDPOW",
+      "name": "Power",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDSHO",
+      "name": "Shoshone",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDTET",
+      "name": "Teton",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDTWI",
+      "name": "Twin Falls",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDVAL",
+      "name": "Valley",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDWAS",
+      "name": "Washington",
+      "state": "ID"
+    },
+    {
+      "abbr": "INADA",
+      "name": "Adams",
+      "state": "IN"
+    },
+    {
+      "abbr": "INALL",
+      "name": "Allen",
+      "state": "IN"
+    },
+    {
+      "abbr": "INBAR",
+      "name": "Bartholomew",
+      "state": "IN"
+    },
+    {
+      "abbr": "INBEN",
+      "name": "Benton",
+      "state": "IN"
+    },
+    {
+      "abbr": "INBLA",
+      "name": "Blackford",
+      "state": "IN"
+    },
+    {
+      "abbr": "INBOO",
+      "name": "Boone",
+      "state": "IN"
+    },
+    {
+      "abbr": "INBRO",
+      "name": "Brown",
+      "state": "IN"
+    },
+    {
+      "abbr": "INCAR",
+      "name": "Carroll",
+      "state": "IN"
+    },
+    {
+      "abbr": "INCAS",
+      "name": "Cass",
+      "state": "IN"
+    },
+    {
+      "abbr": "INCLI",
+      "name": "Clinton",
+      "state": "IN"
+    },
+    {
+      "abbr": "INCLR",
+      "name": "Clark",
+      "state": "IN"
+    },
+    {
+      "abbr": "INCLY",
+      "name": "Clay",
+      "state": "IN"
+    },
+    {
+      "abbr": "INCRA",
+      "name": "Crawford",
+      "state": "IN"
+    },
+    {
+      "abbr": "INDAV",
+      "name": "Daviess",
+      "state": "IN"
+    },
+    {
+      "abbr": "INDEA",
+      "name": "Dearborn",
+      "state": "IN"
+    },
+    {
+      "abbr": "INDEC",
+      "name": "Decatur",
+      "state": "IN"
+    },
+    {
+      "abbr": "INDEK",
+      "name": "DeKalb",
+      "state": "IN"
+    },
+    {
+      "abbr": "INDEL",
+      "name": "Delaware",
+      "state": "IN"
+    },
+    {
+      "abbr": "INDUB",
+      "name": "Dubois",
+      "state": "IN"
+    },
+    {
+      "abbr": "INELK",
+      "name": "Elkhart",
+      "state": "IN"
+    },
+    {
+      "abbr": "INFAY",
+      "name": "Fayette",
+      "state": "IN"
+    },
+    {
+      "abbr": "INFLO",
+      "name": "Floyd",
+      "state": "IN"
+    },
+    {
+      "abbr": "INFOU",
+      "name": "Fountain",
+      "state": "IN"
+    },
+    {
+      "abbr": "INFRA",
+      "name": "Franklin",
+      "state": "IN"
+    },
+    {
+      "abbr": "INFUL",
+      "name": "Fulton",
+      "state": "IN"
+    },
+    {
+      "abbr": "INGIB",
+      "name": "Gibson",
+      "state": "IN"
+    },
+    {
+      "abbr": "INGRA",
+      "name": "Grant",
+      "state": "IN"
+    },
+    {
+      "abbr": "INGRE",
+      "name": "Greene",
+      "state": "IN"
+    },
+    {
+      "abbr": "INHAM",
+      "name": "Hamilton",
+      "state": "IN"
+    },
+    {
+      "abbr": "INHAN",
+      "name": "Hancock",
+      "state": "IN"
+    },
+    {
+      "abbr": "INHAR",
+      "name": "Harrison",
+      "state": "IN"
+    },
+    {
+      "abbr": "INHND",
+      "name": "Hendricks",
+      "state": "IN"
+    },
+    {
+      "abbr": "INHNR",
+      "name": "Henry",
+      "state": "IN"
+    },
+    {
+      "abbr": "INHOW",
+      "name": "Howard",
+      "state": "IN"
+    },
+    {
+      "abbr": "INHUN",
+      "name": "Huntington",
+      "state": "IN"
+    },
+    {
+      "abbr": "INJAC",
+      "name": "Jackson",
+      "state": "IN"
+    },
+    {
+      "abbr": "INJAS",
+      "name": "Jasper",
+      "state": "IN"
+    },
+    {
+      "abbr": "INJAY",
+      "name": "Jay",
+      "state": "IN"
+    },
+    {
+      "abbr": "INJEF",
+      "name": "Jefferson",
+      "state": "IN"
+    },
+    {
+      "abbr": "INJEN",
+      "name": "Jennings",
+      "state": "IN"
+    },
+    {
+      "abbr": "INJOH",
+      "name": "Johnson",
+      "state": "IN"
+    },
+    {
+      "abbr": "INKNO",
+      "name": "Knox",
+      "state": "IN"
+    },
+    {
+      "abbr": "INKOS",
+      "name": "Kosciusko",
+      "state": "IN"
+    },
+    {
+      "abbr": "INLAG",
+      "name": "Lagrange",
+      "state": "IN"
+    },
+    {
+      "abbr": "INLAK",
+      "name": "Lake",
+      "state": "IN"
+    },
+    {
+      "abbr": "INLAP",
+      "name": "LaPorte",
+      "state": "IN"
+    },
+    {
+      "abbr": "INLAW",
+      "name": "Lawrence",
+      "state": "IN"
+    },
+    {
+      "abbr": "INMAD",
+      "name": "Madison",
+      "state": "IN"
+    },
+    {
+      "abbr": "INMIA",
+      "name": "Miami",
+      "state": "IN"
+    },
+    {
+      "abbr": "INMNR",
+      "name": "Monroe",
+      "state": "IN"
+    },
+    {
+      "abbr": "INMNT",
+      "name": "Montgomery",
+      "state": "IN"
+    },
+    {
+      "abbr": "INMOR",
+      "name": "Morgan",
+      "state": "IN"
+    },
+    {
+      "abbr": "INMRN",
+      "name": "Marion",
+      "state": "IN"
+    },
+    {
+      "abbr": "INMRS",
+      "name": "Marshall",
+      "state": "IN"
+    },
+    {
+      "abbr": "INMRT",
+      "name": "Martin",
+      "state": "IN"
+    },
+    {
+      "abbr": "INNEW",
+      "name": "Newton",
+      "state": "IN"
+    },
+    {
+      "abbr": "INNOB",
+      "name": "Noble",
+      "state": "IN"
+    },
+    {
+      "abbr": "INOHI",
+      "name": "Ohio",
+      "state": "IN"
+    },
+    {
+      "abbr": "INORA",
+      "name": "Orange",
+      "state": "IN"
+    },
+    {
+      "abbr": "INOWE",
+      "name": "Owen",
+      "state": "IN"
+    },
+    {
+      "abbr": "INPAR",
+      "name": "Parke",
+      "state": "IN"
+    },
+    {
+      "abbr": "INPER",
+      "name": "Perry",
+      "state": "IN"
+    },
+    {
+      "abbr": "INPIK",
+      "name": "Pike",
+      "state": "IN"
+    },
+    {
+      "abbr": "INPOR",
+      "name": "Porter",
+      "state": "IN"
+    },
+    {
+      "abbr": "INPOS",
+      "name": "Posey",
+      "state": "IN"
+    },
+    {
+      "abbr": "INPUL",
+      "name": "Pulaski",
+      "state": "IN"
+    },
+    {
+      "abbr": "INPUT",
+      "name": "Putnam",
+      "state": "IN"
+    },
+    {
+      "abbr": "INRAN",
+      "name": "Randolph",
+      "state": "IN"
+    },
+    {
+      "abbr": "INRIP",
+      "name": "Ripley",
+      "state": "IN"
+    },
+    {
+      "abbr": "INRUS",
+      "name": "Rush",
+      "state": "IN"
+    },
+    {
+      "abbr": "INSCO",
+      "name": "Scott",
+      "state": "IN"
+    },
+    {
+      "abbr": "INSHE",
+      "name": "Shelby",
+      "state": "IN"
+    },
+    {
+      "abbr": "INSPE",
+      "name": "Spencer",
+      "state": "IN"
+    },
+    {
+      "abbr": "INSTA",
+      "name": "Starke",
+      "state": "IN"
+    },
+    {
+      "abbr": "INSTE",
+      "name": "Steuben",
+      "state": "IN"
+    },
+    {
+      "abbr": "INSTJ",
+      "name": "St. Joseph",
+      "state": "IN"
+    },
+    {
+      "abbr": "INSUL",
+      "name": "Sullivan",
+      "state": "IN"
+    },
+    {
+      "abbr": "INSWI",
+      "name": "Switzerland",
+      "state": "IN"
+    },
+    {
+      "abbr": "INTPP",
+      "name": "Tippecanoe",
+      "state": "IN"
+    },
+    {
+      "abbr": "INTPT",
+      "name": "Tipton",
+      "state": "IN"
+    },
+    {
+      "abbr": "INUNI",
+      "name": "Union",
+      "state": "IN"
+    },
+    {
+      "abbr": "INVAN",
+      "name": "Vanderburgh",
+      "state": "IN"
+    },
+    {
+      "abbr": "INVER",
+      "name": "Vermillion",
+      "state": "IN"
+    },
+    {
+      "abbr": "INVIG",
+      "name": "Vigo",
+      "state": "IN"
+    },
+    {
+      "abbr": "INWAB",
+      "name": "Wabash",
+      "state": "IN"
+    },
+    {
+      "abbr": "INWAS",
+      "name": "Washington",
+      "state": "IN"
+    },
+    {
+      "abbr": "INWAY",
+      "name": "Wayne",
+      "state": "IN"
+    },
+    {
+      "abbr": "INWEL",
+      "name": "Wells",
+      "state": "IN"
+    },
+    {
+      "abbr": "INWHL",
+      "name": "Whitley",
+      "state": "IN"
+    },
+    {
+      "abbr": "INWHT",
+      "name": "White",
+      "state": "IN"
+    },
+    {
+      "abbr": "INWRK",
+      "name": "Warrick",
+      "state": "IN"
+    },
+    {
+      "abbr": "INWRN",
+      "name": "Warren",
+      "state": "IN"
+    },
+    {
+      "abbr": "KDE",
+      "name": "Kent",
+      "state": "DE"
+    },
+    {
+      "abbr": "MABAR",
+      "name": "Barnstable",
+      "state": "MA"
+    },
+    {
+      "abbr": "MABER",
+      "name": "Berkshire",
+      "state": "MA"
+    },
+    {
+      "abbr": "MABRI",
+      "name": "Bristol",
+      "state": "MA"
+    },
+    {
+      "abbr": "MADUK",
+      "name": "Dukes",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAESS",
+      "name": "Essex",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAFRA",
+      "name": "Franklin",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAHMD",
+      "name": "Hampden",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAHMP",
+      "name": "Hampshire",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAMID",
+      "name": "Middlesex",
+      "state": "MA"
+    },
+    {
+      "abbr": "MANAN",
+      "name": "Nantucket",
+      "state": "MA"
+    },
+    {
+      "abbr": "MANOR",
+      "name": "Norfolk",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAPLY",
+      "name": "Plymouth",
+      "state": "MA"
+    },
+    {
+      "abbr": "MASUF",
+      "name": "Suffolk",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAWOR",
+      "name": "Worcester",
+      "state": "MA"
+    },
+    {
+      "abbr": "MEAND",
+      "name": "Androscoggin",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEARO",
+      "name": "Aroostook",
+      "state": "ME"
+    },
+    {
+      "abbr": "MECUM",
+      "name": "Cumberland",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEFRA",
+      "name": "Franklin",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEHAN",
+      "name": "Hancock",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEKEN",
+      "name": "Kennebec",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEKNO",
+      "name": "Knox",
+      "state": "ME"
+    },
+    {
+      "abbr": "MELIN",
+      "name": "Lincoln",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEOXF",
+      "name": "Oxford",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEPEN",
+      "name": "Penobscot",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEPIS",
+      "name": "Piscataquis",
+      "state": "ME"
+    },
+    {
+      "abbr": "MESAG",
+      "name": "Sagadahoc",
+      "state": "ME"
+    },
+    {
+      "abbr": "MESOM",
+      "name": "Somerset",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEWAL",
+      "name": "Waldo",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEWAS",
+      "name": "Washington",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEYOR",
+      "name": "York",
+      "state": "ME"
+    },
+    {
+      "abbr": "MTBEA",
+      "name": "Beaverhead",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTBIG",
+      "name": "Big Horn",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTBLA",
+      "name": "Blaine",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTBRO",
+      "name": "Broadwater",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTCAS",
+      "name": "Cascade",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTCHO",
+      "name": "Chouteau",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTCRB",
+      "name": "Carbon",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTCRT",
+      "name": "Carter",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTCUS",
+      "name": "Custer",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTDAN",
+      "name": "Daniels",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTDAW",
+      "name": "Dawson",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTDEE",
+      "name": "Deer Lodge",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTFAL",
+      "name": "Fallon",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTFER",
+      "name": "Fergus",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTFLA",
+      "name": "Flathead",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTGAL",
+      "name": "Gallatin",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTGAR",
+      "name": "Garfield",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTGLA",
+      "name": "Glacier",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTGOL",
+      "name": "Golden Valley",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTGRA",
+      "name": "Granite",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTHIL",
+      "name": "Hill",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTJEF",
+      "name": "Jefferson",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTJUD",
+      "name": "Judith Basin",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTLAK",
+      "name": "Lake",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTLEW",
+      "name": "Lewis & Clark",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTLIB",
+      "name": "Liberty",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTLIN",
+      "name": "Lincoln",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMAD",
+      "name": "Madison",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMCC",
+      "name": "McCone",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMEA",
+      "name": "Meagher",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMIN",
+      "name": "Mineral",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMIS",
+      "name": "Missoula",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMUS",
+      "name": "Musselshell",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPAR",
+      "name": "Park",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPET",
+      "name": "Petroleum",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPHI",
+      "name": "Phillips",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPON",
+      "name": "Pondera",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPRA",
+      "name": "Prairie",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPWD",
+      "name": "Powder River",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPWL",
+      "name": "Powell",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTRAV",
+      "name": "Ravalli",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTRIC",
+      "name": "Richland",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTROO",
+      "name": "Roosevelt",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTROS",
+      "name": "Rosebud",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTSAN",
+      "name": "Sanders",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTSHE",
+      "name": "Sheridan",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTSIL",
+      "name": "Silver Bow",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTSTI",
+      "name": "Stillwater",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTSWE",
+      "name": "Sweet Grass",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTTET",
+      "name": "Teton",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTTOO",
+      "name": "Toole",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTTRE",
+      "name": "Treasure",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTVAL",
+      "name": "Valley",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTWHE",
+      "name": "Wheatland",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTWIB",
+      "name": "Wibaux",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTYEL",
+      "name": "Yellowstone",
+      "state": "MT"
+    },
+    {
+      "abbr": "NDE",
+      "name": "New Castle",
+      "state": "DE"
+    },
+    {
+      "abbr": "NHBEL",
+      "name": "Belknap",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHCAR",
+      "name": "Carroll",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHCHE",
+      "name": "Cheshire",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHCOO",
+      "name": "Coos",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHGRA",
+      "name": "Grafton",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHHIL",
+      "name": "Hillsborough",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHMER",
+      "name": "Merrimack",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHROC",
+      "name": "Rockingham",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHSTR",
+      "name": "Strafford",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHSUL",
+      "name": "Sullivan",
+      "state": "NH"
+    },
+    {
+      "abbr": "NVCAR",
+      "name": "Carson City",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVCHU",
+      "name": "Churchill",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVCLA",
+      "name": "Clark",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVDOU",
+      "name": "Douglas",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVELK",
+      "name": "Elko",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVESM",
+      "name": "Esmeralda",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVEUR",
+      "name": "Eureka",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVHUM",
+      "name": "Humboldt",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVLAN",
+      "name": "Lander",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVLIN",
+      "name": "Lincoln",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVLYO",
+      "name": "Lyon",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVMIN",
+      "name": "Mineral",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVNYE",
+      "name": "Nye",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVPER",
+      "name": "Pershing",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVSTO",
+      "name": "Storey",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVWAS",
+      "name": "Washoe",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVWHI",
+      "name": "White Pine",
+      "state": "NV"
+    },
+    {
+      "abbr": "ORBAK",
+      "name": "Baker",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORBEN",
+      "name": "Benton",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCLK",
+      "name": "Clackamas",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCLT",
+      "name": "Clatsop",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCOL",
+      "name": "Columbia",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCOO",
+      "name": "Coos",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCRO",
+      "name": "Crook",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCUR",
+      "name": "Curry",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORDES",
+      "name": "Deschutes",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORDOU",
+      "name": "Douglas",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORGIL",
+      "name": "Gilliam",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORGRA",
+      "name": "Grant",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORHAR",
+      "name": "Harney",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORHOO",
+      "name": "Hood River",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORJAC",
+      "name": "Jackson",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORJEF",
+      "name": "Jefferson",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORJOS",
+      "name": "Josephine",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORKLA",
+      "name": "Klamath",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORLAK",
+      "name": "Lake",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORLAN",
+      "name": "Lane",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORLCN",
+      "name": "Lincoln",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORLNN",
+      "name": "Linn",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORMAL",
+      "name": "Malheur",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORMAR",
+      "name": "Marion",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORMOR",
+      "name": "Morrow",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORMUL",
+      "name": "Multnomah",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORPOL",
+      "name": "Polk",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORSHE",
+      "name": "Sherman",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORTIL",
+      "name": "Tillamook",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORUMA",
+      "name": "Umatilla",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORUNI",
+      "name": "Union",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORWAL",
+      "name": "Wallowa",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORWCO",
+      "name": "Wasco",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORWHE",
+      "name": "Wheeler",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORWSH",
+      "name": "Washington",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORYAM",
+      "name": "Yamhill",
+      "state": "OR"
+    },
+    {
+      "abbr": "RIBRI",
+      "name": "Bristol",
+      "state": "RI"
+    },
+    {
+      "abbr": "RIKEN",
+      "name": "Kent",
+      "state": "RI"
+    },
+    {
+      "abbr": "RINEW",
+      "name": "Newport",
+      "state": "RI"
+    },
+    {
+      "abbr": "RIPRO",
+      "name": "Providence",
+      "state": "RI"
+    },
+    {
+      "abbr": "RIWAS",
+      "name": "Washington",
+      "state": "RI"
+    },
+    {
+      "abbr": "SDE",
+      "name": "Sussex",
+      "state": "DE"
+    },
+    {
+      "abbr": "UTBEA",
+      "name": "Beaver",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTBOX",
+      "name": "Box Elder",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTCAC",
+      "name": "Cache",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTCAR",
+      "name": "Carbon",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTDAG",
+      "name": "Daggett",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTDAV",
+      "name": "Davis",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTDUC",
+      "name": "Duchesne",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTEME",
+      "name": "Emery",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTGAR",
+      "name": "Garfield",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTGRA",
+      "name": "Grand",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTIRO",
+      "name": "Iron",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTJUA",
+      "name": "Juab",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTKAN",
+      "name": "Kane",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTMIL",
+      "name": "Millard",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTMOR",
+      "name": "Morgan",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTPIU",
+      "name": "Piute",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTRIC",
+      "name": "Rich",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTSAL",
+      "name": "Salt Lake",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTSEV",
+      "name": "Sevier",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTSNJ",
+      "name": "San Juan",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTSNP",
+      "name": "Sanpete",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTSUM",
+      "name": "Summit",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTTOO",
+      "name": "Tooele",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTUIN",
+      "name": "Uintah",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTUTA",
+      "name": "Utah",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTWAY",
+      "name": "Wayne",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTWEB",
+      "name": "Weber",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTWSH",
+      "name": "Washington",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTWST",
+      "name": "Wasatch",
+      "state": "UT"
+    },
+    {
+      "abbr": "VTADD",
+      "name": "Addison",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTBEN",
+      "name": "Bennington",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTCAL",
+      "name": "Caledonia",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTCHI",
+      "name": "Chittenden",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTESS",
+      "name": "Essex",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTFRA",
+      "name": "Franklin",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTGRA",
+      "name": "Grand Isle",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTLAM",
+      "name": "Lamoille",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTORA",
+      "name": "Orange",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTORL",
+      "name": "Orleans",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTRUT",
+      "name": "Rutland",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTWAS",
+      "name": "Washington",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTWND",
+      "name": "Windsor",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTWNH",
+      "name": "Windham",
+      "state": "VT"
+    },
+    {
+      "abbr": "WAADA",
+      "name": "Adams",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAASO",
+      "name": "Asotin",
+      "state": "WA"
+    },
+    {
+      "abbr": "WABEN",
+      "name": "Benton",
+      "state": "WA"
+    },
+    {
+      "abbr": "WACHE",
+      "name": "Chelan",
+      "state": "WA"
+    },
+    {
+      "abbr": "WACLL",
+      "name": "Clallam",
+      "state": "WA"
+    },
+    {
+      "abbr": "WACLR",
+      "name": "Clark",
+      "state": "WA"
+    },
+    {
+      "abbr": "WACOL",
+      "name": "Columbia",
+      "state": "WA"
+    },
+    {
+      "abbr": "WACOW",
+      "name": "Cowlitz",
+      "state": "WA"
+    },
+    {
+      "abbr": "WADOU",
+      "name": "Douglas",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAFER",
+      "name": "Ferry",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAFRA",
+      "name": "Franklin",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAGAR",
+      "name": "Garfield",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAGRN",
+      "name": "Grant",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAGRY",
+      "name": "Grays Harbor",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAISL",
+      "name": "Island",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAJEF",
+      "name": "Jefferson",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAKLI",
+      "name": "Klickitat",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAKNG",
+      "name": "King",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAKTP",
+      "name": "Kitsap",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAKTT",
+      "name": "Kittitas",
+      "state": "WA"
+    },
+    {
+      "abbr": "WALEW",
+      "name": "Lewis",
+      "state": "WA"
+    },
+    {
+      "abbr": "WALIN",
+      "name": "Lincoln",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAMAS",
+      "name": "Mason",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAOKA",
+      "name": "Okanogan",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAPAC",
+      "name": "Pacific",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAPEN",
+      "name": "Pend Oreille",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAPIE",
+      "name": "Pierce",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASAN",
+      "name": "San Juan",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASKG",
+      "name": "Skagit",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASKM",
+      "name": "Skamania",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASNO",
+      "name": "Snohomish",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASPO",
+      "name": "Spokane",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASTE",
+      "name": "Stevens",
+      "state": "WA"
+    },
+    {
+      "abbr": "WATHU",
+      "name": "Thurston",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAWAH",
+      "name": "Wahkiakum",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAWAL",
+      "name": "Walla Walla",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAWHA",
+      "name": "Whatcom",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAWHI",
+      "name": "Whitman",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAYAK",
+      "name": "Yakima",
+      "state": "WA"
+    },
+    {
+      "abbr": "WYALB",
+      "name": "Albany",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYBIG",
+      "name": "Big Horn",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYCAM",
+      "name": "Campbell",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYCAR",
+      "name": "Carbon",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYCON",
+      "name": "Converse",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYCRO",
+      "name": "Crook",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYFRE",
+      "name": "Fremont",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYGOS",
+      "name": "Goshen",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYHOT",
+      "name": "Hot Springs",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYJOH",
+      "name": "Johnson",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYLAR",
+      "name": "Laramie",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYLIN",
+      "name": "Lincoln",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYNAT",
+      "name": "Natrona",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYNIO",
+      "name": "Niobrara",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYPAR",
+      "name": "Park",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYPLA",
+      "name": "Platte",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYSHE",
+      "name": "Sheridan",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYSUB",
+      "name": "Sublette",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYSWE",
+      "name": "Sweetwater",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYTET",
+      "name": "Teton",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYUIN",
+      "name": "Uinta",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYWAS",
+      "name": "Washakie",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYWES",
+      "name": "Weston",
+      "state": "WY"
+    }
+  ],
+  "hubSpots": null,
+  "notes": "verified: partial - a COMBINED ENTRY for the four QSO parties that share the first weekend of May, not a contest in its own right. The New England rules state the arrangement: 'You may submit a single log that combines all of your QSOs from the New England, 7th Call Area, Indiana and Delaware QSO parties. QSOs not applicable to the NEQP will be ignored.' N1MM+ models it with a module called IN7QPNE and this definition follows that design deliberately, including who it is for. USE THIS ONLY IF YOU ARE OUTSIDE ALL FOUR REGIONS. N1MM's manual is explicit: 'If you are an in-state user of one of these QSO parties, select the appropriate state party option (7QP, IN, NEWE or DE). If you are out-of-state for all four contests this weekend, select the IN7QPNE option.' An Indiana station is in-state for Indiana and out-of-state for the other three, so its exchange and multipliers differ and it must still choose Indiana - which is why all four member parties remain selectable here. KNOWN LIMITATION 1: THIS ENTRY CANNOT GIVE YOU A SCORE. The four sponsors score differently - the 7th Call Area pays 2, 3 and 4 points by mode and counts multipliers once; Indiana pays a flat 2 and counts per mode; New England pays 1 and 2 and counts once; Delaware pays 10, 20 and 20 to out-of-state entrants and counts per band - so no single set of numbers is right for all four at once. N1MM has the same problem and says so. The score shown here is INDICATIVE ONLY; submit the same Cabrillo file to all four sponsors and use the 4QP parsing tool at stateqsoparty.com to split it and get each contest's real claimed score. What this entry does do correctly is LOG and EXPORT: its county list is the union of all four, built from the bundled definitions so it cannot drift from them, and every county carries its own state so one log spans sixteen. KNOWN LIMITATION 2: the band and mode lists are unions too, so a QSO can be logged that one member contest would not count - a digital QSO counts for the 7th Call Area and Delaware but not for Indiana or New England, and 160 m counts for the 7th Call Area but for none of the others. The sponsors' own instruction covers this: QSOs not applicable to a contest are ignored by that contest."
+}

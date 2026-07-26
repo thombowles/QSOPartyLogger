@@ -71,6 +71,16 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         county(for: abbr)?.state ?? homeState
     }
 
+    /// The party ids this one combines, for the weekends where several
+    /// sponsors accept a single shared log — empty for every ordinary party.
+    ///
+    /// This does **not** replace the members: they stay independently
+    /// selectable, because an operator inside one of them needs that party's own
+    /// exchange and multipliers. It only tells the picker to group them, so four
+    /// parties on one weekend do not read as four unrelated choices.
+    var combines: [String] { combinesRaw ?? [] }
+    private let combinesRaw: [String]?
+
     /// How the setup sheet names the inside/outside choice: "Inside \(this)".
     /// Defaults to `homeState`, so every existing party reads as before; the
     /// multi-state regionals supply a phrase instead ("the 7th call area").
@@ -507,6 +517,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case validBands, points, dupeScope, multipliers, bonuses, oneByOne
         case schedule, counties, notes, scoreMultipliers, homeStationPoints
         case hubSpots
+        case combinesRaw = "combines"
         case homeStatesRaw = "homeStates"
         case inStateLabelRaw = "inStateLabel"
         case dxStyleRaw = "dxStyle"

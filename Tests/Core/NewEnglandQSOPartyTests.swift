@@ -250,8 +250,12 @@ final class NewEnglandQSOPartyTests: XCTestCase {
         utc.timeZone = try XCTUnwrap(TimeZone(identifier: "UTC"))
         XCTAssertTrue(utc.isDate(try XCTUnwrap(neqp.schedule?.first?.start),
                                  inSameDayAs: try XCTUnwrap(sevenqp.schedule?.first?.start)))
+        // The two real multi-state contests. The combined May-weekend entry is
+        // multi-state too, but it is a shared-log convenience rather than a
+        // contest, so it is excluded here.
         XCTAssertEqual(Set(PartyCatalog.loadBundled()
-            .filter { $0.homeStates.count > 1 }.map(\.id)), ["sevenqp", "newenglandqp"])
+            .filter { $0.homeStates.count > 1 && $0.combines.isEmpty }.map(\.id)),
+                       ["sevenqp", "newenglandqp"])
     }
 
     /// **Regression guard for a real collision.** Both parties are called NEQP,

@@ -17,7 +17,8 @@ final class ChallengeTests: XCTestCase {
         let mapped = calendar.approvedContests.compactMap(\.partyID)
         XCTAssertEqual(mapped.count, 44)
         let bundledIDs = Set(PartyCatalog.loadBundled().map(\.id))
-        XCTAssertEqual(Set(mapped), bundledIDs.subtracting(["meqp"]))
+        // in7qpne is a combined ENTRY, not a contest the Challenge tracks.
+        XCTAssertEqual(Set(mapped), bundledIDs.subtracting(["meqp", "in7qpne"]))
 
         XCTAssertNil(calendar.approvedContests.first { $0.name.localizedCaseInsensitiveContains("maine") })
         XCTAssertEqual(calendar.contest(partyID: "njqp")?.name, "New Jersey QSO Party")

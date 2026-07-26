@@ -61,7 +61,10 @@ final class GeorgiaQSOPartyTests: XCTestCase {
     /// 259, which is eight states' worth, and Texas's 254. Pinned as a ranking
     /// rather than a superlative, which is what caught 7QP overtaking it.
     func testGeorgiaHasTheThirdLargestCountyListBundled() {
+        // Combined entries are unions of several parties' lists, so they are
+        // not counted here - the ranking is about a single sponsor's counties.
         let ranked = PartyCatalog.loadBundled()
+            .filter { $0.combines.isEmpty }
             .sorted { ($0.counties.count, $1.id) > ($1.counties.count, $0.id) }
             .prefix(4)
             .map { "\($0.id) \($0.counties.count)" }

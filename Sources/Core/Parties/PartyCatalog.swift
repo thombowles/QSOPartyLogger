@@ -58,6 +58,86 @@ enum PartyCatalog {
         return byID.values.sorted { $0.name < $1.name }
     }
 
+    /// The party to open by default at `date` for an operator in `state`.
+    ///
+    /// Where several sponsors share a weekend and accept one combined log, an
+    /// operator **outside all of them** is better served by the combined entry —
+    /// that is what it is for. An operator inside any member gets that member
+    /// back instead, because the combined entry would give them the wrong
+    /// exchange and multipliers.
+    ///
+    /// Returns `nil` when no party is running, so the caller keeps whatever the
+    /// operator last chose.
+    static func suggestedParty(
+        on date: Date,
+        operatorState: String,
+        bundle: Bundle = .main
+    ) -> PartyDefinition? {
+        let state = operatorState.uppercased()
+        let running = allParties(bundle: bundle).filter { party in
+            party.schedule?.contains { $0.start <= date && date < $0.end } == true
+        }
+        guard !running.isEmpty else { return nil }
+
+        // Prefer a combined entry, but only for an operator outside every one
+        // of the parties it combines.
+        if let combined = running.first(where: { party in
+            !party.combines.isEmpty && !party.homeStates.contains(state)
+        }) {
+            return combined
+        }
+
+        // Otherwise the operator's own party. A combined entry also lists their
+        // state among its members', and sorts before them by name, so it has to
+        // be excluded here or an Indiana operator gets the combined entry back.
+        let single = running.filter { $0.combines.isEmpty }
+        return single.first { $0.homeStates.contains(state) }
+            ?? single.first
+            ?? running.first
+    }
+
+    /// One row of the party picker: a party, and whether it is shown nested
+    /// under the combined entry above it.
+    struct PickerEntry: Identifiable, Equatable, Sendable {
+        let party: PartyDefinition
+        /// True for a party that some other party `combines`.
+        let isMember: Bool
+        var id: String { party.id }
+    }
+
+    /// The parties in picker order, with each combined entry followed by the
+    /// parties it combines.
+    ///
+    /// The members are **kept, not hidden**. An operator inside one of them
+    /// needs that party's own exchange and multipliers — an Indiana station is
+    /// in-state for Indiana and out-of-state for the other three — which is why
+    /// N1MM keeps all four alongside its combined `IN7QPNE` module and why this
+    /// does too. Grouping them stops four parties on one weekend reading as four
+    /// unrelated choices.
+    static func pickerEntries(bundle: Bundle = .main) -> [PickerEntry] {
+        let all = allParties(bundle: bundle)
+        let byID = Dictionary(uniqueKeysWithValues: all.map { ($0.id, $0) })
+
+        // A party is a member if some other party combines it. Membership is
+        // declared by the combiner, so no party needs to know it has a parent.
+        var memberOf: [String: String] = [:]
+        for party in all {
+            for member in party.combines where byID[member] != nil {
+                memberOf[member] = party.id
+            }
+        }
+
+        var entries: [PickerEntry] = []
+        for party in all where memberOf[party.id] == nil {
+            entries.append(PickerEntry(party: party, isMember: false))
+            for member in party.combines {
+                guard let m = byID[member] else { continue }
+                entries.append(PickerEntry(party: m, isMember: true))
+            }
+        }
+        return entries
+    }
+
     static func party(id: String, bundle: Bundle = .main) -> PartyDefinition? {
         allParties(bundle: bundle).first { $0.id == id }
     }
