@@ -290,6 +290,14 @@ parties, and the remaining engine gaps. Adding a party is governed by
   stays on screen when another app takes focus, so it can sit beside a
   panadapter in SmartSDR rather than disappearing the moment you click one.
   This is the only place spots are shown — the score panel stays about scoring.
+- **Spot label size** (S / M / L / XL at the top of the funnel popover): the
+  callsign is drawn at 10, 12, 14 or 16 pt, for a dense display or an operating
+  position you read from across the room. Small is the default and is exactly
+  what the map has always drawn. The column pitch and row clearance travel with
+  the size rather than staying fixed, so bigger calls stack into wider columns
+  instead of overlapping — and because a wider column needs a wider panel, the
+  panel's minimum width grows with the size to keep at least two columns
+  available. **Reset All** leaves it alone: that button is about filters.
 - **Stacked spots**: a pile-up no longer shoves labels off frequency. Spots
   too close to plot separately fan out **sideways** into a second and third
   column, each one still drawn at its own frequency, and the column count
@@ -331,7 +339,10 @@ parties, and the remaining engine gaps. Adding a party is governed by
   really sits), per-band, and how long spots live before ageing out (5 min – 2 hr,
   default 15). It's a panel, not a menu — tick as many boxes as you like in
   one visit — and everything applies instantly to the map and to the spot keys.
-  All filters off by default; **Reset All** puts them back.
+  All filters off by default; **Reset All** puts them back, along with the
+  age-out and the band-plan toggle. The same popover carries the **spot label
+  size** picker above the filters — that one **Reset All** deliberately leaves
+  alone, since clearing a band filter is no reason to resize your text.
 - **CQ frequency memory**: sending F1 (or starting repeat-CQ) in Run mode
   remembers the run frequency; ⌘J — or the chip next to Repeat — jumps back
   and flips you to Run after an S&P excursion.
@@ -629,14 +640,16 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 964 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 980 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, contacts
 from your own log reaching the band map (and never displacing somebody else's
 spot), what a spot sheet may offer as a county for any station, cluster
-history, the band map scale and its column stacking, the band plan and its
+history, the band map scale and its column stacking (including that every
+label-size preset still leaves room for two columns, so a pile-up never falls
+back to pushing labels off frequency), the band plan and its
 CW/phone crossovers, typed QSY commands, the key-monitor focus gate and its key
 table, what the radio keys on every step of the entry flow, the CW messages
 editor's Restore Defaults and exchange-mismatch banner, keyer timing, keyer

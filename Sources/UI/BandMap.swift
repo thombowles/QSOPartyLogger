@@ -124,7 +124,14 @@ struct BandMapView: View {
     private static let spanChoices: [(label: String, kHz: Double)] = [
         ("25", 25), ("50", 50), ("100", 100), ("All", 10_000),
     ]
-    private let rulerWidth: CGFloat = 46
+    private let rulerWidth = CGFloat(BandMapMetrics.rulerWidth)
+
+    /// Everything about how big a spot label is drawn — both font sizes, the
+    /// column pitch, the row clearance, the centring offset, and the panel
+    /// width that pitch needs. The view keeps no label geometry of its own.
+    private var labelSize: SpotLabelSize { model.settings.spotLabelSize }
+
+    private static let minHeight: CGFloat = 280
 
     var body: some View {
         VStack(spacing: 6) {
@@ -134,7 +141,12 @@ struct BandMapView: View {
             }
         }
         .padding(10)
-        .frame(minWidth: 190, minHeight: 280)
+        .frame(minWidth: CGFloat(labelSize.minimumPanelWidth), minHeight: Self.minHeight)
+        .background(
+            PanelMinimumSize(
+                width: CGFloat(labelSize.minimumPanelWidth), height: Self.minHeight
+            )
+        )
     }
 
     private var header: some View {
@@ -190,6 +202,19 @@ struct BandMapView: View {
             Text("Band Map")
                 .font(.headline)
 
+            Text("SPOT LABELS")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(.secondary)
+            Picker("", selection: $settings.spotLabelSize) {
+                ForEach(SpotLabelSize.allCases) { size in
+                    Text(size.segmentLabel).tag(size)
+                }
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .help(Self.labelSizeHelp)
+
+            Divider()
             Text("SPOT FILTERS")
                 .font(.caption.weight(.bold))
                 .foregroundStyle(.secondary)
@@ -278,6 +303,17 @@ struct BandMapView: View {
         .padding(14)
         .frame(width: 290)
     }
+
+    /// Built from the presets rather than written out, so the point sizes in
+    /// the tooltip cannot drift from the table in `SpotLabelSize`.
+    private static let labelSizeHelp: String = {
+        let sizes = SpotLabelSize.allCases
+            .map { "\($0.segmentLabel) \(Int($0.callPointSize)) pt" }
+            .joined(separator: ", ")
+        return "Callsign size on the band map — \(sizes). Bigger labels need wider "
+            + "columns to stack a pile-up sideways, so the panel's minimum width "
+            + "grows with the size."
+    }()
 
     private static let ageChoices = [5, 10, 15, 30, 60, 120]
 
@@ -390,13 +426,15 @@ struct BandMapView: View {
                     HStack(spacing: 3) {
                         Circle().frame(width: 5, height: 5)
                         Text(row.spot.call)
-                            .font(.system(size: 10, design: .monospaced).weight(.semibold))
+                            .font(.system(size: CGFloat(labelSize.callPointSize),
+                                          design: .monospaced).weight(.semibold))
                             .strikethrough(worked || row.spot.isSuperseded)
                         // The county is the whole reason the hub feed exists —
                         // a cluster spot never carries one.
                         if let county = row.spot.county, !county.isEmpty {
                             Text(county)
-                                .font(.system(size: 8, design: .monospaced))
+                                .font(.system(size: CGFloat(labelSize.countyPointSize),
+                                              design: .monospaced))
                                 .padding(.horizontal, 3)
                                 .padding(.vertical, 1)
                                 .background(
@@ -420,8 +458,9 @@ struct BandMapView: View {
                 .foregroundStyle(spotColor(worked: worked, spot: row.spot))
                 .opacity(row.spot.isSuperseded ? 0.45 : 1)
                 .offset(
-                    x: rulerWidth + labelInset + CGFloat(row.column) * Self.columnWidth,
-                    y: CGFloat(row.y) - 6
+                    x: rulerWidth + labelInset
+                        + CGFloat(row.column) * CGFloat(labelSize.columnWidth),
+                    y: CGFloat(row.y) - CGFloat(labelSize.verticalOffset)
                 )
                 .help(helpText(for: row.spot, worked: worked, needed: needed))
             }
@@ -456,22 +495,49 @@ struct BandMapView: View {
         return parts.joined(separator: " — ")
     }
 
-    /// Horizontal pitch of the label columns — a six-character call at 10 pt
-    /// monospaced plus its dot, with room to breathe.
-    private static let columnWidth: CGFloat = 60
-    /// Clearance one label needs vertically before the next may share a column.
-    private static let rowHeight: Double = 13
-    private let labelInset: CGFloat = 8
+    private let labelInset = CGFloat(BandMapMetrics.labelInset)
 
+    /// Column pitch and row clearance come off the label size, so bigger text
+    /// stacks into wider columns instead of overlapping in the old ones.
     private func placements(scale: BandMapScale, size: CGSize) -> [BandMapLayout.Placement] {
         BandMapLayout.place(
             spots: model.spots,
             scale: scale,
             height: Double(size.height),
-            rowHeight: Self.rowHeight,
-            columnWidth: Double(Self.columnWidth),
+            rowHeight: labelSize.rowHeight,
+            columnWidth: labelSize.columnWidth,
             availableWidth: Double(size.width - rulerWidth - labelInset)
         )
+    }
+}
+
+/// Holds the hosting panel to the label size's minimum.
+///
+/// SwiftUI's `.frame(minWidth:)` stops the *view* laying out any narrower, but
+/// the `NSPanel` around it knows nothing of that — left alone it would be
+/// dragged smaller and clip the map. So the window needs its own
+/// `contentMinSize`. And a panel restored from its autosaved frame at the old
+/// width has to be *widened* when the operator picks a bigger size, not merely
+/// stopped from shrinking further, or the new pitch would leave room for a
+/// single column and send every collision into the push-down branch.
+private struct PanelMinimumSize: NSViewRepresentable {
+    let width: CGFloat
+    let height: CGFloat
+
+    func makeNSView(context: Context) -> NSView { NSView(frame: .zero) }
+
+    func updateNSView(_ view: NSView, context: Context) {
+        // Deferred: there is no window during the first layout pass, and
+        // resizing one from inside that pass re-enters layout.
+        Task { @MainActor in
+            guard let window = view.window else { return }
+            window.contentMinSize = NSSize(width: width, height: height)
+            let content = window.contentRect(forFrameRect: window.frame)
+            guard content.width < width else { return }
+            var frame = window.frame
+            frame.size.width += width - content.width
+            window.setFrame(frame, display: true)
+        }
     }
 }
 
@@ -479,7 +545,11 @@ struct BandMapView: View {
 @MainActor
 enum BandMapPanel {
     static func make(model: BandMapModel, near window: NSWindow?) -> NSPanel {
-        let width: CGFloat = 230
+        // 230 is the long-standing default and comfortably clears the smallest
+        // label size; only a bigger one raises it, so a panel opened for the
+        // first time at XL is already wide enough for two columns instead of
+        // being widened out from under the operator a moment later.
+        let width = max(230, CGFloat(model.settings.spotLabelSize.minimumPanelWidth))
         let height: CGFloat = 560
         let panel = NSPanel(
             contentRect: NSRect(x: 0, y: 0, width: width, height: height),

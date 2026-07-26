@@ -153,4 +153,69 @@ final class BandMapLayoutTests: XCTestCase {
     func testEmptyInputPlacesNothing() {
         XCTAssertTrue(place([]).isEmpty)
     }
+
+    // MARK: Label size drives the geometry
+
+    /// The label area a panel at this preset's minimum width offers — what
+    /// `BandMapView.placements` passes as `availableWidth`.
+    private func labelArea(_ size: SpotLabelSize) -> Double {
+        size.minimumPanelWidth - BandMapMetrics.rulerWidth - BandMapMetrics.labelInset
+    }
+
+    private func place(_ spots: [Spot], at size: SpotLabelSize) -> [BandMapLayout.Placement] {
+        place(spots, rowHeight: size.rowHeight, columnWidth: size.columnWidth,
+              availableWidth: labelArea(size))
+    }
+
+    /// Bigger text takes wider columns, so one panel width holds fewer of them
+    /// and a deep pile-up starts overflowing sooner. Five spots on adjacent
+    /// kilohertz across a fixed 300 pt: five small columns, only three huge.
+    func testTheSamePanelHoldsFewerColumnsAsTheLabelsGrow() {
+        let spots = (0..<5).map { spot("S\($0)", 14300 - Double($0)) }
+
+        XCTAssertEqual(
+            place(spots, rowHeight: SpotLabelSize.small.rowHeight,
+                  columnWidth: SpotLabelSize.small.columnWidth, availableWidth: 300).map(\.column),
+            [0, 1, 2, 3, 4], "300 pt fits five 60 pt columns"
+        )
+        XCTAssertEqual(
+            place(spots, rowHeight: SpotLabelSize.huge.rowHeight,
+                  columnWidth: SpotLabelSize.huge.columnWidth, availableWidth: 300).map(\.column),
+            [0, 1, 2, 2, 2], "300 pt fits three 96 pt columns, so the last two overflow"
+        )
+    }
+
+    /// `minimumPanelWidth` earns its place. At every preset the panel is wide
+    /// enough that two colliding spots still fan sideways and keep their true
+    /// frequency — a single column would push the second one down instead.
+    func testCollidingSpotsKeepTheirFrequencyAtEveryPresetsMinimumPanelWidth() {
+        for size in SpotLabelSize.allCases {
+            let rows = place([spot("A", 14300), spot("B", 14299)], at: size)
+            XCTAssertEqual(rows.map(\.column), [0, 1], "\(size.rawValue) fell back to one column")
+            for row in rows {
+                XCTAssertEqual(
+                    row.y, scale.y(forKHz: row.spot.freqKHz, height: height), accuracy: 0.001,
+                    "\(size.rawValue): \(row.spot.call) was pushed off its frequency"
+                )
+            }
+        }
+    }
+
+    /// Row clearance travels with the preset too: an overflowing label clears
+    /// the one above it by that preset's own row height, not a fixed 13 pt.
+    func testOverflowClearanceFollowsThePresetRowHeight() {
+        for size in SpotLabelSize.allCases {
+            let rows = place([spot("A", 14300), spot("B", 14299), spot("C", 14298)], at: size)
+            let lastColumn = rows.filter { $0.column == 1 }.map(\.y)
+            guard lastColumn.count == 2 else {
+                // Not an assertion followed by a subscript: if the panel ever
+                // narrows to one column this is empty, and indexing it would
+                // crash the whole suite instead of failing this one test.
+                XCTFail("\(size.rawValue): expected B and C to share column 1, got \(rows.map(\.column))")
+                continue
+            }
+            XCTAssertEqual(lastColumn[1] - lastColumn[0], size.rowHeight, accuracy: 0.001,
+                           "\(size.rawValue)")
+        }
+    }
 }

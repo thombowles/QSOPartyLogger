@@ -123,6 +123,15 @@ final class AppSettings {
         didSet { defaults.set(spotBands.map(\.rawValue), forKey: "spotBands") }
     }
 
+    /// How big spot labels are drawn on the band map. Eyesight and display
+    /// density, so machine-level like the rest of this file rather than saved
+    /// into a log. Deliberately outside the funnel popover's **Reset All**,
+    /// which is about filters — clearing a band filter should not resize
+    /// anyone's text.
+    var spotLabelSize: SpotLabelSize {
+        didSet { defaults.set(spotLabelSize.rawValue, forKey: "spotLabelSize") }
+    }
+
     /// The spot filters as the engine wants them. `workedCalls` and
     /// `allowedModes` are supplied by the caller — they come from the log and
     /// the active party, not from stored preferences.
@@ -255,6 +264,11 @@ final class AppSettings {
         followBandPlan = defaults.object(forKey: "followBandPlan") as? Bool ?? true
         spotModes = Set((defaults.stringArray(forKey: "spotModes") ?? []).compactMap(ModeClass.init(rawValue:)))
         spotBands = Set((defaults.stringArray(forKey: "spotBands") ?? []).compactMap(Band.init(rawValue:)))
+        // An unreadable token falls back to the default rather than to nothing:
+        // a hand-edited or downgraded preference file must never leave the band
+        // map with no label size at all.
+        spotLabelSize = SpotLabelSize(rawValue: defaults.string(forKey: "spotLabelSize") ?? "")
+            ?? .small
         wpm = defaults.object(forKey: "wpm") as? Int ?? 22
         keyerBackend = KeyerBackend(rawValue: defaults.string(forKey: "keyerBackend") ?? "") ?? .direct
         keyerLineConfig = (defaults.data(forKey: "keyerLineConfig")
