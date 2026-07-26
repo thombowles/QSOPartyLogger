@@ -8,11 +8,12 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **9 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+- **8 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
   February and March are clear; April is under way (Louisiana, Mississippi,
   Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec,
-  Nebraska, Florida). **The 7th Call Area is next** — and the 7QP/NEQP schema
-  change must land as its own Article 4 commit before it.
+  Nebraska, Florida, 7QP). **Indiana is next**, sharing the 2 May weekend.
+  **7QP turned out to be EIGHT states, not seven** — the sketch below left
+  Washington out, and the sponsor's own page is the authority.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -118,8 +119,10 @@ Two consequences worth naming before the first one is built:
    > NEQP."
 
    That is the design, and it is not negotiable by convenience. **One log covers
-   every member state** — 7QP's seven (AZ ID MT NV OR UT WY) and NEQP's six (CT
-   ME MA NH RI VT). No "pick your state at setup", no one-log-per-state, no
+   every member state** — 7QP's **eight** (AZ ID MT NV OR UT **WA** WY) and
+   NEQP's six (CT ME MA NH RI VT). *Corrected when 7QP was built: this sketch
+   said seven and left Washington out. Running its own Salmon Run does not take
+   Washington out of the 7th call area.* No "pick your state at setup", no one-log-per-state, no
    seven separate party definitions.
 
    So `homeState: String` genuinely does not survive here, and this is the one
@@ -174,9 +177,9 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**9 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**8 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 7 US + 2 Canadian. Research is banked for none of them.
+next one built". 6 US + 2 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
@@ -200,7 +203,7 @@ next one built". 7 US + 2 Canadian. Research is banked for none of them.
 | ~~18~~ | ~~Quebec~~ | ~~Apr 19 1300Z → Apr 19 2400Z~~ | **done** 2026-07-26 — [`qcqp_rules.md`](../research/qcqp_rules.md); 🇨🇦 **bilingual rules, parsed both** |
 | ~~19~~ | ~~Nebraska~~ | ~~Apr 25 1400Z → Apr 26 0200Z~~ | **done** 2026-07-26 — [`neqp_rules.md`](../research/neqp_rules.md); **36 h, not 12** — and the .org is a content farm |
 | ~~20~~ | ~~Florida~~ | ~~Apr 25 1600Z → Apr 26 0159Z; Apr 26 1200–2159Z~~ | **done** 2026-07-26 — [`fqp_rules.md`](../research/fqp_rules.md); **first-party Cabrillo header**, `FCG-FQP` |
-| 21 | 7th Call Area | May 2 1300Z → May 3 0700Z | **7 states** (AZ ID MT NV OR UT WY) — **one log covers all seven**, see *Scope* |
+| ~~21~~ | ~~7th Call Area~~ | ~~May 2 1300Z → May 3 0700Z~~ | **done** 2026-07-26 — [`sevenqp_rules.md`](../research/sevenqp_rules.md); **EIGHT states, not seven** — WA is in it too |
 | 22 | Indiana | May 2 1500Z → May 3 0259Z | |
 | 23 | Delaware | May 2 1700Z → May 3 2359Z | 3 counties |
 | 24 | New England | May 2 2000Z → May 3 0500Z; May 3 1300–2400Z | **6 states** (CT ME MA NH RI VT) — **one log covers all six**, see *Scope* |
@@ -215,12 +218,12 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**39 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**40 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
 pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP**, **SCQP**,
 **NCQP**, **OKQP**, **IDQP**, **WIQP**, **VAQP**, **LAQP**, **MSQP**, **MOQP**,
-**NMQP**, **GAQP**, **NDQP**, **MIQP**, **OQP**, **QCQP**, **NEQP** and **FQP**
-from the reopened first-half season, all built 2026-07-26.
+**NMQP**, **GAQP**, **NDQP**, **MIQP**, **OQP**, **QCQP**, **NEQP**, **FQP**
+and **7QP** from the reopened first-half season, all built 2026-07-26.
 Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |

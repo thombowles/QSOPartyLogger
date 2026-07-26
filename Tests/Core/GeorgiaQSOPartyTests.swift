@@ -4,8 +4,8 @@ import XCTest
 /// Georgia QSO Party — built from the sponsor's own site (gaqsoparty.com), read
 /// verbatim 2026-07-26. See docs/research/gaqp_rules.md.
 ///
-/// **159 counties — the second-largest list in the app**, behind Texas's 254
-/// and ahead of Virginia's 133. The sponsor states its own multiplier ceilings —
+/// **159 counties — the third-largest list in the app**, behind the 7th Call
+/// Area's 259 (eight states' worth) and Texas's 254. The sponsor states its own multiplier ceilings —
 /// 128 and 318 — and both are arithmetic that checks the county count and the
 /// class lists at once.
 final class GeorgiaQSOPartyTests: XCTestCase {
@@ -57,16 +57,15 @@ final class GeorgiaQSOPartyTests: XCTestCase {
         XCTAssertEqual(Set(gaqp.counties.map(\.name)).count, 159)
     }
 
-    /// Georgia's is the second-largest list bundled: Texas ships all 254 of its
-    /// counties, and nothing else comes near 159. Pinned as a ranking rather
-    /// than a superlative, so adding a bigger state is a visible change here
-    /// instead of a quietly stale claim.
-    func testGeorgiaHasTheSecondLargestCountyListBundled() {
+    /// Georgia's is the third-largest list bundled — behind the 7th Call Area's
+    /// 259, which is eight states' worth, and Texas's 254. Pinned as a ranking
+    /// rather than a superlative, which is what caught 7QP overtaking it.
+    func testGeorgiaHasTheThirdLargestCountyListBundled() {
         let ranked = PartyCatalog.loadBundled()
             .sorted { ($0.counties.count, $1.id) > ($1.counties.count, $0.id) }
-            .prefix(3)
+            .prefix(4)
             .map { "\($0.id) \($0.counties.count)" }
-        XCTAssertEqual(Array(ranked), ["tqp 254", "gaqp 159", "vaqp 133"])
+        XCTAssertEqual(Array(ranked), ["sevenqp 259", "tqp 254", "gaqp 159", "vaqp 133"])
     }
 
     /// **`CHAT` is Chattahoochee, not Chatham.** Four counties begin "Cha", and

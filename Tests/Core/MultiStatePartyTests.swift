@@ -18,11 +18,24 @@ final class MultiStatePartyTests: XCTestCase {
 
     // MARK: The Article 4 proof
 
+    /// The parties that are deliberately multi-state. Everything else must still
+    /// resolve exactly as it did before this schema existed, and a party joining
+    /// this set is a decision, never an accident — which is why the list is
+    /// asserted rather than derived.
+    static let multiState: Set<String> = ["sevenqp"]
+
+    func testOnlyTheIntendedPartiesAreMultiState() {
+        let actual = Set(PartyCatalog.loadBundled()
+            .filter { $0.homeStates.count > 1 }
+            .map(\.id))
+        XCTAssertEqual(actual, Self.multiState)
+    }
+
     /// Every party that was correct before this change still resolves exactly as
     /// it did: one home state, no county carrying its own, and the same
     /// excluded-token list the old `[homeState]` default produced.
-    func testEveryBundledPartyIsUntouched() throws {
-        let bundled = PartyCatalog.loadBundled()
+    func testEverySingleStatePartyIsUntouched() throws {
+        let bundled = PartyCatalog.loadBundled().filter { !Self.multiState.contains($0.id) }
         XCTAssertGreaterThan(bundled.count, 30, "sanity — the catalog loaded")
 
         for party in bundled {
@@ -43,7 +56,8 @@ final class MultiStatePartyTests: XCTestCase {
     /// For a single-state party those are the same list, and the two parties
     /// that override it must still override it.
     func testTheExcludedTokenDefaultDidNotMoveForAnyoneElse() throws {
-        for party in PartyCatalog.loadBundled() where !["mdc", "njqp"].contains(party.id) {
+        for party in PartyCatalog.loadBundled()
+        where !["mdc", "njqp"].contains(party.id) && !Self.multiState.contains(party.id) {
             XCTAssertEqual(party.excludedStateTokens, [party.homeState], party.id)
         }
         let mdc = try XCTUnwrap(PartyCatalog.party(id: "mdc"))

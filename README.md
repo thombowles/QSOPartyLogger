@@ -233,6 +233,15 @@ Built for KE5CW. Bundled parties, all with official county data:
   itself. **Florida entrants get no county multipliers at all.** The 1×1
   Spelling Bee ships in `oneByOne` — 2026's word is `USBIRTHDAY`, for the USA's
   250th. `verified: partial`.
+- **7th Call Area QSO Party** (May 2, 2026) — **the first multi-state party**,
+  and **eight states, not the seven anyone counts**: Washington is in the 7th
+  call area as well as running its own Salmon Run. 259 counties across AZ, ID,
+  MT, NV, OR, UT, WA and WY — the largest list in the app — and **one log covers
+  all eight**, each crediting its own state multiplier. The exchange code is a
+  5-letter `state+county` (`AZYVP` is Yavapai, Arizona), so county *names*
+  repeat freely while codes stay unique, and a county line can cross a state
+  line (`UTRIC/IDBEA`). Eighteen hours, one window; digital pays most (SSB 2,
+  CW 3, digital 4). `verified: partial`.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -388,9 +397,9 @@ Built for KE5CW. Bundled parties, all with official county data:
 contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
 Carolina, Oklahoma, Idaho, Wisconsin, Virginia, Louisiana, Mississippi,
 Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec,
-Nebraska and Florida are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
+Nebraska, Florida and the 7th Call Area are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
 agree there is no state or provincial party in January, November or December.
-**9 parties from April through June remain**, listed in
+**8 parties from April through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -870,7 +879,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1458 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1481 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1400,7 +1409,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 38 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 39 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

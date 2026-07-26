@@ -1,0 +1,1366 @@
+{
+  "schemaVersion": 1,
+  "id": "sevenqp",
+  "name": "7th Call Area QSO Party",
+  "cabrilloContest": "7QP",
+  "homeState": "AZ",
+  "homeStates": [
+    "AZ",
+    "ID",
+    "MT",
+    "NV",
+    "OR",
+    "UT",
+    "WA",
+    "WY"
+  ],
+  "inStateLabel": "the 7th call area",
+  "countyAbbrLength": 5,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 3,
+    "digital": 4
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "once",
+      "dxMultCap": 10
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-05-02T13:00:00Z",
+      "end": "2026-05-03T07:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "AZAPH",
+      "name": "Apache",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZGLA",
+      "name": "Gila",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZLPZ",
+      "name": "La Paz",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZNVO",
+      "name": "Navajo",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZSCZ",
+      "name": "Santa Cruz",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZCHS",
+      "name": "Cochise",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZGHM",
+      "name": "Graham",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZMCP",
+      "name": "Maricopa",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZPMA",
+      "name": "Pima",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZYVP",
+      "name": "Yavapai",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZCNO",
+      "name": "Coconino",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZGLE",
+      "name": "Greenlee",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZMHV",
+      "name": "Mohave",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZPNL",
+      "name": "Pinal",
+      "state": "AZ"
+    },
+    {
+      "abbr": "AZYMA",
+      "name": "Yuma",
+      "state": "AZ"
+    },
+    {
+      "abbr": "IDADA",
+      "name": "Ada",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBNV",
+      "name": "Bonneville",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCUS",
+      "name": "Custer",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDKOO",
+      "name": "Kootenai",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDOWY",
+      "name": "Owyhee",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDADM",
+      "name": "Adams",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBOU",
+      "name": "Boundary",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDELM",
+      "name": "Elmore",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDLAT",
+      "name": "Latah",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDPAY",
+      "name": "Payette",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBAN",
+      "name": "Bannock",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBUT",
+      "name": "Butte",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDFRA",
+      "name": "Franklin",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDLEM",
+      "name": "Lemhi",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDPOW",
+      "name": "Power",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBEA",
+      "name": "Bear Lake",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCAM",
+      "name": "Camas",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDFRE",
+      "name": "Fremont",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDLEW",
+      "name": "Lewis",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDSHO",
+      "name": "Shoshone",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBEN",
+      "name": "Benewah",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCAN",
+      "name": "Canyon",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDGEM",
+      "name": "Gem",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDLIN",
+      "name": "Lincoln",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDTET",
+      "name": "Teton",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBIN",
+      "name": "Bingham",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCAR",
+      "name": "Caribou",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDGOO",
+      "name": "Gooding",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDMAD",
+      "name": "Madison",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDTWI",
+      "name": "Twin Falls",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBLA",
+      "name": "Blaine",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCAS",
+      "name": "Cassia",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDIDA",
+      "name": "Idaho",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDMIN",
+      "name": "Minidoka",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDVAL",
+      "name": "Valley",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBOI",
+      "name": "Boise",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCLA",
+      "name": "Clark",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDJEF",
+      "name": "Jefferson",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDNEZ",
+      "name": "Nez Perce",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDWAS",
+      "name": "Washington",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDBNR",
+      "name": "Bonner",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDCLE",
+      "name": "Clearwater",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDJER",
+      "name": "Jerome",
+      "state": "ID"
+    },
+    {
+      "abbr": "IDONE",
+      "name": "Oneida",
+      "state": "ID"
+    },
+    {
+      "abbr": "MTBEA",
+      "name": "Beaverhead",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTFAL",
+      "name": "Fallon",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTLAK",
+      "name": "Lake",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPET",
+      "name": "Petroleum",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTSHE",
+      "name": "Sheridan",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTBIG",
+      "name": "Big Horn",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTFER",
+      "name": "Fergus",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTLEW",
+      "name": "Lewis & Clark",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPHI",
+      "name": "Phillips",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTSIL",
+      "name": "Silver Bow",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTBLA",
+      "name": "Blaine",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTFLA",
+      "name": "Flathead",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTLIB",
+      "name": "Liberty",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPON",
+      "name": "Pondera",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTSTI",
+      "name": "Stillwater",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTBRO",
+      "name": "Broadwater",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTGAL",
+      "name": "Gallatin",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTLIN",
+      "name": "Lincoln",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPWD",
+      "name": "Powder River",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTSWE",
+      "name": "Sweet Grass",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTCRB",
+      "name": "Carbon",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTGAR",
+      "name": "Garfield",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMAD",
+      "name": "Madison",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPWL",
+      "name": "Powell",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTTET",
+      "name": "Teton",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTCRT",
+      "name": "Carter",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTGLA",
+      "name": "Glacier",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMCC",
+      "name": "McCone",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPRA",
+      "name": "Prairie",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTTOO",
+      "name": "Toole",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTCAS",
+      "name": "Cascade",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTGOL",
+      "name": "Golden Valley",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMEA",
+      "name": "Meagher",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTRAV",
+      "name": "Ravalli",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTTRE",
+      "name": "Treasure",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTCHO",
+      "name": "Chouteau",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTGRA",
+      "name": "Granite",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMIN",
+      "name": "Mineral",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTRIC",
+      "name": "Richland",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTVAL",
+      "name": "Valley",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTCUS",
+      "name": "Custer",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTHIL",
+      "name": "Hill",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMIS",
+      "name": "Missoula",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTROO",
+      "name": "Roosevelt",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTWHE",
+      "name": "Wheatland",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTDAN",
+      "name": "Daniels",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTJEF",
+      "name": "Jefferson",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTMUS",
+      "name": "Musselshell",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTROS",
+      "name": "Rosebud",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTWIB",
+      "name": "Wibaux",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTDAW",
+      "name": "Dawson",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTJUD",
+      "name": "Judith Basin",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTPAR",
+      "name": "Park",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTSAN",
+      "name": "Sanders",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTYEL",
+      "name": "Yellowstone",
+      "state": "MT"
+    },
+    {
+      "abbr": "MTDEE",
+      "name": "Deer Lodge",
+      "state": "MT"
+    },
+    {
+      "abbr": "NVCAR",
+      "name": "Carson City",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVELK",
+      "name": "Elko",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVLAN",
+      "name": "Lander",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVMIN",
+      "name": "Mineral",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVSTO",
+      "name": "Storey",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVCHU",
+      "name": "Churchill",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVESM",
+      "name": "Esmeralda",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVLIN",
+      "name": "Lincoln",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVNYE",
+      "name": "Nye",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVWAS",
+      "name": "Washoe",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVCLA",
+      "name": "Clark",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVEUR",
+      "name": "Eureka",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVLYO",
+      "name": "Lyon",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVPER",
+      "name": "Pershing",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVWHI",
+      "name": "White Pine",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVDOU",
+      "name": "Douglas",
+      "state": "NV"
+    },
+    {
+      "abbr": "NVHUM",
+      "name": "Humboldt",
+      "state": "NV"
+    },
+    {
+      "abbr": "ORBAK",
+      "name": "Baker",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORDES",
+      "name": "Deschutes",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORJEF",
+      "name": "Jefferson",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORMAL",
+      "name": "Malheur",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORUMA",
+      "name": "Umatilla",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORBEN",
+      "name": "Benton",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORDOU",
+      "name": "Douglas",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORJOS",
+      "name": "Josephine",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORMAR",
+      "name": "Marion",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORUNI",
+      "name": "Union",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCLK",
+      "name": "Clackamas",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORGIL",
+      "name": "Gilliam",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORKLA",
+      "name": "Klamath",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORMOR",
+      "name": "Morrow",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORWAL",
+      "name": "Wallowa",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCLT",
+      "name": "Clatsop",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORGRA",
+      "name": "Grant",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORLAK",
+      "name": "Lake",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORMUL",
+      "name": "Multnomah",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORWCO",
+      "name": "Wasco",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCOL",
+      "name": "Columbia",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORHAR",
+      "name": "Harney",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORLAN",
+      "name": "Lane",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORPOL",
+      "name": "Polk",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORWSH",
+      "name": "Washington",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCOO",
+      "name": "Coos",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORHOO",
+      "name": "Hood River",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORLCN",
+      "name": "Lincoln",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORSHE",
+      "name": "Sherman",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORWHE",
+      "name": "Wheeler",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCRO",
+      "name": "Crook",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORJAC",
+      "name": "Jackson",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORLNN",
+      "name": "Linn",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORTIL",
+      "name": "Tillamook",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORYAM",
+      "name": "Yamhill",
+      "state": "OR"
+    },
+    {
+      "abbr": "ORCUR",
+      "name": "Curry",
+      "state": "OR"
+    },
+    {
+      "abbr": "UTBEA",
+      "name": "Beaver",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTDUC",
+      "name": "Duchesne",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTKAN",
+      "name": "Kane",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTSNJ",
+      "name": "San Juan",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTUTA",
+      "name": "Utah",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTBOX",
+      "name": "Box Elder",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTEME",
+      "name": "Emery",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTMIL",
+      "name": "Millard",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTSNP",
+      "name": "Sanpete",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTWST",
+      "name": "Wasatch",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTCAC",
+      "name": "Cache",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTGAR",
+      "name": "Garfield",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTMOR",
+      "name": "Morgan",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTSEV",
+      "name": "Sevier",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTWSH",
+      "name": "Washington",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTCAR",
+      "name": "Carbon",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTGRA",
+      "name": "Grand",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTPIU",
+      "name": "Piute",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTSUM",
+      "name": "Summit",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTWAY",
+      "name": "Wayne",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTDAG",
+      "name": "Daggett",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTIRO",
+      "name": "Iron",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTRIC",
+      "name": "Rich",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTTOO",
+      "name": "Tooele",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTWEB",
+      "name": "Weber",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTDAV",
+      "name": "Davis",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTJUA",
+      "name": "Juab",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTSAL",
+      "name": "Salt Lake",
+      "state": "UT"
+    },
+    {
+      "abbr": "UTUIN",
+      "name": "Uintah",
+      "state": "UT"
+    },
+    {
+      "abbr": "WAADA",
+      "name": "Adams",
+      "state": "WA"
+    },
+    {
+      "abbr": "WADOU",
+      "name": "Douglas",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAKLI",
+      "name": "Klickitat",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAPAC",
+      "name": "Pacific",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASTE",
+      "name": "Stevens",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAASO",
+      "name": "Asotin",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAFER",
+      "name": "Ferry",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAKNG",
+      "name": "King",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAPEN",
+      "name": "Pend Oreille",
+      "state": "WA"
+    },
+    {
+      "abbr": "WATHU",
+      "name": "Thurston",
+      "state": "WA"
+    },
+    {
+      "abbr": "WABEN",
+      "name": "Benton",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAFRA",
+      "name": "Franklin",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAKTP",
+      "name": "Kitsap",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAPIE",
+      "name": "Pierce",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAWAH",
+      "name": "Wahkiakum",
+      "state": "WA"
+    },
+    {
+      "abbr": "WACHE",
+      "name": "Chelan",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAGAR",
+      "name": "Garfield",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAKTT",
+      "name": "Kittitas",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASAN",
+      "name": "San Juan",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAWAL",
+      "name": "Walla Walla",
+      "state": "WA"
+    },
+    {
+      "abbr": "WACLL",
+      "name": "Clallam",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAGRN",
+      "name": "Grant",
+      "state": "WA"
+    },
+    {
+      "abbr": "WALEW",
+      "name": "Lewis",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASKG",
+      "name": "Skagit",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAWHA",
+      "name": "Whatcom",
+      "state": "WA"
+    },
+    {
+      "abbr": "WACLR",
+      "name": "Clark",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAGRY",
+      "name": "Grays Harbor",
+      "state": "WA"
+    },
+    {
+      "abbr": "WALIN",
+      "name": "Lincoln",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASKM",
+      "name": "Skamania",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAWHI",
+      "name": "Whitman",
+      "state": "WA"
+    },
+    {
+      "abbr": "WACOL",
+      "name": "Columbia",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAISL",
+      "name": "Island",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAMAS",
+      "name": "Mason",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASNO",
+      "name": "Snohomish",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAYAK",
+      "name": "Yakima",
+      "state": "WA"
+    },
+    {
+      "abbr": "WACOW",
+      "name": "Cowlitz",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAJEF",
+      "name": "Jefferson",
+      "state": "WA"
+    },
+    {
+      "abbr": "WAOKA",
+      "name": "Okanogan",
+      "state": "WA"
+    },
+    {
+      "abbr": "WASPO",
+      "name": "Spokane",
+      "state": "WA"
+    },
+    {
+      "abbr": "WYALB",
+      "name": "Albany",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYCRO",
+      "name": "Crook",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYLAR",
+      "name": "Laramie",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYPLA",
+      "name": "Platte",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYTET",
+      "name": "Teton",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYBIG",
+      "name": "Big Horn",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYFRE",
+      "name": "Fremont",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYLIN",
+      "name": "Lincoln",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYSHE",
+      "name": "Sheridan",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYUIN",
+      "name": "Uinta",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYCAM",
+      "name": "Campbell",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYGOS",
+      "name": "Goshen",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYNAT",
+      "name": "Natrona",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYSUB",
+      "name": "Sublette",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYWAS",
+      "name": "Washakie",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYCAR",
+      "name": "Carbon",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYHOT",
+      "name": "Hot Springs",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYNIO",
+      "name": "Niobrara",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYSWE",
+      "name": "Sweetwater",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYWES",
+      "name": "Weston",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYCON",
+      "name": "Converse",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYJOH",
+      "name": "Johnson",
+      "state": "WY"
+    },
+    {
+      "abbr": "WYPAR",
+      "name": "Park",
+      "state": "WY"
+    }
+  ],
+  "hubSpots": null,
+  "notes": "verified: partial - rules and the State/County list from the 7QP consortium's own site (7qp.org, coordinated by the Central Oregon DX Club), read verbatim 2026-07-26. The rules are headed '2026 Rules', dated 02/09/2026, on a site whose footer reads 'Site last updated on: June 7, 2026' and which carries the 2026 results, so this is current rather than a rollover. THE FIRST MULTI-STATE PARTY IN THIS APP, built on the County.state / homeStates / inStateLabel schema added in its own commit immediately before this one: ONE LOG COVERS ALL EIGHT MEMBER STATES. IT IS EIGHT, NOT SEVEN - the worklist's sketch listed AZ ID MT NV OR UT WY and left Washington out, presumably because Washington runs its own Salmon Run. It does, and it is ALSO in the 7th call area, which is what W7 means; the sponsor's own page is the authority and the generator counts its state headers rather than trusting the sketch. THE EXCHANGE CODE ALREADY CARRIES THE STATE: 'Exchange state and county, e.g. AZYVP for Yavapai AZ', so codes are five letters - a 2-letter state then a 3-letter county - and County.state is a decomposition of what the sponsor prints rather than an invention. That is why county NAMES repeat freely across the eight states (Lincoln appears in five of them) while the 5-letter codes stay unique. 259 counties, which is the sponsor's own stated total in its scoring rule. Eighteen hours in ONE window, 1300Z Saturday to 0700Z Sunday on the first Saturday in May, and both local glosses (6 AM and midnight PDT) convert correctly. Points run SSB 2, CW 3, DIGITAL 4 - digital is the highest-paying mode here, which only Maine and North Carolina also do. Multipliers count ONCE OVERALL: 7th-area stations count states, provinces and DXCC entities, and non-7th-area stations count the 259 counties. DXCC IS CAPPED AT TEN by the rules ('other DXCC entities (maximum of 10)'), which dxMultCap records. KNOWN LIMITATION 1 - THE DXCC CAP CAN NEVER BIND, because the exchange is the literal 'DX' token, so every entity collapses to one multiplier and the count never reaches ten. Same shape as New Hampshire's, and the fourth party wanting a DXCC prefix table. KNOWN LIMITATION 2 - 'WSJT modes do not support the 7QP exchange, so are not allowed' cannot be enforced, since ModeClass.digital covers RTTY and PSK, which this party does allow, alongside FT8, which it does not. FOURTH USER of that gap after Illinois, North Dakota and Nebraska. OPEN QUESTION 1: NO MAXIMUM IS STATED FOR SIMULTANEOUS COUNTIES. The rules require county-line operation within 500 feet of the line and print a two-county example (UTRIC/IDBEA), but cap nothing; the schema default of 4 ships, which never refuses a legal exchange. NOTE ALSO the sponsor's county-line shorthand 'ORDES/JEF', where the second county reuses the first's state - this app requires both codes in full (ORDES/ORJEF), which is a keystroke difference and not a scoring one. The Cabrillo CONTEST header is the one thing not from the sponsor - the rules demand Cabrillo without naming it - so 7QP comes from WA7BNM under Article 1's exception. THE SPOT HUB DOES NOT SERVE THIS PARTY: 7qp-table.php 302-redirects to a login page, the same trap California's qp-table.php sets, so hubSpots is null."
+}

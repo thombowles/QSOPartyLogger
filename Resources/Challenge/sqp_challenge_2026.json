@@ -237,7 +237,7 @@
   },
   {
    "name": "7th Call Area QSO Party",
-   "partyID": null,
+   "partyID": "sevenqp",
    "windows": [
     {
      "start": "2026-05-02T13:00:00Z",

@@ -3,8 +3,8 @@
 Per [Article 15](../CONSTITUTION.md#article-15--research-before-code). All
 quotations are the sponsor's own words, from the documents in §1.
 
-**159 counties — the second-largest county list in the app**, behind Texas's
-254 and ahead of Virginia's 133. Georgia has more counties than any state but
+**159 counties — the third-largest county list in the app**, behind the 7th
+Call Area's 259 (which is eight states' worth) and Texas's 254. Georgia has more counties than any state but
 Texas, and unlike some sponsors this one lists every one of them.
 
 ## 1. Sponsor / sources
