@@ -8,16 +8,20 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **No parties remain.** Every US state and regional QSO party running through
-  2026-12-31 is bundled. What is left is not new parties but **maintenance**: the
-  late re-verification pass on the `verified: partial` parties (below), the
-  standing debts under *Also outstanding*, and the remaining engine gaps.
+- **29 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+  The original loop built every party running **from 2026-07-24 through
+  2026-12-31**, which it finished; the season, however, starts in February, and
+  the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
+  never in that window and are not bundled. They are the remaining work.
+- Maintenance runs alongside it: the late re-verification pass on the
+  `verified: partial` parties (below), the standing debts under *Also
+  outstanding*, and the remaining engine gaps.
 - **Process per party:** the Article 22 definition of done at the bottom of this
   file. One party per commit (Article 9). Research doc *before* JSON (Article 15).
 - **To restart the build loop**, self-paced, one party per iteration:
 
   ```
-  /loop Add QSO party support for every US state/regional QSO party running through 2026-12-31, in contest-date order, following docs/CONSTITUTION.md exactly. One party per iteration, one commit each.
+  /loop until all QSO parties from the 2026 season are added to qsopartylogger.
   ```
 
   The earlier run paced itself at roughly 5-minute ticks and landed one party per
@@ -40,10 +44,10 @@ and you have everything; nothing important lives only in a chat log.
   question: PAQP's 2026 station is unannounced (worth 200 points per QSO), and
   ILQP's two club calls are marked "NEW FOR 2025" and have run only once.
 
-**The 2026 state QSO party season ends Sunday 18 October 2026.** Two independent
-calendars agree there is no state or provincial QSO party in November or
-December, so "through the end of the calendar year" closes with the Illinois QSO
-Party. Nothing after 2026-10-18 is pending.
+**The 2026 season runs Saturday 7 February → Sunday 18 October 2026.** Two
+independent calendars agree there is no state or provincial QSO party in
+January, November or December, so the season opens with Vermont/Minnesota/BC and
+closes with the Illinois QSO Party. Nothing outside that span is pending.
 
 ## Calendar sources
 
@@ -68,12 +72,76 @@ dates below decide *build order only*.
 | **raw sources only** | Sponsor text captured in `docs/research/`, not yet written up |
 | **not started** | No sources captured |
 
+## Scope
+
+**Widened 2026-07-26, and this is the only thing about this file that changed
+meaning.** The original loop's brief was "every US state/regional QSO party
+running **through** 2026-12-31", started on 2026-07-24 — so in practice it meant
+*the rest of 2026*, and it finished. The 2026 **season** is the calendar year,
+and it opens on 7 February. Everything between 2026-02-07 and 2026-06-21 was
+outside the original window and is unbuilt.
+
+Two consequences worth naming before the first one is built:
+
+1. **These parties have already run.** Article 19 still binds — `schedule`
+   carries the sponsor's own printed dates for the target year, and the target
+   year is **2026**. A past window is correct data, not a defect: the party
+   scores and exports properly, and `UpcomingContests` simply does not surface
+   it. Where a sponsor has already announced 2027 dates, record them in `notes`;
+   never derive a 2027 window from a formula and ship it as if printed.
+2. **Five of the 29 are not US-state parties and four more are multi-state.**
+   The Canadian five (BC, Ontario, Quebec, Canadian Prairies, Atlantic Canada)
+   and the two multi-state regionals (7th Call Area, New England) do not fit
+   `homeState: String` + one county list as cleanly as a single state does.
+   Expect at least one Article 4 schema commit before those land — they sit in
+   May and June, so the single-state parties ahead of them buy time to think.
+
 ## Remaining, in contest-date order
 
-**0 remaining.** All 16 in scope are built (MDC, HQP, OhQP, TnQP, COQP, NJQP,
-IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP); **19 parties
-bundled** in total, those 16 plus the pre-existing ALQP, KSQP and TQP. Every row
-below is struck.
+**29 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+order they recur in 2027, so the rule still reads "the next contest to run is the
+next one built". 24 US + 5 Canadian. Research is banked for none of them.
+
+| # | Party | 2026 dates (UTC, provisional) | Notes |
+| --- | --- | --- | --- |
+| 1 | Vermont | Feb 7 0000Z → Feb 8 2400Z | 14 counties, the smallest list yet |
+| 2 | Minnesota | Feb 7 1400Z → Feb 7 2400Z | single 10 h window |
+| 3 | British Columbia | Feb 7 1600Z → Feb 8 0359Z; Feb 8 1600–2359Z | 🇨🇦 regions, not counties |
+| 4 | South Carolina | Feb 28 1500Z → Mar 1 0159Z | |
+| 5 | North Carolina | Mar 1 1500Z → Mar 2 0100Z | 100 counties |
+| 6 | Oklahoma | Mar 14 1400Z → Mar 15 0200Z; Mar 15 1400–2200Z | |
+| 7 | Idaho | Mar 14 1600Z → Mar 15 0400Z; Mar 15 1400Z → Mar 16 0200Z | also a 7QP state |
+| 8 | Wisconsin | Mar 15 1800Z → Mar 16 0100Z | |
+| 9 | Virginia | Mar 21 1400Z → Mar 22 0400Z; Mar 22 1200–2400Z | counties **and** independent cities |
+| 10 | Louisiana | Apr 4 1400Z → Apr 5 0200Z | parishes, not counties |
+| 11 | Mississippi | Apr 4 1400Z → Apr 5 0200Z | |
+| 12 | Missouri | Apr 11 1400Z → Apr 12 0400Z; Apr 12 1400–2000Z | |
+| 13 | New Mexico | Apr 11 1400Z → Apr 12 0200Z | |
+| 14 | Georgia | Apr 11 1800Z → Apr 12 0359Z; Apr 12 1400–2359Z | 159 counties, the largest |
+| 15 | North Dakota | Apr 11 1800Z → Apr 12 1800Z | 24 h continuous |
+| 16 | Michigan | Apr 18 1600Z → Apr 19 0400Z | |
+| 17 | Ontario | Apr 18 1800Z → Apr 19 0300Z; Apr 19 1200–2000Z | 🇨🇦 |
+| 18 | Quebec | Apr 19 1300Z → Apr 19 2400Z | 🇨🇦 |
+| 19 | Nebraska | Apr 25 1400Z → Apr 26 0200Z | |
+| 20 | Florida | Apr 25 1600Z → Apr 26 0159Z; Apr 26 1200–2159Z | |
+| 21 | 7th Call Area | May 2 1300Z → May 3 0700Z | **7 states** (AZ ID MT NV OR UT WY) |
+| 22 | Indiana | May 2 1500Z → May 3 0259Z | |
+| 23 | Delaware | May 2 1700Z → May 3 2359Z | 3 counties |
+| 24 | New England | May 2 2000Z → May 3 0500Z; May 3 1300–2400Z | **6 states** (CT ME MA NH RI VT) |
+| 25 | Canadian Prairies | May 9 1700Z → May 10 0300Z | 🇨🇦 MB/SK/AB |
+| 26 | Arkansas | May 16 1400Z → May 17 0200Z | |
+| 27 | Kentucky | Jun 6 1300Z → Jun 7 0100Z | |
+| 28 | Atlantic Canada | Jun 7 1400Z → Jun 8 0100Z | 🇨🇦 NB/NS/PE/NL |
+| 29 | West Virginia | Jun 20 1600Z → Jun 21 0400Z | |
+
+County counts above are recollection, not provenance — they are a sanity hint
+for the generator's assertion, never its source (Article 2).
+
+## Built
+
+**19 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP) plus the
+pre-existing ALQP, KSQP and TQP. Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
