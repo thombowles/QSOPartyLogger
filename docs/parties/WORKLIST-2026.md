@@ -8,9 +8,9 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **21 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
-  February is clear (Vermont, Minnesota, British Columbia, South Carolina); North
-  Carolina, Oklahoma, Idaho and Wisconsin are done in March.
+- **20 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+  February is clear; North Carolina, Oklahoma, Idaho, Wisconsin and Virginia are
+  done in March. **April is next**, starting with Louisiana and Mississippi.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -150,9 +150,9 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**21 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**20 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 17 US + 4 Canadian. Research is banked for none of them.
+next one built". 16 US + 4 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
@@ -164,7 +164,7 @@ next one built". 17 US + 4 Canadian. Research is banked for none of them.
 | ~~6~~ | ~~Oklahoma~~ | ~~Mar 14 1400Z → Mar 15 0200Z; Mar 15 1400–2200Z~~ | **done** 2026-07-26 — [`okqp_rules.md`](../research/okqp_rules.md), `verified: partial` |
 | ~~7~~ | ~~Idaho~~ | ~~Mar 14 1600Z → Mar 15 0400Z; Mar 15 1400Z → Mar 16 0200Z~~ | **done** 2026-07-26 — [`idqp_rules.md`](../research/idqp_rules.md); **its county list is 7QP-reusable** |
 | ~~8~~ | ~~Wisconsin~~ | ~~Mar 15 1800Z → Mar 16 0100Z~~ | **done** 2026-07-26 — [`wiqp_rules.md`](../research/wiqp_rules.md), `verified: partial` |
-| 9 | Virginia | Mar 21 1400Z → Mar 22 0400Z; Mar 22 1200–2400Z | counties **and** independent cities |
+| ~~9~~ | ~~Virginia~~ | ~~Mar 21 1400Z → Mar 22 0400Z; Mar 22 1200–2400Z~~ | **done** 2026-07-26 — [`vaqp_rules.md`](../research/vaqp_rules.md); 95 counties + 38 cities |
 | 10 | Louisiana | Apr 4 1400Z → Apr 5 0200Z | parishes, not counties |
 | 11 | Mississippi | Apr 4 1400Z → Apr 5 0200Z | |
 | 12 | Missouri | Apr 11 1400Z → Apr 12 0400Z; Apr 12 1400–2000Z | |
@@ -191,11 +191,11 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**27 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**28 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
 pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP**, **SCQP**,
-**NCQP**, **OKQP**, **IDQP** and **WIQP** from the reopened first-half season,
-all built 2026-07-26. Every row below is struck.
+**NCQP**, **OKQP**, **IDQP**, **WIQP** and **VAQP** from the reopened first-half
+season, all built 2026-07-26. Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
@@ -424,7 +424,7 @@ its own commit (Article 4).
   *multiplier* is not, so a TN mobile/rover sees a slightly low multiplier count.
   COQP turned out **not** to need it — its activation rule is a bonus only.
 
-  **NCQP is the third user, added 2026-07-26**, and in its broadest form yet: *"NC stations may include the county from which operation takes place in the Multiplier count **regardless of whether any QSOs are logged from that same county**"* — so a fixed NC station counts its own county unconditionally. Three sponsors, three scopes (TnQP once, SCQP per band per mode, NCQP once and unconditional), which settles that the field must carry its scope rather than assume one.
+  **VAQP is the FOURTH user, added 2026-07-26**, and the first to attach a condition: its mobiles/rovers/expeditions may claim an entity worked from with ten or more different stations *"if not otherwise worked"* — so the sketch must carry that too. **NCQP is the third user**, and in its broadest form yet: *"NC stations may include the county from which operation takes place in the Multiplier count **regardless of whether any QSOs are logged from that same county**"* — so a fixed NC station counts its own county unconditionally. Three sponsors, three scopes (TnQP once, SCQP per band per mode, NCQP once and unconditional), which settles that the field must carry its scope rather than assume one.
 
   **SCQP rule 9.2.2 is the second user**, and states it as a multiplier outright:
   SC Mobile and Expedition stations count "Each SC county activated. At least one

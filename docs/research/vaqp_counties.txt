@@ -1,0 +1,341 @@
+# Source: https://www.qsl.net/sterling/VA_QSO_Party/2024_VQP/VQP_Counties&Cities.html
+# The sponsor's official entity list, linked from the 2026 main page. Headed
+# 'Counties and Independent Cities (as of 2017)' - 95 counties and 38 independent
+# cities with 3-character abbreviations, CITIES MARKED WITH AN ASTERISK.
+# The 2026 page links this 2024-path file; the 2026 rules restate the same 95/38
+# counts, so it is current.  Fetched: 2026-07-26
+
+Virginia QSO Party
+
+Counties and Independent Cities (as of 2017)
+
+95 Counties and 38 Independent Cities with 3 Character
+Abbreviations - Cities marked with an "*"
+
+Accomack
+ACC
+Dinwiddie
+DIN
+Lancaster
+LAN
+Prince
+William
+PRW
+
+Albemarle
+ALB
+*
+Emporia
+EMX
+Lee
+LEE
+Pulaski
+PUL
+
+*
+Alexandria
+ALX
+Essex
+ESS
+*
+Lexington
+LEX
+*
+Radford
+RAX
+
+Alleghany
+ALL
+Fairfax
+FFX
+Loudoun
+LDN
+Rappahannock
+RAP
+
+Amelia
+AME
+*
+Fairfax
+FXX
+Louisa
+LSA
+Richmond
+RIC
+
+Amherst
+AMH
+* Falls
+Church
+FCX
+Lunenburg
+LUN
+*
+Richmond
+RIX
+
+Appomattox
+APP
+Fauquier
+FAU
+*
+Lynchburg
+LYX
+Roanoke
+ROA
+
+Arlington
+ARL
+Floyd
+FLO
+Madison
+MAD
+*
+Roanoke
+ROX
+
+Augusta
+AUG
+Fluvanna
+FLU
+Mathews
+MAT
+Rockbridge
+RBR
+
+Bath
+BAT
+Franklin
+FRA
+*
+Manassas
+MAX
+Rockingham
+RHM
+
+Bedford
+BED
+*
+Franklin
+FRX
+*
+Manassas Park
+MPX
+Russell
+RUS
+
+Bland
+BLA
+Frederick
+FRE
+*
+Martinsville
+MVX
+* Salem
+SAX
+
+Botetourt
+BOT
+*
+Fredericksburg
+FBX
+Mecklenburg
+MEC
+Scott
+SCO
+
+*
+Bristol
+BRX
+*
+Galax
+GAX
+Middlesex
+MID
+Shenandoah
+SHE
+
+Brunswick
+BRU
+Giles
+GIL
+Montgomery
+MON
+Smyth
+SMY
+
+Buchanan
+BCH
+Gloucester
+GLO
+Nelson
+NEL
+Southampton
+SHA
+
+Buckingham
+BHM
+Goochland
+GOO
+New Kent
+NEW
+Spotsylvania
+SPO
+
+*
+Buena Vista
+BVX
+Grayson
+GRA
+*
+Newport News
+NNX
+Stafford
+STA
+
+Campbell
+CAM
+Greene
+GRN
+*
+Norfolk
+NFX
+*
+Staunton
+STX
+
+Caroline
+CLN
+Greensville
+GVL
+Northampton
+NHA
+*
+Suffolk
+SUX
+
+Carroll
+CRL
+Halifax
+HAL
+Northumberland
+NUM
+Surry
+SUR
+
+Charles
+City
+CCY
+*
+Hampton
+HAX
+* Norton
+NRX
+Sussex
+SUS
+
+Charlotte
+CHA
+Hanover
+HAN
+Nottoway
+NOT
+Tazewell
+TAZ
+
+* Charlottesville
+
+CHX
+Henrico
+HCO
+Orange
+ORG
+*
+Virginia Beach
+VBX
+
+* Chesapeake
+CPX
+* Harrisonburg
+HBX
+Page
+PAG
+Warren
+WAR
+
+Chesterfield
+CHE
+Henry
+HRY
+Patrick
+PAT
+Washington
+WAS
+
+Clarke
+CLA
+Highland
+HIG
+* Petersburg
+PBX
+* Waynesboro
+WAX
+
+*
+Colonial Heights
+COX
+*
+Hopewell
+HOX
+Pittsylvania
+PIT
+Westmoreland
+WES
+
+* Covington
+CVX
+Isle of Wight
+IOW
+* Poquoson
+PQX
+* Williamsburg
+WMX
+
+Craig
+CRA
+James City
+JAM
+* Portsmouth
+POX
+* Winchester
+WIX
+
+Culpeper
+CUL
+King Queen
+KQN
+Powhatan
+POW
+Wise
+WIS
+
+Cumberland
+CUM
+King George
+KGE
+Prince Edward
+PRE
+Wythe
+WYT
+
+* Danville
+DAX
+King William
+KWM
+Prince George
+PRG
+York
+YOR
+
+Dickenson
+DIC

@@ -1,0 +1,611 @@
+{
+  "schemaVersion": 1,
+  "id": "vaqp",
+  "name": "Virginia QSO Party",
+  "cabrilloContest": "VA-QSO-PARTY",
+  "homeState": "VA",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m",
+    "1.25m",
+    "70cm"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "activatedCountyCount",
+      "minQSOs": 1,
+      "points": 100
+    }
+  ],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "maxSimultaneousCounties": 1,
+  "exchangeIncludesRST": false,
+  "exchangeIncludesSerial": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-03-21T14:00:00Z",
+      "end": "2026-03-22T04:00:00Z"
+    },
+    {
+      "start": "2026-03-22T12:00:00Z",
+      "end": "2026-03-23T00:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ACC",
+      "name": "Accomack"
+    },
+    {
+      "abbr": "ALB",
+      "name": "Albemarle"
+    },
+    {
+      "abbr": "ALX",
+      "name": "Alexandria (City)"
+    },
+    {
+      "abbr": "ALL",
+      "name": "Alleghany"
+    },
+    {
+      "abbr": "AME",
+      "name": "Amelia"
+    },
+    {
+      "abbr": "AMH",
+      "name": "Amherst"
+    },
+    {
+      "abbr": "APP",
+      "name": "Appomattox"
+    },
+    {
+      "abbr": "ARL",
+      "name": "Arlington"
+    },
+    {
+      "abbr": "AUG",
+      "name": "Augusta"
+    },
+    {
+      "abbr": "BAT",
+      "name": "Bath"
+    },
+    {
+      "abbr": "BED",
+      "name": "Bedford"
+    },
+    {
+      "abbr": "BLA",
+      "name": "Bland"
+    },
+    {
+      "abbr": "BOT",
+      "name": "Botetourt"
+    },
+    {
+      "abbr": "BRX",
+      "name": "Bristol (City)"
+    },
+    {
+      "abbr": "BRU",
+      "name": "Brunswick"
+    },
+    {
+      "abbr": "BCH",
+      "name": "Buchanan"
+    },
+    {
+      "abbr": "BHM",
+      "name": "Buckingham"
+    },
+    {
+      "abbr": "BVX",
+      "name": "Buena Vista (City)"
+    },
+    {
+      "abbr": "CAM",
+      "name": "Campbell"
+    },
+    {
+      "abbr": "CLN",
+      "name": "Caroline"
+    },
+    {
+      "abbr": "CRL",
+      "name": "Carroll"
+    },
+    {
+      "abbr": "CCY",
+      "name": "Charles City"
+    },
+    {
+      "abbr": "CHA",
+      "name": "Charlotte"
+    },
+    {
+      "abbr": "CHX",
+      "name": "Charlottesville (City)"
+    },
+    {
+      "abbr": "CPX",
+      "name": "Chesapeake (City)"
+    },
+    {
+      "abbr": "CHE",
+      "name": "Chesterfield"
+    },
+    {
+      "abbr": "CLA",
+      "name": "Clarke"
+    },
+    {
+      "abbr": "COX",
+      "name": "Colonial Heights (City)"
+    },
+    {
+      "abbr": "CVX",
+      "name": "Covington (City)"
+    },
+    {
+      "abbr": "CRA",
+      "name": "Craig"
+    },
+    {
+      "abbr": "CUL",
+      "name": "Culpeper"
+    },
+    {
+      "abbr": "CUM",
+      "name": "Cumberland"
+    },
+    {
+      "abbr": "DAX",
+      "name": "Danville (City)"
+    },
+    {
+      "abbr": "DIC",
+      "name": "Dickenson"
+    },
+    {
+      "abbr": "DIN",
+      "name": "Dinwiddie"
+    },
+    {
+      "abbr": "EMX",
+      "name": "Emporia (City)"
+    },
+    {
+      "abbr": "ESS",
+      "name": "Essex"
+    },
+    {
+      "abbr": "FFX",
+      "name": "Fairfax"
+    },
+    {
+      "abbr": "FXX",
+      "name": "Fairfax (City)"
+    },
+    {
+      "abbr": "FCX",
+      "name": "Falls Church (City)"
+    },
+    {
+      "abbr": "FAU",
+      "name": "Fauquier"
+    },
+    {
+      "abbr": "FLO",
+      "name": "Floyd"
+    },
+    {
+      "abbr": "FLU",
+      "name": "Fluvanna"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "FRX",
+      "name": "Franklin (City)"
+    },
+    {
+      "abbr": "FRE",
+      "name": "Frederick"
+    },
+    {
+      "abbr": "FBX",
+      "name": "Fredericksburg (City)"
+    },
+    {
+      "abbr": "GAX",
+      "name": "Galax (City)"
+    },
+    {
+      "abbr": "GIL",
+      "name": "Giles"
+    },
+    {
+      "abbr": "GLO",
+      "name": "Gloucester"
+    },
+    {
+      "abbr": "GOO",
+      "name": "Goochland"
+    },
+    {
+      "abbr": "GRA",
+      "name": "Grayson"
+    },
+    {
+      "abbr": "GRN",
+      "name": "Greene"
+    },
+    {
+      "abbr": "GVL",
+      "name": "Greensville"
+    },
+    {
+      "abbr": "HAL",
+      "name": "Halifax"
+    },
+    {
+      "abbr": "HAX",
+      "name": "Hampton (City)"
+    },
+    {
+      "abbr": "HAN",
+      "name": "Hanover"
+    },
+    {
+      "abbr": "HBX",
+      "name": "Harrisonburg (City)"
+    },
+    {
+      "abbr": "HCO",
+      "name": "Henrico"
+    },
+    {
+      "abbr": "HRY",
+      "name": "Henry"
+    },
+    {
+      "abbr": "HIG",
+      "name": "Highland"
+    },
+    {
+      "abbr": "HOX",
+      "name": "Hopewell (City)"
+    },
+    {
+      "abbr": "IOW",
+      "name": "Isle of Wight"
+    },
+    {
+      "abbr": "JAM",
+      "name": "James City"
+    },
+    {
+      "abbr": "KGE",
+      "name": "King George"
+    },
+    {
+      "abbr": "KQN",
+      "name": "King Queen"
+    },
+    {
+      "abbr": "KWM",
+      "name": "King William"
+    },
+    {
+      "abbr": "LAN",
+      "name": "Lancaster"
+    },
+    {
+      "abbr": "LEE",
+      "name": "Lee"
+    },
+    {
+      "abbr": "LEX",
+      "name": "Lexington (City)"
+    },
+    {
+      "abbr": "LDN",
+      "name": "Loudoun"
+    },
+    {
+      "abbr": "LSA",
+      "name": "Louisa"
+    },
+    {
+      "abbr": "LUN",
+      "name": "Lunenburg"
+    },
+    {
+      "abbr": "LYX",
+      "name": "Lynchburg (City)"
+    },
+    {
+      "abbr": "MAD",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MAX",
+      "name": "Manassas (City)"
+    },
+    {
+      "abbr": "MPX",
+      "name": "Manassas Park (City)"
+    },
+    {
+      "abbr": "MVX",
+      "name": "Martinsville (City)"
+    },
+    {
+      "abbr": "MAT",
+      "name": "Mathews"
+    },
+    {
+      "abbr": "MEC",
+      "name": "Mecklenburg"
+    },
+    {
+      "abbr": "MID",
+      "name": "Middlesex"
+    },
+    {
+      "abbr": "MON",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "NEL",
+      "name": "Nelson"
+    },
+    {
+      "abbr": "NEW",
+      "name": "New Kent"
+    },
+    {
+      "abbr": "NNX",
+      "name": "Newport News (City)"
+    },
+    {
+      "abbr": "NFX",
+      "name": "Norfolk (City)"
+    },
+    {
+      "abbr": "NHA",
+      "name": "Northampton"
+    },
+    {
+      "abbr": "NUM",
+      "name": "Northumberland"
+    },
+    {
+      "abbr": "NRX",
+      "name": "Norton (City)"
+    },
+    {
+      "abbr": "NOT",
+      "name": "Nottoway"
+    },
+    {
+      "abbr": "ORG",
+      "name": "Orange"
+    },
+    {
+      "abbr": "PAG",
+      "name": "Page"
+    },
+    {
+      "abbr": "PAT",
+      "name": "Patrick"
+    },
+    {
+      "abbr": "PBX",
+      "name": "Petersburg (City)"
+    },
+    {
+      "abbr": "PIT",
+      "name": "Pittsylvania"
+    },
+    {
+      "abbr": "PQX",
+      "name": "Poquoson (City)"
+    },
+    {
+      "abbr": "POX",
+      "name": "Portsmouth (City)"
+    },
+    {
+      "abbr": "POW",
+      "name": "Powhatan"
+    },
+    {
+      "abbr": "PRE",
+      "name": "Prince Edward"
+    },
+    {
+      "abbr": "PRG",
+      "name": "Prince George"
+    },
+    {
+      "abbr": "PRW",
+      "name": "Prince William"
+    },
+    {
+      "abbr": "PUL",
+      "name": "Pulaski"
+    },
+    {
+      "abbr": "RAX",
+      "name": "Radford (City)"
+    },
+    {
+      "abbr": "RAP",
+      "name": "Rappahannock"
+    },
+    {
+      "abbr": "RIC",
+      "name": "Richmond"
+    },
+    {
+      "abbr": "RIX",
+      "name": "Richmond (City)"
+    },
+    {
+      "abbr": "ROA",
+      "name": "Roanoke"
+    },
+    {
+      "abbr": "ROX",
+      "name": "Roanoke (City)"
+    },
+    {
+      "abbr": "RBR",
+      "name": "Rockbridge"
+    },
+    {
+      "abbr": "RHM",
+      "name": "Rockingham"
+    },
+    {
+      "abbr": "RUS",
+      "name": "Russell"
+    },
+    {
+      "abbr": "SAX",
+      "name": "Salem (City)"
+    },
+    {
+      "abbr": "SCO",
+      "name": "Scott"
+    },
+    {
+      "abbr": "SHE",
+      "name": "Shenandoah"
+    },
+    {
+      "abbr": "SMY",
+      "name": "Smyth"
+    },
+    {
+      "abbr": "SHA",
+      "name": "Southampton"
+    },
+    {
+      "abbr": "SPO",
+      "name": "Spotsylvania"
+    },
+    {
+      "abbr": "STA",
+      "name": "Stafford"
+    },
+    {
+      "abbr": "STX",
+      "name": "Staunton (City)"
+    },
+    {
+      "abbr": "SUX",
+      "name": "Suffolk (City)"
+    },
+    {
+      "abbr": "SUR",
+      "name": "Surry"
+    },
+    {
+      "abbr": "SUS",
+      "name": "Sussex"
+    },
+    {
+      "abbr": "TAZ",
+      "name": "Tazewell"
+    },
+    {
+      "abbr": "VBX",
+      "name": "Virginia Beach (City)"
+    },
+    {
+      "abbr": "WAR",
+      "name": "Warren"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAX",
+      "name": "Waynesboro (City)"
+    },
+    {
+      "abbr": "WES",
+      "name": "Westmoreland"
+    },
+    {
+      "abbr": "WMX",
+      "name": "Williamsburg (City)"
+    },
+    {
+      "abbr": "WIX",
+      "name": "Winchester (City)"
+    },
+    {
+      "abbr": "WIS",
+      "name": "Wise"
+    },
+    {
+      "abbr": "WYT",
+      "name": "Wythe"
+    },
+    {
+      "abbr": "YOR",
+      "name": "York"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/vaqp-table.php",
+    "postURL": "http://qsopartyhub.com/vaqp-spots.php"
+  },
+  "notes": "verified: partial - rules from the Sterling Park Amateur Radio Club's official '2026 Virginia QSO Party Rules' PDF and the sponsor's own entity list, both read verbatim 2026-07-26. Contact vqp@verizon.net; logs by 15 April. THIS IS THE FIRST BUNDLED PARTY WHOSE ENTITIES ARE NOT ALL COUNTIES: 95 counties AND 38 INDEPENDENT CITIES, 133 in all, which is Virginia's unique arrangement. FOUR NAMES APPEAR TWICE, once as a county and once as a city - Fairfax (FFX county, FXX city), Franklin (FRA/FRX), Richmond (RIC/RIX) and Roanoke (ROA/ROX) - so the NAMES ARE NOT UNIQUE here and only the codes are. Cities are shown as 'Name (City)', which renders the sponsor's own asterisk as readable text and stops you picking FRA when you meant FRX. Most city codes end in X, but that is the sponsor's convention rather than a rule and it is NOT safe to rely on: FFX is Fairfax COUNTY. Twenty-six hours in two windows: 1400Z Saturday 21 March to 0400Z Sunday, then 1200Z to 2400Z Sunday 22 March 2026 - the longest total of any bundled party except Vermont's 48. Round instants, and all four local anchors land exactly under EDT. THE EXCHANGE IS A QSO NUMBER AND A LOCATION, WITH NO SIGNAL REPORT - the third party to send a serial after CQP and PAQP, and no report appears anywhere in the rules. Virginia stations send a county or independent city; everyone else sends a state, a province, or the literal DX. Phone 1 point, CW 2, digital 2. Multipliers count ONCE overall - not per band, not per mode. Virginia stations count the 133 counties and cities plus the states EXCEPT VIRGINIA plus provinces plus DX entities; everyone else counts the 133. Virginia itself is explicitly excluded, stated twice. Alaska and Hawaii are states, not DX. DC is never mentioned and stays its own multiplier. Ten bands, 160 m and up excluding WARC, derived from the suggested-frequency list, which reaches 223.50 MHz and 446.00 MHz - note those are the very frequencies Wisconsin's rules tell operators to avoid, so the two sponsors' conventions genuinely differ. COUNTY-LINE OPERATION IS PERMITTED BUT PAYS FOR ONE: 'Stations on County or Independent City lines count as one QSO and one County/Independent City multiplier.' That is neither of the usual shapes - it is not forbidden as in Alabama and Wisconsin, and it does not pay per county as in Iowa and Oklahoma - so a two-entity entry is rejected here and the operator picks which one to claim. Virginia mobiles, rovers and expeditions earn 100 points for each county or city they log a valid QSO from, which is modelled. KNOWN LIMITATION 1 - CONTACTS WITH VIRGINIA MOBILES, EXPEDITIONS AND ROVERS ARE WORTH 3 POINTS AND THIS APP PAYS 1 OR 2. The rule is 'QSO's count 1 point per Phone, 2 points per CW, 2 points per digital mode, and 3 POINTS PER CONTACT MADE WITH A VIRGINIA MOBILE, EXPEDITION, OR ROVER' - and the worked station's category is NOT part of the exchange. The only hint available while logging is the sponsor's convention that 'Mobile, Rover, and Expedition stations must use appropriate suffix in call sign', which is a convention and not a rule. In a party with 133 entities most of the multipliers come from mobiles, so THIS UNDER-CREDITS ALMOST EVERY SERIOUS ENTRANT. TO CORRECT BY HAND: add 2 points for each phone QSO and 1 for each CW or digital QSO made with a /M, /R or expedition station. KNOWN LIMITATION 2 - THE BONUS STATIONS ARE NOT SHIPPED. 'A QSO with each different VA QSO Party Bonus Station gives a one-time bonus of 50 points. Bonus stations are listed on the VaQP Web Site' - and the rules do not name them, so none can be encoded. Check the VaQP site before the contest and add 50 points per distinct bonus station worked. This is the same call PAQP's unannounced 2026 station got. KNOWN LIMITATION 3 - Virginia mobiles, rovers and expeditions may also claim a county or city as a MULTIPLIER when they work ten or more different stations from it 'if not otherwise worked'; this app has no self-activation multiplier, so an in-state roving entrant is short by that count. Out-of-state entrants are unaffected. Satellite contacts are allowed and this app has no concept of them, though a satellite QSO still lands on a band it knows. Cabrillo CONTEST value VA-QSO-PARTY per the WA7BNM registry - the rules print no header token and give no Cabrillo example. OPEN QUESTIONS (why this is partial): (1) and (2) above change the score for ordinary entrants - the 3-point mobile rule especially - and (3) affects in-state rovers. All three are missing app features rather than rules in doubt. Confirm the bonus-station list at the VaQP web site before submitting."
+}

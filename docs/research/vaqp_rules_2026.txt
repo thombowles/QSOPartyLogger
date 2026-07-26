@@ -1,0 +1,112 @@
+# Source: https://www.qsl.net/sterling/VA_QSO_Party/2026_VQP/2026_VAQP_Rules.pdf
+# THE OFFICIAL 2026 RULES. Header: '2026 Virginia QSO Party Rules'.
+# Sponsor: Sterling Park Amateur Radio Club (SPARC), PO Box 29, Sterling VA 20167.
+# Contact vqp@verizon.net.  Fetched: 2026-07-26
+
+                                  2026 Virginia QSO Party Rules
+SPONSOR                                                         make contacts while stationary and/or while moving.
+Sponsored by the Sterling Park Amateur Radio Club,              The rover may change equipment and antenna
+PO Box 29, Sterling, VA 20167.                                  configurations. The rover may operate from a vehicle
+                                                                and/or off a vehicle. The rover may or may not use
+OBJECTIVE                                                       commercial power.
+To promote amateur radio activity in the 95 Virginia
+Counties and 38 Virginia Independent Cities.                      Power Categories
+                                                                High (greater than 150 watts), Low (150 watts or less)
+DATES                                                           and QRP (5 watts or less)
+Saturday, 21 March 2026, 1400 UTC - Sunday, 22
+March, 0400 UTC and Sunday, 22 March, 1200 UTC -                  Band Categories
+2400 UTC.                                                       Multi-Band or Single Band
+                                                                  Mode Categories
+(For Virginia, this is Saturday 10 AM - 12 Midnight and         Phone, CW, Digital, and Mixed
+Sunday 8 AM - 8 PM Virginia local time.)
+                                                                  Club Entry
+ENTRY CATEGORIES                                                Club - Minimum of three valid contest entries each
+   Operator Categories                                          indicating club affiliation.
+Single Operator - One person performs all operating
+and only one transmitter may be on the air at a time.           SAFETY
+Multi Operator / Single Transmitter - Two or more               All stations should operate safely. For mobiles and
+operators with one transmitter on the air at one time.          rovers, motion is optional and discouraged during
+Multi Operator / Multi Transmitter - Two or more                operation, unless there is a separate driver who is not
+operators with two or more transmitters on the air at one       operating while driving.
+time.
+                                                                VALID CONTACTS
+   Station Categories                                           Virginia stations work all stations. Out-of-State
+* Fixed Station                                                 stations work Virginia stations only. Work fixed
+* Mobile – A station operating from a vehicle which is          stations once per band/mode.
+capable of operating while in motion and operates
+stationary in the same configuration, i.e., able to travel at   Work Virginia Expeditions, Rovers, and Mobiles in
+any time without having to disconnect any wiring or             each Virginia County or Independent City from which
+change any antennas in order to move. A mobile station          they operate. Stations on County or Independent City
+is self-contained and capable of legal motion (land,            lines count as one QSO and one County/Independent
+water or air) while operating. Commercial power may             City multiplier. Mobile, Rover, and Expedition
+not be used. Contacts may be made while moving or               stations must use appropriate suffix in call sign.
+stopped.
+* Expedition – A station that moves between two or              Satellite contacts allowed.
+more Virginia non-permanent station locations. All radio
+equipment, power supplies and antennas must be                  Remote operation of VA stations is allowed.
+transported to each operating site. Commercial power
+may be used. Mobile radios, equipment, and antennas             No cross-mode or repeater QSO's.
+installed in, on or attached to a vehicle wholly for
+normal mobile operation are not permitted to be used in         Spotting nets, DX clusters, etc., may be used to locate
+this class. The vehicle may be used as part of the setup        other stations. Self-spotting permitted.
+once stopped in the temporary location. An expedition
+may not make contest contacts (including contest QSO            Logs with a significant number of QSOs with the same
+coordination) while moving regardless of origin or              station will be categorized as check logs.
+destination.
+* Rover – A vehicle-mounted designed for contesting             EXCHANGE
+and is not a mobile or expedition station. The rover may        Exchange QSO number and QTH (Virginia County or
+                                                                Independent City for VA stations; State, Province or
+"DX" for others).                                          the number of Multipliers plus Bonus Points.
+Virginia Stations log QSO's by Virginia Independent        FREQUENCIES
+City or County of operation.                               160 meters and up, except no WARC band QSO's
+                                                           permitted. Suggested frequencies:
+Identify all QSO's with band/mode, sequential QSO            CW - 1805 KHz and 50 KHz up from band edge on
+number sent/received and date/time of contact in UTC.      others.
+                                                             PHONE -1845, 3860, 7260, 14270, 21370 and
+Please follow standard contest practices by making and     28370 KHz.
+responding to "CQ Virginia QSO Party" calls.                 Novice/Tech Plus - 10 KHz up from the edge of the
+                                                           CW band and 28370 KHz on PHONE.
+Multiple transmitter stations may maintain sequential        VHF - 50.130, 144.200 (CW & SSB), 146.580 and
+QSO numbers independently for each transmitter.            223.50 MHz.
+                                                             UHF - 446.00 MHz.
+SCORING                                                      Digital contacts should use normally accepted sub-
+  QSO Points:                                              bands for these modes.
+QSO's count 1 point per Phone, 2 points per CW, 2
+points per digital mode (RTTY, PSK31,etc.), and 3          ENTRIES
+points per contact made with a Virginia Mobile,            For award purposes, Fixed, Expedition, Mobile and
+Expedition, or Rover.                                      Rover operations will be considered separately. Please
+                                                           submit separate logs for Fixed, Expedition, Mobile,
+   Multipliers:                                            and Rover operation.
+Multipliers are only counted once, i.e., contacting the
+same Virginia County, Independent City, State, Province    Multiple operator stations should list all operators by
+or Country using a different band or mode counts only      call sign.
+as a new QSO, not as a new multiplier.
+                                                           Electronic (preferred) or paper logs, summary and
+Virginia Mobile, Rover, Expedition, and Fixed Station      dupe sheets (200 or more QSO's) are required for all
+multipliers are the total number of Virginia counties,     entries. The summary and 'dupe sheet' requirement is
+Virginia Independent cities, U. S. States (except          waived if recognized contesting software is used.
+Virginia), Canadian Provinces, and DX entities. No         Paper forms are available at the contest web site.
+extra DX multiplier for U.S. (including Alaska and
+Hawaii), Virginia, and Canada.                             For Club Competition purposes, be sure to indicate
+                                                           club name on summary sheet and log.
+Mobile, Rover, and Expedition stations that contact 10
+(ten) or more different stations while operating from a    Submit log entries by 15 April by online portal; mail
+county or independent city may claim it as a multiplier,   to the VA QSO Party, Call Box 29, Sterling, VA
+if not otherwise worked.                                   20167; or by email to vqp@verizon.net. If you have
+                                                           problems, please send an email to vqp@arrl.net.
+Outside of Virginia station multipliers are the total
+number of Virginia Counties (95) and Independent           A donation to help defray the costs of printing and
+Cities (38) worked.                                        mailing is encouraged.
+
+   Bonus Points:                                           AWARDS
+Virginia Mobile, Rover, and Expedition stations receive    VA participants will automatically receive a
+a bonus of 100 additional points for each Virginia         certificate. All others should include “CERTIFICATE:
+County/ Independent City from which they log a valid       YES” in the Cabrillo log file to receive a certificate.
+QSO.
+                                                           The Plaques are identified on the contest web site.
+A QSO with each different VA QSO Party Bonus
+Station gives a one-time bonus of 50 points. Bonus         INFORMATION
+stations are listed on the VaQP Web Site.                  Additional information may be obtained by mail at VA
+   Final score:                                            QSO Party, Call Box 29, Sterling, VA 20167; from the
+Final score is the number of QSO Points multiplied by
+SPARC website www.qsl.net/sterling; or by email to   vqp@verizon.net.

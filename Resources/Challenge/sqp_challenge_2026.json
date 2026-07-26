@@ -97,7 +97,7 @@
   },
   {
    "name": "Virginia QSO Party",
-   "partyID": null,
+   "partyID": "vaqp",
    "windows": [
     {
      "start": "2026-03-21T14:00:00Z",

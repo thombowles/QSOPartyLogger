@@ -108,6 +108,18 @@ Built for KE5CW. Bundled parties, all with official county data:
   rules say DX sends "Country", but its own example logs `DL6QK` as the literal
   token `DX`. `verified: partial` — its power multiplier is **×1.5 for low
   power**, the same gap Vermont has.
+- **Virginia QSO Party** (Mar 21–22, 2026) — 26 hours, and **the first bundled
+  party whose entities are not all counties**: 95 counties *and* 38 independent
+  cities, 133 in all. **Four names appear twice** — Fairfax, Franklin, Richmond
+  and Roanoke each exist as both a county and a city — so names are not unique
+  here and only the codes are; cities render as `Name (City)`, which is the
+  sponsor's own asterisk made readable. Most city codes end in `X`, but `FFX` is
+  Fairfax *County*, so the letter is not a test. Exchange is a **QSO number and a
+  location, with no signal report**. Multipliers once overall; Virginia itself
+  explicitly excluded. County lines are permitted and pay for **one** entity —
+  neither of the usual shapes. `verified: partial`: contacts with Virginia
+  mobiles are worth 3 points and this app pays 1 or 2, and the 50-point bonus
+  stations are published only on the sponsor's web site.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -261,9 +273,9 @@ Built for KE5CW. Bundled parties, all with official county data:
 **Every US state and regional QSO party running from 2026-07-24 through
 2026-12-31 is bundled**, and the season's earlier parties are being added in
 contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
-Carolina, Oklahoma, Idaho and Wisconsin are in. The 2026 season runs
+Carolina, Oklahoma, Idaho, Wisconsin and Virginia are in. The 2026 season runs
 Feb 7 → Oct 18; two independent calendars agree there is no state or provincial
-party in January, November or December. **21 parties from March through June
+party in January, November or December. **20 parties from March through June
 remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
@@ -744,7 +756,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1179 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1202 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1120,6 +1132,18 @@ station profile, radio wiring and cluster history untouched.
   value. DC appears **nowhere in the rules** and only in the multiplier list, as
   the single row `MD Maryland/(D.C.)`. *Retrieval note:* warac.org 403s a plain
   fetch of its multiplier page and needs both a browser User-Agent and a Referer.
+- VAQP: rules from the Sterling Park Amateur Radio Club's official 2026 PDF and
+  the sponsor's entity list, read verbatim 2026-07-26. **Its entity list is 95
+  counties and 38 independent cities**, and four names — Fairfax, Franklin,
+  Richmond, Roanoke — belong to both a county and a city, so this is the first
+  bundled party whose county *names* are not unique.
+  [`gen_vaqp.py`](docs/research/gen_vaqp.py) reads the sponsor's asterisk to tell
+  them apart and renders cities as `Name (City)`; it explicitly pins that the
+  "code ends in X" convention is **not** a city test, since `FFX` is Fairfax
+  County. *A retrieval note worth keeping:* the rules PDF is **two-column**, so
+  `pdftotext` interleaves the columns once whitespace is normalised — quoted
+  assertions have to be fragments that sit inside one column line, and several
+  had to be split after failing.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -1155,7 +1179,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 26 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 27 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong
