@@ -223,7 +223,7 @@
   },
   {
    "name": "Florida QSO Party",
-   "partyID": null,
+   "partyID": "fqp",
    "windows": [
     {
      "start": "2026-04-25T16:00:00Z",

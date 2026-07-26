@@ -1,0 +1,344 @@
+{
+  "schemaVersion": 1,
+  "id": "fqp",
+  "name": "Florida QSO Party",
+  "cabrilloContest": "FCG-FQP",
+  "homeState": "FL",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 0
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "perMode"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perMode"
+    }
+  },
+  "bonuses": [],
+  "oneByOne": {
+    "words": [
+      "USBIRTHDAY"
+    ]
+  },
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 2,
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "scoreMultipliers": {
+    "power": {
+      "QRP": 3,
+      "LOW": 2,
+      "HIGH": 1
+    }
+  },
+  "schedule": [
+    {
+      "start": "2026-04-25T16:00:00Z",
+      "end": "2026-04-26T02:00:00Z"
+    },
+    {
+      "start": "2026-04-26T12:00:00Z",
+      "end": "2026-04-26T22:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ALC",
+      "name": "Alachua"
+    },
+    {
+      "abbr": "BAK",
+      "name": "Baker"
+    },
+    {
+      "abbr": "BAY",
+      "name": "Bay"
+    },
+    {
+      "abbr": "BRA",
+      "name": "Bradford"
+    },
+    {
+      "abbr": "BRE",
+      "name": "Brevard"
+    },
+    {
+      "abbr": "BRO",
+      "name": "Broward"
+    },
+    {
+      "abbr": "CAH",
+      "name": "Calhoun"
+    },
+    {
+      "abbr": "CHA",
+      "name": "Charlotte"
+    },
+    {
+      "abbr": "CIT",
+      "name": "Citrus"
+    },
+    {
+      "abbr": "CLA",
+      "name": "Clay"
+    },
+    {
+      "abbr": "CLM",
+      "name": "Columbia"
+    },
+    {
+      "abbr": "CLR",
+      "name": "Collier"
+    },
+    {
+      "abbr": "DAD",
+      "name": "Miami-Dade"
+    },
+    {
+      "abbr": "DES",
+      "name": "Desoto"
+    },
+    {
+      "abbr": "DIX",
+      "name": "Dixie"
+    },
+    {
+      "abbr": "DUV",
+      "name": "Duval"
+    },
+    {
+      "abbr": "ESC",
+      "name": "Escambia"
+    },
+    {
+      "abbr": "FLG",
+      "name": "Flagler"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "GAD",
+      "name": "Gadsden"
+    },
+    {
+      "abbr": "GIL",
+      "name": "Gilchrist"
+    },
+    {
+      "abbr": "GLA",
+      "name": "Glades"
+    },
+    {
+      "abbr": "GUL",
+      "name": "Gulf"
+    },
+    {
+      "abbr": "HAM",
+      "name": "Hamilton"
+    },
+    {
+      "abbr": "HAR",
+      "name": "Hardee"
+    },
+    {
+      "abbr": "HEN",
+      "name": "Hendry"
+    },
+    {
+      "abbr": "HER",
+      "name": "Hernando"
+    },
+    {
+      "abbr": "HIG",
+      "name": "Highlands"
+    },
+    {
+      "abbr": "HIL",
+      "name": "Hillsborough"
+    },
+    {
+      "abbr": "HOL",
+      "name": "Holmes"
+    },
+    {
+      "abbr": "IDR",
+      "name": "Indian River"
+    },
+    {
+      "abbr": "JAC",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "LAF",
+      "name": "Lafayette"
+    },
+    {
+      "abbr": "LAK",
+      "name": "Lake"
+    },
+    {
+      "abbr": "LEE",
+      "name": "Lee"
+    },
+    {
+      "abbr": "LEO",
+      "name": "Leon"
+    },
+    {
+      "abbr": "LEV",
+      "name": "Levy"
+    },
+    {
+      "abbr": "LIB",
+      "name": "Liberty"
+    },
+    {
+      "abbr": "MAD",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MAO",
+      "name": "Marion"
+    },
+    {
+      "abbr": "MON",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MRT",
+      "name": "Martin"
+    },
+    {
+      "abbr": "MTE",
+      "name": "Manatee"
+    },
+    {
+      "abbr": "NAS",
+      "name": "Nassau"
+    },
+    {
+      "abbr": "OKA",
+      "name": "Okaloosa"
+    },
+    {
+      "abbr": "OKE",
+      "name": "Okeechobee"
+    },
+    {
+      "abbr": "ORA",
+      "name": "Orange"
+    },
+    {
+      "abbr": "OSC",
+      "name": "Osceola"
+    },
+    {
+      "abbr": "PAL",
+      "name": "Palm Beach"
+    },
+    {
+      "abbr": "PAS",
+      "name": "Pasco"
+    },
+    {
+      "abbr": "PIN",
+      "name": "Pinellas"
+    },
+    {
+      "abbr": "POL",
+      "name": "Polk"
+    },
+    {
+      "abbr": "PUT",
+      "name": "Putnam"
+    },
+    {
+      "abbr": "SAN",
+      "name": "Santa Rosa"
+    },
+    {
+      "abbr": "SAR",
+      "name": "Sarasota"
+    },
+    {
+      "abbr": "SEM",
+      "name": "Seminole"
+    },
+    {
+      "abbr": "STJ",
+      "name": "St. Johns"
+    },
+    {
+      "abbr": "STL",
+      "name": "St. Lucie"
+    },
+    {
+      "abbr": "SUM",
+      "name": "Sumter"
+    },
+    {
+      "abbr": "SUW",
+      "name": "Suwannee"
+    },
+    {
+      "abbr": "TAY",
+      "name": "Taylor"
+    },
+    {
+      "abbr": "UNI",
+      "name": "Union"
+    },
+    {
+      "abbr": "VOL",
+      "name": "Volusia"
+    },
+    {
+      "abbr": "WAG",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAK",
+      "name": "Wakulla"
+    },
+    {
+      "abbr": "WAL",
+      "name": "Walton"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/flqp-table.php",
+    "postURL": "http://qsopartyhub.com/flqp-spots.php"
+  },
+  "notes": "verified: partial - rules, both county lists and the Cabrillo specification all from the Florida Contest Group's own site, read verbatim 2026-07-26. THE SPONSOR PRINTS ITS OWN CABRILLO HEADER AND IT IS NOT THE OBVIOUS ONE: 'CONTEST: FCG-FQP', not FL-QSO-PARTY, taken from its own Cabrillo specification - so no Article 1 exception is needed, the first party in six to manage that. FOUR BANDS - 40, 20, 15 and 10 - THE NARROWEST LIST IN THIS APP: 'No 160 or 80 meters, WARC or VHF bands', and the sponsor's own arithmetic proves the count, since 'stations may be worked once per mode per band for a total of 8 maximum QSOs' is four bands times two modes. NO DIGITAL AT ALL. Twenty hours in two 10-hour legs separated by a 10-hour break, and ALL FOUR of the sponsor's local-time glosses convert correctly against its UTC instants - worth saying after Nebraska, where none of them did. Multipliers count PER MODE. FLORIDA ENTRANTS GET NO COUNTY MULTIPLIERS AT ALL - 'There is no in-state County multiplier' - which is unusual; they count states, provinces, DXCC countries and maritime-mobile ITU regions instead. Florida itself is inside '50 States (including Florida)' and reaches an in-state log only through a county, so homeStateCountsViaCounty is true. THE POWER MULTIPLIER FITS - QRP x3, low x2, high x1 - the third party to ship one after New Mexico and Nebraska. County lines take two counties, per the sponsor's explicit cap and the County Hunter guidelines. The 1x1 Spelling Bee ships in oneByOne: twenty stations, two per suffix letter, spelling US BIRTHDAY. THAT WORD IS 2026-ONLY - it marks the USA's 250th - so a 2027 session must replace it. KNOWN LIMITATION 1 - MARITIME MOBILE ITU REGIONS CANNOT BE COUNTED. The rules give maritime-mobile stations their own exchange ('send ITU Region (1, 2 or 3)') and make R1, R2 and R3 multipliers for Florida entrants, and the schema has no class for them: MultClass covers county, state, province and dx. AND THEY DO NOT MERELY FAIL TO COUNT - because dxStyle is 'prefix', R1, R2 and R3 are accepted as PLAUSIBLE DXCC PREFIXES and silently credited as country multipliers instead, which is the same shape as the Mississippi grid-square finding. The exchange logs and the QSO scores; only the multiplier class is wrong, and since both classes count once per mode the total usually lands right by accident. First user of that gap. OPEN QUESTION 1: IS THE OUT-OF-STATE RESTRICTION STATED OR ONLY IMPLIED? The Object is asymmetric - non-Florida amateurs are directed at Florida stations while 'Florida operators can work anyone outside and within Florida' - and non-Florida entrants' only multipliers are Florida counties, but no sentence forbids a non-Florida station from claiming points for another non-Florida contact. outStateWorksHomeStationsOnly ships true as the reading every FQP summary takes; worth confirming with the sponsor before 2027."
+}

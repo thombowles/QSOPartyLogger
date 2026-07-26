@@ -81,6 +81,7 @@
 		52FDB9188C666E49EBE3DDBE /* MessagesDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9C0022577607844914FAD2 /* MessagesDraft.swift */; };
 		545DEA6ED14085E9058FA5CB /* MaineQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464472573FD7960DD5AC5B7B /* MaineQSOPartyTests.swift */; };
 		54C22E5CBC85F00E72EBE2E6 /* MessagesEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C6419D10E7C381AE554C1B /* MessagesEditor.swift */; };
+		55C2812AC8EA3E198F773BA7 /* FloridaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D8CF7496BE7953659E708C /* FloridaQSOPartyTests.swift */; };
 		56D6E0AE92BDE099E45F7C53 /* KeyerBackendLabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8888FFE8F08254615766C16 /* KeyerBackendLabelTests.swift */; };
 		57D6E95483FBA88DE48DE602 /* UpcomingContestsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49AC8D775ABBA76B9D43CD0 /* UpcomingContestsTests.swift */; };
 		59161437AC1F7C6DE90B2418 /* alqp-table-2026-07-25-early.html in Resources */ = {isa = PBXBuildFile; fileRef = F970162F8C3C567192DEB1BB /* alqp-table-2026-07-25-early.html */; };
@@ -393,6 +394,7 @@
 		DFC488FDCD9B9458276688D9 /* ContestArchiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestArchiveTests.swift; sourceTree = "<group>"; };
 		E0A02DEF03C814CF8D2DD737 /* NewMexicoQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMexicoQSOPartyTests.swift; sourceTree = "<group>"; };
 		E4C943C5C616ADB650DA248E /* CWKeyer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CWKeyer.swift; sourceTree = "<group>"; };
+		E4D8CF7496BE7953659E708C /* FloridaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloridaQSOPartyTests.swift; sourceTree = "<group>"; };
 		E53DC8597A1A918FA7CB32D4 /* K3ProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K3ProtocolTests.swift; sourceTree = "<group>"; };
 		E544AF9D2BD44EEFEC54BDF6 /* FlexRadioDriverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexRadioDriverTests.swift; sourceTree = "<group>"; };
 		E70A4C058DB0BE3BF9AA15BC /* Parties */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Parties; path = Resources/Parties; sourceTree = SOURCE_ROOT; };
@@ -528,6 +530,7 @@
 				CA4CFCAA1F93033279C3D7CF /* DupeCheckerTests.swift */,
 				6BA4D636DCF7164283660F61 /* EntryCommandTests.swift */,
 				A3EE6994E490B94BF6B0B2F7 /* ExchangeParserTests.swift */,
+				E4D8CF7496BE7953659E708C /* FloridaQSOPartyTests.swift */,
 				48E3BF99C529E7F7490BE0B6 /* GeorgiaQSOPartyTests.swift */,
 				F8EB12C03231B219068E0737 /* HawaiiQSOPartyTests.swift */,
 				3068869DC84695A9621519CB /* HubPollPolicyTests.swift */,
@@ -960,6 +963,7 @@
 				E9D3C1BC588F38EE754CF5AE /* EntryFlowTests.swift in Sources */,
 				EFF567B7FAA9F043F72398D2 /* ExchangeParserTests.swift in Sources */,
 				60A60A674801918D78F66985 /* FlexRadioDriverTests.swift in Sources */,
+				55C2812AC8EA3E198F773BA7 /* FloridaQSOPartyTests.swift in Sources */,
 				EA68D3C9DCC810F20F865121 /* GeorgiaQSOPartyTests.swift in Sources */,
 				2FB28E2BB6D45DB0A743B1FB /* HawaiiQSOPartyTests.swift in Sources */,
 				71A53F1DD6528F6C6485C0ED /* HubPollPolicyTests.swift in Sources */,

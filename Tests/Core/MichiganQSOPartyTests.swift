@@ -93,14 +93,15 @@ final class MichiganQSOPartyTests: XCTestCase {
     }
 
     /// "CW and SSB on **80, 40, 20, 15 and 10 meters**" — five bands and two
-    /// modes, the narrowest band list in the app. No 160, no 6, no digital.
-    func testFiveBandsAndTwoModesIsTheNarrowestListBundled() {
+    /// modes. No 160, no 6, no digital. Michigan held the narrowest list until
+    /// Florida arrived with four; it is now joint-second.
+    func testFiveBandsAndTwoModes() {
         XCTAssertEqual(miqp.validBands, [.m80, .m40, .m20, .m15, .m10])
         XCTAssertEqual(miqp.allowedModeClasses, [.phone, .cw])
 
         let narrowest = PartyCatalog.loadBundled().map(\.validBands.count).min()
-        XCTAssertEqual(miqp.validBands.count, narrowest,
-                       "no bundled party has fewer bands")
+        XCTAssertEqual(narrowest, 4, "Florida's is narrower")
+        XCTAssertEqual(miqp.validBands.count, 5)
     }
 
     /// The sponsor works the dupe arithmetic out loud: "K8MQP may be contacted

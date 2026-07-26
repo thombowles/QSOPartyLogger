@@ -223,6 +223,16 @@ Built for KE5CW. Bundled parties, all with official county data:
   deliberately not modelled: the FT8/FT4 *second contest* with its own
   grid-square multipliers, satellite QSOs, and the rare-grid bonus.
   `verified: partial`, with the start hour an open question.
+- **Florida QSO Party** (Apr 25–26, 2026) — 20 hours in two 10-hour legs, and
+  **the narrowest band list in the app**: 40/20/15/10 only, which the sponsor's
+  own arithmetic confirms ("worked once per mode per band for a total of **8
+  maximum QSOs**"). Its Cabrillo header is **`FCG-FQP`, printed by the sponsor**
+  — not the `FL-QSO-PARTY` the pattern would suggest, and the first party in six
+  needing no WA7BNM exception. 67 counties, parsed from two of the sponsor's own
+  copies and required to agree; `DAD` is Miami-Dade, a trap the sponsor flags
+  itself. **Florida entrants get no county multipliers at all.** The 1×1
+  Spelling Bee ships in `oneByOne` — 2026's word is `USBIRTHDAY`, for the USA's
+  250th. `verified: partial`.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -377,10 +387,10 @@ Built for KE5CW. Bundled parties, all with official county data:
 2026-12-31 is bundled**, and the season's earlier parties are being added in
 contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
 Carolina, Oklahoma, Idaho, Wisconsin, Virginia, Louisiana, Mississippi,
-Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec and
-Nebraska are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
+Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec,
+Nebraska and Florida are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
 agree there is no state or provincial party in January, November or December.
-**10 parties from April through June remain**, listed in
+**9 parties from April through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -860,7 +870,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1422 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1446 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1346,6 +1356,15 @@ station profile, radio wiring and cluster history untouched.
   CDT, but the rules gloss it "8:00 AM CDT" — WA7BNM trusted the local times and
   publishes 1300Z. The sponsor's own UTC ships, per Article 19, recorded as an
   open question.
+- FQP: rules, both county lists, the Cabrillo specification and the Spelling Bee
+  calls all from the Florida Contest Group's own site, read verbatim
+  2026-07-26 — **the first party in six whose Cabrillo header needs no WA7BNM
+  exception**, because the sponsor publishes its own spec, and it says
+  `FCG-FQP`. The county list is parsed twice, from the live table and the
+  printable PDF, and required to agree; they do on all 67 once one typographic
+  difference is normalised. *Retrieval note:* the spot hub serves Florida as
+  `flqp`, not `fqp` — the third party after California and Ontario where the hub
+  prefix is not the party id.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -1381,7 +1400,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 37 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 38 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong
