@@ -203,7 +203,7 @@
   },
   {
    "name": "Quebec QSO Party",
-   "partyID": null,
+   "partyID": "qcqp",
    "windows": [
     {
      "start": "2026-04-19T13:00:00Z",

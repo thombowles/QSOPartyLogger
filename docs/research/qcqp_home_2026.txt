@@ -1,0 +1,62 @@
+Source: https://quebecqsoparty.org/   Fetched 2026-07-26.  WHOLE PAGE, not just
+  the article body - the bilingual date banner and the 'Nouveau 2026' notice
+  live in the site header, and the notice is what says the operating times are
+  NEW for 2026.
+
+<title>: QSO Party du Québec – 19 avril 2026 de 1300-2400 UTC – April 19th, 2026 1300-2400Z
+
+Note: the '2021-12-09' near the foot is a WordPress theme artifact, not a
+  content date - the rules page carries a '2021-12-11' of the same kind.
+========================================================================
+QSO Party du Québec – 19 avril 2026 de 1300-2400 UTC – April 19th, 2026 1300-2400Z
+Skip to content
+QSO Party du Québec
+19 avril 2026 de 1300-2400 UTC - April 19th, 2026 1300-2400Z
+Nouveau 2026
+Nouvelles heures d’opérations — New operating times
+Nouveaux prix — New Awards
+Limite logs: 3 mai 2026 — Logs limit: May 3rd, 2026
+Primary Navigation Menu
+Menu
+Accueil
+Home
+Règlements en français
+English Rules
+Soumission résultats
+Log Posting
+Journal
+Logging Software
+Annonces d’opération
+Spotting
+Résultats
+Results
+Résultats 2025 – Results 2025
+Résultats 2024 – Results 2024
+Résultats 2023 – Results 2023
+Résultats 2022 – Results 2022
+Prix
+Awards
+Commanditaire principal
+Fédération des clubs de radioamateurs du Québec
+Facebook
+Québec, Canada
+Commandité  – Sponsored
+Club Radio Amateur de l’Outaouais
+Bienvenue
+Bienvenue au QSO Party du Québec!
+Cette année, l’événement aura lieu le dimanche 19 avril 2026, de 13:00 à 24:00 UTC ou 9h à 20h Heure avancée de l’est.
+Le Club de radioamateur Outaouais est fier de commanditer le QSO Party du Québec en 2026.
+Nous souhaitons en faire un lieu de rencontre pour promouvoir la radio-amateur comme loisir et permettre aux autres opérateurs de l’Amérique du nord de découvrir la belle province du Québec.
+Instructions et réglements au https://quebecqsoparty.org/reglements-quebec-qso-party/
+Courriel: QuebecQsoParty@groups.io
+Rester en contact: https://groups.io/g/QuebecQsoParty
+Welcome
+Welcome to the Quebec QSO Party.
+This year the event will be held on Sunday April 19th, 2026 from 13:00 to 24:00 UTC which is 9 AM to 8 PM Eastern Daylight Time.
+The Club de radioamateur Outaouais is proud to sponsor the Quebec QSO Party 2026.
+We would like to promote the Amateur Radio as a hobby and let all of North America discover the beautiful province of Quebec.
+All instructions and rules on https://quebecqsoparty.org/rules-quebec-qso-party/
+Email: QuebecQsoParty@groups.io
+Stay in touch: https://groups.io/g/QuebecQsoParty
+2021-12-09
+Designed using Unos. Powered by WordPress.

@@ -15,7 +15,7 @@ final class MessageDefaultsTests: XCTestCase {
     /// in a comment is a small lie that nothing catches.
     static let rstPartyIDs = [
         "alqp", "azqp", "bcqp", "coqp", "gaqp", "hqp", "iaqp", "ilqp", "ksqp", "laqp", "meqp", "miqp", "moqp", "msqp", "ndqp", "nmqp",
-        "nhqp", "njqp", "nyqp", "ohqp", "okqp", "oqp", "scqp", "sdqp", "tnqp", "tqp", "vtqp",
+        "nhqp", "njqp", "nyqp", "ohqp", "okqp", "oqp", "qcqp", "scqp", "sdqp", "tnqp", "tqp", "vtqp",
         "warun",
     ]
 
@@ -38,7 +38,7 @@ final class MessageDefaultsTests: XCTestCase {
     /// The Article 4 proof: every party that was correct before this change
     /// resolves to the exact macros it shipped with.
     func testEveryReportPartyKeepsTheShippedDefaults() throws {
-        XCTAssertEqual(Self.rstPartyIDs.count, 28,
+        XCTAssertEqual(Self.rstPartyIDs.count, 29,
                        "a party joined or left the report shape — update the roster deliberately")
         for id in Self.rstPartyIDs {
             let p = try XCTUnwrap(PartyCatalog.party(id: id), id)
