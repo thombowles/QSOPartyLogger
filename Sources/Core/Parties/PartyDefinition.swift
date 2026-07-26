@@ -404,6 +404,15 @@ enum BonusRule: Codable, Equatable, Sendable {
         case once       // KSQP KS0KS, MDC W3VPR
         case perMode    // WA W7DX: 500 per mode
         case perQSO     // TnQP K4TCG: 100 per valid QSO
+        /// …once per band **and** mode class. SCQP: "Bonus Stations may be
+        /// worked ONCE per BAND per MODE for bonus points. You may work a bonus
+        /// station more than once per band per mode for additional QSO points
+        /// and multipliers" — a mobile bonus station worked from four counties
+        /// on 40 m CW pays its bonus once, and four QSOs' worth of points.
+        ///
+        /// Distinct from `.perQSO`, which would pay all four, and from
+        /// `.perMode`, which would collapse every band into one.
+        case perBandMode
     }
 
     struct SweepTier: Codable, Equatable, Sendable {

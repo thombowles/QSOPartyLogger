@@ -211,6 +211,7 @@ struct ScoreSidebar: View {
         switch scope {
         case .once: ""
         case .perMode: "/mode"
+        case .perBandMode: "/band/mode"
         case .perQSO: "/QSO"
         }
     }

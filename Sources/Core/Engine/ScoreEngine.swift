@@ -243,6 +243,9 @@ enum ScoreEngine {
                     total += points
                 case .perMode:
                     total += Set(matches.map(\.modeClass)).count * points
+                case .perBandMode:
+                    total += Set(matches.map { "\($0.band.rawValue)/\($0.modeClass.rawValue)" })
+                        .count * points
                 case .perQSO:
                     total += matches.count * points
                 }
