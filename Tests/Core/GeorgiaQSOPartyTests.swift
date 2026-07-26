@@ -223,8 +223,9 @@ final class GeorgiaQSOPartyTests: XCTestCase {
     }
 
     /// "**DX counts for QSO points only, there are no country multipliers.**"
-    /// The only bundled party that pays points for a class it grants no
-    /// multiplier for — modelled by omitting `dx` from the in-state classes,
+    /// One of two bundled parties that pay points for a class they grant no
+    /// multiplier for — North Dakota, the same weekend, is the other. Modelled
+    /// by omitting `dx` from the in-state classes,
     /// since the engine scores every in-scope row and consults `classes` for
     /// multipliers alone.
     func testDXPaysPointsAndNoMultiplier() {
@@ -335,9 +336,10 @@ final class GeorgiaQSOPartyTests: XCTestCase {
         XCTAssertEqual(utc.component(.day, from: windows[1].start), 12)
     }
 
-    /// Three parties share 11 April 2026 — the busiest Saturday of the season —
-    /// and Georgia starts four hours after the other two.
-    func testGeorgiaSharesItsSaturdayWithMissouriAndNewMexico() throws {
+    /// Four parties share 11 April 2026 — the busiest Saturday of the season.
+    /// Georgia starts four hours after Missouri and New Mexico, and at the same
+    /// minute as North Dakota.
+    func testGeorgiaSharesItsSaturdayWithThreeOtherParties() throws {
         var utc = Calendar(identifier: .gregorian)
         utc.timeZone = try XCTUnwrap(TimeZone(identifier: "UTC"))
         let opening = try XCTUnwrap(gaqp.schedule?.first?.start)
@@ -345,7 +347,7 @@ final class GeorgiaQSOPartyTests: XCTestCase {
         let sameDay = PartyCatalog.loadBundled().filter { party in
             party.schedule?.contains { utc.isDate($0.start, inSameDayAs: opening) } == true
         }.map(\.id).sorted()
-        XCTAssertEqual(sameDay, ["gaqp", "moqp", "nmqp"])
+        XCTAssertEqual(sameDay, ["gaqp", "moqp", "ndqp", "nmqp"])
     }
 
     func testNotesRecordBothOpenQuestions() throws {

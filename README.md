@@ -166,10 +166,23 @@ Built for KE5CW. Bundled parties, all with official county data:
   once per mode. **(Not per band)**". `CHAT` is **Chattahoochee** — Chatham,
   which contains Savannah, is `CHTM` — and `HARA`/`HARR`/`HART` are the app's
   only three-way code group. **No digital**, said in one sentence, and **DX is
-  worth points but no multiplier**, which no other bundled party does. DC is a
+  worth points but no multiplier**, a shape it shares only with North Dakota. DC is a
   multiplier in its own right here rather than an alias for Maryland. The
   sponsor states its own ceilings, 128 and 318, and both are arithmetic that
   checks out. `verified: partial`.
+- **North Dakota QSO Party** (Apr 11–12, 2026) — **24 unbroken hours**, one
+  window, both instants printed in UTC and local so nothing is derived. Its
+  distinguishing feature is that **the Canadian list is not the standard
+  thirteen**: the sponsor prints `NF` Newfoundland and `LB` Labrador as two
+  separate tokens and has no Nunavut at all — pre-2001 RAC nomenclature, which
+  needs a `provinces` override. **North Dakota is not a state multiplier** ("49
+  states excluding North Dakota"); ND stations count all 53 of their own
+  counties instead, which is why the in-state ceiling is 116 rather than 63.
+  Flat one point for every mode. Two limitations are recorded rather than
+  papered over: an ND station must log `DX` rather than the country prefix the
+  rules ask for (the score is unaffected — DX is never a multiplier), and the
+  sponsor's "NO FT8" cannot be enforced, since `digital` is one mode class.
+  `verified: partial`.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -324,9 +337,9 @@ Built for KE5CW. Bundled parties, all with official county data:
 2026-12-31 is bundled**, and the season's earlier parties are being added in
 contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
 Carolina, Oklahoma, Idaho, Wisconsin, Virginia, Louisiana, Mississippi,
-Missouri, New Mexico and Georgia are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
+Missouri, New Mexico, Georgia and North Dakota are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
 agree there is no state or provincial party in January, November or December.
-**15 parties from April through June remain**, listed in
+**14 parties from April through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -806,7 +819,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1308 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1331 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1240,6 +1253,15 @@ station profile, radio wiring and cluster history untouched.
   agree, which they do on all 159. Two open questions are recorded rather than
   guessed away: the sponsor never states which bands are legal (only suggested
   frequencies), and never caps simultaneous counties (it defers to MARAC).
+- NDQP: rules, the 53-county list and the Canadian abbreviations all from the
+  ARRL North Dakota Section's own "2026 ND QSO Party Rules" PDF (Last-Modified
+  2026-03-06), read verbatim 2026-07-26. The sponsor here is a **section, not a
+  club** — the ND Section Manager runs it directly, and there is no separate
+  contest site. **Its Canadian list is parsed rather than typed**, because it is
+  not the app's: `NF` + `LB` instead of `NL`, and no Nunavut. The Cabrillo
+  `CONTEST:` header is the one thing not from the sponsor — five pages ask for
+  Cabrillo logs without ever naming the header — so `ND-QSO-PARTY` comes from
+  WA7BNM's Cabrillo Names table under Article 1's exception.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -1275,7 +1297,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 32 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 33 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

@@ -155,7 +155,7 @@
   },
   {
    "name": "North Dakota QSO Party",
-   "partyID": null,
+   "partyID": "ndqp",
    "windows": [
     {
      "start": "2026-04-11T18:00:00Z",

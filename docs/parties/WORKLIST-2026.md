@@ -8,10 +8,10 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **15 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+- **14 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
   February and March are clear; April is under way (Louisiana, Mississippi,
-  Missouri, New Mexico, Georgia). **North Dakota is next**, sharing Georgia's
-  11 April slot.
+  Missouri, New Mexico, Georgia, North Dakota). **Michigan is next**, opening
+  the 18 April weekend.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -151,9 +151,9 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**15 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**14 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 11 US + 4 Canadian. Research is banked for none of them.
+next one built". 10 US + 4 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
@@ -171,7 +171,7 @@ next one built". 11 US + 4 Canadian. Research is banked for none of them.
 | ~~12~~ | ~~Missouri~~ | ~~Apr 11 1400Z → Apr 12 0400Z; Apr 12 1400–2000Z~~ | **done** 2026-07-26 — [`moqp_rules.md`](../research/moqp_rules.md); date **moved for Easter** |
 | ~~13~~ | ~~New Mexico~~ | ~~Apr 11 1400Z → Apr 12 0200Z~~ | **done** 2026-07-26 — [`nmqp_rules.md`](../research/nmqp_rules.md); **first power multiplier that fits** |
 | ~~14~~ | ~~Georgia~~ | ~~Apr 11 1800Z → Apr 12 0359Z; Apr 12 1400–2359Z~~ | **done** 2026-07-26 — [`gaqp_rules.md`](../research/gaqp_rules.md); 159 counties, **entirely first-party** |
-| 15 | North Dakota | Apr 11 1800Z → Apr 12 1800Z | 24 h continuous |
+| ~~15~~ | ~~North Dakota~~ | ~~Apr 11 1800Z → Apr 12 1800Z~~ | **done** 2026-07-26 — [`ndqp_rules.md`](../research/ndqp_rules.md); 24 h continuous, **non-standard province list** |
 | 16 | Michigan | Apr 18 1600Z → Apr 19 0400Z | |
 | 17 | Ontario | Apr 18 1800Z → Apr 19 0300Z; Apr 19 1200–2000Z | 🇨🇦 |
 | 18 | Quebec | Apr 19 1300Z → Apr 19 2400Z | 🇨🇦 |
@@ -192,11 +192,11 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**33 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**34 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
 pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP**, **SCQP**,
 **NCQP**, **OKQP**, **IDQP**, **WIQP**, **VAQP**, **LAQP**, **MSQP**, **MOQP**,
-**NMQP** and **GAQP** from the reopened first-half season, all built 2026-07-26.
+**NMQP**, **GAQP** and **NDQP** from the reopened first-half season, all built 2026-07-26.
 Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
@@ -419,13 +419,36 @@ its own commit (Article 4).
   as the default. ILQP supplies `[["phone"], ["cw", "digital"]]`; VTQP needs
   RTTY split out of `.digital`, which `QSO.rawMode` already carries. Pinned by
   `VermontQSOPartyTests.testKnownGapRTTYAndFT8ShareOneModeClass`.
-- **FT4/FT8 cannot be excluded while other digital modes are allowed.** ILQP:
-  "FT4 and FT8 contacts will receive no contact credit. Other digital modes are
-  encouraged." That is below the granularity of `ModeClass`, which has one
-  `.digital` case. `QSO.rawMode` carries the concrete mode, so a fix is possible —
-  a party-level list of excluded raw modes — but one party wants it and the harm
-  is small (an FT8 QSO scores locally and earns nothing from the sponsor).
-  Recorded in `ilqp.json` as KNOWN LIMITATION 2.
+- **FT4/FT8 cannot be excluded while other digital modes are allowed — SECOND
+  USER FOUND 2026-07-26, so the two-user bar is met and this is now buildable.**
+  ILQP: "FT4 and FT8 contacts will receive no contact credit. Other digital modes
+  are encouraged." **NDQP: "Digital = (RTTY/PSK), NO FT8"** — the same rule from
+  a different sponsor, and both admit RTTY and PSK alongside the exclusion. That
+  is below the granularity of `ModeClass`, which has one `.digital` case.
+  `QSO.rawMode` already carries the concrete mode, so the fix is a party-level
+  list of excluded raw modes consulted where `allowedModeClasses` already is, in
+  `ScoreEngine.score`'s invalid-mode filter. The harm stays small per party (an
+  FT8 QSO scores locally and earns nothing from the sponsor), but it is now two
+  sponsors' stated rules going unmodelled. Recorded in `ilqp.json` and
+  `ndqp.json` as KNOWN LIMITATION 2 in both.
+
+- **The DX-prefix gate costs a party where DX pays points but no multiplier.**
+  Added 2026-07-26 by NDQP. `ExchangeParser.acceptsDXPrefix` only guesses at
+  DXCC prefixes where `dx` is a multiplier class for that operator — deliberately,
+  because the guess is loose enough to validate every mistyped county, and the
+  comment there says so. North Dakota is the first party where that gate has a
+  cost: its rules ask DX stations for a **country** ("DX Stations give RST and DX
+  country") while granting ND entrants no DX multipliers, so the gate is shut and
+  a bare `DL` cannot be logged. `dxStyle: "prefix"` would not help — it is inert
+  under the same gate, *and* it would drop the literal `DX` token, leaving no way
+  to log the contact at all. `token` therefore ships and the operator enters `DX`.
+  **The score is unaffected** (DX is never a multiplier there, and every mode pays
+  one point), so this is a fidelity gap in the recorded exchange, not a scoring
+  one. Georgia has the same points-but-no-multiplier shape and is unaffected,
+  because its DX stations send the literal token by rule. A fix would separate
+  "may I guess a prefix" from "is DX a multiplier" — perhaps gating on
+  `dxStyle == .prefix` instead, which is what the setting was named for.
+  Recorded in `ndqp.json` as KNOWN LIMITATION 1.
 - **Self-activation multipliers — SECOND USER FOUND 2026-07-26, so the repo's own
   bar is met and this is now buildable.** TnQP: "Tennessee mobiles and rovers may
   claim one multiplier for any Tennessee county from which they complete at least

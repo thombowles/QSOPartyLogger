@@ -120,8 +120,9 @@ once. The generator asserts both.
   this is the opposite of New Mexico's DC→MD one party earlier, and the
   arithmetic is what distinguishes them.
 - **DX is worth points and nothing else** for a Georgia entrant — stated
-  outright, and the only bundled party to pay points for a class it grants no
-  multiplier for. Modelled by leaving `dx` out of `classes`: the engine scores
+  outright. North Dakota, the next party built and the same weekend on the
+  calendar, turned out to do the same, so this shape has two users rather than
+  the one claimed when Georgia shipped. Modelled by leaving `dx` out of `classes`: the engine scores
   every in-scope row for points and consults `classes` only for multipliers.
 
 ## 7. Out-of-state credit
