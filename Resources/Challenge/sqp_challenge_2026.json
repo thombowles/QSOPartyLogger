@@ -247,7 +247,7 @@
   },
   {
    "name": "Indiana QSO Party",
-   "partyID": null,
+   "partyID": "inqp",
    "windows": [
     {
      "start": "2026-05-02T15:00:00Z",

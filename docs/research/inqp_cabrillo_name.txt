@@ -1,0 +1,8 @@
+Source: https://www.contestcalendar.com/cabnames.php  (WA7BNM Contest Calendar,
+  'Cabrillo Names' table).  Fetched 2026-07-26.
+
+Used under CONSTITUTION.md Article 1's WA7BNM exception, and ONLY for the
+Cabrillo CONTEST: header.  The rules discuss the Cabrillo CLUB: line at length
+without ever naming the CONTEST: value.
+========================================================================
+8	Indiana QSO Party  	IN-QSO-PARTY

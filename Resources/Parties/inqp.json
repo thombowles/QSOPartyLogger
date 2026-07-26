@@ -1,0 +1,430 @@
+{
+  "schemaVersion": 1,
+  "id": "inqp",
+  "name": "Indiana QSO Party",
+  "cabrilloContest": "IN-QSO-PARTY",
+  "homeState": "IN",
+  "countyAbbrLength": 5,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 2,
+    "digital": 0
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perMode"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perMode"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 2,
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-05-02T15:00:00Z",
+      "end": "2026-05-03T03:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "INADA",
+      "name": "Adams"
+    },
+    {
+      "abbr": "INALL",
+      "name": "Allen"
+    },
+    {
+      "abbr": "INBAR",
+      "name": "Bartholomew"
+    },
+    {
+      "abbr": "INBEN",
+      "name": "Benton"
+    },
+    {
+      "abbr": "INBLA",
+      "name": "Blackford"
+    },
+    {
+      "abbr": "INBOO",
+      "name": "Boone"
+    },
+    {
+      "abbr": "INBRO",
+      "name": "Brown"
+    },
+    {
+      "abbr": "INCAR",
+      "name": "Carroll"
+    },
+    {
+      "abbr": "INCAS",
+      "name": "Cass"
+    },
+    {
+      "abbr": "INCLI",
+      "name": "Clinton"
+    },
+    {
+      "abbr": "INCLR",
+      "name": "Clark"
+    },
+    {
+      "abbr": "INCLY",
+      "name": "Clay"
+    },
+    {
+      "abbr": "INCRA",
+      "name": "Crawford"
+    },
+    {
+      "abbr": "INDAV",
+      "name": "Daviess"
+    },
+    {
+      "abbr": "INDEA",
+      "name": "Dearborn"
+    },
+    {
+      "abbr": "INDEC",
+      "name": "Decatur"
+    },
+    {
+      "abbr": "INDEK",
+      "name": "DeKalb"
+    },
+    {
+      "abbr": "INDEL",
+      "name": "Delaware"
+    },
+    {
+      "abbr": "INDUB",
+      "name": "Dubois"
+    },
+    {
+      "abbr": "INELK",
+      "name": "Elkhart"
+    },
+    {
+      "abbr": "INFAY",
+      "name": "Fayette"
+    },
+    {
+      "abbr": "INFLO",
+      "name": "Floyd"
+    },
+    {
+      "abbr": "INFOU",
+      "name": "Fountain"
+    },
+    {
+      "abbr": "INFRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "INFUL",
+      "name": "Fulton"
+    },
+    {
+      "abbr": "INGIB",
+      "name": "Gibson"
+    },
+    {
+      "abbr": "INGRA",
+      "name": "Grant"
+    },
+    {
+      "abbr": "INGRE",
+      "name": "Greene"
+    },
+    {
+      "abbr": "INHAM",
+      "name": "Hamilton"
+    },
+    {
+      "abbr": "INHAN",
+      "name": "Hancock"
+    },
+    {
+      "abbr": "INHAR",
+      "name": "Harrison"
+    },
+    {
+      "abbr": "INHND",
+      "name": "Hendricks"
+    },
+    {
+      "abbr": "INHNR",
+      "name": "Henry"
+    },
+    {
+      "abbr": "INHOW",
+      "name": "Howard"
+    },
+    {
+      "abbr": "INHUN",
+      "name": "Huntington"
+    },
+    {
+      "abbr": "INJAC",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "INJAS",
+      "name": "Jasper"
+    },
+    {
+      "abbr": "INJAY",
+      "name": "Jay"
+    },
+    {
+      "abbr": "INJEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "INJEN",
+      "name": "Jennings"
+    },
+    {
+      "abbr": "INJOH",
+      "name": "Johnson"
+    },
+    {
+      "abbr": "INKNO",
+      "name": "Knox"
+    },
+    {
+      "abbr": "INKOS",
+      "name": "Kosciusko"
+    },
+    {
+      "abbr": "INLAG",
+      "name": "Lagrange"
+    },
+    {
+      "abbr": "INLAK",
+      "name": "Lake"
+    },
+    {
+      "abbr": "INLAP",
+      "name": "LaPorte"
+    },
+    {
+      "abbr": "INLAW",
+      "name": "Lawrence"
+    },
+    {
+      "abbr": "INMAD",
+      "name": "Madison"
+    },
+    {
+      "abbr": "INMIA",
+      "name": "Miami"
+    },
+    {
+      "abbr": "INMNR",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "INMNT",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "INMOR",
+      "name": "Morgan"
+    },
+    {
+      "abbr": "INMRN",
+      "name": "Marion"
+    },
+    {
+      "abbr": "INMRS",
+      "name": "Marshall"
+    },
+    {
+      "abbr": "INMRT",
+      "name": "Martin"
+    },
+    {
+      "abbr": "INNEW",
+      "name": "Newton"
+    },
+    {
+      "abbr": "INNOB",
+      "name": "Noble"
+    },
+    {
+      "abbr": "INOHI",
+      "name": "Ohio"
+    },
+    {
+      "abbr": "INORA",
+      "name": "Orange"
+    },
+    {
+      "abbr": "INOWE",
+      "name": "Owen"
+    },
+    {
+      "abbr": "INPAR",
+      "name": "Parke"
+    },
+    {
+      "abbr": "INPER",
+      "name": "Perry"
+    },
+    {
+      "abbr": "INPIK",
+      "name": "Pike"
+    },
+    {
+      "abbr": "INPOR",
+      "name": "Porter"
+    },
+    {
+      "abbr": "INPOS",
+      "name": "Posey"
+    },
+    {
+      "abbr": "INPUL",
+      "name": "Pulaski"
+    },
+    {
+      "abbr": "INPUT",
+      "name": "Putnam"
+    },
+    {
+      "abbr": "INRAN",
+      "name": "Randolph"
+    },
+    {
+      "abbr": "INRIP",
+      "name": "Ripley"
+    },
+    {
+      "abbr": "INRUS",
+      "name": "Rush"
+    },
+    {
+      "abbr": "INSCO",
+      "name": "Scott"
+    },
+    {
+      "abbr": "INSHE",
+      "name": "Shelby"
+    },
+    {
+      "abbr": "INSPE",
+      "name": "Spencer"
+    },
+    {
+      "abbr": "INSTA",
+      "name": "Starke"
+    },
+    {
+      "abbr": "INSTE",
+      "name": "Steuben"
+    },
+    {
+      "abbr": "INSTJ",
+      "name": "St. Joseph"
+    },
+    {
+      "abbr": "INSUL",
+      "name": "Sullivan"
+    },
+    {
+      "abbr": "INSWI",
+      "name": "Switzerland"
+    },
+    {
+      "abbr": "INTPP",
+      "name": "Tippecanoe"
+    },
+    {
+      "abbr": "INTPT",
+      "name": "Tipton"
+    },
+    {
+      "abbr": "INUNI",
+      "name": "Union"
+    },
+    {
+      "abbr": "INVAN",
+      "name": "Vanderburgh"
+    },
+    {
+      "abbr": "INVER",
+      "name": "Vermillion"
+    },
+    {
+      "abbr": "INVIG",
+      "name": "Vigo"
+    },
+    {
+      "abbr": "INWAB",
+      "name": "Wabash"
+    },
+    {
+      "abbr": "INWAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "INWAY",
+      "name": "Wayne"
+    },
+    {
+      "abbr": "INWEL",
+      "name": "Wells"
+    },
+    {
+      "abbr": "INWHL",
+      "name": "Whitley"
+    },
+    {
+      "abbr": "INWHT",
+      "name": "White"
+    },
+    {
+      "abbr": "INWRK",
+      "name": "Warrick"
+    },
+    {
+      "abbr": "INWRN",
+      "name": "Warren"
+    }
+  ],
+  "hubSpots": null,
+  "notes": "verified: partial - rules and county list from the Hoosier DX and Contest Club's own site, read verbatim 2026-07-26 (rules Last-Modified 2026-03-14). QSO POINTS CHANGED FOR 2026: 'Count two points for each complete two-way QSO (both CW and Phone) - Rule change for 2026.' Phone used to be worth one and CW two, AND THE OLD WORDING IS STILL IN THE PAGE AS AN HTML COMMENT - so a scraper that strips the comment markers but keeps the text reads both rules at once. The generator asserts the new rule is live AND that the old one appears only inside a comment. THE COUNTY ABBREVIATIONS CHANGED IN 2017, which the rules say outright, so any pre-2017 list is wrong; counties-rev2017.html meta-refreshes to counties.html, which is the current one. THE EXCHANGE IS A 5-CHARACTER STATE+COUNTY CODE - Marion is INMRN, which the rules print as their example - the same shape as 7QP's, but Indiana is a single state so no County.state is needed and the multi-state schema is untouched here. WATCH INMRN: Marion is MRN, not MAR, so the naive truncation is wrong. Twelve hours in one window, 1500Z to 0259Z on the first full weekend of May, with both local zones given (11am-11pm EDT or 10am-10pm CDT - Indiana straddles two) and both converting correctly. Six bands, and the sponsor works the dupe arithmetic out loud: six bands times two modes means 'the same fixed station could theoretically be worked twelve times'. CW AND PHONE ONLY - digital is never named anywhere in the rules. Multipliers count PER MODE. INDIANA IS NOT A STATE MULTIPLIER ('the other 49 U.S. states'), and Indiana entrants count the 92 counties themselves, so homeStateCountsViaCounty is false. DC COUNTS AS MARYLAND. DX PAYS POINTS AND NO MULTIPLIER for an Indiana entrant - 'Indiana stations may work DX stations for QSO point credit, but there are no DX multipliers' - the third party with that shape, after Georgia and North Dakota. County lines take one or two counties, with the sponsor spelling out the refusal: 'three and four county operations are not allowed'. No bonus points and no power multiplier: 'Multiply QSO points by total multipliers', which the sponsor's own worked example confirms (354 QSOs x 2 points x 66 multipliers = 46,728). The Cabrillo CONTEST header is the one thing not from the sponsor - the rules discuss the Cabrillo CLUB: line at length without ever naming CONTEST: - so IN-QSO-PARTY comes from WA7BNM under Article 1's exception. THE SPOT HUB DOES NOT SERVE THIS PARTY: inqp-table.php 302-redirects to a login page, exactly as 7QP's does, so hubSpots is null."
+}

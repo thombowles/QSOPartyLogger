@@ -73,6 +73,7 @@ BUNDLED_BY_SITE_NAME = {
     "Missouri QSO Party": "moqp",
     "North Carolina QSO Party": "ncqp",
     "7th Call Area QSO Party": "sevenqp",
+    "Indiana QSO Party": "inqp",
     "Florida QSO Party": "fqp",
     "Georgia QSO Party": "gaqp",
     "Michigan QSO Party": "miqp",

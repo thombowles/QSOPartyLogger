@@ -1,0 +1,118 @@
+# Source: http://www.hdxcc.org/inqp/counties.html   Fetched 2026-07-26.
+# (counties-rev2017.html meta-refreshes here; the rules note 'County name
+#  abbreviations changed in 2017', so a pre-2017 list is wrong.)
+# Two columns: County, INQP Exchange - and the exchange is the 5-character
+#   code IN+county, e.g. Marion is INMRN, which the rules print as an example.
+### TABLE 0
+	CQ INQP CQ INQP
+      
+        
+          Sponsored by 
+          HDXCC
+          the Hoosier DX and Contest Club
+-->
+        -->
+      
+        
+        Counties [PDF]
+Counties [Text]
+Printable Map
+
+### TABLE 1
+County	INQPExchange
+Adams	INADA
+Allen	INALL
+Bartholomew	INBAR
+Benton	INBEN
+Blackford	INBLA
+Boone	INBOO
+Brown	INBRO
+Carroll	INCAR
+Cass	INCAS
+Clark	INCLR
+Clay	INCLY
+Clinton	INCLI
+Crawford	INCRA
+Daviess	INDAV
+Dearborn	INDEA
+Decatur	INDEC
+DeKalb	INDEK
+Delaware	INDEL
+Dubois	INDUB
+Elkhart	INELK
+Fayette	INFAY
+Floyd	INFLO
+Fountain	INFOU
+Franklin	INFRA
+Fulton	INFUL
+Gibson	INGIB
+Grant	INGRA
+Greene	INGRE
+Hamilton	INHAM
+Hancock	INHAN
+Harrison	INHAR
+### TABLE 2
+County	INQPExchange
+Hendricks	INHND
+Henry	INHNR
+Howard	INHOW
+Huntington	INHUN
+Jackson	INJAC
+Jasper	INJAS
+Jay	INJAY
+Jefferson	INJEF
+Jennings	INJEN
+Johnson	INJOH
+Knox	INKNO
+Kosciusko	INKOS
+Lagrange	INLAG
+Lake	INLAK
+LaPorte	INLAP
+Lawrence	INLAW
+Madison	INMAD
+Marion	INMRN
+Marshall	INMRS
+Martin	INMRT
+Miami	INMIA
+Monroe	INMNR
+Montgomery	INMNT
+Morgan	INMOR
+Newton	INNEW
+Noble	INNOB
+Ohio	INOHI
+Orange	INORA
+Owen	INOWE
+Parke	INPAR
+### TABLE 3
+County	INQPExchange
+Perry	INPER
+Pike	INPIK
+Porter	INPOR
+Posey	INPOS
+Pulaski	INPUL
+Putnam	INPUT
+Randolph	INRAN
+Ripley	INRIP
+Rush	INRUS
+Scott	INSCO
+Shelby	INSHE
+Spencer	INSPE
+Starke	INSTA
+Steuben	INSTE
+St. Joseph	INSTJ
+Sullivan	INSUL
+Switzerland	INSWI
+Tippecanoe	INTPP
+Tipton	INTPT
+Union	INUNI
+Vanderburgh	INVAN
+Vermillion	INVER
+Vigo	INVIG
+Wabash	INWAB
+Warren	INWRN
+Warrick	INWRK
+Washington	INWAS
+Wayne	INWAY
+Wells	INWEL
+White	INWHT
+Whitley	INWHL
