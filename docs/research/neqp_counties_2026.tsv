@@ -1,0 +1,78 @@
+# Source: https://neqp.org/neqp-county-abbreviations/   Fetched 2026-07-26.
+#
+# Four columns: State, County, 5-letter Abbreviation, Licensed Hams.  The
+#   STATE cell is filled only on the first row of each state's block.
+#
+# The sponsor gives the same rationale for 5-letter codes that 7QP does:
+#   'some county names are the same in each state (Middlesex is in MA and CT,
+#    for example). We prefer that logs use the full 5-letter abbreviations -
+#    state then county.'
+State	County	5-letter Abbreviation	Licensed Hams (as of Nov 2018)
+Connecticut	Capital Region	CTCAP	
+	Greater Bridgeport	CTGBR	
+	Lower CT River	CTLCR	
+	Naugatuck Valley	CTNAU	
+	Northeastern	CTNOE	
+	Northwest Hills	CTNOW	
+	Southeastern	CTSOE	
+	South Central	CTSOC	
+	Western	CTWES	
+Maine	Androscoggin	MEAND	244
+	Aroostook	MEARO	224
+	Cumberland	MECUM	705
+	Franklin	MEFRA	82
+	Hancock	MEHAN	194
+	Kennebec	MEKEN	367
+	Knox	MEKNO	140
+	Lincoln	MELIN	143
+	Oxford	MEOXF	191
+	Penobscot	MEPEN	424
+	Piscataquis	MEPIS	70
+	Sagadahoc	MESAG	122
+	Somerset	MESOM	137
+	Waldo	MEWAL	151
+	Washington	MEWAS	167
+	York	MEYOR	506
+Massachusetts	Barnstable	MABAR	656
+	Berkshire	MABER	335
+	Bristol	MABRI	967
+	Dukes	MADUK	30
+	Essex	MAESS	1300
+	Franklin	MAFRA	200
+	Hampden	MAHMD	705
+	Hampshire	MAHMP	331
+	Middlesex	MAMID	3973
+	Nantucket	MANAN	25
+	Norfolk	MANOR	1151
+	Plymouth	MAPLY	876
+	Suffolk	MASUF	406
+	Worcester	MAWOR	1690
+New Hampshire	Belknap	NHBEL	287
+	Carroll	NHCAR	147
+	Cheshire	NHCHE	275
+	Coos	NHCOO	94
+	Grafton	NHGRA	280
+	Hillsborough	NHHIL	1565
+	Merrimack	NHMER	528
+	Rockingham	NHROC	1118
+	Strafford	NHSTR	343
+	Sullivan	NHSUL	153
+Rhode Island	Bristol	RIBRI	57
+	Kent	RIKEN	396
+	Newport	RINEW	272
+	Providence	RIPRO	698
+	Washington	RIWAS	291
+Vermont	Addison	VTADD	124
+	Bennington	VTBEN	114
+	Caledonia	VTCAL	61
+	Chittenden	VTCHI	558
+	Essex	VTESS	16
+	Franklin	VTFRA	119
+	Grand Isle	VTGRA	20
+	Lamoille	VTLAM	56
+	Orange	VTORA	89
+	Orleans	VTORL	55
+	Rutland	VTRUT	178
+	Washington	VTWAS	203
+	Windham	VTWNH	111
+	Windsor	VTWND	152

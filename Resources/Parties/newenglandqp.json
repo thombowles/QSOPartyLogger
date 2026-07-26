@@ -1,0 +1,431 @@
+{
+  "schemaVersion": 1,
+  "id": "newenglandqp",
+  "name": "New England QSO Party",
+  "cabrilloContest": "NEQP",
+  "homeState": "CT",
+  "homeStates": [
+    "CT",
+    "MA",
+    "ME",
+    "NH",
+    "RI",
+    "VT"
+  ],
+  "inStateLabel": "New England",
+  "countyAbbrLength": 5,
+  "validBands": [
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "maxSimultaneousCounties": 1,
+  "provinces": [
+    "AB",
+    "BC",
+    "LB",
+    "MB",
+    "NB",
+    "NF",
+    "NS",
+    "NT",
+    "NU",
+    "ON",
+    "PE",
+    "QC",
+    "SK",
+    "YT"
+  ],
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-05-02T20:00:00Z",
+      "end": "2026-05-03T05:00:00Z"
+    },
+    {
+      "start": "2026-05-03T13:00:00Z",
+      "end": "2026-05-04T00:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "CTCAP",
+      "name": "Capital Region",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTGBR",
+      "name": "Greater Bridgeport",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTLCR",
+      "name": "Lower CT River",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTNAU",
+      "name": "Naugatuck Valley",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTNOE",
+      "name": "Northeastern",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTNOW",
+      "name": "Northwest Hills",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTSOC",
+      "name": "South Central",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTSOE",
+      "name": "Southeastern",
+      "state": "CT"
+    },
+    {
+      "abbr": "CTWES",
+      "name": "Western",
+      "state": "CT"
+    },
+    {
+      "abbr": "MABAR",
+      "name": "Barnstable",
+      "state": "MA"
+    },
+    {
+      "abbr": "MABER",
+      "name": "Berkshire",
+      "state": "MA"
+    },
+    {
+      "abbr": "MABRI",
+      "name": "Bristol",
+      "state": "MA"
+    },
+    {
+      "abbr": "MADUK",
+      "name": "Dukes",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAESS",
+      "name": "Essex",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAFRA",
+      "name": "Franklin",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAHMD",
+      "name": "Hampden",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAHMP",
+      "name": "Hampshire",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAMID",
+      "name": "Middlesex",
+      "state": "MA"
+    },
+    {
+      "abbr": "MANAN",
+      "name": "Nantucket",
+      "state": "MA"
+    },
+    {
+      "abbr": "MANOR",
+      "name": "Norfolk",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAPLY",
+      "name": "Plymouth",
+      "state": "MA"
+    },
+    {
+      "abbr": "MASUF",
+      "name": "Suffolk",
+      "state": "MA"
+    },
+    {
+      "abbr": "MAWOR",
+      "name": "Worcester",
+      "state": "MA"
+    },
+    {
+      "abbr": "MEAND",
+      "name": "Androscoggin",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEARO",
+      "name": "Aroostook",
+      "state": "ME"
+    },
+    {
+      "abbr": "MECUM",
+      "name": "Cumberland",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEFRA",
+      "name": "Franklin",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEHAN",
+      "name": "Hancock",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEKEN",
+      "name": "Kennebec",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEKNO",
+      "name": "Knox",
+      "state": "ME"
+    },
+    {
+      "abbr": "MELIN",
+      "name": "Lincoln",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEOXF",
+      "name": "Oxford",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEPEN",
+      "name": "Penobscot",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEPIS",
+      "name": "Piscataquis",
+      "state": "ME"
+    },
+    {
+      "abbr": "MESAG",
+      "name": "Sagadahoc",
+      "state": "ME"
+    },
+    {
+      "abbr": "MESOM",
+      "name": "Somerset",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEWAL",
+      "name": "Waldo",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEWAS",
+      "name": "Washington",
+      "state": "ME"
+    },
+    {
+      "abbr": "MEYOR",
+      "name": "York",
+      "state": "ME"
+    },
+    {
+      "abbr": "NHBEL",
+      "name": "Belknap",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHCAR",
+      "name": "Carroll",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHCHE",
+      "name": "Cheshire",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHCOO",
+      "name": "Coos",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHGRA",
+      "name": "Grafton",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHHIL",
+      "name": "Hillsborough",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHMER",
+      "name": "Merrimack",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHROC",
+      "name": "Rockingham",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHSTR",
+      "name": "Strafford",
+      "state": "NH"
+    },
+    {
+      "abbr": "NHSUL",
+      "name": "Sullivan",
+      "state": "NH"
+    },
+    {
+      "abbr": "RIBRI",
+      "name": "Bristol",
+      "state": "RI"
+    },
+    {
+      "abbr": "RIKEN",
+      "name": "Kent",
+      "state": "RI"
+    },
+    {
+      "abbr": "RINEW",
+      "name": "Newport",
+      "state": "RI"
+    },
+    {
+      "abbr": "RIPRO",
+      "name": "Providence",
+      "state": "RI"
+    },
+    {
+      "abbr": "RIWAS",
+      "name": "Washington",
+      "state": "RI"
+    },
+    {
+      "abbr": "VTADD",
+      "name": "Addison",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTBEN",
+      "name": "Bennington",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTCAL",
+      "name": "Caledonia",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTCHI",
+      "name": "Chittenden",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTESS",
+      "name": "Essex",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTFRA",
+      "name": "Franklin",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTGRA",
+      "name": "Grand Isle",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTLAM",
+      "name": "Lamoille",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTORA",
+      "name": "Orange",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTORL",
+      "name": "Orleans",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTRUT",
+      "name": "Rutland",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTWAS",
+      "name": "Washington",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTWND",
+      "name": "Windsor",
+      "state": "VT"
+    },
+    {
+      "abbr": "VTWNH",
+      "name": "Windham",
+      "state": "VT"
+    }
+  ],
+  "hubSpots": null,
+  "notes": "verified: partial - rules and the 68-multiplier list from neqp.org, read verbatim 2026-07-26; the rules page's own footer reads 'Last updated 4/27/2026'. THE SECOND MULTI-STATE PARTY, on the schema 7QP proved: ONE LOG COVERS ALL SIX MEMBER STATES (CT ME MA NH RI VT). The sponsor gives the SAME rationale for 5-letter codes that 7QP does, and says it outright: 'some county names are the same in each state (Middlesex is in MA and CT, for example). We prefer that logs use the full 5-letter abbreviations - state then county.' Middlesex is exactly that case here - CTMID and MAMID - which is why County.state earns its keep. CONNECTICUT NO LONGER USES COUNTIES: 'Note that CT switched from counties to Regional Councils of Government (2024)', so its nine multipliers are COGs - Capital Region, Naugatuck Valley, Northwest Hills and the rest - and Hartford, New Haven, Fairfield and Litchfield are NOT multipliers any more. The generator asserts both halves, so a source that predates 2024 fails loudly rather than shipping nine dead multipliers. THE SPONSOR'S OWN PER-STATE BREAKDOWN IS THE ARITHMETIC CHECK and it holds: CT/9 MA/14 ME/16 NH/10 RI/5 VT/14 = 68. Twenty hours in two legs on the first full weekend of May, and all four local glosses convert correctly. FIVE BANDS, 80 through 10 - no 160 m and no VHF. Points are phone 1 and CW 2, with DIGITAL EXPLICITLY SCORING AS CW ('two points per CW (includes digital modes)'). Multipliers count ONCE overall. New England entrants count states, provinces and DXCC countries, NOT counties - so a New England station working another earns points only. DC counts as Maryland. OPEN QUESTION 1: THE CANADIAN LIST HAS FOURTEEN ENTRIES AND THE SPONSOR NAMES NONE OF THEM. 'Canadian provinces(14 - VO1/VO2 are separate)' gives the count and the reason - Newfoundland and Labrador split - but no abbreviations. NF and LB ship, following North Dakota's and Quebec's lists, which are the only other sponsors in this app to split it; an operator should confirm the tokens before 2027. County lines are logged as two separate QSOs, so maxSimultaneousCounties is 1. No bonus points and no power multiplier: 'Total score is QSO points times the multiplier.' The Cabrillo CONTEST header is the one thing not from the sponsor - the rules ask for Cabrillo without naming it - so NEQP comes from WA7BNM under Article 1's exception."
+}

@@ -1,0 +1,18 @@
+Source: https://neqp.org/neqp-county-abbreviations/   Fetched 2026-07-26.
+The PROSE of that page, with its table removed - the table is banked
+  separately as neqp_counties_2026.tsv.  Kept apart so the sponsor's stated
+  rationale can be asserted against the sponsor's own words rather than
+  against a comment this repo wrote.
+========================================================================
+Note: some county names are the same in each state (Middlesex is in MA and CT, for example). We prefer that logs use the full 5-letter abbreviations – state then county.
+Click here for a map of New England counties.
+Recent Blog Posts
+Log parsing tool – N1MM+ IN7QPNEDE
+May 1, 2024
+W1DED’s NEQP Interview
+April 30, 2024
+CT: Town – Multiplier converter available
+April 8, 2024
+Resources
+Map of NE Counties
+County Abbreviations

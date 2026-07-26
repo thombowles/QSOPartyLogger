@@ -267,7 +267,7 @@
   },
   {
    "name": "New England QSO Party",
-   "partyID": null,
+   "partyID": "newenglandqp",
    "windows": [
     {
      "start": "2026-05-02T20:00:00Z",
