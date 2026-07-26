@@ -1,0 +1,64 @@
+# Source: http://ncqsoparty.org/wp-content/uploads/2022/11/NCQP_Abbreviations_221121.pdf
+# The sponsor's official county abbreviation sheet, dated 11/21/22 and still the one
+# linked from the 2026 rules page. Fetched: 2026-07-26
+#
+# THE ABBREVIATION IS ENCODED BY COLOUR, NOT BY CASE. The sheet's own subtitle says
+# '(Abbreviation in dark red capital letters: i.e. CAPS)'. gen_ncqp.py therefore reads
+# ncqp_abbreviations.html - pdftohtml -c output of this same PDF, which preserves the
+# colour - and takes the #cc0000 runs as the code. Case alone is NOT sufficient:
+# 'NEW Hanover' has a capital H that is BLACK, so the code is NEW and not NEWH.
+
+                                                                                               11/21/22
+                       North Carolina QSO Party Abbreviations
+                    (Abbreviation in dark red capital letters: i.e. CAPS)
+
+___ALAmance               ___CUMberland           ___JOHnston            ___RANdolph
+___ALExander              ___CURrituck            ___JONes               ___RIChmond
+___ALLeghany              ___DARe                 ___LEE                 ___ROBeson
+___ANSon                  ___DaViDson             ___LENoir              ___ROCkingham
+___ASHe                   ___DAVie                ___LINcoln             ___ROWan
+___AVEry                  ___DUPlin               ___MACon               ___RUTherford
+___BEAufort               ___DURham               ___MADison             ___SAMpson
+___BERtie                 ___EDGecombe            ___MARtin              ___SCOtland
+___BLAden                 ___FORsyth              ___MCDowell            ___STAnly
+___BRUnswick              ___FRAnklin             ___MECklenburg         ___STOkes
+___BUNcombe               ___GASton               ___MITchell            ___SURry
+___BURke                  ___GATes                ___MONtgomery          ___SWAin
+___CABarrus               ___GRahaM               ___MOOre               ___TRAnsylvania
+___CALdwell               ___GRAnville            ___NASh                ___TYRrell
+___CAMden                 ___GREene               ___NEW Hanover         ___UNIon
+___CARteret               ___GUIlford             ___NORthampton         ___VANce
+___CASwell                ___HALifax              ___ONSlow              ___WAKe
+___CATawba                ___HARnett              ___ORAnge              ___WARren
+___CHAtham                ___HAYwood              ___PAMlico             ___WAShington
+___CHErokee               ___HENderson            ___PASquotank          ___WATauga
+___CHOwen                 ___HERtford             ___PENder              ___WAYne
+___CLAy                   ___HOKe                 ___PErQuimans          ___WiLKes
+___CLEveland              ___HYDe                 ___PERson              ___WILson
+___COLumbus               ___IREdell              ___PITt                ___YADkin
+___CRAven                 ___JACkson              ___POLk                ___YANcey
+
+Additional Multipliers for NC Stations (States, District of Columbia, and Canadian Provinces & Territories)
+___ AL Alabama                     ___ MN Minnesota               ___ WA Washington
+___ AK Alaska                      ___ MS Mississippi             ___ WV West Virginia
+___ AZ Arizona                     ___ MO Missouri                ___ WI Wisconsin
+___ AR Arkansas                    ___ MT Montana                 ___ WY Wyoming
+___ CA California                  ___ NE Nebraska
+___ CT Connecticut                 ___ NH New Hampshire
+___ CO Colorado                    ___ NV Nevada
+___ DC District of Columbia        ___ NJ New Jersey              ___ AB Alberta
+___ DE Delaware                    ___ NM New Mexico              ___ BC British Columbia
+___ FL Florida                     ___ NY New York                ___ MB Manitoba
+___ GA Georgia                     ___ ND North Dakota            ___ NB New Brunswick
+___ HI Hawaii                      ___ OH Ohio                    ___ NL Newfoundland and Labrador
+___ ID Idaho                       ___ OK Oklahoma                ___ NS Nova Scotia
+___ IL Illinois                    ___ OR Oregon                  ___ NT Northwest Territories
+___ IN Indiana                     ___ PA Pennsylvania            ___ NU Nunavut (Territory)
+___ IA Iowa                        ___ RI Rhode Island            ___ ON Ontario
+___ KS Kansas                      ___ SC South Carolina          ___ PE Prince Edward Island
+___ KY Kentucky                    ___ SD South Dakota            ___ QC Quebec
+___ LA Louisiana                   ___ TN Tennessee               ___ SK Saskatchewan
+___ ME Maine                       ___ TX Texas                   ___ YT Yukon (Territory)
+___ MD Maryland                    ___ UT Utah
+___ MA Massachusetts               ___ VT Vermont
+___ MI Michigan                    ___ VA Virginia                ___ DX Other DX Country

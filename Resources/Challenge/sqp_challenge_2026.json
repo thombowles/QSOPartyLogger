@@ -49,7 +49,7 @@
   },
   {
    "name": "North Carolina QSO Party",
-   "partyID": null,
+   "partyID": "ncqp",
    "windows": [
     {
      "start": "2026-03-01T15:00:00Z",

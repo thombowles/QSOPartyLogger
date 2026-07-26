@@ -60,6 +60,20 @@ Built for KE5CW. Bundled parties, all with official county data:
   the rules cap county-line operation nowhere, and SC mobile/expedition entrants
   undercount, since their per-county-activated **multiplier** is modelled here
   only as a bonus.
+- **North Carolina QSO Party** (Mar 1, 2026) — ten hours, Sunday only. 100
+  counties, and **the sponsor encodes each code as the dark-red letters of the
+  county name**, not as its capitals: `CABarrus` is `CAB`, `DaViDson` is `DVD`.
+  New Hanover proves the two rules differ — its capital `H` is black, so the code
+  is `NEW`, not `NEWH` — so [`gen_ncqp.py`](docs/research/gen_ncqp.py) reads the
+  PDF's colour and cross-checks all ten "Rarest of NC" codes against the rules.
+  Phone 2 / CW 3 / **digital 5**, the only bundled party where digital outscores
+  CW; multipliers count once overall to the sponsor's stated 164. No 160 m.
+  **`verified: partial`, and this one's gaps are the largest in the app**: QSOs
+  with ten designated "Rarest of NC" counties are worth **10×** *before*
+  multiplication, and five of those ten pays a further 500 — neither is
+  expressible, so an NCQP score here is a floor, with the correcting arithmetic
+  spelled out in the party's notes. FT8/FT4 belong to a separate Weak Signal
+  Showcase and must be kept out of this log.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -212,10 +226,10 @@ Built for KE5CW. Bundled parties, all with official county data:
 
 **Every US state and regional QSO party running from 2026-07-24 through
 2026-12-31 is bundled**, and the season's earlier parties are being added in
-contest-date order — Vermont, Minnesota, British Columbia and South Carolina are
-in. The 2026 season runs Feb 7 → Oct 18; two independent calendars agree there is
-no state or provincial party in January, November or December. **25 parties from
-February through June remain**, listed in
+contest-date order — Vermont, Minnesota, British Columbia, South Carolina and
+North Carolina are in. The 2026 season runs Feb 7 → Oct 18; two independent
+calendars agree there is no state or provincial party in January, November or
+December. **24 parties from March through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -695,7 +709,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1086 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1109 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1022,6 +1036,19 @@ station profile, radio wiring and cluster history untouched.
   [`gen_scqp.py`](docs/research/gen_scqp.py) asserts all four of the sponsor's
   point sentences, because the pay-by-who-was-worked shape is the easiest thing
   here to get backwards.
+- NCQP: rules from the North Carolina QSO Party Committee's official 2026 PDF
+  ("Updated 10/13/2025") plus the sponsor's county abbreviation sheet, both read
+  verbatim 2026-07-26. **The abbreviation is encoded by colour, not by case** —
+  the sheet prints each county name with its code in dark red and says so — so
+  [`gen_ncqp.py`](docs/research/gen_ncqp.py) parses `pdftohtml -c` output and
+  takes the `#cc0000` runs as the code, while taking the *names* from the plain
+  text (pdftohtml pads every run, making a mid-word boundary indistinguishable
+  from the real space in "New Hanover"). The cross-check is the rules PDF, which
+  prints ten codes in plain text for the "Rarest of NC" counties; all ten agree.
+  Independent validation: 99 of the 100 names match the real North Carolina
+  county list exactly, and the hundredth is the sponsor's own typo — the sheet
+  spells Chowan "Chowen", which ships as printed and is asserted, the same call
+  the repo makes for NHQP's "Merrimac".
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -1057,7 +1084,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 22 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 23 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

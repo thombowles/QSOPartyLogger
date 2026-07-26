@@ -8,9 +8,9 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **25 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
-  Vermont, Minnesota, British Columbia and South Carolina were built the same
-  day, clearing February.
+- **24 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+  February is clear (Vermont, Minnesota, British Columbia, South Carolina) and
+  North Carolina opens March.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -116,9 +116,9 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**25 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**24 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 21 US + 4 Canadian. Research is banked for none of them.
+next one built". 20 US + 4 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
@@ -126,7 +126,7 @@ next one built". 21 US + 4 Canadian. Research is banked for none of them.
 | ~~2~~ | ~~Minnesota~~ | ~~Feb 7 1400Z → Feb 7 2400Z~~ | **done** 2026-07-26 — [`mnqp_rules.md`](../research/mnqp_rules.md), `verified: partial` |
 | ~~3~~ | ~~British Columbia~~ | ~~Feb 7 1600Z → Feb 8 0359Z; Feb 8 1600–2359Z~~ | **done** 2026-07-26 — [`bcqp_rules.md`](../research/bcqp_rules.md), `verified: partial` |
 | ~~4~~ | ~~South Carolina~~ | ~~Feb 28 1500Z → Mar 1 0159Z~~ | **done** 2026-07-26 — [`scqp_rules.md`](../research/scqp_rules.md), `verified: partial` |
-| 5 | North Carolina | Mar 1 1500Z → Mar 2 0100Z | 100 counties |
+| ~~5~~ | ~~North Carolina~~ | ~~Mar 1 1500Z → Mar 2 0100Z~~ | **done** 2026-07-26 — [`ncqp_rules.md`](../research/ncqp_rules.md), `verified: partial` |
 | 6 | Oklahoma | Mar 14 1400Z → Mar 15 0200Z; Mar 15 1400–2200Z | |
 | 7 | Idaho | Mar 14 1600Z → Mar 15 0400Z; Mar 15 1400Z → Mar 16 0200Z | also a 7QP state |
 | 8 | Wisconsin | Mar 15 1800Z → Mar 16 0100Z | |
@@ -157,11 +157,11 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**23 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**24 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
-pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP** and **SCQP**
-from the reopened first-half season, all built 2026-07-26. Every row below is
-struck.
+pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP**, **SCQP** and
+**NCQP** from the reopened first-half season, all built 2026-07-26. Every row
+below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
@@ -263,6 +263,34 @@ its own commit (Article 4).
   *Still worth checking when Pennsylvania is built: if PAQP also exchanges a QSO
   number, it now just sets the flag.*
 
+- **NO POINTS-BY-COUNTY, and no named-subset sweep — NCQP needs both, and
+  together they are now the largest scoring gap in the repo.** Added 2026-07-26.
+
+  *(a) Points by county.* NCQP designates ten "Rarest of NC" counties and pays
+  **10× QSO points** for working them — phone 20, CW 30, digital 50 — and the
+  sponsor stresses the placement: *"These points are added to the rest of the
+  regular QSO Points **prior to MULT multiplication** so they have a significant
+  positive effect on the final score."* `PointsTable` is keyed by mode alone.
+  Sketch: an optional `bonusCountyPoints: {counties: [...], factor: Int}` (or an
+  explicit per-mode table) consulted by
+  `PartyDefinition.pointsTable(forTheirLoc:countyAbbrs:)` — **the hook already
+  exists**, since that method already takes the received location and already
+  chooses between two tables for `homeStationPoints`. This is the cheapest of the
+  outstanding gaps and the highest-value; build it first.
+
+  *(b) Named-subset sweep.* *"If at least one QSO is made with a station in five
+  of the 'Rarest of NC' counties, 500 additional bonus points are added to the
+  score after multiplication."* `BonusRule.sweepTiers` lands in the right place
+  but counts `workedValues(.county).count` — *any* counties — so reusing it would
+  pay nearly every log. Sketch: a `sweepOf(counties: [String], need: Int, points:
+  Int)` case; only the predicate is new.
+
+  **Both affect every entrant, in state and out** — unlike SCQP's activation
+  multiplier or VTQP's power factor, which each hit one class of operator. Until
+  they are built an NCQP score is a floor; `ncqp.json` gives the operator the
+  correcting arithmetic, and
+  `NorthCarolinaQSOPartyTests.testKnownGapRarestCountiesDoNotPayTenTimes` and
+  `…testKnownGapTheFiveRareCountySweepIsNotPaid` pin the current behaviour.
 - **FRACTIONAL SCORE MULTIPLIERS — the largest single scoring gap in the repo,
   and the next commit that should be made.** `ScoreMultipliers` is
   `[String: Int]`, and VTQP's power multiplier is **QRP ×2, LOW POWER ×1.5, high
@@ -359,6 +387,8 @@ its own commit (Article 4).
   matching 500-point *bonus* is modeled (`activatedCountyCount`); the extra
   *multiplier* is not, so a TN mobile/rover sees a slightly low multiplier count.
   COQP turned out **not** to need it — its activation rule is a bonus only.
+
+  **NCQP is the third user, added 2026-07-26**, and in its broadest form yet: *"NC stations may include the county from which operation takes place in the Multiplier count **regardless of whether any QSOs are logged from that same county**"* — so a fixed NC station counts its own county unconditionally. Three sponsors, three scopes (TnQP once, SCQP per band per mode, NCQP once and unconditional), which settles that the field must carry its scope rather than assume one.
 
   **SCQP rule 9.2.2 is the second user**, and states it as a multiplier outright:
   SC Mobile and Expedition stations count "Each SC county activated. At least one
