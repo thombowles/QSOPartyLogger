@@ -1,0 +1,490 @@
+{
+  "schemaVersion": 1,
+  "id": "neqp",
+  "name": "Nebraska QSO Party",
+  "cabrilloContest": "NE-QSO-PARTY",
+  "homeState": "NE",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m",
+    "1.25m",
+    "70cm"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 3,
+    "digital": 1
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "KA0BOJ",
+      "points": 100,
+      "scope": "once"
+    },
+    {
+      "type": "workStation",
+      "call": "K0SMM",
+      "points": 50,
+      "scope": "once"
+    },
+    {
+      "type": "workStation",
+      "call": "K0RPT",
+      "points": 50,
+      "scope": "once"
+    },
+    {
+      "type": "workStation",
+      "call": "K0NEB",
+      "points": 50,
+      "scope": "once"
+    },
+    {
+      "type": "workStation",
+      "call": "NF0N",
+      "points": 50,
+      "scope": "once"
+    },
+    {
+      "type": "workStation",
+      "call": "N0FER",
+      "points": 50,
+      "scope": "once"
+    },
+    {
+      "type": "workStation",
+      "call": "KE0XQ",
+      "points": 50,
+      "scope": "once"
+    }
+  ],
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "maxSimultaneousCounties": 2,
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "scoreMultipliers": {
+    "power": {
+      "QRP": 5,
+      "LOW": 2,
+      "HIGH": 1
+    }
+  },
+  "schedule": [
+    {
+      "start": "2026-04-25T14:00:00Z",
+      "end": "2026-04-27T02:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ADMS",
+      "name": "Adams"
+    },
+    {
+      "abbr": "ANTE",
+      "name": "Antelope"
+    },
+    {
+      "abbr": "ARTH",
+      "name": "Arthur"
+    },
+    {
+      "abbr": "BANN",
+      "name": "Banner"
+    },
+    {
+      "abbr": "BLAI",
+      "name": "Blaine"
+    },
+    {
+      "abbr": "BOON",
+      "name": "Boone"
+    },
+    {
+      "abbr": "BOXB",
+      "name": "Box Butte"
+    },
+    {
+      "abbr": "BOYD",
+      "name": "Boyd"
+    },
+    {
+      "abbr": "BRWN",
+      "name": "Brown"
+    },
+    {
+      "abbr": "BUFF",
+      "name": "Buffalo"
+    },
+    {
+      "abbr": "BURT",
+      "name": "Burt"
+    },
+    {
+      "abbr": "BUTL",
+      "name": "Butler"
+    },
+    {
+      "abbr": "CASS",
+      "name": "Cass"
+    },
+    {
+      "abbr": "CEDA",
+      "name": "Cedar"
+    },
+    {
+      "abbr": "CHAS",
+      "name": "Chase"
+    },
+    {
+      "abbr": "CHER",
+      "name": "Cherry"
+    },
+    {
+      "abbr": "CHEY",
+      "name": "Cheyenne"
+    },
+    {
+      "abbr": "CLAY",
+      "name": "Clay"
+    },
+    {
+      "abbr": "COLF",
+      "name": "Colfax"
+    },
+    {
+      "abbr": "CUMI",
+      "name": "Cumming"
+    },
+    {
+      "abbr": "CUST",
+      "name": "Custer"
+    },
+    {
+      "abbr": "DAKO",
+      "name": "Dakota"
+    },
+    {
+      "abbr": "DAWE",
+      "name": "Dawes"
+    },
+    {
+      "abbr": "DAWS",
+      "name": "Dawson"
+    },
+    {
+      "abbr": "DEUE",
+      "name": "Deuel"
+    },
+    {
+      "abbr": "DGLS",
+      "name": "Douglas"
+    },
+    {
+      "abbr": "DIXO",
+      "name": "Dixon"
+    },
+    {
+      "abbr": "DODG",
+      "name": "Dodge"
+    },
+    {
+      "abbr": "DUND",
+      "name": "Dundy"
+    },
+    {
+      "abbr": "FILL",
+      "name": "Fillmore"
+    },
+    {
+      "abbr": "FRNK",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "FRON",
+      "name": "Frontier"
+    },
+    {
+      "abbr": "FURN",
+      "name": "Furnas"
+    },
+    {
+      "abbr": "GAGE",
+      "name": "Gage"
+    },
+    {
+      "abbr": "GARD",
+      "name": "Garden"
+    },
+    {
+      "abbr": "GARF",
+      "name": "Garfield"
+    },
+    {
+      "abbr": "GOSP",
+      "name": "Gosper"
+    },
+    {
+      "abbr": "GRAN",
+      "name": "Grant"
+    },
+    {
+      "abbr": "GREE",
+      "name": "Greeley"
+    },
+    {
+      "abbr": "HALL",
+      "name": "Hall"
+    },
+    {
+      "abbr": "HAMI",
+      "name": "Hamilton"
+    },
+    {
+      "abbr": "HAYE",
+      "name": "Hayes"
+    },
+    {
+      "abbr": "HITC",
+      "name": "Hitchcock"
+    },
+    {
+      "abbr": "HOLT",
+      "name": "Holt"
+    },
+    {
+      "abbr": "HOOK",
+      "name": "Hooker"
+    },
+    {
+      "abbr": "HOWA",
+      "name": "Howard"
+    },
+    {
+      "abbr": "HRLN",
+      "name": "Harlan"
+    },
+    {
+      "abbr": "JEFF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JOHN",
+      "name": "Johnson"
+    },
+    {
+      "abbr": "KEAR",
+      "name": "Kearney"
+    },
+    {
+      "abbr": "KEIT",
+      "name": "Keith"
+    },
+    {
+      "abbr": "KEYA",
+      "name": "Keya Paha"
+    },
+    {
+      "abbr": "KIMB",
+      "name": "Kimball"
+    },
+    {
+      "abbr": "KNOX",
+      "name": "Knox"
+    },
+    {
+      "abbr": "LINC",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "LNCS",
+      "name": "Lancaster"
+    },
+    {
+      "abbr": "LOGA",
+      "name": "Logan"
+    },
+    {
+      "abbr": "LOUP",
+      "name": "Loup"
+    },
+    {
+      "abbr": "MCPH",
+      "name": "McPherson"
+    },
+    {
+      "abbr": "MDSN",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MERR",
+      "name": "Merrick"
+    },
+    {
+      "abbr": "MORR",
+      "name": "Morrill"
+    },
+    {
+      "abbr": "NANC",
+      "name": "Nance"
+    },
+    {
+      "abbr": "NEMA",
+      "name": "Nemaha"
+    },
+    {
+      "abbr": "NUCK",
+      "name": "Nuckolls"
+    },
+    {
+      "abbr": "OTOE",
+      "name": "Otoe"
+    },
+    {
+      "abbr": "PAWN",
+      "name": "Pawnee"
+    },
+    {
+      "abbr": "PERK",
+      "name": "Perkins"
+    },
+    {
+      "abbr": "PHEL",
+      "name": "Phelps"
+    },
+    {
+      "abbr": "PIER",
+      "name": "Pierce"
+    },
+    {
+      "abbr": "PLAT",
+      "name": "Platte"
+    },
+    {
+      "abbr": "POLK",
+      "name": "Polk"
+    },
+    {
+      "abbr": "REDW",
+      "name": "Red Willow"
+    },
+    {
+      "abbr": "RICH",
+      "name": "Richardson"
+    },
+    {
+      "abbr": "ROCK",
+      "name": "Rock"
+    },
+    {
+      "abbr": "SALI",
+      "name": "Saline"
+    },
+    {
+      "abbr": "SARP",
+      "name": "Sarpy"
+    },
+    {
+      "abbr": "SAUN",
+      "name": "Saunders"
+    },
+    {
+      "abbr": "SCOT",
+      "name": "Scottsbluff"
+    },
+    {
+      "abbr": "SEWA",
+      "name": "Seward"
+    },
+    {
+      "abbr": "SHRD",
+      "name": "Sheridan"
+    },
+    {
+      "abbr": "SHRM",
+      "name": "Sherman"
+    },
+    {
+      "abbr": "SIOU",
+      "name": "Sioux"
+    },
+    {
+      "abbr": "STAN",
+      "name": "Stanton"
+    },
+    {
+      "abbr": "THAY",
+      "name": "Thayer"
+    },
+    {
+      "abbr": "THOM",
+      "name": "Thomas"
+    },
+    {
+      "abbr": "THUR",
+      "name": "Thurston"
+    },
+    {
+      "abbr": "VLLY",
+      "name": "Valley"
+    },
+    {
+      "abbr": "WASH",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAYN",
+      "name": "Wayne"
+    },
+    {
+      "abbr": "WEBS",
+      "name": "Webster"
+    },
+    {
+      "abbr": "WHEE",
+      "name": "Wheeler"
+    },
+    {
+      "abbr": "YORK",
+      "name": "York"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/neqp-table.php",
+    "postURL": "http://qsopartyhub.com/neqp-spots.php"
+  },
+  "notes": "verified: partial - rules from the Nebraska QSO Party Committee's own site, read verbatim 2026-07-26; entries go to Matt Anderson KA0BOJ, the ARRL Nebraska Section Manager. TWO RETRIEVAL TRAPS. FIRST, nebraskaqsoparty.ORG IS NOT THE SPONSOR: it is a GoDaddy content-farm page with no rules, no dates and no county list, linking out to a law firm and Nielsen radio ratings. The sponsor is nebraskaqsoparty.COM, and the .org is banked as a counter-example. SECOND, THE CURRENT RULES LIVE AT A URL THAT SAYS 2022 - the sponsor edits one post in place, so 'rules-for-2022-nebraska-qso-party' serves the 2026 rules; the body is rendered client-side and absent from both the HTML and the site's own feeds. OPEN QUESTION 1: IS THE START 1400Z OR 1300Z? April is CDT, UTC-5, so 1400 UTC is 9:00 AM CDT - but the rules gloss it '(8:00 AM CDT)' and gloss the 0200 UTC finish '(08:00 PM CDT)' where it is 9:00 PM. Both parentheticals are one hour off, consistently, as if computed with the CST offset. WA7BNM trusted the local times and publishes 1300Z-0100Z; the SQP Challenge calendar trusted the UTC. THE SPONSOR'S OWN UTC FIGURES SHIP per Article 19, so an operator starting at 1400Z loses the first hour if 1300Z was meant - worth an email before 2027. THIRTY-SIX HOURS IN ONE UNBROKEN WINDOW, joint-longest with Hawaii and behind only Vermont's 48: 'no scheduled breaks and you can operate the ENTIRE time scheduled'. The rules say the finish is 'Sunday April 27th', which mislabels the weekday - the 27th is a Monday - but the UTC DATE IS RIGHT, since Sunday evening in Nebraska is Monday in UTC. TEN BANDS - 160 through 10, 6 m, and 'all VHF/UHF bands are allowed', less WARC; Vermont and New York carry more. Points run 1 for digital, 2 for phone, 3 for CW. THE POWER MULTIPLIER FITS - QRP x5, under 100 W x2, over 100 W x1, all whole numbers - making this the second party after New Mexico to ship one, with the identical 5/2/1 shape. Multipliers count ONCE OVERALL. Nebraska is inside 'the maximum number of states worked is 50' - fifty, not forty-nine - and NE stations send counties, so homeStateCountsViaCounty is true. SEVEN BONUS STATIONS, the ARRL section appointees: KA0BOJ the Section Manager at 100 points and six others at 50, parsed from the sponsor's own table rather than typed. OPEN QUESTION 2: ARE THEY ONCE OR PER QSO? '100 bonus points for ANY QSO with...' is ambiguous; scope 'once' ships as the conservative reading, and per-QSO across eleven bands and three modes would dominate the score, which argues the same way. County lines allow two counties, logged as two rows from one exchange - CountyLineExpander described from the sponsor's side. RST IS OPTIONAL HERE, which no other bundled party says; the field still ships, because having it costs nothing and hiding it would lose information the sponsor accepts. THREE THINGS ARE DELIBERATELY NOT MODELLED. KNOWN LIMITATION 1 - THE FT8/FT4 COMPETITION IS A WHOLE SECOND CONTEST: its own 2 points per QSO, its own multiplier class (GRID SQUARES, capped at 13 for out-of-state entrants), its own power multiplier fixed at 1, its own log and its own final-score formula. The schema describes one contest per party, so a party with two parallel scoring systems has no representation; FT8 entrants are out of scope, which the rules make a supported way to enter rather than a defect. The 'not FT8/FT4' exclusion inside the MAIN contest is separately the same gap Illinois and North Dakota have - third user. KNOWN LIMITATION 2 - SATELLITE QSOs CANNOT BE SCORED: ModeClass has phone, CW and digital, and satellite is a fourth thing here worth 4 points, so a satellite QSO scores whichever mode it is logged under. First user of that gap. KNOWN LIMITATION 3 - THE RARE GRID BONUS IS NOT MODELLED: it pays on activating one of three named grid squares (DN91CE, DN91DE, DN91EE) and the app has no notion of the operator's grid; the rule's own worked example is internally muddled too. The Cabrillo CONTEST header is the one thing not from the sponsor - the rules demand Cabrillo without naming it - so NE-QSO-PARTY comes from WA7BNM under Article 1's exception. SPONSOR MISSPELLING SHIPPED AS PRINTED: CUMI is 'Cumming' where Nebraska's county is Cuming, one m. The county list is the sponsor's own PDF, which the rules describe candidly - 'It is the same list used in 2016' - so its 2022 file date is intent, not staleness."
+}

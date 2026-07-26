@@ -213,7 +213,7 @@
   },
   {
    "name": "Nebraska QSO Party",
-   "partyID": null,
+   "partyID": "neqp",
    "windows": [
     {
      "start": "2026-04-25T14:00:00Z",

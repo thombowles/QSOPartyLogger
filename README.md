@@ -212,6 +212,17 @@ Built for KE5CW. Bundled parties, all with official county data:
   `dxStyle: token` **is** the rule rather than an approximation — "only one DX
   multiplier is given". The sponsor publishes in French *and* English, and the
   two editions disagree about `NT`. `verified: partial`.
+- **Nebraska QSO Party** (Apr 25–26, 2026) — **36 unbroken hours**, the most
+  feature-rich party of the season, and the one with the worst provenance
+  hazards. `nebraskaqsoparty.org` is **not** the sponsor: it is a content-farm
+  page with no rules, no dates and no county list. The real rules live on the
+  `.com` at a URL still reading `rules-for-2022`, and render client-side. 93
+  counties, seven bonus stations (the ARRL section appointees, KA0BOJ at 100 and
+  six at 50), and a power multiplier that fits — QRP ×5, low ×2, high ×1. **The
+  only bundled party where digital pays less than phone.** Three things are
+  deliberately not modelled: the FT8/FT4 *second contest* with its own
+  grid-square multipliers, satellite QSOs, and the rare-grid bonus.
+  `verified: partial`, with the start hour an open question.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -366,10 +377,10 @@ Built for KE5CW. Bundled parties, all with official county data:
 2026-12-31 is bundled**, and the season's earlier parties are being added in
 contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
 Carolina, Oklahoma, Idaho, Wisconsin, Virginia, Louisiana, Mississippi,
-Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario and Quebec are
-in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
+Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec and
+Nebraska are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
 agree there is no state or provincial party in January, November or December.
-**11 parties from April through June remain**, listed in
+**10 parties from April through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -849,7 +860,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1396 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1422 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1323,6 +1334,18 @@ station profile, radio wiring and cluster history untouched.
   tell that it was appended late. All fourteen ship as printed, since refusing
   one would block a legal exchange. The home page flags the 2026 hours as new,
   so a pre-2026 source has the wrong window.
+- NEQP: rules from the Nebraska QSO Party Committee's own site, read verbatim
+  2026-07-26. **Two retrieval traps, both banked.** `nebraskaqsoparty.org` has
+  the obvious name and is a GoDaddy content farm — generic prose, no rules, no
+  dates, no county list, outbound links to a law firm and Nielsen radio
+  ratings; it is banked as a *counter-example* so a later session recognises it.
+  The sponsor is the `.com`, whose current rules sit at
+  `…/f/rules-for-2022-nebraska-qso-party` because it edits one post in place,
+  and whose body is absent from both the HTML and the site's own feeds.
+  **The sponsor also contradicts itself about the start hour**: 1400 UTC is 9 AM
+  CDT, but the rules gloss it "8:00 AM CDT" — WA7BNM trusted the local times and
+  publishes 1300Z. The sponsor's own UTC ships, per Article 19, recorded as an
+  open question.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -1358,7 +1381,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 36 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 37 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

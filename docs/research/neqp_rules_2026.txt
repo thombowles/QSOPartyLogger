@@ -1,0 +1,157 @@
+Source: https://nebraskaqsoparty.com/qso-party-rules/f/rules-for-2022-nebraska-qso-party
+  Post title: "Rules for 2026 Nebraska QSO Party", dated January 5, 2025.
+Sponsor: Nebraska QSO Party Committee; entries to Matt Anderson KA0BOJ, the
+  ARRL Nebraska Section Manager.
+Fetched: 2026-07-26.
+
+TWO RETRIEVAL TRAPS, both worth recording:
+
+1. THE SLUG SAYS 2022.  The sponsor edits one post in place rather than
+   publishing a new one each year, so the CURRENT rules live at a URL reading
+   "rules-for-2022-nebraska-qso-party".  The title and the body are 2026, and
+   the body's "Highlights for this Year" names the 2026 changes.
+
+2. nebraskaqsoparty.ORG IS NOT THE SPONSOR.  That domain serves a GoDaddy
+   content-farm page: generic prose about what a QSO party is, no rules, no
+   dates, no county list, and outbound links to a law firm, Nielsen radio
+   ratings, two universities and NPR.  It was last modified the same day this
+   was fetched.  The sponsor is nebraskaqsoparty.COM, which WA7BNM links.
+
+The rules body is rendered client-side and is absent from the static HTML and
+  from the site's own RSS and JSON feeds, which carry only the title line.  The
+  text below was taken from the rendered page.
+========================================================================
+2026 NEBRASKA QSO PARTY RULES
+
+Highlights for this Year
+
+· The QSO Party will be April this year..
+
+· Will be two days: Saturday April 25th and Sunday April 26th. · There is a new website, www.nebraskaqsoparty.com .
+
+  NEW CATAGORIES.  Multi and TEAM NEBRASKA
+
+· FT8/FT4 with exchange of grid square is allowed, but only in a separate competition.
+
+· A 100 point BONUS is given for a QSO with KAØBOJ Nebraska SM...PLUS.... new bonuses for for all other Nebraska Section Appointees worth 50 points each!  See list below.
+
+· For the QSO exchange, signal reports are optional.
+
+General Information
+
+Objective. Stations outside of Nebraska to work as many Nebraska stations/counties as possible. Stations in Nebraska to work everyone.
+
+Dates/Times. The QSO Party (QP) will be held over two days.  The QP will be April 25-26.
+The first day of the QP will start Saturday, April 25th, 1400 UTC (8:00 AM CDT Sat, ) and end Sunday April 27th at 0200 UTC (08:00 PM CDT), Their are no scheduled breaks and you can operate the ENTIRE time scheduled.  We have done this to maximize the opportunity to make contacts with as many Nebraska Stations as possible.  Good hunting.
+
+Modes. For the regularly scored contest, modes are CW, Phone (SSB, AM, FM) and Digital (RTTY, PSK, and other digital modes, but not FT8/FT4). We encourage FT8/FT4 participation exchanging grid square, but it will be scored separately. See separate description of the FT8/FT4 rules.
+
+Satellite. Plus a new category for satellite QSO's of 4 points each
+
+Exchange. For all modes except FT8/FT4 grid-square, stations outside of Nebraska send State, Canadian Province or DXCC Country (S/P/C). Stations in Nebraska send NE county. For FT8-grid-square, stations exchange grid square. For all modes, exchange of signal report is optional.
+
+Recommended Frequencies. On CW, suggested frequencies are +/- 1.805, and on other bands 35+ kHz up from the lower band edge. On Phone suggested frequencies are +/- 1.915 and near, but not on, 3.865, 7.265, 14.265, 21.365, and 28.465; and 50.175. For FT8, 1.840+, 3.573+, 7.074+, 14.074+, 21.074+, and 28.074+.
+
+All VHF/UHF bands are allowed. WARC band contacts do not count. Please be courteous of stations that may have scheduled operations on the various bands.
+
+Entry Classes. There are SIX: Out-Of-State, Nebraska Fixed, Nebraska Mobile/Portable, Multi (please state number of operators) and TEAM NEBRASKA (State number of participating stations in your team)  Also a new category of Satellite.  All contacts regardless of mode are 4 points.
+
+Scoring (except for FT8/FT4 grid-square)
+
+Final Score equals (QSO Points x Power Multiplier x Geo Multiplier) plus Bonus points.
+
+A Summary Sheet (provided separately) should help guide the scoring. Summary Sheets can be downloaded, and filled in using the "Fill & Sign" mode of Adobe Acrobat. Save the "filled-in" form with your call in the file name, and attach it to your email.
+
+Some QSO Party logging software does not provide complete summaries.
+
+QSO Points. Contacts with the same station on different bands are considered unique, and contacts with the same station on the same band but with different modes are also considered unique. QSOs with the same mobile/portable station from different counties are also considered unique, even on the same band and/or with the same mode.
+
+Each unique digital contact is 1 points, Phone is worth 2 points, CW is worth 3 points and Satellite is worth 4 points.
+
+Power Multiplier. For all stations regardless of class/mode, there is a single Power Multiplier based on the maximum transmitted power output used during the QSO Party. If all QSOs are made QRP (5 watts or less) the power multiplier is 5; if less than 100 watts, the multiplier is 2; otherwise the power multiplier is 1 for over 100 watts.
+
+Geo Multiplier. For stations outside of Nebraska, this multiplier is the total number of Nebraska counties worked. Count each Nebraska county only once per contest. The multiplier for out-of-state stations has a maximum of 93 counties.
+
+For stations in Nebraska (either fixed or mobile/portable) the multiplier is the total number of Nebraska counties worked plus the total number of States/Provinces/Countries (S/P/C) worked. The maximum number of states worked is 50, and the maximum number of Canadian provinces worked is 13. Count each Nebraska county, and each S/P/C, only once per contest.
+
+For Nebraska mobile/portable stations, calculate the geographic multiplier as above for all QSOs without regard to county of operation, band, or mode. Count each S/P/C and county only once per contest.
+
+RARE GRID BONUS For the following grid squares (DN91CE, DN91DE, DN91EE) if you activate in them you will receive a bonus of 5 points per QSO.  Example if you make a phone QSO that is 2 points and a CW QSO that is 3 points for a total of 5 points.  Then you take your total score from the unique grid only QSO's.  Take that total and in this example 5 points times the rare grid multiplier of 5 for a bonus of 25 points.  (No mobile multiplier of 3 in the RARE GRID BONUS)
+
+NOTE. A list of Nebraska County abbreviations is provided on the website. It is the same list used in 2016.
+
+Multi Person Transmitters  Anyone in or out of state may operate more than one transmitter, but it must be one person per transmitter.  For scoring purposes please state the number of operators.  You must combine ALL logs into ONE .ADIF and send.
+
+TEAM NEBRASKA.  This is for ALL operators in the geographic boundaries of the state.  Get together with as many other operators within the state and make as many contacts as possible.  Here again, let me know how many are in your team.  You can be Team (your team name) SSB, Team (your team name) CW, Team (your team name) Mixed or Team (your team name) Digital and a brand new category Team (your team name) Satellite.  Please state which category you are going to enter in.  You must combine ALL logs into one .ADIF and send.  The teams will be recognized by team name and then the operators and their callsigns will be listed with their team.  You can also enter as an individual along with your team scores.
+
+Bonus Points
+
+There will be 100 bonus points for any QSO with Nebraska SM KAØBOJ and 50 bonus points for all other appointees in the section.  A current updated list is here.
+
+Matt Anderson - KAØBOJ Nebraska SM 100 points
+
+Shaun Munson - KØSMM Nebraska ASM/ADEC/AEC 50 points
+
+Ed Holloway - KØRPT Nebraska SEC/ASM 50 points
+
+Joe Eisenberg - KØNEB Nebraska ASM 50 points
+
+Mike Nickolaus - NFØN Nebraska STM/ASM 50 points
+
+Michael Ruhrdanz - NØFER Nebraska Technical Coordinator/ASM 50 points
+
+Bill McCollum - KEØXQ Nebraska ASM 50 points
+
+FT8/FT4 grid-square Competition this is a separate competition entry
+
+Multiple transceivers maybe used for FT8/FT4.  No robot operation allowed please.  Butt in the seats.
+
+Count 2 points for each unique QSO. The power multiplier for all FT8/grid-square operations is 1, so power has no effect on score.
+
+For stations outside of Nebraska, the geo multiplier is the total number of grid squares of only NE stations worked. Count each Nebraska grid only once per contest. The multiplier for out-of-state stations has a maximum of 13.
+
+For stations in Nebraska (either fixed or mobile/portable) the geo multiplier is the total number of grid squares worked, whether in Nebraska or outside Nebraska. Count each grid only once per contest.
+
+For Nebraska mobile/portable stations operating FT8/FT4, calculate the geo multiplier as above for all QSOs without regard to county of operation, band, or mode, that is, credit for a grid square is only once per contest.
+
+Regarding bonuses for FT8/FT4 stations, for either fixed stations or mobile/portable, bonuses will be earned for the same kind of QSOs as for non FT8/FT4 scoring, and mobile/portable stations get a bonus for operating in different counties.
+
+To get the final score, multiply FT8/FT4 QSO Points times the geo multiplier based on grid squares only, and then add bonuses.
+
+Additional Information
+
+Entries. Deadline for all entries is will be May 7th, 2026. The deadline will be determined by postmark on letters, or dates on emails. A separate log with FT8/FT4 QSOs needs to be submitted to be considered for the FT8/FT4 competition.
+
+All entries must contain a completed Summary Sheet and a log with band, mode, date, UTC time, call of the station worked, and exchange sent/received. See the website for a file containing a blank Summary Sheet.
+
+Note: For submittals that have five (5) QSOs or less, you may elect to have us calculate your score. Simply request it in your email (or letter) when you submit the log.
+
+Entrants are encouraged to submit an electronic log. Only Cabrillo format will be accepted for electronic logs. Otherwise submit hand logs. Submit entry materials in either of two ways:
+
+(1) By e-mail: Please send the Log and Summary Sheet to nebraskaqsoparty@gmail.com
+
+(2) By USPS Mail: Matt Anderson, KAØBOJ, 14300 NW 98th Street, Raymond, NE 68428
+
+Awards. All entries will receive a participation certificate. As there have been in previous years, depending on sponsors, there will be plaque and gift card awards. These will be posted separately on the website.
+
+Miscellaneous
+
+· For a non FT8/FT4 QSO to be valid, each in-state station must copy the call sign and the S/P/C or county of the contacted station, and each out-of-state station must copy the NE county. For FT8/FT4, only call and grid square is required. Signal report is optional for any mode.
+
+· Nebraska Mobile/Portable stations that change counties are considered to be a new station in each county, and may therefore be counted again for QSO points and geo multiplier credit for the new county.
+
+· Nebraska Mobile/Portable stations should sign with their [call]/[county].
+
+· Nebraska Mobile/Portable stations may operate from county lines, but only two counties at a time. A single exchange on the air is ok, but enter it twice in the log, once for each county.
+
+· Cross mode contacts and repeater contacts are prohibited. All contacts must be simplex.
+
+· Spotting, including self spotting, is encouraged.
+
+· Known mobile/portable activity will be posted before the contest, as well as bonus station's schedules. See website.
+
+· Multiple transmitters maybe used for FT8/FT4.  NO ROBOT OPERATION.  In Multi-transmitters must have one operator per radio for SSB and CW.  One operator may operate multiple digital radios, but NO ROBOT OPERATION please. · Entrants are encouraged to post estimates of their scores at www.3830scores.com .
+
+Conditions of Entry. By submitting an entry, entrants agree to be bound by these rules and their intent, by the regulations of their licensing authority, and by the decisions of the Nebraska QSO Party Committee. Awards may be added or deleted depending on participation.
+
+Copyright © 2026 Nebraska QSO Party - All Rights Reserved.

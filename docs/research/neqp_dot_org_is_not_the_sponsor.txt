@@ -1,0 +1,89 @@
+Source: https://nebraskaqsoparty.ORG/   Fetched 2026-07-26.
+
+BANKED AS A COUNTER-EXAMPLE, NOT AS A SOURCE.  This domain has the obvious
+name and is NOT the sponsor.  It is a GoDaddy-hosted WordPress page of
+generic prose - 'What Is a QSO Party?', 'Why Participate?' - carrying NO
+rules, NO dates, NO county list and NO exchange.  Its outbound links are to a
+law firm, Nielsen radio ratings, two universities and NPR.
+
+The sponsor is nebraskaqsoparty.COM, which is what WA7BNM links and what
+carries the 2026 rules.  A session that trusted the .org would have found
+nothing checkable and might have filled the gaps from memory - which is the
+failure Article 1 exists to prevent.
+
+Its non-self outbound links, verbatim:
+  https://journalism.unl.edu/
+  https://maps.app.goo.gl/9DaoT2dyx6FjA65k6
+  https://maps.app.goo.gl/oQhexeRgnLkurRSS8
+  https://radio-locator.com/cgi-bin/finder?sr=Y&amp;s=T&amp;state=NE&amp;format=&amp;band=
+  https://ratings.radio-online.com/cgi-bin/rol.exe/arb_market
+  https://www.huskermax.com/huskers-radio-network/
+  https://www.npr.org/podcasts/381444555/nebraska-news
+  https://www.stangelawfirm.com/
+  https://www.unomaha.edu/college-of-communication-fine-arts-and-media/communication/index.php
+  https://www.weather.gov/oax/nwr_main
+========================================================================
+Nebraska QSO Party
+Toggle navigation
+Home
+Blog
+Privacy Policy
+Terms & Conditions
+Search
+Search for:
+Search
+Skip to content
+Nebraska QSO Party
+Home
+Blog
+Privacy Policy
+Terms & Conditions
+Search for:
+Toggle sidebar & navigation
+Nebraska Radio Station Information
+Scroll down to content
+Nebraska QSO Party
+The Nebraska QSO Party is an annual amateur radio event that brings together operators from across the country and around the world to connect with stations throughout Nebraska. Whether you are a seasoned contester or just getting started in amateur radio, the Nebraska QSO Party offers an opportunity to sharpen your operating skills, make new contacts, and enjoy a weekend dedicated to radio communication.
+What Is a QSO Party?
+A QSO Party is a radio operating event where amateur radio operators attempt to make as many contacts, or “QSOs,” as possible within a defined period of time. Each state-level QSO Party highlights a specific location, encouraging operators to contact stations within that state. The Nebraska QSO Party focuses on counties across Nebraska, giving participants the chance to work stations in both populated and rare counties while contributing to a broader nationwide event calendar.
+Event Overview
+The Nebraska QSO Party typically runs over a weekend and is open to all licensed amateur radio operators. Participants can operate from fixed stations, mobile setups, or portable locations. Key details often include multiple operating bands such as common HF frequencies, phone (SSB) and CW modes, and sometimes digital participation. The event is designed to be accessible for both casual operators and competitive contesters, with a county-based exchange system for Nebraska stations.
+How It Works
+Participants make contacts with as many stations as possible during the event period. Each contact includes an exchange of information, typically involving signal reports and location details. Nebraska stations usually provide their county name or abbreviation, while out-of-state stations typically provide their state, province, or country. Operators log each contact and submit their results after the event for scoring and recognition.
+Scoring and Awards
+The Nebraska QSO Party uses a scoring system designed to reward both activity and geographic diversity. Points are typically awarded per valid QSO, with multipliers based on Nebraska counties. Mobile stations may earn additional credit for activating multiple counties. Awards are often presented in categories such as top Nebraska station, top out-of-state participant, mobile and portable operators, and first-time participants.
+Why Participate?
+The Nebraska QSO Party offers a valuable opportunity to build operating confidence, improve contesting skills, and make contacts across Nebraska and beyond. It encourages community involvement within amateur radio while allowing operators to pursue personal goals such as working rare counties. Whether participating casually or competitively, operators contribute to a larger shared event that highlights the state’s radio activity.
+Getting Started
+Getting involved is straightforward. Participants should review the official rules and schedule, prepare their station and logging software, and tune to the designated bands during the event. Operators can call CQ or respond to other stations, log their contacts, and submit results after the event. Even limited participation can be both enjoyable and meaningful.
+Resources and Preparation
+Preparation can enhance the experience. Reviewing propagation forecasts, testing equipment and antennas, and becoming familiar with logging tools can improve performance during the event. Planning operating times based on expected band conditions can also help maximize contacts.
+Join the Nebraska QSO Party
+The Nebraska QSO Party is more than a contest. It is a celebration of amateur radio, community connection, and the diverse counties that make up Nebraska. Whether you participate for a short time or throughout the entire event, your involvement helps strengthen the amateur radio community and makes the event a success.
+Nebraska Radio Information
+Market #163 – Lincoln, NE Ratings
+Click this link to view the top-rated radio stations in Lincoln, Nebraska in Lancaster County from Nielsen.
+Market #75 – Omaha, Nebraska Ratings
+If you are interested in viewing the Nielsen radio ratings for the Omaha, Nebraska market in Douglas County, click this link.
+University of Nebraska-Lincoln
+If you are in the Lincoln, NE area and looking to start a career path towards working in radio, the College of Journalism and Mass Communication at UNL may be for you. Click here to learn more.
+University of Nebraska-Omaha
+UNO offers a great resource for residents in Douglas County, NE, or nearby who are looking to start a career in radio journalism and mass communication. Click here to find out more information.
+Nebraska Radio Stations
+Click here to find an expansive list of radio stations located in the state of Nebraska from Radio Locator.
+Nebraska News
+To view some of the latest news out of the state of Nebraska, please visit this website from National Public Radio.
+Nebraska Cornhuskers Radio Network
+Click here to view affiliate stations on the Nebraska Cornhuskers Radio Network.
+National Weather Service
+If you are in Nebraska and looking for where to find pertinent severe weather information, this link may be helpful.
+Other Helpful Nebraska Information
+Nebraska Divorce and Family Law Firm
+Omaha, Nebraska Divorce Lawyers in Douglas County on Google
+Lincoln, Nebraska Divorce Lawyers in Lancaster County on Google
+Copyright 2026 | All Rights Reserved
+Privacy Policy
+Copyright © 2026 Nebraska QSO Party
+Inspiro Theme
+by WPZOOM
+Scroll to top

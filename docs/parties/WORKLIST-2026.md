@@ -8,10 +8,10 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **11 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+- **10 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
   February and March are clear; April is under way (Louisiana, Mississippi,
-  Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec).
-  **Nebraska is next**, opening the 25 April weekend.
+  Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec,
+  Nebraska). **Florida is next**, sharing Nebraska's weekend.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -151,9 +151,9 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**11 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**10 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 9 US + 2 Canadian. Research is banked for none of them.
+next one built". 8 US + 2 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
@@ -175,7 +175,7 @@ next one built". 9 US + 2 Canadian. Research is banked for none of them.
 | ~~16~~ | ~~Michigan~~ | ~~Apr 18 1600Z → Apr 19 0400Z~~ | **done** 2026-07-26 — [`miqp_rules.md`](../research/miqp_rules.md); **site had rolled to 2027**, editions diffed |
 | ~~17~~ | ~~Ontario~~ | ~~Apr 18 1800Z → Apr 19 0300Z; Apr 19 1200–2000Z~~ | **done** 2026-07-26 — [`oqp_rules.md`](../research/oqp_rules.md); 🇨🇦 **rules still 2026 while the site says 2027** |
 | ~~18~~ | ~~Quebec~~ | ~~Apr 19 1300Z → Apr 19 2400Z~~ | **done** 2026-07-26 — [`qcqp_rules.md`](../research/qcqp_rules.md); 🇨🇦 **bilingual rules, parsed both** |
-| 19 | Nebraska | Apr 25 1400Z → Apr 26 0200Z | |
+| ~~19~~ | ~~Nebraska~~ | ~~Apr 25 1400Z → Apr 26 0200Z~~ | **done** 2026-07-26 — [`neqp_rules.md`](../research/neqp_rules.md); **36 h, not 12** — and the .org is a content farm |
 | 20 | Florida | Apr 25 1600Z → Apr 26 0159Z; Apr 26 1200–2159Z | |
 | 21 | 7th Call Area | May 2 1300Z → May 3 0700Z | **7 states** (AZ ID MT NV OR UT WY) — **one log covers all seven**, see *Scope* |
 | 22 | Indiana | May 2 1500Z → May 3 0259Z | |
@@ -192,12 +192,12 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**37 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**38 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
 pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP**, **SCQP**,
 **NCQP**, **OKQP**, **IDQP**, **WIQP**, **VAQP**, **LAQP**, **MSQP**, **MOQP**,
-**NMQP**, **GAQP**, **NDQP**, **MIQP**, **OQP** and **QCQP** from the reopened
-first-half season, all built 2026-07-26.
+**NMQP**, **GAQP**, **NDQP**, **MIQP**, **OQP**, **QCQP** and **NEQP** from the
+reopened first-half season, all built 2026-07-26.
 Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |

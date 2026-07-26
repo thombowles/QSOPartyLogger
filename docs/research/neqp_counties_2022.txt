@@ -1,0 +1,107 @@
+Source: https://nebraskaqsoparty.com/qso-party-rules -> 'Nebraska QSO Party
+  County Abbreviation List (pdf)', served from img1.wsimg.com.
+  Last-Modified: Fri, 18 Mar 2022 01:57:27 GMT.  Fetched 2026-07-26 via
+  pdftotext -layout.
+
+The 2026 rules link this file as the current list and say so outright:
+  'A list of Nebraska County abbreviations is provided on the website. It is
+   the same list used in 2016.'
+So the 2022 file date is not staleness - the sponsor intends the list to be
+  unchanged, and says which year it dates from.
+========================================================================
+            Nebraska QSO Party County Abbreviations
+
+Adams           ADMS
+Antelope        ANTE
+Arthur          ARTH
+Banner          BANN
+Blaine          BLAI
+Boone           BOON
+Box Butte       BOXB
+Boyd            BOYD
+Brown           BRWN
+Buffalo         BUFF
+Burt            BURT
+Butler          BUTL
+Cass            CASS
+Cedar           CEDA
+Chase           CHAS
+Cherry          CHER
+Cheyenne        CHEY
+Clay            CLAY
+Colfax          COLF
+Cumming         CUMI
+Custer          CUST
+Dakota          DAKO
+Dawes           DAWE
+Dawson          DAWS
+Deuel           DEUE
+Dixon           DIXO
+Dodge           DODG
+Douglas         DGLS
+Dundy           DUND
+Fillmore        FILL
+Franklin        FRNK
+Frontier        FRON
+Furnas          FURN
+Gage            GAGE
+Garden      GARD
+Garfield    GARF
+Gosper      GOSP
+Grant       GRAN
+Greeley     GREE
+Hall        HALL
+Hamilton    HAMI
+Harlan      HRLN
+Hayes       HAYE
+Hitchcock   HITC
+Holt        HOLT
+Hooker      HOOK
+Howard      HOWA
+Jefferson   JEFF
+Johnson     JOHN
+Kearney     KEAR
+Keith       KEIT
+Keya Paha   KEYA
+Kimball     KIMB
+Knox        KNOX
+Lancaster   LNCS
+Lincoln     LINC
+Logan       LOGA
+Loup        LOUP
+Madison     MDSN
+McPherson   MCPH
+Merrick     MERR
+Morrill     MORR
+Nance       NANC
+Nemaha      NEMA
+Nuckolls    NUCK
+Otoe        OTOE
+Pawnee      PAWN
+Perkins     PERK
+Phelps      PHEL
+Pierce      PIER
+Platte        PLAT
+Polk          POLK
+Red Willow    REDW
+Richardson    RICH
+Rock          ROCK
+Saline        SALI
+Sarpy         SARP
+Saunders      SAUN
+Scottsbluff   SCOT
+Seward        SEWA
+Sheridan      SHRD
+Sherman       SHRM
+Sioux         SIOU
+Stanton       STAN
+Thayer        THAY
+Thomas        THOM
+Thurston      THUR
+Valley        VLLY
+Washington    WASH
+Wayne         WAYN
+Webster       WEBS
+Wheeler       WHEE
+York          YORK
+
