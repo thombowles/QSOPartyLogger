@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "id": "laqp",
+  "name": "Louisiana QSO Party",
+  "cabrilloContest": "LA-QSO-PARTY",
+  "homeState": "LA",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 4,
+    "digital": 4
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBandMode"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBandMode"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "N5LCC",
+      "points": 100,
+      "scope": "once"
+    },
+    {
+      "type": "activatedCountyCount",
+      "minQSOs": 1,
+      "points": 50
+    }
+  ],
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "maxSimultaneousCounties": 2,
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-04-04T14:00:00Z",
+      "end": "2026-04-05T02:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ACAD",
+      "name": "Acadia"
+    },
+    {
+      "abbr": "ALLE",
+      "name": "Allen"
+    },
+    {
+      "abbr": "ASCE",
+      "name": "Ascension"
+    },
+    {
+      "abbr": "ASSU",
+      "name": "Assumption"
+    },
+    {
+      "abbr": "AVOY",
+      "name": "Avoyelles"
+    },
+    {
+      "abbr": "BEAU",
+      "name": "Beauregard"
+    },
+    {
+      "abbr": "BIEN",
+      "name": "Bienville"
+    },
+    {
+      "abbr": "BOSS",
+      "name": "Bossier"
+    },
+    {
+      "abbr": "CADD",
+      "name": "Caddo"
+    },
+    {
+      "abbr": "CALC",
+      "name": "Calcasieu"
+    },
+    {
+      "abbr": "CALD",
+      "name": "Caldwell"
+    },
+    {
+      "abbr": "CAME",
+      "name": "Cameron"
+    },
+    {
+      "abbr": "CATA",
+      "name": "Catahoula"
+    },
+    {
+      "abbr": "CLAI",
+      "name": "Claiborne"
+    },
+    {
+      "abbr": "CONC",
+      "name": "Concordia"
+    },
+    {
+      "abbr": "DESO",
+      "name": "De Soto"
+    },
+    {
+      "abbr": "EBR",
+      "name": "East Baton Rouge"
+    },
+    {
+      "abbr": "ECAR",
+      "name": "East Carroll"
+    },
+    {
+      "abbr": "EFEL",
+      "name": "East Feliciana"
+    },
+    {
+      "abbr": "EVAN",
+      "name": "Evangeline"
+    },
+    {
+      "abbr": "FRAN",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "GRAN",
+      "name": "Grant"
+    },
+    {
+      "abbr": "IBER",
+      "name": "Iberia"
+    },
+    {
+      "abbr": "IBVL",
+      "name": "Iberville"
+    },
+    {
+      "abbr": "JACK",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JEFF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JFDV",
+      "name": "Jefferson Davis"
+    },
+    {
+      "abbr": "LASA",
+      "name": "La Salle"
+    },
+    {
+      "abbr": "LAFA",
+      "name": "Lafayette"
+    },
+    {
+      "abbr": "LAFO",
+      "name": "Lafourche"
+    },
+    {
+      "abbr": "LINC",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "LIVI",
+      "name": "Livingston"
+    },
+    {
+      "abbr": "MADI",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MORE",
+      "name": "Morehouse"
+    },
+    {
+      "abbr": "NATC",
+      "name": "Natchitoches"
+    },
+    {
+      "abbr": "ORLE",
+      "name": "Orleans"
+    },
+    {
+      "abbr": "OUAC",
+      "name": "Ouachita"
+    },
+    {
+      "abbr": "PLAQ",
+      "name": "Plaquemines"
+    },
+    {
+      "abbr": "PCP",
+      "name": "Pointe Coupee"
+    },
+    {
+      "abbr": "RAPI",
+      "name": "Rapides"
+    },
+    {
+      "abbr": "REDR",
+      "name": "Red River"
+    },
+    {
+      "abbr": "RICH",
+      "name": "Richland"
+    },
+    {
+      "abbr": "SABI",
+      "name": "Sabine"
+    },
+    {
+      "abbr": "SBND",
+      "name": "St. Bernard"
+    },
+    {
+      "abbr": "SCHL",
+      "name": "St. Charles"
+    },
+    {
+      "abbr": "SHEL",
+      "name": "St. Helena"
+    },
+    {
+      "abbr": "SJAM",
+      "name": "St. James"
+    },
+    {
+      "abbr": "SJB",
+      "name": "St. John Baptist"
+    },
+    {
+      "abbr": "SLAN",
+      "name": "St. Landry"
+    },
+    {
+      "abbr": "SMT",
+      "name": "St. Martin"
+    },
+    {
+      "abbr": "SMAR",
+      "name": "St. Mary"
+    },
+    {
+      "abbr": "STAM",
+      "name": "St. Tammany"
+    },
+    {
+      "abbr": "TANG",
+      "name": "Tangipahoa"
+    },
+    {
+      "abbr": "TENS",
+      "name": "Tensas"
+    },
+    {
+      "abbr": "TERR",
+      "name": "Terrebonne"
+    },
+    {
+      "abbr": "UNIO",
+      "name": "Union"
+    },
+    {
+      "abbr": "VERM",
+      "name": "Vermilion"
+    },
+    {
+      "abbr": "VERN",
+      "name": "Vernon"
+    },
+    {
+      "abbr": "WASH",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WEBS",
+      "name": "Webster"
+    },
+    {
+      "abbr": "WBR",
+      "name": "West Baton Rouge"
+    },
+    {
+      "abbr": "WCAR",
+      "name": "West Carroll"
+    },
+    {
+      "abbr": "WFEL",
+      "name": "West Feliciana"
+    },
+    {
+      "abbr": "WINN",
+      "name": "Winn"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/laqp-table.php",
+    "postURL": "http://qsopartyhub.com/laqp-spots.php"
+  },
+  "notes": "verified: partial - rules from the Louisiana Contest Club's own pages, https://laqp.louisianacontestclub.org/laqso-rules-htm/ and its official parish abbreviation list, both read verbatim 2026-07-26. Chairman Bobby WM5H, questions@laqp.org; Cabrillo logs within 10 days. THE FIRST BUNDLED PARTY WHOSE HOME ENTITIES ARE PARISHES rather than counties - Louisiana has 64 of them. THE 2026 DATE IS DERIVED, NOT PUBLISHED, AND IT IS THIS PARTY'S MAIN OPEN QUESTION. Rule 2 still reads 'The Louisiana QSO Party will run from 14:00 UTC April 5, 2025 to 02:00 UTC April 6, 2025' - the 2025 running - the sponsor's own 'LAQP Dates' page 404s, and its Recent Posts stop at the 2021 results. Shipped as 1400Z Saturday 4 April to 0200Z Sunday 5 April 2026 on three grounds: the 1400Z-to-0200Z twelve-hour shape has been stable for years; 'first Saturday in April' fits both the printed 2025 date and the sponsor's own archived post '2020 LAQP is April 4th'; and the State QSO Party Challenge calendar prints exactly those instants. BUT THE SPONSOR STATES NO FORMULA, so unlike ILQP - whose page prints 'Sunday the third full weekend of October' - this rests on inference from two past dates. Confirm before operating. Phone 2 points, CW and digital 4 - the joint highest CW value in this app, tied with British Columbia. Multipliers count PER BAND AND MODE on both sides, which the sponsor's '64 possible per band/mode' settles. Louisiana stations count the 64 parishes plus states OTHER THAN LOUISIANA plus the 13 provinces plus DXCC entities; everyone else counts the 64 parishes. Louisiana itself is excluded in so many words. The province list is the standard 13, and the sponsor explains why it dropped the Maritime sub-regions it once counted - 'to be more in line with other state QSO parties'. DC is never mentioned and stays its own multiplier. Eight bands, 160 m through 2 m, no WARC. Parish lines pay both parishes with a separate log entry for each, which is what this app writes. N5LCC, the club station, pays a ONE-TIME 100-point bonus; Louisiana rovers earn 50 points per parish activated. No power multiplier - power selects the award only. KNOWN LIMITATION - CW AND DIGITAL ARE ONE MODE FOR THE SPONSOR AND TWO FOR THIS APP, AND HERE THAT MOVES THE SCORE. The rules say fixed stations 'may be worked once on CW/Digital and once on Phone PER BAND' and that 'CW/Digital and Phone contacts count as separate multipliers' - a TWO-WAY split, where this app keys on three mode classes. So working one station on CW and again on RTTY on the same band shows here as two valid QSOs and TWO MULTIPLIERS, while the sponsor counts one of each. Illinois has the identical rule, but there it touched only dupe accounting because ILQP counts multipliers once overall; LOUISIANA COUNTS THEM PER BAND AND MODE, so the over-count reaches the final score. If you work any station on both CW and a digital mode on the same band, delete the second contact before submitting. Cabrillo CONTEST value LA-QSO-PARTY per the WA7BNM registry - the rules require Cabrillo but print no header token. Parishes are 64 with MIXED 3- AND 4-CHARACTER codes: five are three characters, all contractions of long names - EBR East Baton Rouge, WBR West Baton Rouge, PCP Pointe Coupee, SJB St. John Baptist and SMT St. Martin. THERE ARE NINE 'St.' PARISHES AND NO TWO FOLLOW THE SAME PATTERN; watch SMT St. Martin against SMAR St. Mary in particular, three characters against four for two parishes three letters apart. Note also the East/West triples - EBR/WBR, ECAR/WCAR, EFEL/WFEL - of which only the Baton Rouges contract, and JEFF Jefferson against JFDV Jefferson Davis. The sponsor prints 'St. John Baptist', dropping the 'the' of the official St. John the Baptist Parish; it ships as printed. OPEN QUESTIONS (why this is partial): (1) THE 2026 DATE, derived as above from a rules page that still carries 2025 and a sponsor site whose dates page is missing. This is the principal one. (2) The CW/digital mode grouping above, which is a missing app feature rather than a rule in doubt, and which over-counts multipliers. Confirm both with the contest committee at questions@laqp.org before submitting a log."
+}

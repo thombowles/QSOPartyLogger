@@ -41,21 +41,38 @@ final class UpcomingContestsTests: XCTestCase {
 
     /// Contests the app has no definition for still appear, dated by the
     /// challenge's own calendar and labeled as such.
-    func testCalendarOnlyContestsAppearInSpring() {
-        let list = upcoming(now: "2026-04-01T00:00:00Z")
-        let louisiana = list.first { $0.name == "Louisiana QSO Party" }
-        XCTAssertNotNil(louisiana)
-        XCTAssertNil(louisiana?.partyID)
-        XCTAssertEqual(louisiana?.dateSource, .challengeCalendar)
-        XCTAssertEqual(louisiana?.isApproved, true)
-
-        // Bundled parties in the same list come from their own schedules.
-        let alabama = list.first { $0.partyID == "alqp" }
-        XCTAssertEqual(alabama?.dateSource, .partyDefinition)
-        XCTAssertLessThan(
-            try XCTUnwrap(louisiana?.nextWindow.start),
-            try XCTUnwrap(alabama?.nextWindow.start)
+    ///
+    /// **The example is computed, not named.** This test used to hard-code
+    /// Louisiana, which stopped being calendar-only the moment LAQP was bundled
+    /// — the same rot that moved the user-party fixture three times in one day.
+    /// It now asks the calendar for any contest with no bundled party, so it
+    /// keeps testing the real behaviour as parties land. When every approved
+    /// contest is bundled there is nothing left to test, and it says so rather
+    /// than passing vacuously.
+    func testCalendarOnlyContestsAppearAsCalendarSourced() throws {
+        let bundledIDs = Set(parties.map(\.id))
+        let unmapped = calendar.approvedContests.filter {
+            $0.partyID == nil || !bundledIDs.contains($0.partyID!)
+        }
+        try XCTSkipIf(
+            unmapped.isEmpty,
+            "every approved contest now has a bundled party — nothing is calendar-only"
         )
+
+        let list = UpcomingContests.upcoming(
+            now: instant("2026-01-01T00:00:00Z"),
+            parties: parties, calendar: calendar, records: []
+        )
+        let names = Set(unmapped.map(\.name))
+        let row = try XCTUnwrap(list.first { names.contains($0.name) },
+                                "a calendar-only contest should still be listed")
+        XCTAssertNil(row.partyID)
+        XCTAssertEqual(row.dateSource, .challengeCalendar)
+        XCTAssertEqual(row.isApproved, true)
+
+        // ...while a bundled party in the same list comes from its own schedule.
+        let alabama = try XCTUnwrap(list.first { $0.partyID == "alqp" })
+        XCTAssertEqual(alabama.dateSource, .partyDefinition)
     }
 
     /// The calendar's NJQP row is known-wrong (Sep 19); the sponsor says

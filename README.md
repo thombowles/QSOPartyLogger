@@ -120,6 +120,15 @@ Built for KE5CW. Bundled parties, all with official county data:
   neither of the usual shapes. `verified: partial`: contacts with Virginia
   mobiles are worth 3 points and this app pays 1 or 2, and the 50-point bonus
   stations are published only on the sponsor's web site.
+- **Louisiana QSO Party** (Apr 4, 2026) — **the first bundled party whose home
+  entities are parishes**, all 64 of them, with mixed 3/4-character codes. Nine
+  are `St.` parishes and no two follow the same pattern — watch `SMT` St. Martin
+  against `SMAR` St. Mary. Phone 2 / CW and digital 4; multipliers count **per
+  band and mode**; `N5LCC` pays a one-time 100, and Louisiana rovers 50 per
+  parish activated. `verified: partial` on two counts: **the 2026 date is derived,
+  not published** — the rules still print the 2025 running and the sponsor's dates
+  page 404s — and CW/digital are one mode for the sponsor and two here, which
+  **over-counts multipliers** because they are scoped per band and mode.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -273,10 +282,10 @@ Built for KE5CW. Bundled parties, all with official county data:
 **Every US state and regional QSO party running from 2026-07-24 through
 2026-12-31 is bundled**, and the season's earlier parties are being added in
 contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
-Carolina, Oklahoma, Idaho, Wisconsin and Virginia are in. The 2026 season runs
-Feb 7 → Oct 18; two independent calendars agree there is no state or provincial
-party in January, November or December. **20 parties from March through June
-remain**, listed in
+Carolina, Oklahoma, Idaho, Wisconsin, Virginia and Louisiana are in. The 2026
+season runs Feb 7 → Oct 18; two independent calendars agree there is no state or
+provincial party in January, November or December. **19 parties from April
+through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -756,7 +765,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1202 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1222 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1144,6 +1153,16 @@ station profile, radio wiring and cluster history untouched.
   `pdftotext` interleaves the columns once whitespace is normalised — quoted
   assertions have to be fragments that sit inside one column line, and several
   had to be split after failing.
+- LAQP: rules from the Louisiana Contest Club's own pages, read verbatim
+  2026-07-26. **Its 2026 date is derived rather than published:** rule 2 still
+  carries the 2025 running, the sponsor's "LAQP Dates" page 404s, and its Recent
+  Posts stop at the 2021 results. The shipped window rests on the stable
+  1400Z–0200Z shape, on "first Saturday in April" fitting both the printed 2025
+  date and the sponsor's archived "2020 LAQP is April 4th", and on the Challenge
+  calendar agreeing — but **no formula is stated**, which is weaker than ILQP's
+  derivation and is why the party ships partial.
+  [`gen_laqp.py`](docs/research/gen_laqp.py) asserts rule 2 still shows 2025, so a
+  sponsor update forces the derivation to be re-checked rather than silently kept.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -1179,7 +1198,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 27 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 28 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong
