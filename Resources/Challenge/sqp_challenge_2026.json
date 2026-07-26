@@ -165,7 +165,7 @@
   },
   {
    "name": "Georgia QSO Party",
-   "partyID": null,
+   "partyID": "gaqp",
    "windows": [
     {
      "start": "2026-04-11T18:00:00Z",

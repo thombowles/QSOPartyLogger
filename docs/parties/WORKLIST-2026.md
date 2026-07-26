@@ -8,10 +8,10 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **16 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+- **15 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
   February and March are clear; April is under way (Louisiana, Mississippi,
-  Missouri, New Mexico). **Georgia is next** — 159 counties, the largest list
-  of the season.
+  Missouri, New Mexico, Georgia). **North Dakota is next**, sharing Georgia's
+  11 April slot.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -151,9 +151,9 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**16 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**15 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 12 US + 4 Canadian. Research is banked for none of them.
+next one built". 11 US + 4 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
@@ -170,7 +170,7 @@ next one built". 12 US + 4 Canadian. Research is banked for none of them.
 | ~~11~~ | ~~Mississippi~~ | ~~Apr 4 1400Z → Apr 5 0200Z~~ | **done** 2026-07-26 — [`msqp_rules.md`](../research/msqp_rules.md); FT4/8 is a first-class mode |
 | ~~12~~ | ~~Missouri~~ | ~~Apr 11 1400Z → Apr 12 0400Z; Apr 12 1400–2000Z~~ | **done** 2026-07-26 — [`moqp_rules.md`](../research/moqp_rules.md); date **moved for Easter** |
 | ~~13~~ | ~~New Mexico~~ | ~~Apr 11 1400Z → Apr 12 0200Z~~ | **done** 2026-07-26 — [`nmqp_rules.md`](../research/nmqp_rules.md); **first power multiplier that fits** |
-| 14 | Georgia | Apr 11 1800Z → Apr 12 0359Z; Apr 12 1400–2359Z | 159 counties, the largest |
+| ~~14~~ | ~~Georgia~~ | ~~Apr 11 1800Z → Apr 12 0359Z; Apr 12 1400–2359Z~~ | **done** 2026-07-26 — [`gaqp_rules.md`](../research/gaqp_rules.md); 159 counties, **entirely first-party** |
 | 15 | North Dakota | Apr 11 1800Z → Apr 12 1800Z | 24 h continuous |
 | 16 | Michigan | Apr 18 1600Z → Apr 19 0400Z | |
 | 17 | Ontario | Apr 18 1800Z → Apr 19 0300Z; Apr 19 1200–2000Z | 🇨🇦 |
@@ -192,12 +192,12 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**32 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**33 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
 pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP**, **SCQP**,
-**NCQP**, **OKQP**, **IDQP**, **WIQP**, **VAQP**, **LAQP**, **MSQP**, **MOQP**
-and **NMQP** from the reopened first-half season, all built 2026-07-26. Every row
-below is struck.
+**NCQP**, **OKQP**, **IDQP**, **WIQP**, **VAQP**, **LAQP**, **MSQP**, **MOQP**,
+**NMQP** and **GAQP** from the reopened first-half season, all built 2026-07-26.
+Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |

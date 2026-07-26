@@ -17,14 +17,14 @@ final class HubSpotSourceTests: XCTestCase {
     /// The hub serves 17 of the 19 bundled parties. A party joining or leaving
     /// this set changes where the app polls, so it must be a deliberate edit
     /// backed by a regenerated mapping — never incidental.
-    func testExactlyThirtyPartiesAreServedByTheHub() {
+    func testExactlyThirtyOnePartiesAreServedByTheHub() {
         let served = PartyCatalog.loadBundled()
             .filter { $0.hubSpots != nil }
             .map(\.id)
             .sorted()
         XCTAssertEqual(
             served,
-            ["alqp", "azqp", "bcqp", "coqp", "hqp", "iaqp", "idqp", "ilqp", "ksqp", "laqp", "mdc", "meqp",
+            ["alqp", "azqp", "bcqp", "coqp", "gaqp", "hqp", "iaqp", "idqp", "ilqp", "ksqp", "laqp", "mdc", "meqp",
              "mnqp", "moqp", "msqp",
              "ncqp", "nhqp", "njqp", "nmqp", "nyqp", "ohqp", "okqp", "paqp", "scqp", "sdqp", "tnqp", "tqp",
              "vaqp", "vtqp", "wiqp"]
