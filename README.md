@@ -424,7 +424,10 @@ Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec,
 Nebraska, Florida, the 7th Call Area, Indiana, Delaware and New England are
 in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
 agree there is no state or provincial party in January, November or December.
-**5 parties from April through June remain**, listed in
+**5 parties from April through June remain** (one of them, the Canadian
+Prairies, is blocked — its districts are published only as images and the
+sponsor's own pages give four different totals; see
+[`docs/research/cpqp_blocked.md`](docs/research/cpqp_blocked.md)), listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`

@@ -1,0 +1,22 @@
+Source: https://cpqp.ve6hams.ca/counties/   Fetched 2026-07-26.
+
+Every district list on this page is an image.  The only machine-readable
+  thing it offers is a link to Elections Canada's district finder.
+========================================================================
+Counties – CANADIAN PRAIRIES QSO PARTY
+Skip to content
+Menu
+ALBERTA
+SASKATCHEWAN
+MANITOBA
+Look up your Federal Electoral District here:
+https://www.elections.ca/scripts/vis/FindED?L=e&PAGEID=20
+AB
+Calgary, AB Federal Districts
+Edmonton, AB Federal Districts
+Red Deer, AB Federal Districts
+Saskatchewan Federal Districts
+Regina, SK Federal Districts
+Saskatoon, SK Federal Districts
+Manitoba Federal Districts
+Winnipeg, MB Federal Districts

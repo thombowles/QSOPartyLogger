@@ -209,7 +209,7 @@ next one built". 3 US + 2 Canadian. Research is banked for none of them.
 | ~~22~~ | ~~Indiana~~ | ~~May 2 1500Z → May 3 0259Z~~ | **done** 2026-07-26 — [`inqp_rules.md`](../research/inqp_rules.md); **points changed for 2026**, old rule still in an HTML comment |
 | ~~23~~ | ~~Delaware~~ | ~~May 2 1700Z → May 3 2359Z~~ | **done** 2026-07-26 — [`deqp_rules.md`](../research/deqp_rules.md); 3 counties, **rules titled 2024** and they state no times |
 | ~~24~~ | ~~New England~~ | ~~May 2 2000Z → May 3 0500Z; May 3 1300–2400Z~~ | **done** 2026-07-26 — [`neqp_rules.md`](../research/neqp_rules.md); 6 states, id **`newenglandqp`** (Nebraska holds `neqp`) |
-| 25 | Canadian Prairies | May 9 1700Z → May 10 0300Z | 🇨🇦 MB/SK/AB |
+| **25** | **Canadian Prairies** | May 9 1700Z → May 10 0300Z | 🇨🇦 MB/SK/AB — **BLOCKED 2026-07-26**: districts are images only, sponsor totals contradict. Research banked in [`cpqp_blocked.md`](../research/cpqp_blocked.md) |
 | 26 | Arkansas | May 16 1400Z → May 17 0200Z | |
 | 27 | Kentucky | Jun 6 1300Z → Jun 7 0100Z | |
 | 28 | Atlantic Canada | Jun 7 1400Z → Jun 8 0100Z | 🇨🇦 NB/NS/PE/NL |
