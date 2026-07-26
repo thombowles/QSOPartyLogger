@@ -92,6 +92,30 @@ final class HubSelfSpotTests: XCTestCase {
         )
     }
 
+    /// A county line goes out whole. This is off the documented contract —
+    /// `docs/research/qsopartyhub.md` §5 records the county input as a
+    /// `<select>` of single tokens, and §6 lists a county-line spot as
+    /// unverified. Taken anyway: a spot naming only `MDSN` tells a chaser
+    /// hunting `LIME` to skip a station that would have given them the
+    /// multiplier. Correct information off-contract beats misleading
+    /// information on it.
+    func testACountyLineIsSentWhole() throws {
+        XCTAssertEqual(
+            try value(of: "county", in: fields(county: "MDSN/LIME"), party: try party("alqp")),
+            "MDSN/LIME"
+        )
+    }
+
+    /// Illinois inside a pair: the alias is per token, not per field, so the
+    /// county that needs translating still gets it and its partner is left
+    /// alone.
+    func testEachCountyOfALineIsTranslatedSeparately() throws {
+        XCTAssertEqual(
+            try value(of: "county", in: fields(county: "PULA/JACK"), party: try party("ilqp")),
+            "PULS/JACK"
+        )
+    }
+
     // MARK: Validation
 
     /// The form's own maxlengths. Exceeding them is the caller's bug, but the
@@ -123,6 +147,35 @@ final class HubSelfSpotTests: XCTestCase {
         XCTAssertNotNil(
             HubSelfSpot.validate(fields(county: "ZZZZ"), party: try party("alqp"))
         )
+    }
+
+    /// The field is typed by hand, so it is read the way a county line is
+    /// written — however the operator happens to separate them.
+    func testACountyLineIsAcceptedHoweverItIsSeparated() throws {
+        let alqp = try party("alqp")
+        XCTAssertNil(HubSelfSpot.validate(fields(county: "MDSN/LIME"), party: alqp))
+        XCTAssertNil(HubSelfSpot.validate(fields(county: "MDSN, LIME"), party: alqp))
+        XCTAssertNil(HubSelfSpot.validate(fields(county: "mdsn lime"), party: alqp))
+    }
+
+    /// One bad county in a pair fails the whole spot, and names the one at
+    /// fault rather than making the operator guess which half is wrong.
+    func testABadCountyInsideALineIsNamed() throws {
+        XCTAssertEqual(
+            HubSelfSpot.validate(fields(county: "MDSN/ZZZZ"), party: try party("alqp")),
+            .unknownCounty("ZZZZ")
+        )
+    }
+
+    /// Splitting typed text, before anything judges whether the tokens are
+    /// real counties — that is validation's job, and it needs the bad ones.
+    func testTypedCountyTextSplitsIntoTokens() {
+        XCTAssertEqual(HubSelfSpot.counties(in: "MDSN/LIME"), ["MDSN", "LIME"])
+        XCTAssertEqual(HubSelfSpot.counties(in: " mdsn ,  lime "), ["MDSN", "LIME"])
+        XCTAssertEqual(HubSelfSpot.counties(in: "MDSN//"), ["MDSN"])
+        XCTAssertEqual(HubSelfSpot.counties(in: "MDSN/MDSN"), ["MDSN"])
+        XCTAssertEqual(HubSelfSpot.counties(in: "MDSN/ZZZZ"), ["MDSN", "ZZZZ"])
+        XCTAssertEqual(HubSelfSpot.counties(in: "   "), [])
     }
 
     // MARK: Throttle

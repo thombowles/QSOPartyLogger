@@ -436,27 +436,13 @@ struct MainView: View {
             .help("Export Cabrillo (⇧⌘E)")
 
             Button {
-                beginSelfSpot()
+                beginSpotForMode()
             } label: {
-                Label("Spot Myself", systemImage: "dot.radiowaves.left.and.right")
+                Label(spotCommandLabel, systemImage: spotCommandIcon)
             }
             .keyboardShortcut("s", modifiers: [.command, .shift])
             .disabled(!canSpotToHub)
-            .help(canSpotToHub
-                  ? "Post your own spot to the QSO Party Hub (⇧⌘S) — confirmed before it sends"
-                  : "This party isn't on the QSO Party Hub, or your callsign isn't set")
-
-            Button {
-                beginSpotForEntryStation()
-            } label: {
-                Label("Spot Station", systemImage: "dot.radiowaves.right")
-            }
-            .keyboardShortcut("s", modifiers: [.option, .command])
-            .disabled(!canSpotEntryStation)
-            .help(canSpotToHub
-                  ? "Post the station in the call field to the QSO Party Hub (⌥⌘S) — "
-                    + "or right-click any spot on the band map, or any row in the log"
-                  : "This party isn't on the QSO Party Hub, or your callsign isn't set")
+            .help(spotCommandHelp)
 
             Button {
                 showMessagesEditor = true
@@ -938,9 +924,34 @@ struct MainView: View {
         party?.hubSpots != nil && !document.log.station.callsign.isEmpty
     }
 
-    /// ⌥⌘S needs somebody in the call field to spot.
-    private var canSpotEntryStation: Bool {
-        canSpotToHub && !entry.callNormalized.isEmpty
+    /// What ⇧⌘S means right now — running advertises you, searching puts the
+    /// station you found on the board.
+    private var spotCommand: SpotCommand {
+        SpotCommand.target(mode: document.log.operatingMode, entryCall: entry.callNormalized)
+    }
+
+    /// The button says which one it is before it is pressed. A command that
+    /// changes meaning has to show it, or it is the same trap as two shortcuts
+    /// a modifier apart.
+    private var spotCommandLabel: String {
+        spotCommand == .myself ? "Spot Myself" : "Spot Station"
+    }
+
+    private var spotCommandIcon: String {
+        spotCommand == .myself ? "dot.radiowaves.left.and.right" : "dot.radiowaves.right"
+    }
+
+    private var spotCommandHelp: String {
+        guard canSpotToHub else {
+            return "This party isn't on the QSO Party Hub, or your callsign isn't set"
+        }
+        let what = switch spotCommand {
+        case .myself: "Post your own spot to the QSO Party Hub (⇧⌘S)"
+        case .station(let call): "Post \(call) to the QSO Party Hub (⇧⌘S)"
+        case .blankStation: "Spot a station to the QSO Party Hub (⇧⌘S) — type the call in the sheet"
+        }
+        return what + " — confirmed before it sends. Or right-click any spot on the "
+            + "band map, or any row in the log."
     }
 
     /// Where the radio is, to 10 Hz — finer than that is noise on a spot, and
@@ -950,16 +961,25 @@ struct MainView: View {
         radio.radioState.map { (Double($0.frequencyHz) / 10).rounded() / 100 }
     }
 
-    /// ⌥⌘S — spot whoever is in the call field right now. The county comes out
-    /// of the exchange as copied so far, and only if it really is one of this
-    /// party's counties.
-    private func beginSpotForEntryStation() {
-        guard canSpotEntryStation else { return }
-        beginSpot(
-            station: entry.callNormalized,
-            frequencyKHz: vfoKHzForSpotting,
-            location: entry.exchange
-        )
+    /// ⇧⌘S — the only spot shortcut, and the operating mode decides who it
+    /// means. Searching takes the county out of the exchange as copied so far,
+    /// and only if it really is one of this party's counties.
+    private func beginSpotForMode() {
+        switch spotCommand {
+        case .myself:
+            beginSelfSpot()
+        case .station(let call):
+            beginSpot(
+                station: call,
+                frequencyKHz: vfoKHzForSpotting,
+                location: entry.exchange
+            )
+        case .blankStation:
+            // Heard a call and reached for the command before typing it. The
+            // sheet opens on the empty station field, the way it already opens
+            // on an empty frequency, and validation holds the send.
+            beginSpot(station: "", frequencyKHz: vfoKHzForSpotting, location: nil)
+        }
     }
 
     /// Open the spot sheet for a station that is not you — from the band map,
@@ -981,19 +1001,19 @@ struct MainView: View {
     /// Open the self-spot sheet, pre-filled from live state.
     ///
     /// Everything here is already known — the call from the station profile,
-    /// the frequency from the radio, the county from the log — and retyping it
-    /// mid-run is exactly why operators stop self-spotting.
+    /// the frequency from the radio, the counties from the log — and retyping
+    /// it mid-run is exactly why operators stop self-spotting.
+    ///
+    /// The same prefill as every other spot, so the rules hold once instead of
+    /// twice: an out-of-state location is not offered as a county, a county
+    /// line is offered whole, and no radio means a blank frequency the sheet
+    /// holds rather than a band default posted publicly as fact.
     private func beginSelfSpot() {
-        guard canSpotToHub else { return }
-        let call = document.log.station.callsign.uppercased()
-        selfSpotFields = HubSelfSpot.Fields(
-            station: call,
-            frequencyKHz: vfoKHzForSpotting ?? Double(currentBand.defaultFreqKHz),
-            county: document.log.myLocation.sentExchanges.first,
-            comment: "",
-            poster: call
+        beginSpot(
+            station: document.log.station.callsign,
+            frequencyKHz: vfoKHzForSpotting,
+            location: HubSpotPrefill.ownCounty(document.log.myLocation)
         )
-        showSelfSpot = true
     }
 
     /// Prompt a rover to re-spot when it changes county. A mobile has to
@@ -1009,16 +1029,16 @@ struct MainView: View {
         // first is either dropped or lands on a half-finished change. The
         // county is deliberately *not* recorded in that case, so the change is
         // still pending when Setup closes and the offer follows then.
+        //
+        // Compared whole, not by first county: a line moving MDSN/LIME to
+        // MDSN/LAWR changes in the second position only, and that is just as
+        // much a county change to re-spot for.
         guard !showSetup else { return }
         guard canSpotToHub, settings.hubSpotsEnabled,
-              document.log.myLocation.isInState,
-              let county = document.log.myLocation.sentExchanges.first,
-              !county.isEmpty,
+              let county = HubSpotPrefill.ownCounty(document.log.myLocation),
               let previous = lastSelfSpotCounty, previous != county
         else {
-            lastSelfSpotCounty = document.log.myLocation.isInState
-                ? document.log.myLocation.sentExchanges.first
-                : nil
+            lastSelfSpotCounty = HubSpotPrefill.ownCounty(document.log.myLocation)
             return
         }
         lastSelfSpotCounty = county

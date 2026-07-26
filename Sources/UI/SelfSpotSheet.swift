@@ -56,14 +56,10 @@ struct SelfSpotSheet: View {
                 }
                 GridRow {
                     Text("County").gridColumnAlignment(.trailing)
-                    Picker("", selection: countyBinding) {
-                        Text("— none —").tag("")
-                        ForEach(party.counties) { county in
-                            Text("\(county.abbr) — \(county.name)").tag(county.abbr)
-                        }
-                    }
-                    .labelsHidden()
-                    .frame(width: 220)
+                    TextField("optional — MDSN, or MDSN/LIME on a line", text: countyBinding)
+                        .textFieldStyle(.roundedBorder)
+                        .focused($focused, equals: .county)
+                        .frame(width: 260)
                 }
                 GridRow {
                     Text("Comment").gridColumnAlignment(.trailing)
@@ -97,14 +93,27 @@ struct SelfSpotSheet: View {
         }
         .padding(20)
         .frame(width: 430)
-        // Land on whatever still needs an answer. A contact logged without a
-        // radio arrives with no frequency, and that is the one field the
+        // Land on whatever still needs an answer. Reaching for the command
+        // before typing the call leaves the station blank; a contact logged
+        // without a radio arrives with no frequency. Either is a field the
         // operator has to supply before this can go anywhere.
-        .onAppear { focused = fields.frequencyKHz > 0 ? .station : .frequency }
+        .onAppear {
+            if fields.station.isEmpty {
+                focused = .station
+            } else {
+                focused = fields.frequencyKHz > 0 ? .station : .frequency
+            }
+        }
     }
 
-    /// The picker speaks the party's own abbreviations; translation to the
-    /// hub's token happens at the wire, not here.
+    /// Free text, not a picker, because a county-line operator gives two to
+    /// four and a picker can only say one. The field speaks the party's own
+    /// abbreviations; splitting, validating and translating to the hub's own
+    /// tokens all happen in `HubSelfSpot`, at the wire.
+    ///
+    /// The raw string is what is stored. Splitting into an array here and
+    /// rejoining on the way back would eat the separator the moment it is
+    /// typed and fight the cursor for the next keystroke.
     private var countyBinding: Binding<String> {
         Binding(
             get: { fields.county ?? "" },

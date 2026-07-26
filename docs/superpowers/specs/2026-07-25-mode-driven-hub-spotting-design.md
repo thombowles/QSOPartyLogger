@@ -1,7 +1,7 @@
 # Mode-driven hub spotting, and county lines on the wire
 
 Date: 2026-07-25
-Status: approved, not yet implemented
+Status: implemented
 
 ## Problem
 

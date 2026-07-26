@@ -74,12 +74,29 @@ enum HubSelfSpot {
               party.validBands.contains(band) else {
             return .frequencyNotOnAPartyBand
         }
-        if let county = fields.county?.trimmingCharacters(in: .whitespaces), !county.isEmpty {
-            guard party.counties.contains(where: { $0.abbr == county.uppercased() }) else {
-                return .unknownCounty(county.uppercased())
+        // Every county of a line, not just the first: one bad half must not
+        // ride out on the back of a good one. The offender is named rather
+        // than leaving the operator to work out which half is wrong.
+        for county in counties(in: fields.county ?? "") {
+            guard party.counties.contains(where: { $0.abbr == county }) else {
+                return .unknownCounty(county)
             }
         }
         return nil
+    }
+
+    /// The counties in a typed county field, in the order written, uppercased,
+    /// deduped. Separated however the operator happens to write a line —
+    /// `MDSN/LIME`, `MDSN, LIME`, `MDSN LIME` all read the same.
+    ///
+    /// Every token comes back, county or not. Judging them is `validate`'s
+    /// job, and it needs the bad ones in order to name them.
+    static func counties(in text: String) -> [String] {
+        var seen = Set<String>()
+        return text.uppercased()
+            .split(whereSeparator: { !$0.isLetter && !$0.isNumber })
+            .map(String.init)
+            .filter { seen.insert($0).inserted }
     }
 
     /// Whether this spot repeats one just sent. Frequency and county changes
@@ -127,11 +144,22 @@ enum HubSelfSpot {
         return text
     }
 
-    /// Our official abbreviation translated to the token the hub's own form
-    /// accepts — Illinois' `PULA` has to go out as its `PULS`.
+    /// Our official abbreviations translated to the tokens the hub's own form
+    /// accepts — Illinois' `PULA` has to go out as its `PULS`. Per token, so
+    /// the alias still holds inside a pair and its partner is left alone.
+    ///
+    /// A county line goes out whole, slash-joined. This is off the documented
+    /// contract: `docs/research/qsopartyhub.md` §5 records the county input as
+    /// a `<select>` of single tokens, and §6 lists a county-line spot as
+    /// unverified. Taken anyway, because a spot naming only the first county
+    /// tells a chaser hunting the second to skip a station that would have
+    /// given them the multiplier — correct information off-contract beats
+    /// misleading information on it. The first real county-line send is
+    /// verified against the following poll, not assumed from an HTTP 200.
     private static func hubCountyToken(_ county: String?, party: PartyDefinition) -> String {
-        guard let county = county?.trimmingCharacters(in: .whitespaces).uppercased(),
-              !county.isEmpty else { return "" }
-        return party.hubSpots?.reverseCountyAliases[county] ?? county
+        let aliases = party.hubSpots?.reverseCountyAliases
+        return counties(in: county ?? "")
+            .map { aliases?[$0] ?? $0 }
+            .joined(separator: "/")
     }
 }

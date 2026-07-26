@@ -53,10 +53,26 @@ final class HubSpotPrefillTests: XCTestCase {
         XCTAssertEqual(try fields(location: "599 mdsn").county, "MDSN")
     }
 
-    /// A county-line station gives two; the sheet's picker can change it, so
-    /// the first is the one to offer.
-    func testACountyLineExchangeOffersItsFirstCounty() throws {
-        XCTAssertEqual(try fields(location: "MDSN/LIME").county, "MDSN")
+    /// A county-line station gives two, and both are what a chaser needs: a
+    /// spot naming only the first tells somebody hunting the second to skip a
+    /// station that would have given them the multiplier.
+    func testACountyLineExchangeOffersEveryCounty() throws {
+        XCTAssertEqual(try fields(location: "MDSN/LIME").county, "MDSN/LIME")
+    }
+
+    func testCountiesAreOfferedInTheOrderTheyWereCopied() throws {
+        XCTAssertEqual(try fields(location: "LIME MDSN").county, "LIME/MDSN")
+    }
+
+    /// A stutter in the exchange is not a second county.
+    func testARepeatedCountyIsOfferedOnce() throws {
+        XCTAssertEqual(try fields(location: "MDSN MDSN").county, "MDSN")
+    }
+
+    /// The signal report and a garbled token sit between them; neither is a
+    /// county, and neither stops the two that are.
+    func testTokensThatAreNotCountiesAreSkippedRatherThanFatal() throws {
+        XCTAssertEqual(try fields(location: "MDSN 599 XXXX LIME").county, "MDSN/LIME")
     }
 
     func testAnExchangeWithNoCountyInItOffersNone() throws {
@@ -65,6 +81,57 @@ final class HubSpotPrefillTests: XCTestCase {
 
     func testNoLocationAtAllOffersNoCounty() throws {
         XCTAssertNil(try fields(location: nil).county)
+    }
+
+    // MARK: Your own county, for your own spot
+
+    func testYourOwnCountyIsOfferedForYourOwnSpot() {
+        XCTAssertEqual(HubSpotPrefill.ownCounty(.inState(counties: ["MDSN"])), "MDSN")
+    }
+
+    /// Operating a line: the board gets both, the same as a chaser would hear.
+    func testYourOwnCountyLineIsOfferedWhole() {
+        XCTAssertEqual(
+            HubSpotPrefill.ownCounty(.inState(counties: ["MDSN", "LIME"])),
+            "MDSN/LIME"
+        )
+    }
+
+    /// An out-of-state entrant sends a state. It is a multiplier and it is not
+    /// a county token, so offering it would fill the sheet with the one value
+    /// its own validation refuses — and block the send you just asked for.
+    func testAnOutOfStateOperatorHasNoCountyToOffer() {
+        XCTAssertNil(HubSpotPrefill.ownCounty(.outOfState(location: "TX")))
+    }
+
+    func testADXOperatorHasNoCountyToOffer() {
+        XCTAssertNil(HubSpotPrefill.ownCounty(.outOfState(location: "DX")))
+    }
+
+    /// End to end: what self-spot offers is something the sheet will actually
+    /// send. Self-spot used to build its fields directly, filling the county
+    /// from `sentExchanges.first` with no in-state check — so an out-of-state
+    /// operator got `TX` in the county box and a sheet blocked by its own
+    /// prefill. `ownCounty` is the single filter both paths now share.
+    func testAnOutOfStateSelfSpotIsNotBlockedByItsOwnPrefill() throws {
+        let prefilled = HubSelfSpot.Fields(
+            station: "KE5CW",
+            frequencyKHz: 7047,
+            county: HubSpotPrefill.ownCounty(.outOfState(location: "TX")),
+            comment: "",
+            poster: "KE5CW"
+        )
+        XCTAssertNil(HubSelfSpot.validate(prefilled, party: try party()))
+    }
+
+    /// What the rover tracker compares. A line moving LIME→LAWR changes in the
+    /// second position only, and a comparison that looked at the first county
+    /// alone would never notice.
+    func testACountyLineChangingInAnyPositionIsADifferentOffer() {
+        XCTAssertNotEqual(
+            HubSpotPrefill.ownCounty(.inState(counties: ["MDSN", "LIME"])),
+            HubSpotPrefill.ownCounty(.inState(counties: ["MDSN", "LAWR"]))
+        )
     }
 
     // MARK: The rest of the form

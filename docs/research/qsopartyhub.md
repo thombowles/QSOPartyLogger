@@ -131,6 +131,24 @@ board immediately, and a repeated submit posts twice.
    this rests on that single observed instance.
 4. **Third-party spotting.** The hub is not self-spot-only: every live ALQP
    spot was posted by `N4EMP` for other stations. Both patterns occur.
+5. **County lines are posted off-contract.** §5 records `county` as a `<select>`
+   carrying single tokens, and open question 1 above notes that no county-line
+   spot has ever been observed on the board. This app nevertheless posts a
+   county line whole and slash-joined — `MDSN/LIME`, each half translated
+   through the party's own alias map separately, so ILQP's `PULA/JACK` goes out
+   as `PULS/JACK`.
+
+   Taken deliberately: a spot naming only the first county tells a chaser
+   hunting the second to skip a station that would have given them the
+   multiplier. Correct information off-contract beats misleading information
+   on it.
+
+   **Unverified.** What the server stores for a value outside its own
+   `<select>`, and how its table then renders it, are both unknown. The first
+   real county-line send must be checked against the following poll — the
+   same discipline open question 2 already imposes on every send — and what it
+   shows recorded here. Inbound parsing is unchanged: `HubSpotParser` reads the
+   county column by position and will surface whatever string comes back.
 
 ## 7. Etiquette
 

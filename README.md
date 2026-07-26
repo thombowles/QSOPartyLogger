@@ -399,8 +399,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `⌘B` | Toggle the band map window |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
-| `⇧⌘S` | Spot yourself to the QSO Party Hub (confirm with Return, cancel with Esc) |
-| `⌥⌘S` | Spot the station in the call field to the hub — or right-click a band map spot, or a log row |
+| `⇧⌘S` | Spot to the QSO Party Hub — yourself in Run, the call field in S&P (Return sends, Esc cancels) |
 | `⌘⇧D` | Contest Dashboard (season history + SQP Challenge) |
 | `⌘[` / `⌘]` | Dashboard: previous / next year |
 | `⌘R` | Dashboard: re-read the history file |
@@ -509,12 +508,27 @@ silently dropped, a frequency it had to reconstruct from a malformed entry is
 flagged before you tune there, and a call the board has already corrected —
 these boards keep the typo alongside the fix — is greyed and stepped over.
 
-### Spotting yourself (⇧⌘S)
+### Spotting (⇧⌘S, or right-click)
 
-In-state operators are the ones sponsors are asking to post, so ⇧⌘S opens a
-spot pre-filled from what the app already knows: your call from the station
-profile, your frequency from the radio, your county from the log. Return
-sends, Escape cancels.
+One shortcut, and your operating mode decides who it means. Calling CQ, you
+want yourself on the board; hunting, you want the station you just found. Two
+commands a modifier apart only ever produced a sheet with the wrong call in it
+mid-QSO.
+
+| Mode | Call field | ⇧⌘S spots |
+| --- | --- | --- |
+| Run | anything | **you** — your call, the VFO, your counties from the log |
+| S&P | `N4RT` | **N4RT** — the VFO, and the county out of the exchange you have copied so far |
+| S&P | empty | a blank sheet, cursor in the call field, for a call you heard but have not typed |
+
+The toolbar button says which one it is before you press it, and names the
+call. Run ignores the call field on purpose: half a call typed while you are
+running still means your own run.
+
+The hub is not a self-spot board — in the live ALQP capture every spot was
+posted by one operator for other stations — so you can also **right-click a
+spot** on the band map, including one that came from your own log, or
+**right-click a row in the log** to spot a station you worked earlier.
 
 **Every send is confirmed first.** The hub's form has no CSRF token, no
 authentication and no session — whatever is posted reaches a public board
@@ -522,30 +536,25 @@ instantly, and submitting twice posts twice. An identical spot repeated within
 five minutes is refused, though changing frequency or county never counts as a
 repeat, because those are exactly when a re-spot matters.
 
+**County lines go out whole.** The county field is free text, and an operator
+on a line spots as `MDSN/LIME`. A spot naming only the first county tells
+somebody hunting the second to skip a station that would have given them the
+multiplier. Every county is checked against this party's own list before it can
+be sent, and each is translated to the hub's own spelling separately — Illinois'
+`PULA/JACK` goes out as `PULS/JACK`.
+
 **Rovers get prompted.** Change county in the log and the spot sheet opens by
-itself, pre-filled for the new county. It still never posts on its own — it
-just stops the county change from being the thing you forget.
+itself, pre-filled for the new counties — including a line that changed in its
+second position only. It still never posts on its own; it just stops the county
+change from being the thing you forget.
 
-Frequency goes out in clean kilohertz, which is the one thing this app can do
-to reduce the ambiguity its own parser exists to resolve.
-
-### Spotting somebody else (⌥⌘S, or right-click)
-
-The hub is not a self-spot board — in the live ALQP capture every spot was
-posted by one operator for other stations. So anyone can be put up there:
-
-- **⌥⌘S** spots whoever is in the call field, with the radio's frequency and
-  the county out of the exchange you have copied so far.
-- **Right-click a spot** on the band map — including one that came from your
-  own log — to pass it on to the hub with its county.
-- **Right-click a row in the log** to spot a station you worked earlier.
-
-All three open the same sheet, and the same confirmation: nothing reaches the
-board without Return. The county is only offered when it really is one of this
+Nothing is invented. The county is only offered when it really is one of this
 party's counties, so an out-of-state `TX`, a `DX`, or a half-copied exchange is
-never posted as a county token. A contact logged with no radio has no
-frequency, and the sheet opens on the empty frequency field rather than
-inventing one — a guess on a public board is worse than a blank.
+never posted as one. With no radio connected there is no frequency to offer, so
+the sheet opens on an empty frequency field and holds the send until you type
+one — a guess on a public board is worse than a blank. Frequency goes out in
+clean kilohertz, the one thing this app can do to reduce the ambiguity its own
+parser exists to resolve.
 
 A 200 back from the hub means *sent*, not *accepted* — the page re-renders
 rather than reporting a status. The app therefore watches the next couple of
@@ -620,7 +629,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 945 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 964 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
