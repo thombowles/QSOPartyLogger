@@ -145,7 +145,7 @@
   },
   {
    "name": "New Mexico QSO Party",
-   "partyID": null,
+   "partyID": "nmqp",
    "windows": [
     {
      "start": "2026-04-11T14:00:00Z",

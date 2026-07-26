@@ -73,6 +73,7 @@ BUNDLED_BY_SITE_NAME = {
     "Missouri QSO Party": "moqp",
     "North Carolina QSO Party": "ncqp",
     "New Hampshire QSO Party": "nhqp",
+    "New Mexico QSO Party": "nmqp",
     "New Jersey QSO Party": "njqp",
     "New York QSO Party": "nyqp",
     "Ohio QSO Party": "ohqp",

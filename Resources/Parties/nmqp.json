@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "id": "nmqp",
+  "name": "New Mexico QSO Party",
+  "cabrilloContest": "NM-QSO-PARTY",
+  "homeState": "NM",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "W1AW/5",
+      "points": 250,
+      "scope": "once"
+    },
+    {
+      "type": "activatedCountyCount",
+      "minQSOs": 15,
+      "points": 5000
+    }
+  ],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "maxSimultaneousCounties": 2,
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "scoreMultipliers": {
+    "power": {
+      "QRP": 5,
+      "LOW": 2,
+      "HIGH": 1
+    }
+  },
+  "schedule": [
+    {
+      "start": "2026-04-11T14:00:00Z",
+      "end": "2026-04-12T02:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "BER",
+      "name": "Bernalillo"
+    },
+    {
+      "abbr": "CAT",
+      "name": "Catron"
+    },
+    {
+      "abbr": "CHA",
+      "name": "Chaves"
+    },
+    {
+      "abbr": "CIB",
+      "name": "Cibola"
+    },
+    {
+      "abbr": "COL",
+      "name": "Colfax"
+    },
+    {
+      "abbr": "CUR",
+      "name": "Curry"
+    },
+    {
+      "abbr": "DEB",
+      "name": "De Baca"
+    },
+    {
+      "abbr": "DON",
+      "name": "Dona Ana"
+    },
+    {
+      "abbr": "EDD",
+      "name": "Eddy"
+    },
+    {
+      "abbr": "GRA",
+      "name": "Grant"
+    },
+    {
+      "abbr": "GUA",
+      "name": "Guadalupe"
+    },
+    {
+      "abbr": "HAR",
+      "name": "Harding"
+    },
+    {
+      "abbr": "HID",
+      "name": "Hidalgo"
+    },
+    {
+      "abbr": "LEA",
+      "name": "Lea"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "LOS",
+      "name": "Los Alamos"
+    },
+    {
+      "abbr": "LUN",
+      "name": "Luna"
+    },
+    {
+      "abbr": "MCK",
+      "name": "McKinley"
+    },
+    {
+      "abbr": "MOR",
+      "name": "Mora"
+    },
+    {
+      "abbr": "OTE",
+      "name": "Otero"
+    },
+    {
+      "abbr": "QUA",
+      "name": "Quay"
+    },
+    {
+      "abbr": "RIO",
+      "name": "Rio Arriba"
+    },
+    {
+      "abbr": "ROO",
+      "name": "Roosevelt"
+    },
+    {
+      "abbr": "SJU",
+      "name": "San Juan"
+    },
+    {
+      "abbr": "SMI",
+      "name": "San Miguel"
+    },
+    {
+      "abbr": "SAN",
+      "name": "Sandoval"
+    },
+    {
+      "abbr": "SFE",
+      "name": "Santa Fe"
+    },
+    {
+      "abbr": "SIE",
+      "name": "Sierra"
+    },
+    {
+      "abbr": "SOC",
+      "name": "Socorro"
+    },
+    {
+      "abbr": "TAO",
+      "name": "Taos"
+    },
+    {
+      "abbr": "TOR",
+      "name": "Torrance"
+    },
+    {
+      "abbr": "UNI",
+      "name": "Union"
+    },
+    {
+      "abbr": "VAL",
+      "name": "Valencia"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/nmqp-table.php",
+    "postURL": "http://qsopartyhub.com/nmqp-spots.php"
+  },
+  "notes": "verified: partial - rules from the sponsor's own '2026 New Mexico QSO Party Form Packet' (NMQP_Forms.pdf, last modified 09 April 2026), read verbatim 2026-07-26. One document carries the rules, the county check sheet and the Cabrillo specification. THE PACKET KEEPS ITS OWN CHANGE LOG, which no other sponsor here does, and it earns its place: the W1AW/5 bonus was REDUCED FROM 500 TO 250 POINTS on 09 April, so a copy captured between 24 March and 9 April carries the wrong number. The 250 ships and the generator asserts it. The sponsor asks readers to re-check the page before the contest. THIS PARTY'S POWER MULTIPLIER FITS, which is worth saying because two others' do not. QRP is x5, low power x2 and high power x1 - all whole numbers - so unlike Vermont and Wisconsin, whose low-power factor is x1.5 and cannot be represented, NEW MEXICO'S POWER MULTIPLIER IS APPLIED IN FULL. QRP at x5 is the largest score multiplier in this app. Twelve hours, 1400Z to 0200Z on Saturday 11 April 2026 - the second Saturday of April, and the sponsor states the formula, both UTC instants, both local instants and the duration in a single sentence, which is the most self-checking date statement of the run. It overlaps Missouri for its whole twelve hours. Phone 1 point, CW 2, digital 2. Multipliers count ONLY ONCE, regardless of mode or band. New Mexico stations count the 33 counties, all 50 states INCLUDING NEW MEXICO - the sponsor's 'up to 50' is what settles that, and NM is reachable only through a county - the 13 provinces and DX; everyone else counts the 33 counties. DC counts as Maryland. Alaska and Hawaii are states, not DX. Eight bands, with 60 m named separately from the WARC bands, which is the correct distinction and one several sponsors blur. County lines pay two counties and no more: the sponsor rules out the three-county case explicitly, and defines county lines by MARAC's county-hunter rules with a 50-metre tolerance. TWO BONUSES, BOTH MODELLED. New Mexico mobiles earn 5,000 points for every county from which they make at least 15 valid QSOs - by far the largest activation bonus in this app. And W1AW/5 pays 250 points ONCE, however many times it is worked; note this is a 2026-ONLY RULE, for the same ARRL celebration as Vermont's W1AW/1, and it must be deleted when the 2027 packet is read. The sponsor also allows W1AW/5 to be worked again on the same band and mode from a different county, which this app already handles, since a county change makes a new QSO. FT8 AND FT4 ARE PERMITTED BUT CANNOT BE LOGGED NATIVELY. The sponsor requires the normal exchange, not grid squares: 'QSOs that contain grid squares or signal reports instead of the required exchange cannot be scored', and participants must either use a mode that carries the exchange, such as JS8Call, or EDIT THEIR LOGS BEFORE SUBMISSION - replacing signal reports with 599 and converting grid squares to the state, province or DXCC entity. That is the opposite of Mississippi, which makes grid squares a first-class exchange; both parties allow FT8 and neither can be logged natively. KNOWN LIMITATION - DX COLLAPSES TO ONE MULTIPLIER WHERE THE SPONSOR COUNTS ENTITIES. The multiplier rule counts 'DX entities worked' individually, but the log format carries the literal token DX - the packet says the QTH field is a county, a state or province, or 'DX', and its own sample log shows LY2ZZ 599 DX. So a New Mexico entrant working ten DXCC entities is credited ONE multiplier instead of ten. THE SPONSOR'S OWN AUTOMATED SCORER FACES THE SAME PROBLEM, since the field it reads is DX too; it must derive the entity from the callsign, which is exactly the DXCC prefix table this app has wanted since NHQP. OUT-OF-STATE ENTRANTS ARE UNAFFECTED - their only multipliers are NM counties. Count your DX entities by hand if you are in New Mexico. Cabrillo CONTEST value NM-QSO-PARTY, printed by the sponsor in its own sample log. The packet also asks New Mexico stations to set ARRL-SECTION: NM or LOCATION: NM so the automated scorer identifies them. Counties are 33 with uniform 3-letter codes, and THE TRAP IS THE SAN/SANTA CLUSTER: SAN is SANDOVAL, not San Juan (SJU), not San Miguel (SMI) and not Santa Fe (SFE). Watch also COL Colfax against CIB Cibola. The sponsor prints 'Dona Ana' without the tilde of the official Dona Ana County; it ships as printed. OPEN QUESTIONS (why this is partial): (1) The DX multiplier collapse above, which is a missing app feature rather than a rule in doubt, and which affects New Mexico entrants only. (2) The W1AW/5 bonus is explicitly 2026-only and must be removed for 2027; the generator asserts the marker is still present so its disappearance is noticed."
+}
