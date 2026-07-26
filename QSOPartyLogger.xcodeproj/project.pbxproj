@@ -118,6 +118,7 @@
 		75B4B677B2E8E0D1B4F0795D /* AdifExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A779F556F857265114F40CB4 /* AdifExporter.swift */; };
 		7AFC46B00E954C466FB322F6 /* ClusterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F09518732D969C418274DB /* ClusterProtocol.swift */; };
 		7BD916C1B52B135ADEA0EB0E /* EntryBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */; };
+		7BE97A35880D3C0C58FBF1FC /* CaveatRosterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CBF19C2B05E02E5B784A9 /* CaveatRosterTests.swift */; };
 		7C432C2A33658F48ADF44099 /* IowaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273A1C77EBE557460270764F /* IowaQSOPartyTests.swift */; };
 		7E095A753F6C058F8D0F402E /* BritishColumbiaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42368D9706B3F36B3537C216 /* BritishColumbiaQSOPartyTests.swift */; };
 		8169A7673BCD6E9B2A60EE78 /* EntryFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242014141B06D7E0F2526D86 /* EntryFlow.swift */; };
@@ -245,6 +246,7 @@
 		0EC4FB2912638C4B5052ED72 /* HubSpotParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotParser.swift; sourceTree = "<group>"; };
 		0F52BEC7154012161AF51ED0 /* CWSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CWSender.swift; sourceTree = "<group>"; };
 		112CC71F65B097523B39BC9B /* HubSelfSpotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSelfSpotTests.swift; sourceTree = "<group>"; };
+		132CBF19C2B05E02E5B784A9 /* CaveatRosterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaveatRosterTests.swift; sourceTree = "<group>"; };
 		14042D5B6DD33CC2A46A276C /* SpotFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFilter.swift; sourceTree = "<group>"; };
 		14A9F5FF0C8233FC92821648 /* SpotLabelSizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotLabelSizeTests.swift; sourceTree = "<group>"; };
 		14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialExchangeTests.swift; sourceTree = "<group>"; };
@@ -542,6 +544,7 @@
 				42368D9706B3F36B3537C216 /* BritishColumbiaQSOPartyTests.swift */,
 				AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */,
 				715DC2AC0C0FD0301DA7FF0B /* CaliforniaQSOPartyTests.swift */,
+				132CBF19C2B05E02E5B784A9 /* CaveatRosterTests.swift */,
 				5BA71198926002262F846473 /* ChallengeTests.swift */,
 				3EF36ECEA568E47C2F9D6778 /* ClusterHistoryTests.swift */,
 				A2914E1429C4152BCF4A61DC /* ClusterProtocolTests.swift */,
@@ -981,6 +984,7 @@
 				7E095A753F6C058F8D0F402E /* BritishColumbiaQSOPartyTests.swift in Sources */,
 				74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */,
 				0C98121EB0A1EFAF11C23781 /* CaliforniaQSOPartyTests.swift in Sources */,
+				7BE97A35880D3C0C58FBF1FC /* CaveatRosterTests.swift in Sources */,
 				198B4CCE041337F320053AA5 /* ChallengeTests.swift in Sources */,
 				46267A86861ADDCD7E3EDBA8 /* CloudMirrorTests.swift in Sources */,
 				D3877536C753E23BBA86DEE4 /* ClusterHistoryTests.swift in Sources */,

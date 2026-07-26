@@ -334,5 +334,12 @@
   "hubSpots": {
     "tableURL": "http://qsopartyhub.com/sdqp-table.php",
     "postURL": "http://qsopartyhub.com/sdqp-spots.php"
-  }
+  },
+  "caveats": [
+    {
+      "kind": "ruleInference",
+      "summary": "Whether South Dakota counts itself, and whether outside stations may work only SD, are both inferred.",
+      "detail": "(why this is partial): (1) Whether South Dakota itself counts as a state multiplier for SD entrants is not stated. In-state multipliers include 'US States', but SD stations send a county so the token SD is never received, and there is no in-state maximum to settle it by arithmetic the way KSQP, COQP, IAQP and AZQP have one. Shipped as NOT counting, so as not to credit a multiplier the sponsor never described - the same call as NHQP and MEQP. (2) No rule states whether stations outside South Dakota may work only SD stations. The Object reads 'Stations outside South Dakota work as many South Dakota stations and counties as possible', which is an aim rather than a limit, and out-of-state multipliers are SD counties only. Shipped with the restriction ON, as for NJQP, IAQP, NHQP and PAQP, so a stray non-SD contact is visibly flagged NO CREDIT rather than silently adding points. Confirm both with the sponsor (w0ej@arrl.net) before submitting a log."
+    }
+  ]
 }

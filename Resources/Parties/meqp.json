@@ -150,5 +150,12 @@
   "hubSpots": {
     "tableURL": "http://qsopartyhub.com/meqp-table.php",
     "postURL": "http://qsopartyhub.com/meqp-spots.php"
-  }
+  },
+  "caveats": [
+    {
+      "kind": "ruleInference",
+      "summary": "Whether Maine counts as its own state multiplier is not stated; shipped as not counting.",
+      "detail": "(why this is partial): whether Maine itself counts as a state multiplier for Maine entrants. The rules list 'States (50)' as a class but never say a Maine county also yields the ME state multiplier, Maine stations always send a county so the token ME is never received, and there is no stated multiplier maximum to settle it by arithmetic. Shipped as NOT counting, so as not to credit a multiplier the sponsor never described - the same call as NHQP. Affects Maine entrants only; confirm with the sponsor (maineqsoparty@gmail.com) before submitting a log."
+    }
+  ]
 }

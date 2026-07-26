@@ -125,5 +125,12 @@
   "hubSpots": {
     "tableURL": "http://qsopartyhub.com/azqp-table.php",
     "postURL": "http://qsopartyhub.com/azqp-spots.php"
-  }
+  },
+  "caveats": [
+    {
+      "kind": "ruleInference",
+      "summary": "Arizona counting itself as a multiplier is inferred, and the rules are still the 2025 revision.",
+      "detail": "(why this is partial): (1) The published rules are the 2025 revision under a 2026 banner, so a 2026 rule change would not be visible. Re-check azqp.org in the fortnight before 10 October 2026, and re-run gen_azqp.py, whose quoted-sentence assertions fail loudly if the text moved. (2) Whether Arizona itself counts as a state multiplier for Arizona stations is not stated in words. It ships as counting, because an AZ station can never receive the token AZ and the sponsor's stated total of 50 states is otherwise unreachable - the same arithmetic that settles KSQP, COQP and IAQP, but an inference rather than a quotation. Confirm both with the sponsor (info@azqp.org) before submitting a log."
+    }
+  ]
 }

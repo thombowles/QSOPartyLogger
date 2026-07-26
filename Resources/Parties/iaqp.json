@@ -456,5 +456,12 @@
   "hubSpots": {
     "tableURL": "http://qsopartyhub.com/iaqp-table.php",
     "postURL": "http://qsopartyhub.com/iaqp-spots.php"
-  }
+  },
+  "caveats": [
+    {
+      "kind": "ruleInference",
+      "summary": "The rules page is still titled 2025, and whether outside stations may work only Iowa is inferred.",
+      "detail": "(why this is partial): (1) The published rules page is still titled for 2025 and its rules PDF is dated 12 AUG 2018; only the 2026 DATE (September 19, third weekend, 1400Z-0200Z) is announced, so re-check w0yl.com/IAQP in early September for a 2026 revision. (2) No rule states whether stations outside Iowa may work only Iowa stations. The Objective says 'Stations outside Iowa work as many Iowa stations as possible' — an aim, not a limit — and the dupe list's 'Non-Iowa stations may be worked ONCE per MODE per BAND' is not scoped to Iowa entrants, which arguably cuts the other way. Shipped with the restriction ON for consistency with every other bundled party and because a stray non-Iowa contact is then visibly flagged NO CREDIT rather than silently adding points; if the sponsor scores those QSOs, this under-counts and the flag makes that obvious. Confirm with iowaqsoparty@hotmail.com. Not modeled: satellite QSOs being allowed, and the club competition."
+    }
+  ]
 }

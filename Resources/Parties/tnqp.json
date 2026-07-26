@@ -453,5 +453,12 @@
   "hubSpots": {
     "tableURL": "http://qsopartyhub.com/tnqp-table.php",
     "postURL": "http://qsopartyhub.com/tnqp-spots.php"
-  }
+  },
+  "caveats": [
+    {
+      "kind": "provenance",
+      "summary": "The rules document is titled 2025 and no 2026 revision exists yet.",
+      "detail": "(why this is partial): (1) the posted rules document is titled for 2025 and no 2026-specific revision exists yet — re-check tnqp.org/rules/ in late August 2026. (2) Not modeled: 'Tennessee mobiles and rovers may claim one MULTIPLIER for any Tennessee county from which they complete at least 10 QSOs if they do not earn a multiplier for that county otherwise' — the matching 500-point BONUS is modeled, but this extra self-activation multiplier is not, so a TN mobile/rover may see a slightly low multiplier count."
+    }
+  ]
 }

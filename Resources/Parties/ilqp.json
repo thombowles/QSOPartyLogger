@@ -487,5 +487,22 @@
     "countyAliases": {
       "PULS": "PULA"
     }
-  }
+  },
+  "caveats": [
+    {
+      "kind": "scoreAffecting",
+      "summary": "Dupes across CW and digital are not flagged.",
+      "detail": "DUPES ACROSS CW AND DIGITAL ARE NOT FLAGGED. The sponsor's mode split is TWO-WAY: 'Stations may be worked once per band and mode (phone and CW/digital)'. This app keys dupes on three mode classes, so working one station on CW and again on RTTY on the same band shows as two valid QSOs when ILQP counts the second as a duplicate. Multipliers are unaffected - they count once regardless - and the sponsor's stated penalty is loss of the QSO with no further deduction, but the extra QSO points will not survive adjudication."
+    },
+    {
+      "kind": "scoreAffecting",
+      "summary": "FT4/FT8 contacts earn no credit from the sponsor but are scored here.",
+      "detail": "'FT4 and FT8 contacts will receive no contact credit. Other digital modes are encouraged.' That distinction is below the granularity of this app's mode classes, so an FT8 QSO logs and scores here and earns nothing from the sponsor. No final-score multiplier; power classes and the new Unlimited class decide awards only, and the high/low boundary moved to 100 W for 2025 (it was 200 W). Cabrillo CONTEST value IL-QSO-PARTY per WA7BNM; the sponsor prefers Cabrillo but explicitly accepts an Excel or hand-written paper log, and prints no header token. Counties are 102 with MIXED 3- AND 4-CHARACTER abbreviations - the rules say 'Each Illinois county has an established 4 letter abbreviation (Lee County excepted)', so LEE is the only 3-letter code. The rules name their own worst traps and the generator asserts both pairs: 'White (WHIT) and Whiteside (WTSD)' and 'Mason (MASN) and Macon (MACN)'. That second pair also settles a conflict between two sponsor documents - the website FAQ says Macon should be MCON, while the county list and the rules both say MACN, so MACN ships."
+    },
+    {
+      "kind": "provenance",
+      "summary": "The rules are the 2025 edition; the date follows the sponsor’s own printed formula.",
+      "detail": "(why this is partial): (1) The published rules are the 2025 edition and the site's banner still reads 'Next Date for the ILQP: October 19, 2025'. The DATE is not in doubt - the sponsor's page prints the formula 'Held Annually on Sunday the third full weekend of October', 18 October 2026 is that Sunday, and the same formula reproduces the 2025 date the rules print - but no 2026 rule revision has been posted, and in particular the bonus stations are marked 'NEW FOR 2025' and have run only once. Re-check w9awe.org/ilqp before 18 October 2026 (the rules PDF is on page 2 of the file browser) and re-run gen_ilqp.py, whose quoted-sentence assertions fail loudly if the text moved. (2) Whether Illinois itself counts as a state multiplier for IL entrants is not stated, and there is no in-state maximum to settle it by arithmetic; shipped as NOT counting, the same call as NHQP, MEQP and SDQP. (3) No rule states whether stations outside Illinois may work only Illinois stations; out-of-state multipliers are IL counties only, and the restriction ships ON as for six other parties, so a stray non-IL contact is visibly flagged NO CREDIT. Confirm all three with the sponsor (n9jf@arrl.net) before submitting a log."
+    }
+  ]
 }
