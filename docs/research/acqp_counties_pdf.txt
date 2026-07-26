@@ -1,0 +1,45 @@
+Source: https://www.acqp.ca/wp-content/uploads/2025/03/
+  ACQP-Province-County-Division-Abbreviations-1.2-Sheet2.pdf
+Fetched 2026-07-26 via pdftotext -layout.  A SECOND, INDEPENDENT COPY of the
+  live HTML table - the two should be required to agree when this is built.
+========================================================================
+                                       Atlantic Canada QSO Party - Provinces & County/Division Abbreviations
+                                                          Prince Edward
+      Newfoundland & Labrador (NL)                           Island (3)            New Brunswick (15)            Nova Scotia (18)
+Division                 Abbr                      County         Abbr         County       Abbr           County       Abbreviation
+ Div 1:Avalon Peninsula-St. John's       NLASJ         Kings         PEKGS          Albert       NBALB           Annapolis     NSANP
+
+ Div 2:Burin Peninsula-Marystown        NLBMT          Queens        PEQNS         Carleton      NBCAR           Antigonish    NSATG
+Div 3:South Coast-Channel-Port aux
+             Basques                    NLSCB          Prince        PEPRN         Charlotte     NBCHA         Cape Breton     NSCBR
+
+  Div 4:St. George's-Stephenville       NLSGS                                     Gloucester     NBGLO           Colchester    NSCOL
+
+Div 5:Humber District-Corner Brook      NLHCB                                        Kent        NBKEN          Cumberland     NSCMB
+Div 6:Central Newfoundland-Grand
+          Falls-Windsor                 NLGFW                                        Kings       NBKGS               Digby     NSDIG
+
+ Div 7:Bonavista/Trinity-Clarenville    NLBTC                                     Madawaska      NBMAD         Guysborough     NSGUY
+
+ Div 8:Notre Dame Bay-Lewisporte        NLNDL                                   Northumberland   NBNOR              Halifax    NSHRM
+   Div 9: Northern Peninsula-St.
+              Anthony                   NLNSA                                      Queens        NBQNS               Hants     NSHNT
+  Div 10: Labrador-Happy Valley-
+            Goose Bay                   NLLGB                                     Restigouche    NBRES            Inverness    NSINV
+
+     Div 11:Nunatsiavut-Nain            NLLNN                                     Saint John     NBSJC               Kings     NSKGS
+
+                                                                                   Sunbury       NBSUN           Lunenburg     NSLUN
+
+                                                                                    Victoria      NBVIC              Pictou    NSPIC
+
+                                                                                 Westmorland     NBWES             Queens      NSQNS
+
+                                                                                     York        NBYOR           Richmond      NSRIC
+
+                                                                                                                 Shelburne     NSSHL
+
+                                                                                                                    Victoria   NSVIC
+
+                                                                                                                  Yarmouth     NSYAR
+
