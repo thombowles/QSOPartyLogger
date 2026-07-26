@@ -110,9 +110,43 @@ Two consequences worth naming before the first one is built:
    which is what sponsors require, is unaffected. Ontario, Quebec and the two
    multi-province parties should each be checked against this, not assumed.
 
-   **Still open: the two multi-state regionals** (7QP's seven states, NEQP's
-   six), which genuinely have no single `homeState`. They sit in May, so the
-   single-state parties ahead of them still buy time to think.
+   **The two multi-state regionals — REQUIREMENT SET BY KE5CW, 2026-07-26:**
+
+   > "I should be able to log all states on the 7qp in a single log. Same for
+   > NEQP."
+
+   That is the design, and it is not negotiable by convenience. **One log covers
+   every member state** — 7QP's seven (AZ ID MT NV OR UT WY) and NEQP's six (CT
+   ME MA NH RI VT). No "pick your state at setup", no one-log-per-state, no
+   seven separate party definitions.
+
+   So `homeState: String` genuinely does not survive here, and this is the one
+   Article 4 change the remaining parties actually force. Sketch, to be confirmed
+   against each sponsor's rules when built:
+
+   - **Counties carry their own state.** `County` gains an optional `state`;
+     `nil` keeps every existing party identical (Article 4). The party's county
+     list becomes the union across member states, ~350 entries for 7QP.
+   - **`homeState` becomes a set.** An optional `homeStates: [String]` whose
+     default is `[homeState]`, so nothing else moves. `excludedStateTokens`
+     defaults to all of them — a 7-land station sends a county, never a bare
+     state, so none of the seven tokens is loggable.
+   - **Per-QSO location comes from the county, not the party.** `AdifExporter`
+     writes `party.homeState` into `state`/`my_state` and `cnty` today; for these
+     two it must read the county's own state instead. Cabrillo is unaffected —
+     it carries the raw exchange token.
+   - **`homeStateCountsViaCounty` becomes per-state** if any sponsor wants it.
+   - **The UI's "Inside/Outside \(homeState)"** needs a party-supplied phrase
+     ("Inside the 7th call area"), which is data, not a UI special case.
+
+   **Five of the thirteen member-state county lists are already bundled**, which
+   materially de-risks this: AZ and ID for 7QP, and ME, NH and VT for NEQP. The
+   other eight (MT NV OR UT WY, CT MA RI) have no 2026 party of their own and
+   must be generated from the regional sponsors' own lists.
+
+   Its own commit, adding no party (Article 4), before 7QP is built. Both sit on
+   2 May, so the March and April parties still buy time — but the shape is now
+   decided, and it should not be re-litigated.
 
 ## Remaining, in contest-date order
 
@@ -142,10 +176,10 @@ next one built". 19 US + 4 Canadian. Research is banked for none of them.
 | 18 | Quebec | Apr 19 1300Z → Apr 19 2400Z | 🇨🇦 |
 | 19 | Nebraska | Apr 25 1400Z → Apr 26 0200Z | |
 | 20 | Florida | Apr 25 1600Z → Apr 26 0159Z; Apr 26 1200–2159Z | |
-| 21 | 7th Call Area | May 2 1300Z → May 3 0700Z | **7 states** (AZ ID MT NV OR UT WY) |
+| 21 | 7th Call Area | May 2 1300Z → May 3 0700Z | **7 states** (AZ ID MT NV OR UT WY) — **one log covers all seven**, see *Scope* |
 | 22 | Indiana | May 2 1500Z → May 3 0259Z | |
 | 23 | Delaware | May 2 1700Z → May 3 2359Z | 3 counties |
-| 24 | New England | May 2 2000Z → May 3 0500Z; May 3 1300–2400Z | **6 states** (CT ME MA NH RI VT) |
+| 24 | New England | May 2 2000Z → May 3 0500Z; May 3 1300–2400Z | **6 states** (CT ME MA NH RI VT) — **one log covers all six**, see *Scope* |
 | 25 | Canadian Prairies | May 9 1700Z → May 10 0300Z | 🇨🇦 MB/SK/AB |
 | 26 | Arkansas | May 16 1400Z → May 17 0200Z | |
 | 27 | Kentucky | Jun 6 1300Z → Jun 7 0100Z | |
