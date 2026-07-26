@@ -1,0 +1,411 @@
+{
+  "schemaVersion": 1,
+  "id": "mnqp",
+  "name": "Minnesota QSO Party",
+  "cabrilloContest": "MN-QSO-PARTY",
+  "homeState": "MN",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "exchangeIncludesRST": false,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-02-07T14:00:00Z",
+      "end": "2026-02-08T00:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "AIT",
+      "name": "Aitkin"
+    },
+    {
+      "abbr": "ANO",
+      "name": "Anoka"
+    },
+    {
+      "abbr": "BEC",
+      "name": "Becker"
+    },
+    {
+      "abbr": "BEL",
+      "name": "Beltrami"
+    },
+    {
+      "abbr": "BEN",
+      "name": "Benton"
+    },
+    {
+      "abbr": "BIG",
+      "name": "Big Stone"
+    },
+    {
+      "abbr": "BLU",
+      "name": "Blue Earth"
+    },
+    {
+      "abbr": "BRO",
+      "name": "Brown"
+    },
+    {
+      "abbr": "CRL",
+      "name": "Carlton"
+    },
+    {
+      "abbr": "CRV",
+      "name": "Carver"
+    },
+    {
+      "abbr": "CAS",
+      "name": "Cass"
+    },
+    {
+      "abbr": "CHP",
+      "name": "Chippewa"
+    },
+    {
+      "abbr": "CHS",
+      "name": "Chisago"
+    },
+    {
+      "abbr": "CLA",
+      "name": "Clay"
+    },
+    {
+      "abbr": "CLE",
+      "name": "Clearwater"
+    },
+    {
+      "abbr": "COO",
+      "name": "Cook"
+    },
+    {
+      "abbr": "COT",
+      "name": "Cottonwood"
+    },
+    {
+      "abbr": "CRO",
+      "name": "Crow Wing"
+    },
+    {
+      "abbr": "DAK",
+      "name": "Dakota"
+    },
+    {
+      "abbr": "DOD",
+      "name": "Dodge"
+    },
+    {
+      "abbr": "DOU",
+      "name": "Douglas"
+    },
+    {
+      "abbr": "FAI",
+      "name": "Faribault"
+    },
+    {
+      "abbr": "FIL",
+      "name": "Fillmore"
+    },
+    {
+      "abbr": "FRE",
+      "name": "Freeborn"
+    },
+    {
+      "abbr": "GOO",
+      "name": "Goodhue"
+    },
+    {
+      "abbr": "GRA",
+      "name": "Grant"
+    },
+    {
+      "abbr": "HEN",
+      "name": "Hennepin"
+    },
+    {
+      "abbr": "HOU",
+      "name": "Houston"
+    },
+    {
+      "abbr": "HUB",
+      "name": "Hubbard"
+    },
+    {
+      "abbr": "ISA",
+      "name": "Isanti"
+    },
+    {
+      "abbr": "ITA",
+      "name": "Itasca"
+    },
+    {
+      "abbr": "JAC",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "KNB",
+      "name": "Kanabec"
+    },
+    {
+      "abbr": "KND",
+      "name": "Kandiyohi"
+    },
+    {
+      "abbr": "KIT",
+      "name": "Kittson"
+    },
+    {
+      "abbr": "KOO",
+      "name": "Koochiching"
+    },
+    {
+      "abbr": "LAC",
+      "name": "Lac Qui Parle"
+    },
+    {
+      "abbr": "LAK",
+      "name": "Lake"
+    },
+    {
+      "abbr": "LKW",
+      "name": "Lake of the Woods"
+    },
+    {
+      "abbr": "LES",
+      "name": "Le Sueur"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "LYO",
+      "name": "Lyon"
+    },
+    {
+      "abbr": "MAH",
+      "name": "Mahnomen"
+    },
+    {
+      "abbr": "MRS",
+      "name": "Marshall"
+    },
+    {
+      "abbr": "MRT",
+      "name": "Martin"
+    },
+    {
+      "abbr": "MCL",
+      "name": "McLeod"
+    },
+    {
+      "abbr": "MEE",
+      "name": "Meeker"
+    },
+    {
+      "abbr": "MIL",
+      "name": "Mille Lacs"
+    },
+    {
+      "abbr": "MOR",
+      "name": "Morrison"
+    },
+    {
+      "abbr": "MOW",
+      "name": "Mower"
+    },
+    {
+      "abbr": "MUR",
+      "name": "Murray"
+    },
+    {
+      "abbr": "NIC",
+      "name": "Nicollet"
+    },
+    {
+      "abbr": "NOB",
+      "name": "Nobles"
+    },
+    {
+      "abbr": "NOR",
+      "name": "Norman"
+    },
+    {
+      "abbr": "OLM",
+      "name": "Olmsted"
+    },
+    {
+      "abbr": "OTT",
+      "name": "Ottertail"
+    },
+    {
+      "abbr": "PEN",
+      "name": "Pennington"
+    },
+    {
+      "abbr": "PIN",
+      "name": "Pine"
+    },
+    {
+      "abbr": "PIP",
+      "name": "Pipestone"
+    },
+    {
+      "abbr": "POL",
+      "name": "Polk"
+    },
+    {
+      "abbr": "POP",
+      "name": "Pope"
+    },
+    {
+      "abbr": "RAM",
+      "name": "Ramsey"
+    },
+    {
+      "abbr": "RDL",
+      "name": "Red Lake"
+    },
+    {
+      "abbr": "RDW",
+      "name": "Redwood"
+    },
+    {
+      "abbr": "REN",
+      "name": "Renville"
+    },
+    {
+      "abbr": "RIC",
+      "name": "Rice"
+    },
+    {
+      "abbr": "ROC",
+      "name": "Rock"
+    },
+    {
+      "abbr": "ROS",
+      "name": "Roseau"
+    },
+    {
+      "abbr": "SCO",
+      "name": "Scott"
+    },
+    {
+      "abbr": "SHE",
+      "name": "Sherburne"
+    },
+    {
+      "abbr": "SIB",
+      "name": "Sibley"
+    },
+    {
+      "abbr": "STL",
+      "name": "St Louis"
+    },
+    {
+      "abbr": "STR",
+      "name": "Stearns"
+    },
+    {
+      "abbr": "STE",
+      "name": "Steele"
+    },
+    {
+      "abbr": "STV",
+      "name": "Stevens"
+    },
+    {
+      "abbr": "SWI",
+      "name": "Swift"
+    },
+    {
+      "abbr": "TOD",
+      "name": "Todd"
+    },
+    {
+      "abbr": "TRA",
+      "name": "Traverse"
+    },
+    {
+      "abbr": "WAB",
+      "name": "Wabasha"
+    },
+    {
+      "abbr": "WAD",
+      "name": "Wadena"
+    },
+    {
+      "abbr": "WSC",
+      "name": "Waseca"
+    },
+    {
+      "abbr": "WSH",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAT",
+      "name": "Watonwan"
+    },
+    {
+      "abbr": "WIL",
+      "name": "Wilkin"
+    },
+    {
+      "abbr": "WIN",
+      "name": "Winona"
+    },
+    {
+      "abbr": "WRI",
+      "name": "Wright"
+    },
+    {
+      "abbr": "YEL",
+      "name": "Yellow Medicine"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/mnqp-table.php",
+    "postURL": "http://qsopartyhub.com/mnqp-spots.php"
+  },
+  "notes": "verified: partial - rules from the Minnesota Wireless Association's OFFICIAL 2026 document, 'MNQP_Contest_Rules rev 31.pdf', footer 'Rev 31 - December 31, 2025', read verbatim 2026-07-26, plus the sponsor's official county multiplier list PDF and the MNQP main page. Counties are generated by gen_mnqp.py, which parses the sponsor's county list TWICE - the PDF prints all 87 alphabetically by county AND alphabetically by designator - and requires the two orderings to agree exactly. PROVENANCE NOTE WORTH KEEPING: W0AA.ORG NO LONGER PUBLISHES THE 2026 RULES. The live rules page says the rules were 'last updated for the 2027 QSO Party' and links the 2027 PDF, which flags FOUR of its own changes as 'NEW 2027' - multipliers move to once per mode, in-state county multipliers stop counting for MN stations while Minnesota itself starts counting, CW goes from 2 points to 3, and rovers gain two-county operation. Building this party from the live document would have been wrong in all four. Rev 31 was recovered from the Wayback Machine snapshot of 2026-02-09, two days after the contest, whose copy of the rules page reads 'last updated for the 2026 QSO Party'. Note also that the sponsor's own changelog sentence is stale and understates the revision badly: both the 2026 and 2027 versions of the page carry the identical line 'Changed entry deadline to seven days after the contest'. And w0aa.org 404s its own PDFs unless the request carries a Referer of https://www.w0aa.org/mnqp-rules/. Ten hours in one window, 1400Z to 2400Z Saturday 7 February 2026. The rules say 'from 1400 through 2359 UTC (8 AM through 5:59 PM CST)' and the main page says '1400 UTC (8:00 AM CST) to 2400 UTC (6:00 PM CST)'; inclusive of the 2359 minute these are the same instant, and both are internally consistent against CST. The sponsor publishes future dates - 6 February 2027, 5 February 2028, 3 February 2029 - which are recorded here but deliberately NOT put in the schedule, since Article 19 ships the target year only. TWO POINTS FOR EVERY QSO, phone and CW alike, stated in those words. Multipliers count ONCE OVERALL - not per band, not per mode, the only bundled party with that scope on both sides. Minnesota stations count 87 MN counties + 49 states (explicitly NOT Minnesota) + DC + 13 provinces and territories + one DX, for the sponsor's stated 151 maximum, and this app reproduces that total exactly. Everyone else counts the 87 MN counties, for 87. DC IS ITS OWN MULTIPLIER HERE and is deliberately not aliased to MD, unlike VTQP and MDC. All DX is worth ONE multiplier however many entities are worked, which is what the DX token style produces. HF only - 160 through 10 m excluding WARC, six bands, confirmed one-for-one against the sponsor's suggested-frequency table; no VHF or UHF at all. COUNTY-LINE OPERATION IS FORBIDDEN: 'No station may claim simultaneous operation in more than one county, state, or province', so entering two counties is rejected, as in ALQP. Minnesota entrants are capped at 100 watts by class (5 W for QRP) while W/VE classes run to 1500 W - an eligibility rule, not a scoring one. No bonus stations and no final-score multiplier of any kind. KNOWN LIMITATION 1 - THE EXCHANGE IS A NAME AND THIS APP CANNOT LOG IT, WHICH BLOCKS SUBMISSION. MNQP exchanges a FIRST NAME plus a location and NO signal report: 'MN Stations: First name & county (three letter designator). W/VE Stations: First name and state / province. DX Stations: First name only.' This app has no name field on a QSO, so the name is not captured, and the Cabrillo exporter writes the signal-report/serial slot into the ex1 column the sponsor reserves for the name - which for a party with neither is EMPTY. SCORING IS COMPLETELY UNAFFECTED: names are not multipliers, not points and not part of the dupe key, so live operating, dupe checking, multiplier tracking and the score are all correct. But Cabrillo is REQUIRED for submission and the log robot expects the name in ex1, so AN EXPORTED MNQP LOG NEEDS ITS NAME COLUMN FILLED IN BEFORE IT IS SUBMITTED. Recorded as a deferred engine gap; the fix is a name field on the QSO plus an exchangeIncludesName flag, which touches the entry bar and the edit sheet and is therefore its own commit. Cabrillo CONTEST value MN-QSO-PARTY per the WA7BNM registry, entry 238 - the rules require Cabrillo but print no header token. Logs are due within 7 days at https://mnqp.contesting.com/mnqpsubmitlog.php. Counties are 87 with uniform 3-letter designators, and several are NOT the naive first three letters: Carlton is CRL, Carver CRV and Crow Wing CRO, so CAR is not a designator at all; Kanabec is KNB and Kandiyohi KND, so KAN is not either; Marshall MRS and Martin MRT sit one letter apart. St Louis is printed without a period as 'St Louis' (STL) and Otter Tail as one word, 'Ottertail' (OTT); both ship as the sponsor prints them. OPEN QUESTIONS (why this is partial): (1) KNOWN LIMITATION 1 above - the name half of the exchange is not logged, so the exported Cabrillo is not submittable as it stands. This is a missing app feature, not a rule in doubt. (2) The 2026 rules are no longer published by the sponsor and were recovered from a web archive; they are the right document - the archived rules page of the same date names them - but they cannot be re-fetched from w0aa.org to confirm. If MNQP is ever re-verified for 2027, note that the 2027 edition is a DIFFERENT PARTY in four fields, all of which this schema already has: countScope perMode, homeStateCountsViaCounty true, points phone 2 / CW 3, and maxSimultaneousCounties 2. Confirm with the Rules Committee at mnqp-committee@w0aa.org."
+}

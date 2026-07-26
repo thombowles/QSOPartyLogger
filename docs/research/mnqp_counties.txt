@@ -1,0 +1,129 @@
+# Source: https://www.w0aa.org/wp-content/docs/mnqp/MNQP-MN-Counties.pdf
+# The sponsor's official county multiplier list, linked from the MNQP main page as
+# 'County multiplier list with abbreviations'. Carries the 87 counties TWICE - once
+# alphabetical by county, once alphabetical by designator - which is what gen_mnqp.py
+# cross-checks. Also carries the states and the 13 provinces.
+# Fetched: 2026-07-26
+
+                                       87 - Minnesota Counties and 3 letter designators
+                                                   Alphabetical by County
+
+Aitkin                    AIT         Isanti                             ISA                 Pipestone          PIP
+Anoka                     ANO         Itasca                             ITA                 Polk              POL
+Becker                    BEC         Jackson                           JAC                  Pope              POP
+Beltrami                  BEL         Kanabec                           KNB                  Ramsey            RAM
+Benton                    BEN         Kandiyohi                         KND                  Red Lake          RDL
+Big Stone                 BIG         Kittson                           KIT                  Redwood           RDW
+Blue Earth                BLU         Koochiching                       KOO                  Renville          REN
+Brown                     BRO         Lac Qui Parle                     LAC                  Rice              RIC
+Carlton                   CRL         Lake                              LAK                  Rock              ROC
+Carver                    CRV         Lake of the Woods                 LKW                  Roseau            ROS
+Cass                      CAS         Le Sueur                          LES                  St Louis          STL
+Chippewa                  CHP         Lincoln                            LIN                 Scott             SCO
+Chisago                   CHS         Lyon                              LYO                  Sherburne         SHE
+Clay                      CLA         McLeod                            MCL                  Sibley             SIB
+Clearwater                CLE         Mahnomen                          MAH                  Stearns           STR
+Cook                      COO         Marshall                          MRS                  Steele            STE
+Cottonwood                COT         Martin                            MRT                  Stevens           STV
+Crow Wing                 CRO         Meeker                            MEE                  Swift             SWI
+Dakota                    DAK         Mille Lacs                        MIL                  Todd              TOD
+Dodge                     DOD         Morrison                          MOR                  Traverse          TRA
+Douglas                   DOU         Mower                             MOW                  Wabasha           WAB
+Faribault                 FAI         Murray                            MUR                  Wadena            WAD
+Fillmore                  FIL         Nicollet                          NIC                  Waseca            WSC
+Freeborn                  FRE         Nobles                            NOB                  Washington        WSH
+Goodhue                   GOO         Norman                            NOR                  Watonwan          WAT
+Grant                     GRA         Olmsted                           OLM                  Wilkin            WIL
+Hennepin                  HEN         Ottertail                         OTT                  Winona            WIN
+Houston                   HOU         Pennington                        PEN                  Wright            WRI
+Hubbard                   HUB         Pine                               PIN                 Yellow Medicine   YEL
+
+                                            50 - US States and 2-letter designators
+
+Alabama                   AL          Kentucky                           KY                  Ohio              OH
+Alaska                    AK          Louisiana                          LA                  Oklahoma          OK
+Arizona                   AZ          Maine                              ME                  Oregon            OR
+Arkansas                  AR          Maryland                           MD                  Pennsylvania      PA
+California                CA          Massachusetts                      MA                  Rhode Island      RI
+Colorado                  CO          Michigan                           MI                  South Carolina    SC
+Connecticut               CT          Mississippi                        MS                  South Dakota      SD
+Delaware                  DE          Missouri                           MO                  Tennessee         TN
+Dist. Of Columbia         DC          Montana                            MT                  Texas             TX
+Florida                   FL          Nebraska                           NE                  Utah              UT
+Georgia                   GA          Nevada                             NV                  Vermont           VT
+Hawaii                    HI          New Hampshire                      NH                  Virgina           VA
+Idaho                     ID          New Jersey                         NJ                  Washington        WA
+Illinois                  IL          New Mexico                         NM                  West Virginia     WV
+Indiana                   IN          New York                           NY                  Wisconsin         WI
+Iowa                      IA          North Carolina                     NC                  Wyoming           WY
+Kansas                    KS          North Dakota                       ND
+
+                                13 - Canadian Provinces & Territories and 2-letter designators
+                                                 Alphabetical by Province
+
+Alberta                   AB          Nova Scotia                         NS                 Quebec            QC
+British Columbia          BC          Nunavut                             NU                 Saskatchewan      SK
+Manitoba                  MB          Northwest Territories               NT                 Yukon             YT
+New Brunswick             NB          Ontario                             ON
+Newfoundland & Labrador   NL          Prince Edward Island                PE
+                                  87 - Minnesota Counties and 3 letter designators
+                                            Alphabetical by Designator
+
+Aitkin               AIT         Isanti                             ISA                 Pipestone                     PIP
+Anoka                ANO         Itasca                             ITA                 Polk                         POL
+Becker               BEC         Jackson                           JAC                  Pope                         POP
+Beltrami             BEL         Kittson                           KIT                  Ramsey                       RAM
+Benton               BEN         Kanabec                           KNB                  Red Lake                     RDL
+Big Stone            BIG         Kandiyohi                         KND                  Redwood                      RDW
+Blue Earth           BLU         Koochiching                       KOO                  Renville                     REN
+Brown                BRO         Lac Qui Parle                     LAC                  Rice                         RIC
+Cass                 CAS         Lake                              LAK                  Rock                         ROC
+Chippewa             CHP         Le Sueur                          LES                  Roseau                       ROS
+Chisago              CHS         Lincoln                            LIN                 Scott                        SCO
+Clay                 CLA         Lake of the Woods                 LKW                  Sherburne                    SHE
+Clearwater           CLE         Lyon                              LYO                  Sibley                        SIB
+Cook                 COO         Mahnomen                          MAH                  Steele                       STE
+Cottonwood           COT         McLeod                            MCL                  St Louis                     STL
+Carlton              CRL         Meeker                            MEE                  Stearns                      STR
+Crow Wing            CRO         Mille Lacs                        MIL                  Stevens                      STV
+Carver               CRV         Morrison                          MOR                  Swift                        SWI
+Dakota               DAK         Mower                             MOW                  Todd                         TOD
+Dodge                DOD         Marshall                          MRS                  Traverse                     TRA
+Douglas              DOU         Martin                            MRT                  Wabasha                      WAB
+Faribault            FAI         Murray                            MUR                  Wadena                       WAD
+Fillmore             FIL         Nicollet                          NIC                  Watonwan                     WAT
+Freeborn             FRE         Nobles                            NOB                  Wilkin                       WIL
+Goodhue              GOO         Norman                            NOR                  Winona                       WIN
+Grant                GRA         Olmsted                           OLM                  Wright                       WRI
+Hennepin             HEN         Ottertail                         OTT                  Waseca                       WSC
+Houston              HOU         Pennington                        PEN                  Washington                   WSH
+Hubbard              HUB         Pine                               PIN                 Yellow Medicine              YEL
+
+                                       50 - US States and 2-letter designators
+
+Alabama              AL          Kentucky                           KY                  Ohio                         OH
+Alaska               AK          Louisiana                          LA                  Oklahoma                     OK
+Arizona              AZ          Maine                              ME                  Oregon                       OR
+Arkansas             AR          Maryland                           MD                  Pennsylvania                 PA
+California           CA          Massachusetts                      MA                  Rhode Island                 RI
+Colorado             CO          Michigan                           MI                  South Carolina               SC
+Connecticut          CT          Mississippi                        MS                  South Dakota                 SD
+Delaware             DE          Missouri                           MO                  Tennessee                    TN
+Dist. Of Columbia    DC          Montana                            MT                  Texas                        TX
+Florida              FL          Nebraska                           NE                  Utah                         UT
+Georgia              GA          Nevada                             NV                  Vermont                      VT
+Hawaii               HI          New Hampshire                      NH                  Virgina                      VA
+Idaho                ID          New Jersey                         NJ                  Washington                   WA
+Illinois             IL          New Mexico                         NM                  West Virginia                WV
+Indiana              IN          New York                           NY                  Wisconsin                    WI
+Iowa                 IA          North Carolina                     NC                  Wyoming                      WY
+Kansas               KS          North Dakota                       ND
+
+                           13 - Canadian Provinces & Territories and 2-letter designators
+                                              Alphabetical by Prefix
+
+VE1 - Nova Scotia    NS          VE6 - Alberta                       AB                 VY0 - Nunavut                NU
+VE2 - Quebec         QC          VE7 - British Columbia              BC                 VY1 - Yukon                  YT
+VE3 - Ontario        ON          VE8 - Northwest Territories         NT                 VY2 - Prince Edward Island   PE
+VE4 - Manitoba       MB          VE9 - New Brunswick                 NB
+VE5 - Saskatchewan   SK          VO - Newfoundland & Labrador        NL

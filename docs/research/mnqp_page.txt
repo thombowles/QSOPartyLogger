@@ -1,0 +1,63 @@
+# Source: https://www.w0aa.org/mn-qso-party/ (Minnesota Wireless Association)
+# The MNQP main page. Carries the 2026 date and hours, and the sponsor's own
+# published FUTURE dates. Fetched: 2026-07-26
+# NOTE this page says 1400-2400 UTC where the rules PDF says 1400-2359 UTC.
+
+28th Annual Minnesota QSO Party
+
+Presented by the Minnesota Wireless Association
+
+Saturday, February 7th, 2026
+
+Hours: 1400 UTC (8:00 AM CST) to 2400 UTC (6:00 PM CST)
+
+MN QSO Party Rules
+
+County multiplier list with abbreviations
+
+Upload your log here. Logs are due within 7 days of the contest end.
+
+Plaques and certificates for winners in all categories.
+
+Special gift of Minnesota wild rice for Top 10 non-MN scores.
+
+Send your operation plans to webmaster@w0aa.org to be included on the Activity Map and Mobile Operations pages.
+
+Spotting
+
+Many of the mobile stations will be using APRS. You can track them with links on the Activity Map or Mobile Operations page.
+
+You can track ALL APRS equipped mobile stations at one time on https://mobiletracker.stateqso.com/MN/.
+
+We encourage the use of spotting networks. In addition to the normal DX Cluster sites you may want to try the QSOPartyHub site, the County Hunting Spots site, and the Reverse Beacon Network.
+
+Real Time Contesting
+
+The MN QSO Party is supported by the Real Time Contesting Scoreboard to see your score in real time. Go to hamscore.com to view the scoreboard. Instructions on setting up your logger to participate in Real Time Scoring ar at blog.contestonlinescore.com.
+
+Resources
+
+The Resources page contains links to tools to make your contest experience better.
+
+Sponsors
+
+Please visit our Sponsors page to see the groups and individuals that make the Minnesota QSO Party possible.
+
+Dates
+
+The Minnesota QSO Party is always the first Saturday in February.
+
+Future dates for the Minnesota QSO Party
+
+February 6, 2027
+February 5, 2028
+February 3, 2029
+
+©
+2026							Minnesota Wireless Association
+
+Powered by WordPress
+
+To the top ↑
+
+Up ↑

@@ -1,0 +1,207 @@
+# Source: https://www.w0aa.org/wp-content/docs/mnqp/MNQP_Contest_Rules%20rev%2031.pdf
+# THE 2026 AUTHORITY. Footer on every page: 'Rev 31 - December 31, 2025'.
+# Retrieved from the Wayback Machine snapshot 20260209103319 (two days after the
+# 2026 contest), because w0aa.org now publishes only the 2027 edition. The archived
+# rules page of that date reads: 'The MN QSO Party rules were last updated for the
+# 2026 QSO Party' and links exactly this file.
+# Sponsor: Minnesota Wireless Association (W0AA). Committee: mnqp-committee@w0aa.org
+# Fetched: 2026-07-26
+
+                                                                                                   Page 1 of 4
+
+                                 Minnesota QSO Party Rules
+NEW 2026
+
+MNQP and Online Scoreboard join forces to advance their project Real Time Contesting to bring real time
+scoring to Radiosporting. Read about their project at https://blog.contestonlinescore.com/real-time-
+contesting-rtc-is-our-new-project/ . Instructions to set up your logger to participate are on the site. Go to
+https://hamscore.com/scoreboard/ to monitor your progress and score during the contest. Final results
+and awards will be determined by MNQP’s log checking software published later.
+
+Time:
+
+Contest runs on the first Saturday of February from 1400 through 2359 UTC (8 AM through 5:59 PM
+CST).
+
+QSO Rules:
+
+MN stations work everyone; all other W/VE & DX work MN stations. Work stations once per band &
+mode. MN mobiles and rovers may be worked once per band & mode from each county, & MN mobiles
+and rovers may work stations once per band & mode from each county.
+
+Bands:
+
+HF: 160m - 10m (excluding WARC bands).
+
+Modes:
+
+Phone (SSB, DSB, FM, AM all count as Phone)
+CW - only
+
+A station may be worked once on CW and once on Phone.
+
+Spotting Networks:
+
+Use of Packet or Telnet spotting networks is permissible in all categories. Self-spotting is allowed.
+
+Exchange:
+
+MN Stations: First name & county (three letter designator).
+W/VE Stations: First name and state / province (two letter abbreviation).
+DX Stations: First name only. Section should be logged as DX.
+
+MN ARES Stations: MN ARES groups using ARES as their name compete for a certificate. The top
+score ARES station will earn the certificate.
+
+Use only one name throughout the contest. Multioperator stations shall use the same name on all
+transmitters during the contest.
+
+Rev 31 – December 31, 2025                                                                        MNQP Rules
+                                                                                                   Page 2 of 4
+
+** NOTE ** MN Mobile and Rover stations must sign their call sign with the county three letter designator,
+in addition to the exchange. For example, WØAA/DAK for Dakota County.
+
+MN Fixed stations should not sign their call sign with the three-letter county designator to avoid being
+confused as a mobile or rover station.
+
+Multipliers:
+
+Multipliers for Minnesota Stations: 87 Minnesota counties, 49 states (does not include Minnesota), 1
+District of Columbia, 10 Canadian provinces, 3 Canadian Territories, and 1 DX; 151 maximum.
+
+Minnesota stations may work DXCC countries for points and receive 1 multiplier for working a DX station.
+
+Multipliers for W/VE and DX (outside Minnesota): MN counties: 87 maximum.
+
+Multipliers count once overall - not once per band or mode.
+
+Scoring:
+
+Score 2 QSO points for all QSO’s, i.e. Phone and CW QSO’s equal 2 QSO points each.
+The final score is QSO points total times multiplier total.
+
+Operating Classes-MN:
+
+Output power for all Minnesota operating classes is limited to a maximum of 100 watts except
+QRP (5 watts).
+
+    •   Single Operator Mixed (100 watts or less)
+    •   Single Operator Mixed QRP (5 watts or less)
+    •   Single Operator Phone (100 watts or less)
+    •   Single Operator CW (100 watts or less)
+    •   Multi-Operator (One or Two Transmitters - Multiple Operators) (100 watts or less)
+    •   Mobile - Single Transmitter (No Limit on the Number of Operators) (100 watts or less)
+    •   Rover - Single Transmitter (No Limit on the Number of Operators) (100 watts or less)
+
+All classes (except Phone & CW Only) are mixed modes only. All classes are restricted to 160 through 10
+meters (exclusive of WARC Bands). Mobile entries are strongly encouraged to have a separate driver
+and operator. Drivers and operators in the same vehicle may not work each other.
+
+Mobile and Rover categories are stations that operate from two or more counties with the same call sign.
+
+Mobile stations, including antennas, must be self-contained in or on a vehicle and capable of operating
+while moving.
+
+Rover stations must operate stationery from at least two counties using portable, temporary or permanent
+antennas. In addition, Rovers may operate while mobile. An antenna used for mobile operation cannot be
+used for stationary operation. The intent of the Rover Category is for stations to operate primarily
+stationary and to use mobile operation while moving between stationary positions. Stations deemed to
+have operated outside the spirit of the category, such as primarily mobile while operating a minimum
+number of counties stationery, may be reclassified as a Check log by the MNQP committee.
+
+Rev 31 – December 31, 2025                                                                        MNQP Rules
+                                                                                                  Page 3 of 4
+
+Any station claiming Single or Multi-operator category that operated from more than one county with one
+call will be reclassified into a Mobile or Rover Category.
+
+Operating in two or more classes requires separate unique call sign to be used for each class.
+
+Any station submitting a log whose operating method does not meet one of the above categories will be
+reclassified as a check log.
+
+Operating Classes-W/VE:
+
+    •   Single Op Mixed Low Power (100watts or less)
+    •   Single Op Mixed High Power (1500 watts or less)
+    •   Single Op Mixed QRP (5 watts or less)
+    •   Single Op Phone (1500 watts or less)
+    •   Single Op CW (1500 watts or less)
+    •   Multi-Op (One or Two Transmitters - Multiple Operators) (1500 watts or less)
+
+All classes (except Phone & CW Only) are mixed modes only. All classes are restricted to 160 through 10
+meters (exclusive of WARC Bands).
+
+Operating Classes-DX:
+
+    •   Unlimited
+
+Suggested Frequencies
+
+CW: 1.850, 3.550, 7.050, 14.050, 21.050, 28.050. CW QSOs in the SSB Portion of the HF Bands are
+not allowed.
+SSB: 1.870, 3.850, 7.250, 14.270, 21.350, 28.450.
+
+Logs:
+
+Logs must be submitted within 7 days of contest completion. Upload electronic logs at
+mnqp.contesting.com/mnqpsubmitlog.php (link available on MNQP website) according to the following
+guidelines:
+
+    •   Cabrillo format is required (CALL.LOG or CALL.CBR extensions, i.e. KØAD.LOG), see example
+        below.
+    •   Separate summary sheet not required with Cabrillo submitted logs (standard for major contests).
+    •   Confirmation e-mails will be sent; however you should check the logs received page to verify that
+        the log has been received mnqp.contesting.com/mnqplogsrcvd.php
+
+Electronic logs are preferred. Change your paper log to electronic with this on-line log converter:
+www.b4h.net/cabforms/mnqp_cab3.php If you must paper logs can be sent to MNQP, 4745-170th Lane
+NE, Ham Lake, MN 55304-5233 postmarked no later than 14 days after the contest. Log and scoring
+summary sheets are available on the Internet at WWW.WØAA.ORG/MNQP under the Resources link.
+Paper logs generated by a logging program will require submission of electronic file to be considered for
+awards.
+
+Rev 31 – December 31, 2025                                                                       MNQP Rules
+                                                                                                   Page 4 of 4
+
+Cabrillo format template:
+                                      ----------info sent-------------- ----------info rcvd----------
+-----
+QSO: freq mo date        time call       ex1        ex2 call       ex1        ex2 t
+QSO: ***** ** yyyy-mm-dd nnnn ********** aaaaaaaaaa aaa ********** aaaaaaaaaa aaa n
+QSO: 14042 CW 2010-02-06 1200 AC0W       BILL       MOW N2CU       TOM        NY
+
+o   ex1: Name
+o   ex2: 3 letter county designator for MN, Two letter QTH designation for W/VE, DX for
+    non-W/VE
+
+Prizes and Awards:
+
+1st place in each MN & W/VE class receives plaque or certificate depending on the number of entries.
+The top ten single operate W/VE entries outside Minnesota and top six Minnesota single operator entries
+will receive a special gift of Premium Wild Rice from the State of Minnesota. First place single operator
+winners in each State/Province will receive a certificate. Certificates will also be sent to Minnesota
+stations that set new a scoring record for the county they operate in. The top score in each DXCC country
+will receive a certificate. The Contest Committee reserves the right to limit prize distribution based on the
+level of financial support received by sponsors. Certificates will be emailed unless a paper certificate is
+requested.
+
+See MNQP Award Policy on the MNQP website, https://www.w0aa.org/mnqp , for full details.
+
+Minnesota Three Letter County Designators:
+
+The 87 counties of Minnesota are each assigned a 3-letter designator. A list of these counties is available
+at WWW.WØAA.ORG/MNQP under the resources link. These should be used if designing a template for
+your contest software of choice. The following programs support the Minnesota QSO Party: N1MM
+Logger Plus, N3FJP, WriteLog, TR4W Logger, CQ/X de NO5W, GenLog, and SkookumLogger (MAC
+Computers).
+
+County Line Operation:
+Mobile or rover stations that change geographic area (counties for Minnesota stations, state or province
+for others) are considered to be a new station and may be contacted again for QSO points and multiplier
+credit. No station may claim simultaneous operation in more than one county, state, or province. A
+mobile, rover or portable station must move to a location clearly within the new county before claiming a
+county change. Common sense and safety should be considered when making county changes.
+
+Rev 31 – December 31, 2025                                                                        MNQP Rules

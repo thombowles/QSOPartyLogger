@@ -97,14 +97,24 @@ final class UpcomingContestsTests: XCTestCase {
 
     /// A user-installed party whose name matches a calendar contest takes
     /// over that row — its (sponsor-sourced) schedule wins, no duplicate.
+    ///
+    /// Wisconsin stands in for the user-installed party because it is on the
+    /// 2026 approved list and **not bundled**, which is what this test needs.
+    /// It used to be Minnesota; MNQP became a bundled party on 2026-07-26 and
+    /// is now mapped by `partyID`, so it no longer exercises the name path.
+    /// Whichever party is used here must be one the calendar cannot map by id.
     func testUserPartyReplacesCalendarRowByName() throws {
-        let minnesota = try PartyCatalog.decode(Data("""
+        let bundledIDs = Set(parties.map(\.id))
+        XCTAssertFalse(bundledIDs.contains("wiqp"),
+                       "pick another unbundled approved contest — Wisconsin has been bundled")
+
+        let wisconsin = try PartyCatalog.decode(Data("""
         {
           "schemaVersion": 1,
-          "id": "mnqp",
-          "name": "Minnesota QSO Party",
-          "cabrilloContest": "MNQP",
-          "homeState": "MN",
+          "id": "wiqp",
+          "name": "Wisconsin QSO Party",
+          "cabrilloContest": "WIQP",
+          "homeState": "WI",
           "countyAbbrLength": 3,
           "validBands": ["80m", "40m", "20m"],
           "points": { "phone": 1, "cw": 2, "digital": 2 },
@@ -114,20 +124,20 @@ final class UpcomingContestsTests: XCTestCase {
             "outState": { "classes": ["county"], "homeStateCountsViaCounty": false, "countScope": "once" }
           },
           "bonuses": [],
-          "schedule": [ { "start": "2026-02-07T14:00:00Z", "end": "2026-02-08T00:00:00Z" } ],
-          "counties": [ { "abbr": "AIT", "name": "Aitkin" } ]
+          "schedule": [ { "start": "2026-03-15T18:00:00Z", "end": "2026-03-16T01:00:00Z" } ],
+          "counties": [ { "abbr": "ADA", "name": "Adams" } ]
         }
         """.utf8))
 
         let list = UpcomingContests.upcoming(
             now: instant("2026-02-01T00:00:00Z"),
-            parties: parties + [minnesota],
+            parties: parties + [wisconsin],
             calendar: calendar,
             records: []
         )
-        let rows = list.filter { $0.name == "Minnesota QSO Party" }
+        let rows = list.filter { $0.name == "Wisconsin QSO Party" }
         XCTAssertEqual(rows.count, 1)
-        XCTAssertEqual(rows.first?.partyID, "mnqp")
+        XCTAssertEqual(rows.first?.partyID, "wiqp")
         XCTAssertEqual(rows.first?.dateSource, .partyDefinition)
         XCTAssertEqual(rows.first?.isApproved, true)
     }

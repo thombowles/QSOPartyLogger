@@ -8,8 +8,8 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **28 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
-  Vermont, the season opener, was built the same day and is bundled.
+- **27 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+  Vermont and Minnesota, the two 7 February parties, were built the same day.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -99,14 +99,14 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**28 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**27 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 23 US + 5 Canadian. Research is banked for none of them.
+next one built". 22 US + 5 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
 | ~~1~~ | ~~Vermont~~ | ~~Feb 7 0000Z → Feb 8 2400Z~~ | **done** 2026-07-26 — [`vtqp_rules.md`](../research/vtqp_rules.md), `verified: partial` |
-| 2 | Minnesota | Feb 7 1400Z → Feb 7 2400Z | single 10 h window |
+| ~~2~~ | ~~Minnesota~~ | ~~Feb 7 1400Z → Feb 7 2400Z~~ | **done** 2026-07-26 — [`mnqp_rules.md`](../research/mnqp_rules.md), `verified: partial` |
 | 3 | British Columbia | Feb 7 1600Z → Feb 8 0359Z; Feb 8 1600–2359Z | 🇨🇦 regions, not counties |
 | 4 | South Carolina | Feb 28 1500Z → Mar 1 0159Z | |
 | 5 | North Carolina | Mar 1 1500Z → Mar 2 0100Z | 100 counties |
@@ -140,10 +140,10 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**20 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**21 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
-pre-existing ALQP, KSQP and TQP, and **VTQP** — the first of the reopened
-first-half season, built 2026-07-26. Every row below is struck.
+pre-existing ALQP, KSQP and TQP, and **VTQP** and **MNQP** from the reopened
+first-half season, both built 2026-07-26. Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
@@ -267,6 +267,34 @@ its own commit (Article 4).
   ×1.5 on an odd points×mults product lands on a half exactly half the time.
   Its own commit, adding no party (Article 4), with every existing party's score
   proved unchanged; then VTQP gains the field in a second commit.
+- **THE EXCHANGE CANNOT CARRY A NAME — and it is the only gap so far that blocks
+  log submission.** MNQP's exchange is a **first name** plus a location, with no
+  signal report at all: *"MN Stations: First name & county (three letter
+  designator). W/VE Stations: First name and state / province. DX Stations: First
+  name only."* `QSO` has `call`, `rstSent/Rcvd`, `serialSent/Rcvd`, `myLoc`,
+  `theirLoc` — and no name. `CabrilloExporter.qsoLine` writes
+  `exchangeNumber(serial:rst:)` into the `ex1` column the sponsor reserves for
+  the name, which for a party with neither resolves to the **empty string**, so
+  the exported log has the right columns with the names missing. The sponsor's
+  own template shows the cost:
+
+  ```
+  QSO: 14042 CW 2010-02-06 1200 AC0W  BILL  MOW N2CU  TOM  NY
+                                      ^ex1=Name           ^ex1=Name
+  ```
+
+  **Scoring is entirely unaffected** — names are not multipliers, not points, and
+  not part of the dupe key — so live operating, dupe checking and the score are
+  all correct. Cabrillo is *required* for submission, though, so an MNQP log
+  needs its name column filled in by hand. Sketch: `QSO.nameSent/nameRcvd:
+  String?` plus `PartyDefinition.exchangeIncludesName: Bool` defaulting false,
+  with `ex1` preferring name → serial → RST; the entry bar and edit sheet each
+  gain a field, and `ExchangeParser` learns a `NAME LOC` form. That touches
+  `Sources/UI/`, so it is its own commit under Article 4 and cannot ride along
+  with a party under Article 9. Pinned by
+  `MinnesotaQSOPartyTests.testKnownGapTheNameHalfOfTheExchangeIsNotLogged`.
+  **Watch for a second user** — a name exchange is common in the parties still
+  to be built, and the count matters for the schema's shape.
 - **Bonuses cannot be restricted to one side of the party.** VTQP rule 1A(F):
   *"Stations OUTSIDE of Vermont will get an additional 2 point bonus for each
   W1AW/1 station they work"*, ending *"Vermont stations will not get this
