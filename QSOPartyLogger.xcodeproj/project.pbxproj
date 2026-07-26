@@ -192,6 +192,7 @@
 		DECFF08699FBD43DBA559547 /* SeasonStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D222FC07C47B321835C0B0 /* SeasonStats.swift */; };
 		E19F4F34905150E1AC1CB86F /* ContestArchiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC488FDCD9B9458276688D9 /* ContestArchiveTests.swift */; };
 		E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52BEC7154012161AF51ED0 /* CWSender.swift */; };
+		E6A1CF88C19C7DADF81B78DE /* PartyCaveatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DA0DF56D3346FEB3B3B11C /* PartyCaveatTests.swift */; };
 		E9827B06A176CDDB8E3D8770 /* PartyModeInferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3270C8AA34DCB8481F768F /* PartyModeInferenceTests.swift */; };
 		E9D3C1BC588F38EE754CF5AE /* EntryFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944ACFBCB11B916DDD2F8933 /* EntryFlowTests.swift */; };
 		EA548A4E8ACEAACF1F2452DC /* MessagesRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D2158467D3A61358A399D7 /* MessagesRow.swift */; };
@@ -239,6 +240,7 @@
 		067FE6B0EB648263DEECAC66 /* OperatorAlertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatorAlertTests.swift; sourceTree = "<group>"; };
 		075DC2D7011F9E054C8826A8 /* HubSpotPrefillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotPrefillTests.swift; sourceTree = "<group>"; };
 		093C918A35B84A46D9369272 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		09DA0DF56D3346FEB3B3B11C /* PartyCaveatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCaveatTests.swift; sourceTree = "<group>"; };
 		0DEA58106A345669FAF4E466 /* HubSpotFilteringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotFilteringTests.swift; sourceTree = "<group>"; };
 		0EC4FB2912638C4B5052ED72 /* HubSpotParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotParser.swift; sourceTree = "<group>"; };
 		0F52BEC7154012161AF51ED0 /* CWSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CWSender.swift; sourceTree = "<group>"; };
@@ -593,6 +595,7 @@
 				797C5CEFFBDB939E217C6D60 /* OperatingFeatureTests.swift */,
 				067FE6B0EB648263DEECAC66 /* OperatorAlertTests.swift */,
 				6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */,
+				09DA0DF56D3346FEB3B3B11C /* PartyCaveatTests.swift */,
 				3E3270C8AA34DCB8481F768F /* PartyModeInferenceTests.swift */,
 				033F9D044AD7BFDEE8B6D181 /* PennsylvaniaQSOPartyTests.swift */,
 				EF7194268CC1DFB2953FFDE8 /* QuebecQSOPartyTests.swift */,
@@ -1041,6 +1044,7 @@
 				821AC67E517BE893BEAAFB77 /* OperatingFeatureTests.swift in Sources */,
 				178BB230D59AA574DBF19D29 /* OperatorAlertTests.swift in Sources */,
 				632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */,
+				E6A1CF88C19C7DADF81B78DE /* PartyCaveatTests.swift in Sources */,
 				E9827B06A176CDDB8E3D8770 /* PartyModeInferenceTests.swift in Sources */,
 				FF1D72B5F974B4BC4D6C3A5A /* PennsylvaniaQSOPartyTests.swift in Sources */,
 				C9AAE61B0FC8097BED39445C /* PreferenceIsolationTests.swift in Sources */,

@@ -71,19 +71,40 @@ is an acceptable outcome recorded in `notes`; quietly guessing the band list is
 not.
 
 **The marker is load-bearing, not decorative.** `PartyDefinition.isPartiallyVerified`
-matches the literal string `verified: partial`, and the setup sheet raises a
-warning on it — in the party picker and again under it. So:
+matches the literal string `verified: partial`. So:
 
 - Write the marker exactly. A party whose rules are unconfirmed but whose notes
   paraphrase it ("mostly verified", "some details unclear") ships looking
   trustworthy.
 - Introduce the open questions with the literal words **`OPEN QUESTION`** (or
-  `OPEN QUESTIONS`). `PartyDefinition.openQuestions` splits the notes there, and
-  the setup sheet shows that tail inline while the provenance paragraph before it
-  goes behind a disclosure. Without the marker the operator sees a warning with
-  nothing actionable next to it.
+  `OPEN QUESTIONS`), and modelling gaps with **`KNOWN LIMITATION`**.
+  `PartyDefinition.openQuestions` splits the notes at the first marker for
+  auditing, and `operatorAlerts` cuts each numbered item to its headline
+  sentence for display.
 - Both properties are covered by `PartyCatalogTests`, including a per-party
   roster of which parties are partial — so a status change has to be deliberate.
+
+**But the marker no longer decides what the operator sees.** It fired on 39 of
+46 parties, which is the default state rather than a signal, and the picker read
+as a catalogue of broken things. **What the operator sees is
+[`caveats`](../Sources/Core/Parties/PartyDefinition.swift), classified by what
+the gap costs them** — see
+[the design](superpowers/specs/2026-07-26-party-caveats-design.md):
+
+| kind | means | raises a warning |
+| --- | --- | --- |
+| `exportBlocking` | the log this app writes cannot be submitted as-is | **yes** |
+| `scoreAffecting` | the app's total will differ from the sponsor's | **yes** |
+| `ruleInference` | the sponsor's text is ambiguous; this app inferred a reading | no |
+| `provenance` | source stale or archived; re-check before the next running | no |
+| `cosmetic` | recorded for completeness; no scoring or export consequence | no |
+
+So a **new party must carry both**: the `verified: partial` marker in `notes`
+where the rules were not fully confirmed, *and* a typed caveat for each thing
+that costs the operator something. A party whose only gaps are provenance ones is
+still `verified: partial`, and correctly raises no warning. Caveats are never
+read by `ScoreEngine`; `summary` is authored, `detail` is copied from the notes
+rather than retyped (Article 2).
 
 ### Article 4 — The schema evolves additively; refactors are quarantined
 

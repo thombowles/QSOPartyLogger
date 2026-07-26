@@ -893,12 +893,38 @@ for a complete example):
   ],
   "oneByOne": null,
   "counties": [ { "abbr": "AIT", "name": "Aitkin" } ],
+  "caveats": [
+    { "kind": "scoreAffecting",
+      "summary": "Score is a floor — the name half of the exchange isn't logged.",
+      "detail": "Optional. Copied from the notes; the summary is the display line." }
+  ],
   "notes": "Verify against current-year rules."
 }
 ```
 
 Malformed files are reported with the reason; the app keeps running with the
 bundled parties.
+
+### Caveats — what the setup sheet warns about
+
+`caveats` is optional and never affects scoring. It classifies the gaps between
+this app and the sponsor's rules by **what they cost you**, so the warning means
+something:
+
+| kind | means | warns |
+| --- | --- | --- |
+| `exportBlocking` | the log this app writes can't be submitted as-is | **yes, in orange** |
+| `scoreAffecting` | the app's total will differ from the sponsor's | **yes, in orange** |
+| `ruleInference` | the sponsor's text is ambiguous; this app inferred a reading | no |
+| `provenance` | source stale or archived; re-check before the next running | no |
+| `cosmetic` | recorded for completeness; no scoring or export consequence | no |
+
+Only the first two interrupt you. A party whose only gaps are stale sources is
+still marked `verified: partial` in its notes — that marker is the maintainer's
+audit trail — but it no longer paints the picker with warning triangles, which
+is what 39 of 46 parties used to do. A file with no `caveats` falls back to
+whatever `OPEN QUESTION` / `KNOWN LIMITATION` items its notes carry, shown in the
+quiet informational tone.
 
 ## Adding a radio
 
@@ -924,7 +950,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1584 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1593 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,

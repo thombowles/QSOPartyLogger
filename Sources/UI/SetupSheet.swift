@@ -32,14 +32,19 @@ struct SetupSheet: View {
                 Section("QSO Party") {
                     Picker("Party", selection: $partyID) {
                         ForEach(PartyCatalog.pickerEntries()) { entry in
-                            // Flag partial verification in the list itself, so
-                            // it is visible before committing to a party. A
-                            // party that is part of a combined entry is nested
+                            // NO VERIFICATION MARKER HERE. It used to carry
+                            // "⚠︎" for every partially-verified party, which was
+                            // 39 of 46 -- so the list read as a catalogue of
+                            // broken things. Choosing a contest and knowing how
+                            // the app handles it are different jobs, and the
+                            // notice below re-renders with the selection, so it
+                            // is already the before-you-commit surface.
+                            //
+                            // A party that is part of a combined entry is nested
                             // under it rather than listed on its own.
                             Text(entry.isMember
                                  ? "      ↳ \(entry.party.name)"
-                                 : entry.party.name
-                                    + (entry.party.isPartiallyVerified ? "  ⚠︎" : ""))
+                                 : entry.party.name)
                                 .tag(entry.party.id)
                         }
                     }
@@ -131,47 +136,62 @@ struct SetupSheet: View {
         .onAppear(perform: load)
     }
 
-    /// Verification status for the selected party. A `verified: partial` party
-    /// gets a warning plus its open questions inline — those are what an
-    /// operator has to act on. The full provenance paragraph sits behind a
-    /// disclosure so it is auditable without swamping the sheet, and is offered
-    /// for every party, not only the partial ones.
+    /// What this app will and will not do for the selected party.
+    ///
+    /// **Orange is reserved for `blockingCaveats`** — the app will mis-score or
+    /// mis-export this party, which is worth interrupting someone for. It is no
+    /// longer keyed on `isPartiallyVerified`, which fired on 39 of 46 parties
+    /// and so said nothing. Stale sources, inferred readings and cosmetic notes
+    /// keep the informational tone; the full provenance paragraph stays behind
+    /// the disclosure, and is offered for every party.
     @ViewBuilder
     private func verificationNotice(_ party: PartyDefinition) -> some View {
-        let alerts = party.operatorAlerts
+        let blocking = party.blockingCaveats
+        let advisory = party.advisoryCaveats
+        // A party with no typed caveats -- not yet classified, or user-installed
+        // -- still shows whatever its notes carry, in the quiet tone.
+        let fallback = party.caveats.isEmpty ? party.operatorAlerts : []
 
-        // The warning tone is for rules that could not be confirmed. A party
-        // whose rules ARE confirmed can still carry a modelling limitation --
-        // the Salmon Run does -- so those are shown too, just not in orange.
-        if party.isPartiallyVerified {
+        if !blocking.isEmpty {
             Label(
-                alerts.isEmpty
-                    ? "Some rules for this party could not be fully confirmed."
-                    : "Some rules for this party could not be fully confirmed — "
-                      + "\(alerts.count) thing\(alerts.count == 1 ? "" : "s") to check "
-                      + "before you submit a log.",
+                blocking.contains { $0.kind == .exportBlocking }
+                    ? "This log needs checking before you submit it."
+                    : "\(blocking.count) thing\(blocking.count == 1 ? "" : "s") this app "
+                      + "cannot score for you here.",
                 systemImage: "exclamationmark.triangle.fill"
             )
             .font(.caption.weight(.semibold))
             .foregroundStyle(.orange)
-        } else if !alerts.isEmpty {
-            Label(
-                "\(alerts.count) thing\(alerts.count == 1 ? "" : "s") this app cannot "
-                    + "score for you in this party.",
-                systemImage: "info.circle.fill"
-            )
-            .font(.caption.weight(.semibold))
-            .foregroundStyle(.secondary)
+
+            ForEach(Array(blocking.enumerated()), id: \.offset) { _, caveat in
+                Text("• \(caveat.summary)")
+                    .font(.caption2.weight(.medium))
+                    .foregroundStyle(.orange)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .textSelection(.enabled)
+            }
         }
 
-        // One line per thing to act on, rather than the whole provenance
-        // paragraph the notes carry.
-        ForEach(Array(alerts.enumerated()), id: \.offset) { _, alert in
-            Text("• \(alert)")
-                .font(.caption2)
+        // Everything that is worth reading but not worth interrupting for.
+        let quiet = advisory.map(\.summary) + fallback
+        if !quiet.isEmpty {
+            if blocking.isEmpty {
+                Label(
+                    "\(quiet.count) note\(quiet.count == 1 ? "" : "s") on how this app "
+                        + "handles this party.",
+                    systemImage: "info.circle.fill"
+                )
+                .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-                .textSelection(.enabled)
+            }
+
+            ForEach(Array(quiet.enumerated()), id: \.offset) { _, line in
+                Text("• \(line)")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .textSelection(.enabled)
+            }
         }
 
         if let notes = party.notes {

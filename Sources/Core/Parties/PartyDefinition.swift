@@ -288,10 +288,91 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
 
     // MARK: Verification status (constitution Article 3)
 
+    /// One thing about this party that an operator or a maintainer should know,
+    /// classified by **what it costs the operator** rather than by how confident
+    /// the maintainer was.
+    ///
+    /// This exists because `isPartiallyVerified` fired on 84% of the catalogue.
+    /// A marker that is the default state cannot tell "your Cabrillo will be
+    /// rejected" apart from "re-check the sponsor's page next spring", and the
+    /// picker read as a list of broken things. Only `Kind.badges` raises a
+    /// visible warning; the rest stay available in the sheet and under Rules
+    /// provenance.
+    ///
+    /// **Never read by `ScoreEngine`.** Caveats describe the gap between this
+    /// app and the sponsor's rules; they never change a score themselves, which
+    /// is what makes them safe to add to every party in a single pass.
+    struct Caveat: Codable, Equatable, Sendable {
+        enum Kind: String, Codable, Sendable, CaseIterable {
+            /// The log this app writes cannot be submitted as it stands — a
+            /// required field is not captured (MNQP's exchange name half).
+            case exportBlocking
+            /// The app's total will differ from the sponsor's, because a rule
+            /// that is fully verified cannot be expressed here (WIQP's
+            /// fractional power multiplier; NCQP's two scoring rules).
+            case scoreAffecting
+            /// The sponsor's text is genuinely ambiguous and this app resolved
+            /// it by inference. Defensible either way, and named so the reading
+            /// is auditable.
+            case ruleInference
+            /// The source is stale, archived or undated — re-check before the
+            /// next running. Costs the operator nothing today.
+            case provenance
+            /// Recorded for completeness; no scoring or export consequence.
+            case cosmetic
+
+            /// Loud enough to interrupt someone who is trying to start a
+            /// contest. `ruleInference` deliberately does **not** qualify: it
+            /// can move a score by one multiplier, but ~15 parties carry one and
+            /// badging them rebuilds the problem this type exists to remove.
+            var badges: Bool { self == .exportBlocking || self == .scoreAffecting }
+
+            /// Most severe first, for display ordering.
+            var severity: Int {
+                switch self {
+                case .exportBlocking: return 0
+                case .scoreAffecting: return 1
+                case .ruleInference: return 2
+                case .provenance: return 3
+                case .cosmetic: return 4
+                }
+            }
+        }
+
+        let kind: Kind
+        /// One line, phrased as what the *app* does — "Score is a floor: the
+        /// power multiplier isn't applied" — rather than as doubt about the
+        /// rules. This is the only authored text; `detail` is copied verbatim.
+        let summary: String
+        /// The corresponding `KNOWN LIMITATION` / `OPEN QUESTION` prose from
+        /// `notes`, copied rather than retyped (Article 2). `nil` where the
+        /// summary is already the whole of it.
+        let detail: String?
+    }
+
+    /// This party's caveats, most severe first. Empty for a party that has not
+    /// been classified yet — including any user-installed file — in which case
+    /// the sheet falls back to `operatorAlerts`.
+    var caveats: [Caveat] {
+        (caveatsRaw ?? []).sorted { $0.kind.severity < $1.kind.severity }
+    }
+    private let caveatsRaw: [Caveat]?
+
+    /// The caveats that earn a visible warning: the app will mis-score or
+    /// mis-export this party.
+    var blockingCaveats: [Caveat] { caveats.filter(\.kind.badges) }
+
+    /// Everything else — worth reading, not worth interrupting for.
+    var advisoryCaveats: [Caveat] { caveats.filter { !$0.kind.badges } }
+
     /// Whether this party shipped with rules that could not be fully confirmed
     /// from an official source. Matched on the literal `verified: partial`
     /// marker rather than a loose word search, so provenance prose that merely
     /// mentions "partial" cannot raise a false warning.
+    ///
+    /// **No longer drives the UI** — see `Caveat`. It remains the Article 3
+    /// marker, remains mandatory in `notes`, and remains covered by
+    /// `PartyCatalogTests`, so a status change is still deliberate.
     var isPartiallyVerified: Bool {
         notes?.range(of: "verified: partial", options: .caseInsensitive) != nil
     }
@@ -517,6 +598,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case validBands, points, dupeScope, multipliers, bonuses, oneByOne
         case schedule, counties, notes, scoreMultipliers, homeStationPoints
         case hubSpots
+        case caveatsRaw = "caveats"
         case combinesRaw = "combines"
         case homeStatesRaw = "homeStates"
         case inStateLabelRaw = "inStateLabel"
