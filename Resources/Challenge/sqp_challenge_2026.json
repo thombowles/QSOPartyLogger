@@ -291,7 +291,7 @@
   },
   {
    "name": "Arkansas QSO Party",
-   "partyID": null,
+   "partyID": "arqp",
    "windows": [
     {
      "start": "2026-05-16T14:00:00Z",

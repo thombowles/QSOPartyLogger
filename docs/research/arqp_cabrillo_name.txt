@@ -1,0 +1,4 @@
+Source: https://www.contestcalendar.com/cabnames.php  (WA7BNM Contest Calendar,
+  'Cabrillo Names' table).  Fetched 2026-07-26.  Article 1 exception, header only.
+========================================================================
+132	Arkansas QSO Party  	AR-QSO-PARTY

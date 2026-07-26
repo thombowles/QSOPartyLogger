@@ -266,6 +266,15 @@ Built for KE5CW. Bundled parties, all with official county data:
   Hartford is not a multiplier any more. Its id is **`newenglandqp`**, because
   Nebraska already holds `neqp`. Digital scores as CW by the sponsor's own
   words. `verified: partial`.
+- **Arkansas QSO Party** (May 16, 2026) — 75 counties whose codes are **not
+  truncations**: Clark is `CLK` because Clay took `CLA`, and there is an
+  Arkansas County coded `ARK`. Its "**mobile stations claim 2 points per QSO**"
+  rule keys points on the *entrant's* category, which `PointsTable` cannot
+  express — but the engine's `points × mults × factor + bonus` is associative,
+  so `stationCategory: ×2` carries it **exactly**. It is also the first party
+  whose DX cap actually binds: "only count 1 DX multiplier", and one is what the
+  token style produces. The rules state **no contest times**, only "the third
+  Saturday in May". `verified: partial`.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -421,10 +430,10 @@ Built for KE5CW. Bundled parties, all with official county data:
 contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
 Carolina, Oklahoma, Idaho, Wisconsin, Virginia, Louisiana, Mississippi,
 Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec,
-Nebraska, Florida, the 7th Call Area, Indiana, Delaware and New England are
-in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
+Nebraska, Florida, the 7th Call Area, Indiana, Delaware, New England and
+Arkansas are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
 agree there is no state or provincial party in January, November or December.
-**5 parties from April through June remain** (one of them, the Canadian
+**4 parties from April through June remain**, plus the Canadian
 Prairies, is blocked — its districts are published only as images and the
 sponsor's own pages give four different totals; see
 [`docs/research/cpqp_blocked.md`](docs/research/cpqp_blocked.md)), listed in
@@ -907,7 +916,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1532 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1550 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1437,7 +1446,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 42 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 43 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

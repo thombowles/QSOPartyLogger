@@ -1,0 +1,385 @@
+{
+  "schemaVersion": 1,
+  "id": "arqp",
+  "name": "Arkansas QSO Party",
+  "cabrilloContest": "AR-QSO-PARTY",
+  "homeState": "AR",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 1,
+    "digital": 1
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once",
+      "dxMultCap": 1
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "WR5P",
+      "points": 200,
+      "scope": "perQSO"
+    },
+    {
+      "type": "activatedCountyCount",
+      "minQSOs": 1,
+      "points": 200
+    }
+  ],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "scoreMultipliers": {
+    "stationCategory": {
+      "MOBILE": 2,
+      "PORTABLE": 2,
+      "ROVER": 2
+    }
+  },
+  "schedule": [
+    {
+      "start": "2026-05-16T14:00:00Z",
+      "end": "2026-05-17T02:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ARK",
+      "name": "Arkansas"
+    },
+    {
+      "abbr": "ASH",
+      "name": "Ashley"
+    },
+    {
+      "abbr": "BAX",
+      "name": "Baxter"
+    },
+    {
+      "abbr": "BEN",
+      "name": "Benton"
+    },
+    {
+      "abbr": "BOO",
+      "name": "Boone"
+    },
+    {
+      "abbr": "BRA",
+      "name": "Bradley"
+    },
+    {
+      "abbr": "CAL",
+      "name": "Calhoun"
+    },
+    {
+      "abbr": "CAR",
+      "name": "Carroll"
+    },
+    {
+      "abbr": "CHI",
+      "name": "Chicot"
+    },
+    {
+      "abbr": "CLA",
+      "name": "Clay"
+    },
+    {
+      "abbr": "CLE",
+      "name": "Cleburne"
+    },
+    {
+      "abbr": "CLK",
+      "name": "Clark"
+    },
+    {
+      "abbr": "CLV",
+      "name": "Cleveland"
+    },
+    {
+      "abbr": "COL",
+      "name": "Columbia"
+    },
+    {
+      "abbr": "CON",
+      "name": "Conway"
+    },
+    {
+      "abbr": "CRA",
+      "name": "Crawford"
+    },
+    {
+      "abbr": "CRG",
+      "name": "Craighead"
+    },
+    {
+      "abbr": "CRI",
+      "name": "Crittenden"
+    },
+    {
+      "abbr": "CRO",
+      "name": "Cross"
+    },
+    {
+      "abbr": "DAL",
+      "name": "Dallas"
+    },
+    {
+      "abbr": "DES",
+      "name": "Desha"
+    },
+    {
+      "abbr": "DRE",
+      "name": "Drew"
+    },
+    {
+      "abbr": "FAU",
+      "name": "Faulkner"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "FUL",
+      "name": "Fulton"
+    },
+    {
+      "abbr": "GAR",
+      "name": "Garland"
+    },
+    {
+      "abbr": "GNT",
+      "name": "Grant"
+    },
+    {
+      "abbr": "GRE",
+      "name": "Greene"
+    },
+    {
+      "abbr": "HEM",
+      "name": "Hempstead"
+    },
+    {
+      "abbr": "HOW",
+      "name": "Howard"
+    },
+    {
+      "abbr": "HSP",
+      "name": "Hot Spring"
+    },
+    {
+      "abbr": "IND",
+      "name": "Independence"
+    },
+    {
+      "abbr": "IZA",
+      "name": "Izard"
+    },
+    {
+      "abbr": "JAK",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JON",
+      "name": "Johnson"
+    },
+    {
+      "abbr": "LAF",
+      "name": "Lafayette"
+    },
+    {
+      "abbr": "LAW",
+      "name": "Lawrence"
+    },
+    {
+      "abbr": "LEE",
+      "name": "Lee"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "LOG",
+      "name": "Logan"
+    },
+    {
+      "abbr": "LON",
+      "name": "Lonoke"
+    },
+    {
+      "abbr": "LRV",
+      "name": "Little River"
+    },
+    {
+      "abbr": "MAD",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MGY",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "MIL",
+      "name": "Miller"
+    },
+    {
+      "abbr": "MIS",
+      "name": "Mississippi"
+    },
+    {
+      "abbr": "MON",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MRN",
+      "name": "Marion"
+    },
+    {
+      "abbr": "NEV",
+      "name": "Nevada"
+    },
+    {
+      "abbr": "NEW",
+      "name": "Newton"
+    },
+    {
+      "abbr": "OUA",
+      "name": "Ouachita"
+    },
+    {
+      "abbr": "PER",
+      "name": "Perry"
+    },
+    {
+      "abbr": "PHI",
+      "name": "Phillips"
+    },
+    {
+      "abbr": "PIK",
+      "name": "Pike"
+    },
+    {
+      "abbr": "PLK",
+      "name": "Polk"
+    },
+    {
+      "abbr": "POI",
+      "name": "Poinsett"
+    },
+    {
+      "abbr": "POP",
+      "name": "Pope"
+    },
+    {
+      "abbr": "PRA",
+      "name": "Prairie"
+    },
+    {
+      "abbr": "PUL",
+      "name": "Pulaski"
+    },
+    {
+      "abbr": "RAN",
+      "name": "Randolph"
+    },
+    {
+      "abbr": "SAL",
+      "name": "Saline"
+    },
+    {
+      "abbr": "SCO",
+      "name": "Scott"
+    },
+    {
+      "abbr": "SCY",
+      "name": "Searcy"
+    },
+    {
+      "abbr": "SEB",
+      "name": "Sebastian"
+    },
+    {
+      "abbr": "SFR",
+      "name": "Francis"
+    },
+    {
+      "abbr": "SHA",
+      "name": "Sharp"
+    },
+    {
+      "abbr": "STO",
+      "name": "Stone"
+    },
+    {
+      "abbr": "SVR",
+      "name": "Sevier"
+    },
+    {
+      "abbr": "UNI",
+      "name": "Union"
+    },
+    {
+      "abbr": "VBN",
+      "name": "Van Buren"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WHI",
+      "name": "White"
+    },
+    {
+      "abbr": "WOO",
+      "name": "Woodruff"
+    },
+    {
+      "abbr": "YEL",
+      "name": "Yell"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/arqp-table.php",
+    "postURL": "http://qsopartyhub.com/arqp-spots.php"
+  },
+  "notes": "verified: partial - rules from arkqp.com, read verbatim 2026-07-26; presented by The Noise Blankers Radio Group. The rules carry a 'New for 2026' bonus, so they are current. OPEN QUESTION 1: THE RULES STATE NO CONTEST TIMES - 'Contest Period: The third Saturday in May' and nothing more, exactly as Delaware does. The DATE derives from the sponsor (the third Saturday in May 2026 is the 16th); the HOURS come from the SQP Challenge calendar, 1400Z to 0200Z, and should be confirmed before 2027. THE 2-POINTS-FOR-MOBILE RULE FITS EXACTLY, which is worth stating because it looks like it should not: 'Mobile, Portable, and Rover stations claim 2 points per QSO... All other categories claim 1 point per QSO' keys points on the ENTRANT's category, which PointsTable cannot express - but the engine computes qsoPoints x mults x categoryFactor + bonus, so doubling the points and doubling the factor give the same total. scoreMultipliers.stationCategory carries it with no approximation at all. THE DX CAP ACTUALLY BINDS HERE: 'Regardless of number of DX QSOs made, only count 1 DX multiplier', and since the exchange is the literal DX token, one is exactly what the engine produces - the first party where dxMultCap and the token style agree instead of fighting. Arkansas is NOT a state multiplier ('U.S. States EXCEPT Arkansas'); Arkansas entrants count the 75 counties directly. Multipliers count once overall. Eight bands, three modes, and no repeaters. Two of the three bonuses fit - 200 points per QSO with WR5P, and 200 per county activated by a mobile, portable or rover. KNOWN LIMITATION 1 - THE 500-POINT LIVE-STREAMING BONUS IS NOT MODELLED, new for 2026: it pays for streaming to YouTube or Twitch, which is not something a logger can observe, and no BonusRule shape describes it. County lines let a station within three miles send every applicable county with no stated cap, so the schema default of 4 ships. WATCH THE COUNTY CODES: they are not truncations. Clark is CLK BECAUSE CLAY TOOK CLA; Polk is PLK and Jackson is JAK with POL and JAC simply unused - and there is an ARKANSAS County in Arkansas, coded ARK. The list dates itself, 'Three- letter designation is NEW for 2022', so its 2022 file date is intent rather than staleness and any pre-2022 list uses different abbreviations entirely. The Cabrillo CONTEST header is the one thing not from the sponsor, so AR-QSO-PARTY comes from WA7BNM under Article 1's exception."
+}

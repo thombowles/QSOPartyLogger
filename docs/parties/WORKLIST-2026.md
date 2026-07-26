@@ -8,12 +8,15 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **5 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+- **4 parties remain**, plus the blocked Canadian Prairies. **The scope widened on 2026-07-26** — see *Scope* below.
   February and March are clear; April is under way (Louisiana, Mississippi,
   Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec,
-  Nebraska, Florida, 7QP, Indiana, Delaware, NEQP). **The Canadian Prairies
-  are next** (9 May). **Both multi-state parties are done** and the schema
-  needed no further change for the second.
+  Nebraska, Florida, 7QP, Indiana, Delaware, NEQP, Arkansas). **Both
+  multi-state parties are done** and the schema needed no further change for
+  the second. **The Canadian Prairies is BLOCKED** — its 62 districts are
+  published only as JPEGs and the sponsor's own pages give four different
+  totals; see [`cpqp_blocked.md`](../research/cpqp_blocked.md) for the research
+  and the unblock path. **Kentucky is next** (6 June).
   **7QP turned out to be EIGHT states, not seven** — the sketch below left
   Washington out, and the sponsor's own page is the authority.
   The original loop built every party running **from 2026-07-24 through
@@ -179,7 +182,7 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**5 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**4 remaining** plus one blocked, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
 next one built". 3 US + 2 Canadian. Research is banked for none of them.
 
@@ -210,7 +213,7 @@ next one built". 3 US + 2 Canadian. Research is banked for none of them.
 | ~~23~~ | ~~Delaware~~ | ~~May 2 1700Z → May 3 2359Z~~ | **done** 2026-07-26 — [`deqp_rules.md`](../research/deqp_rules.md); 3 counties, **rules titled 2024** and they state no times |
 | ~~24~~ | ~~New England~~ | ~~May 2 2000Z → May 3 0500Z; May 3 1300–2400Z~~ | **done** 2026-07-26 — [`neqp_rules.md`](../research/neqp_rules.md); 6 states, id **`newenglandqp`** (Nebraska holds `neqp`) |
 | **25** | **Canadian Prairies** | May 9 1700Z → May 10 0300Z | 🇨🇦 MB/SK/AB — **BLOCKED 2026-07-26**: districts are images only, sponsor totals contradict. Research banked in [`cpqp_blocked.md`](../research/cpqp_blocked.md) |
-| 26 | Arkansas | May 16 1400Z → May 17 0200Z | |
+| ~~26~~ | ~~Arkansas~~ | ~~May 16 1400Z → May 17 0200Z~~ | **done** 2026-07-26 — [`arqp_rules.md`](../research/arqp_rules.md); the rules state **no times** |
 | 27 | Kentucky | Jun 6 1300Z → Jun 7 0100Z | |
 | 28 | Atlantic Canada | Jun 7 1400Z → Jun 8 0100Z | 🇨🇦 NB/NS/PE/NL |
 | 29 | West Virginia | Jun 20 1600Z → Jun 21 0400Z | |
@@ -220,12 +223,12 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**43 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**44 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
 pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP**, **SCQP**,
 **NCQP**, **OKQP**, **IDQP**, **WIQP**, **VAQP**, **LAQP**, **MSQP**, **MOQP**,
 **NMQP**, **GAQP**, **NDQP**, **MIQP**, **OQP**, **QCQP**, **NEQP**, **FQP**
-**7QP**, **INQP**, **DEQP** and **NEQP** from the reopened first-half season, all built 2026-07-26.
+**7QP**, **INQP**, **DEQP**, **NEQP** and **ARQP** from the reopened first-half season, all built 2026-07-26.
 Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
