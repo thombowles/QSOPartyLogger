@@ -1,0 +1,262 @@
+{
+  "schemaVersion": 1,
+  "id": "bcqp",
+  "name": "British Columbia QSO Party",
+  "cabrilloContest": "BC-QSO-PARTY",
+  "homeState": "BC",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 4,
+    "digital": 4
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBandMode"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBandMode"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "VA7ODX",
+      "points": 20,
+      "scope": "perQSO"
+    }
+  ],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "provinces": [
+    "NL",
+    "PE",
+    "NS",
+    "NB",
+    "QC",
+    "ON",
+    "MB",
+    "SK",
+    "AB",
+    "YT",
+    "NT",
+    "NU"
+  ],
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-02-07T16:00:00Z",
+      "end": "2026-02-08T04:00:00Z"
+    },
+    {
+      "start": "2026-02-08T16:00:00Z",
+      "end": "2026-02-09T00:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ASL",
+      "name": "Abbotsford-South Langley"
+    },
+    {
+      "abbr": "BUC",
+      "name": "Burnaby Central"
+    },
+    {
+      "abbr": "BNS",
+      "name": "Burnaby North-Seymour"
+    },
+    {
+      "abbr": "CPG",
+      "name": "Cariboo-Prince George"
+    },
+    {
+      "abbr": "CHP",
+      "name": "Chilliwack-Hope"
+    },
+    {
+      "abbr": "CLC",
+      "name": "Cloverdale-Langley City"
+    },
+    {
+      "abbr": "CKS",
+      "name": "Columbia-Kootenay-Southern Rockies"
+    },
+    {
+      "abbr": "CPC",
+      "name": "Coquitlam-Port Coquitlam"
+    },
+    {
+      "abbr": "COA",
+      "name": "Courtenay-Alberni"
+    },
+    {
+      "abbr": "CML",
+      "name": "Cowichan-Malahat-Langford"
+    },
+    {
+      "abbr": "DEL",
+      "name": "Delta"
+    },
+    {
+      "abbr": "ESQ",
+      "name": "Esquimalt-Saanich-Sooke"
+    },
+    {
+      "abbr": "FPK",
+      "name": "Fleetwood-Port Kells"
+    },
+    {
+      "abbr": "KSC",
+      "name": "Kamloops-Shuwswap-Central Rockies"
+    },
+    {
+      "abbr": "KTN",
+      "name": "Kamloops-Thompson-Nicola"
+    },
+    {
+      "abbr": "KEL",
+      "name": "Kelowna"
+    },
+    {
+      "abbr": "LTF",
+      "name": "Langley Township-Fraser Heights"
+    },
+    {
+      "abbr": "MMA",
+      "name": "Mission-Matsqui-Abbotsford"
+    },
+    {
+      "abbr": "NAL",
+      "name": "Nanaimo-Ladysmith"
+    },
+    {
+      "abbr": "NBM",
+      "name": "New Westminster-Burnaby-Maillardville"
+    },
+    {
+      "abbr": "NPR",
+      "name": "North Island-Powell River"
+    },
+    {
+      "abbr": "NVC",
+      "name": "North Vancouver-Capilano"
+    },
+    {
+      "abbr": "OSK",
+      "name": "Okanagan Lake West-South Kelowna"
+    },
+    {
+      "abbr": "PMM",
+      "name": "Pitt Meadows-Maple Ridge"
+    },
+    {
+      "abbr": "PMC",
+      "name": "Port Moody-Coquitlam"
+    },
+    {
+      "abbr": "PPN",
+      "name": "Prince George-Peace River-Northern Rockies"
+    },
+    {
+      "abbr": "RCM",
+      "name": "Richmond Center-Marpole"
+    },
+    {
+      "abbr": "RES",
+      "name": "Richmond East-Steveston"
+    },
+    {
+      "abbr": "SGI",
+      "name": "Saanich-Gulf Islands"
+    },
+    {
+      "abbr": "SSW",
+      "name": "Similkameen-South Okangan-West Kootenay"
+    },
+    {
+      "abbr": "SBV",
+      "name": "Skeena-Bulkley Valley"
+    },
+    {
+      "abbr": "SWR",
+      "name": "South Surrey-White Rock"
+    },
+    {
+      "abbr": "SUC",
+      "name": "Surrey Centre"
+    },
+    {
+      "abbr": "SUN",
+      "name": "Surrey Newton"
+    },
+    {
+      "abbr": "VAC",
+      "name": "Vancouver Centre"
+    },
+    {
+      "abbr": "VAE",
+      "name": "Vancouver East"
+    },
+    {
+      "abbr": "VSB",
+      "name": "Vancouver Fraserview-South Burnaby"
+    },
+    {
+      "abbr": "VAG",
+      "name": "Vancouver Granville"
+    },
+    {
+      "abbr": "VAK",
+      "name": "Vancouver Kingsway"
+    },
+    {
+      "abbr": "VAQ",
+      "name": "Vancouver Quadra"
+    },
+    {
+      "abbr": "VLM",
+      "name": "Vernon-Lake Country-Monashee"
+    },
+    {
+      "abbr": "VIC",
+      "name": "Victoria"
+    },
+    {
+      "abbr": "WVS",
+      "name": "West Vancouver-Sunshine Coast-Sea to Sky Country"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/bcqp-table.php",
+    "postURL": "http://qsopartyhub.com/bcqp-spots.php"
+  },
+  "notes": "verified: partial - rules from the Orca DX and Contest Club's own 2026 page, http://www.orcadxcc.org/bcqp_rules.html (footer 'Updated: Feb. 5, 2026 VA7ST'), with the official multiplier list, the FAQ and the score summary sheet PDF, all read verbatim 2026-07-26. All four sponsor documents are current and agree; nothing here rests on an archive or a stale year. THE FIRST NON-US PARTY IN THIS APP. BRITISH COLUMBIA HAS NO COUNTIES, so the county field carries the 43 FEDERAL ELECTORAL DISTRICTS instead - 'not demarcated by signposts and not part of any street addresses', as the sponsor puts it. THIS DISTRICT LIST IS NEW: a redrawing of the electoral map for the October 2025 election gave BC 43 districts, and the sponsor says they 'came into effect in 2025 and are used for the 2026 BCQP'. Any older BCQP district list is WRONG for 2026 - the sponsor's own Cabrillo sample on the rules page still shows the retired code NWB, and the generator asserts NWB is absent. Twenty hours in TWO segments with a gap you may not operate in: 1600Z Saturday 7 February to 0400Z Sunday, then 1600Z Sunday to 2400Z. The page prints the ends as 0359z and 2359z, but states the lengths as 12 and eight hours and then the total outright - 'Participants may operate all 20 hours of the contest' - which only the full hours satisfy. Note a stale-date typo in the second segment's sentence, which begins 'Sunday, Feb. 2, 2025'; the same sentence ends '2359z Sunday Feb. 8, 2026' and every other statement agrees on 8 February 2026. PHONE 2 POINTS, CW 4 - the highest CW value of any bundled party. Multipliers count ONCE PER BAND AND MODE, on both sides, which the sponsor illustrates: 'A mixed mode op can count DEL on CW 20 and Phone 20 as well as CW 40 and Phone 40'. BC stations count the 43 districts, Canadian provinces and US states; everyone else counts the 43 districts only, for a ceiling of 516 across six bands and two modes. 'Maryland and DC are lumped together as MD', and the sponsor's own state table has 50 rows with no DC row at all. Alaska and Hawaii are STATES here, not DX - the sponsor says so twice. VA7ODX pays 20 points per QSO, added after multiplying, which the FAQ's worked examples confirm exactly. DX CONTACTS EARN POINTS BUT NO MULTIPLIER. That rule appears ONLY in the FAQ, not in the rules page, and missing it would give a BC entrant a phantom multiplier on every band and mode. Two more rules live only in the FAQ: 'There is no power multiple', so no final-score multiplier ships; and there is NO MOBILE OR ROVER CATEGORY at all, because February weather and the size of the northern districts make it impractical - so no station may claim two districts and a district-line entry is rejected, as in ALQP and MNQP. Self-spotting is prohibited in all classes, though packet and Skimmer are allowed - worth knowing, since this app can post spots to the hub. KNOWN LIMITATION - ADIF EXPORT WRITES 'BC,<district>' IN THE CNTY FIELD. That is ADIF's State,County shape for a US secondary administrative subdivision, and BC electoral districts are neither counties nor in ADIF's enumeration, so the field is well formed but not meaningful to an ADIF consumer. CABRILLO IS UNAFFECTED - it carries the raw exchange token, and Cabrillo is the format the sponsor actually requires. Cabrillo CONTEST value BC-QSO-PARTY, printed by the SPONSOR in its own sample log, so unlike most bundled parties this does not rest on the WA7BNM registry. Logs are due within 14 days at http://bcqp.contesting.com/bcqpsubmitlog.php. District codes are 43 with uniform 3 letters, and the worst trap is a near-anagram: CKS is Columbia-Kootenay-Southern Rockies while KSC is Kamloops-Shuwswap-Central Rockies, both ending in Rockies. There are two Kamloops districts (KSC, KTN), three Surreys (SUC, SUN, SWR), two Burnabys (BUC, BNS - neither is BUR) and seven Vancouver-area codes, of which none is VAN. Three sponsor spellings ship as printed and are asserted by the generator: 'Shuwswap' for Shuswap (KSC), 'Okangan' for Okanagan (SSW), and 'Richmond Center' with the US spelling (RCM) even though the same list writes 'Surrey Centre'. OPEN QUESTIONS (why this is partial): (1) Whether British Columbia itself counts as a province multiplier for BC entrants. THREE sponsor documents list BC among the countable provinces - the rules' enumeration, the summary sheet's bracketed list and the FAQ - but NO BC STATION CAN EVER SEND THE TOKEN 'BC', because the exchange from British Columbia is always a district, and the FAQ tells an operator who does not know their district to look it up rather than fall back to the province. Shipped as NOT counting, on the reading that the enumerations are reference boilerplate listing the standard 13 with their prefixes; BC is accordingly not a loggable token here either. If that reading is wrong a BC entrant is one multiplier short per band per mode. (2) The ADIF county-field limitation above. Confirm (1) with the Contest Coordinator at va7bec@gmail.com before submitting a log."
+}

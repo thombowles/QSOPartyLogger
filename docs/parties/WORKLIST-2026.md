@@ -8,8 +8,9 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **27 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
-  Vermont and Minnesota, the two 7 February parties, were built the same day.
+- **26 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+  Vermont, Minnesota and British Columbia — the whole 7–8 February weekend — were
+  built the same day.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -90,24 +91,40 @@ Two consequences worth naming before the first one is built:
    scores and exports properly, and `UpcomingContests` simply does not surface
    it. Where a sponsor has already announced 2027 dates, record them in `notes`;
    never derive a 2027 window from a formula and ship it as if printed.
-2. **Five of the 29 are not US-state parties and four more are multi-state.**
+2. **Five of the 29 are not US-state parties and two more are multi-state.**
    The Canadian five (BC, Ontario, Quebec, Canadian Prairies, Atlantic Canada)
    and the two multi-state regionals (7th Call Area, New England) do not fit
    `homeState: String` + one county list as cleanly as a single state does.
-   Expect at least one Article 4 schema commit before those land — they sit in
-   May and June, so the single-state parties ahead of them buy time to think.
+
+   **BCQP settled the first half of this on 2026-07-26: a single-province party
+   needs NO schema change.** Nothing requires `homeState` to be a *US* state or
+   the county class to be a *county* — `validate()` only wants two characters,
+   and `homeState` drives the UI labels, the ADIF `state` field, the Cabrillo
+   in-state location and `homeStateCountsViaCounty`, all of which `"BC"` is
+   correct for. British Columbia's 43 federal electoral districts sit in the
+   county list unchanged. **Two things to carry forward:** `provinces` **must**
+   be overridden to drop the home province, because `validOutStateTokens` unions
+   `provinces` in *after* subtracting `excludedStateTokens`, so the home
+   province stays loggable otherwise; and ADIF's `cnty` field comes out as
+   `<province>,<district>`, which is well formed but meaningless — Cabrillo,
+   which is what sponsors require, is unaffected. Ontario, Quebec and the two
+   multi-province parties should each be checked against this, not assumed.
+
+   **Still open: the two multi-state regionals** (7QP's seven states, NEQP's
+   six), which genuinely have no single `homeState`. They sit in May, so the
+   single-state parties ahead of them still buy time to think.
 
 ## Remaining, in contest-date order
 
-**27 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**26 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 22 US + 5 Canadian. Research is banked for none of them.
+next one built". 22 US + 4 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
 | ~~1~~ | ~~Vermont~~ | ~~Feb 7 0000Z → Feb 8 2400Z~~ | **done** 2026-07-26 — [`vtqp_rules.md`](../research/vtqp_rules.md), `verified: partial` |
 | ~~2~~ | ~~Minnesota~~ | ~~Feb 7 1400Z → Feb 7 2400Z~~ | **done** 2026-07-26 — [`mnqp_rules.md`](../research/mnqp_rules.md), `verified: partial` |
-| 3 | British Columbia | Feb 7 1600Z → Feb 8 0359Z; Feb 8 1600–2359Z | 🇨🇦 regions, not counties |
+| ~~3~~ | ~~British Columbia~~ | ~~Feb 7 1600Z → Feb 8 0359Z; Feb 8 1600–2359Z~~ | **done** 2026-07-26 — [`bcqp_rules.md`](../research/bcqp_rules.md), `verified: partial` |
 | 4 | South Carolina | Feb 28 1500Z → Mar 1 0159Z | |
 | 5 | North Carolina | Mar 1 1500Z → Mar 2 0100Z | 100 counties |
 | 6 | Oklahoma | Mar 14 1400Z → Mar 15 0200Z; Mar 15 1400–2200Z | |
@@ -140,10 +157,10 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**21 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**22 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
-pre-existing ALQP, KSQP and TQP, and **VTQP** and **MNQP** from the reopened
-first-half season, both built 2026-07-26. Every row below is struck.
+pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP** and **BCQP** from the
+reopened first-half season, all built 2026-07-26. Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |

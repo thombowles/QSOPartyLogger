@@ -58,6 +58,7 @@ CALENDAR_ALIASES = {
 BUNDLED_BY_SITE_NAME = {
     "Alabama QSO Party": "alqp",
     "Arizona QSO Party": "azqp",
+    "British Columbia QSO Party": "bcqp",
     "California QSO Party": "cqp",
     "Colorado QSO Party": "coqp",
     "Hawaii QSO Party": "hqp",

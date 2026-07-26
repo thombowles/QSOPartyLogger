@@ -106,6 +106,7 @@
 		7AFC46B00E954C466FB322F6 /* ClusterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F09518732D969C418274DB /* ClusterProtocol.swift */; };
 		7BD916C1B52B135ADEA0EB0E /* EntryBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */; };
 		7C432C2A33658F48ADF44099 /* IowaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273A1C77EBE557460270764F /* IowaQSOPartyTests.swift */; };
+		7E095A753F6C058F8D0F402E /* BritishColumbiaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42368D9706B3F36B3537C216 /* BritishColumbiaQSOPartyTests.swift */; };
 		8169A7673BCD6E9B2A60EE78 /* EntryFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242014141B06D7E0F2526D86 /* EntryFlow.swift */; };
 		820C4377EA5B9A172E10F6F3 /* WorkedBeforeTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41280766B8E0202F2FCDAE83 /* WorkedBeforeTable.swift */; };
 		821AC67E517BE893BEAAFB77 /* OperatingFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797C5CEFFBDB939E217C6D60 /* OperatingFeatureTests.swift */; };
@@ -252,6 +253,7 @@
 		3EF36ECEA568E47C2F9D6778 /* ClusterHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterHistoryTests.swift; sourceTree = "<group>"; };
 		3FD300005CA528B8CA373476 /* Spot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
 		41280766B8E0202F2FCDAE83 /* WorkedBeforeTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedBeforeTable.swift; sourceTree = "<group>"; };
+		42368D9706B3F36B3537C216 /* BritishColumbiaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BritishColumbiaQSOPartyTests.swift; sourceTree = "<group>"; };
 		458F13A4AC7D10092F93F2D9 /* SpotCommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCommandTests.swift; sourceTree = "<group>"; };
 		4617D5E5CB3103CD4E042746 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		464472573FD7960DD5AC5B7B /* MaineQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaineQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -479,6 +481,7 @@
 				256735340D033423D4396DBA /* BandMapLayoutTests.swift */,
 				311E0EE90DBA33F96AC71E69 /* BandMapTests.swift */,
 				B8F437B56480EB7F8E109AF5 /* BandPlanTests.swift */,
+				42368D9706B3F36B3537C216 /* BritishColumbiaQSOPartyTests.swift */,
 				AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */,
 				715DC2AC0C0FD0301DA7FF0B /* CaliforniaQSOPartyTests.swift */,
 				5BA71198926002262F846473 /* ChallengeTests.swift */,
@@ -889,6 +892,7 @@
 				D8C66775D3C9F52A735ABA85 /* BandMapObservationTests.swift in Sources */,
 				83FA7452B5CF0039189A7995 /* BandMapTests.swift in Sources */,
 				EC56BDD4BA4DD578EFC84597 /* BandPlanTests.swift in Sources */,
+				7E095A753F6C058F8D0F402E /* BritishColumbiaQSOPartyTests.swift in Sources */,
 				74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */,
 				0C98121EB0A1EFAF11C23781 /* CaliforniaQSOPartyTests.swift in Sources */,
 				198B4CCE041337F320053AA5 /* ChallengeTests.swift in Sources */,

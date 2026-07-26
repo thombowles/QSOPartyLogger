@@ -34,6 +34,19 @@ Built for KE5CW. Bundled parties, all with official county data:
   exported Cabrillo log needs its name column filled in before submission.
   **Built from the archived 2026 edition** (`rev 31`): the sponsor now publishes
   only the 2027 rules, which change four scoring rules.
+- **British Columbia QSO Party** (Feb 7–8, 2026) — **the first non-US party**.
+  BC has no counties, so the county field carries its **43 federal electoral
+  districts**, a list redrawn for the October 2025 election and new for 2026 —
+  the sponsor's own Cabrillo sample still shows a retired code, which the
+  generator asserts is absent. Two segments totalling the sponsor's stated 20
+  hours. Phone 2 / **CW 4**, the highest CW value here; multipliers count **once
+  per band *and* mode**; DC is lumped into MD, and Alaska and Hawaii are states
+  rather than DX. `VA7ODX` pays **20 points per QSO**, added after multiplying.
+  **Three of its rules exist only in the sponsor's FAQ** — DX earns points but no
+  multiplier, "There is no power multiple", and there is no mobile/rover category
+  at all — and each would have been a scoring error if only the rules page were
+  read. `verified: partial` on one question: three sponsor documents list BC
+  among the countable provinces, yet no BC station can ever send the token `BC`.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -186,10 +199,10 @@ Built for KE5CW. Bundled parties, all with official county data:
 
 **Every US state and regional QSO party running from 2026-07-24 through
 2026-12-31 is bundled**, and the season's earlier parties are being added in
-contest-date order — Vermont and Minnesota are in. The 2026 season runs
-Feb 7 → Oct 18; two independent calendars agree there is no state or provincial
-party in January, November or December. **27 parties from February through June
-remain**, listed in
+contest-date order — Vermont, Minnesota and British Columbia are in. The 2026
+season runs Feb 7 → Oct 18; two independent calendars agree there is no state or
+provincial party in January, November or December. **26 parties from February
+through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -669,7 +682,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1031 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1055 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -964,6 +977,24 @@ station profile, radio wiring and cluster history untouched.
   `verified: partial` — the exchange carries a **first name** and no signal
   report, and this repo has no name field, so an exported Cabrillo log's `ex1`
   column is empty where the log robot expects the name.
+- BCQP: rules from the Orca DX and Contest Club's own 2026 page
+  (`orcadxcc.org/bcqp_rules.html`, footer `Updated: Feb. 5, 2026 VA7ST`), with its
+  official multiplier list, its FAQ and its score summary sheet — four current,
+  mutually consistent sponsor documents, read verbatim 2026-07-26. **The sponsor
+  prints its own Cabrillo `CONTEST:` value**, so unlike almost every other
+  bundled party this one does not rest on the WA7BNM registry. **Reading the FAQ
+  was not optional:** three rules appear nowhere else — DX contacts earn points
+  but no multiplier, "There is no power multiple", and there is no mobile or
+  rover category — and the first of those would have handed a BC entrant a
+  phantom multiplier on every band and mode. The FAQ's two worked scoring
+  examples are asserted arithmetically by
+  [`gen_bcqp.py`](docs/research/gen_bcqp.py), which also pins the sponsor's three
+  own misspellings (`Shuwswap`, `Okangan`, `Richmond Center`) so nobody corrects
+  them, and asserts the retired district code `NWB` is absent. `verified: partial`
+  — see the BC-as-a-multiplier question above, plus one export note: ADIF's `cnty`
+  field is written `BC,<district>`, which is well formed but meaningless for a
+  region that has no counties. Cabrillo, the format the sponsor requires, is
+  unaffected.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -999,7 +1030,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 20 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 21 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

@@ -25,7 +25,7 @@
   },
   {
    "name": "British Columbia QSO Party",
-   "partyID": null,
+   "partyID": "bcqp",
    "windows": [
     {
      "start": "2026-02-07T16:00:00Z",

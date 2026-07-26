@@ -1,0 +1,40 @@
+# Source: http://www.orcadxcc.org/content/bcqp_summary.pdf — official score summary sheet.
+# A third sponsor document listing the multipliers, with the province prefixes.
+# Fetched: 2026-07-26
+
+         British Columbia QSO Party
+            Score Summary Sheet
+Call :                                          Operator(s):
+
+Address:
+
+City            Province / State         Postal Code             Country                 E-mail
+
+ENTRY CLASS
+- Mode:        Phone c       CW c     Mixed c
+- Power:       QRP (<5 watts) c Low (5-100 watts) c High (>100 watts) c
+- Entry Class: Single-OP-ALL c Multi-OP-ALL c
+
+MULTIPLIERS
+Non-BC Stations: BC Districts (43 max)
+BC Stations: BC Districts (43 max), 10 provinces and three territories [NS (VE1/VA1, CY9, CY0), QC
+                (VE2/VA2), ON (VE3/VA3), MB (VE4/VA4), SK (VE5/VA5), AB (VE6/VA6), BC
+                (VE7/VA7), NT(VE8), NB (VE9), NL (VO1, VO2), NU (VY0), YT (VY1) and PE (VY2)],
+                and US states, including KH6 and KL7
+
+Bonus           Each QSO with the Orca DX and Contest Club callsign, VA7ODX, will be worth an
+                additional 20 points, added AFTER all other scoring components.
+
+SCORING
+   Mode                 QSOs         Points     Multipliers        Total Points       Bonus points
+       Phone                            2
+
+         CW                             4
+
+FINAL SCORE (QSO points x Multipliers) + Bonus points:
+
+Soapbox:
+
+The decision of the Committee will be accepted as final.
+
+Signature                                               Date:

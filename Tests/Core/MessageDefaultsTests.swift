@@ -9,10 +9,12 @@ import XCTest
 /// See docs/superpowers/specs/2026-07-25-serial-macros-cut-numbers-mode-default-design.md
 final class MessageDefaultsTests: XCTestCase {
 
-    /// The sixteen parties whose exchange carries a report and no number,
-    /// named so a party cannot change shape unnoticed.
+    /// Every party whose exchange carries a report and no number, named so a
+    /// party cannot change shape unnoticed. Deliberately not described by a
+    /// count in prose — the list grows with each party added, and a stale number
+    /// in a comment is a small lie that nothing catches.
     static let rstPartyIDs = [
-        "alqp", "azqp", "coqp", "hqp", "iaqp", "ilqp", "ksqp", "meqp",
+        "alqp", "azqp", "bcqp", "coqp", "hqp", "iaqp", "ilqp", "ksqp", "meqp",
         "nhqp", "njqp", "nyqp", "ohqp", "sdqp", "tnqp", "tqp", "vtqp", "warun",
     ]
 
@@ -34,8 +36,9 @@ final class MessageDefaultsTests: XCTestCase {
 
     /// The Article 4 proof: every party that was correct before this change
     /// resolves to the exact macros it shipped with.
-    func testTheSixteenReportPartiesKeepTheShippedDefaults() throws {
-        XCTAssertEqual(Self.rstPartyIDs.count, 17)
+    func testEveryReportPartyKeepsTheShippedDefaults() throws {
+        XCTAssertEqual(Self.rstPartyIDs.count, 18,
+                       "a party joined or left the report shape — update the roster deliberately")
         for id in Self.rstPartyIDs {
             let p = try XCTUnwrap(PartyCatalog.party(id: id), id)
             XCTAssertEqual(MessageSets.defaults(for: p), MessageSets.standard,
