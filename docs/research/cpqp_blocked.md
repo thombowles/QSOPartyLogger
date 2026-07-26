@@ -32,19 +32,39 @@ assert against. Typing 62 names and codes off a JPEG, against four
 contradictory totals, is exactly the failure
 [Article 1](../CONSTITUTION.md) and Article 2 exist to prevent.
 
-## How to unblock it
+## Re-attempted 2026-07-26 — still blocked, and nothing has moved
 
-In rough order of preference:
+Every path below that could be tried without contacting the sponsor was tried,
+by rendering the pages rather than fetching them. **Both blockers are intact.**
 
-1. **Ask the sponsor for a text list.** The contest is coordinated through
-   `cpqp.ve6hams.ca`; a logging-software support file must exist, because N1MM
-   users need one — the rules describe configuring `RoverQTH` with 3-letter FED
-   identifiers, so the abbreviations are somewhere in a logging package.
-2. **Look inside a logging program's data files.** N1MM+ and N3FJP both support
-   CPQP; their district tables would be first-party-adjacent and machine
-   readable.
-3. **OCR the images**, and only then — with the count still unresolved, this
-   would need the sponsor to confirm the total before it could ship.
+| Checked | Result |
+| --- | --- |
+| `/counties/` | **Unchanged.** 10 JPEGs, **0 tables, 0 alt text** — `FEDS_2023_2.jpg`, `AB2023.jpg`, `Calgary2023.jpg`, `Edmonton2023.jpg`, `REDDEER2023.jpg`, `SK2023.jpg`, `Regina2023.jpg`, `Saskatoon2023.jpg`, `MB2023.jpg`, `Winnipeg2023.jpg`. Still just a link to Elections Canada's lookup tool. |
+| `/multipliers/` | **Unchanged, and the contradiction is still in one paragraph:** "a total of **63** multipliers", "Total **65** Canadian Prairies District Multipliers", "a total of **66** multipliers", "Total **60** Outside Canadian Prairies Districts Multipliers". |
+| `/software/` | **No data file of any kind.** Confirms N1MM+ support "v1.0.9491 or newer" and DXLog "2.5.33", and offers a call-history file only by emailing VE2FK. No district table. |
+| `cpqp.contesting.com/cpqpsubmitlog.php` | **Not the districts.** Its only dropdown is the entrant's *own* location — DX, 13 provinces, 50 states. The robot does not publish what it validates against. |
+
+So the count is still unresolvable from the sponsor's own site, which is the
+deeper of the two blockers: even a perfectly OCR'd list of 62 could not be
+checked against a page that says 63, 65, 66 and 60.
+
+## What is left to try
+
+Both remaining paths need a decision that is not this repo's to make:
+
+1. **Ask the sponsor for a text list** — `CPQPinfo@ve6hams.ca`, or VE2FK for the
+   N1MM call-history file. This is outward-facing correspondence and needs the
+   maintainer's say-so, not an agent's. It is also the path most likely to
+   work, because N1MM and DXLog both ship a district table, so a machine-readable
+   list demonstrably exists somewhere.
+2. **Read N1MM+ or DXLog's own data files.** First-party-adjacent and machine
+   readable, but they ship inside a Windows installer rather than as a published
+   file, so getting one means downloading and unpacking a binary.
+
+**OCR is not a path on its own.** With the totals unresolved it would produce a
+list that cannot be asserted, which is precisely what
+[Article 1](../CONSTITUTION.md) and Article 2 forbid. Ask the sponsor first;
+OCR only becomes viable once someone states the real total.
 
 ## What the rules do say, and it is otherwise a clean fit
 
