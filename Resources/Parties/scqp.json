@@ -1,0 +1,272 @@
+{
+  "schemaVersion": 1,
+  "id": "scqp",
+  "name": "South Carolina QSO Party",
+  "cabrilloContest": "SC-QSO-PARTY",
+  "homeState": "SC",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m"
+  ],
+  "points": {
+    "phone": 4,
+    "cw": 4,
+    "digital": 4
+  },
+  "homeStationPoints": {
+    "phone": 2,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "perBandMode"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBandMode"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "W4CAE",
+      "points": 350,
+      "scope": "perBandMode"
+    },
+    {
+      "type": "workStation",
+      "call": "WW4SF",
+      "points": 250,
+      "scope": "perBandMode"
+    },
+    {
+      "type": "workStation",
+      "call": "K4YTZ",
+      "points": 250,
+      "scope": "perBandMode"
+    }
+  ],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-02-28T15:00:00Z",
+      "end": "2026-03-01T02:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ABBE",
+      "name": "Abbeville"
+    },
+    {
+      "abbr": "AIKE",
+      "name": "Aiken"
+    },
+    {
+      "abbr": "ALLE",
+      "name": "Allendale"
+    },
+    {
+      "abbr": "ANDE",
+      "name": "Anderson"
+    },
+    {
+      "abbr": "BAMB",
+      "name": "Bamberg"
+    },
+    {
+      "abbr": "BARN",
+      "name": "Barnwell"
+    },
+    {
+      "abbr": "BEAU",
+      "name": "Beaufort"
+    },
+    {
+      "abbr": "BERK",
+      "name": "Berkeley"
+    },
+    {
+      "abbr": "CHOU",
+      "name": "Calhoun"
+    },
+    {
+      "abbr": "CHAR",
+      "name": "Charleston"
+    },
+    {
+      "abbr": "CKEE",
+      "name": "Cherokee"
+    },
+    {
+      "abbr": "CHES",
+      "name": "Chester"
+    },
+    {
+      "abbr": "CHFD",
+      "name": "Chesterfield"
+    },
+    {
+      "abbr": "CLRN",
+      "name": "Clarendon"
+    },
+    {
+      "abbr": "COLL",
+      "name": "Colleton"
+    },
+    {
+      "abbr": "DARL",
+      "name": "Darlington"
+    },
+    {
+      "abbr": "DILL",
+      "name": "Dillon"
+    },
+    {
+      "abbr": "DORC",
+      "name": "Dorchester"
+    },
+    {
+      "abbr": "EDGE",
+      "name": "Edgefield"
+    },
+    {
+      "abbr": "FAIR",
+      "name": "Fairfield"
+    },
+    {
+      "abbr": "FLOR",
+      "name": "Florence"
+    },
+    {
+      "abbr": "GEOR",
+      "name": "Georgetown"
+    },
+    {
+      "abbr": "GVIL",
+      "name": "Greenville"
+    },
+    {
+      "abbr": "GRWD",
+      "name": "Greenwood"
+    },
+    {
+      "abbr": "HAMP",
+      "name": "Hampton"
+    },
+    {
+      "abbr": "HORR",
+      "name": "Horry"
+    },
+    {
+      "abbr": "JASP",
+      "name": "Jasper"
+    },
+    {
+      "abbr": "KERS",
+      "name": "Kershaw"
+    },
+    {
+      "abbr": "LNCS",
+      "name": "Lancaster"
+    },
+    {
+      "abbr": "LAUR",
+      "name": "Laurens"
+    },
+    {
+      "abbr": "LEE",
+      "name": "Lee"
+    },
+    {
+      "abbr": "LEXI",
+      "name": "Lexington"
+    },
+    {
+      "abbr": "MARI",
+      "name": "Marion"
+    },
+    {
+      "abbr": "MARL",
+      "name": "Marlboro"
+    },
+    {
+      "abbr": "MCOR",
+      "name": "McCormick"
+    },
+    {
+      "abbr": "NEWB",
+      "name": "Newberry"
+    },
+    {
+      "abbr": "OCON",
+      "name": "Oconee"
+    },
+    {
+      "abbr": "ORNG",
+      "name": "Orangeburg"
+    },
+    {
+      "abbr": "PICK",
+      "name": "Pickens"
+    },
+    {
+      "abbr": "RICH",
+      "name": "Richland"
+    },
+    {
+      "abbr": "SALU",
+      "name": "Saluda"
+    },
+    {
+      "abbr": "SPAR",
+      "name": "Spartanburg"
+    },
+    {
+      "abbr": "SUMT",
+      "name": "Sumter"
+    },
+    {
+      "abbr": "UNIO",
+      "name": "Union"
+    },
+    {
+      "abbr": "WILL",
+      "name": "Williamsburg"
+    },
+    {
+      "abbr": "YORK",
+      "name": "York"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/scqp-table.php",
+    "postURL": "http://qsopartyhub.com/scqp-spots.php"
+  },
+  "notes": "verified: partial - rules from the SCQP Team's official 2026 PDF, header 'SOUTH CAROLINA QSO PARTY RULES (rev. 2.2.26)', read verbatim 2026-07-26, with the scqso.com home page confirming the date. The cleanest source of this run: ONE current-year document carries the rules, the 46 counties, the states, the provinces AND the sponsor's own Cabrillo CONTEST value, so nothing here rests on an archive, a secondary page or a registry. PROVENANCE NOTE: THE FILENAME LIES. The PDF is served as SCQPRULES2024_0126.pdf, which reads like a 2024 document; its own header says rev. 2.2.26 - 2 February 2026 - and it carries the 2026 dates and the 2026 bonus stations. The revision line governs. This is the mirror image of MNQP, whose filename was honestly 2027 while the trap was that the sponsor no longer published the year being built. Between them: never take a year from a URL. Eleven hours in one window, 1500Z Saturday 28 February to 0200Z Sunday 1 March 2026 - the sponsor prints the end as 0159Z but states '11 hours total', which settles it, and this is the ONLY bundled party whose window crosses a month boundary. POINTS ARE PAID BY WHO WAS WORKED, NOT BY MODE, and getting this backwards is the easiest mistake here: a contact with a South Carolina station is worth TWO points and a contact with a station outside South Carolina is worth FOUR, with phone, CW and digital all paying alike. Out-of-state entrants may only work SC stations at all, so every contact in an out-of-state log is worth two. Multipliers count ONCE PER MODE PER BAND on both sides. SC stations count the 46 counties, all 50 states INCLUDING South Carolina, Washington DC, and the 13 provinces and territories, for 110 per band per mode; everyone else counts the 46 SC counties, for a ceiling of 1,104 across eight bands and three modes. South Carolina itself is a multiplier reachable only through a county, and the sponsor says so about as plainly as it can be said - 'Each USA state including South Carolina' followed immediately by 'When logging other SC stations, enter the SC County as the exchange (not SC)'. WASHINGTON DC IS ITS OWN MULTIPLIER here and is deliberately not aliased to MD, unlike VTQP, BCQP and MDC; Puerto Rico, the USVI, Guam and the other US territories are DX. DX contacts earn points and no multiplier, and the sponsor asks for the literal token - 'DX' (not country). THREE BONUS STATIONS, each paying ONCE PER BAND PER MODE: W4CAE 350 points (Columbia Amateur Radio Club), WW4SF 250 (Swamp Fox Contest Group) and K4YTZ 250 (York County Amateur Radio Society), for 850 available in every one of the 24 band/mode slots. The sponsor's own example fixes the scope: 'You can work WW4SF/CHAR, WW4SF/GVIL, WW4SF/JASP and WW4SF/HORR on 40m CW, but only the first contact with WW4SF on 40m CW will qualify for Bonus Station points.' Working a bonus station again in a new county still pays QSO points and multipliers. No final-score multiplier of any kind - power selects the award category only. All digital modes are ONE mode, stated outright: 'a FT8/4 and RTTY contact on the same band with the same station is considered a dupe', which is how this app already behaves and is the exact opposite of VTQP. County-line contacts are permitted and must be logged as separate contacts, which is what this app produces. KNOWN LIMITATION - SC MOBILE AND EXPEDITION STATIONS UNDERCOUNT THEIR MULTIPLIERS. Rule 9.2.2 gives them a multiplier for 'Each SC county activated', once per mode per band, on top of the counties they work. This app models county activation as a BONUS (points) rather than as a multiplier, so an SC mobile or expedition entrant sees a multiplier total short by the number of counties they activated. FIXED SC STATIONS AND EVERY OUT-OF-STATE ENTRANT ARE UNAFFECTED - which is every operator this app is likely to be used by. Recorded as a deferred engine gap; TnQP wants the same shape, so SCQP is the second party to need it. Cabrillo CONTEST value SC-QSO-PARTY, printed by the sponsor in its own example log. Logs are due within 14 days and CABRILLO ONLY - the sponsor no longer accepts paper. Counties are 46 with MIXED 3- AND 4-CHARACTER abbreviations: LEE is the only three, and unlike ILQP the rules give no note about it. Calhoun is CHOU, not CALH - the same code Alabama uses for its own Calhoun. Three counties begin 'Ch' and none of them is CHER: Chester is CHES, Chesterfield CHFD and Cherokee CKEE. Greenville is GVIL and Greenwood GRWD; Lancaster is LNCS and Laurens LAUR. OPEN QUESTIONS (why this is partial): (1) The county-line limit. The rules permit county-line contacts and mandate only how they are logged - '\"County-line\" contacts must appear in the log as separate contacts' - but cap nothing, not two and not four. Shipped on this app's own maximum of four, which is a default rather than a sponsor's number; inventing a cap of two would be no better founded and would reject a legal entry. (2) The mobile/expedition activation multiplier above, which is a missing app feature rather than a rule in doubt. Confirm (1) with the SCQP Team via scqso.com before submitting a county-line log."
+}

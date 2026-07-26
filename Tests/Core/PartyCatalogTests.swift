@@ -13,7 +13,7 @@ final class PartyCatalogTests: XCTestCase {
         XCTAssertEqual(
             Set(parties.map(\.id)),
             ["alqp", "azqp", "bcqp", "coqp", "cqp", "hqp", "iaqp", "ilqp", "ksqp", "mdc", "meqp",
-             "mnqp", "nhqp", "njqp", "nyqp", "ohqp", "paqp", "sdqp", "tnqp", "tqp", "vtqp",
+             "mnqp", "nhqp", "njqp", "nyqp", "ohqp", "paqp", "scqp", "sdqp", "tnqp", "tqp", "vtqp",
              "warun"]
         )
     }
@@ -69,7 +69,7 @@ final class PartyCatalogTests: XCTestCase {
     func testPartialVerificationStatusPerParty() throws {
         let expectedPartial: Set<String> = [
             "azqp", "hqp", "iaqp", "ilqp", "meqp", "nhqp", "njqp", "nyqp", "paqp",
-            "sdqp", "tnqp", "tqp", "vtqp", "mnqp", "bcqp",
+            "sdqp", "tnqp", "tqp", "vtqp", "mnqp", "bcqp", "scqp",
         ]
         for party in PartyCatalog.loadBundled() {
             XCTAssertEqual(

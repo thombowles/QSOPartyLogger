@@ -8,9 +8,9 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **26 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
-  Vermont, Minnesota and British Columbia — the whole 7–8 February weekend — were
-  built the same day.
+- **25 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+  Vermont, Minnesota, British Columbia and South Carolina were built the same
+  day, clearing February.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -116,16 +116,16 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**26 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**25 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 22 US + 4 Canadian. Research is banked for none of them.
+next one built". 21 US + 4 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
 | ~~1~~ | ~~Vermont~~ | ~~Feb 7 0000Z → Feb 8 2400Z~~ | **done** 2026-07-26 — [`vtqp_rules.md`](../research/vtqp_rules.md), `verified: partial` |
 | ~~2~~ | ~~Minnesota~~ | ~~Feb 7 1400Z → Feb 7 2400Z~~ | **done** 2026-07-26 — [`mnqp_rules.md`](../research/mnqp_rules.md), `verified: partial` |
 | ~~3~~ | ~~British Columbia~~ | ~~Feb 7 1600Z → Feb 8 0359Z; Feb 8 1600–2359Z~~ | **done** 2026-07-26 — [`bcqp_rules.md`](../research/bcqp_rules.md), `verified: partial` |
-| 4 | South Carolina | Feb 28 1500Z → Mar 1 0159Z | |
+| ~~4~~ | ~~South Carolina~~ | ~~Feb 28 1500Z → Mar 1 0159Z~~ | **done** 2026-07-26 — [`scqp_rules.md`](../research/scqp_rules.md), `verified: partial` |
 | 5 | North Carolina | Mar 1 1500Z → Mar 2 0100Z | 100 counties |
 | 6 | Oklahoma | Mar 14 1400Z → Mar 15 0200Z; Mar 15 1400–2200Z | |
 | 7 | Idaho | Mar 14 1600Z → Mar 15 0400Z; Mar 15 1400Z → Mar 16 0200Z | also a 7QP state |
@@ -157,10 +157,11 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**22 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**23 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
-pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP** and **BCQP** from the
-reopened first-half season, all built 2026-07-26. Every row below is struck.
+pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP** and **SCQP**
+from the reopened first-half season, all built 2026-07-26. Every row below is
+struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
@@ -351,14 +352,30 @@ its own commit (Article 4).
   a party-level list of excluded raw modes — but one party wants it and the harm
   is small (an FT8 QSO scores locally and earns nothing from the sponsor).
   Recorded in `ilqp.json` as KNOWN LIMITATION 2.
-- **Self-activation multipliers.** TnQP: "Tennessee mobiles and rovers may claim
-  one multiplier for any Tennessee county from which they complete at least 10
-  QSOs if they do not earn a multiplier for that county otherwise." The matching
-  500-point *bonus* is modeled (`activatedCountyCount`); the extra *multiplier*
-  is not, so a TN mobile/rover sees a slightly low multiplier count. COQP turned
-  out **not** to need it — its activation rule is a bonus only — so TnQP is the
-  sole user so far, and the field is not yet worth building. Revisit if a second
-  party wants it.
+- **Self-activation multipliers — SECOND USER FOUND 2026-07-26, so the repo's own
+  bar is met and this is now buildable.** TnQP: "Tennessee mobiles and rovers may
+  claim one multiplier for any Tennessee county from which they complete at least
+  10 QSOs if they do not earn a multiplier for that county otherwise." The
+  matching 500-point *bonus* is modeled (`activatedCountyCount`); the extra
+  *multiplier* is not, so a TN mobile/rover sees a slightly low multiplier count.
+  COQP turned out **not** to need it — its activation rule is a bonus only.
+
+  **SCQP rule 9.2.2 is the second user**, and states it as a multiplier outright:
+  SC Mobile and Expedition stations count "Each SC county activated. At least one
+  (1) QSO must be made from a county in order for it to count as activated", and
+  "Expedition stations that operate from more than one county will receive a
+  multiplier (ONCE PER MODE PER BAND) for each county activated". Note SCQP scopes
+  it **per band per mode** while TnQP's is once — so the field must carry the
+  scope, not assume one. Sketch: an optional `activatedCountyMultiplier: {minQSOs:
+  Int}` on `MultRule`, credited from `log.myLoc` values rather than `theirLoc`,
+  honouring the side's existing `countScope`, and gated on
+  `isRovingCategory(log.station.categoryStation)` exactly as the bonus already is.
+  Its own commit under Article 4, adding no party.
+
+  **Who is affected:** only in-state mobile/rover/expedition entrants. A fixed
+  in-state station and *every* out-of-state entrant score identically today,
+  which is why both parties shipped without it. Recorded in `scqp.json`'s notes
+  as a KNOWN LIMITATION so an SC mobile operator sees it.
 - ~~**No 222 MHz band.**~~ **Done 2026-07-24.** `Band.cm125` = `1.25m`,
   222000–225000 kHz, default 222100 — ADIF 3.1.4 for the band string and edges,
   47 CFR §97.301(a) as cross-check, ARRL band plan for the calling frequency.

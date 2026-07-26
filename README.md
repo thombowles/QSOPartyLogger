@@ -47,6 +47,19 @@ Built for KE5CW. Bundled parties, all with official county data:
   at all — and each would have been a scoring error if only the rules page were
   read. `verified: partial` on one question: three sponsor documents list BC
   among the countable provinces, yet no BC station can ever send the token `BC`.
+- **South Carolina QSO Party** (Feb 28 – Mar 1, 2026) — eleven hours, and the
+  only bundled party whose window crosses a month boundary. **Points are paid by
+  who was worked, not by mode**: 2 for a contact with an SC station, 4 for one
+  outside, phone and CW and digital alike. Multipliers count **once per band and
+  mode**; **three bonus stations** — `W4CAE` 350, `WW4SF` 250, `K4YTZ` 250 — each
+  paying once in every one of the 24 band/mode slots. South Carolina is itself a
+  multiplier reachable only through a county, which the sponsor states more
+  plainly than any other party here. DC counts in its own right; US territories
+  are DX. 46 counties with mixed 3/4 codes (`LEE` alone is three), and Calhoun is
+  `CHOU` — the same code Alabama uses for its own Calhoun. `verified: partial`:
+  the rules cap county-line operation nowhere, and SC mobile/expedition entrants
+  undercount, since their per-county-activated **multiplier** is modelled here
+  only as a bonus.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -199,10 +212,10 @@ Built for KE5CW. Bundled parties, all with official county data:
 
 **Every US state and regional QSO party running from 2026-07-24 through
 2026-12-31 is bundled**, and the season's earlier parties are being added in
-contest-date order — Vermont, Minnesota and British Columbia are in. The 2026
-season runs Feb 7 → Oct 18; two independent calendars agree there is no state or
-provincial party in January, November or December. **26 parties from February
-through June remain**, listed in
+contest-date order — Vermont, Minnesota, British Columbia and South Carolina are
+in. The 2026 season runs Feb 7 → Oct 18; two independent calendars agree there is
+no state or provincial party in January, November or December. **25 parties from
+February through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -682,7 +695,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1060 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1086 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -995,6 +1008,20 @@ station profile, radio wiring and cluster history untouched.
   field is written `BC,<district>`, which is well formed but meaningless for a
   region that has no counties. Cabrillo, the format the sponsor requires, is
   unaffected.
+- SCQP: rules from the SCQP Team's official 2026 PDF, header `SOUTH CAROLINA QSO
+  PARTY RULES (rev. 2.2.26)`, read verbatim 2026-07-26. The cleanest source of
+  the run: one current-year document carries the rules, the 46 counties, the
+  states, the provinces **and** the sponsor's own Cabrillo `CONTEST:` value, so
+  nothing rests on an archive, a secondary page or a registry. **The filename
+  lies and the revision line does not** — the PDF is served as
+  `SCQPRULES2024_0126.pdf`, which reads like a 2024 document, while its header
+  says `rev. 2.2.26` and its contents carry the 2026 dates and bonus stations.
+  That is the mirror image of MNQP, whose filename was honestly 2027 while the
+  trap was that the sponsor no longer published the year being built. Between
+  them: never take a year from a URL.
+  [`gen_scqp.py`](docs/research/gen_scqp.py) asserts all four of the sponsor's
+  point sentences, because the pay-by-who-was-worked shape is the easiest thing
+  here to get backwards.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -1030,7 +1057,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 21 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 22 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

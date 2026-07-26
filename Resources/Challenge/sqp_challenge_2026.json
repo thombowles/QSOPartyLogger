@@ -39,7 +39,7 @@
   },
   {
    "name": "South Carolina QSO Party",
-   "partyID": null,
+   "partyID": "scqp",
    "windows": [
     {
      "start": "2026-02-28T15:00:00Z",
