@@ -84,16 +84,18 @@ enum AdifExporter {
 
         let theirLoc = q.theirLoc.uppercased()
         if let countyName = countyNames[theirLoc] {
-            r += field("cnty", "\(party.homeState),\(countyName)")
-            r += field("state", party.homeState)
+            let theirState = party.state(forCounty: theirLoc)
+            r += field("cnty", "\(theirState),\(countyName)")
+            r += field("state", theirState)
         } else if MultClass.acceptedStateTokens.contains(theirLoc) {
             r += field("state", theirLoc)
         }
 
         let myLoc = q.myLoc.uppercased()
         if let myCountyName = countyNames[myLoc] {
-            r += field("my_cnty", "\(party.homeState),\(myCountyName)")
-            r += field("my_state", party.homeState)
+            let ownState = party.state(forCounty: myLoc)
+            r += field("my_cnty", "\(ownState),\(myCountyName)")
+            r += field("my_state", ownState)
         } else if !myState.isEmpty {
             r += field("my_state", myState)
         }

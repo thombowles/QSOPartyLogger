@@ -146,9 +146,31 @@ Two consequences worth naming before the first one is built:
    other eight (MT NV OR UT WY, CT MA RI) have no 2026 party of their own and
    must be generated from the regional sponsors' own lists.
 
-   Its own commit, adding no party (Article 4), before 7QP is built. Both sit on
-   2 May, so the March and April parties still buy time — but the shape is now
-   decided, and it should not be re-litigated.
+   **DONE 2026-07-26, in its own party-free commit** — the sketch above shipped
+   almost unchanged. Three optional fields carry it, all defaulted so every
+   existing party is byte-identical:
+
+   | Field | Default | What it does |
+   | --- | --- | --- |
+   | `County.state` | `nil` | the state that county lies in |
+   | `PartyDefinition.homeStates` | `[homeState]` | every member state |
+   | `PartyDefinition.inStateLabel` | `homeState` | the setup sheet's phrase |
+
+   `PartyDefinition.state(forCounty:)` is the single accessor that resolves a
+   county to its state, and every call site that used to read `party.homeState`
+   for a county now goes through it — the state credited by
+   `homeStateCountsViaCounty`, and ADIF's `cnty`/`state`/`my_cnty`/`my_state`.
+   `excludedStateTokens` now defaults to **all** member states, so no member
+   state is a loggable token. `validate()` rejects a county naming a state the
+   party does not cover, and a `homeState` absent from `homeStates`.
+
+   `Tests/Core/MultiStatePartyTests.swift` is the Article 4 proof: every bundled
+   party still has one home state, no county naming one, and the same
+   excluded-token list. **Two things the sketch got wrong and the build
+   corrected**: Cabrillo needed no change at all (its `LOCATION:` header is the
+   entrant's own state, and `homeState` remains right for that), and
+   `homeStateCountsViaCounty` did *not* need to become per-state — resolving the
+   county's own state gives each member state its multiplier from one flag.
 
 ## Remaining, in contest-date order
 

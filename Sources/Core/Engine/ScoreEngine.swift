@@ -188,7 +188,10 @@ enum ScoreEngine {
         if countyAbbrs.contains(theirLoc) {
             var out: [(MultClass, String)] = [(.county, theirLoc)]
             if rule.homeStateCountsViaCounty {
-                out.append((.state, party.homeState))
+                // The county's own state, which for every single-state party is
+                // the party's — and for a 7QP log is whichever of the seven the
+                // county lies in.
+                out.append((.state, party.state(forCounty: theirLoc)))
             }
             return out
         }

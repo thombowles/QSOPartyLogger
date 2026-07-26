@@ -84,8 +84,8 @@ struct SetupSheet: View {
                 Section("My Location") {
                     if let party {
                         Picker("Operating from", selection: $isInState) {
-                            Text("Outside \(party.homeState)").tag(false)
-                            Text("Inside \(party.homeState)").tag(true)
+                            Text("Outside \(party.inStateLabel)").tag(false)
+                            Text("Inside \(party.inStateLabel)").tag(true)
                         }
                         .pickerStyle(.segmented)
 

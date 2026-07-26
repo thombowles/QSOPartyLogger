@@ -51,9 +51,37 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     var stateAliases: [String: String] { stateAliasesRaw ?? [:] }
     private let stateAliasesRaw: [String: String]?
 
+    /// Every state this party's counties lie in. Defaults to `[homeState]`,
+    /// which is every single-state party — the list exists for the two
+    /// multi-state regionals, where **one log covers all member states**: the
+    /// 7th Call Area's seven and New England's six.
+    ///
+    /// `homeState` remains the party's *primary* state and still drives the
+    /// Cabrillo `LOCATION:` header and the ADIF fallback; `homeStates` is what
+    /// decides which state tokens an entrant may not send, because a station in
+    /// any member state sends a county rather than a bare state.
+    var homeStates: [String] { homeStatesRaw ?? [homeState] }
+    private let homeStatesRaw: [String]?
+
+    /// The state a given county lies in — its own `state` where the party set
+    /// one, and `homeState` otherwise. **Every call site that used to read
+    /// `party.homeState` for a county should read this**, which is what keeps
+    /// single-state parties identical while letting a 7QP county carry Idaho.
+    func state(forCounty abbr: String) -> String {
+        county(for: abbr)?.state ?? homeState
+    }
+
+    /// How the setup sheet names the inside/outside choice: "Inside \(this)".
+    /// Defaults to `homeState`, so every existing party reads as before; the
+    /// multi-state regionals supply a phrase instead ("the 7th call area").
+    var inStateLabel: String { inStateLabelRaw ?? homeState }
+    private let inStateLabelRaw: String?
+
     /// State tokens that are not valid in this party beyond the home state
     /// (MDC: DC arrives as the WDC county entity, so both MD and DC are out).
-    var excludedStateTokens: [String] { excludedStateTokensRaw ?? [homeState] }
+    /// Defaults to **all** of `homeStates`, so a multi-state party excludes
+    /// every member state without having to list them twice.
+    var excludedStateTokens: [String] { excludedStateTokensRaw ?? homeStates }
     private let excludedStateTokensRaw: [String]?
 
     /// Province token list override (OhQP counts only 11). Default: the 13.
@@ -350,6 +378,19 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         }
         guard !counties.isEmpty else { throw PartyValidationError.noCounties }
         guard homeState.count == 2 else { throw PartyValidationError.badHomeState(homeState) }
+        for s in homeStates where s.count != 2 {
+            throw PartyValidationError.badHomeState(s)
+        }
+        guard homeStates.contains(homeState) else {
+            throw PartyValidationError.badHomeState(homeState)
+        }
+        // A county's own state must be one the party actually covers, or the
+        // ADIF export and the state credit would name a state nobody can work.
+        for c in counties {
+            if let s = c.state, !homeStates.contains(s) {
+                throw PartyValidationError.badHomeState(s)
+            }
+        }
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -357,6 +398,8 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case validBands, points, dupeScope, multipliers, bonuses, oneByOne
         case schedule, counties, notes, scoreMultipliers, homeStationPoints
         case hubSpots
+        case homeStatesRaw = "homeStates"
+        case inStateLabelRaw = "inStateLabel"
         case dxStyleRaw = "dxStyle"
         case allowedModeClassesRaw = "allowedModes"
         case maxSimultaneousCountiesRaw = "maxSimultaneousCounties"
