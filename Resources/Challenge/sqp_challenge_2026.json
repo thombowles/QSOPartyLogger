@@ -257,7 +257,7 @@
   },
   {
    "name": "Delaware QSO Party",
-   "partyID": null,
+   "partyID": "deqp",
    "windows": [
     {
      "start": "2026-05-02T17:00:00Z",

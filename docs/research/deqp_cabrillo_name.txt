@@ -1,0 +1,8 @@
+Source: https://www.contestcalendar.com/cabnames.php  (WA7BNM Contest Calendar,
+  'Cabrillo Names' table).  Fetched 2026-07-26.
+
+Used under CONSTITUTION.md Article 1's WA7BNM exception, for the Cabrillo
+CONTEST: header ONLY.  The sponsor has a whole Cabrillo Info page and still
+never names the header.
+========================================================================
+240	Delaware QSO Party  	DE-QSO-PARTY

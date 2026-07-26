@@ -249,6 +249,15 @@ Built for KE5CW. Bundled parties, all with official county data:
   wording is *still on the page inside an HTML comment*, so a careless scraper
   reads both rules at once. The county abbreviations changed in 2017 and the
   pre-2017 page still resolves. `verified: partial`, with no open questions.
+- **Delaware QSO Party** (May 2–3, 2026) — **three counties, the smallest list
+  in the app**, and the one party where the list is the only easy thing. Its
+  **newest rules are titled 2024** (2025 and 2026 both 404), and the site's own
+  `rules.htm` redirects to 2022→2023 and stops two editions short — only the
+  home page's link reaches the current one. **The rules state no contest times
+  at all**, just "first full weekend in May", so the hours come from the
+  Challenge calendar and are flagged. **QSO points depend on which side of the
+  state line you are on** — 1/2/2 inside, 10/20/20 outside — which the schema
+  can only approximate. Four limitations, all recorded. `verified: partial`.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -404,9 +413,9 @@ Built for KE5CW. Bundled parties, all with official county data:
 contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
 Carolina, Oklahoma, Idaho, Wisconsin, Virginia, Louisiana, Mississippi,
 Missouri, New Mexico, Georgia, North Dakota, Michigan, Ontario, Quebec,
-Nebraska, Florida, the 7th Call Area and Indiana are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
+Nebraska, Florida, the 7th Call Area, Indiana and Delaware are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
 agree there is no state or provincial party in January, November or December.
-**7 parties from April through June remain**, listed in
+**6 parties from April through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -886,7 +895,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1499 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1514 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1416,7 +1425,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 40 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 41 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong
