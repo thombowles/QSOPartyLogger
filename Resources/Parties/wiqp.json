@@ -1,0 +1,370 @@
+{
+  "schemaVersion": 1,
+  "id": "wiqp",
+  "name": "Wisconsin QSO Party",
+  "cabrilloContest": "WI-QSO-PARTY",
+  "homeState": "WI",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m",
+    "1.25m",
+    "70cm"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province"
+      ],
+      "homeStateCountsViaCounty": true,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "activatedCountyCount",
+      "minQSOs": 12,
+      "points": 500
+    },
+    {
+      "type": "workStation",
+      "call": "W9FK",
+      "points": 100,
+      "scope": "perBandMode"
+    }
+  ],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "maxSimultaneousCounties": 1,
+  "stateAliases": {
+    "DC": "MD"
+  },
+  "exchangeIncludesRST": false,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-03-15T18:00:00Z",
+      "end": "2026-03-16T01:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ADA",
+      "name": "Adams"
+    },
+    {
+      "abbr": "ASH",
+      "name": "Ashland"
+    },
+    {
+      "abbr": "BAR",
+      "name": "Barron"
+    },
+    {
+      "abbr": "BAY",
+      "name": "Bayfield"
+    },
+    {
+      "abbr": "BRO",
+      "name": "Brown"
+    },
+    {
+      "abbr": "BUF",
+      "name": "Buffalo"
+    },
+    {
+      "abbr": "BUR",
+      "name": "Burnett"
+    },
+    {
+      "abbr": "CAL",
+      "name": "Calumet"
+    },
+    {
+      "abbr": "CHI",
+      "name": "Chippewa"
+    },
+    {
+      "abbr": "CLA",
+      "name": "Clark"
+    },
+    {
+      "abbr": "COL",
+      "name": "Columbia"
+    },
+    {
+      "abbr": "CRA",
+      "name": "Crawford"
+    },
+    {
+      "abbr": "DAN",
+      "name": "Dane"
+    },
+    {
+      "abbr": "DOD",
+      "name": "Dodge"
+    },
+    {
+      "abbr": "DOO",
+      "name": "Door"
+    },
+    {
+      "abbr": "DOU",
+      "name": "Douglas"
+    },
+    {
+      "abbr": "DUN",
+      "name": "Dunn"
+    },
+    {
+      "abbr": "EAU",
+      "name": "Eau Claire"
+    },
+    {
+      "abbr": "FLO",
+      "name": "Florence"
+    },
+    {
+      "abbr": "FON",
+      "name": "Fond du Lac"
+    },
+    {
+      "abbr": "FOR",
+      "name": "Forest"
+    },
+    {
+      "abbr": "GRA",
+      "name": "Grant"
+    },
+    {
+      "abbr": "GRE",
+      "name": "Green"
+    },
+    {
+      "abbr": "GRL",
+      "name": "Green Lake"
+    },
+    {
+      "abbr": "IOW",
+      "name": "Iowa"
+    },
+    {
+      "abbr": "IRO",
+      "name": "Iron"
+    },
+    {
+      "abbr": "JAC",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JUN",
+      "name": "Juneau"
+    },
+    {
+      "abbr": "KEN",
+      "name": "Kenosha"
+    },
+    {
+      "abbr": "KEW",
+      "name": "Kewaunee"
+    },
+    {
+      "abbr": "LAC",
+      "name": "La Crosse"
+    },
+    {
+      "abbr": "LAF",
+      "name": "Lafayette"
+    },
+    {
+      "abbr": "LAN",
+      "name": "Langlade"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "MAN",
+      "name": "Manitowoc"
+    },
+    {
+      "abbr": "MAR",
+      "name": "Marathon"
+    },
+    {
+      "abbr": "MRN",
+      "name": "Marinette"
+    },
+    {
+      "abbr": "MRQ",
+      "name": "Marquette"
+    },
+    {
+      "abbr": "MEN",
+      "name": "Menominee"
+    },
+    {
+      "abbr": "MIL",
+      "name": "Milwaukee"
+    },
+    {
+      "abbr": "MON",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "OCO",
+      "name": "Oconto"
+    },
+    {
+      "abbr": "ONE",
+      "name": "Oneida"
+    },
+    {
+      "abbr": "OUT",
+      "name": "Outagamie"
+    },
+    {
+      "abbr": "OZA",
+      "name": "Ozaukee"
+    },
+    {
+      "abbr": "PEP",
+      "name": "Pepin"
+    },
+    {
+      "abbr": "PIE",
+      "name": "Pierce"
+    },
+    {
+      "abbr": "POL",
+      "name": "Polk"
+    },
+    {
+      "abbr": "POR",
+      "name": "Portage"
+    },
+    {
+      "abbr": "PRI",
+      "name": "Price"
+    },
+    {
+      "abbr": "RAC",
+      "name": "Racine"
+    },
+    {
+      "abbr": "RIC",
+      "name": "Richland"
+    },
+    {
+      "abbr": "ROC",
+      "name": "Rock"
+    },
+    {
+      "abbr": "RUS",
+      "name": "Rusk"
+    },
+    {
+      "abbr": "SAU",
+      "name": "Sauk"
+    },
+    {
+      "abbr": "SAW",
+      "name": "Sawyer"
+    },
+    {
+      "abbr": "SHA",
+      "name": "Shawano"
+    },
+    {
+      "abbr": "SHE",
+      "name": "Sheboygan"
+    },
+    {
+      "abbr": "STC",
+      "name": "St Croix"
+    },
+    {
+      "abbr": "TAY",
+      "name": "Taylor"
+    },
+    {
+      "abbr": "TRE",
+      "name": "Trempealeau"
+    },
+    {
+      "abbr": "VER",
+      "name": "Vernon"
+    },
+    {
+      "abbr": "VIL",
+      "name": "Vilas"
+    },
+    {
+      "abbr": "WAL",
+      "name": "Walworth"
+    },
+    {
+      "abbr": "WSB",
+      "name": "Washburn"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAU",
+      "name": "Waukesha"
+    },
+    {
+      "abbr": "WAP",
+      "name": "Waupaca"
+    },
+    {
+      "abbr": "WSR",
+      "name": "Waushara"
+    },
+    {
+      "abbr": "WIN",
+      "name": "Winnebago"
+    },
+    {
+      "abbr": "WOO",
+      "name": "Wood"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/wiqp-table.php",
+    "postURL": "http://qsopartyhub.com/wiqp-spots.php"
+  },
+  "notes": "verified: partial - rules from the West Allis Radio Amateur Club's own 2026 page, https://www.warac.org/wqp/wiqp_rules.htm, with the sponsor's official Multiplier List and its Cabrillo guide, all read verbatim 2026-07-26. Logs to wiqp-logs@warac.org by 29 March. SEVEN HOURS in one window, 1800Z to 0100Z on 15 March 2026 - THE SHORTEST TOTAL OPERATING TIME OF ANY BUNDLED PARTY, beating Illinois's eight; note that Kansas and Texas each have a SHORTER single session, six hours, but run eighteen hours overall. Round instants with local anchors that agree under CDT, so nothing had to be reconstructed. (The page carries a stale note, 'First day of Daylight Saving Time!', which is wrong for 2026 - US daylight time began 8 March, a week earlier - and appears to be leftover copy the sponsor meant to comment out. It changes nothing.) READING THE SPONSOR'S CABRILLO GUIDE CHANGED A FIELD, which is worth recording. The rules say non-Wisconsin stations send 'State or Province or Country', which reads like a DX prefix; the sponsor's own worked example logs DL6QK as the literal token 'DX'. Had only the rules page been read, this party would have shipped expecting prefixes and would have rejected the sponsor's own sample line. The same example also confirms the exchange carries NO SIGNAL REPORT - 'W9HNW RAC ND9Z BRO' is call and location only - which is the fifth party after MDC, MNQP, NCQP and IDQP to drop it. Wisconsin stations send a county; everyone else sends a state, a province, or DX. Phone 1 point, CW and digital 2. Multipliers count ONCE OVERALL - the sponsor's own maxima (72 counties, 50 states, 13 provinces) are what settle that, since a per-band or per-mode scope could not have a maximum of 72. Wisconsin stations count the 72 counties plus states plus provinces for 135; everyone else counts the 72 counties. WISCONSIN ITSELF IS A MULTIPLIER, stated outright - 'Wisconsin may be counted as a state multiplier' - and reachable only through a county, since WI stations send a county. DX EARNS POINTS BUT NO MULTIPLIER. DC counts as Maryland, which appears NOWHERE in the rules and only in the multiplier list, printed as the single row 'MD Maryland/(D.C.)'. Ten bands - the largest list of any bundled party - derived from the suggested-frequency table, since the rules publish no list and say only 'all amateur bands not prohibited for contesting'; that table covers 160 through 10 m plus 6 m, 2 m, 1.25 m and 70 cm. COUNTY-LINE OPERATION IS FORBIDDEN: 'Mobiles or portables may not sit on a county line', so a two-county entry is rejected, as in ALQP and MNQP. FT8 and FT4 are not accepted while RTTY, PSK, Olivia and Feld-Hell are, which is below this app's mode-class granularity - KEEP FT8/FT4 OUT OF THE LOG. All digital modes count as one, stated outright ('Cannot work the same station on more than one Digital mode on the same band'), which is exactly how this app behaves. KNOWN LIMITATION 1 - THE POWER MULTIPLIER IS NOT APPLIED, AND IT IS THE BIGGEST NUMBER HERE. The sponsor's scoring is points x POWER x multipliers + bonuses, where QRP (under 5 W) is x2, LOW POWER (5-100 W) is x1.5 and high power is x1. This app's score multiplier field holds whole numbers only, so x1.5 cannot be represented, and shipping x1 for low power would understate a low-power entrant by a third while looking right. Nothing ships instead: MULTIPLY THE FINAL SCORE YOURSELF - by 2 for QRP, by 1.5 for low power - before submitting. THIS IS THE SAME GAP VERMONT HAS, with the identical three factors, so two sponsors now want it. KNOWN LIMITATION 2 - the 500-point county bonus is credited for EVERY county with 12 or more QSOs, including your home county, while the sponsor pays it only 'for each county that you operate from OUTSIDE your home county'. A Wisconsin mobile or portable who also makes 12+ QSOs from home is over-credited 500; subtract it. IN-STATE MOBILES AND PORTABLES ONLY. KNOWN LIMITATION 3 - the W9FK bonus is credited on every band and mode, while the sponsor pays it only BELOW 50 MHz. Working W9FK on 6 m, 2 m, 1.25 m or 70 cm over-credits 100 points per slot; subtract those. Cabrillo CONTEST value WI-QSO-PARTY, printed by the sponsor in its own Cabrillo guide, so this does not rest on the WA7BNM registry. Counties are 72 with uniform 3-letter codes and several dense clusters: THREE Mar- counties of which only Marathon is MAR (Marinette is MRN, Marquette MRQ); THREE Gr- counties (Grant GRA, Green GRE, Green Lake GRL - the last two one letter apart); and SIX W- counties (Walworth WAL, Washington WAS, Washburn WSB, Waukesha WAU, Waupaca WAP, Waushara WSR), where neither Washburn nor Waushara takes the naive form. Multi-word names are printed without punctuation: Fond du Lac FON, La Crosse LAC, St Croix STC (no period, as in Minnesota's St Louis). OPEN QUESTIONS (why this is partial): (1) KNOWN LIMITATION 1 - the fractional power multiplier, which changes the final score for every entrant who is not running high power. (2) and (3) - the two bonus rules above, each of which over-credits a narrow case. None of the three is a rule in doubt; all three are missing app features. Note also that the sponsor's do-not-use list names 906.50 and 1294.50 MHz, so 33 cm and 23 cm contacts are plausibly legal here and cannot be logged at all - the same gap NYQP has."
+}

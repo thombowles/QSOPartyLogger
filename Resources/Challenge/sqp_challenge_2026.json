@@ -87,7 +87,7 @@
   },
   {
    "name": "Wisconsin QSO Party",
-   "partyID": null,
+   "partyID": "wiqp",
    "windows": [
     {
      "start": "2026-03-15T18:00:00Z",

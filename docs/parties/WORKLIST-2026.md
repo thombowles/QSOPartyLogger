@@ -8,9 +8,9 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **22 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+- **21 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
   February is clear (Vermont, Minnesota, British Columbia, South Carolina); North
-  Carolina, Oklahoma and Idaho are done in March.
+  Carolina, Oklahoma, Idaho and Wisconsin are done in March.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -150,9 +150,9 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**22 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**21 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 18 US + 4 Canadian. Research is banked for none of them.
+next one built". 17 US + 4 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
@@ -163,7 +163,7 @@ next one built". 18 US + 4 Canadian. Research is banked for none of them.
 | ~~5~~ | ~~North Carolina~~ | ~~Mar 1 1500Z → Mar 2 0100Z~~ | **done** 2026-07-26 — [`ncqp_rules.md`](../research/ncqp_rules.md), `verified: partial` |
 | ~~6~~ | ~~Oklahoma~~ | ~~Mar 14 1400Z → Mar 15 0200Z; Mar 15 1400–2200Z~~ | **done** 2026-07-26 — [`okqp_rules.md`](../research/okqp_rules.md), `verified: partial` |
 | ~~7~~ | ~~Idaho~~ | ~~Mar 14 1600Z → Mar 15 0400Z; Mar 15 1400Z → Mar 16 0200Z~~ | **done** 2026-07-26 — [`idqp_rules.md`](../research/idqp_rules.md); **its county list is 7QP-reusable** |
-| 8 | Wisconsin | Mar 15 1800Z → Mar 16 0100Z | |
+| ~~8~~ | ~~Wisconsin~~ | ~~Mar 15 1800Z → Mar 16 0100Z~~ | **done** 2026-07-26 — [`wiqp_rules.md`](../research/wiqp_rules.md), `verified: partial` |
 | 9 | Virginia | Mar 21 1400Z → Mar 22 0400Z; Mar 22 1200–2400Z | counties **and** independent cities |
 | 10 | Louisiana | Apr 4 1400Z → Apr 5 0200Z | parishes, not counties |
 | 11 | Mississippi | Apr 4 1400Z → Apr 5 0200Z | |
@@ -191,11 +191,11 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**26 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**27 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
 pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP**, **SCQP**,
-**NCQP**, **OKQP** and **IDQP** from the reopened first-half season, all built
-2026-07-26. Every row below is struck.
+**NCQP**, **OKQP**, **IDQP** and **WIQP** from the reopened first-half season,
+all built 2026-07-26. Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
@@ -325,8 +325,10 @@ its own commit (Article 4).
   correcting arithmetic, and
   `NorthCarolinaQSOPartyTests.testKnownGapRarestCountiesDoNotPayTenTimes` and
   `…testKnownGapTheFiveRareCountySweepIsNotPaid` pin the current behaviour.
-- **FRACTIONAL SCORE MULTIPLIERS — the largest single scoring gap in the repo,
-  and the next commit that should be made.** `ScoreMultipliers` is
+- **FRACTIONAL SCORE MULTIPLIERS — SECOND USER FOUND 2026-07-26, so the repo's
+  two-user bar is met and this is now buildable.** WIQP's power factors are QRP
+  ×2, LOW ×1.5, high ×1 — **identical to VTQP's, down to the same three
+  numbers**. Two sponsors, one gap; when it lands, both parties gain the field. `ScoreMultipliers` is
   `[String: Int]`, and VTQP's power multiplier is **QRP ×2, LOW POWER ×1.5, high
   ×1** (rule 7(D)(1)). ×1.5 cannot be represented, and shipping ×1 for low power
   would understate the most common power category by a third *while looking

@@ -98,23 +98,25 @@ final class UpcomingContestsTests: XCTestCase {
     /// A user-installed party whose name matches a calendar contest takes
     /// over that row — its (sponsor-sourced) schedule wins, no duplicate.
     ///
-    /// Wisconsin stands in for the user-installed party because it is on the
+    /// Virginia stands in for the user-installed party because it is on the
     /// 2026 approved list and **not bundled**, which is what this test needs.
-    /// It used to be Minnesota; MNQP became a bundled party on 2026-07-26 and
-    /// is now mapped by `partyID`, so it no longer exercises the name path.
-    /// Whichever party is used here must be one the calendar cannot map by id.
+    /// It has been Minnesota and then Wisconsin; both became bundled parties on
+    /// 2026-07-26 and are now mapped by `partyID`, so neither exercises the name
+    /// path any more. Whichever party is used here must be one the calendar
+    /// cannot map by id — the assertion below fails loudly when that stops being
+    /// true, which is how this fixture keeps getting caught rather than rotting.
     func testUserPartyReplacesCalendarRowByName() throws {
         let bundledIDs = Set(parties.map(\.id))
-        XCTAssertFalse(bundledIDs.contains("wiqp"),
-                       "pick another unbundled approved contest — Wisconsin has been bundled")
+        XCTAssertFalse(bundledIDs.contains("vaqp"),
+                       "pick another unbundled approved contest — Virginia has been bundled")
 
-        let wisconsin = try PartyCatalog.decode(Data("""
+        let virginia = try PartyCatalog.decode(Data("""
         {
           "schemaVersion": 1,
-          "id": "wiqp",
-          "name": "Wisconsin QSO Party",
-          "cabrilloContest": "WIQP",
-          "homeState": "WI",
+          "id": "vaqp",
+          "name": "Virginia QSO Party",
+          "cabrilloContest": "VAQP",
+          "homeState": "VA",
           "countyAbbrLength": 3,
           "validBands": ["80m", "40m", "20m"],
           "points": { "phone": 1, "cw": 2, "digital": 2 },
@@ -124,20 +126,20 @@ final class UpcomingContestsTests: XCTestCase {
             "outState": { "classes": ["county"], "homeStateCountsViaCounty": false, "countScope": "once" }
           },
           "bonuses": [],
-          "schedule": [ { "start": "2026-03-15T18:00:00Z", "end": "2026-03-16T01:00:00Z" } ],
-          "counties": [ { "abbr": "ADA", "name": "Adams" } ]
+          "schedule": [ { "start": "2026-03-21T14:00:00Z", "end": "2026-03-22T04:00:00Z" } ],
+          "counties": [ { "abbr": "ACC", "name": "Accomack" } ]
         }
         """.utf8))
 
         let list = UpcomingContests.upcoming(
             now: instant("2026-02-01T00:00:00Z"),
-            parties: parties + [wisconsin],
+            parties: parties + [virginia],
             calendar: calendar,
             records: []
         )
-        let rows = list.filter { $0.name == "Wisconsin QSO Party" }
+        let rows = list.filter { $0.name == "Virginia QSO Party" }
         XCTAssertEqual(rows.count, 1)
-        XCTAssertEqual(rows.first?.partyID, "wiqp")
+        XCTAssertEqual(rows.first?.partyID, "vaqp")
         XCTAssertEqual(rows.first?.dateSource, .partyDefinition)
         XCTAssertEqual(rows.first?.isApproved, true)
     }

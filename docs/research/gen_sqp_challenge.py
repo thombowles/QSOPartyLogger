@@ -81,6 +81,7 @@ BUNDLED_BY_SITE_NAME = {
     "Texas QSO Party": "tqp",
     "Vermont QSO Party": "vtqp",
     "Washington State Salmon Run": "warun",
+    "Wisconsin QSO Party": "wiqp",
 }
 
 ROW = re.compile(
