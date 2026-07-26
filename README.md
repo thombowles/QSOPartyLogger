@@ -300,6 +300,16 @@ parties, and the remaining engine gaps. Adding a party is governed by
   the band filling up — and ⌘← / ⌘→ / ⌘↑ / ⌘↓ steps straight over it, because there is
   nothing left to work there. If every spot on the band is worked, the keys
   leave the radio where it is.
+- **Stations you worked land on the map**: work someone nobody spotted and he
+  used to leave no trace — ten minutes later his frequency read as empty. Now
+  logging a contact puts him on the band map at the frequency you worked him
+  on, struck through like any other worked call, carrying the exchange he
+  sent. N1MM's bandmap has always carried locally-added calls beside network
+  ones. He is added only when nobody has already spotted him, so another
+  operator's spot keeps its own reported frequency, and only when the radio
+  gave a frequency to place him at — a contact logged with no radio is not
+  given a guessed one. They age out on the same **Age out after** setting as
+  cluster spots, and *Hide stations already worked* clears them all.
 - **Band-plan-aware mode switching**: tune into the phone portion of a band
   and the radio goes to SSB; tune into the CW portion and it goes to CW. It
   fires only when *the app* moves you — clicking a spot, typing a frequency
@@ -390,6 +400,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
 | `⇧⌘S` | Spot yourself to the QSO Party Hub (confirm with Return, cancel with Esc) |
+| `⌥⌘S` | Spot the station in the call field to the hub — or right-click a band map spot, or a log row |
 | `⌘⇧D` | Contest Dashboard (season history + SQP Challenge) |
 | `⌘[` / `⌘]` | Dashboard: previous / next year |
 | `⌘R` | Dashboard: re-read the history file |
@@ -518,6 +529,24 @@ just stops the county change from being the thing you forget.
 Frequency goes out in clean kilohertz, which is the one thing this app can do
 to reduce the ambiguity its own parser exists to resolve.
 
+### Spotting somebody else (⌥⌘S, or right-click)
+
+The hub is not a self-spot board — in the live ALQP capture every spot was
+posted by one operator for other stations. So anyone can be put up there:
+
+- **⌥⌘S** spots whoever is in the call field, with the radio's frequency and
+  the county out of the exchange you have copied so far.
+- **Right-click a spot** on the band map — including one that came from your
+  own log — to pass it on to the hub with its county.
+- **Right-click a row in the log** to spot a station you worked earlier.
+
+All three open the same sheet, and the same confirmation: nothing reaches the
+board without Return. The county is only offered when it really is one of this
+party's counties, so an out-of-state `TX`, a `DX`, or a half-copied exchange is
+never posted as a county token. A contact logged with no radio has no
+frequency, and the sheet opens on the empty frequency field rather than
+inventing one — a guess on a public board is worse than a blank.
+
 A 200 back from the hub means *sent*, not *accepted* — the page re-renders
 rather than reporting a status. The app therefore watches the next couple of
 polls for your call to appear and says **confirmed on the board** only once it
@@ -591,11 +620,13 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 843 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 945 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
-worked, skimmer), spot navigation including worked-station skipping, cluster
+worked, skimmer), spot navigation including worked-station skipping, contacts
+from your own log reaching the band map (and never displacing somebody else's
+spot), what a spot sheet may offer as a county for any station, cluster
 history, the band map scale and its column stacking, the band plan and its
 CW/phone crossovers, typed QSY commands, the key-monitor focus gate and its key
 table, what the radio keys on every step of the entry flow, the CW messages

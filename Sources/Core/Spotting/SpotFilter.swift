@@ -233,7 +233,14 @@ enum SpotFilter {
     static func matches(_ spot: Spot, options: Options) -> Bool {
         if options.northAmericanSpottersOnly, !isNorthAmerican(call: spot.spotter) { return false }
         if options.northAmericanStationsOnly, !isNorthAmerican(call: spot.call) { return false }
-        if !options.sources.isEmpty, !options.sources.contains(spot.source) { return false }
+        // Your own log is never what the source filter is choosing between:
+        // "QSO Party Hub spots only" picks a feed, and this is not one. Hiding
+        // worked stations is the control that clears these, and clears all of
+        // them — every station in your log is worked by definition.
+        if !options.sources.isEmpty, spot.source != .local,
+           !options.sources.contains(spot.source) {
+            return false
+        }
         if options.hideWorked,
            isWorked(spot, workedCalls: options.workedCalls,
                     workedCallCounties: options.workedCallCounties) {

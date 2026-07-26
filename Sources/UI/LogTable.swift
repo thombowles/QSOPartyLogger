@@ -9,6 +9,13 @@ struct LogTable: View {
     let onDeleteRow: (QSO) -> Void
     let onDeleteGroup: (QSO) -> Void
     let onEdit: (QSO) -> Void
+    /// Whether this party is on the QSO Party Hub and there is a callsign to
+    /// post under. False leaves the menu item out rather than offering
+    /// something that cannot work.
+    let canSpotToHub: Bool
+    /// Right-click → post this station to the hub. Opens the confirmation
+    /// sheet; nothing is posted from the menu itself.
+    let onSpotToHub: (QSO) -> Void
 
     @State private var selection: QSO.ID?
 
@@ -102,6 +109,9 @@ struct LogTable: View {
         .contextMenu(forSelectionType: QSO.ID.self) { ids in
             if let id = ids.first, let qso = qsos.first(where: { $0.id == id }) {
                 Button("Edit…") { onEdit(qso) }
+                if canSpotToHub {
+                    Button("Spot \(qso.call) to QSO Party Hub…") { onSpotToHub(qso) }
+                }
                 Divider()
                 Button("Delete Row", role: .destructive) { onDeleteRow(qso) }
                 if (groupSizes[qso.groupID] ?? 1) > 1 {

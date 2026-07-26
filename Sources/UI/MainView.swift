@@ -126,7 +126,7 @@ struct MainView: View {
                         fields: $selfSpotFields,
                         onSend: { fields in
                             showSelfSpot = false
-                            Task { await hubSpotClient.selfSpot(fields, source: source, party: party) }
+                            Task { await hubSpotClient.post(fields, source: source, party: party) }
                         },
                         onCancel: { showSelfSpot = false }
                     )
@@ -319,6 +319,9 @@ struct MainView: View {
         // close rather than stacking a sheet on top of it.
         .onChange(of: showSetup) { _, isOpen in
             guard !isOpen else { return }
+            // Setup is also where the callsign arrives, and there is no
+            // spotting without one.
+            bandMapModel?.canSpotToHub = canSpotToHub
             offerReSpotOnCountyChange()
         }
         // The QSO number needs no re-seeding here: `EntryState.serialSent`
@@ -329,6 +332,7 @@ struct MainView: View {
             bandMapModel?.partyBands = party?.validBands ?? Band.allCases
             bandMapModel?.allowedModes = party?.allowedModeClasses ?? []
             bandMapModel?.party = party
+            bandMapModel?.canSpotToHub = canSpotToHub
             syncHubSpotClient()
         }
     }
@@ -340,7 +344,15 @@ struct MainView: View {
             party: party,
             onDeleteRow: { document.remove(ids: [$0.id], undoManager: undoManager) },
             onDeleteGroup: { document.removeGroup(groupID: $0.groupID, undoManager: undoManager) },
-            onEdit: { editingQSO = $0 }
+            onEdit: { editingQSO = $0 },
+            canSpotToHub: canSpotToHub,
+            onSpotToHub: { qso in
+                beginSpot(
+                    station: qso.call,
+                    frequencyKHz: qso.freqKHz.map(Double.init),
+                    location: qso.theirLoc
+                )
+            }
         )
         // Whatever the history table takes, the log table gives back, so the
         // pane's minimum content height — and the window — never moves.
@@ -429,9 +441,21 @@ struct MainView: View {
                 Label("Spot Myself", systemImage: "dot.radiowaves.left.and.right")
             }
             .keyboardShortcut("s", modifiers: [.command, .shift])
-            .disabled(!canSelfSpot)
-            .help(canSelfSpot
+            .disabled(!canSpotToHub)
+            .help(canSpotToHub
                   ? "Post your own spot to the QSO Party Hub (⇧⌘S) — confirmed before it sends"
+                  : "This party isn't on the QSO Party Hub, or your callsign isn't set")
+
+            Button {
+                beginSpotForEntryStation()
+            } label: {
+                Label("Spot Station", systemImage: "dot.radiowaves.right")
+            }
+            .keyboardShortcut("s", modifiers: [.option, .command])
+            .disabled(!canSpotEntryStation)
+            .help(canSpotToHub
+                  ? "Post the station in the call field to the QSO Party Hub (⌥⌘S) — "
+                    + "or right-click any spot on the band map, or any row in the log"
                   : "This party isn't on the QSO Party Hub, or your callsign isn't set")
 
             Button {
@@ -695,6 +719,14 @@ struct MainView: View {
             model.log = document.log
             model.onTuneSpot = { tune(to: $0) }
             model.onTuneKHz = { qsyTo(kHz: $0) }
+            model.canSpotToHub = canSpotToHub
+            model.onSpotToHub = { spot in
+                beginSpot(
+                    station: spot.call,
+                    frequencyKHz: spot.freqKHz,
+                    location: spot.county
+                )
+            }
             bandMapModel = model
         }
     }
@@ -756,13 +788,25 @@ struct MainView: View {
             execute(command)
         case .send(let index, let text):
             keyed(text, fromMessageAt: index)
-        case .logged(_, let text):
+        case .logged(let rows, let text):
+            addWorkedStationsToBandMap(rows)
             focusedField = .call
             if !text.isEmpty { radio.sendCW(text, settings: settings) }
         case .needsSetup:
             showSetup = true
         case .nothing:
             break
+        }
+    }
+
+    /// A station nobody spotted leaves nothing on the band map: work him, and
+    /// ten minutes later his frequency reads as empty. So the log feeds the
+    /// map too — one spot per contact, only where nobody has spotted him
+    /// already, and only when the radio gave us a frequency to put him on.
+    /// It arrives worked, so it draws struck-through and ⌘←/⌘→ steps over it.
+    private func addWorkedStationsToBandMap(_ rows: [QSO]) {
+        for spot in WorkedSpot.spots(for: rows, myCall: document.log.station.callsign) {
+            spotStore.addIfAbsent(spot)
         }
     }
 
@@ -888,10 +932,50 @@ struct MainView: View {
         focusedField = .call
     }
 
-    /// Whether self-spotting is available at all: the hub has to serve this
-    /// party, and there has to be a callsign to post under.
-    private var canSelfSpot: Bool {
+    /// Whether spotting is available at all: the hub has to serve this party,
+    /// and there has to be a callsign to post under.
+    private var canSpotToHub: Bool {
         party?.hubSpots != nil && !document.log.station.callsign.isEmpty
+    }
+
+    /// ⌥⌘S needs somebody in the call field to spot.
+    private var canSpotEntryStation: Bool {
+        canSpotToHub && !entry.callNormalized.isEmpty
+    }
+
+    /// Where the radio is, to 10 Hz — finer than that is noise on a spot, and
+    /// the hub's frequency field only accepts ten characters. `nil` with no
+    /// radio: the sheet would rather show an empty field than a guess.
+    private var vfoKHzForSpotting: Double? {
+        radio.radioState.map { (Double($0.frequencyHz) / 10).rounded() / 100 }
+    }
+
+    /// ⌥⌘S — spot whoever is in the call field right now. The county comes out
+    /// of the exchange as copied so far, and only if it really is one of this
+    /// party's counties.
+    private func beginSpotForEntryStation() {
+        guard canSpotEntryStation else { return }
+        beginSpot(
+            station: entry.callNormalized,
+            frequencyKHz: vfoKHzForSpotting,
+            location: entry.exchange
+        )
+    }
+
+    /// Open the spot sheet for a station that is not you — from the band map,
+    /// the log, or the entry field. It still only opens the sheet: every send
+    /// is confirmed, because the board takes whatever it is given, publicly
+    /// and at once.
+    private func beginSpot(station: String, frequencyKHz: Double?, location: String?) {
+        guard canSpotToHub, let party else { return }
+        selfSpotFields = HubSpotPrefill.fields(
+            station: station,
+            frequencyKHz: frequencyKHz,
+            location: location,
+            poster: document.log.station.callsign,
+            party: party
+        )
+        showSelfSpot = true
     }
 
     /// Open the self-spot sheet, pre-filled from live state.
@@ -900,15 +984,11 @@ struct MainView: View {
     /// the frequency from the radio, the county from the log — and retyping it
     /// mid-run is exactly why operators stop self-spotting.
     private func beginSelfSpot() {
-        guard canSelfSpot else { return }
+        guard canSpotToHub else { return }
         let call = document.log.station.callsign.uppercased()
         selfSpotFields = HubSelfSpot.Fields(
             station: call,
-            // To 10 Hz — finer than that is noise on a spot, and the hub's
-            // frequency field only accepts ten characters.
-            frequencyKHz: radio.radioState
-                .map { (Double($0.frequencyHz) / 10).rounded() / 100 }
-                ?? Double(currentBand.defaultFreqKHz),
+            frequencyKHz: vfoKHzForSpotting ?? Double(currentBand.defaultFreqKHz),
             county: document.log.myLocation.sentExchanges.first,
             comment: "",
             poster: call
@@ -930,7 +1010,7 @@ struct MainView: View {
         // county is deliberately *not* recorded in that case, so the change is
         // still pending when Setup closes and the offer follows then.
         guard !showSetup else { return }
-        guard canSelfSpot, settings.hubSpotsEnabled,
+        guard canSpotToHub, settings.hubSpotsEnabled,
               document.log.myLocation.isInState,
               let county = document.log.myLocation.sentExchanges.first,
               !county.isEmpty,

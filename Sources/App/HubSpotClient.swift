@@ -122,7 +122,7 @@ final class HubSpotClient {
             for row in result.rejected {
                 log("? could not read: \(row)")
             }
-            checkSelfSpotConfirmation(in: result.spots)
+            checkSpotConfirmation(in: result.spots)
             if !result.spots.isEmpty {
                 spotsReceived += result.spots.count
                 onSpots?(result.spots)
@@ -158,9 +158,11 @@ final class HubSpotClient {
     /// Polls checked since a send without seeing it land.
     private var pollsAwaitingConfirmation = 0
 
-    /// Post a self-spot. The caller is responsible for having confirmed it
-    /// with the operator: this reaches a public board immediately.
-    func selfSpot(_ fields: HubSelfSpot.Fields, source: HubSpotSource, party: PartyDefinition) async {
+    /// Post a spot — your own station or someone else's; the form takes the
+    /// call spotted and the poster as separate fields, and the board's own
+    /// traffic is mostly third-party. The caller is responsible for having
+    /// confirmed it with the operator: this reaches a public board immediately.
+    func post(_ fields: HubSelfSpot.Fields, source: HubSpotSource, party: PartyDefinition) async {
         if let problem = HubSelfSpot.validate(fields, party: party) {
             sendState = .failed(problem.errorDescription ?? "Invalid spot.")
             return
@@ -185,7 +187,7 @@ final class HubSpotClient {
         )
 
         sendState = .sending
-        log("> self-spot \(fields.station) \(HubSelfSpot.formattedFrequency(fields.frequencyKHz))"
+        log("> spot \(fields.station) \(HubSelfSpot.formattedFrequency(fields.frequencyKHz))"
             + " \(fields.county ?? "")")
         do {
             let (_, response) = try await session.data(for: request)
@@ -196,22 +198,23 @@ final class HubSpotClient {
             lastSentAt = Date()
             pollsAwaitingConfirmation = 0
             sendState = .sent(Date())
-            log("*** self-spot sent — waiting to see it on the board")
+            log("*** spot sent — waiting to see it on the board")
         } catch {
             sendState = .failed("Couldn't post the spot: \(error.localizedDescription)")
-            log("*** self-spot failed: \(error.localizedDescription)")
+            log("*** spot failed: \(error.localizedDescription)")
         }
     }
 
     /// Look for a just-sent spot in what the board now shows. The form gives
     /// no acknowledgement of its own, so an unverified send would leave the
-    /// operator sitting on a frequency believing they are advertised.
-    private func checkSelfSpotConfirmation(in spots: [Spot]) {
+    /// operator sitting on a frequency believing they are advertised — or
+    /// believing they have put someone else on the map when they have not.
+    private func checkSpotConfirmation(in spots: [Spot]) {
         guard case .sent = sendState, let sent = lastSent else { return }
         let call = sent.station.trimmingCharacters(in: .whitespaces).uppercased()
         if spots.contains(where: { $0.call == call }) {
             sendState = .confirmed
-            log("*** self-spot confirmed on the board")
+            log("*** spot confirmed on the board")
             return
         }
         pollsAwaitingConfirmation += 1
@@ -220,7 +223,7 @@ final class HubSpotClient {
                 "The spot was sent but hasn't appeared on the board. It may not have "
                 + "been accepted — check the page before relying on it."
             )
-            log("*** self-spot not seen after \(pollsAwaitingConfirmation) polls")
+            log("*** spot not seen after \(pollsAwaitingConfirmation) polls")
         }
     }
 

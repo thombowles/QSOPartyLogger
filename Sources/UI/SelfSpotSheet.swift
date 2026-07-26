@@ -97,7 +97,10 @@ struct SelfSpotSheet: View {
         }
         .padding(20)
         .frame(width: 430)
-        .onAppear { focused = .station }
+        // Land on whatever still needs an answer. A contact logged without a
+        // radio arrives with no frequency, and that is the one field the
+        // operator has to supply before this can go anywhere.
+        .onAppear { focused = fields.frequencyKHz > 0 ? .station : .frequency }
     }
 
     /// The picker speaks the party's own abbreviations; translation to the

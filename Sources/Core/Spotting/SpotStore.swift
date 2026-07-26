@@ -19,7 +19,10 @@ final class SpotStore {
 
     private func maxAge(for source: SpotSource) -> TimeInterval {
         switch source {
-        case .cluster: maxAge
+        // Your own log ages with the cluster, on the operator's one "Age out
+        // after" setting — N1MM has a single spot timeout for the whole map,
+        // and a station worked twenty minutes ago has very likely moved.
+        case .cluster, .local: maxAge
         case .hub: Double(max(1, hubMaxAgeMinutes)) * 60
         }
     }
@@ -40,6 +43,17 @@ final class SpotStore {
         // Age out relative to the newest spot we know about, not this one —
         // a bulk sh/dx reply arrives with older spots mixed in.
         purge(now: all.map(\.receivedAt).max() ?? spot.receivedAt)
+    }
+
+    /// Add only when that call is not already on the map for that band.
+    ///
+    /// This is how a station you worked but nobody spotted gets there. A spot
+    /// that already exists keeps its own reported frequency and simply greys
+    /// out: having worked someone is no reason to move another operator's spot
+    /// of him, and his frequency is where the spotter says it is.
+    func addIfAbsent(_ spot: Spot) {
+        guard !all.contains(where: { $0.id == spot.id }) else { return }
+        add(spot)
     }
 
     func purge(now: Date) {

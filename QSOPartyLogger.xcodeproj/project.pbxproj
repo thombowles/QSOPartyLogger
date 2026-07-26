@@ -17,6 +17,7 @@
 		07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DA5A46F75BD3EFC70DC50D /* CabrilloExporter.swift */; };
 		097E888A0ACA42B4ED11F066 /* K3ProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53DC8597A1A918FA7CB32D4 /* K3ProtocolTests.swift */; };
 		098B5B5D2F15D62548FB7A6B /* County.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE0321C50DA1A9D4AEB58D0 /* County.swift */; };
+		09F3976A16C1ED37ED9E5465 /* HubSpotPrefillTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075DC2D7011F9E054C8826A8 /* HubSpotPrefillTests.swift */; };
 		0B13C9686C52A0FFC4FD1016 /* KeyerTimingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DD03F2A0464D759CD172A8 /* KeyerTimingTests.swift */; };
 		0B84F1968593931579E19473 /* EntryCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2436011194157AC1F402566 /* EntryCommand.swift */; };
 		0B9D330021B44D8F26900857 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C918A35B84A46D9369272 /* AppSettings.swift */; };
@@ -155,6 +156,7 @@
 		D92268C1083B39CB08B32393 /* SpotFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04053E0272A2391F55417D60 /* SpotFilterTests.swift */; };
 		D9CBAA91D8BCAD19385482BA /* PartyCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDA62C0033DE71F4781CC89 /* PartyCatalog.swift */; };
 		DB32F376EC8DA6665E9ED5A2 /* MarylandDCQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5892A4EA032BA925FA66EA70 /* MarylandDCQSOPartyTests.swift */; };
+		DB8DC9D842C0716CD047B3F4 /* HubSpotPrefill.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50EF7423E88A0338CAF3332 /* HubSpotPrefill.swift */; };
 		DECFF08699FBD43DBA559547 /* SeasonStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D222FC07C47B321835C0B0 /* SeasonStats.swift */; };
 		E19F4F34905150E1AC1CB86F /* ContestArchiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC488FDCD9B9458276688D9 /* ContestArchiveTests.swift */; };
 		E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52BEC7154012161AF51ED0 /* CWSender.swift */; };
@@ -163,6 +165,7 @@
 		EA548A4E8ACEAACF1F2452DC /* MessagesRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D2158467D3A61358A399D7 /* MessagesRow.swift */; };
 		EC56BDD4BA4DD578EFC84597 /* BandPlanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F437B56480EB7F8E109AF5 /* BandPlanTests.swift */; };
 		ED5F3D5F6931292ADBF3E385 /* MorseCodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6989E84D7AABBEB0B1451F /* MorseCodeTests.swift */; };
+		EEAC967D1FF111C0098BA700 /* WorkedStationSpotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD3096B56AD7C6DE79D6B9 /* WorkedStationSpotTests.swift */; };
 		EEFDEF1FDBA0BAC08E4F5BA7 /* TestBundleSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6F9800ED08704FB3E4DFA1 /* TestBundleSetup.swift */; };
 		EFF567B7FAA9F043F72398D2 /* ExchangeParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EE6994E490B94BF6B0B2F7 /* ExchangeParserTests.swift */; };
 		F067C727C4F4076315B221F1 /* RadioState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C366652F539E9935BD0A4502 /* RadioState.swift */; };
@@ -176,6 +179,7 @@
 		FBF94AC519A65928C7634BA7 /* AlabamaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F208CF00E5CDC47B602583B8 /* AlabamaQSOPartyTests.swift */; };
 		FCD0E7F6D8B1ABFBDDB80BE7 /* HubPollPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E91F46A9B0E33BC6E1FC0F5 /* HubPollPolicy.swift */; };
 		FD4BB73B3EB6BD727C76FCA7 /* HubSpotSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C79995543D0CB2BED77E11 /* HubSpotSource.swift */; };
+		FD9C2EB6C5010F7BB499DE43 /* WorkedSpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9382E762282D91D8950B0F07 /* WorkedSpot.swift */; };
 		FEFDD64CFF603D6BBD4A5EAC /* MultClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2559BE76C4D55ED692590BD6 /* MultClass.swift */; };
 		FF1D72B5F974B4BC4D6C3A5A /* PennsylvaniaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F9D044AD7BFDEE8B6D181 /* PennsylvaniaQSOPartyTests.swift */; };
 /* End PBXBuildFile section */
@@ -196,6 +200,7 @@
 		02641FE9618E6D9A40BCF583 /* UpcomingContests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingContests.swift; sourceTree = "<group>"; };
 		033F9D044AD7BFDEE8B6D181 /* PennsylvaniaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PennsylvaniaQSOPartyTests.swift; sourceTree = "<group>"; };
 		04053E0272A2391F55417D60 /* SpotFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFilterTests.swift; sourceTree = "<group>"; };
+		075DC2D7011F9E054C8826A8 /* HubSpotPrefillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotPrefillTests.swift; sourceTree = "<group>"; };
 		093C918A35B84A46D9369272 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		0DEA58106A345669FAF4E466 /* HubSpotFilteringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotFilteringTests.swift; sourceTree = "<group>"; };
 		0EC4FB2912638C4B5052ED72 /* HubSpotParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotParser.swift; sourceTree = "<group>"; };
@@ -257,6 +262,7 @@
 		5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryBar.swift; sourceTree = "<group>"; };
 		5EEF467249C2C6AB91F4EF7D /* QSOPartyLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QSOPartyLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F01ACCE3E8BBB30BB6AFFB0 /* EditQSOSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditQSOSheet.swift; sourceTree = "<group>"; };
+		62CD3096B56AD7C6DE79D6B9 /* WorkedStationSpotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedStationSpotTests.swift; sourceTree = "<group>"; };
 		64ADDA6B23BDF320E013D346 /* JSONValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONValue.swift; sourceTree = "<group>"; };
 		64E7C41D9406F1E08708929F /* OneByOneTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneByOneTracker.swift; sourceTree = "<group>"; };
 		65578A775A74FB103913C439 /* SpotStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotStore.swift; sourceTree = "<group>"; };
@@ -287,6 +293,7 @@
 		909A650EB49961812900CFD5 /* HubSelfSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSelfSpot.swift; sourceTree = "<group>"; };
 		9183D3107E206A940C2DCDCB /* HubSpotSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotSourceTests.swift; sourceTree = "<group>"; };
 		91AE54A60C33CC8614CCB97C /* RadioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioController.swift; sourceTree = "<group>"; };
+		9382E762282D91D8950B0F07 /* WorkedSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedSpot.swift; sourceTree = "<group>"; };
 		944ACFBCB11B916DDD2F8933 /* EntryFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryFlowTests.swift; sourceTree = "<group>"; };
 		95D6B397C7B014ACA6232F8F /* CountyLineExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountyLineExpander.swift; sourceTree = "<group>"; };
 		9B143A6F4360839CB52EFA48 /* SectionMultiplierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionMultiplierTests.swift; sourceTree = "<group>"; };
@@ -350,6 +357,7 @@
 		F208CF00E5CDC47B602583B8 /* AlabamaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlabamaQSOPartyTests.swift; sourceTree = "<group>"; };
 		F2BC1600467005E882D39CF4 /* HubSpotParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotParserTests.swift; sourceTree = "<group>"; };
 		F435A4BFCDEA86D0D8F785C4 /* RadioRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioRegistry.swift; sourceTree = "<group>"; };
+		F50EF7423E88A0338CAF3332 /* HubSpotPrefill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotPrefill.swift; sourceTree = "<group>"; };
 		F53E1CCA809156CAFA061676 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountyLineExpanderTests.swift; sourceTree = "<group>"; };
 		F8EB12C03231B219068E0737 /* HawaiiQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HawaiiQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -474,6 +482,7 @@
 				0DEA58106A345669FAF4E466 /* HubSpotFilteringTests.swift */,
 				AFA8F0CE885ABA98BA247459 /* HubSpotLifetimeTests.swift */,
 				F2BC1600467005E882D39CF4 /* HubSpotParserTests.swift */,
+				075DC2D7011F9E054C8826A8 /* HubSpotPrefillTests.swift */,
 				9183D3107E206A940C2DCDCB /* HubSpotSourceTests.swift */,
 				C8008DF74BE1374A98273ECC /* IllinoisQSOPartyTests.swift */,
 				273A1C77EBE557460270764F /* IowaQSOPartyTests.swift */,
@@ -506,6 +515,7 @@
 				FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */,
 				B49AC8D775ABBA76B9D43CD0 /* UpcomingContestsTests.swift */,
 				4FFB1E6038FE703DDB36B5F0 /* WorkedBeforeTableTests.swift */,
+				62CD3096B56AD7C6DE79D6B9 /* WorkedStationSpotTests.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -627,10 +637,12 @@
 				8E91F46A9B0E33BC6E1FC0F5 /* HubPollPolicy.swift */,
 				909A650EB49961812900CFD5 /* HubSelfSpot.swift */,
 				0EC4FB2912638C4B5052ED72 /* HubSpotParser.swift */,
+				F50EF7423E88A0338CAF3332 /* HubSpotPrefill.swift */,
 				3FD300005CA528B8CA373476 /* Spot.swift */,
 				14042D5B6DD33CC2A46A276C /* SpotFilter.swift */,
 				731055DFF68E6AF98B5FD807 /* SpotParser.swift */,
 				65578A775A74FB103913C439 /* SpotStore.swift */,
+				9382E762282D91D8950B0F07 /* WorkedSpot.swift */,
 			);
 			path = Spotting;
 			sourceTree = "<group>";
@@ -877,6 +889,7 @@
 				9BEA6405716A8DDB990C92E0 /* HubSpotFilteringTests.swift in Sources */,
 				6525B803608BD20967CA6E54 /* HubSpotLifetimeTests.swift in Sources */,
 				2CCA229FB32E1D2414047EEA /* HubSpotParserTests.swift in Sources */,
+				09F3976A16C1ED37ED9E5465 /* HubSpotPrefillTests.swift in Sources */,
 				406B8E868EA486712C1D3E7F /* HubSpotSourceTests.swift in Sources */,
 				209C0DA71AC3EE5A16488856 /* IllinoisQSOPartyTests.swift in Sources */,
 				7C432C2A33658F48ADF44099 /* IowaQSOPartyTests.swift in Sources */,
@@ -919,6 +932,7 @@
 				EEFDEF1FDBA0BAC08E4F5BA7 /* TestBundleSetup.swift in Sources */,
 				57D6E95483FBA88DE48DE602 /* UpcomingContestsTests.swift in Sources */,
 				0EDE7ED8045380184EDE1D4F /* WorkedBeforeTableTests.swift in Sources */,
+				EEAC967D1FF111C0098BA700 /* WorkedStationSpotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -969,6 +983,7 @@
 				15C3B40327ABFE9DB29B1309 /* HubSelfSpot.swift in Sources */,
 				FA255DF473A40C79961107EF /* HubSpotClient.swift in Sources */,
 				03BBE5CC8E7D73FD68269F42 /* HubSpotParser.swift in Sources */,
+				DB8DC9D842C0716CD047B3F4 /* HubSpotPrefill.swift in Sources */,
 				FD4BB73B3EB6BD727C76FCA7 /* HubSpotSource.swift in Sources */,
 				4E0B4EB7497EBFFE66BA6F4B /* JSONValue.swift in Sources */,
 				0589789400D49E118C812D8E /* KeyMonitorGate.swift in Sources */,
@@ -1017,6 +1032,7 @@
 				614B6DA68C817BCE6A257501 /* UpcomingContests.swift in Sources */,
 				B44F4F99DF83E5711D8DAB06 /* UppercasingBinding.swift in Sources */,
 				820C4377EA5B9A172E10F6F3 /* WorkedBeforeTable.swift in Sources */,
+				FD9C2EB6C5010F7BB499DE43 /* WorkedSpot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

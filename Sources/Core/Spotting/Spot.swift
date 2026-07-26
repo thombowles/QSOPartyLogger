@@ -8,6 +8,10 @@ enum SpotSource: String, Codable, Sendable {
     case cluster
     /// qsopartyhub.com, the board several QSO party sponsors point operators at.
     case hub
+    /// Your own log. Nobody spotted this station; you worked him, and the band
+    /// map carries him so the frequency does not read as empty ten minutes
+    /// later. N1MM's bandmap does the same for calls the operator typed.
+    case local
 }
 
 /// One spot. Identity is call + band, so a re-spot of the same station
