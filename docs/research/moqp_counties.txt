@@ -1,0 +1,56 @@
+# Source: https://www.w0ma.org/mo_qso_party/MO-Counties.pdf
+# The sponsor's official 'Missouri County Listing' - 115 entities in three columns
+# of 'NAME  CODE'. Missouri has 114 counties plus the independent City of St. Louis.
+# Fetched: 2026-07-26
+
+                                       Missouri Counties
+
+                        Missouri County Listing
+NAME             CODE    NAME               CODE           NAME               CODE
+Adair            ADR     Harrison           HAR            Phelps             PHE
+Andrew           AND     Henry              HEN            Pike               PIK
+Atchison         ATC     Hickory            HIC            Platte             PLA
+Audrain          AUD     Holt               HLT            Polk               POL
+Barry            BAR     Howard             HOW            Pulaski            PUL
+Barton           BTN     Howell             HWL            Putnam             PUT
+Bates            BAT     Iron               IRN            Ralls              RAL
+Benton           BEN     Jackson            JAC            Randolph           RAN
+Bollinger        BOL     Jasper             JAS            Ray                RAY
+Boone            BOO     Jefferson          JEF            Reynolds           REY
+Buchanan         BUC     Johnson            JON            Ripley             RIP
+Butler           BTR     Knox               KNX            Saline             SAL
+Caldwell         CWL     Laclede            LAC            Schuyler           SCH
+Callaway         CAL     Lafayette          LAF            Scotland           SCT
+Camden           CAM     Lawrence           LAW            Scott              SCO
+Cape Girardeau   CPG     Lewis              LEW            Shannon            SHA
+Carroll          CRL     Lincoln            LCN            Shelby             SHL
+Carter           CAR     Linn               LIN            St. Charles        STC
+Cass             CAS     Livingston         LIV            St. Clair          SCL
+Cedar            CED     Macon              MAC            St. Francois       STF
+Chariton         CHN     Madison            MAD            St. Genevieve      STG
+Christian        CHR     Maries             MRE            St. Louis City     STL
+Clark            CLK     Marion             MAR            St. Louis County   SLC
+Clay             CLA     McDonald           MCD            Stoddard           STD
+Clinton          CLN     Mercer             MER            Stone              STN
+Cole             COL     Miller             MIL            Sullivan           SUL
+Cooper           COP     Mississippi        MIS            Taney              TAN
+Crawford         CRA     Moniteau           MNT            Texas              TEX
+Dade             DAD     Monroe             MON            Vernon             VRN
+Dallas           DAL     Montgomery         MGM            Warren             WAR
+Daviess          DVS     Morgan             MOR            Washington         WAS
+DeKalb           DEK     New Madrid         NMD            Wayne              WAY
+Dent             DEN     Newton             NWT            Webster            WEB
+Douglas          DGL     Nodaway            NOD            Worth              WOR
+Dunklin          DUN     Oregon             ORE            Wright             WRT
+Franklin         FRA     Osage              OSA
+Gasconade        GAS     Ozark              OZA
+Gentry           GEN     Pemiscot           PEM
+Greene           GRN     Perry              PER
+Grundy           GRU     Pettis             PET
+
+                                          Page 1 of 2
+       Missouri Counties
+
+Missouri County Map
+
+          Page 2 of 2

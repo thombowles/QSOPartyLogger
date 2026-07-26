@@ -131,7 +131,7 @@
   },
   {
    "name": "Missouri QSO Party",
-   "partyID": null,
+   "partyID": "moqp",
    "windows": [
     {
      "start": "2026-04-11T14:00:00Z",
