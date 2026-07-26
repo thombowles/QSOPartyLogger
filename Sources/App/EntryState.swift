@@ -9,38 +9,75 @@ final class EntryState {
     var rstRcvd = ""
     var serialRcvd = ""
 
-    /// The exchange as it will be logged. Assigning marks it confirmed: the
-    /// only way text gets here is the operator putting it here.
-    var exchange: String {
-        get { exchangeStorage }
+    var exchange = ""
+
+    /// Whether `exchange` holds text the app put there rather than text the
+    /// operator typed. Auto-fill only ever writes into a field it already owns,
+    /// so it can never destroy a copied exchange — and it takes its own text
+    /// back when the call it belonged to leaves the field.
+    private(set) var exchangeIsAutoFilled = false
+
+    /// Where auto-filled text came from, because the two sources do not
+    /// deserve equal faith. Our own log is something the operator copied and
+    /// logged; a spot is a stranger's claim, and the captured hub corpus shows
+    /// those go wrong — a busted call, a frequency 29 kHz off, an unparseable
+    /// typo. A wrong county is cross-checked against the other station's log
+    /// and costs the contact.
+    enum ExchangeOrigin: Equatable, Sendable {
+        case ownLog
+        case spot
+    }
+
+    private(set) var exchangeOrigin: ExchangeOrigin = .ownLog
+
+    /// Auto-filled from a third party rather than from anything we copied.
+    /// Drives the stronger of the two provisional treatments in the entry row.
+    var exchangeIsUnconfirmed: Bool { exchangeIsAutoFilled && exchangeOrigin == .spot }
+
+    /// The exchange as the operator edits it. Writing through here is what
+    /// marks the text as theirs; the view binds to this, never to `exchange`.
+    var exchangeTyped: String {
+        get { exchange }
         set {
-            exchangeStorage = newValue
-            exchangeIsUnconfirmed = false
+            exchange = newValue
+            exchangeIsAutoFilled = false
         }
     }
-    private var exchangeStorage = ""
 
-    /// The exchange came from a spot and has not been copied yet.
-    ///
-    /// A hub spot names the county, but that is a third party's claim. The
-    /// captured corpus shows those can be wrong — a busted call, a frequency
-    /// 29 kHz off, an unparseable typo — and a wrong county is cross-checked
-    /// against the other station's log and costs the contact. So the value is
-    /// offered, and shown as provisional until the operator stands behind it.
-    private(set) var exchangeIsUnconfirmed = false
+    func autoFillExchange(_ text: String, origin: ExchangeOrigin = .ownLog) {
+        exchange = text
+        exchangeIsAutoFilled = true
+        exchangeOrigin = origin
+    }
 
-    /// Offer an exchange taken from a spot rather than copied off the air.
-    ///
-    /// Never overwrites what the operator typed — stepping through spots with
-    /// ⌘←/⌘→ must not replace an exchange already being copied. One offered
-    /// value does replace another, so stepping keeps up instead of sticking on
-    /// the first county seen.
-    func prefillExchange(_ county: String) {
-        let county = county.trimmingCharacters(in: .whitespaces).uppercased()
-        guard !county.isEmpty else { return }
-        guard exchangeStorage.isEmpty || exchangeIsUnconfirmed else { return }
-        exchangeStorage = county
-        exchangeIsUnconfirmed = true
+    /// What the operator copied for a station and never logged. Hunting a
+    /// station who can be heard but cannot hear you means copying his exchange
+    /// with nothing to show for it; moving to the next spot must not carry that
+    /// to the next station, and coming back must not mean copying it twice.
+    struct Pending: Equatable {
+        var exchange: String
+        var serialRcvd: String
+
+        var isEmpty: Bool {
+            exchange.trimmingCharacters(in: .whitespaces).isEmpty
+                && serialRcvd.trimmingCharacters(in: .whitespaces).isEmpty
+        }
+    }
+
+    var pendingExchanges: [String: Pending] = [:]
+
+    /// Put back what was copied for this station, as the operator's own text.
+    func restorePending(_ pending: Pending) {
+        exchange = pending.exchange
+        serialRcvd = pending.serialRcvd
+        exchangeIsAutoFilled = false
+    }
+
+    /// Take back text the app put there. Text the operator typed is untouched.
+    func clearAutoFilledExchange() {
+        guard exchangeIsAutoFilled else { return }
+        exchange = ""
+        exchangeIsAutoFilled = false
     }
 
     /// What the operator typed into Ser S, or nil to follow the log.
@@ -173,6 +210,7 @@ final class EntryState {
         serialOverride = nil
         serialRcvd = ""
         exchange = ""
+        exchangeIsAutoFilled = false
         exchangeStatus = .idle
         dupeWarning = nil
         isNewMult = false

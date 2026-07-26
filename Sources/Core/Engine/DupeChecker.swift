@@ -59,6 +59,49 @@ enum DupeChecker {
         }
         return dupes
     }
+
+    /// One prior on-air contact with a station, for the worked-before table.
+    ///
+    /// A county-line contact produced several log rows from one contact, so it
+    /// is one entry here and carries both counties — a table that answers
+    /// "which bands and modes is he already in my log on" must not count one
+    /// QSO twice.
+    struct WorkedContact: Equatable, Identifiable, Sendable {
+        /// The contact's `groupID` — stable, and unique per contact.
+        let id: UUID
+        let band: Band
+        let modeClass: ModeClass
+        let timestampUTC: Date
+        /// Their location, county-line pairs joined the way the exchange
+        /// parser accepts them.
+        let theirLoc: String
+    }
+
+    /// Every prior contact with `call`, most recent first, across all bands and
+    /// modes. Empty for a call that is blank or never worked.
+    static func workedContacts(call: String, log: [QSO]) -> [WorkedContact] {
+        let wanted = call.trimmingCharacters(in: .whitespaces).uppercased()
+        guard !wanted.isEmpty else { return [] }
+
+        var byGroup: [UUID: [QSO]] = [:]
+        for q in log where q.call.uppercased() == wanted {
+            byGroup[q.groupID, default: []].append(q)
+        }
+
+        return byGroup.values
+            .compactMap { rows -> WorkedContact? in
+                let ordered = rows.sortedChronologically()
+                guard let first = ordered.first else { return nil }
+                return WorkedContact(
+                    id: first.groupID,
+                    band: first.band,
+                    modeClass: first.modeClass,
+                    timestampUTC: first.timestampUTC,
+                    theirLoc: ordered.map(\.theirLoc).joined(separator: "/")
+                )
+            }
+            .sorted { $0.timestampUTC > $1.timestampUTC }
+    }
 }
 
 extension [QSO] {

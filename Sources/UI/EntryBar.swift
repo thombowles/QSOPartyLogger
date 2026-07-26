@@ -45,25 +45,30 @@ struct EntryBar: View {
                     field("Ser S", text: $entry.serialSent, width: 60, focusTag: .serialSent)
                     field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
                 }
-                field(exchangeLabel, text: $entry.exchange.uppercasing, width: 170,
-                      focusTag: .exchange)
-                    // A county taken from a spot is a third party's claim, not
-                    // something copied. Dashed and dimmed until the operator
-                    // types it, so what was heard is never confused with what
-                    // was merely asserted.
-                    .overlay {
-                        if entry.exchangeIsUnconfirmed {
-                            RoundedRectangle(cornerRadius: 5)
-                                .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
-                                .foregroundStyle(.orange)
-                                .padding(.top, 16)
-                                .allowsHitTesting(false)
-                        }
+                field(
+                    exchangeLabel,
+                    text: $entry.exchangeTyped.uppercasing,
+                    width: 170,
+                    focusTag: .exchange,
+                    provisional: entry.exchangeIsAutoFilled
+                )
+                // Provisional text from our own log is something the operator
+                // copied once already. A county from a spot is a stranger's
+                // claim about a station never worked, so it gets the louder
+                // treatment — what was heard must never look like what was
+                // merely asserted.
+                .overlay {
+                    if entry.exchangeIsUnconfirmed {
+                        RoundedRectangle(cornerRadius: 5)
+                            .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                            .foregroundStyle(.orange)
+                            .padding(.top, 16)
+                            .allowsHitTesting(false)
                     }
-                    .opacity(entry.exchangeIsUnconfirmed ? 0.75 : 1)
-                    .help(entry.exchangeIsUnconfirmed
-                          ? "From a spot, not copied — confirm it before logging"
-                          : "")
+                }
+                .help(entry.exchangeIsUnconfirmed
+                      ? "From a spot, not copied — confirm it before logging"
+                      : "")
                 statusBadge
                 Spacer()
                 Button("Log", action: onLog)
@@ -150,11 +155,14 @@ struct EntryBar: View {
         }
     }
 
+    /// `provisional` greys the text: the app put it there from what it knows
+    /// about the station, and the first keystroke makes it the operator's.
     private func field(
         _ label: String,
         text: Binding<String>,
         width: CGFloat,
-        focusTag: Field
+        focusTag: Field,
+        provisional: Bool = false
     ) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
@@ -163,6 +171,7 @@ struct EntryBar: View {
             TextField("", text: text)
                 .textFieldStyle(.roundedBorder)
                 .font(.system(.body, design: .monospaced))
+                .foregroundStyle(provisional ? AnyShapeStyle(.secondary) : AnyShapeStyle(.primary))
                 .frame(width: width)
                 .focused($focus, equals: focusTag)
                 .onSubmit(onLog)

@@ -185,6 +185,29 @@ struct MainView: View {
         )
     }
 
+    /// Every prior contact with the call in the entry field — the history
+    /// table's contents, and the reason it is on screen at all.
+    private var workedBefore: [DupeChecker.WorkedContact] {
+        DupeChecker.workedContacts(call: entry.callNormalized, log: document.log.qsos)
+    }
+
+    /// "KSQP 2025 — JOH" when previous contests know the station and this one
+    /// does not. It is where a pre-filled exchange came from, which is why it
+    /// belongs on screen rather than only in the field.
+    private var workedBeforeArchiveLine: String? {
+        guard workedBefore.isEmpty, !entry.callNormalized.isEmpty,
+              let seen = flow.archiveIndex.entries(for: entry.callNormalized).first
+        else { return nil }
+        return "\(seen.partyID.uppercased()) \(seen.year) — \(seen.theirLoc)"
+    }
+
+    private var workedBeforeHeight: CGFloat {
+        WorkedBeforeTable.height(
+            contacts: workedBefore.count,
+            hasArchiveLine: workedBeforeArchiveLine != nil
+        )
+    }
+
     /// Calls already in the log on the current band+mode — grays their spots.
     private var workedCallsOnCurrentBandMode: Set<String> {
         Set(
@@ -234,7 +257,7 @@ struct MainView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .onChange(of: entry.exchange) { revalidate() }
-                .onChange(of: entry.call) { revalidate() }
+                .onChange(of: entry.call) { flow.callChanged(operatingContext) }
 
             MessagesRow(
                 operatingMode: operatingMode,
@@ -249,6 +272,16 @@ struct MainView: View {
                 cqFrequencyLabel: cqFrequencyHz.map { String(format: "%.1f", Double($0) / 1000) },
                 onJumpToCQ: jumpToCQFrequency
             )
+
+            if workedBeforeHeight > 0 {
+                WorkedBeforeTable(
+                    call: entry.callNormalized,
+                    contacts: workedBefore,
+                    archiveLine: workedBeforeArchiveLine,
+                    currentBand: currentBand,
+                    currentModeClass: currentModeClass
+                )
+            }
             Divider()
 
             logTable
@@ -309,7 +342,9 @@ struct MainView: View {
             onDeleteGroup: { document.removeGroup(groupID: $0.groupID, undoManager: undoManager) },
             onEdit: { editingQSO = $0 }
         )
-        .frame(minHeight: 240)
+        // Whatever the history table takes, the log table gives back, so the
+        // pane's minimum content height — and the window — never moves.
+        .frame(minHeight: WorkedBeforeTable.logTableMin(tableHeight: workedBeforeHeight))
     }
 
     private func onDisappear() {
@@ -423,7 +458,7 @@ struct MainView: View {
                 )
                 .foregroundStyle(spotClient.status == .connected ? .green : .primary)
             }
-            .help("DX cluster connection for spots — click a spot to tune, ⌘←/⌘→ to step")
+            .help("DX cluster connection for spots — click a spot to tune, ⌘← / ⌘→ / ⌘↑ / ⌘↓ to step")
             .popover(isPresented: $showClusterPopover) {
                 clusterPopover
             }
@@ -541,7 +576,7 @@ struct MainView: View {
             if spotClient.status != .disconnected || !spotClient.console.isEmpty {
                 nodeConsole
             }
-            Text("Logs in with your callsign. Spots for the current band appear in the sidebar and band map — click to tune, ⌘← / ⌘→ to step through them.")
+            Text("Logs in with your callsign. Spots for the current band appear in the sidebar and band map — click to tune, ⌘← / ⌘→ / ⌘↑ / ⌘↓ to step through them.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 250, alignment: .leading)
@@ -647,6 +682,7 @@ struct MainView: View {
         }
 
         spotStore.maxAgeMinutes = settings.spotMaxAgeMinutes
+        loadArchiveIndex()
 
         if bandMapModel == nil {
             let model = BandMapModel(radio: radio, spotStore: spotStore, settings: settings)
@@ -660,6 +696,30 @@ struct MainView: View {
             model.onTuneSpot = { tune(to: $0) }
             model.onTuneKHz = { qsyTo(kHz: $0) }
             bandMapModel = model
+        }
+    }
+
+    /// Previous contests, read once and indexed by call — what a prefill falls
+    /// back on when this log has never worked the station. Off the main actor
+    /// because the archive holds every QSO of every contest ever logged, and a
+    /// failure is silent: this is a convenience, not a correctness path.
+    private func loadArchiveIndex() {
+        Task {
+            let index = await Task.detached(priority: .userInitiated) {
+                () -> StationMemory.Index in
+                let folder = ContestHistorian.resolveFolder()
+                guard let archive = try? ArchiveStore(folder: folder).load() else {
+                    return .empty
+                }
+                var counties: [String: Set<String>] = [:]
+                for id in Set(archive.records.map(\.partyID)) {
+                    counties[id] = Set(
+                        PartyCatalog.party(id: id)?.counties.map(\.abbr) ?? []
+                    )
+                }
+                return StationMemory.Index.build(archive, countiesByParty: counties)
+            }.value
+            flow.archiveIndex = index
         }
     }
 
@@ -814,14 +874,18 @@ struct MainView: View {
         }
         spotCursorKHz = spot.freqKHz
         applyBandPlanMode(kHz: spot.freqKHz)
-        entry.call = spot.call
-        // Only a hub spot names a county, and only as a third party's claim —
-        // it lands marked unconfirmed until the operator copies it themselves.
-        if settings.prefillExchangeFromSpots, let county = spot.county {
-            entry.prefillExchange(county)
-        }
+        // Not a plain assignment: arriving at a station takes whatever was
+        // copied for the last one off the row and keeps it under his call.
+        //
+        // Only a hub spot names a county, and only as a third party's claim,
+        // so it goes in as the weakest candidate — behind anything copied for
+        // this station and anything worked before.
+        flow.stationChanged(
+            to: spot.call,
+            operatingContext,
+            spotCounty: settings.prefillExchangeFromSpots ? spot.county : nil
+        )
         focusedField = .call
-        revalidate()
     }
 
     /// Whether self-spotting is available at all: the hub has to serve this
@@ -892,8 +956,11 @@ struct MainView: View {
         hubSpotClient.start(source: source, party: party)
     }
 
-    /// ⌘← / ⌘→. Worked stations stay on the band map, greyed, but there is
-    /// nothing left to work on them so the keys step over them.
+    /// ⌘← / ⌘→ / ⌘↑ / ⌘↓. Worked stations stay on the band map, greyed, but
+    /// there is nothing left to work on them so the keys step over them.
+    ///
+    /// A spot reporting a county is judged on call+county, so a rover that has
+    /// moved comes back into the rotation.
     private func jumpToSpot(_ direction: SpotStore.Direction) {
         let bandSpots = visibleSpotsOnBand
         let reference = radio.radioState.map { Double($0.frequencyHz) / 1000 }
@@ -1107,7 +1174,7 @@ struct MainView: View {
         switch action {
         // ⌘= / ⌘+ and ⌘- (plus keypad variants): CW speed ±2 WPM.
         case .adjustWPM(let delta): adjustWPM(by: delta)
-        // ⌘←/⌘→: previous/next spot on the band. ⌘J: back to CQ frequency.
+        // ⌘←/⌘→ and ⌘↓/⌘↑: previous/next spot on the band. ⌘J: back to CQ.
         case .previousSpot: jumpToSpot(.down)
         case .nextSpot: jumpToSpot(.up)
         case .jumpToCQFrequency: jumpToCQFrequency()

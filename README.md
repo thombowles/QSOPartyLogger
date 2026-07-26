@@ -198,6 +198,29 @@ parties, and the remaining engine gaps. Adding a party is governed by
   (sponsors want them), KS0KS +100 bonus, TQP mobile 5-county bonuses, and a
   "NEW MULT" badge before you log. KSQP 1×1 word tracker (KANSAS, QSOPARTY,
   SUNFLOWER, YELLOWBRICKROAD) with wildcard handling.
+- **Worked before**: type or tune to a call already in the log and a table
+  appears between the F-keys and the log listing every prior contact with him —
+  band, mode, time, and what he sent. The entry for the band and mode you are on
+  right now is bold and orange: nothing left to work here. A county-line contact
+  is one row, not two. It takes no space at all for a station you have not
+  worked, and the room comes out of the log table rather than out of the window,
+  so nothing resizes.
+- **Exchange pre-fill**: work a station on a new band and his county or state is
+  already in the field, taken from your most recent contact with him — or, when
+  this contest has never worked him, from previous contests in the history
+  archive. A county only carries over within the same sponsor's party: Colorado
+  and Kansas both abbreviate Jefferson County `JEF`, so a Colorado exchange
+  parses perfectly as a Kansas county and is still wrong. Every candidate has to
+  survive the current party's own exchange parser before it is offered.
+  Pre-filled text is greyed until you type over it, and it withdraws itself if
+  the call changes.
+- **Copied, not lost**: a station you can hear but who cannot hear you takes an
+  exchange to copy and gives no contact for it. Moving to the next spot clears
+  the field so nothing is logged against the wrong station, and keeps what you
+  copied under his call — land back on him, by spot, by ⌘arrow, or by typing his
+  call, and it is there again. Typing is untouched: only a deliberate move to
+  another station stashes, so fixing a typo in a call never costs the exchange
+  underneath it.
 - **Elecraft K3/K3S/KX3/KX2 CAT** over serial (4800–38400 baud): live
   frequency/mode/TX polling (`IF;` — verified against Programmer's Reference
   revs F2 and G5), band stamped onto each QSO.
@@ -238,7 +261,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
   commands run at login are configurable — `sh/dx 30` by default, so the
   band map is populated with recent spots the moment you connect instead of
   starting empty. Click a spot to tune and pre-fill the call, or step
-  spot-to-spot with ⌘← / ⌘→.
+  spot-to-spot with ⌘← / ⌘→ or ⌘↓ / ⌘↑.
 - **QSO Party Hub spots**: several sponsors point their operators at
   [qsopartyhub.com](http://qsopartyhub.com) to self-spot, and unlike a cluster
   spot those carry the **county** — the multiplier the party is actually
@@ -247,23 +270,26 @@ parties, and the remaining engine gaps. Adding a party is governed by
   multipliers. 17 of the 19 bundled parties are covered (California's page is
   an unfinished stub and WA Salmon Run has none). Polling only runs inside the
   party's own operating window.
-- **Exchange pre-fill from a spot**: tuning to a hub spot puts its county
-  straight into the exchange field — but shown **unconfirmed** (dashed, dimmed,
-  with a reminder) until you copy it on the air. A spotter's county is their
-  claim, not something you heard, and a wrong one is cross-checked against the
-  other station's log. Typing over it confirms it; it never overwrites an
-  exchange you're already typing. Toggle in the band map funnel.
+- **Exchange pre-fill from a spot**: when nothing in your own log or the
+  archive knows a station, a hub spot's county fills the exchange as a last
+  resort — shown **unconfirmed** (dashed, with a reminder) rather than merely
+  provisional. A spotter's county is their claim about a station you've never
+  worked, and a wrong one is cross-checked against their log. Anything you
+  copied, and anything you worked before, outranks it. Toggle in the band map
+  funnel.
 - **Rovers stop hiding**: a mobile that changes county is a new contact, and
   now the band map knows it. Work a rover in one county and it greys out; the
   moment it spots from a county you still need it comes back, un-greyed and
-  back in the ⌘← / ⌘→ rotation. Cluster spots never carried a county, so this
-  was invisible before.
+  back in the ⌘← / ⌘→ / ⌘↑ / ⌘↓ rotation. Cluster spots never carried a
+  county, so this was invisible before.
 - **Band map window (⌘B)**: floating N1MM-style panel — vertical frequency
   ruler for the current band with spots plotted where they live, a red VFO
   marker tracking the radio, and a dashed CQ line marking your run
   frequency. Zoom 25/50/100 kHz or the whole band; click a spot to tune +
-  fill the call, click empty map to QSY there. Remembers its position. This
-  is the only place spots are shown — the score panel stays about scoring.
+  fill the call, click empty map to QSY there. Remembers its position, and
+  stays on screen when another app takes focus, so it can sit beside a
+  panadapter in SmartSDR rather than disappearing the moment you click one.
+  This is the only place spots are shown — the score panel stays about scoring.
 - **Stacked spots**: a pile-up no longer shoves labels off frequency. Spots
   too close to plot separately fan out **sideways** into a second and third
   column, each one still drawn at its own frequency, and the column count
@@ -271,13 +297,13 @@ parties, and the remaining engine gaps. Adding a party is governed by
   ever dropped: twenty calls on one frequency show all twenty.
 - **Worked stations stay visible**: a call already in the log on this
   band+mode is greyed and struck through rather than removed, so you can see
-  the band filling up — and ⌘← / ⌘→ steps straight over it, because there is
+  the band filling up — and ⌘← / ⌘→ / ⌘↑ / ⌘↓ steps straight over it, because there is
   nothing left to work there. If every spot on the band is worked, the keys
   leave the radio where it is.
 - **Band-plan-aware mode switching**: tune into the phone portion of a band
   and the radio goes to SSB; tune into the CW portion and it goes to CW. It
   fires only when *the app* moves you — clicking a spot, typing a frequency
-  or band, ⌘← / ⌘→, ⌘J — so your own VFO knob never triggers a mode change
+  or band, ⌘← / ⌘→ / ⌘↑ / ⌘↓, ⌘J — so your own VFO knob never triggers a mode change
   mid-QSO. It never selects a digital mode, never fights a RTTY operator
   working the data segment, and never picks a mode the party doesn't score.
   Crossovers come from 47 CFR §97.305(c) (with §97.301(a) for the 80/75 m
@@ -294,7 +320,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
   digital class, the digital sub-band is CW, which is where that activity
   really sits), per-band, and how long spots live before ageing out (5 min – 2 hr,
   default 15). It's a panel, not a menu — tick as many boxes as you like in
-  one visit — and everything applies instantly to the map and to ⌘← / ⌘→.
+  one visit — and everything applies instantly to the map and to the spot keys.
   All filters off by default; **Reset All** puts them back.
 - **CQ frequency memory**: sending F1 (or starting repeat-CQ) in Run mode
   remembers the run frequency; ⌘J — or the chip next to Repeat — jumps back
@@ -357,6 +383,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `Esc` | Abort CW + stop repeat-CQ — and close the sheet, when one is open |
 | `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
 | `⌘←` / `⌘→` | Tune to previous / next unworked spot on the band |
+| `⌘↓` / `⌘↑` | The same, on the vertical axis — `⌘↑` goes up the band map |
 | `⌘R` | Toggle Run / Search & Pounce |
 | `⌘J` | Jump back to your CQ run frequency (Run mode) |
 | `⌘B` | Toggle the band map window |
@@ -564,7 +591,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 811 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 843 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,

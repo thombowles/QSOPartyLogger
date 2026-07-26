@@ -36,7 +36,7 @@ The non-negotiables, so they are never a surprise:
 | Path | Contents |
 | --- | --- |
 | `Sources/Core/Parties/` | `PartyDefinition` (JSON rule schema), `PartyCatalog`, counties, mult classes |
-| `Sources/Core/Engine/` | `ScoreEngine`, `ExchangeParser`, `DupeChecker`, `CountyLineExpander`, ESM |
+| `Sources/Core/Engine/` | `ScoreEngine`, `ExchangeParser`, `DupeChecker`, `CountyLineExpander`, `StationMemory`, ESM |
 | `Sources/Core/Export/` | Cabrillo V3, ADIF 3.1.4 |
 | `Sources/Core/History/` | Contest archive (one iCloud file), score snapshots, season stats, SQP Challenge, upcoming calendar |
 | `Sources/Core/Spotting/` | Cluster protocol, spot parsing, filters, band map scale |

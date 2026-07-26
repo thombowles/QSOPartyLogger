@@ -1,95 +1,149 @@
 import XCTest
 @testable import QSOPartyLogger
 
-/// Pre-filling the exchange from a spot's county.
+/// A spot's county as the last-resort exchange candidate.
 ///
-/// A hub spot names the county, which is the exchange in a state QSO party —
-/// but it is a *third party's* claim, not something the operator copied. The
-/// captured corpus is proof that claim can be wrong: `N4RT` appeared at both
-/// 7045.5 and 7074.5 within 33 seconds, `KC4TE` was a busted call, `1042.3`
-/// was a typo. A wrong county reaching the log is cross-checked against the
-/// other station's and costs the contact.
+/// Three things can fill this field, and they do not deserve equal faith:
 ///
-/// So the value goes in, but stays marked unconfirmed until the operator has
-/// actually touched it. What was copied is always distinguishable from what
-/// was claimed.
+/// 1. What the operator copied for this station and never logged.
+/// 2. What the operator worked before, here or in a past contest.
+/// 3. What a stranger posted to a spotting board thirty seconds ago.
+///
+/// Only the third is someone else's claim, and the captured hub corpus shows
+/// those go wrong — a busted call, a frequency 29 kHz off, an unparseable
+/// typo. A wrong county is cross-checked against the other station's log and
+/// costs the contact. So a spot county fills only when nothing better exists,
+/// and says plainly that it was not copied.
+@MainActor
 final class SpotExchangePrefillTests: XCTestCase {
 
-    func testPrefilledExchangeIsMarkedUnconfirmed() {
-        let entry = EntryState()
-        entry.prefillExchange("MDSN")
-
-        XCTAssertEqual(entry.exchange, "MDSN")
-        XCTAssertTrue(entry.exchangeIsUnconfirmed)
+    private func ksqpDocument() -> LogDocument {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(callsign: "KE5CW"),
+            location: .outOfState(location: "TX"),
+            partyID: "ksqp",
+            undoManager: nil
+        )
+        return doc
     }
+
+    private func ksqpDocumentWorking(_ call: String, as loc: String) -> LogDocument {
+        let doc = ksqpDocument()
+        doc.append(
+            qsos: [
+                QSO(call: call, band: .m40, modeClass: .cw, rawMode: "CW",
+                    rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: loc)
+            ],
+            undoManager: nil
+        )
+        return doc
+    }
+
+    private func context() -> EntryFlow.Context {
+        EntryFlow.Context(
+            band: .m40, modeClass: .cw, rawMode: "CW", freqKHz: nil,
+            radioConnected: false, cursor: .exchange,
+            keying: KeyingSettings(esmEnabled: true, cutNumbers: false, cutOne: false)
+        )
+    }
+
+    // MARK: The spot fills when nothing better is known
+
+    func testSpotCountyFillsAnUnknownStation() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.stationChanged(to: "W0BH", context(), spotCounty: "MRN")
+
+        XCTAssertEqual(flow.entry.exchange, "MRN")
+        XCTAssertTrue(flow.entry.exchangeIsUnconfirmed,
+                      "nobody copied this — it is a spotter's claim")
+    }
+
+    /// A spot with no county at all — every cluster spot — fills nothing.
+    func testSpotWithoutACountyFillsNothing() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.stationChanged(to: "W0BH", context(), spotCounty: nil)
+
+        XCTAssertEqual(flow.entry.exchange, "")
+        XCTAssertFalse(flow.entry.exchangeIsUnconfirmed)
+    }
+
+    // MARK: Anything of our own outranks it
+
+    /// Worked before means the operator already copied this county once, off
+    /// the air. That beats a stranger's claim, and carries no warning.
+    func testOwnLogOutranksTheSpotsClaim() {
+        let flow = EntryFlow(document: ksqpDocumentWorking("K5NA", as: "JOH"))
+        flow.stationChanged(to: "K5NA", context(), spotCounty: "MRN")
+
+        XCTAssertEqual(flow.entry.exchange, "JOH", "what we worked beats what a spotter says")
+        XCTAssertTrue(flow.entry.exchangeIsAutoFilled)
+        XCTAssertFalse(flow.entry.exchangeIsUnconfirmed,
+                       "our own log is not an unconfirmed claim")
+    }
+
+    /// What the operator copied but never logged outranks everything.
+    func testCopiedExchangeOutranksTheSpotsClaim() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.entry.call = "K5NA"
+        flow.entry.exchangeTyped = "JOH"
+
+        flow.stationChanged(to: "W0BH", context(), spotCounty: "MRN")
+        flow.stationChanged(to: "K5NA", context(), spotCounty: "SED")
+
+        XCTAssertEqual(flow.entry.exchange, "JOH", "the operator's own copy stands")
+        XCTAssertFalse(flow.entry.exchangeIsUnconfirmed)
+    }
+
+    // MARK: Ownership
 
     /// Typing is the operator taking responsibility for the value.
-    func testTypingIntoTheFieldConfirmsIt() {
-        let entry = EntryState()
-        entry.prefillExchange("MDSN")
-        entry.exchange = "MDSN"
+    func testTypingOverTheSpotCountyConfirmsIt() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.stationChanged(to: "W0BH", context(), spotCounty: "MRN")
+        XCTAssertTrue(flow.entry.exchangeIsUnconfirmed)
 
-        XCTAssertFalse(entry.exchangeIsUnconfirmed,
-                       "the operator has now put their own name to it")
+        flow.entry.exchangeTyped = "MRN"
+        XCTAssertFalse(flow.entry.exchangeIsUnconfirmed,
+                       "the operator has put their own name to it now")
     }
 
-    /// Never overwrite what the operator typed. Stepping through spots with
-    /// ⌘←/⌘→ must not quietly replace an exchange already being copied.
-    func testPrefillNeverClobbersTypedText() {
-        let entry = EntryState()
-        entry.exchange = "LAWR"
-        entry.prefillExchange("MDSN")
+    /// The claim belongs to the call it arrived with. Correcting a busted spot
+    /// by typing must not leave the old station's county behind.
+    func testSpotCountyDoesNotFollowATypedCorrection() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.stationChanged(to: "W0BH", context(), spotCounty: "MRN")
+        XCTAssertEqual(flow.entry.exchange, "MRN")
 
-        XCTAssertEqual(entry.exchange, "LAWR")
-        XCTAssertFalse(entry.exchangeIsUnconfirmed)
+        flow.entry.call = "W0BHX"
+        flow.callChanged(context())
+
+        XCTAssertEqual(flow.entry.exchange, "",
+                       "the county was W0BH's, not this station's")
+        XCTAssertFalse(flow.entry.exchangeIsUnconfirmed)
     }
 
-    /// But one unconfirmed value may replace another, so stepping between
-    /// spots keeps up rather than sticking on the first county seen.
-    func testPrefillReplacesAnEarlierUnconfirmedValue() {
-        let entry = EntryState()
-        entry.prefillExchange("MDSN")
-        entry.prefillExchange("LAWR")
+    /// Moving on takes the app's own text back rather than carrying it to the
+    /// next station, exactly as it does for a fill from the log.
+    func testMovingToAnotherStationDropsTheSpotCounty() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.stationChanged(to: "W0BH", context(), spotCounty: "MRN")
+        flow.stationChanged(to: "K5NA", context(), spotCounty: nil)
 
-        XCTAssertEqual(entry.exchange, "LAWR")
-        XCTAssertTrue(entry.exchangeIsUnconfirmed)
+        XCTAssertEqual(flow.entry.exchange, "")
+        XCTAssertFalse(flow.entry.exchangeIsUnconfirmed)
     }
 
-    /// Clearing for the next contact drops the mark with the value, or the
-    /// next contact would inherit a warning about an exchange that is gone.
-    func testClearingForTheNextContactResetsTheMark() {
-        let entry = EntryState()
-        entry.prefillExchange("MDSN")
-        entry.clearForNextContact(modeClass: .cw)
+    // MARK: Downstream
 
-        XCTAssertEqual(entry.exchange, "")
-        XCTAssertFalse(entry.exchangeIsUnconfirmed)
-    }
+    /// The mark is presentation only. A spot-filled exchange validates and
+    /// scores exactly as a typed one does — checking it is the operator's job,
+    /// not the app's to discount it.
+    func testASpotFilledExchangeStillValidatesNormally() {
+        let flow = EntryFlow(document: ksqpDocument())
+        flow.stationChanged(to: "W0BH", context(), spotCounty: "MRN")
 
-    /// An empty county is not a value to pre-fill — most cluster spots have
-    /// none at all.
-    func testEmptyCountyIsNotPrefilled() {
-        let entry = EntryState()
-        entry.prefillExchange("")
-
-        XCTAssertEqual(entry.exchange, "")
-        XCTAssertFalse(entry.exchangeIsUnconfirmed)
-    }
-
-    /// The mark is presentation only. A pre-filled exchange still validates
-    /// and scores exactly as a typed one does — it is the operator's job to
-    /// check it, not the app's to discount it.
-    func testAnUnconfirmedExchangeStillValidatesNormally() throws {
-        let alqp = try XCTUnwrap(PartyCatalog.party(id: "alqp"))
-        var log = ContestLog(partyID: "alqp")
-        log.myLocation = .outOfState(location: "TX")
-
-        let entry = EntryState()
-        entry.call = "K4EES"
-        entry.prefillExchange("BALD")
-        entry.revalidate(party: alqp, log: log, band: .m40, modeClass: .cw)
-
-        XCTAssertEqual(entry.exchangeStatus, .valid(["BALD"]))
-        XCTAssertTrue(entry.exchangeIsUnconfirmed, "validating is not confirming")
+        XCTAssertEqual(flow.entry.exchangeStatus, .valid(["MRN"]))
+        XCTAssertTrue(flow.entry.exchangeIsUnconfirmed, "validating is not confirming")
     }
 }
