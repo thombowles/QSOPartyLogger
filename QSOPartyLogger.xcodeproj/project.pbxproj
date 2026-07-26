@@ -46,6 +46,7 @@
 		2B2A1A856A6A6B9837A2EFB1 /* ElecraftK3Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6991F8344C755AD580ADCF48 /* ElecraftK3Driver.swift */; };
 		2BE2738C1B1EF3016138FB64 /* ArchiveStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C999FF4972E859F8CFD19B12 /* ArchiveStore.swift */; };
 		2CCA229FB32E1D2414047EEA /* HubSpotParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BC1600467005E882D39CF4 /* HubSpotParserTests.swift */; };
+		2D7E7342666EE5D877E66C2E /* OntarioQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9470B675F129A683C136E00 /* OntarioQSOPartyTests.swift */; };
 		2FADB97332AC9D40282F9897 /* RadioBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771A2A2E70C2A91608F19549 /* RadioBar.swift */; };
 		2FB28E2BB6D45DB0A743B1FB /* HawaiiQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EB12C03231B219068E0737 /* HawaiiQSOPartyTests.swift */; };
 		2FBC769F772805B49F4479DB /* EntryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B07E26A34F4A74B9165A344 /* EntryState.swift */; };
@@ -381,6 +382,7 @@
 		D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDocumentTests.swift; sourceTree = "<group>"; };
 		D590A3128E841A331486E328 /* HubSpotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotClient.swift; sourceTree = "<group>"; };
 		D6D2158467D3A61358A399D7 /* MessagesRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesRow.swift; sourceTree = "<group>"; };
+		D9470B675F129A683C136E00 /* OntarioQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OntarioQSOPartyTests.swift; sourceTree = "<group>"; };
 		D9CC975E303DB2512FF84C86 /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
 		D9D222FC07C47B321835C0B0 /* SeasonStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonStats.swift; sourceTree = "<group>"; };
 		DBF66C01612DA91290CFA1B6 /* SmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokeTests.swift; sourceTree = "<group>"; };
@@ -554,6 +556,7 @@
 				C2F2B4F0F3E08B109AEE12BA /* OhioQSOPartyTests.swift */,
 				5C2BAF28C33E175242E46CCF /* OklahomaQSOPartyTests.swift */,
 				165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */,
+				D9470B675F129A683C136E00 /* OntarioQSOPartyTests.swift */,
 				797C5CEFFBDB939E217C6D60 /* OperatingFeatureTests.swift */,
 				6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */,
 				3E3270C8AA34DCB8481F768F /* PartyModeInferenceTests.swift */,
@@ -989,6 +992,7 @@
 				C86470C8A36E65E23F364FD5 /* OhioQSOPartyTests.swift in Sources */,
 				425FA08EE52DE4370C778AC4 /* OklahomaQSOPartyTests.swift in Sources */,
 				BA29F9177B9172AD408E813B /* OneByOneTrackerTests.swift in Sources */,
+				2D7E7342666EE5D877E66C2E /* OntarioQSOPartyTests.swift in Sources */,
 				821AC67E517BE893BEAAFB77 /* OperatingFeatureTests.swift in Sources */,
 				632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */,
 				E9827B06A176CDDB8E3D8770 /* PartyModeInferenceTests.swift in Sources */,

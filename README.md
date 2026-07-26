@@ -192,6 +192,17 @@ Built for KE5CW. Bundled parties, all with official county data:
   multiplier** here, unlike the two parties built before it. County lines are
   forbidden outright, with a 500-foot minimum move. `verified: partial` — only
   because the 2026 rules came from an archive; there are no open questions.
+- **Ontario QSO Party** (Apr 18–19, 2026) — 17 hours in two legs, sharing
+  Michigan's weekend. **50 multiplier areas, and they are not all counties**:
+  the sponsor explains that former counties have become single-tier
+  municipalities, so the list mixes counties, districts, regional
+  municipalities, cities, towns and united counties. **`HAL` is the Town of
+  Haldimand, not Halton** (`HTN`). Multipliers count **per band**, not per mode.
+  Three limitations are recorded rather than papered over: the five 10-point
+  club stations are *QSO* points that sit inside the multiplication and have no
+  schema shape, the literal `DX` cannot be logged because counting DXCC
+  entities individually requires prefix mode, and the activation bonus counts
+  three QSOs where the sponsor wants three different stations. `verified: partial`.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -346,9 +357,9 @@ Built for KE5CW. Bundled parties, all with official county data:
 2026-12-31 is bundled**, and the season's earlier parties are being added in
 contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
 Carolina, Oklahoma, Idaho, Wisconsin, Virginia, Louisiana, Mississippi,
-Missouri, New Mexico, Georgia, North Dakota and Michigan are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
+Missouri, New Mexico, Georgia, North Dakota, Michigan and Ontario are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
 agree there is no state or provincial party in January, November or December.
-**13 parties from April through June remain**, listed in
+**12 parties from April through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -828,7 +839,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1351 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1374 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1281,6 +1292,17 @@ station profile, radio wiring and cluster history untouched.
   archived four days before the 2026 contest already carried DC. The rules name
   no year at all, and their formula reproduces the sponsor's own stated 2027
   date exactly, which verifies the reading better than any calendar could.
+- OQP: rules from Contest Club Ontario's own site and the multiplier list from
+  its `OQPMultList.pdf`, read verbatim 2026-07-26. **The site rolled forward to
+  2027 but the rules did not** — the landing page advertises the 30th Annual OQP
+  while `rules.htm` is still the 2026 edition, byte-identical to the archived
+  copy of 2026-05-04. The generator asserts that split *and* diffs the 2025
+  edition against it, confirming every item on the sponsor's own change list:
+  phone went from 1 point to 2, VE3RHQ joined the bonus stations, a 250 m
+  county-line definition arrived, and **two hours moved from Saturday night to
+  Sunday** — so any pre-2026 source is wrong about both the times and the
+  points. *Retrieval note:* the spot hub serves Ontario as `onqp`, not `oqp`;
+  the obvious URL 404s.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -1316,7 +1338,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 34 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 35 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

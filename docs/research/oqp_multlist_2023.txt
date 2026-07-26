@@ -1,0 +1,62 @@
+Source: https://www.va3cco.com/oqp/OQPMultList.pdf  (linked from the OQP
+  'Ontario Multipliers' page as 'List of counties and abbreviations in PDF
+  format').  Last-Modified: Tue, 20 May 2025 00:45:23 GMT.
+Fetched 2026-07-26 via pdftotext -layout.
+
+The document dates ITSELF 'Effective 01Jan2023' and the 2026 rules link to it
+  as the current list, so it is the authority for the multiplier list.  Three
+  columns: name, 3-letter multiplier, RAC section (ONN/ONS/ONE/GH).
+========================================================================
+OQP Ontario Multiplier List - Effective 01Jan2023   Mult   Section
+
+Algoma District                                     ALG    ONN
+Brant County                                        BRA    ONS
+City of Brantford                                   BFD    ONS
+Bruce County                                        BRU    ONS
+City of Chatham-Kent                                CHK    ONS
+Cochrane District                                   COC    ONN
+Dufferin County                                     DUF    ONS
+Durham Regional Municipality                        DUR    GH
+Elgin County                                        ELG    ONS
+Essex County                                        ESX    ONS
+Frontenac County                                    FRO    ONE
+Grey County                                         GRY    ONS
+Town of Haldimand                                   HAL    ONS
+Haliburton County                                   HLB    ONE
+Halton Regional Municipality                        HTN    GH
+City of Hamilton                                    HAM    GH
+Hastings County                                     HAS    ONE
+Huron County                                        HUR    ONS
+City of Kawartha Lakes                              KAW    ONE
+Kenora District                                     KEN    ONN
+Lambton County                                      LAM    ONS
+Lanark County                                       LAN    ONE
+Leeds & Grenville United Counties                   LGR    ONE
+Lennox-Addington County                             LXA    ONE
+Manitoulin District                                 MAN    ONN
+Middlesex County                                    MSX    ONS
+Muskoka District                                    MUS    ONS
+Niagara Regional Municipality                       NIA    GH
+Nipissing District                                  NIP    ONN
+Town of Norfolk                                     NFK    ONS
+Northumberland County                               NOR    ONE
+City of Ottawa                                      OTT    ONE
+Oxford County                                       OXF    ONS
+Parry Sound District                                PSD    ONS
+Peel Regional Municipality                          PEL    GH
+Perth County                                        PER    ONS
+Peterborough County                                 PET    ONE
+United Counties of Prescott & Russell               PRU    ONE
+City of Prince Edward                               PED    ONE
+Rainy River District                                RAI    ONN
+Renfrew County                                      REN    ONE
+Simcoe County                                       SIM    ONS
+United Counties of Stormont, Dundas & Glengarry     SDG    ONE
+Sudbury District                                    SUD    ONN
+Thunder Bay District                                TBY    ONN
+Timiskaming District                                TIM    ONN
+City of Toronto                                     TOR    GH
+Waterloo Regional Municipality                      WAT    ONS
+Wellington County                                   WEL    ONS
+York Regional Municipality                          YRK    GH
+

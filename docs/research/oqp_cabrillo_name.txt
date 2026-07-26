@@ -1,0 +1,9 @@
+Source: https://www.contestcalendar.com/cabnames.php  (WA7BNM Contest Calendar,
+  'Cabrillo Names' table).  Fetched 2026-07-26.
+
+Used under CONSTITUTION.md Article 1's WA7BNM exception, and ONLY for the
+Cabrillo CONTEST: header.  The 2026 rules ask for a Cabrillo log and link a
+text-to-Cabrillo converter (b4h.net/cabforms/onqp_cab3.php) without ever naming
+the header.  Every other Ontario rule in this repo comes from the sponsor.
+========================================================================
+357	Ontario QSO Party  	ON-QSO-PARTY

@@ -189,7 +189,7 @@
   },
   {
    "name": "Ontario QSO Party",
-   "partyID": null,
+   "partyID": "oqp",
    "windows": [
     {
      "start": "2026-04-18T18:00:00Z",

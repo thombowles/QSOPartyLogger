@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "id": "oqp",
+  "name": "Ontario QSO Party",
+  "cabrilloContest": "ON-QSO-PARTY",
+  "homeState": "ON",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m"
+  ],
+  "points": {
+    "phone": 2,
+    "cw": 2,
+    "digital": 0
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBand"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBand"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "activatedCountyCount",
+      "minQSOs": 3,
+      "points": 300
+    }
+  ],
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "provinces": [
+    "AB",
+    "BC",
+    "MB",
+    "NB",
+    "NL",
+    "NT",
+    "NS",
+    "NU",
+    "PE",
+    "QC",
+    "SK",
+    "YT"
+  ],
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-04-18T18:00:00Z",
+      "end": "2026-04-19T03:00:00Z"
+    },
+    {
+      "start": "2026-04-19T12:00:00Z",
+      "end": "2026-04-19T20:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ALG",
+      "name": "Algoma District"
+    },
+    {
+      "abbr": "BFD",
+      "name": "City of Brantford"
+    },
+    {
+      "abbr": "BRA",
+      "name": "Brant County"
+    },
+    {
+      "abbr": "BRU",
+      "name": "Bruce County"
+    },
+    {
+      "abbr": "CHK",
+      "name": "City of Chatham-Kent"
+    },
+    {
+      "abbr": "COC",
+      "name": "Cochrane District"
+    },
+    {
+      "abbr": "DUF",
+      "name": "Dufferin County"
+    },
+    {
+      "abbr": "DUR",
+      "name": "Durham Regional Municipality"
+    },
+    {
+      "abbr": "ELG",
+      "name": "Elgin County"
+    },
+    {
+      "abbr": "ESX",
+      "name": "Essex County"
+    },
+    {
+      "abbr": "FRO",
+      "name": "Frontenac County"
+    },
+    {
+      "abbr": "GRY",
+      "name": "Grey County"
+    },
+    {
+      "abbr": "HAL",
+      "name": "Town of Haldimand"
+    },
+    {
+      "abbr": "HAM",
+      "name": "City of Hamilton"
+    },
+    {
+      "abbr": "HAS",
+      "name": "Hastings County"
+    },
+    {
+      "abbr": "HLB",
+      "name": "Haliburton County"
+    },
+    {
+      "abbr": "HTN",
+      "name": "Halton Regional Municipality"
+    },
+    {
+      "abbr": "HUR",
+      "name": "Huron County"
+    },
+    {
+      "abbr": "KAW",
+      "name": "City of Kawartha Lakes"
+    },
+    {
+      "abbr": "KEN",
+      "name": "Kenora District"
+    },
+    {
+      "abbr": "LAM",
+      "name": "Lambton County"
+    },
+    {
+      "abbr": "LAN",
+      "name": "Lanark County"
+    },
+    {
+      "abbr": "LGR",
+      "name": "Leeds & Grenville United Counties"
+    },
+    {
+      "abbr": "LXA",
+      "name": "Lennox-Addington County"
+    },
+    {
+      "abbr": "MAN",
+      "name": "Manitoulin District"
+    },
+    {
+      "abbr": "MSX",
+      "name": "Middlesex County"
+    },
+    {
+      "abbr": "MUS",
+      "name": "Muskoka District"
+    },
+    {
+      "abbr": "NFK",
+      "name": "Town of Norfolk"
+    },
+    {
+      "abbr": "NIA",
+      "name": "Niagara Regional Municipality"
+    },
+    {
+      "abbr": "NIP",
+      "name": "Nipissing District"
+    },
+    {
+      "abbr": "NOR",
+      "name": "Northumberland County"
+    },
+    {
+      "abbr": "OTT",
+      "name": "City of Ottawa"
+    },
+    {
+      "abbr": "OXF",
+      "name": "Oxford County"
+    },
+    {
+      "abbr": "PED",
+      "name": "City of Prince Edward"
+    },
+    {
+      "abbr": "PEL",
+      "name": "Peel Regional Municipality"
+    },
+    {
+      "abbr": "PER",
+      "name": "Perth County"
+    },
+    {
+      "abbr": "PET",
+      "name": "Peterborough County"
+    },
+    {
+      "abbr": "PRU",
+      "name": "United Counties of Prescott & Russell"
+    },
+    {
+      "abbr": "PSD",
+      "name": "Parry Sound District"
+    },
+    {
+      "abbr": "RAI",
+      "name": "Rainy River District"
+    },
+    {
+      "abbr": "REN",
+      "name": "Renfrew County"
+    },
+    {
+      "abbr": "SDG",
+      "name": "United Counties of Stormont, Dundas & Glengarry"
+    },
+    {
+      "abbr": "SIM",
+      "name": "Simcoe County"
+    },
+    {
+      "abbr": "SUD",
+      "name": "Sudbury District"
+    },
+    {
+      "abbr": "TBY",
+      "name": "Thunder Bay District"
+    },
+    {
+      "abbr": "TIM",
+      "name": "Timiskaming District"
+    },
+    {
+      "abbr": "TOR",
+      "name": "City of Toronto"
+    },
+    {
+      "abbr": "WAT",
+      "name": "Waterloo Regional Municipality"
+    },
+    {
+      "abbr": "WEL",
+      "name": "Wellington County"
+    },
+    {
+      "abbr": "YRK",
+      "name": "York Regional Municipality"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/onqp-table.php",
+    "postURL": "http://qsopartyhub.com/onqp-spots.php"
+  },
+  "notes": "verified: partial - rules from Contest Club Ontario's own site, read verbatim 2026-07-26, and the multiplier list from its OQPMultList.pdf ('Effective 01Jan2023'). THE SITE ROLLED FORWARD TO 2027 BUT THE RULES DID NOT: the OQP landing page advertises 'The 30th Annual Ontario QSO Party 2027' while rules.htm is still headed '2026 Ontario QSO Party Rules (revised 01 March 2026)' and is byte-identical to the Wayback snapshot of 2026-05-04. The generator asserts both halves of that split. IT ALSO DIFFS THE 2025 EDITION AGAINST THE 2026 ONE and confirms every item on the sponsor's own change list: phone went from 1 point to 2, VE3RHQ joined the bonus stations, a 250 m county-line proximity definition and a Fixed Station County Line category were added, and TWO HOURS MOVED FROM SATURDAY NIGHT TO SUNDAY - so ANY PRE-2026 SOURCE IS WRONG ABOUT BOTH THE TIMES AND THE PHONE POINTS. Seventeen hours in two legs, with the sponsor printing the 2026 instants outright. FLAT 2 POINTS for phone and CW alike. Multipliers count PER BAND, not per mode, even though a station is worked twice per band. Ontario stations claim the 50 Ontario multipliers directly, so homeStateCountsViaCounty is false and ON is absent from the provinces they count. THE 50 ARE NOT ALL COUNTIES - the sponsor explains that former counties have become single-tier municipalities, so the list mixes counties, districts, regional municipalities, cities, towns and united counties. WATCH HAL: it is the Town of HALDIMAND, not Halton, which is HTN - two adjacent southern-Ontario entities where the obvious abbreviation belongs to the smaller one. County lines need a separate QSO per county, so maxSimultaneousCounties is 1. KNOWN LIMITATION 1 - THE FIVE 10-POINT CLUB STATIONS ARE NOT MODELLED. The sponsor pays 10 QSO POINTS for working VA3CCO, VE3CCO, VE3ODX, VA3RAC and VE3RHQ, and QSO points sit INSIDE the multiplication. The nearest schema shape, a workStation bonus, is added AFTER multiplication - so an entrant with 60 multipliers would be credited 8 points where the sponsor credits 480. A wrong number that looks deliberate is harder to notice than a missing one, so nothing ships for these five and their QSOs score the ordinary 2 points. Second user of the points-table gap North Carolina opened: NCQP wants points by county, Ontario wants points by callsign, and both want pointsTable to consult more than the mode. KNOWN LIMITATION 2 - THE LITERAL 'DX' CANNOT BE LOGGED. The sponsor counts DXCC countries individually and asks for 'province, state, or DXCC country or abbreviation', but adds that when an Ontario station logs it 'the abbreviation \"DX\" is also acceptable'. dxStyle 'token' would accept DX while collapsing every entity into one multiplier per band AND leaving an Ontario station unable to log DL at all; 'prefix' counts entities individually and accepts DL, but isPlausibleDXPrefix rejects the literal DX by design. PREFIX SHIPS, because it gets the scoring right and accepts the primary form; the rare secondary form is the casualty. This is the exact mirror of North Dakota, where the same two settings traded places and token won. KNOWN LIMITATION 3 - the activation bonus requires 'three contacts with three different stations' and activatedCountyCount counts three QSOs, which three bands' worth of one station would satisfy; the overpayment is bounded at 300 points per multiplier area. The Cabrillo CONTEST header is the one thing not from the sponsor - the rules ask for Cabrillo and link a converter without ever naming the header - so ON-QSO-PARTY comes from WA7BNM's Cabrillo Names table under Article 1's exception. SPONSOR TYPOS SHIPPED AS PRINTED: a log deadline reading 'for 2025 that will be May 18, 2026', and 'seperate' in the Fixed Station County Line paragraph. OPEN QUESTION 1: IS 60 M LEGAL? 'All Bands 160-2 meters with the exception of the WARC bands' puts 60 m inside the range and 60 m is not strictly WARC, but it is channelised in Canada, absent from the sponsor's suggested frequencies and universally excluded from contests. Eight bands ship without it; North Dakota's wording has the identical ambiguity and was resolved the same way."
+}
