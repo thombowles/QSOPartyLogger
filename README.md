@@ -9,6 +9,18 @@ field.
 
 Built for KE5CW. Bundled parties, all with official county data:
 
+- **Vermont QSO Party** (Feb 7–8, 2026) — the season's opener, and a party of
+  extremes: the **longest window (48 hours)**, the **smallest county list (14)**,
+  and the **highest CW value (3 points)** of any bundled party. Built from the
+  sponsor's own 2026 rules document (RANV, footer `13-JAN-2026`) with the summary
+  page cross-checking the county names. Mults **once per mode** on both sides,
+  DC→MD, county lines paying "2 QSO's and 2 multipliers", and `W1AW/1` worth +2
+  per QSO — a 2026-only America250 rule. The sponsor names its own worst trap and
+  it became the spot check: `WNH` Windham vs `WNS` Windsor, neither of them
+  `WIN`. `verified: partial`, with five limitations recorded — chief among them
+  that VTQP's power multiplier is **×1.5 for low power**, which this app's
+  whole-number score multiplier cannot represent, so **none is applied and you
+  multiply the final score yourself**.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -159,10 +171,13 @@ Built for KE5CW. Bundled parties, all with official county data:
   two-way (CW and digital are one mode for dupes, which this app doesn't flag),
   and FT4/FT8 earn no sponsor credit.
 
-**Every US state and regional QSO party running through 2026-12-31 is now
-bundled.** The season closed with Illinois on Oct 18; two independent calendars
-agree there is no state or provincial party in November or December.
-[`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md) keeps the
+**Every US state and regional QSO party running from 2026-07-24 through
+2026-12-31 is bundled**, and the first of the season's earlier parties —
+Vermont — is now in too. The 2026 season runs Feb 7 → Oct 18; two independent
+calendars agree there is no state or provincial party in January, November or
+December. **28 parties from February through June remain**, listed in
+contest-date order in
+[`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
 parties, and the remaining engine gaps. Adding a party is governed by
 [`docs/CONSTITUTION.md`](docs/CONSTITUTION.md).
@@ -640,7 +655,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 980 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1007 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -891,6 +906,28 @@ station profile, radio wiring and cluster history untouched.
   sponsor documents, since the site's FAQ says Macon is `MCON` while the county
   list and the rules both say `MACN`. *Retrieval note:* the rules PDF is on page 2
   of the site's file browser, which paginates in JavaScript with no link href.
+- VTQP: rules from the Radio Amateurs of Northern Vermont's **official 2026 rules
+  document** (`ranv.org/vtqso.doc`, titled "VERMONT QSO Party Rules", created
+  2026-01-13, footer `13-JAN-2026`) with the RANV summary page
+  (`ranv.org/vtqso.html`, page-dated January 31 2026) alongside it, both read
+  verbatim 2026-07-26. The page says outright that it is a summary and that the
+  `.doc` carries the specific rules, so the `.doc` is the authority; the page
+  supplies only the county **names**, since the `.doc` prints abbreviations only.
+  [`gen_vtqp.py`](docs/research/gen_vtqp.py) makes the two documents check each
+  other — names parsed from the page's table, and the resulting abbreviation set
+  asserted equal to the `.doc`'s own sentence "14 Vermont Counties: ADD, BEN, …".
+  It also asserts the sponsor's own trap note ("Take care to not mix up WiNdHam
+  (WNH) and WiNdSor (WNS)!!") and that `GRA` is Grand Isle, not the "Grand Island"
+  that appears in one operating-schedule line. **This is the first party in the
+  repo built entirely from a current-year rules document since MEQP** — nothing
+  here rests on a stale edition. `verified: partial` all the same, because five
+  verified rules cannot be expressed: the **×1.5 low-power score multiplier**
+  (whole numbers only, so none is applied), the W1AW/1 bonus being out-of-state
+  only, RTTY and FT8 sharing one mode class where the sponsor counts two,
+  30/17/12 m shipping as fully valid when the sponsor allows them for FT8/FT4
+  only, and two absent multiplier kinds — approved club stations (`W1NVT`) and
+  grid squares. Two genuine unknowns are open: whether Vermont is a state
+  multiplier for Vermont entrants, and whether 60 m is legal.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -926,7 +963,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 18 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 19 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

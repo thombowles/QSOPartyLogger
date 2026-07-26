@@ -5,7 +5,7 @@
  "approvedContests": [
   {
    "name": "Vermont QSO Party",
-   "partyID": null,
+   "partyID": "vtqp",
    "windows": [
     {
      "start": "2026-02-07T00:00:00Z",

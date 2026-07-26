@@ -8,7 +8,8 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **29 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+- **28 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+  Vermont, the season opener, was built the same day and is bundled.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -98,13 +99,13 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**29 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**28 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 24 US + 5 Canadian. Research is banked for none of them.
+next one built". 23 US + 5 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
-| 1 | Vermont | Feb 7 0000Z → Feb 8 2400Z | 14 counties, the smallest list yet |
+| ~~1~~ | ~~Vermont~~ | ~~Feb 7 0000Z → Feb 8 2400Z~~ | **done** 2026-07-26 — [`vtqp_rules.md`](../research/vtqp_rules.md), `verified: partial` |
 | 2 | Minnesota | Feb 7 1400Z → Feb 7 2400Z | single 10 h window |
 | 3 | British Columbia | Feb 7 1600Z → Feb 8 0359Z; Feb 8 1600–2359Z | 🇨🇦 regions, not counties |
 | 4 | South Carolina | Feb 28 1500Z → Mar 1 0159Z | |
@@ -139,9 +140,10 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**19 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
-NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP) plus the
-pre-existing ALQP, KSQP and TQP. Every row below is struck.
+**20 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
+pre-existing ALQP, KSQP and TQP, and **VTQP** — the first of the reopened
+first-half season, built 2026-07-26. Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
@@ -243,7 +245,39 @@ its own commit (Article 4).
   *Still worth checking when Pennsylvania is built: if PAQP also exchanges a QSO
   number, it now just sets the flag.*
 
-- **Mode-class grouping for dupes.** ILQP's mode split is **two-way** — "Stations
+- **FRACTIONAL SCORE MULTIPLIERS — the largest single scoring gap in the repo,
+  and the next commit that should be made.** `ScoreMultipliers` is
+  `[String: Int]`, and VTQP's power multiplier is **QRP ×2, LOW POWER ×1.5, high
+  ×1** (rule 7(D)(1)). ×1.5 cannot be represented, and shipping ×1 for low power
+  would understate the most common power category by a third *while looking
+  right* — the exact failure the constitution's preamble names. So VTQP ships
+  with **no `scoreMultipliers` at all** and an operator-facing instruction to do
+  the arithmetic by hand (`vtqp.json` KNOWN LIMITATION 1, pinned by
+  `VermontQSOPartyTests.testKnownGapPowerMultiplierIsNotAppliedBecauseItIsFractional`).
+  **This is bigger than a schema change.** The `Int` runs all the way through:
+  `MultRule.factor(power:station:) -> Int`, `ScoreBreakdown.categoryFactor: Int`,
+  `ScoreEngine.total = qsoPoints * multiplierCount * categoryFactor + bonusPoints`,
+  `ScoreSidebar`'s `Text("\(score.categoryFactor)")` — and
+  **`ScoreSnapshot.categoryFactor: Int` is persisted to the iCloud contest
+  archive**, so widening it is a stored-history migration as well. Sketch: keep
+  the JSON key, accept either an integer or a decimal, carry the factor as a
+  rational (numerator/denominator) rather than a `Double` so the final score
+  stays exact and the sidebar can render "×1.5" without float formatting, and
+  decide the rounding rule explicitly — VTQP's sponsor does not state one, and
+  ×1.5 on an odd points×mults product lands on a half exactly half the time.
+  Its own commit, adding no party (Article 4), with every existing party's score
+  proved unchanged; then VTQP gains the field in a second commit.
+- **Bonuses cannot be restricted to one side of the party.** VTQP rule 1A(F):
+  *"Stations OUTSIDE of Vermont will get an additional 2 point bonus for each
+  W1AW/1 station they work"*, ending *"Vermont stations will not get this
+  bonus."* `ScoreEngine.bonusPoints` applies `workStation` regardless of
+  `log.myLocation`, so a Vermont entrant is over-credited 2 points per W1AW/1
+  QSO. Sketch: an optional `appliesTo: "inState" | "outState"` on `BonusRule`,
+  defaulting to both. **One user so far** — the repo's bar is a second. Pinned by
+  `testKnownGapVermontEntrantsAlsoReceiveTheBonusTheyShouldNot`. Note the rule
+  itself is 2026-only (America250/YOTC), so it may simply disappear.
+- **Mode-class grouping — now TWO users, wanting OPPOSITE things.** ILQP's mode
+  split is **two-way** — "Stations
   may be worked once per band and mode (**phone and CW/digital**)" — while
   `DupeChecker` keys on all three `ModeClass` cases. So a station worked on CW and
   again on RTTY on one band is not flagged, and the sponsor counts the second as a
@@ -251,9 +285,20 @@ its own commit (Article 4).
   regardless, and the sponsor's stated penalty is loss of the QSO with no further
   deduction. Sketch: a party-level `dupeModeGroups: [["cw", "digital"]]` consulted
   by `DupeChecker` (and by nothing else, since no party groups modes for
-  multiplier purposes). **One user so far**, so it wants a second before the shape
-  is fixed — the repo's own bar. Recorded in `ilqp.json`'s notes as KNOWN
-  LIMITATION 1 so an operator sees it.
+  multiplier purposes). Recorded in `ilqp.json`'s notes as KNOWN LIMITATION 1 so
+  an operator sees it.
+
+  **VTQP is the second user, and it wants the opposite grouping** — a *finer*
+  split, not a coarser one. Its page: *"RTTY is considered a legacy mode and is
+  not part of this digital group."* RTTY and WSJT-X are two sponsor modes sharing
+  one `ModeClass`, and since VTQP multipliers count **once per mode**, a Vermont
+  entrant working one state on both RTTY and FT8 earns two multipliers from the
+  sponsor and one here. The two parties together settle the shape: not a
+  dupe-only `dupeModeGroups`, but **a party-supplied partition of modes** that
+  both `DupeChecker` and the multiplier scope consult, with `ModeClass.allCases`
+  as the default. ILQP supplies `[["phone"], ["cw", "digital"]]`; VTQP needs
+  RTTY split out of `.digital`, which `QSO.rawMode` already carries. Pinned by
+  `VermontQSOPartyTests.testKnownGapRTTYAndFT8ShareOneModeClass`.
 - **FT4/FT8 cannot be excluded while other digital modes are allowed.** ILQP:
   "FT4 and FT8 contacts will receive no contact credit. Other digital modes are
   encouraged." That is below the granularity of `ModeClass`, which has one

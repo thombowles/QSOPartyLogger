@@ -1,0 +1,498 @@
+# Source: https://www.ranv.org/vtqso.html (Radio Amateurs of Northern Vermont)
+# Page dated: January 31, 2026.  Fetched: 2026-07-26
+# The sponsor calls this page a SUMMARY and points to vtqso.doc for the rules.
+
+Vermont QSO Party
+
+2026 VERMONT QSO PARTY
+
+February 7-8, 2026
+
+Important note about log uploads!!
+
+The uploader was in TEST MODE before February 8th at 0200 UTC.
+
+If you uploaded your log before the end of the contest, or just after,
+
+it is likely  it wasn't uploaded.
+
+Please check The Received Logs List
+and make sure you are listed.
+If not, upload again.  Thanks..
+
+Thanks For Another Great Vermont QSO Party!
+
+ 
+2025 Results
+
+2024 Results
+
+ 
+
+2023 Results
+2022 Results
+2021 Results
+2020 Results
+
+2019 Results
+2018 Results
+2017 Results
+2016 Results
+
+2015 Results
+2014 Results
+2013 Results
+2012 Results
+
+The 68th Vermont QSO Party will take place during the first full
+weekend of February 2026.
+
+It will begin at 0000 UTC Saturday February 7 and will end at 2400 UTC Sunday February 8, which is a 48-hour period.
+In local time, this corresponds to a start time of 7:00 PM EST FRIDAY night February 6th and an end time of
+7PM SUNDAY night February 8th.
+
+The VERMONT QSO PARTY provides the opportunity for Amateur Radio Operators to contact and exchange QSO information
+with Vermont Amateur Radio operators. All licensed amateur radio operators are invited to participate.
+Stations outside Vermont work Vermont stations. Stations within Vermont work everyone.
+
+The discussion below is a summary of the QSO Party. Please download
+The Official 2026 Vermont QSO Party Rules for specific rules.
+
+BEFORE THE QSO PARTY!!
+
+MAKE SURE you have set up working software which will generate the correct log format.
+All logs must be uploaded to the VT QSO Party Robot at:
+https://vtqp.contesting.com/vtqpsubmitlog.php.
+Phone, SSB, CW and RTTY contacts must be uploaded as a Cabrillo file.
+Digital contacts (FT8/FT4) must be uploaded as an ADIF file.
+Inproperly formatted logs will be rejected by the system.
+
+W1AW/1 ACTIVATION
+
+As part of the America250 WAS and ARRL Year of the Club (YOTC) Celebration, W1AW/1 will be active from Vermont
+during the week of February 4 through February 11, which includes the 48 hours of the Vermont QSO Party.
+Hams from across Vermont will activate W1AW/1 on various bands and modes. Vermont stations will have the opportunity
+to use either their own callsign or W1AW/1. Stations OUTSIDE of Vermont will get a 2-point bonus for every W1AW/1
+station in Vermont they work. W1AW will be active from other states (AL, IN, KS) as well. These do not count for Vermont QSO Party credit!
+W1AW/1 might be on bands outside of the allowed QSO Party bands, and these will not also not count for credit.
+
+State QSO Party Challenge
+
+The annual State QSO Party Challenge recognizes all radio amateurs� participation in the U.S. State and Canadian Province QSO parties.
+It is open to any radio amateur who participates in any of the approved State QSO Parties.
+Participants must simply submit their scores to 3830Scores.com to be included in the Challenge.
+NEW this year is the State QSO Party Mobile/Portable Challenge,
+which is a special category created for the mobile and portable operators of the State QSO Parties.
+
+Go tostateqsoparty.com for rules and full details of the various operating awards.
+
+FT8 and FT4
+
+The Vermont QSO Party will include and encourage operation on the WSJT digital modes of FT8, FT4 and others.
+When we say "digital" we mean the modes supported by the WSJTx software.
+These modes only encode the station's GRID SQUARE and not state, province or county. For these modes,
+special rules come into play. Note: RTTY is considered a legacy mode and is not part of this digital group.
+
+Stations can only count once per band for credit on digital modes. That is, if you work a station on both FT8 and FT4
+on a particular band, it only counts once.
+Use only 4-digit grid squares in your log.  That is, FN34, not FN34km!
+The number of FT8/FT4 multipliers (for Vermont stations) is the  number of grid squares worked, divided by 3 and rounded DOWN.
+
+The number of FT8/FT4 multipliers (for outside Vermont stations) is the number of grid squares worked in Vermont (maximum of 5).
+If an FT8/FT4 station does not send its grid square, it can count for QSO credit, but not for grid square credit.
+For RTTY operation, use states and countries as multipliers. Other stations must send their state
+or province to count for credit.
+In addition to the suggested frequencies listed below, FT8/FT4 contacts can also be made ONLY on the recognized FT8/FT4 frequencies
+of 10.136/10.140, 18.110/18.104 and 24.915/24.919 MHz upper side band.
+No other forms of activity are allowed on 30, 17 and 12 meters.
+
+Example:
+
+You work 43 grid squares on FT8 and 6 states on RTTY. Your total number of digital grids is determined in this manner:
+
+43 grids / 3 = 14.33 which is rounded down to 14 multipliers. Add to this the number of states on RTTY. Your total number of digital
+multipliers will be 14 + 6 = 20. Remember that you are determining number of multiplers across all digital modes, regardless
+of bands. The contest manager will compute the correct number of multipliers, if you have difficulty.
+
+Proper Cabrillo format for non digital QSO (SSB, CW, RTTY):
+
+QSO: 14150 PH 2023-02-04 0000 W1NVT  59  CHI K7GMB  59   WA
+
+Proper Cabrillo format for digital QSO (FT8, FT4, etc):
+
+QSO:  7074 DG 2023-02-05 0506 W1NVT  04 FN34 W9FMC  11 EN53
+
+Most Vermont stations can be found in the FN34 and FN33 grid squares. Small pieces of Vermont also lie in FN32, FN44 and FN35. The contest
+manager will determine which FT8/FT4 contacts are valid Vermont contacts.
+Remember that stations outside of Vermont can only work Vermont stations for credit.
+Although not an exhaustive list, these are the Vermont stations most likely to be on FT8/FT4:
+AA1SU, K1BIF, KC1IFK, KI1P, KK1L, N1GB, N1FS, N1GVT, N1IBM, NQ1B, W1FP, W1NVT.
+
+Logging Digital Contacts
+
+N1MM, N3FJP and most all other logging programs WILL NOT support digital contacts in the Vermont QSO Party.
+
+Do not try to log FT8/FT4/digital contacts in these programs. You will end up with a improperly formatted log and it will be rejected.
+
+The WSJTx software generates an ADIF file for FT8/FT4 contacts.
+If you made FT8 contacts, when you upload your log, you can upload the ADIF file out of WSJTx
+and the robot will convert the ADIF and merge it into your Cabrillo log containing the SSB and CW contacts.
+MAKE SURE you only upload the portion of your WSJTx ADIF corresponding to the QSO Party (i.e. February 7-8, 2026).
+You will have to provide your correct Grid Square. If you did not make FT8/FT4 QSO's, then ignore this on the upload page.
+
+If you made FT8/FT8 QSO's using WSJTx, use these steps to upload your log.
+
+With WSJTx open, click on "File" at the top left
+In the drop down box, click on "Open Log Directory"
+Look for the file name "wsjtx_log.adi". Click on it to open it. This is your ADIF log.
+BEFORE DOING ANYTHING ELSE, save this file to another file name for safe keeping. If you mess up you could lose your QSO's.
+Look through the file and notice the indication "qso_date" in the file. Erase all dates which are not in the range 20260207 through 20250208.
+Save this file as "yourcall".adi. This is the file which gets uploaded to the ADIF converter when you upload.
+Exit the editor. Say "NO" when they want you to save the changes.
+
+N1MM-WSJTx to learn how to do this.
+Note that this process is rather lengthy and definitely should not be attempted 5 minutes before the start of the QSO Party! -->
+
+CATEGORIES
+
+There are three categories in the VERMONT QSO PARTY:
+
+Single-Op
+Multi-Op
+Rover / mobile.
+
+Club stations would typically be in the Multi-Op category unless there is only one operator.
+
+There is only one category - Single-Op - for stations outside of Vermont, regardless of the number of operators.
+
+EXCHANGE
+
+Vermont stations send signal report and Vermont county.
+U.S. and Canada stations send signal report and state or province.
+DX stations send signal report.
+FT8/FT4 contacts will exchange signal reports in dB and grid square.
+
+SCORING
+
+Points
+
+Stations can be worked on multiple bands and multiple modes.
+
+Phone: 1 pt
+RTTY: 2 pts
+Digital (all WSJTx modes count as 1 mode): 2 pts
+CW:  3 pts
+
+Contacts with W1AW/1 from stations outside of Vermont add 2 points to each of the above.
+
+Multipliers
+
+Multipliers  count ONLY ONCE PER MODE. Multipliers consist of:
+
+50 U.S. States
+
+13 Canadian Provinces and Territories (see list below)
+
+Any ARRL DXCC country (except U.S. Canada, Alaska, Hawaii)
+
+14 Vermont Counties (see list below)
+
+2026 Club Station  W1NVT
+
+Grid squares divided by 3 only for for FT8 and other WSJT modes.
+
+Vermont stations can use all of the above for multipliers.
+
+Stations outside Vermont can only count Vermont Counties and Vermont Club Stations and Vermont grid squares on FT8.
+
+County Line Operations
+
+Mobiles may operate from a location straddling a Vermont county line. They will announce this as such.
+You can work these stations once, but you can count them as two contacts from the different counties.
+Be sure to log these as separate contacts.
+Do not try to enter both counties on the same log line!
+This rule only applies to Vermont counties. If you are situated on a state line, pick one.
+
+Club Station Multipliers
+
+Approved Vermont Club Stations will count as multipliers. A club operation must inform the QSO Party Chairman
+no later than one week before the contest. A club operation must commit to operating at least 5 hours duing the event.
+Stations using their own call sign may not then use a club call sign to give out a multiplier.
+
+Club multiplier  for 2026: W1NVT  These count on each mode: Phone, CW, Digital.
+
+Power Multiplier
+
+High Power 	 over 150w 	 x 1.0
+
+Low Power 	over 5w, under 150w 	x 1.5
+
+QRP 	under 5w  	 x 2.0
+
+Final Score is QSO Points times multipliers times power multiplier.
+
+LOG CHECKING
+
+Be sure to log all contacts accurately!
+
+A busted callsign, incorrect exchange (state, province, country, county) or incorrect band/mode will all
+result in a contact being removed. Be sure to use the specific VT QSO County abbreviations and NOT
+abbreviations from other contests (some are different).
+Duplicate contacts will not be counted.
+
+SUGGESTED FREQUENCIES AND TIMES
+
+Phone: 80-15 meters: the first 25 kHz of the General portion of each band, 1850-1875 KHz, 28.400-28.425 MHz.
+CW: 50 kHz from the bottom edge of each band.
+VHF: 50.130 MHz SSB, 144.200 MHz SSB, 146.520 MHz FM.
+
+USE OF SPOTTING NETWORKS
+
+Participants in the Vermont QSO Party may use spotting networks to find activity or to announce activity.
+Please be reasonable in using the networks.
+
+VERMONT ACTIVITY HOURS
+
+Vermont activity hours have been scheduled to allow Vermont stations to find each other.
+Please check these frequencies, as it is rough to work each other on 20-10m days and 40m late night.
+These have changed from past years due to changing band conditions.
+
+Sat 0000-0015Z 	 Fri 7PM ET 	7205 KHz
+
+Sat 0100-0115Z 	 Fri 8PM ET 	7205 KHz
+
+Sat 0200-0215Z 	 Fri 9PM ET 	3850 KHz
+
+Sat 1800-1815Z 	 Sat 1PM ET 	7205 KHz
+
+Sat 2200-2215Z 	 Sat 5PM ET 	7205 KHz
+
+Sun 0000-0015Z 	 Sat 7PM ET 	7205 KHz
+
+Sun 0100-0115Z 	 Sat 8PM ET 	7205 KHz
+
+Sun 0200-0215Z 	 Fri 9PM ET 	3850 KHz
+
+Sun 1800-1815Z 	 Sun 1PM ET 	7205 KHz
+
+Sun 2200-2215Z 	 Sun 5PM ET 	7205 KHz
+
+2026 Schedules for selected Vermont stations
+
+W1NVT - The host station will be active 8AM until past midnight all days.
+Most activity will be on SSB, with some activity on CW.
+FT8 will run most of the day concurrent with the SSB activity.
+At various times, W1NVT will operate as W1AW/1. Check the cluster for activity.
+W1NVT counts as a bonus multiplier. W1AW/1 counts as 2 extra points per contact.
+
+Sat 0000-0300   Fri 7-10 PM   20/40/80M SSB
+Sat 0300-0500   Fri 10-midn   FT8/4
+Sat 1300-2400   Sat 8AM-7PM   20/15/10M SSB and FT8/4
+Sun 0000-0300   Sat 7-10PM    20/40/80M CW Sprint 50 kHz from bottom band edge
+Sun 0300-0500   Sat 10-midn   FT8/4
+Sun 1300-2400   Sun 8AM-7PM   20/15/10M SSB and FT8/4
+
+KK1L   (CHI) (FN34) will be on Phone, CW, FT4 and FT8
+Sat 0000-0400
+Sat 1300-0000
+
+K1IB - This will be a mobile operation sitting on county lines. Each QSO
+can count as TWO QSO's, but you must log 2 QSOs. This operation will be all CW.
+Times are approximate.
+Sat 0000Z: Windsor Co. 80/40M
+Sat 1400Z: Essex/Caledonia Co. 10-40M
+Sat 1545Z: Washington/Caledonia Co. 10-40M
+Sat 1730Z: Caledonia/Orange Co. 10-40M
+Sat 1915Z: Orange/Windsor Co. 10-40M
+
+KI1P - Schedule is not set, but these are the possibilities
+Sat 0200-0400 Washington/Orange Co. 40-80M
+Sat 1500-1700 Grand Island/Chittenden Co. 15-20M
+Sun 1500-1700 Essex/Caledonia Co. 15-20M
+
+Other Vermont Stations likely to be on:
+K1BIF, K1ZK, KE1VT, N1TTW, NQ1B, W1XIV
+
+Also look for Vermont stations operating as W1AW/1.
+Schedule at:  www.ranv.org/w1awsked.html
+
+Check the DX Cluster for activity. Most Vermont stations will spot themselves at the start of a run.
+
+Remember! If on FT8/FT4, no county multiplier can be claimed! Only grid squares count there.
+
+REPORTING
+
+On-Line Submission. VTQSO logs should submitted on line at this site:
+https://vtqp.contesting.com/vtqpsubmitlog.php.
+
+You will be asked to provide an email address, category (single-op or multi-op) and power level (5/150/1500).
+You then will select the file containing your log.
+
+SSB, Phone, CW and RTTY contacts must be in Cabrillo Format! Most contest software can produce this for you.
+Digital FT8/FT4 contacts must be in ADIF format. See the discussion above on how to generate this.
+
+The robot will quickly scan your log and either accept it or report errors. You can then modify your log file to fix
+the problems and resubmit the log.
+
+NOTE DEADLINE OF 2 WEEKS!! The deadline for all submissions  is February 22, 2026 at 2359 UTC or 6:59 PM EST.
+
+Postal Mail. We strongly, strongly encourage all participants to submit logs electronically!!
+However, paper contest logs will be accepted via postal mail to:
+Vermont QSO Party, PO Box 9392, South Burlington, VT 05403-9392.
+PAPER LOGS MUST BE POSTMARKED NO LATER THAN FEBRUARY 18 TO BE CONSIDERED.
+When submitting paper logs, please include summary sheet and dupe sheets
+
+Any software which automatically looks up call sign addresses is NOT to be used and any
+logs submitted in this format are not acceptable  (Ham Radio Deluxe and N3FJP have this feature and it MUST be turned off!)
+Participants are expected to COPY ALL pertinent contest exchange information!
+If you have questions or issues with contest software, contact the Contest Manager at the above address,
+BEFORE the QSO Party.
+
+DON'T E-MAIL LOGS directly, as these are not accepted.
+
+AWARDS
+
+The 3 highest single operator scorers outside Vermont but within the U.S. will receive a 3 oz. miniature jug of genuine Vermont Maple Syrup!
+The top scorers in each category from Vermont and each category outside Vermont will receive a certificate.
+Stations outside Vermont making 20 or more Vermont contacts will receive a certificate.
+Stations in Vermont making 100 or more contacts will receive a certficate.
+Results will be published on this site within 60-90 days after the end of the QSO Party
+
+OTHER CONTESTS
+
+Several other contests run concurrently with the Vermont QSO Party. To maximize your QSO's and fun, please be
+ready to give the exchanges necessary in these other contests too!
+
+CONTEST	 DAY/TIMES/HRS(UTC) 	 THEIR REPORT 	 YOUR REPORT 	RULES
+
+Minnesota QSO Party (MnQP) 	 Sat 1400 -
+Sat 2400 (10)	 Name and MN County 	 Name and Your State 	https://www.w0aa.org/mn-qso-party
+
+BC QSO Party 	 Sat 1600-0400
+Sun 1600-2400 (20)	 RST and BC Electorial District 	 RST and Your State 	http://www.orcadxcc.org/bcqp_rules.html
+
+NA CW Sprint	 Sun 0000 -
+Sun 0400 (4)	 Your Call, Their Call, S/N, Name, State (CW ONLY)	 Their Call, Your Call, S/N, Name, State (CW ONLY)	http://ncjweb.com/Sprint-Rules.pdf
+
+10-10 Winter QSO Party	 Sat 0000 -
+Sun 2400 (48)	 Name, 10-10# (or 0), State (10M ONLY) 	 Name, 10-10# (or 0), State (10M ONLY) 	http://www.ten-ten.org
+
+EU-DX Contest	 Sat 1200 -
+Sun 1200 (24) 	 RST and EU Region 	 RST and ITU Zone 	 https://eudxcc.altervista.org/eu-dx-contest
+
+Eurasia HF Championship	 Sat 0600 -
+Sat 1800 (12)	 RST and 6-digit grid square 	 RST and 6-digit grid square	https://www.eurasia-contest.com/rules
+-->
+FISTS Saturday Sprint	 Sat 1600 -
+Sun 1800 (2)	 RST, Name, State, FISTS # (CW Only)	 RST, Name, State, 0 (CW Only) 	https://fistsna.org/operating.html#sprints
+-->
+Mexican RTTY Contest	 Sat 1200 -
+Sun 2400 (36)	 RST & Mexican State (RTTY) 	 RST & S/N (ask for the US state) (RTTY) 	http://rtty.fmre.mx/reglas/Rules_FMRE_RTTY_2023.pdf
+-->
+
+OTHER INFORMATION
+
+Check back at this site for information regarding planned operations, schedules and last minute changes.
+Contact  the QSO Party Manager if you have questions about the rules.
+
+Official 2026 Vermont QSO Party Rules
+
+CANADIAN PROVINCES AND TERRITORIES
+
+AB  	 Alberta 	VE6
+
+BC  	 British Columbia 	VE7
+
+MB  	 Manitoba 	VE4
+
+NB  	 New Brunswick 	VE9
+
+NL  	 Newfoundland-Labrador 	VO1,2
+
+NS  	 Nova Scotia 	VE1
+
+NT  	 Northwest Territories 	VE8
+
+NU  	 Nunavut 	VY�
+
+ON  	 Ontario 	VE3
+
+PE  	 Prince Edward Island 	VY2
+
+QC  	 Quebec 	VE2
+
+SK  	 Saskatchewan 	VE5
+
+YT  	 Yukon 	VY1
+
+VERMONT COUNTIES
+
+ADD 	ADDISON
+
+BEN 	BENNINGTON
+
+CAL 	CALEDONIA
+
+CHI 	CHITTENDEN
+
+ESS 	ESSEX
+
+FRA 	FRANKLIN
+
+GRA 	GRAND ISLE
+
+LAM 	LAMOILLE
+
+ORA 	ORANGE
+
+ORL 	ORLEANS
+
+RUT 	RUTLAND
+
+WAS 	WASHINGTON
+
+WNH 	WINDHAM
+
+WNS 	WINDSOR
+
+1. Take care to not mix up WiNdHam (WNH) and WiNdSor (WNS)!!
+
+2. Be sure to use the correct VTQSO 3-letter designations shown above.
+
+VERMONT CLUBS
+
+K1BBS BURR & BURTON SEMINARY AR
+W1BD  CENTRAL VT ARC
+WX1BTV NATL WEATHER SERVICE BTV
+W1CTE CENTER FOR TECHNOLOGY RC
+K1EQX NORTHEAST FM RPTR ASSN
+N1FS  ADDISON CO ARA
+K1GAP LINCOLN GAP RC
+W1GMR GREEN MTN ARC
+W1GMW GREEN MTN WIRELESS SOCIETY
+WB1GQR VT CONTEST RADIO
+K1IBM IBM ARC
+K1JAY ST. ALBANS ARC
+W1JXN BLACK MTN RADIO GROUP
+W1KOO BURLINGTON ARC
+N1LED LEDDYNAMICS ARC
+K1LNR VT INTERCONNECT TEAM
+W1NVT RADIO AMATEURS OF NORTHERN VT
+KB1PIH WEST RIVER RC
+W1PU  ROADKILL ARC
+WG1Q   GREEN MTN WIRELESS SOCIETY
+W1RMC MIDDLEBURY COLLEGE ARC
+W1RRC WEST RIVER RC
+N1STA ST. ALBANS ARC
+W1STM SPRINGFIELD TELESCOPE RC
+K1SV  SOUTHERN VT ARC
+W1UWS CT VALLEY FM ASSOC
+AA1VT  LSCAARC
+N1VT  MOUNT TOP ASSOC OF VT
+WR1VT  WEST RIVER RC
+WW1VT  RUTLAND AREA RADIO EXP
+W1VTC VT TECHNICAL COLLEGE ARC
+
+January 31, 2026
+
+Radio Amateurs of Northern Vermont

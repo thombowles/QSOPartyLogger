@@ -73,6 +73,7 @@ BUNDLED_BY_SITE_NAME = {
     "South Dakota QSO Party": "sdqp",
     "Tennessee QSO Party": "tnqp",
     "Texas QSO Party": "tqp",
+    "Vermont QSO Party": "vtqp",
     "Washington State Salmon Run": "warun",
 }
 

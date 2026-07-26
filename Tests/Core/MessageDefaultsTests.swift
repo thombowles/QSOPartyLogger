@@ -13,7 +13,7 @@ final class MessageDefaultsTests: XCTestCase {
     /// named so a party cannot change shape unnoticed.
     static let rstPartyIDs = [
         "alqp", "azqp", "coqp", "hqp", "iaqp", "ilqp", "ksqp", "meqp",
-        "nhqp", "njqp", "nyqp", "ohqp", "sdqp", "tnqp", "tqp", "warun",
+        "nhqp", "njqp", "nyqp", "ohqp", "sdqp", "tnqp", "tqp", "vtqp", "warun",
     ]
 
     /// A synthetic party, so the both-flags shape can be pinned without
@@ -35,7 +35,7 @@ final class MessageDefaultsTests: XCTestCase {
     /// The Article 4 proof: every party that was correct before this change
     /// resolves to the exact macros it shipped with.
     func testTheSixteenReportPartiesKeepTheShippedDefaults() throws {
-        XCTAssertEqual(Self.rstPartyIDs.count, 16)
+        XCTAssertEqual(Self.rstPartyIDs.count, 17)
         for id in Self.rstPartyIDs {
             let p = try XCTUnwrap(PartyCatalog.party(id: id), id)
             XCTAssertEqual(MessageSets.defaults(for: p), MessageSets.standard,
