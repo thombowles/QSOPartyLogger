@@ -25,14 +25,14 @@ generator asserts a couple of them by name so a silent reversion is caught.
 
 Sources (both banked):
 
-  neqp_rules_2026.txt      https://neqp.org/rules/  ("Last updated 4/27/2026")
-  neqp_counties_2026.tsv        https://neqp.org/neqp-county-abbreviations/ (table)
-  neqp_counties_page_prose.txt  ...the same page's prose, banked apart
+  newenglandqp_rules_2026.txt      https://neqp.org/rules/  ("Last updated 4/27/2026")
+  newenglandqp_counties_2026.tsv        https://neqp.org/neqp-county-abbreviations/ (table)
+  newenglandqp_counties_page_prose.txt  ...the same page's prose, banked apart
   sevenqp_cabrillo_name.txt   WA7BNM Cabrillo Names, which lists NEQP too
 
-  All fetched 2026-07-26. See neqp_rules.md.
+  All fetched 2026-07-26. See newenglandqp_rules.md.
 
-Run:  python3 docs/research/gen_neqp.py
+Run:  python3 docs/research/gen_newenglandqp.py
 """
 
 import json
@@ -57,7 +57,7 @@ def read(name):
 
 # ---------------------------------------------------------------- the counties
 counties, current = [], None
-for line in read("neqp_counties_2026.tsv").splitlines():
+for line in read("newenglandqp_counties_2026.tsv").splitlines():
     if line.startswith("#") or not line.strip():
         continue
     cells = [c.strip() for c in line.split("\t")]
@@ -84,7 +84,7 @@ assert len(by_abbr) == 68, "codes must be unique"
 assert {len(c["abbr"]) for c in counties} == {5}
 
 # THE SPONSOR'S OWN PER-STATE BREAKDOWN, which is the arithmetic check.
-rules = read("neqp_rules_2026.txt")
+rules = read("newenglandqp_rules_2026.txt")
 flat = re.sub(r"\s+", " ", rules)
 assert "for a total of 68 (CT/9 MA/14 ME/16 NH/10 RI/5 VT/14)" in flat
 EXPECTED = {"CT": 9, "MA": 14, "ME": 16, "NH": 10, "RI": 5, "VT": 14}
@@ -109,7 +109,7 @@ assert not any(c["name"] in ("Hartford", "New Haven", "Fairfield", "Litchfield")
 # not by that example: four names still repeat across ten multipliers.
 assert ("some county names are the same in each state (Middlesex is in MA and CT, for "
         "example). We prefer that logs use the full 5-letter abbreviations - state then "
-        "county.") in re.sub(r"\s+", " ", read("neqp_counties_page_prose.txt")), \
+        "county.") in re.sub(r"\s+", " ", read("newenglandqp_counties_page_prose.txt")), \
     "asserted against the sponsor's prose, banked apart from the table so this is "\
     "not a check on a comment this repo wrote"
 assert sorted(c["abbr"] for c in counties if c["name"] == "Middlesex") == ["MAMID"], \

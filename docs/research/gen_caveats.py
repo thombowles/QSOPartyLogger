@@ -18,6 +18,12 @@ they carry no new fact, and repeating them would put the same warning on
 screen twice. Where such a recap does introduce a new point, it is classified
 on that point alone.
 
+RUN THIS AFTER ANY PARTY GENERATOR. A `gen_<party>.py` rewrites its JSON file
+whole and knows nothing about caveats, so it silently drops them. That is caught
+rather than trusted: `CaveatRosterTests.testEveryBundledPartyWithMarkedNotesHasCaveats`
+fails for any bundled party that has OPEN QUESTION / KNOWN LIMITATION prose but
+no typed caveats. Re-running this script is idempotent and fixes it.
+
 Run:  python3 docs/research/gen_caveats.py
 """
 import json

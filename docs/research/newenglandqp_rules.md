@@ -18,9 +18,9 @@ further change to it. Two things are worth knowing before anything else:
 | Cabrillo name | WA7BNM Contest Calendar (Article 1 exception — §9) |
 | Fetched | **2026-07-26** |
 
-Banked verbatim: [`neqp_rules_2026.txt`](neqp_rules_2026.txt),
-[`neqp_counties_2026.tsv`](neqp_counties_2026.tsv),
-[`neqp_counties_page_prose.txt`](neqp_counties_page_prose.txt).
+Banked verbatim: [`newenglandqp_rules_2026.txt`](newenglandqp_rules_2026.txt),
+[`newenglandqp_counties_2026.tsv`](newenglandqp_counties_2026.tsv),
+[`newenglandqp_counties_page_prose.txt`](newenglandqp_counties_page_prose.txt).
 
 The county page's **table and prose are banked apart**, so the sponsor's stated
 rationale can be asserted against the sponsor's own words rather than against a

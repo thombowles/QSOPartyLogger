@@ -206,12 +206,12 @@ next one built". 3 US + 2 Canadian. Research is banked for none of them.
 | ~~16~~ | ~~Michigan~~ | ~~Apr 18 1600Z → Apr 19 0400Z~~ | **done** 2026-07-26 — [`miqp_rules.md`](../research/miqp_rules.md); **site had rolled to 2027**, editions diffed |
 | ~~17~~ | ~~Ontario~~ | ~~Apr 18 1800Z → Apr 19 0300Z; Apr 19 1200–2000Z~~ | **done** 2026-07-26 — [`oqp_rules.md`](../research/oqp_rules.md); 🇨🇦 **rules still 2026 while the site says 2027** |
 | ~~18~~ | ~~Quebec~~ | ~~Apr 19 1300Z → Apr 19 2400Z~~ | **done** 2026-07-26 — [`qcqp_rules.md`](../research/qcqp_rules.md); 🇨🇦 **bilingual rules, parsed both** |
-| ~~19~~ | ~~Nebraska~~ | ~~Apr 25 1400Z → Apr 26 0200Z~~ | **done** 2026-07-26 — [`neqp_rules.md`](../research/neqp_rules.md); **36 h, not 12** — and the .org is a content farm |
+| ~~19~~ | ~~Nebraska~~ | ~~Apr 25 1400Z → Apr 26 0200Z~~ | **done** 2026-07-26 — **research LOST to the namespace collision — see below**; **36 h, not 12** — and the .org is a content farm |
 | ~~20~~ | ~~Florida~~ | ~~Apr 25 1600Z → Apr 26 0159Z; Apr 26 1200–2159Z~~ | **done** 2026-07-26 — [`fqp_rules.md`](../research/fqp_rules.md); **first-party Cabrillo header**, `FCG-FQP` |
 | ~~21~~ | ~~7th Call Area~~ | ~~May 2 1300Z → May 3 0700Z~~ | **done** 2026-07-26 — [`sevenqp_rules.md`](../research/sevenqp_rules.md); **EIGHT states, not seven** — WA is in it too |
 | ~~22~~ | ~~Indiana~~ | ~~May 2 1500Z → May 3 0259Z~~ | **done** 2026-07-26 — [`inqp_rules.md`](../research/inqp_rules.md); **points changed for 2026**, old rule still in an HTML comment |
 | ~~23~~ | ~~Delaware~~ | ~~May 2 1700Z → May 3 2359Z~~ | **done** 2026-07-26 — [`deqp_rules.md`](../research/deqp_rules.md); 3 counties, **rules titled 2024** and they state no times |
-| ~~24~~ | ~~New England~~ | ~~May 2 2000Z → May 3 0500Z; May 3 1300–2400Z~~ | **done** 2026-07-26 — [`neqp_rules.md`](../research/neqp_rules.md); 6 states, id **`newenglandqp`** (Nebraska holds `neqp`) |
+| ~~24~~ | ~~New England~~ | ~~May 2 2000Z → May 3 0500Z; May 3 1300–2400Z~~ | **done** 2026-07-26 — [`newenglandqp_rules.md`](../research/newenglandqp_rules.md); 6 states, id **`newenglandqp`** (Nebraska holds `neqp`) |
 | **25** | **Canadian Prairies** | May 9 1700Z → May 10 0300Z | 🇨🇦 MB/SK/AB — **BLOCKED 2026-07-26**: districts are images only, sponsor totals contradict. Research banked in [`cpqp_blocked.md`](../research/cpqp_blocked.md) |
 | ~~26~~ | ~~Arkansas~~ | ~~May 16 1400Z → May 17 0200Z~~ | **done** 2026-07-26 — [`arqp_rules.md`](../research/arqp_rules.md); the rules state **no times** |
 | ~~27~~ | ~~Kentucky~~ | ~~Jun 6 1300Z → Jun 7 0100Z~~ | **done** 2026-07-26 — [`kyqp_rules.md`](../research/kyqp_rules.md); site says 2027 but the rules are a formula |
