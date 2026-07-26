@@ -59,7 +59,7 @@
   },
   {
    "name": "Oklahoma QSO Party",
-   "partyID": null,
+   "partyID": "okqp",
    "windows": [
     {
      "start": "2026-03-14T14:00:00Z",

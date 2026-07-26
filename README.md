@@ -74,6 +74,17 @@ Built for KE5CW. Bundled parties, all with official county data:
   expressible, so an NCQP score here is a floor, with the correcting arithmetic
   spelled out in the party's notes. FT8/FT4 belong to a separate Weak Signal
   Showcase and must be kept out of this log.
+- **Oklahoma QSO Party** (Mar 14–15, 2026) — 20 hours in two windows. 77
+  counties, and **the sponsor names its own traps**: seven pairs it says "cause
+  considerable confusion" (`GAR`/`GRV`, `GRA`/`GNT`, `HAR`/`HRP`, `MCL`/`MCU`,
+  `ROG`/`RGM`, `WAS`/`WAT`, `WOO`/`WDW`), every one of which the naive first
+  three letters gets backwards. Phone 2 / CW 3 / digital 3; multipliers once
+  overall, with **uncapped DXCC** for Oklahoma stations. County lines pay up to
+  **four**, each on its own log line — the sponsor names a real three-county
+  junction. Oklahoma mobiles earn 500 points per county with ≥10 QSOs, which is
+  modelled. **`verified: partial`** on whether Oklahoma itself counts via a
+  county — and note that `qsl.net/okdxa/OKQP.htm`, still the top search result,
+  is the **2003** rules and wrong four ways.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -226,10 +237,10 @@ Built for KE5CW. Bundled parties, all with official county data:
 
 **Every US state and regional QSO party running from 2026-07-24 through
 2026-12-31 is bundled**, and the season's earlier parties are being added in
-contest-date order — Vermont, Minnesota, British Columbia, South Carolina and
-North Carolina are in. The 2026 season runs Feb 7 → Oct 18; two independent
-calendars agree there is no state or provincial party in January, November or
-December. **24 parties from March through June remain**, listed in
+contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
+Carolina and Oklahoma are in. The 2026 season runs Feb 7 → Oct 18; two
+independent calendars agree there is no state or provincial party in January,
+November or December. **23 parties from March through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -709,7 +720,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1109 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1133 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1049,6 +1060,20 @@ station profile, radio wiring and cluster history untouched.
   county list exactly, and the hundredth is the sponsor's own typo — the sheet
   spells Chowan "Chowen", which ships as printed and is asserted, the same call
   the repo makes for NHQP's "Merrimac".
+- OKQP: rules from the sponsor's official 2026 PDF (`k5cm.com/okqp2026rules.pdf`)
+  with its county locator page and its own 2026 summary, read verbatim
+  2026-07-26. **The first search result for this party is the 2003 rules** —
+  `qsl.net/okdxa/OKQP.htm`, headline "2003 Oklahoma QSO Party", still live — and
+  it is wrong in four scoring dimensions: it says the exchange carries a QSO
+  *number* (2026: a signal report), that *nine* Canadian provinces count (13),
+  that 160 m is a contest band (80 m and up now), and it has no mobile activation
+  bonus at all. Reaching the real rules took three hops, via the log robot at
+  `okqp.contesting.com`. [`gen_okqp.py`](docs/research/gen_okqp.py) pins all four
+  2026 values, and asserts the sponsor's own list of confusable abbreviations
+  verbatim. *A schedule note worth keeping:* the sponsor's local anchors ("9 to 9
+  on Saturday, 9 to 5 on Sunday") only land under **CDT** — its remark that "DST
+  does NOT start on this weekend" means daylight time began the weekend *before*,
+  not that Oklahoma is on standard time.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -1084,7 +1109,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 23 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 24 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

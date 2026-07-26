@@ -58,6 +58,7 @@
 		3E4CB50A4A38D69CDDF3CB6A /* EntryCommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA4D636DCF7164283660F61 /* EntryCommandTests.swift */; };
 		3EC65F34682AFB29CB5CB473 /* SpotLabelSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B32AF67B7058055ADD0B7 /* SpotLabelSize.swift */; };
 		406B8E868EA486712C1D3E7F /* HubSpotSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9183D3107E206A940C2DCDCB /* HubSpotSourceTests.swift */; };
+		425FA08EE52DE4370C778AC4 /* OklahomaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2BAF28C33E175242E46CCF /* OklahomaQSOPartyTests.swift */; };
 		42E10D9D5426C54AFA9C6A23 /* KeyMonitorGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */; };
 		4499E2CE096927357D50EABF /* ScoreEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29960406C674052D5117926D /* ScoreEngineTests.swift */; };
 		451EEEAEAD526B20F82A3045 /* SpotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB030727FF0C38B6B3944150 /* SpotClient.swift */; };
@@ -276,6 +277,7 @@
 		5B4D578B0A19E09B560A6584 /* SouthCarolinaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SouthCarolinaQSOPartyTests.swift; sourceTree = "<group>"; };
 		5BA71198926002262F846473 /* ChallengeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeTests.swift; sourceTree = "<group>"; };
 		5BE5CDC2177C8552E1D6426F /* MorseCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCode.swift; sourceTree = "<group>"; };
+		5C2BAF28C33E175242E46CCF /* OklahomaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OklahomaQSOPartyTests.swift; sourceTree = "<group>"; };
 		5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryBar.swift; sourceTree = "<group>"; };
 		5EEF467249C2C6AB91F4EF7D /* QSOPartyLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QSOPartyLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F01ACCE3E8BBB30BB6AFFB0 /* EditQSOSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditQSOSheet.swift; sourceTree = "<group>"; };
@@ -522,6 +524,7 @@
 				734E327D94C25EFA4A5DCBA4 /* NewYorkQSOPartyTests.swift */,
 				3503B1BC8F8AE6F11E4221F7 /* NorthCarolinaQSOPartyTests.swift */,
 				C2F2B4F0F3E08B109AEE12BA /* OhioQSOPartyTests.swift */,
+				5C2BAF28C33E175242E46CCF /* OklahomaQSOPartyTests.swift */,
 				165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */,
 				797C5CEFFBDB939E217C6D60 /* OperatingFeatureTests.swift */,
 				6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */,
@@ -946,6 +949,7 @@
 				5DA8E578367D0F336A8218E6 /* NewYorkQSOPartyTests.swift in Sources */,
 				C60CC51CEC644E079173FDD5 /* NorthCarolinaQSOPartyTests.swift in Sources */,
 				C86470C8A36E65E23F364FD5 /* OhioQSOPartyTests.swift in Sources */,
+				425FA08EE52DE4370C778AC4 /* OklahomaQSOPartyTests.swift in Sources */,
 				BA29F9177B9172AD408E813B /* OneByOneTrackerTests.swift in Sources */,
 				821AC67E517BE893BEAAFB77 /* OperatingFeatureTests.swift in Sources */,
 				632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */,
