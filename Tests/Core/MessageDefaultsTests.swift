@@ -14,7 +14,7 @@ final class MessageDefaultsTests: XCTestCase {
     /// count in prose — the list grows with each party added, and a stale number
     /// in a comment is a small lie that nothing catches.
     static let rstPartyIDs = [
-        "alqp", "arqp", "azqp", "bcqp", "coqp", "deqp", "fqp", "gaqp", "hqp", "iaqp", "ilqp", "inqp", "ksqp", "laqp", "meqp", "miqp", "moqp", "msqp", "ndqp", "neqp", "newenglandqp", "nmqp",
+        "alqp", "arqp", "azqp", "bcqp", "coqp", "deqp", "fqp", "gaqp", "hqp", "iaqp", "ilqp", "inqp", "ksqp", "kyqp", "laqp", "meqp", "miqp", "moqp", "msqp", "ndqp", "neqp", "newenglandqp", "nmqp",
         "nhqp", "njqp", "nyqp", "ohqp", "okqp", "oqp", "qcqp", "scqp", "sdqp", "sevenqp", "tnqp", "tqp", "vtqp",
         "warun",
     ]
@@ -38,7 +38,7 @@ final class MessageDefaultsTests: XCTestCase {
     /// The Article 4 proof: every party that was correct before this change
     /// resolves to the exact macros it shipped with.
     func testEveryReportPartyKeepsTheShippedDefaults() throws {
-        XCTAssertEqual(Self.rstPartyIDs.count, 36,
+        XCTAssertEqual(Self.rstPartyIDs.count, 37,
                        "a party joined or left the report shape — update the roster deliberately")
         for id in Self.rstPartyIDs {
             let p = try XCTUnwrap(PartyCatalog.party(id: id), id)

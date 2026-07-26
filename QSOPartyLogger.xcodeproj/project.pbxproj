@@ -34,6 +34,7 @@
 		15C3B40327ABFE9DB29B1309 /* HubSelfSpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909A650EB49961812900CFD5 /* HubSelfSpot.swift */; };
 		198B4CCE041337F320053AA5 /* ChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA71198926002262F846473 /* ChallengeTests.swift */; };
 		1A483EEB4F78C27DB1D7EC6D /* MorseCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE5CDC2177C8552E1D6426F /* MorseCode.swift */; };
+		1C435A7CF041FD09A750BDC7 /* KentuckyQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7580B0CD758A93D4F6B5422 /* KentuckyQSOPartyTests.swift */; };
 		1DAC9D9495B4F17E4872E359 /* PartyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */; };
 		1E7FDC4C244F2B6F88CA2229 /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9CC975E303DB2512FF84C86 /* Band.swift */; };
 		1F398856D0FD6956763806D5 /* Challenge in Resources */ = {isa = PBXBuildFile; fileRef = 75970653CB7669E2A41577F5 /* Challenge */; };
@@ -374,6 +375,7 @@
 		B53EC04A80BE35768462933D /* NorthDakotaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorthDakotaQSOPartyTests.swift; sourceTree = "<group>"; };
 		B54B32AF67B7058055ADD0B7 /* SpotLabelSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotLabelSize.swift; sourceTree = "<group>"; };
 		B598E336484B5D8CC5B9A2F9 /* ChallengeStanding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeStanding.swift; sourceTree = "<group>"; };
+		B7580B0CD758A93D4F6B5422 /* KentuckyQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KentuckyQSOPartyTests.swift; sourceTree = "<group>"; };
 		B768FEBEB75AB19F20D486E6 /* sdqp-table-2024-10-12.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "sdqp-table-2024-10-12.html"; sourceTree = "<group>"; };
 		B8F437B56480EB7F8E109AF5 /* BandPlanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandPlanTests.swift; sourceTree = "<group>"; };
 		B909EF1868C1BAA122BC10E6 /* MacroTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroTokenTests.swift; sourceTree = "<group>"; };
@@ -558,6 +560,7 @@
 				C8008DF74BE1374A98273ECC /* IllinoisQSOPartyTests.swift */,
 				0676CB4B55B41FD7B226CA31 /* IndianaQSOPartyTests.swift */,
 				273A1C77EBE557460270764F /* IowaQSOPartyTests.swift */,
+				B7580B0CD758A93D4F6B5422 /* KentuckyQSOPartyTests.swift */,
 				60F9E076B4DB0EFFC60C9304 /* LouisianaQSOPartyTests.swift */,
 				B909EF1868C1BAA122BC10E6 /* MacroTokenTests.swift */,
 				464472573FD7960DD5AC5B7B /* MaineQSOPartyTests.swift */,
@@ -998,6 +1001,7 @@
 				ABDD0E4BC39F882357AA73DC /* IndianaQSOPartyTests.swift in Sources */,
 				7C432C2A33658F48ADF44099 /* IowaQSOPartyTests.swift in Sources */,
 				097E888A0ACA42B4ED11F066 /* K3ProtocolTests.swift in Sources */,
+				1C435A7CF041FD09A750BDC7 /* KentuckyQSOPartyTests.swift in Sources */,
 				42E10D9D5426C54AFA9C6A23 /* KeyMonitorGateTests.swift in Sources */,
 				56D6E0AE92BDE099E45F7C53 /* KeyerBackendLabelTests.swift in Sources */,
 				0B13C9686C52A0FFC4FD1016 /* KeyerTimingTests.swift in Sources */,

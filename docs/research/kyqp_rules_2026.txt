@@ -1,0 +1,124 @@
+Source: https://kyqsoparty.org/rules/   Fetched 2026-07-26.
+Sponsor: the Kentucky Contest Group.
+
+THE SITE HAS ROLLED FORWARD TO 2027 - it advertises 'Saturday June 5th, 2027'
+  and its 2026 results are posted.  That does NOT corrupt the schedule,
+  because the rules give a FORMULA and year-independent times: 'always 1st
+  Saturday in June', '13Z - 01Z'.  The 2026 running was 6 June.
+========================================================================
+2027 Kentucky QSO Party Operating Rules
+Work KY Stations
+Once per band, per mode, per county.  QSOs between non-KY stations do not count for credit.
+Date/Time
+Saturday, June 5, 2027:
+EDT: 9AM – 9PM
+CDT: 8AM – 8PM
+MDT: 7AM – 7PM
+PDT: 6AM – 6PM
+UTC: 13Z – 01Z June 6
+Modes
+CW
+Phone (SSB/FM)
+All simplex QSOs, no repeaters, NO digital QSOs.
+Bands / Suggested Frequencies
+80, 40, 20, 15, 10, 6, 2
+CW: 3.540, 7.040, 14.040, 21.040, 28.040, 50.095 and 144.060
+SSB: 3,810, 7.190, 14.250, 21.300, 28.450, 50.135 and 144.250
+Exchange Sent
+KY stations: RS(T) + County Abbreviation
+USA stations (non-KY):  RS(T) + State
+Canada:  RS(T) + Province
+DX:  RS(T) + “DX”
+Categories
+KY Fixed Station
+Single Op (CW, Phone, Mixed – High and Low power, 6 total categories)
+QRP (5w or less, any modes)
+Multi-Op (more than one person contributing to the score with only one transmitted signal allowed on-air at any time, any power level, any modes.  Includes club stations, EOC stations, school stations, or any ad-hoc group)
+KY Mobile
+Single-Op Unassisted (single operator also drives)
+Single-Op Assisted (single operator has a driver)
+Multi-Op (two or more operators that drive and operate)
+Mobile stations have antennas that are usable while in motion.
+KY Expedition
+Single-Op, Single-County (operating in a single county)
+Single-Op, Multi-County (operating in two or more counties)
+Multi-Op, Single-County (operating in a single county)
+Multi-Op, Multi-County (operating in two or more counties)
+Expedition stations operate in a KY county.
+They may use larger antennas that cannot be used mobile.
+Only one transmitted signal allowed on-air at any time, any power, any mode.
+Mobiles and Expeditions see County Line Operations below
+Power Multiplier
+High Power: More than 100 watts,  Power Multiplier = 1.
+Low Power: 100 watts or less, Power Multiplier = 2.
+QRP: 5 watts or less, Power Multiplier = 3.
+QSO Points
+1 point per completed Phone QSO
+2 points per completed CW QSO
+QSO Multipliers
+Kentucky Station operators (including Mobiles and Expeditions):
+Each Kentucky station is a multiplier when worked in each of the 120 counties.
+When logging Kentucky stations, enter the County as the exchange (not KY).
+KY stations log USA state (not ARRL section), including DC, and Canadian Provinces.
+KY stations log DX contacts for QSO points only, and enter “DX” for the exchange.
+Non-Kentucky Station operators (USA, Canada, and DX):
+Each Kentucky station is a multiplier based on their county.
+When logging Kentucky stations, enter the County as the exchange (not KY).
+ALL operators:
+KY Mobiles or Expeditions traveling to a new County may be contacted again for QSO Point and County Multiplier credit.
+Score Calculation
+Total score = QSO Points x QSO Multipliers x Power Multiplier + Bonus Station points.
+An additional 100 points is added to your final score as a bonus for submitting your Cabrillo log file online.
+County Line Operations
+KY Fixed stations on a county line must choose a KY county, and exchange that county during the QSO Party.  No multiple county exchanges.
+KY Mobiles and Expeditions that move to a new county are considered a new station, and can be contacted again for QSO point credit.
+KY Mobile and Expedition stations may setup on a county line, and each QSO and Multiplier gets credit:  For example, N4TY sets on the Scott and Fayette county line & exchanges multiple counties at once:
+Spot yourself and enter SCO/FAY in the comments.
+Call CQ like this:  CQ KYQP de N4TY/SCO/FAY
+And send the exchange as:  599 SCO/FAY
+Operators must log you twice, but some logger programs like N1MM will log 2 QSOs at once.
+Bonus Station K4KCG
+K4KCG may be worked once per BAND and MODE for 100 bonus points per QSO.  For example, a station working K4KCG on 20M CW and SSB would earn 200 bonus points.  Logging programs need not track earned bonus points — after your Cabrillo log is submitted, the KYQP committee will add bonus points to your posted score.  Bonus stations may change each year, without needing logging program updates.
+NOTE: The K4KCG Bonus will be added to your score total automatically.
+Miscellaneous
+There are no Assisted (spotting) vs Unassisted classes.
+Spotting Assistance is always allowed and encouraged!
+N1MM has no Expedition or Mobile category, so KY stations operating in multiple counties configure N1MM as Rover, but submit their log as either Mobile or Expedition (there are 4 Expedition categories).
+Awards
+Plaques are awarded for the highest score in these categories based on merit:
+Kentucky (high score):
+Fixed Station Single-Op CW (High & Low power)
+Fixed Station Single-Op Phone (High & Low power)
+Fixed Station Single-Op Mixed (High & Low power)
+Fixed Station QRP
+Fixed Station Multi-Op
+Expedition: Single-Op, Single-County
+Expedition: Single-Op, Multi-County
+Expedition: Multi-Op, Single-County
+Expedition: Multi-Op, Multi-County
+Mobile: Single-op Unassisted
+Mobile: Single-op Assisted (with driver)
+Mobile: Multi-op
+Unbridled Spirit – for exceptional effort in KY
+Goin’ Mobile – for exceptional mobile efforts in KY
+Total of 17 possible plaques to be awarded.
+USA (high score):
+Modes: CW, Phone, Mixed, QRP (non-KY stations)
+Total of 4 possible plaques to be awarded.
+There are no separate power categories for USA stations (except QRP).
+Canada, DX (high score):
+Modes: CW, Phone, Mixed (Canada)
+Modes: CW, Mixed (DX)
+Total of 5 possible plaques to be awarded
+There are no separate power categories for Canada and DX stations.
+Log Submission Deadline
+Visit the Log Submission page to upload your Cabrillo log file.
+Deadline for submissions: June 30th, 2359Z
+KY QSO Party 2027 - starts in:
+313Days
+17Hours
+20Minutes
+15Seconds
+Recent Posts
+2026 Plaque Winners
+Bonus Station K4KCG

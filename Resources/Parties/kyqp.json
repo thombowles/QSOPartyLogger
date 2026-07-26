@@ -1,0 +1,556 @@
+{
+  "schemaVersion": 1,
+  "id": "kyqp",
+  "name": "Kentucky QSO Party",
+  "cabrilloContest": "KYQP",
+  "homeState": "KY",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 0
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [
+    {
+      "type": "workStation",
+      "call": "K4KCG",
+      "points": 100,
+      "scope": "perBandMode"
+    }
+  ],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "scoreMultipliers": {
+    "power": {
+      "QRP": 3,
+      "LOW": 2,
+      "HIGH": 1
+    }
+  },
+  "schedule": [
+    {
+      "start": "2026-06-06T13:00:00Z",
+      "end": "2026-06-07T01:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ADA",
+      "name": "Adair"
+    },
+    {
+      "abbr": "ALL",
+      "name": "Allen"
+    },
+    {
+      "abbr": "AND",
+      "name": "Anderson"
+    },
+    {
+      "abbr": "BAL",
+      "name": "Ballard"
+    },
+    {
+      "abbr": "BAR",
+      "name": "Barren"
+    },
+    {
+      "abbr": "BAT",
+      "name": "Bath"
+    },
+    {
+      "abbr": "BEL",
+      "name": "Bell"
+    },
+    {
+      "abbr": "BOL",
+      "name": "Boyle"
+    },
+    {
+      "abbr": "BOO",
+      "name": "Boone"
+    },
+    {
+      "abbr": "BOU",
+      "name": "Bourbon"
+    },
+    {
+      "abbr": "BOY",
+      "name": "Boyd"
+    },
+    {
+      "abbr": "BRA",
+      "name": "Bracken"
+    },
+    {
+      "abbr": "BRE",
+      "name": "Breathitt"
+    },
+    {
+      "abbr": "BRK",
+      "name": "Breckinridge"
+    },
+    {
+      "abbr": "BUL",
+      "name": "Bullitt"
+    },
+    {
+      "abbr": "BUT",
+      "name": "Butler"
+    },
+    {
+      "abbr": "CAE",
+      "name": "Carlisle"
+    },
+    {
+      "abbr": "CAL",
+      "name": "Caldwell"
+    },
+    {
+      "abbr": "CAM",
+      "name": "Campbell"
+    },
+    {
+      "abbr": "CAS",
+      "name": "Casey"
+    },
+    {
+      "abbr": "CAW",
+      "name": "Calloway"
+    },
+    {
+      "abbr": "CHR",
+      "name": "Christian"
+    },
+    {
+      "abbr": "CLA",
+      "name": "Clark"
+    },
+    {
+      "abbr": "CLI",
+      "name": "Clinton"
+    },
+    {
+      "abbr": "CLY",
+      "name": "Clay"
+    },
+    {
+      "abbr": "CRI",
+      "name": "Crittenden"
+    },
+    {
+      "abbr": "CRL",
+      "name": "Carroll"
+    },
+    {
+      "abbr": "CTR",
+      "name": "Carter"
+    },
+    {
+      "abbr": "CUM",
+      "name": "Cumberland"
+    },
+    {
+      "abbr": "DAV",
+      "name": "Daviess"
+    },
+    {
+      "abbr": "EDM",
+      "name": "Edmonson"
+    },
+    {
+      "abbr": "ELL",
+      "name": "Elliott"
+    },
+    {
+      "abbr": "EST",
+      "name": "Estill"
+    },
+    {
+      "abbr": "FAY",
+      "name": "Fayette"
+    },
+    {
+      "abbr": "FLE",
+      "name": "Fleming"
+    },
+    {
+      "abbr": "FLO",
+      "name": "Floyd"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "FUL",
+      "name": "Fulton"
+    },
+    {
+      "abbr": "GAL",
+      "name": "Gallatin"
+    },
+    {
+      "abbr": "GAR",
+      "name": "Garrard"
+    },
+    {
+      "abbr": "GRE",
+      "name": "Green"
+    },
+    {
+      "abbr": "GRP",
+      "name": "Greenup"
+    },
+    {
+      "abbr": "GRT",
+      "name": "Grant"
+    },
+    {
+      "abbr": "GRV",
+      "name": "Graves"
+    },
+    {
+      "abbr": "GRY",
+      "name": "Grayson"
+    },
+    {
+      "abbr": "HAN",
+      "name": "Hancock"
+    },
+    {
+      "abbr": "HAR",
+      "name": "Hardin"
+    },
+    {
+      "abbr": "HEN",
+      "name": "Henderson"
+    },
+    {
+      "abbr": "HIC",
+      "name": "Hickman"
+    },
+    {
+      "abbr": "HNY",
+      "name": "Henry"
+    },
+    {
+      "abbr": "HOP",
+      "name": "Hopkins"
+    },
+    {
+      "abbr": "HRL",
+      "name": "Harlan"
+    },
+    {
+      "abbr": "HRT",
+      "name": "Hart"
+    },
+    {
+      "abbr": "HSN",
+      "name": "Harrison"
+    },
+    {
+      "abbr": "JAC",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JES",
+      "name": "Jessamine"
+    },
+    {
+      "abbr": "JOH",
+      "name": "Johnson"
+    },
+    {
+      "abbr": "KEN",
+      "name": "Kenton"
+    },
+    {
+      "abbr": "KNT",
+      "name": "Knott"
+    },
+    {
+      "abbr": "KNX",
+      "name": "Knox"
+    },
+    {
+      "abbr": "LAR",
+      "name": "Larue"
+    },
+    {
+      "abbr": "LAU",
+      "name": "Laurel"
+    },
+    {
+      "abbr": "LAW",
+      "name": "Lawrence"
+    },
+    {
+      "abbr": "LEE",
+      "name": "LEE"
+    },
+    {
+      "abbr": "LES",
+      "name": "Leslie"
+    },
+    {
+      "abbr": "LET",
+      "name": "Letcher"
+    },
+    {
+      "abbr": "LEW",
+      "name": "Lewis"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "LIV",
+      "name": "Livingston"
+    },
+    {
+      "abbr": "LOG",
+      "name": "Logan"
+    },
+    {
+      "abbr": "LYO",
+      "name": "Lyon"
+    },
+    {
+      "abbr": "MAD",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MAG",
+      "name": "Magoffin"
+    },
+    {
+      "abbr": "MAR",
+      "name": "Marion"
+    },
+    {
+      "abbr": "MAS",
+      "name": "Mason"
+    },
+    {
+      "abbr": "MAT",
+      "name": "Martin"
+    },
+    {
+      "abbr": "MCC",
+      "name": "McCracken"
+    },
+    {
+      "abbr": "MCL",
+      "name": "McLean"
+    },
+    {
+      "abbr": "MCY",
+      "name": "McCreary"
+    },
+    {
+      "abbr": "MEA",
+      "name": "Meade"
+    },
+    {
+      "abbr": "MEN",
+      "name": "Menifee"
+    },
+    {
+      "abbr": "MER",
+      "name": "Mercer"
+    },
+    {
+      "abbr": "MET",
+      "name": "Metcalfe"
+    },
+    {
+      "abbr": "MON",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MOR",
+      "name": "Morgan"
+    },
+    {
+      "abbr": "MOT",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "MSL",
+      "name": "Marshall"
+    },
+    {
+      "abbr": "MUH",
+      "name": "Muhlenberg"
+    },
+    {
+      "abbr": "NEL",
+      "name": "Nelson"
+    },
+    {
+      "abbr": "NIC",
+      "name": "Nicholas"
+    },
+    {
+      "abbr": "OHI",
+      "name": "Ohio"
+    },
+    {
+      "abbr": "OLD",
+      "name": "Oldham"
+    },
+    {
+      "abbr": "OWE",
+      "name": "Owen"
+    },
+    {
+      "abbr": "OWS",
+      "name": "Owsley"
+    },
+    {
+      "abbr": "PEN",
+      "name": "Pendleton"
+    },
+    {
+      "abbr": "PER",
+      "name": "Perry"
+    },
+    {
+      "abbr": "PIK",
+      "name": "Pike"
+    },
+    {
+      "abbr": "POW",
+      "name": "Powell"
+    },
+    {
+      "abbr": "PUL",
+      "name": "Pulaski"
+    },
+    {
+      "abbr": "ROB",
+      "name": "Robertson"
+    },
+    {
+      "abbr": "ROC",
+      "name": "Rockcastle"
+    },
+    {
+      "abbr": "ROW",
+      "name": "Rowan"
+    },
+    {
+      "abbr": "RUS",
+      "name": "Russell"
+    },
+    {
+      "abbr": "SCO",
+      "name": "Scott"
+    },
+    {
+      "abbr": "SHE",
+      "name": "Shelby"
+    },
+    {
+      "abbr": "SIM",
+      "name": "Simpson"
+    },
+    {
+      "abbr": "SPE",
+      "name": "Spencer"
+    },
+    {
+      "abbr": "TAY",
+      "name": "Taylor"
+    },
+    {
+      "abbr": "TOD",
+      "name": "Todd"
+    },
+    {
+      "abbr": "TRI",
+      "name": "Trigg"
+    },
+    {
+      "abbr": "TRM",
+      "name": "Trimble"
+    },
+    {
+      "abbr": "UNI",
+      "name": "Union"
+    },
+    {
+      "abbr": "WAR",
+      "name": "Warren"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAY",
+      "name": "Wayne"
+    },
+    {
+      "abbr": "WEB",
+      "name": "Webster"
+    },
+    {
+      "abbr": "WHI",
+      "name": "Whitley"
+    },
+    {
+      "abbr": "WOL",
+      "name": "Wolfe"
+    },
+    {
+      "abbr": "WOO",
+      "name": "Woodford"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/kyqp-table.php",
+    "postURL": "http://qsopartyhub.com/kyqp-spots.php"
+  },
+  "notes": "verified: partial - rules and county list from the Kentucky Contest Group's own site, read verbatim 2026-07-26. THE SITE HAS ROLLED FORWARD TO 2027 AND IT DOES NOT MATTER, which is worth saying after Michigan and Ontario where it did: the rules give a formula and year-independent times - 'always 1st Saturday in June', 'UTC: 13Z - 01Z' - so the 2026 window derives from the sponsor rather than from the page's headline date. The first Saturday in June 2026 is the 6th, and all four of the sponsor's local zones (EDT, CDT, MDT, PDT) are printed and consistent. 120 counties, the third-largest single -state list here. WATCH THE CODES: they are not truncations where the obvious three letters were already taken - HAR is Hardin and HRL is Harlan; MON is Monroe and MOT is Montgomery; GRE Green, GRP Greenup, GRT Grant, GRV Graves and GRY Grayson are five counties sharing two letters. SEVEN BANDS, 80 through 2 - no 160 m. NO DIGITAL AT ALL, and no repeaters. Points are phone 1 and CW 2. THE POWER MULTIPLIER FITS - high x1, low x2, QRP x3 - the fifth party to ship one. Kentucky is not a state multiplier; KY entrants count the 120 counties directly, plus states including DC and Canadian provinces. DX PAYS POINTS AND NO MULTIPLIER for a Kentucky entrant - 'KY stations log DX contacts for QSO points only' - the fourth party with that shape after Georgia, North Dakota and Indiana. THE BONUS STATION USES THE perBandMode SCOPE ADDED FOR SOUTH CAROLINA EARLIER IN THIS RUN: 'K4KCG may be worked once per BAND and MODE for 100 bonus points per QSO' - second user of that scope, and it fits exactly. NOTE THE SPONSOR'S OWN WARNING: 'Bonus stations may change each year', so a 2027 session must re-read the call rather than assume K4KCG. KNOWN LIMITATION 1 - THE 100-POINT LOG-SUBMISSION BONUS IS NOT MODELLED: it pays for uploading a Cabrillo file, not for anything on the air, and no BonusRule shape describes that; Delaware has the same gap with its 50-point version. KNOWN LIMITATION 2 - COUNTY-LINE PERMISSION IS PER CATEGORY AND THE SCHEMA IS PER PARTY. 'KY Fixed stations on a county line must choose a KY county... No multiple county exchanges', while KY Mobile and Expedition stations may send several. maxSimultaneousCounties is one number for the whole party, so the schema default of 4 ships - permissive for mobiles, which is right, and permissive for fixed stations, which the sponsor forbids. Refusing a legal mobile exchange would be the worse failure."
+}

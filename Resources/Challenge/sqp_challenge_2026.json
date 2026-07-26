@@ -301,7 +301,7 @@
   },
   {
    "name": "Kentucky QSO Party",
-   "partyID": null,
+   "partyID": "kyqp",
    "windows": [
     {
      "start": "2026-06-06T13:00:00Z",

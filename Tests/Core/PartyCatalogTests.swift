@@ -12,7 +12,7 @@ final class PartyCatalogTests: XCTestCase {
         let parties = PartyCatalog.loadBundled()
         XCTAssertEqual(
             Set(parties.map(\.id)),
-            ["alqp", "arqp", "azqp", "bcqp", "coqp", "cqp", "deqp", "fqp", "gaqp", "hqp", "iaqp", "idqp", "ilqp", "inqp", "ksqp", "mdc",
+            ["alqp", "arqp", "azqp", "bcqp", "coqp", "cqp", "deqp", "fqp", "gaqp", "hqp", "iaqp", "idqp", "ilqp", "inqp", "ksqp", "kyqp", "mdc",
              "meqp", "miqp",
              "laqp", "mnqp", "moqp", "msqp", "ncqp", "ndqp", "neqp", "newenglandqp", "nhqp", "nmqp", "njqp", "nyqp", "ohqp", "okqp", "oqp", "paqp", "qcqp", "scqp", "sdqp", "sevenqp", "tnqp", "tqp", "vaqp", "vtqp",
              "warun", "wiqp"]
@@ -71,7 +71,7 @@ final class PartyCatalogTests: XCTestCase {
         let expectedPartial: Set<String> = [
             "azqp", "hqp", "iaqp", "ilqp", "meqp", "nhqp", "njqp", "nyqp", "paqp",
             "sdqp", "tnqp", "tqp", "vtqp", "mnqp", "bcqp", "scqp", "ncqp", "okqp", "idqp",
-            "wiqp", "vaqp", "laqp", "msqp", "moqp", "nmqp", "gaqp", "ndqp", "miqp", "oqp", "qcqp", "neqp", "fqp", "sevenqp", "inqp", "deqp", "newenglandqp", "arqp",
+            "wiqp", "vaqp", "laqp", "msqp", "moqp", "nmqp", "gaqp", "ndqp", "miqp", "oqp", "qcqp", "neqp", "fqp", "sevenqp", "inqp", "deqp", "newenglandqp", "arqp", "kyqp",
         ]
         for party in PartyCatalog.loadBundled() {
             XCTAssertEqual(

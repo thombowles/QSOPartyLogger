@@ -1,0 +1,4 @@
+Source: https://www.contestcalendar.com/cabnames.php  (WA7BNM Contest Calendar).
+Fetched 2026-07-26.  Article 1 exception, Cabrillo CONTEST: header only.
+========================================================================
+371	Kentucky QSO Party  	KYQP
