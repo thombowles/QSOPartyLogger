@@ -121,7 +121,7 @@
   },
   {
    "name": "Mississippi QSO Party",
-   "partyID": null,
+   "partyID": "msqp",
    "windows": [
     {
      "start": "2026-04-04T14:00:00Z",

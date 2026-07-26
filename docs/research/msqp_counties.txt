@@ -1,0 +1,43 @@
+# Source: https://arrlmiss.org/wp-content/uploads/2023/09/MSQP-Counties.pdf
+# The sponsor's official 'County Check List' - 82 counties in three columns of
+# 'Abbrv  County Name'. Dated 2023 by its upload path but still the list the 2026
+# rules page links, and the 2026 rules restate the count (82 possible).
+# Fetched: 2026-07-26
+
+Abbrv   County Name       Abbrv   County Name   Abbrv   County Name
+
+ADA     Adams             JEF     Jefferson     SMI     Smith
+ALC     Alcorn            JON     Jones         STO     Stone
+AMI     Amite             KEM     Kemper        SUN     Sunflower
+ATT     Attala            LAF     Lafayette     TAL     Tallahatchie
+BEN     Benton            LAM     Lamar         TAT     Tate
+BOL     Bolivar           LAU     Lauderdale    TIP     Tippah
+CHI     Chickasaw         LAW     Lawrence      TIS     Tishomingo
+CHO     Choctaw           LEA     Leake         TUN     Tunica
+CAL     Calhoun           LEE     Lee           UNI     Union
+CLB     Claiborne         LEF     Leflore       WAL     Walthall
+CLA     Clay              LIN     Lincoln       WAS     Washington
+CLK     Clarke            LOW     Lowndes       WAY     Wayne
+COA     Coahoma           MRN     Marion        WEB     Webster
+COP     Copiah            MAD     Madison       WIN     Winston
+COV     Covington         MGY     Montgomery    WIL     Wilkinson
+CAR     Carroll           MON     Monroe        WAR     Warren
+DES     DeSoto            MAR     Marshall      YAL     Yalobusha
+FOR     Forrest           NES     Neshoba       YAZ     Yazoo
+FRA     Franklin          NEW     Newton
+GEO     George            NOX     Noxubee
+GRN     Greene            OKT     Oktibbeha
+GRE     Grenada           PAN     Panola
+HAN     Hancock           PER     Perry
+HAR     Harrison          PIK     Pike
+HIN     Hinds             PEA     Pearl River
+HOL     Holmes            PON     Pontotoc
+HUM     Humphreys         PRE     Prentiss
+ISS     Issaquena         QUI     Quitman
+ITA     Itawamba          RAN     Rankin
+                                                   Mississippi
+JAC     Jackson           SCO     Scott
+                                                   QSO Party
+JAS     Jasper            SHA     Sharkey
+JDV     Jefferson Davis   SIM     Simpson
+                                                County Check List

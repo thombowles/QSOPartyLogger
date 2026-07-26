@@ -1,0 +1,394 @@
+{
+  "schemaVersion": 1,
+  "id": "msqp",
+  "name": "Mississippi QSO Party",
+  "cabrilloContest": "MS-QSO-PARTY",
+  "homeState": "MS",
+  "countyAbbrLength": 3,
+  "validBands": [
+    "160m",
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m",
+    "6m",
+    "2m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 2
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "prefix",
+  "allowedModes": [
+    "phone",
+    "cw",
+    "digital"
+  ],
+  "maxSimultaneousCounties": 1,
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-04-04T14:00:00Z",
+      "end": "2026-04-05T02:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ADA",
+      "name": "Adams"
+    },
+    {
+      "abbr": "ALC",
+      "name": "Alcorn"
+    },
+    {
+      "abbr": "AMI",
+      "name": "Amite"
+    },
+    {
+      "abbr": "ATT",
+      "name": "Attala"
+    },
+    {
+      "abbr": "BEN",
+      "name": "Benton"
+    },
+    {
+      "abbr": "BOL",
+      "name": "Bolivar"
+    },
+    {
+      "abbr": "CAL",
+      "name": "Calhoun"
+    },
+    {
+      "abbr": "CAR",
+      "name": "Carroll"
+    },
+    {
+      "abbr": "CHI",
+      "name": "Chickasaw"
+    },
+    {
+      "abbr": "CHO",
+      "name": "Choctaw"
+    },
+    {
+      "abbr": "CLB",
+      "name": "Claiborne"
+    },
+    {
+      "abbr": "CLK",
+      "name": "Clarke"
+    },
+    {
+      "abbr": "CLA",
+      "name": "Clay"
+    },
+    {
+      "abbr": "COA",
+      "name": "Coahoma"
+    },
+    {
+      "abbr": "COP",
+      "name": "Copiah"
+    },
+    {
+      "abbr": "COV",
+      "name": "Covington"
+    },
+    {
+      "abbr": "DES",
+      "name": "DeSoto"
+    },
+    {
+      "abbr": "FOR",
+      "name": "Forrest"
+    },
+    {
+      "abbr": "FRA",
+      "name": "Franklin"
+    },
+    {
+      "abbr": "GEO",
+      "name": "George"
+    },
+    {
+      "abbr": "GRN",
+      "name": "Greene"
+    },
+    {
+      "abbr": "GRE",
+      "name": "Grenada"
+    },
+    {
+      "abbr": "HAN",
+      "name": "Hancock"
+    },
+    {
+      "abbr": "HAR",
+      "name": "Harrison"
+    },
+    {
+      "abbr": "HIN",
+      "name": "Hinds"
+    },
+    {
+      "abbr": "HOL",
+      "name": "Holmes"
+    },
+    {
+      "abbr": "HUM",
+      "name": "Humphreys"
+    },
+    {
+      "abbr": "ISS",
+      "name": "Issaquena"
+    },
+    {
+      "abbr": "ITA",
+      "name": "Itawamba"
+    },
+    {
+      "abbr": "JAC",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "JAS",
+      "name": "Jasper"
+    },
+    {
+      "abbr": "JEF",
+      "name": "Jefferson"
+    },
+    {
+      "abbr": "JDV",
+      "name": "Jefferson Davis"
+    },
+    {
+      "abbr": "JON",
+      "name": "Jones"
+    },
+    {
+      "abbr": "KEM",
+      "name": "Kemper"
+    },
+    {
+      "abbr": "LAF",
+      "name": "Lafayette"
+    },
+    {
+      "abbr": "LAM",
+      "name": "Lamar"
+    },
+    {
+      "abbr": "LAU",
+      "name": "Lauderdale"
+    },
+    {
+      "abbr": "LAW",
+      "name": "Lawrence"
+    },
+    {
+      "abbr": "LEA",
+      "name": "Leake"
+    },
+    {
+      "abbr": "LEE",
+      "name": "Lee"
+    },
+    {
+      "abbr": "LEF",
+      "name": "Leflore"
+    },
+    {
+      "abbr": "LIN",
+      "name": "Lincoln"
+    },
+    {
+      "abbr": "LOW",
+      "name": "Lowndes"
+    },
+    {
+      "abbr": "MAD",
+      "name": "Madison"
+    },
+    {
+      "abbr": "MRN",
+      "name": "Marion"
+    },
+    {
+      "abbr": "MAR",
+      "name": "Marshall"
+    },
+    {
+      "abbr": "MON",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MGY",
+      "name": "Montgomery"
+    },
+    {
+      "abbr": "NES",
+      "name": "Neshoba"
+    },
+    {
+      "abbr": "NEW",
+      "name": "Newton"
+    },
+    {
+      "abbr": "NOX",
+      "name": "Noxubee"
+    },
+    {
+      "abbr": "OKT",
+      "name": "Oktibbeha"
+    },
+    {
+      "abbr": "PAN",
+      "name": "Panola"
+    },
+    {
+      "abbr": "PEA",
+      "name": "Pearl River"
+    },
+    {
+      "abbr": "PER",
+      "name": "Perry"
+    },
+    {
+      "abbr": "PIK",
+      "name": "Pike"
+    },
+    {
+      "abbr": "PON",
+      "name": "Pontotoc"
+    },
+    {
+      "abbr": "PRE",
+      "name": "Prentiss"
+    },
+    {
+      "abbr": "QUI",
+      "name": "Quitman"
+    },
+    {
+      "abbr": "RAN",
+      "name": "Rankin"
+    },
+    {
+      "abbr": "SCO",
+      "name": "Scott"
+    },
+    {
+      "abbr": "SHA",
+      "name": "Sharkey"
+    },
+    {
+      "abbr": "SIM",
+      "name": "Simpson"
+    },
+    {
+      "abbr": "SMI",
+      "name": "Smith"
+    },
+    {
+      "abbr": "STO",
+      "name": "Stone"
+    },
+    {
+      "abbr": "SUN",
+      "name": "Sunflower"
+    },
+    {
+      "abbr": "TAL",
+      "name": "Tallahatchie"
+    },
+    {
+      "abbr": "TAT",
+      "name": "Tate"
+    },
+    {
+      "abbr": "TIP",
+      "name": "Tippah"
+    },
+    {
+      "abbr": "TIS",
+      "name": "Tishomingo"
+    },
+    {
+      "abbr": "TUN",
+      "name": "Tunica"
+    },
+    {
+      "abbr": "UNI",
+      "name": "Union"
+    },
+    {
+      "abbr": "WAL",
+      "name": "Walthall"
+    },
+    {
+      "abbr": "WAR",
+      "name": "Warren"
+    },
+    {
+      "abbr": "WAS",
+      "name": "Washington"
+    },
+    {
+      "abbr": "WAY",
+      "name": "Wayne"
+    },
+    {
+      "abbr": "WEB",
+      "name": "Webster"
+    },
+    {
+      "abbr": "WIL",
+      "name": "Wilkinson"
+    },
+    {
+      "abbr": "WIN",
+      "name": "Winston"
+    },
+    {
+      "abbr": "YAL",
+      "name": "Yalobusha"
+    },
+    {
+      "abbr": "YAZ",
+      "name": "Yazoo"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/msqp-table.php",
+    "postURL": "http://qsopartyhub.com/msqp-spots.php"
+  },
+  "notes": "verified: partial - rules from the Vicksburg Amateur Radio Club's official '2026 MS QSO PARTY RULES' PDF and the sponsor's County Check List, both read verbatim 2026-07-26, with msqp.eqth.net confirming the date. Contest manager Malcolm W5XX; logs by e-mail by 30 April. Note arrlmiss.org 404s a plain fetch of its own PDFs - they need a browser User-Agent and a Referer of the MSQP page. THE DATES ARE THE CLEANEST OF THIS RUN: the rules print both instants AND the duration - 'Starts: 1400z / 4 April 2026, Ends: 0200z / 5 April 2026, Duration: 12 Hours' - all three agree, and the sponsor's activity page independently says 'April 4, 2026, 9:00 am to 9:00 pm CDT', which is exactly that window. Nothing here is derived. (A web search confidently placed this party on Sunday 5 April ending 0159Z; it is wrong on the day, the date and the end instant.) SSB 1 point, CW 2, RTTY 2, FT4/8 2. Multipliers are earned ONCE regardless of band or mode, stated in the heading. Mississippi stations count the 82 counties, the REMAINING 49 states - Mississippi itself is excluded - the 13 provinces and DX entities individually; everyone else counts the 82 counties. Eight bands, listed outright. No bonus stations, no activation bonus and no power multiplier: the sponsor says 'No separate mode or power categories'. Self-spotting is allowed for Mississippi mobile and portable stations only. THIS IS THE FIRST PARTY IN THIS APP THAT BUILDS FT4/FT8 IN ON PURPOSE - 'Incorporate FT4/8 digital modes into the event' is one of its three objectives, where Illinois, North Carolina, Oklahoma and Idaho all bar it - and that is where every limitation below comes from. KNOWN LIMITATION 1 - GRID SQUARE MULTIPLIERS ARE NOT COUNTED, AND THIS IS THE BIGGEST GAP. On FT4/8 the sponsor counts MS GRID SQUARES as multipliers: an out-of-state entrant earns one for each of up to NINE (EM41-44 and EM50-54) on top of the 82 counties, better than a tenth of the achievable total; a Mississippi entrant takes the total number of grid squares worked and divides by four, rounding up, with no cap. This app has no grid square multiplier class and no grid field on a QSO, so none of that is counted. ADD THEM BY HAND on the sponsor's scoring spreadsheet. KNOWN LIMITATION 2 - THE FT4/8 EXCHANGE IS A GRID SQUARE, NOT A LOCATION. 'ALL FT4/8 stations send signal report and Grid Square', while every other mode sends a county, state, province or country. This app has ONE exchange shape per party, so an FT4/8 contact cannot carry the token the sponsor asks for. WORSE, A GRID SQUARE IS SILENTLY ACCEPTED AS A PHANTOM DX MULTIPLIER: because DX stations here send a country prefix, a token like EM42 looks like a valid prefix to this app, so a Mississippi entrant who logs one is credited a DXCC entity that does not exist. TAKEN WITH LIMITATION 1, FT4/8 CONTACTS ARE BEST KEPT OUT OF THIS LOG and scored by hand - which is the reverse of the advice four other parties need, where FT8 is barred outright. KNOWN LIMITATION 3 - RTTY AND FT4/8 ARE SEPARATE MODES TO THE SPONSOR AND ONE MODE HERE. The sponsor's own example works one station on '20m CW, 20m SSB, 20m RTTY, 20m FT4/8' - four QSOs where this app sees three and flags the fourth as a duplicate. KNOWN LIMITATION 4 - PORTABLE AND MOBILE STATIONS SCORE DIFFERENTLY. 'Portable/Mobile: Final score will be the sum of the scores from each County operated' is a different scoring model rather than a bonus, and this app computes one score for the whole log. MISSISSIPPI MOBILES AND PORTABLES ONLY; every fixed and out-of-state entrant is exact. Cabrillo CONTEST value MS-QSO-PARTY per the WA7BNM registry - the rules print no header token and do not even require Cabrillo, since 'hand-written legible logs will be accepted'. Counties are 82 with uniform 3-letter codes and some of the densest clusters in this app: FOUR Ca-/Cl- counties where CAL is Calhoun, CLA is CLAY, CLB is Claiborne and CLK is Clarke; FOUR La- counties (Lafayette LAF, Lamar LAM, Lauderdale LAU, Lawrence LAW); FOUR Wa- counties (Walthall WAL, Warren WAR, Washington WAS, Wayne WAY); MAR Marshall against MRN Marion; and GRN Greene against GRE Grenada, one letter apart with the shorter-looking code on the longer name. JEF Jefferson and JDV Jefferson Davis are the same pair Louisiana has, with different codes. DES is DeSoto as one word, where Louisiana prints De Soto as two. OPEN QUESTIONS (why this is partial): (1) The four KNOWN LIMITATIONS above, all consequences of FT4/8 being a first-class mode here; limitation 1 changes the score for every entrant who works any FT4/8. (2) COUNTY LINES ARE NOT MENTIONED ANYWHERE in the rules - neither permitted nor forbidden - so a two-county entry is rejected here on the reading that silence is not permission, and because the Portable/Mobile scoring model reads as one county at a time. (3) No rule states whether stations outside Mississippi may work only Mississippi stations; the objectives and the multiplier list both point that way, and the restriction ships ON as for six other parties, so a stray non-MS contact is visibly flagged NO CREDIT. Confirm all three with W5XX at ARRL.NET."
+}

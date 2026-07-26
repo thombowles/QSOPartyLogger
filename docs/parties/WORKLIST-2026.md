@@ -8,9 +8,9 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **19 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
-  February and March are clear, and April has begun with Louisiana. **Mississippi
-  is next**, sharing Louisiana's 4 April slot.
+- **18 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+  February and March are clear, and the 4 April pair (Louisiana, Mississippi) is
+  done. **Missouri is next.**
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -150,9 +150,9 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**19 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**18 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 15 US + 4 Canadian. Research is banked for none of them.
+next one built". 14 US + 4 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
@@ -166,7 +166,7 @@ next one built". 15 US + 4 Canadian. Research is banked for none of them.
 | ~~8~~ | ~~Wisconsin~~ | ~~Mar 15 1800Z → Mar 16 0100Z~~ | **done** 2026-07-26 — [`wiqp_rules.md`](../research/wiqp_rules.md), `verified: partial` |
 | ~~9~~ | ~~Virginia~~ | ~~Mar 21 1400Z → Mar 22 0400Z; Mar 22 1200–2400Z~~ | **done** 2026-07-26 — [`vaqp_rules.md`](../research/vaqp_rules.md); 95 counties + 38 cities |
 | ~~10~~ | ~~Louisiana~~ | ~~Apr 4 1400Z → Apr 5 0200Z~~ | **done** 2026-07-26 — [`laqp_rules.md`](../research/laqp_rules.md); 64 parishes, date **derived** |
-| 11 | Mississippi | Apr 4 1400Z → Apr 5 0200Z | |
+| ~~11~~ | ~~Mississippi~~ | ~~Apr 4 1400Z → Apr 5 0200Z~~ | **done** 2026-07-26 — [`msqp_rules.md`](../research/msqp_rules.md); FT4/8 is a first-class mode |
 | 12 | Missouri | Apr 11 1400Z → Apr 12 0400Z; Apr 12 1400–2000Z | |
 | 13 | New Mexico | Apr 11 1400Z → Apr 12 0200Z | |
 | 14 | Georgia | Apr 11 1800Z → Apr 12 0359Z; Apr 12 1400–2359Z | 159 counties, the largest |
@@ -191,11 +191,11 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**29 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**30 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
 pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP**, **SCQP**,
-**NCQP**, **OKQP**, **IDQP**, **WIQP**, **VAQP** and **LAQP** from the reopened
-first-half season, all built 2026-07-26. Every row below is struck.
+**NCQP**, **OKQP**, **IDQP**, **WIQP**, **VAQP**, **LAQP** and **MSQP** from the
+reopened first-half season, all built 2026-07-26. Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |
