@@ -126,21 +126,40 @@ struct SetupSheet: View {
     /// for every party, not only the partial ones.
     @ViewBuilder
     private func verificationNotice(_ party: PartyDefinition) -> some View {
+        let alerts = party.operatorAlerts
+
+        // The warning tone is for rules that could not be confirmed. A party
+        // whose rules ARE confirmed can still carry a modelling limitation --
+        // the Salmon Run does -- so those are shown too, just not in orange.
         if party.isPartiallyVerified {
             Label(
-                "Rules verified: partial — check the open questions below before submitting a log.",
+                alerts.isEmpty
+                    ? "Some rules for this party could not be fully confirmed."
+                    : "Some rules for this party could not be fully confirmed — "
+                      + "\(alerts.count) thing\(alerts.count == 1 ? "" : "s") to check "
+                      + "before you submit a log.",
                 systemImage: "exclamationmark.triangle.fill"
             )
             .font(.caption.weight(.semibold))
             .foregroundStyle(.orange)
+        } else if !alerts.isEmpty {
+            Label(
+                "\(alerts.count) thing\(alerts.count == 1 ? "" : "s") this app cannot "
+                    + "score for you in this party.",
+                systemImage: "info.circle.fill"
+            )
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(.secondary)
+        }
 
-            if let questions = party.openQuestions {
-                Text(questions)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .textSelection(.enabled)
-            }
+        // One line per thing to act on, rather than the whole provenance
+        // paragraph the notes carry.
+        ForEach(Array(alerts.enumerated()), id: \.offset) { _, alert in
+            Text("• \(alert)")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+                .textSelection(.enabled)
         }
 
         if let notes = party.notes {

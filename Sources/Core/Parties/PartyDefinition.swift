@@ -289,12 +289,121 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     /// The `OPEN QUESTION…` tail of `notes` — the part an operator actually
     /// needs to act on before submitting a log, separated from the provenance
     /// paragraph that precedes it. `nil` when the notes carry no such section.
+    /// The raw provenance tail, from the first marker to the end of `notes` —
+    /// the maintainer's record, used for auditing. **The setup sheet does not
+    /// show this**; it shows `operatorAlerts`, which is the same information cut
+    /// down to what someone mid-contest has to act on.
     var openQuestions: String? {
         guard let notes,
               let marker = notes.range(of: "OPEN QUESTION", options: .caseInsensitive)
         else { return nil }
         let tail = notes[marker.lowerBound...].trimmingCharacters(in: .whitespacesAndNewlines)
         return tail.isEmpty ? nil : tail
+    }
+
+    /// The things an operator has to *act on*, one short line each.
+    ///
+    /// `notes` is a maintainer's provenance record — long, shouty, and written
+    /// to be audited rather than read mid-contest. This pulls out only the
+    /// numbered `OPEN QUESTION n:` and `KNOWN LIMITATION n:` items and stops at
+    /// the end of each, because the previous version ran from the first marker
+    /// to the end of the notes and put the whole provenance paragraph on screen
+    /// in caption text.
+    ///
+    /// Each item is trimmed to its own headline sentence, so what reaches the
+    /// sheet is "Is the start 1400Z or 1300Z?" rather than four sentences about
+    /// which aggregator believed which.
+    var operatorAlerts: [String] {
+        guard let notes else { return [] }
+        let pattern = #"(OPEN QUESTION|KNOWN LIMITATION)\s*(\d+)?\s*[:\-]?\s*"#
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return [] }
+
+        let ns = notes as NSString
+        let matches = regex.matches(in: notes, range: NSRange(location: 0, length: ns.length))
+        guard !matches.isEmpty else { return [] }
+
+        return matches.enumerated().compactMap { index, match -> String? in
+            // Body runs from the end of this marker to the start of the next.
+            let start = match.range.upperBound
+            let end = index + 1 < matches.count
+                ? matches[index + 1].range.lowerBound
+                : ns.length
+            guard start < end else { return nil }
+
+            let body = ns.substring(with: NSRange(location: start, length: end - start))
+            guard let headline = Self.firstSentence(of: body) else { return nil }
+            let kind = ns.substring(with: match.range(at: 1)).capitalized
+            return "\(kind): \(Self.softened(headline))"
+        }
+    }
+
+    /// The first sentence, keeping its own terminator — so a question stays a
+    /// question. Splitting on "." alone ran straight past "1400Z or 1300Z?" and
+    /// swept in the paragraph that followed it.
+    private static func firstSentence(of text: String) -> String? {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        if let end = trimmed.firstIndex(where: { ".?!".contains($0) }) {
+            let sentence = String(trimmed[...end])
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            if !sentence.isEmpty { return sentence }
+        }
+        return trimmed
+    }
+
+    /// Technical abbreviations that are genuinely written in capitals and must
+    /// survive the softening below. Everything else in caps is a maintainer
+    /// shouting for attention in a wall of prose, which reads badly on screen.
+    private static let keepUppercase: Set<String> = [
+        "QSO", "QSOS", "CW", "SSB", "DX", "DXCC", "RST", "RS", "FM", "AM",
+        "HF", "VHF", "UHF", "WARC", "ITU", "UTC", "GMT", "ADIF", "LOTW",
+        "EDT", "CDT", "MDT", "PDT", "ADT", "EST", "CST", "MST", "PST",
+        "US", "USA", "VE", "VA", "DC", "MD", "NL", "NF", "LB", "NU", "NT",
+        "FT8", "FT4", "RTTY", "PSK", "WSJT", "APRS", "EOC", "SM", "ASM",
+        "N1MM", "COG", "COGS", "FED", "FEDS", "QRP", "SO2R", "RBN",
+    ]
+
+    /// Lowers a maintainer's shouting. A word is left alone if it is a known
+    /// abbreviation, contains a digit (`1400Z`, `DN91CE`, `7QP`), or is not
+    /// entirely capitals; everything else that is all-caps is lowered.
+    private static func softened(_ text: String) -> String {
+        // Quoted spans are the SPONSOR'S OWN WORDS. Lowering their capitals
+        // would misquote them - "'1A DE'" is an exchange, not shouting - so
+        // each quoted run is passed through untouched.
+        var out = ""
+        var rest = Substring(text)
+        while let open = rest.firstIndex(of: "'") {
+            out += softenWords(String(rest[..<open]))
+            let afterOpen = rest.index(after: open)
+            if let close = rest[afterOpen...].firstIndex(of: "'") {
+                out += String(rest[open...close])
+                rest = rest[rest.index(after: close)...]
+            } else {
+                out += String(rest[open...])
+                return out
+            }
+        }
+        return out + softenWords(String(rest))
+    }
+
+    private static func softenWords(_ text: String) -> String {
+        text.split(separator: " ", omittingEmptySubsequences: false)
+            .map { word -> String in
+                // Hyphenated compounds are judged part by part, so the word
+                // half of "10-POINT" lowers while the number half is left.
+                return word.split(separator: "-", omittingEmptySubsequences: false)
+                    .map { part -> String in
+                        let bare = part.filter(\.isLetter)
+                        guard !bare.isEmpty,
+                              bare.allSatisfy(\.isUppercase),
+                              !part.contains(where: \.isNumber),
+                              !keepUppercase.contains(bare.uppercased())
+                        else { return String(part) }
+                        return part.lowercased()
+                    }
+                    .joined(separator: "-")
+            }
+            .joined(separator: " ")
     }
 
     // MARK: County abbreviation shape
