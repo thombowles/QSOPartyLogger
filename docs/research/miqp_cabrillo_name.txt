@@ -1,0 +1,10 @@
+Source: https://www.contestcalendar.com/cabnames.php  (WA7BNM Contest Calendar,
+  'Cabrillo Names' table).  Fetched 2026-07-26.
+
+Used under CONSTITUTION.md Article 1's WA7BNM exception, and ONLY for the
+Cabrillo CONTEST: header.  The sponsor has a whole page about Cabrillo and still
+never names one - deliberately: 'MiQP does NOT use Cabrillo header info as it has
+been found over the years to be incorrect.'  Every other Michigan rule in this
+repo comes from the sponsor.  Matching rows, verbatim:
+========================================================================
+323	Michigan QSO Party  	MI-QSO-PARTY

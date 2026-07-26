@@ -183,6 +183,15 @@ Built for KE5CW. Bundled parties, all with official county data:
   rules ask for (the score is unaffected — DX is never a multiplier), and the
   sponsor's "NO FT8" cannot be enforced, since `digital` is one mode class.
   `verified: partial`.
+- **Michigan QSO Party** (Apr 18, 2026) — 12 hours, 83 counties, and **the
+  narrowest band list in the app**: CW and SSB on 80/40/20/15/10 only, no 160,
+  no 6, no digital. The sponsor works its own dupe arithmetic out loud — five
+  bands × two modes = ten QSOs with one station — and the test log reaches
+  exactly ten. Multipliers count **per mode**, Michigan is not a state
+  multiplier ("49 American states excluding Michigan"), and **DX is a real
+  multiplier** here, unlike the two parties built before it. County lines are
+  forbidden outright, with a 500-foot minimum move. `verified: partial` — only
+  because the 2026 rules came from an archive; there are no open questions.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
@@ -337,9 +346,9 @@ Built for KE5CW. Bundled parties, all with official county data:
 2026-12-31 is bundled**, and the season's earlier parties are being added in
 contest-date order — Vermont, Minnesota, British Columbia, South Carolina, North
 Carolina, Oklahoma, Idaho, Wisconsin, Virginia, Louisiana, Mississippi,
-Missouri, New Mexico, Georgia and North Dakota are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
+Missouri, New Mexico, Georgia, North Dakota and Michigan are in. The 2026 season runs Feb 7 → Oct 18; two independent calendars
 agree there is no state or provincial party in January, November or December.
-**14 parties from April through June remain**, listed in
+**13 parties from April through June remain**, listed in
 contest-date order in
 [`docs/parties/WORKLIST-2026.md`](docs/parties/WORKLIST-2026.md), which keeps the
 per-party status, the late re-verification schedule for the `verified: partial`
@@ -819,7 +828,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1331 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1351 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
@@ -1262,6 +1271,16 @@ station profile, radio wiring and cluster history untouched.
   `CONTEST:` header is the one thing not from the sponsor — five pages ask for
   Cabrillo logs without ever naming the header — so `ND-QSO-PARTY` comes from
   WA7BNM's Cabrillo Names table under Article 1's exception.
+- MiQP: rules and multiplier list from the Mad River Radio Club's own site, read
+  verbatim 2026-07-26 — **but the live site had already rolled forward to 2027**
+  ("Next MiQP Sat 17 Apr 2027"), so the 2026 edition came from the Wayback
+  Machine and **both editions are banked and diffed by the generator**. Exactly
+  one sentence differs: the 2027 rules add "+ 1 District of Columbia" to the
+  multiplier list. That reads like a scoring change and is not one — the rules
+  defer to the Official List of Mults twice in both editions, and the list
+  archived four days before the 2026 contest already carried DC. The rules name
+  no year at all, and their formula reproduces the sponsor's own stated 2027
+  date exactly, which verifies the reading better than any calendar could.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
@@ -1297,7 +1316,7 @@ station profile, radio wiring and cluster history untouched.
   approved-contest resource is **generated** by
   [`gen_sqp_challenge.py`](docs/research/gen_sqp_challenge.py) from the
   challenge's own calendar (fetched 2026-07-24) and homepage list (read
-  2026-07-25), with hard assertions: 47 contests, 61 windows, 33 mapped to
+  2026-07-25), with hard assertions: 47 contests, 61 windows, 34 mapped to
   bundled parties. **Maine QSO Party is not on the 2026 approved list**
   (verified twice), so the dashboard shows MEQP logs but excludes them from
   challenge scoring, saying so. The calendar's NJQP row is known-wrong

@@ -1,0 +1,39 @@
+Source: https://miqp.org/index.php/cabrillo-information/  Fetched 2026-07-26.
+Note what it does NOT say: there is no CONTEST: header anywhere, and the page
+  explains why - 'MiQP does NOT use Cabrillo header info as it has been found
+  over the years to be incorrect.'  The header value therefore comes from
+  WA7BNM under Article 1's exception; see miqp_cabrillo_name.txt.
+========================================================================
+Files submitted must follow the Cabrillo log standard.  For details on the standard, see https://wwrof.org/cabrillo/.
+Michigan QSO Party Specific Items:
+All Logs must contain the Cabrillo Required tags: Start-Of-Log: and End-Of-Log:
+Version 2.x or 3.x is OK.
+In order to receive credit for QSO’s, the log must contain QSO: tags that contain MiQP QSO’s with the fields in the correct order, correct format and the correct number of fields.
+Correct number of fields: 10
+QSO Fields & Order: Freq, Mode, Date, Time, SentCall, SentRST, SentQth, RcvCall, RcvRST, RcvQth.
+Freq is actual frequency in KHz or 3500, 7000, 14000, 21000, 28000.
+Mode is CW or PH.
+Date is yyyy-mm-dd
+Time is hhmm in UTC
+SentQTH is one of the abbreviations from the official list.  Michigan stations must list county abbreviation and NOT MI or MICH or MICHIGAN!
+Cabrillo is DOS/Windows centric and requires all lines to end in CR LF (Carriage Return, Line Feed). Note if you use Mac OS or Linux or other O/S they have different conventions and require being saved in DOS/Windows format.
+Notes:
+MiQP does NOT use Cabrillo header info as it has been found over the years to be incorrect.  That is why we collect Call, Location, Category and Club info when the log file is submitted to the web upload page.
+MiQP does extract soapbox: tags for inclusion in the results writeup.
+Example:
+START-OF-LOG: 3.0
+QSO: 7040 CW 2021-04-17 1648 K8MQP 599 WASH K8MAD 599 OH
+END-OF-LOG:
+Proudly powered by WordPress
+-->
+Contact MiQP Via Email - Info@MiQP.org
+Michigan QSO Party Committee:
+Ken Meier, W8MJ – Chairman
+Earl Morse, N8SS
+Greg Chapoton, NA8V
+Tim Mitchell, K9TM
+Vic Kean, K1LT
+Mad River Radio Club
+All content copyright Mad River Radio Club, all rights reserved
+Unless otherwise noted.
+Web work by K9TM, hosting on QTH.com

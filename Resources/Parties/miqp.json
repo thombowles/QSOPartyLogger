@@ -1,0 +1,394 @@
+{
+  "schemaVersion": 1,
+  "id": "miqp",
+  "name": "Michigan QSO Party",
+  "cabrilloContest": "MI-QSO-PARTY",
+  "homeState": "MI",
+  "countyAbbrLength": 4,
+  "validBands": [
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 2,
+    "digital": 0
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "county",
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perMode"
+    },
+    "outState": {
+      "classes": [
+        "county"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perMode"
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "token",
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "exchangeIncludesRST": true,
+  "outStateWorksHomeStationsOnly": true,
+  "schedule": [
+    {
+      "start": "2026-04-18T16:00:00Z",
+      "end": "2026-04-19T04:00:00Z"
+    }
+  ],
+  "counties": [
+    {
+      "abbr": "ALCO",
+      "name": "Alcona"
+    },
+    {
+      "abbr": "ALGE",
+      "name": "Alger"
+    },
+    {
+      "abbr": "ALLE",
+      "name": "Allegan"
+    },
+    {
+      "abbr": "ALPE",
+      "name": "Alpena"
+    },
+    {
+      "abbr": "ANTR",
+      "name": "Antrim"
+    },
+    {
+      "abbr": "AREN",
+      "name": "Arenac"
+    },
+    {
+      "abbr": "BARA",
+      "name": "Baraga"
+    },
+    {
+      "abbr": "BARR",
+      "name": "Barry"
+    },
+    {
+      "abbr": "BAY",
+      "name": "Bay"
+    },
+    {
+      "abbr": "BENZ",
+      "name": "Benzie"
+    },
+    {
+      "abbr": "BERR",
+      "name": "Berrien"
+    },
+    {
+      "abbr": "BRAN",
+      "name": "Branch"
+    },
+    {
+      "abbr": "CALH",
+      "name": "Calhoun"
+    },
+    {
+      "abbr": "CASS",
+      "name": "Cass"
+    },
+    {
+      "abbr": "CHAR",
+      "name": "Charlevoix"
+    },
+    {
+      "abbr": "CHEB",
+      "name": "Cheboygan"
+    },
+    {
+      "abbr": "CHIP",
+      "name": "Chippewa"
+    },
+    {
+      "abbr": "CLAR",
+      "name": "Clare"
+    },
+    {
+      "abbr": "CLIN",
+      "name": "Clinton"
+    },
+    {
+      "abbr": "CRAW",
+      "name": "Crawford"
+    },
+    {
+      "abbr": "DELT",
+      "name": "Delta"
+    },
+    {
+      "abbr": "DICK",
+      "name": "Dickinson"
+    },
+    {
+      "abbr": "EATO",
+      "name": "Eaton"
+    },
+    {
+      "abbr": "EMME",
+      "name": "Emmet"
+    },
+    {
+      "abbr": "GENE",
+      "name": "Genesee"
+    },
+    {
+      "abbr": "GLAD",
+      "name": "Gladwin"
+    },
+    {
+      "abbr": "GOGE",
+      "name": "Gogebic"
+    },
+    {
+      "abbr": "GRAT",
+      "name": "Gratiot"
+    },
+    {
+      "abbr": "GRTR",
+      "name": "Grand Traverse"
+    },
+    {
+      "abbr": "HILL",
+      "name": "Hillsdale"
+    },
+    {
+      "abbr": "HOUG",
+      "name": "Houghton"
+    },
+    {
+      "abbr": "HURO",
+      "name": "Huron"
+    },
+    {
+      "abbr": "INGH",
+      "name": "Ingham"
+    },
+    {
+      "abbr": "IONI",
+      "name": "Ionia"
+    },
+    {
+      "abbr": "IOSC",
+      "name": "Iosco"
+    },
+    {
+      "abbr": "IRON",
+      "name": "Iron"
+    },
+    {
+      "abbr": "ISAB",
+      "name": "Isabella"
+    },
+    {
+      "abbr": "JACK",
+      "name": "Jackson"
+    },
+    {
+      "abbr": "KALK",
+      "name": "Kalkaska"
+    },
+    {
+      "abbr": "KENT",
+      "name": "Kent"
+    },
+    {
+      "abbr": "KEWE",
+      "name": "Keweenaw"
+    },
+    {
+      "abbr": "KZOO",
+      "name": "Kalamazoo"
+    },
+    {
+      "abbr": "LAKE",
+      "name": "Lake"
+    },
+    {
+      "abbr": "LAPE",
+      "name": "Lapeer"
+    },
+    {
+      "abbr": "LEEL",
+      "name": "Leelanau"
+    },
+    {
+      "abbr": "LENA",
+      "name": "Lenawee"
+    },
+    {
+      "abbr": "LIVI",
+      "name": "Livingston"
+    },
+    {
+      "abbr": "LUCE",
+      "name": "Luce"
+    },
+    {
+      "abbr": "MACK",
+      "name": "Mackinac"
+    },
+    {
+      "abbr": "MACO",
+      "name": "Macomb"
+    },
+    {
+      "abbr": "MANI",
+      "name": "Manistee"
+    },
+    {
+      "abbr": "MARQ",
+      "name": "Marquette"
+    },
+    {
+      "abbr": "MASO",
+      "name": "Mason"
+    },
+    {
+      "abbr": "MCLM",
+      "name": "Montcalm"
+    },
+    {
+      "abbr": "MECO",
+      "name": "Mecosta"
+    },
+    {
+      "abbr": "MENO",
+      "name": "Menominee"
+    },
+    {
+      "abbr": "MIDL",
+      "name": "Midland"
+    },
+    {
+      "abbr": "MISS",
+      "name": "Missaukee"
+    },
+    {
+      "abbr": "MONR",
+      "name": "Monroe"
+    },
+    {
+      "abbr": "MTMO",
+      "name": "Montmorency"
+    },
+    {
+      "abbr": "MUSK",
+      "name": "Muskegon"
+    },
+    {
+      "abbr": "NEWA",
+      "name": "Newaygo"
+    },
+    {
+      "abbr": "OAKL",
+      "name": "Oakland"
+    },
+    {
+      "abbr": "OCEA",
+      "name": "Oceana"
+    },
+    {
+      "abbr": "OGEM",
+      "name": "Ogemaw"
+    },
+    {
+      "abbr": "ONTO",
+      "name": "Ontonagon"
+    },
+    {
+      "abbr": "OSCE",
+      "name": "Osceola"
+    },
+    {
+      "abbr": "OSCO",
+      "name": "Oscoda"
+    },
+    {
+      "abbr": "OTSE",
+      "name": "Otsego"
+    },
+    {
+      "abbr": "OTTA",
+      "name": "Ottawa"
+    },
+    {
+      "abbr": "PRES",
+      "name": "Presque Isle"
+    },
+    {
+      "abbr": "ROSC",
+      "name": "Roscommon"
+    },
+    {
+      "abbr": "SAGI",
+      "name": "Saginaw"
+    },
+    {
+      "abbr": "SANI",
+      "name": "Sanilac"
+    },
+    {
+      "abbr": "SCHO",
+      "name": "Schoolcraft"
+    },
+    {
+      "abbr": "SHIA",
+      "name": "Shiawassee"
+    },
+    {
+      "abbr": "STCL",
+      "name": "St Clair"
+    },
+    {
+      "abbr": "STJO",
+      "name": "St Joseph"
+    },
+    {
+      "abbr": "TUSC",
+      "name": "Tuscola"
+    },
+    {
+      "abbr": "VANB",
+      "name": "Van Buren"
+    },
+    {
+      "abbr": "WASH",
+      "name": "Washtenaw"
+    },
+    {
+      "abbr": "WAYN",
+      "name": "Wayne"
+    },
+    {
+      "abbr": "WEXF",
+      "name": "Wexford"
+    }
+  ],
+  "hubSpots": {
+    "tableURL": "http://qsopartyhub.com/miqp-table.php",
+    "postURL": "http://qsopartyhub.com/miqp-spots.php"
+  },
+  "notes": "verified: partial - rules and multiplier list from the Mad River Radio Club's own site, read verbatim 2026-07-26. THE LIVE SITE HAD ALREADY ROLLED FORWARD TO 2027 by then ('Next MiQP Sat 17 Apr 2027'), so the 2026 edition comes from the Wayback Machine - rules archived 2026-03-14, five weeks before the contest, and the multiplier list archived 2026-04-14, four days before it. BOTH EDITIONS ARE BANKED AND DIFFED by the generator, which is how the one real change was found rather than absorbed. EXACTLY ONE SENTENCE DIFFERS: the 2027 rules add '+ 1 District of Columbia' to the Michigan-station multiplier list. THAT IS A CLARIFICATION, NOT A RULE CHANGE - the rules defer to the Official List of Mults twice in both editions ('the official abbreviations must be used to assure scoring credit'), and the list archived four days before the 2026 contest already carried DC and is otherwise identical to the live one. DC ships as a multiplier, correct for both years. THE RULES CARRY NO YEAR AT ALL - the date is a formula, 'the Saturday of the third full weekend in April', which is why the rollover did not corrupt them; and the formula reproduces the sponsor's own stated 'Sat 17 Apr 2027' exactly, which verifies the reading better than any calendar could. Twelve hours, 16Z to 04Z. FIVE BANDS AND TWO MODES - 80 through 10 metres, CW and SSB, no 160 m, no 6 m, NO DIGITAL - the narrowest band list in this app, and the sponsor works the dupe arithmetic out loud: 5 bands x 2 modes = 10 QSOs with one station. Multipliers count PER MODE, so the same multiplier on CW and on SSB is two. Michigan is NOT a state multiplier ('49 American states (excluding Michigan)'); MI stations count the 83 counties instead. DX IS A REAL MULTIPLIER here, worth one per mode, since the exchange is the literal token - so unlike Georgia and North Dakota this is not a points-but-no-multiplier party. The 13 provinces ARE the app's standard 13, listed in full by the sponsor, so no override is needed - unlike North Dakota's. COUNTY LINES ARE FORBIDDEN OUTRIGHT: 'No station may claim simultaneous operation in more than one county, state, or province', with a 500-foot minimum move - stricter than North Dakota, which permits parking on the line and only requires separate contacts. The sponsor rules on the awkward cases in the exchange itself: KH6/KL7 are W/VE and send HI/AK, KP2/KP4 are not and send DX. The exchange became RST rather than a QSO number in 2022, so any source predating that is wrong. The Cabrillo CONTEST header is the one thing not from the sponsor: it has a whole page about Cabrillo and deliberately names no header ('MiQP does NOT use Cabrillo header info as it has been found over the years to be incorrect'), so MI-QSO-PARTY comes from WA7BNM's Cabrillo Names table under Article 1's exception. No bonus points and no power or station score multiplier: 'Final Score - multiply total QSO points by the total number of multipliers.' NO OPEN QUESTIONS - every modelled rule is stated, the changed sentence is settled by a second source, and the date formula is confirmed against the sponsor's own future date. It is partial only because the 2026 rules came from an archive rather than a live page."
+}

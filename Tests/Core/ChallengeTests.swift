@@ -15,7 +15,7 @@ final class ChallengeTests: XCTestCase {
         XCTAssertEqual(calendar.approvedContests.flatMap(\.windows).count, 61)
 
         let mapped = calendar.approvedContests.compactMap(\.partyID)
-        XCTAssertEqual(mapped.count, 33)
+        XCTAssertEqual(mapped.count, 34)
         let bundledIDs = Set(PartyCatalog.loadBundled().map(\.id))
         XCTAssertEqual(Set(mapped), bundledIDs.subtracting(["meqp"]))
 

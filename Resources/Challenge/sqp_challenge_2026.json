@@ -179,7 +179,7 @@
   },
   {
    "name": "Michigan QSO Party",
-   "partyID": null,
+   "partyID": "miqp",
    "windows": [
     {
      "start": "2026-04-18T16:00:00Z",
