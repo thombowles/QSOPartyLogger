@@ -1,0 +1,80 @@
+# Source: https://idahoqsoparty.org/MAPcountylist.htm — 'MAP & LIST of the 44 Idaho
+# Counties', the sponsor's official multiplier list.  Fetched: 2026-07-26
+# NOTE the server 403s a plain fetch; it needs a browser User-Agent AND a Referer of
+# https://idahoqsoparty.org/ .
+
+MAP & LIST
+of the 44 Idaho
+Counties
+
+Please note:  each county counts as a multiplier.  You can work the
+same station                                                                                     
+for a printable list LINK
+
+more than once if that station has moved to a new county. You can work the same
+
+station for more points on different bands.
+
+                                                                                                                                                          
+
+ ADA
+ Ada
+   BNV  Bonneville
+   CUS  Custer
+ 
+ KOO  Kootenai
+   OWY  Owyhee
+ ADM
+ Adams
+   BOU  Boundary
+   ELM  Elmore
+ 
+ LAT  Latah
+   PAY  Payette
+ BAN
+ Bannock
+   BUT  Butte
+   FRA  Franklin
+ 
+ LEM  Lemhi
+   POW  Power
+ BEA
+ Bear Lake
+   CAM  Camas
+   FRE  Fremont
+ 
+ LEW  Lewis
+   SHO  Shoshone
+ BEN
+ Benewah
+   CAN  Canyon
+   GEM  Gem
+ 
+ LIN  Lincoln
+   TET  Teton
+ BIN
+ Bingham
+   CAR  Caribou
+   GOO  Gooding
+ 
+ MAD  Madison
+   TWI  Twin Falls
+ BLA
+ Blaine
+   CAS  Cassia
+   IDA  Idaho
+ 
+ MIN  Minidoka
+   VAL  Valley
+ BOI
+ Boise
+   CLA  Clark
+   JEF  Jefferson
+ 
+ NEZ  Nez Perce
+   WAS  Washington
+ BNR
+ Bonner
+   CLE  Clearwater
+   JER  Jerome
+   ONE  Oneida

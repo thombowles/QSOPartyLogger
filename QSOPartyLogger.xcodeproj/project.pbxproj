@@ -128,6 +128,7 @@
 		9ECF4B187A1C5F95F20C0C4C /* BandMapLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256735340D033423D4396DBA /* BandMapLayoutTests.swift */; };
 		A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC43C19DF629A758F1B4641 /* ContestLog.swift */; };
 		A4276D42A299E140C2F6C501 /* CountyLineExpanderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */; };
+		A528B72837E1537BDA590A5B /* IdahoQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED18DA5065D11D03393147E1 /* IdahoQSOPartyTests.swift */; };
 		A632469108D3943D5C878CD7 /* SpottingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2215D1E38A85D6578624B1D /* SpottingTests.swift */; };
 		A9FC2E13D5AAAFEDD440F60F /* SectionMultiplierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B143A6F4360839CB52EFA48 /* SectionMultiplierTests.swift */; };
 		AC51CD88CDF9CBFA21C5C25F /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD300005CA528B8CA373476 /* Spot.swift */; };
@@ -375,6 +376,7 @@
 		E77F88B8469172A628005C61 /* ArizonaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArizonaQSOPartyTests.swift; sourceTree = "<group>"; };
 		EBD1F2D81475C7AC090117A5 /* SalmonRunTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalmonRunTests.swift; sourceTree = "<group>"; };
 		EC05BC2077B42827CBC8A537 /* HubFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubFrequency.swift; sourceTree = "<group>"; };
+		ED18DA5065D11D03393147E1 /* IdahoQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdahoQSOPartyTests.swift; sourceTree = "<group>"; };
 		EF27EC7CAEAE6E71B85FD5E9 /* BandMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMap.swift; sourceTree = "<group>"; };
 		EF6989E84D7AABBEB0B1451F /* MorseCodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCodeTests.swift; sourceTree = "<group>"; };
 		F1B2185C4DCD353FBC522D1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -510,6 +512,7 @@
 				F2BC1600467005E882D39CF4 /* HubSpotParserTests.swift */,
 				075DC2D7011F9E054C8826A8 /* HubSpotPrefillTests.swift */,
 				9183D3107E206A940C2DCDCB /* HubSpotSourceTests.swift */,
+				ED18DA5065D11D03393147E1 /* IdahoQSOPartyTests.swift */,
 				C8008DF74BE1374A98273ECC /* IllinoisQSOPartyTests.swift */,
 				273A1C77EBE557460270764F /* IowaQSOPartyTests.swift */,
 				B909EF1868C1BAA122BC10E6 /* MacroTokenTests.swift */,
@@ -929,6 +932,7 @@
 				2CCA229FB32E1D2414047EEA /* HubSpotParserTests.swift in Sources */,
 				09F3976A16C1ED37ED9E5465 /* HubSpotPrefillTests.swift in Sources */,
 				406B8E868EA486712C1D3E7F /* HubSpotSourceTests.swift in Sources */,
+				A528B72837E1537BDA590A5B /* IdahoQSOPartyTests.swift in Sources */,
 				209C0DA71AC3EE5A16488856 /* IllinoisQSOPartyTests.swift in Sources */,
 				7C432C2A33658F48ADF44099 /* IowaQSOPartyTests.swift in Sources */,
 				097E888A0ACA42B4ED11F066 /* K3ProtocolTests.swift in Sources */,

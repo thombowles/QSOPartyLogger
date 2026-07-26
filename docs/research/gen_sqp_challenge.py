@@ -62,6 +62,7 @@ BUNDLED_BY_SITE_NAME = {
     "California QSO Party": "cqp",
     "Colorado QSO Party": "coqp",
     "Hawaii QSO Party": "hqp",
+    "Idaho QSO Party": "idqp",
     "Illinois QSO Party": "ilqp",
     "Iowa QSO Party": "iaqp",
     "Kansas QSO Party": "ksqp",

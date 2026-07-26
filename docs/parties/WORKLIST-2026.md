@@ -8,9 +8,9 @@ Ordered by contest date, so the next contest to run is always the next one built
 **This file is the state.** Read it plus [`../CONSTITUTION.md`](../CONSTITUTION.md)
 and you have everything; nothing important lives only in a chat log.
 
-- **23 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
+- **22 parties remain.** **The scope widened on 2026-07-26** — see *Scope* below.
   February is clear (Vermont, Minnesota, British Columbia, South Carolina); North
-  Carolina and Oklahoma are done in March.
+  Carolina, Oklahoma and Idaho are done in March.
   The original loop built every party running **from 2026-07-24 through
   2026-12-31**, which it finished; the season, however, starts in February, and
   the 24 US and 5 Canadian parties that ran **2026-02-07 → 2026-06-21** were
@@ -150,9 +150,9 @@ Two consequences worth naming before the first one is built:
 
 ## Remaining, in contest-date order
 
-**23 remaining**, ordered by 2026 contest date (Article 22) — which is also the
+**22 remaining**, ordered by 2026 contest date (Article 22) — which is also the
 order they recur in 2027, so the rule still reads "the next contest to run is the
-next one built". 19 US + 4 Canadian. Research is banked for none of them.
+next one built". 18 US + 4 Canadian. Research is banked for none of them.
 
 | # | Party | 2026 dates (UTC, provisional) | Notes |
 | --- | --- | --- | --- |
@@ -162,7 +162,7 @@ next one built". 19 US + 4 Canadian. Research is banked for none of them.
 | ~~4~~ | ~~South Carolina~~ | ~~Feb 28 1500Z → Mar 1 0159Z~~ | **done** 2026-07-26 — [`scqp_rules.md`](../research/scqp_rules.md), `verified: partial` |
 | ~~5~~ | ~~North Carolina~~ | ~~Mar 1 1500Z → Mar 2 0100Z~~ | **done** 2026-07-26 — [`ncqp_rules.md`](../research/ncqp_rules.md), `verified: partial` |
 | ~~6~~ | ~~Oklahoma~~ | ~~Mar 14 1400Z → Mar 15 0200Z; Mar 15 1400–2200Z~~ | **done** 2026-07-26 — [`okqp_rules.md`](../research/okqp_rules.md), `verified: partial` |
-| 7 | Idaho | Mar 14 1600Z → Mar 15 0400Z; Mar 15 1400Z → Mar 16 0200Z | also a 7QP state |
+| ~~7~~ | ~~Idaho~~ | ~~Mar 14 1600Z → Mar 15 0400Z; Mar 15 1400Z → Mar 16 0200Z~~ | **done** 2026-07-26 — [`idqp_rules.md`](../research/idqp_rules.md); **its county list is 7QP-reusable** |
 | 8 | Wisconsin | Mar 15 1800Z → Mar 16 0100Z | |
 | 9 | Virginia | Mar 21 1400Z → Mar 22 0400Z; Mar 22 1200–2400Z | counties **and** independent cities |
 | 10 | Louisiana | Apr 4 1400Z → Apr 5 0200Z | parishes, not counties |
@@ -191,11 +191,11 @@ for the generator's assertion, never its source (Article 2).
 
 ## Built
 
-**25 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
+**26 bundled.** The 16 built by the first loop (MDC, HQP, OhQP, TnQP, COQP,
 NJQP, IAQP, NHQP, Salmon Run, MEQP, CQP, AZQP, PAQP, SDQP, NYQP, ILQP), the
 pre-existing ALQP, KSQP and TQP, and **VTQP**, **MNQP**, **BCQP**, **SCQP**,
-**NCQP** and **OKQP** from the reopened first-half season, all built 2026-07-26.
-Every row below is struck.
+**NCQP**, **OKQP** and **IDQP** from the reopened first-half season, all built
+2026-07-26. Every row below is struck.
 
 | Party | 2026 dates (UTC, provisional) | Research | Status |
 | --- | --- | --- | --- |

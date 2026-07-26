@@ -1,0 +1,474 @@
+# Source: https://idahoqsoparty.org/rules.htm — the Idaho QSO Party ('THE SPUD RUN')
+# official rules. Sponsor contact: idahoqso@gmail.com.  Fetched: 2026-07-26
+#
+# WARNING - THE DATE BLOCK AT THE TOP IS A MESS AND MUST NOT BE READ LITERALLY.
+# It contains a literal 'xxxxZ' placeholder for the Saturday start, calls 13 March
+# 2026 a Saturday (it is a Friday), dates the Saturday end '14/March/2025' (wrong
+# year), and labels 1400Z on '14/March/2026' as the SUNDAY start (the 14th is a
+# Saturday). See idqp_rules.md section 2 for the reconstruction, which rests on the
+# formula, the stated 12-hour durations and the local-time anchors under EDT.
+
+RULES -
+ 
+Idaho QSO Party            
+
+RULES OVERVIEW :           
+
+Hello everyone, if you look at the rules below,  they look
+complicated,  and maybe they are ?
+
+However,  for most
+
+non-Idaho
+stations they don't have to be
+complex.
+
+The objective is to have some fun, all you need to do to work us.  
+Spotting us is great too, it helps everyone find us.   
+
+How to find us: 
+
+Tune
+around, we're out here calling,  check the spotting network. & when
+you find us give us a SPOT ,
+
+spots sure help the QRP/Low power boys get attention. Rovers need help
+too.
+
+ 
+
+The IDQP starts
+Saturday, March
+13   
+
+xxxxZ (13/March/2026 GMT)
+
+EsT   12 noon (Saturday morning, local time, USA)
+
+CsT   11 AM
+
+MsT  10 AM
+
+PsT   9 AM
+
+ON THE AIR
+
+12 Hours
+
+END TIME FOR SATURDAY is
+
+03:59Z
+(14/March/2025, GMT)
+
+EsT 11:59pm midnight
+
+CsT 10:59 PM
+
+MsT 9:59 PM
+
+PsT    8:59 PM
+
+ 
+ 
+ 
+
+LOOK OUT  !  check your computer time, 
+
+Daylight time kicked in
+ 
+ 
+
+ 
+ 
+ 
+
+START TIME FOR
+SUNDAY
+
+1400Z (14/March/2026, GMT)
+
+EDT   10 AM     (Sunday
+morning, local time, USA)
+
+CDT   9 AM
+
+MDT  8 AM
+
+PDT   7 AM
+
+ON THE AIR
+
+12 Hours
+
+END TIME FOR SUNDAY is
+
+01:59Z
+(15/March/2026, GMT)
+
+EDT 9:59 PM    (local time, Sunday evening, USA) 
+
+CDT 8:59 PM
+
+MDT 7:59 PM
+
+PDT  6:59 PM
+
+ 
+ 
+ 
+
+ Hope to work  you on
+the RADIO  !!
+
+ 
+
+ 
+
+NOW, here are the complete rules !!!   Please
+note,  these are not intended to be confusing  !
+
+1. Objective:
+
+       
+
+For amateurs outside the state of Idaho � to contact  as many Idaho stations and
+Idaho counties as possible. 
+
+      Remember, the counties are multipliers for out of
+state entries.
+
+       
+
+        For Idaho stations � to
+activate as
+many counties as possible, and work as many OUT OF STATE stations as possible
+!!!      
+
+     
+
+       Idaho Stations 
+our  job is to
+work out of state stations,  cause a pile-up.
+CALL CQ
+
+2. Contest Period:
+
+        Always the second full weekend of
+March. please see just above in the blue area for start and stop times. 
+Heads UP ,,
+
+    
+
+3. Categories:
+
+        A. Single operator. One person
+performs all operating and logging functions.
+
+        B. Multioperator � This only
+pertaining to operators that are actually running the radio.   Not
+loggers, or spotting networks.
+
+            1)
+Multi-Single. Only one (1) transmitted signal on the air at any time.
+
+            2)
+Multi-Multi. May have any number of transmitters in operation, but only one per
+mode per band at a time.
+
+               
+
+        C. Mobile/Rover. Mobile/Rover is a
+station that is self-contained (radio, antenna, power source) capable of motion.
+
+            This category
+is not limited by the number of operators for competition purposes.
+
+            There is a
+category for In-State and one for Out of State.        
+
+                           
+
+            Heads UP
+IDAHO STATIONS     -       
+Bonus Points for activating dormant counties.
+
+               Any Expedition
+or Rover or a  home station residing in a county,  that activates that county, 
+which has
+been dormant during previous year(s)  (See
+List HERE )  
+
+               those station will get 500
+bonus points (or 1000) (or 1500)  (see list)   if they make MORE THAN 10 contacts
+
+                          
+
+           
+Rule change- Idaho Rovers ,  If you've been out
+roving, lets say on Saturday,  then go home and want to operate from your
+home station too
+
+               NO PROBLEM,  we request you submit a Rover log and a home station log. 
+you will be listed
+twice in the yearly score summaries.
+
+ 
+
+          
+Rover scoring:
+
+               Only a single log is needed regardless of how many counties you are roving
+in.  Each QSO record needs to indicate the county the QSO was completed
+in..
+
+               The Cabrillo files from 
+N3FJP and N1MM software handles this just fine.  Other software may handle it
+too ??
+               You can work the same station on the same mode/band from different  counties and count each as a QSO, 
+
+               
+HOWEVER, once you work 'say' Kansas, thats the one and only multiplier
+for KS. 
+
+4. Power. Three power output categories for all categories. Logs not showing
+power output category will be listed as high power.
+
+        A. QRP - 5W output or less
+
+        B. Low Power - 150W output or less
+
+        C. High Power - more than 150W output
+
+5. Modes: All entrants may operate one of the following categories:
+
+        A. Mixed mode (Phone, CW, Digital) or
+any combination thereof
+
+        B. Phone only
+
+        C. CW only  ,
+
+we encourage  slow speed , less than 13WPM
+if calling CQ IDQP
+contest,
+
+                        otherwise QRS to the
+worked station speed or ask the worked station to QRS.   
+
+       D. Digital
+only , these include any digital mode that requires operator input, 
+
+                            FT-8 is
+incompatible with our exchange, so No FT-8 type modes  
+
+6.  Bands,   only
+160 - 80 - 40 - 20 - 15 - 10 meters.  Please use frequencies that
+are customary for the mode you are using.
+
+7. Contest Exchange:
+
+        A. Idaho stations send your 
+counties three letter abbreviation. 
+
+                    Note
+for Idaho Stations:
+
+                    Most stations have little interest in your county, They
+are interested in working Idaho, or they just love a pile up !!
+
+                    BUT for those that are
+really in the contest 
+
+it's important.  be sure they get your county 3 letter abbreviation         
+
+        B. W/VE stations (including KH6/KL7)
+send your state or province.
+
+        C. DX stations (including KH2/KP4,
+etc.) send your  DXCC prefix/country .
+
+          
+         please note: the RST is no longer part of the contest,  logging software
+sometimes requires the RST, 59 is perfect,
+
+                  
+ you are not scored on RST reports
+
+                    if the contact is
+in both logs its a good contact.  that's all that matters, being heard !!        
+
+                
+
+8. Scoring:
+
+        A. QSO Points:
+
+               
+Each phone QSO counts as one point
+
+                Each CW and Digital QSO
+counts as two points
+
+                    
+ALL 
+QRP QSO's count 5 points.  voice, CW,
+digital.
+
+                   
+
+ 
+
+        B. Multipliers:
+
+            1) For Idaho
+stations, count each US state (including Idaho), Canada province, and DXCC country as
+"a"   (one) 
+multiplier.
+
+                A multiplier is counted 
+once per mode, regardless of the number of bands on which it is worked
+
+            2)  For
+non-Idaho stations:  Idaho counties are multipliers. Idaho mobile stations that change counties are considered
+to be a new station
+
+               
+and may be contacted again for point and multiplier credit. Idaho stations on a
+county line may be claimed as
+
+               
+a QSO and a multiplier from each county (2 QSO's and 2 multipliers). County
+lines whether land or water, are
+
+               
+defined per "County Hunter" rules. Mobiles should identify themselves by call
+sign / county. Mobiles use only
+
+               
+one call per county. An Idaho county multiplier will be counted once per mode,
+regardless of the number of bands
+
+               
+on which it is worked.
+
+        C. Final Score:
+
+               
+Fixed stations   Multiply QSO x  Mode multiplier x Mults...
+
+               
+Rover/Mobile operations your log must include which county you were in for each
+QSO !!
+
+               
+Rover/Mobile   please see section  3 C   above..
+
+               
+
+9. Suggested frequencies:
+
+        CW - plus or minus 35 kHz up.
+
+        Phone -
+plus or minus 3855, 7.260, 14.260, 21.335, and 28.470 MHz.
+
+        Digital � use commonly accepted
+region of band. RTTY is most common digital mode,
+
+                    
+these are just suggested frequencies, try
+not to cause QRM to QSO�s in progress ..  only
+160 - 80 - 40 - 20 - 15 - 10 meters
+
+ 
+
+10. Miscellaneous:
+
+        A. Call sign/exchange information
+must be received by each station for a complete QSO.
+
+        B. No cross-mode contacts are
+allowed.
+
+        C. CW contacts must be made in the CW
+portion of the band. Same for RTTY.
+
+        D. Stations may be worked once per
+mode, per band (for mobiles in each new county), i.e.,
+w7abc
+may be worked on
+
+            both 20 CW
+and 20 SSB for QSO credit.
+
+        E. Your call sign must indicate your
+DXCC country (also, portables in Hawaii and Alaska must sign /KH6 or /KL7).
+
+        F. Amateur Radio Clubs may compete,
+as per ARRL Club competition rules. Please indicate your club affiliation on
+Cabrillo log file.
+
+        G. Idaho stations are encouraged to
+identify themselves by county, i.e., K7IQP/KOO (station in Kootenai County)
+
+            or NX7TT/JEF
+(station in Jefferson County) on CW / Digital, and �K7IQP slash Kootenai� or
+�NX7TT slash Jefferson�
+
+            on phone.
+
+        H. For out of state operators, the
+number of Idaho counties (44 total) is the multiplier.
+
+        I. For Rovers in Idaho, scores are
+accumulated by county. You may work the same station from as many counties your
+in,   for QSO
+points.
+
+        J. Repeaters are not to be used.
+
+11. Reporting:    see this link
+LOGS 
+ALL Logs must be Cabrillo files. See possible
+logging software button on the home page
+
+                    
+IT IS IMPERATIVE THAT 
+YOUR EMAIL ADDRESS
+IS INCLUDED in YOUR
+Cabrillo FILE,,
+
+12. Awards:
+
+       
+A.
+Certificates can be retrieved from the Idaho QSO Party Log Submission Site. 
+
+      Go to...https://idqp.contesting.com/idqpsubmitlog.php...click
+on CERTIFICATES and enter your call sign. 
+
+      Your certificate will download to your computer
+in PDF format. Certificates won't be available for  at least 2
+
+      weeks after the contest ends.
+
+        B. Special awards may be awarded at
+the discretion of the Idaho QSO Party Contest Committee.
+
+       
+
+13. Condition of Entry:
+
+        Each entrant agrees to be bound by
+the provisions, as well as the intent of this announcement,
+
+        the regulations of their licensing
+authority and the decisions of the Idaho QSO Party Contest Committee.
+
+                                                
+
+     (be advised, your logging
+software WILL probably NOT score correctly !   DO NOT DESPAIR, 
+
+     Our scoring software will decode it and
+if necessary adjust your score.

@@ -73,7 +73,7 @@
   },
   {
    "name": "Idaho QSO Party",
-   "partyID": null,
+   "partyID": "idqp",
    "windows": [
     {
      "start": "2026-03-14T16:00:00Z",
