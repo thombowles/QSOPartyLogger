@@ -70,6 +70,20 @@ targets:
             UTTypeTagSpecification:
               public.filename-extension:
                 - qplog
+        # ADIF is someone else's format, so imported, not exported. Without
+        # this the ⌘E save panel (allowed types drive allowed extensions)
+        # renames "KE5CW.adi" to "KE5CW.adi.txt". ADI files are plain text
+        # named .adi per the ADIF 3.1.4 spec (adif.org, §Data Formats);
+        # .adif is the alternate spelling other loggers emit.
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: org.b5n.qsopartylogger.adif
+            UTTypeDescription: ADIF Amateur Radio Log
+            UTTypeConformsTo:
+              - public.plain-text
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - adi
+                - adif
     entitlements:
       path: Resources/QSOPartyLogger.entitlements
       properties:

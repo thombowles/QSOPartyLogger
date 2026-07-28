@@ -287,5 +287,6 @@ final class CallHistoryPrefillTests: XCTestCase {
 
 private extension LogDocument {
     /// `EntryFlow` for a document, for tests that build both.
+    @MainActor
     func flowForTest() -> EntryFlow { EntryFlow(document: self) }
 }

@@ -149,20 +149,6 @@ struct MainView: View {
                 defaultFilename: exportName
             ) { _ in }
             .toolbar { toolbarContent }
-            .alert("Radio error", isPresented: radioErrorPresented) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(radio.lastError ?? "")
-            }
-    }
-
-    private var radioErrorPresented: Binding<Bool> {
-        Binding(
-            get: { radio.lastError != nil },
-            set: { presented in
-                if !presented { radio.clearError() }
-            }
-        )
     }
 
     private var splitContent: some View {
@@ -682,7 +668,7 @@ struct MainView: View {
         focusedField = .call
         flow.onAppear(operatingContext)
         installKeyMonitor()
-        radio.connectAndValidate(settings: settings)
+        radio.autoConnect(settings: settings)
 
         spotClient.onSpot = { spot in
             spotStore.add(spot)
@@ -1324,7 +1310,9 @@ struct MainView: View {
     private func exportADIF() {
         guard let party else { return }
         exportDoc = TextExportDocument(text: AdifExporter.export(log: document.log, party: party))
-        exportType = .plainText
+        // Through .plainText the save panel would append ".txt" — .adi is not
+        // an extension of any plain-text type. .adi (LogDocument.swift) is.
+        exportType = .adi
         exportName = "\(document.log.station.callsign.isEmpty ? "log" : document.log.station.callsign).adi"
         isExporting = true
     }
@@ -1366,6 +1354,7 @@ struct WindowAccessor: NSViewRepresentable {
 /// Plain-text FileDocument for save panels.
 struct TextExportDocument: FileDocument {
     static var readableContentTypes: [UTType] { [.plainText] }
+    static var writableContentTypes: [UTType] { [.plainText, .adi] }
     var text: String
 
     init(text: String) {

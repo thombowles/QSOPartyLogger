@@ -562,8 +562,18 @@ parties, and the remaining engine gaps. Adding a party is governed by
   status (frequency/mode/TX via interlock), CW through the radio's CWX
   keyer, bidirectional WPM sync.
 - **Auto-reconnect on open**: opening a contest file reconnects the last
-  radio setup and *validates* it — if the radio doesn't answer within a few
-  seconds you get told, instead of discovering a dead link mid-pileup.
+  radio setup, and every connect — manual or automatic — *validates* that
+  the radio actually answers, instead of letting a dead link surface
+  mid-pileup.
+- **Connection truth lives in the radio bar, not in popups**: the slot by
+  the Connect button reads "Waiting for radio…" while the link proves out,
+  then lights up with the live frequency — or warns **Radio not answering**
+  in orange, with the full story (the exact target, what to check, the
+  macOS Local Network permission hint) one tooltip away. Failed connects
+  ("Couldn't open port", "No radio address") and involuntary drops
+  ("Connection lost") land in the same spot. And the button never lies:
+  it offers **Disconnect** only once the radio has answered — an unproven
+  link gets **Cancel**, because there is nothing yet worth disconnecting.
 - **CW keying two ways**: direct DTR/RTS line keying with sub-millisecond
   software timing (8–50 WPM, optional PTT line with lead/tail), or the
   radio's internal keyer (K3 `KY` / Flex CWX). F1–F8 messages with
@@ -712,7 +722,10 @@ parties, and the remaining engine gaps. Adding a party is governed by
   is two keystrokes on a normal run.
 - **Exports**: Cabrillo V3 (per-county-line QSO rows, category headers,
   claimed score) and ADIF 3.1.4 (`CNTY`/`MY_CNTY` with full county names,
-  `STX_STRING`/`SRX_STRING`, group ids in an APP_ field).
+  `STX_STRING`/`SRX_STRING`, group ids in an APP_ field). The app declares
+  the ADIF file type (`.adi`/`.adif`, plain text), so ⌘E's save panel keeps
+  the `.adi` name instead of appending `.txt`, and Finder labels the file
+  "ADIF Amateur Radio Log".
 - **Documents**: each contest is a `.qplog` file (JSON) with undo. New logs
   auto-save into your logs folder on setup, then **every QSO change writes
   straight to disk** (and mirrors to iCloud Drive if configured) — a crash
@@ -1091,9 +1104,11 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1750 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1795 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
-app-facing defaults, cluster login/telnet handling,
+app-facing defaults, the radio connection lifecycle (phases, inline errors,
+silent-radio validation — driven over `/dev/null` as a stone-deaf serial
+port, so no hardware is needed), cluster login/telnet handling,
 call history files (the N1MM text format against two complete real files,
 the listing and download-form pages against captured HTML, the store, the
 scripted download client including every keep-the-cache failure path, and
