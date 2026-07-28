@@ -107,6 +107,15 @@ struct SetupSheet: View {
                             Text($0.rawValue).tag($0)
                         }
                     }
+                    // Status by the control that fixes it: the log already
+                    // has spots on the record, so NON-ASSISTED is the one
+                    // selection that contradicts it.
+                    if document.log.usedSpots, station.categoryAssisted == .nonAssisted {
+                        Label(AssistedSpotWarning.setupCaution, systemImage: "exclamationmark.triangle.fill")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                     Picker("Power", selection: $station.categoryPower) {
                         ForEach(StationProfile.CategoryPower.allCases, id: \.self) {
                             Text($0.rawValue).tag($0)

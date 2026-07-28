@@ -216,4 +216,53 @@ final class ModelTests: XCTestCase {
             .searchPounce
         )
     }
+
+    // MARK: The spot-use fact and the assisted claim (2026-07-28)
+
+    /// A document saved before the fact existed still opens, and reads as
+    /// having used nothing — proven by stripping a key that exists today, so
+    /// the fixture is real, not hypothetical.
+    func testLogWithoutUsedSpotsDecodesToFalse() throws {
+        var log = ContestLog(partyID: "ksqp")
+        log.station.callsign = "KE5CW"
+        var object = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: log.encoded()) as? [String: Any]
+        )
+        XCTAssertNotNil(
+            object.removeValue(forKey: "usedSpots"),
+            "the key must exist before removing it, or this proves nothing"
+        )
+        let legacy = try JSONSerialization.data(withJSONObject: object)
+
+        let decoded = try ContestLog.decode(from: legacy)
+        XCTAssertFalse(decoded.usedSpots, "absent means no spotting assistance")
+        XCTAssertEqual(decoded.station.callsign, "KE5CW", "neighbouring values survive")
+    }
+
+    func testUsedSpotsSurvivesARoundTrip() throws {
+        var log = ContestLog(partyID: "ksqp")
+        log.usedSpots = true
+        XCTAssertTrue(try ContestLog.decode(from: log.encoded()).usedSpots,
+                      "a restart mid-contest must not launder the assistance")
+    }
+
+    /// The one predicate the warning hangs off: the conjunction of the
+    /// recorded fact and the profile's claim. The fact is recorded even for
+    /// an ASSISTED profile — flipping the claim afterwards is what the
+    /// truth table's third line is about.
+    func testSpotsContradictNonAssistedClaimTruthTable() {
+        var log = ContestLog(partyID: "ksqp")
+        XCTAssertEqual(log.station.categoryAssisted, .nonAssisted, "precondition: the default claim")
+        XCTAssertFalse(log.spotsContradictNonAssistedClaim, "no spots — nothing to contradict")
+
+        log.usedSpots = true
+        XCTAssertTrue(log.spotsContradictNonAssistedClaim,
+                      "spots received against a NON-ASSISTED claim")
+
+        log.station.categoryAssisted = .assisted
+        XCTAssertFalse(log.spotsContradictNonAssistedClaim, "ASSISTED owns its spots")
+
+        log.usedSpots = false
+        XCTAssertFalse(log.spotsContradictNonAssistedClaim)
+    }
 }

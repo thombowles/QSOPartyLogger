@@ -319,4 +319,21 @@ final class LogDocumentTests: XCTestCase {
         XCTAssertEqual(doc.log.operatingMode, .run,
                        "the manual choice survives; re-deriving would give S&P")
     }
+
+    // MARK: The spot-use fact (2026-07-28)
+
+    /// A spot delivered into the session is recorded on the document — once.
+    /// The method takes no undo manager on purpose: this is an observation,
+    /// not an operator edit, and ⌘Z must never clear an integrity record.
+    @MainActor
+    func testNoteSpotsUsedRecordsTheFactOnce() {
+        let doc = LogDocument()
+        XCTAssertFalse(doc.log.usedSpots, "precondition: a fresh document has used nothing")
+
+        doc.noteSpotsUsed()
+        XCTAssertTrue(doc.log.usedSpots)
+
+        doc.noteSpotsUsed()  // the thousandth spot says nothing the first didn't
+        XCTAssertTrue(doc.log.usedSpots)
+    }
 }

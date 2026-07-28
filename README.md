@@ -608,6 +608,18 @@ parties, and the remaining engine gaps. Adding a party is governed by
   unfinished stub), WA Salmon Run (no page), the multi-state and combined
   entries, and NAQP. Polling only runs inside the
   party's own operating window.
+- **Assisted-category honesty**: the first spot either feed delivers —
+  cluster or hub — is recorded on the log itself (it survives a restart),
+  and if Contest Setup still declares `CATEGORY-ASSISTED: NON-ASSISTED`, an
+  orange badge stands in the station strip: most sponsors score any
+  spotting-network use as Assisted (NAQP rule 5A is the canonical wording).
+  Non-blocking throughout — dismiss it with ⌘. (or the ×), and it stands
+  back up exactly once more per sitting: at Cabrillo export, where the
+  claim ships. The export itself is never altered or held up; switching
+  Assisted in Contest Setup (which carries its own inline caution, as does
+  the cluster connect popover) is what clears it. Self-spotting alone never
+  trips it — sending a spot receives no assistance, and self-spotting rules
+  genuinely vary by sponsor.
 - **Exchange pre-fill from a spot**: when nothing in your own log or the
   archive knows a station, a hub spot's county fills the exchange as a last
   resort — shown **unconfirmed** (dashed, with a reminder) rather than merely
@@ -784,6 +796,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `⌘B` | Toggle the band map window |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
+| `⌘.` | Dismiss the assisted-category warning for this sitting (it returns at Cabrillo export) |
 | `⇧⌘S` | Spot to the QSO Party Hub — yourself in Run, the call field in S&P (Return sends, Esc cancels) |
 | `⌘⇧D` | Contest Dashboard (season history + SQP Challenge) |
 | `⌘[` / `⌘]` | Dashboard: previous / next year |
@@ -1061,7 +1074,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1721 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1737 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1070,7 +1083,9 @@ spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, contacts
 from your own log reaching the band map (and never displacing somebody else's
 spot), what a spot sheet may offer as a county for any station, cluster
-history, the band map scale and its column stacking (including that every
+history, the assisted-category warning (the spot-use record on the log, its
+decode tolerance, and every string and show/hide rule — including that none
+of them names a party), the band map scale and its column stacking (including that every
 label-size preset still leaves room for two columns, so a pile-up never falls
 back to pushing labels off frequency), the band plan and its
 CW/phone crossovers, typed QSY commands, the key-monitor focus gate and its key

@@ -23,6 +23,21 @@ struct ContestLog: Codable, Equatable, Sendable {
     /// Empty for every party that exchanges no name — and for documents
     /// written before the setting existed, which decode to empty.
     var exchangeName: String
+    /// Whether spotting-network information — cluster or hub — was ever
+    /// delivered into this contest's session. Set once and never cleared:
+    /// reception is access (NAQP rule 5A(ii)'s word), access is what the
+    /// Cabrillo ASSISTED/NON-ASSISTED split turns on everywhere, and a
+    /// restart mid-contest must not launder it. Recorded even while the
+    /// profile claims ASSISTED, so flipping the claim afterwards changes
+    /// the warning, not the fact.
+    var usedSpots: Bool = false
+
+    /// The assisted-category warning's one predicate: spotting information
+    /// reached this log while Contest Setup claims NON-ASSISTED. Universal
+    /// Cabrillo, no party involved; everything visible hangs off this.
+    var spotsContradictNonAssistedClaim: Bool {
+        usedSpots && station.categoryAssisted == .nonAssisted
+    }
 
     /// The QSO number to send for the next contact, for parties whose exchange
     /// carries one. Derived from the highest number already sent rather than
@@ -72,7 +87,7 @@ struct ContestLog: Codable, Equatable, Sendable {
 
     private enum CodingKeys: String, CodingKey {
         case schemaVersion, partyID, station, myLocation, qsos, messages, operatingMode, setupCompleted
-        case exchangeName
+        case exchangeName, usedSpots
     }
 
     init(from decoder: Decoder) throws {
@@ -93,6 +108,9 @@ struct ContestLog: Codable, Equatable, Sendable {
             ?? !station.callsign.isEmpty
         // Documents written before name exchanges existed carry no name.
         exchangeName = try c.decodeIfPresent(String.self, forKey: .exchangeName) ?? ""
+        // Documents written before the fact was recorded used no spots —
+        // which is how sponsors read logs that predate the header too.
+        usedSpots = try c.decodeIfPresent(Bool.self, forKey: .usedSpots) ?? false
     }
 
     static func decode(from data: Data) throws -> ContestLog {
