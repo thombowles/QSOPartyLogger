@@ -311,6 +311,55 @@ final class NorthAmericanQSOPartyCWTests: XCTestCase {
         XCTAssertEqual(Array(fields.suffix(6)), ["KE5CW", "TOM", "TX", "N2CU", "BILL", "NY"])
     }
 
+    // MARK: Entry classifications (rules 5 and 6)
+
+    /// Rule 5B — Single Operator Assisted: one operator, spotting allowed —
+    /// is `SINGLE-OP` + `ASSISTED`, the pair the operator's own January 2026
+    /// entry carried. Rule 6A rides along: QRP is a competitive category,
+    /// not a score factor (`testPartyShape` pins the nil `scoreMultipliers`).
+    func testCabrilloDeclaresASingleOpAssistedQRPEntry() {
+        var contest = log([qso(call: "N2CU", their: "NY")])
+        contest.station.categoryOperator = .singleOp
+        contest.station.categoryAssisted = .assisted
+        contest.station.categoryPower = .qrp
+        let score = ScoreEngine.score(log: contest, party: naqp)
+        let export = CabrilloExporter.export(log: contest, party: naqp, score: score)
+        let lines = export.components(separatedBy: "\n")
+
+        XCTAssertTrue(lines.contains("CATEGORY-OPERATOR: SINGLE-OP"))
+        XCTAssertTrue(lines.contains("CATEGORY-ASSISTED: ASSISTED"))
+        XCTAssertTrue(lines.contains("CATEGORY-POWER: QRP"))
+    }
+
+    /// Rule 5C — Multioperator Two-Transmitter: `MULTI-OP`, `TWO`, the crew
+    /// in `OPERATORS:`, spotting allowed (5C(ii)), and 5C(vii)'s single
+    /// shared name in every sent exchange — the log-wide `exchangeName`
+    /// mechanism, visible in each QSO line's sent-name column.
+    func testCabrilloDeclaresAMultiTwoEntry() {
+        var contest = log([
+            qso(call: "N2CU", their: "NY"),
+            qso(call: "W0BH", band: .m40, their: "KS"),
+        ])
+        contest.station.categoryOperator = .multiOp
+        contest.station.categoryAssisted = .assisted
+        contest.station.categoryTransmitter = .two
+        contest.station.operators = "KE5CW W5XYZ"
+        let score = ScoreEngine.score(log: contest, party: naqp)
+        let export = CabrilloExporter.export(log: contest, party: naqp, score: score)
+        let lines = export.components(separatedBy: "\n")
+
+        XCTAssertTrue(lines.contains("CATEGORY-OPERATOR: MULTI-OP"))
+        XCTAssertTrue(lines.contains("CATEGORY-ASSISTED: ASSISTED"))
+        XCTAssertTrue(lines.contains("CATEGORY-TRANSMITTER: TWO"))
+        XCTAssertTrue(lines.contains("OPERATORS: KE5CW W5XYZ"))
+        let qsoLines = lines.filter { $0.hasPrefix("QSO:") }
+        XCTAssertEqual(qsoLines.count, 2)
+        for line in qsoLines {
+            XCTAssertTrue(line.contains(" TOM "),
+                          "one name for the whole contest, rule 5C(vii): \(line)")
+        }
+    }
+
     func testDefaultMessagesSendNameThenLocation() {
         let sets = MessageSets.defaults(for: naqp)
         XCTAssertTrue(sets.searchPounce.contains("{NAME} {EXCH}"), "\(sets.searchPounce)")

@@ -51,6 +51,9 @@ struct MainView: View {
     @State private var spotPurgeTask: Task<Void, Never>?
     @State private var showClusterPopover = false
     @State private var clusterCommand = ""
+    /// Session-scoped on purpose: a claim that is still wrong earns one nag
+    /// per sitting, and the Cabrillo export stands it back up regardless.
+    @State private var spotWarningDismissed = false
     /// Reference frequency for ⌘←/⌘→ when no live radio frequency exists.
     @State private var spotCursorKHz: Double?
     /// Run frequency captured when CQ is sent; ⌘J jumps back to it.
@@ -148,20 +151,6 @@ struct MainView: View {
                 defaultFilename: exportName
             ) { _ in }
             .toolbar { toolbarContent }
-            .alert("Radio error", isPresented: radioErrorPresented) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(radio.lastError ?? "")
-            }
-    }
-
-    private var radioErrorPresented: Binding<Bool> {
-        Binding(
-            get: { radio.lastError != nil },
-            set: { presented in
-                if !presented { radio.clearError() }
-            }
-        )
     }
 
     private var splitContent: some View {
@@ -316,6 +305,14 @@ struct MainView: View {
             spotStore.purge(now: Date())
         }
         .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
+        // A conflict that returns — the profile flipped away from
+        // NON-ASSISTED and back, spots still on the record — stands the
+        // warning back up; going quiet leaves the dismissal alone.
+        .onChange(of: document.log.spotsContradictNonAssistedClaim) { _, conflict in
+            spotWarningDismissed = AssistedSpotWarning.rearm(
+                dismissed: spotWarningDismissed, conflict: conflict
+            )
+        }
         .onChange(of: document.log.myLocation.sentExchanges) { offerReSpotOnCountyChange() }
         // Setup is where a rover changes county, so the offer waits for it to
         // close rather than stacking a sheet on top of it.
@@ -404,6 +401,30 @@ struct MainView: View {
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
                     .background(.blue.opacity(0.2), in: Capsule())
+            }
+
+            if AssistedSpotWarning.isVisible(
+                conflict: document.log.spotsContradictNonAssistedClaim,
+                dismissed: spotWarningDismissed
+            ) {
+                HStack(spacing: 5) {
+                    Label(AssistedSpotWarning.badge, systemImage: "exclamationmark.triangle.fill")
+                        .font(.caption.weight(.bold))
+                    Button {
+                        spotWarningDismissed = true
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                    .buttonStyle(.plain)
+                    .keyboardShortcut(".", modifiers: .command)
+                    .accessibilityLabel("Dismiss assisted-category warning")
+                    .help("Dismiss for this sitting (⌘.) — it returns at Cabrillo export")
+                }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(.orange.opacity(0.2), in: Capsule())
+                .foregroundStyle(.orange)
+                .help(AssistedSpotWarning.detail)
             }
 
             Spacer()
@@ -546,6 +567,15 @@ struct MainView: View {
             Toggle("Connect automatically when a contest opens", isOn: $settings.clusterAutoConnect)
                 .font(.callout)
 
+            // Status by the control that creates the condition, before the
+            // first spot lands. The strip badge takes over once one does.
+            if document.log.station.categoryAssisted == .nonAssisted {
+                Label(AssistedSpotWarning.connectCaution, systemImage: "exclamationmark.triangle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                    .frame(maxWidth: 250, alignment: .leading)
+            }
+
             Text("Spot filters (continent, mode, band, age) live in the band map window — ⌘B.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -667,15 +697,20 @@ struct MainView: View {
         focusedField = .call
         flow.onAppear(operatingContext)
         installKeyMonitor()
-        radio.connectAndValidate(settings: settings)
+        radio.autoConnect(settings: settings)
 
         spotClient.onSpot = { spot in
             spotStore.add(spot)
+            // Reception is use: a delivered spot is "access to spotting
+            // information", whatever the profile currently claims.
+            document.noteSpotsUsed()
         }
         // Hub spots land in the same store, so the band map, filters, stacking
-        // and ⌘←/⌘→ treat them exactly like any other spot.
+        // and ⌘←/⌘→ treat them exactly like any other spot — including the
+        // assisted-category record.
         hubSpotClient.onSpots = { spots in
             for spot in spots { spotStore.add(spot) }
+            if !spots.isEmpty { document.noteSpotsUsed() }
         }
         syncHubSpotClient()
         if settings.clusterAutoConnect,
@@ -1308,6 +1343,14 @@ struct MainView: View {
     }
 
     private func exportCabrillo() {
+        // The claim ships here, so a standing conflict re-surfaces even if
+        // dismissed earlier. The export itself proceeds untouched — the
+        // warning is advice, and the file is never rewritten. ADIF (⌘E)
+        // carries no CATEGORY-ASSISTED claim and does not re-arm.
+        spotWarningDismissed = AssistedSpotWarning.rearm(
+            dismissed: spotWarningDismissed,
+            conflict: document.log.spotsContradictNonAssistedClaim
+        )
         guard let party else { return }
         exportDoc = TextExportDocument(
             text: CabrilloExporter.export(log: document.log, party: party, score: score)

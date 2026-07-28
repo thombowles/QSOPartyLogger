@@ -171,6 +171,25 @@ amplifier"). Rule 14 team competition is a registration-side arrangement
 ("Inclusion of team information in submitted Cabrillo logs is not required").
 M2 carries a 10-minute band timer (rule 5C(vi)) the app does not model — §14.
 
+**Cabrillo `CATEGORY-*` mapping** (added 2026-07-28; header value authority
+is the wwrof spec, [`cabrillo_v3_headers.md`](cabrillo_v3_headers.md)):
+
+| Rule 5/6 entry | `CATEGORY-OPERATOR` | `CATEGORY-ASSISTED` | `CATEGORY-TRANSMITTER` |
+| --- | --- | --- | --- |
+| SO (5A) | `SINGLE-OP` | `NON-ASSISTED` | `ONE` |
+| SOA (5B) | `SINGLE-OP` | `ASSISTED` | `ONE` |
+| M2 (5C) | `MULTI-OP` | `ASSISTED` allowed (5C(ii)) | `TWO`, `OPERATORS:` lists the crew |
+
+Power: rule 6 A/B → `CATEGORY-POWER: QRP` / `LOW`; a station "choosing to
+use more than 100 W or entered as High Power" exports `HIGH` and is received
+as a check log by the sponsor — the export stays honest rather than
+blocking. `CATEGORY-BAND:` is always `ALL` (no single-band awards exist in
+rule 19), `CATEGORY-MODE: CW`. No overlay or time categories exist. The
+reference for a real accepted submission is KE5CW's January 2026 log (N1MM):
+`SINGLE-OP` + `ASSISTED` + `LOW` + `ONE` — SOA, the category rule 5B
+defines. The sponsor's upload form (read 2026-07-28) separately asks for
+power bucket, spotting assistance, and operator count at submission time.
+
 ## 12. Cabrillo `CONTEST:` header
 
 The rules print no header token, so per constitution Article 1's codified

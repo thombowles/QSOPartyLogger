@@ -180,6 +180,17 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         undoManager?.setActionName("Edit Contact")
     }
 
+    /// A spot from either feed — cluster or hub — reached this session.
+    /// An observation, not an operator edit, so it registers no undo: ⌘Z
+    /// must never clear an integrity record. Direct mutation is the same
+    /// dirty-tracking class as the Run/S&P binding, and the flag rides
+    /// along with every subsequent save.
+    @MainActor
+    func noteSpotsUsed() {
+        guard !log.usedSpots else { return }
+        log.usedSpots = true
+    }
+
     /// "2026-07-25 ALQP KE5CW" — default display name for unsaved logs.
     nonisolated static func defaultDisplayName(partyID: String, callsign: String, date: Date = Date()) -> String {
         let f = DateFormatter()
