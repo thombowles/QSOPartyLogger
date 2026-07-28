@@ -12,8 +12,8 @@ final class CaveatRosterTests: XCTestCase {
     /// means a real scoring gap was found; a departure means one was closed.
     private static let badges: Set<String> = [
         "arqp", "deqp", "fqp", "idqp", "ilqp", "in7qpne", "kyqp", "laqp",
-        "mnqp", "moqp", "msqp", "naqpcw", "ncqp", "ndqp", "neqp", "nmqp",
-        "oqp", "qcqp", "scqp", "vaqp", "vtqp", "warun", "wiqp",
+        "mnqp", "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp",
+        "nmqp", "oqp", "qcqp", "scqp", "vaqp", "vtqp", "warun", "wiqp",
     ]
 
     func testBadgeRosterIsExactlyAsExpected() {
@@ -82,6 +82,6 @@ final class CaveatRosterTests: XCTestCase {
         let verifiedWithCaveats = parties
             .filter { !$0.isPartiallyVerified && !$0.caveats.isEmpty }
             .map(\.id)
-        XCTAssertEqual(verifiedWithCaveats, ["naqpcw", "warun"])
+        XCTAssertEqual(verifiedWithCaveats, ["naqpcw", "naqpssb", "warun"])
     }
 }
