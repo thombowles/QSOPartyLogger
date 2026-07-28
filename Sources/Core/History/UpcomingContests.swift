@@ -25,8 +25,8 @@ struct UpcomingContest: Equatable, Sendable, Identifiable {
 enum UpcomingContests {
     /// Remaining contests as of `now`, soonest next-window first. Installed
     /// parties (bundled or user) supply their own schedules; calendar rows
-    /// cover the rest, deduplicated by contest name — so the calendar's
-    /// known-wrong NJQP date can never shadow the sponsor's.
+    /// cover the rest, deduplicated by party id *and* by contest name — so the
+    /// calendar's known-wrong NJQP date can never shadow the sponsor's.
     static func upcoming(
         now: Date,
         parties: [PartyDefinition],
@@ -34,14 +34,22 @@ enum UpcomingContests {
         records: [ContestRecord]
     ) -> [UpcomingContest] {
         var claimedNames = Set<String>()
+        var claimedIDs = Set<String>()
         var out: [UpcomingContest] = []
         let enteredKeys = Set(records.map { "\($0.partyID)|\($0.year)" })
 
         for party in parties {
             guard let schedule = party.schedule, !schedule.isEmpty else { continue }
-            // A party with a definition owns its name outright: even when its
+            // A party with a definition owns its row outright: even when its
             // windows have all passed, the calendar must not resurrect it.
+            // Claim by id as well as name — the challenge spells two approved
+            // contests differently than their sponsors do (Maryland/DC,
+            // Washington State Salmon Run), and both spellings are sourced,
+            // so name alone let those list twice. Matching `isApproved` and
+            // `ChallengeStanding`, the id is authoritative and the name is the
+            // fallback for a user party the generated mapping never saw.
             claimedNames.insert(party.name.lowercased())
+            claimedIDs.insert(party.id)
             let windows = schedule.sorted { $0.start < $1.start }
             guard let next = windows.first(where: { $0.end > now }) else { continue }
             let isApproved = calendar.map {
@@ -60,7 +68,8 @@ enum UpcomingContests {
         }
 
         for contest in calendar?.approvedContests ?? []
-        where !claimedNames.contains(contest.name.lowercased()) {
+        where !claimedNames.contains(contest.name.lowercased())
+            && !(contest.partyID.map(claimedIDs.contains) ?? false) {
             guard let next = contest.windows.first(where: { $0.end > now }) else { continue }
             out.append(UpcomingContest(
                 name: contest.name,
