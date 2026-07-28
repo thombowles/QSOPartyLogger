@@ -717,7 +717,10 @@ parties, and the remaining engine gaps. Adding a party is governed by
   score sidebar computed it (QSOs, mults, bonus, on-air time with ≥30-min
   breaks excluded), QSO and score charts, and each party's year-over-year
   trend with your personal best flagged. Return (or double-click) on a row
-  reopens that contest's `.qplog`.
+  reopens that contest's `.qplog`; ⌘E (also in the row's right-click menu)
+  exports it as ADIF straight from the saved log — no need to reopen it —
+  and is grayed out when the log file is missing from the logs folder or
+  the party's rules aren't installed.
 - **State QSO Party Challenge tracker**: estimated standing by the sponsor's
   own formula — total QSOs × parties entered, with the official ≥2-QSO
   multiplier floor and the Bronze 500 → Diamond 100,000 ladder (levels
@@ -774,6 +777,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `⌘[` / `⌘]` | Dashboard: previous / next year |
 | `⌘R` | Dashboard: re-read the history file |
 | `Return` on a dashboard row | Open that contest's log |
+| `⌘E` on a dashboard row | Export that contest as ADIF (grayed out without its log file or installed rules) |
 
 These keys belong to the log window that has focus. While a sheet is open —
 Setup, the Messages editor, Edit QSO — the sheet owns the keyboard: `Esc` closes
@@ -1046,7 +1050,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1695 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1705 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,

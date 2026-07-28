@@ -155,6 +155,26 @@ final class DashboardModel {
 
     // MARK: Actions
 
+    /// The export staged for the contests section's ADIF save panel;
+    /// cleared when the panel closes.
+    var adifExport: AdifExporter.ArchivedExport?
+
+    /// Whether the record's party rules are installed right now — the same
+    /// catalog snapshot the row's name and score affordances read.
+    func partyInstalled(_ partyID: String) -> Bool {
+        partyNames[partyID] != nil
+    }
+
+    func exportADIF(_ record: ContestRecord) {
+        do {
+            adifExport = try AdifExporter.exportArchived(
+                record: record, folder: CloudMirror.activeFolder()
+            )
+        } catch {
+            NSLog("Dashboard: ADIF export failed: \(error)")
+        }
+    }
+
     func openLog(_ record: ContestRecord) {
         guard let name = record.sourceFileName,
               let folder = CloudMirror.activeFolder() else { return }
