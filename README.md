@@ -608,18 +608,25 @@ parties, and the remaining engine gaps. Adding a party is governed by
   unfinished stub), WA Salmon Run (no page), the multi-state and combined
   entries, and NAQP. Polling only runs inside the
   party's own operating window.
-- **Assisted-category honesty**: the first spot either feed delivers —
-  cluster or hub — is recorded on the log itself (it survives a restart),
-  and if Contest Setup still declares `CATEGORY-ASSISTED: NON-ASSISTED`, an
-  orange badge stands in the station strip: most sponsors score any
-  spotting-network use as Assisted (NAQP rule 5A is the canonical wording).
-  Non-blocking throughout — dismiss it with ⌘. (or the ×), and it stands
-  back up exactly once more per sitting: at Cabrillo export, where the
-  claim ships. The export itself is never altered or held up; switching
-  Assisted in Contest Setup (which carries its own inline caution, as does
-  the cluster connect popover) is what clears it. Self-spotting alone never
-  trips it — sending a spot receives no assistance, and self-spotting rules
-  genuinely vary by sponsor.
+- **A NON-ASSISTED entry gets no spots, full stop**: declare
+  `CATEGORY-ASSISTED: NON-ASSISTED` in Contest Setup and spotting is
+  switched off — Connect is disabled (with the reason and the fix right
+  there in the popover), auto-connect does not fire, hub polling does not
+  start, and declaring it mid-contest drops an open connection and clears
+  the network spots off the band map. Sponsors score any spotting-network
+  use as Assisted (NAQP rule 5A is the canonical wording), so the app makes
+  the claim true rather than warning you afterwards that it wasn't.
+  Changing Assisted back is the whole of the override; there is no other
+  one. Two things stay outside the block: **self-spotting** (⇧⌘S sends, it
+  doesn't receive, and sponsors split on whether it's allowed at all), and
+  **contacts from your own log** on the band map, which aren't spotting
+  information.
+- **The record prevention can't reach**: spots taken while ASSISTED are
+  noted on the log itself and survive a restart, so switching to
+  NON-ASSISTED *afterwards* raises an orange badge in the station strip —
+  the contacts are already made and can't be un-assisted. Non-blocking:
+  dismiss with ⌘. (or the ×), and it returns once more at Cabrillo export,
+  where the claim ships. The export is never altered or held up.
 - **Exchange pre-fill from a spot**: when nothing in your own log or the
   archive knows a station, a hub spot's county fills the exchange as a last
   resort — shown **unconfirmed** (dashed, with a reminder) rather than merely
@@ -799,7 +806,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `⌘B` | Toggle the band map window |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo (the toolbar's Export menu) |
-| `⌘.` | Dismiss the assisted-category warning for this sitting (it returns at Cabrillo export) |
+| `⌘.` | Dismiss the spots-already-used badge for this sitting (it returns at Cabrillo export) |
 | `⇧⌘S` | Spot to the QSO Party Hub — yourself in Run, the call field in S&P (Return sends, Esc cancels) |
 | `⌘⇧D` | Contest Dashboard (season history + SQP Challenge) |
 | `⌘[` / `⌘]` | Dashboard: previous / next year |
@@ -1077,7 +1084,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1743 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1747 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1086,9 +1093,11 @@ spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, contacts
 from your own log reaching the band map (and never displacing somebody else's
 spot), what a spot sheet may offer as a county for any station, cluster
-history, the assisted-category warning (the spot-use record on the log, its
-decode tolerance, and every string and show/hide rule — including that none
-of them names a party), the band map scale and its column stacking (including that every
+history, the spotting policy (which entry categories may take spots at all,
+that hub polling obeys the same claim, the spot-use record on the log and its
+decode tolerance, that clearing network spots spares your own log's contacts,
+and every string and show/hide rule — including that none of them names a
+party), the band map scale and its column stacking (including that every
 label-size preset still leaves room for two columns, so a pile-up never falls
 back to pushing labels off frequency), the band plan and its
 CW/phone crossovers, typed QSY commands, the key-monitor focus gate and its key

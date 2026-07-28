@@ -1,3 +1,29 @@
+# Assisted-category enforcement — a NON-ASSISTED entry takes no spots
+
+> **Revised 2026-07-28, same day, after the first version shipped.** KE5CW,
+> having tried the build: *"Actually, just prevent usage of clusters when
+> non-assisted is selected."* The design below was warning-only — it let the
+> feeds run and told the operator afterwards that the claim was now false.
+> **Prevention replaces it as the primary mechanism**: a NON-ASSISTED entry
+> cannot connect, cannot auto-connect, cannot poll the hub, and loses both
+> the connection and the network spots the moment the claim is declared.
+>
+> What survives from the original, and why: the **record** (`usedSpots`) and
+> the **strip badge**, in a strictly narrower role. Prevention cannot reach
+> backwards — spots taken legitimately under ASSISTED are already in the log,
+> so switching the claim to NON-ASSISTED afterwards is the one case left, and
+> it is exactly the case that would otherwise ship a false Cabrillo header in
+> silence. Under prevention the badge can arise no other way, which turns it
+> from a nag into a precise signal. The dismissal (⌘.) and the
+> Cabrillo-export re-arm are unchanged.
+>
+> `AssistedSpotWarning` is renamed `SpottingPolicy`, since the type now owns
+> permission as well as wording. Sections below are the original design;
+> read them as the state of things before this revision, except where the
+> revision says otherwise.
+
+---
+
 # Assisted-category warning — spots used while the entry says NON-ASSISTED
 
 **Date:** 2026-07-28 · **Trigger:** follow-up to
