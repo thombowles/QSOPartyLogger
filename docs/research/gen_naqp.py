@@ -303,10 +303,13 @@ def notes(mode_word, cabrillo, jan, aug, due, manager, form_url):
         f"CONTEST header {cabrillo} per the WA7BNM registry (Article 1 exception - the "
         f"rules print no token). Logs due within 7 days ({due}) at "
         f"ncjweb.com/naqplogsubmit; paper logs via {form_url}. Contest manager: "
-        f"{manager}. KNOWN LIMITATION 1: {CAVEAT_HI} KNOWN LIMITATION 2: "
-        f"{CAVEAT_LOCATION} KNOWN LIMITATION 3: {CAVEAT_4U1} Not modelled, deliberately: "
-        f"the 10-of-12-hour off-time accounting, M2's 10-minute band timer (rule 5C(vi)), "
-        f"and the sponsor-side NIL/bust penalty arithmetic of rule 12."
+        f"{manager}. Not modelled, deliberately: the 10-of-12-hour off-time accounting, "
+        f"M2's 10-minute band timer (rule 5C(vi)), and the sponsor-side NIL/bust penalty "
+        f"arithmetic of rule 12. Nothing may follow the last marked item below: the "
+        f"caveats pass (gen_caveats.py) copies each item's body from the notes, and a "
+        f"trailing paragraph would ride along into the last caveat's detail. "
+        f"KNOWN LIMITATION 1: {CAVEAT_HI} KNOWN LIMITATION 2: "
+        f"{CAVEAT_LOCATION} KNOWN LIMITATION 3: {CAVEAT_4U1}"
     )
 
 
