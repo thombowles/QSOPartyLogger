@@ -13,10 +13,11 @@ struct SetupSheet: View {
     @State private var stateToken = ""
     @State private var selectedCounties: [String] = []
     @State private var countySearch = ""
+    @State private var exchangeName = ""
 
     @FocusState private var focused: Field?
 
-    private enum Field: Hashable { case callsign, stateToken, countySearch }
+    private enum Field: Hashable { case callsign, stateToken, countySearch, exchangeName }
 
     private var parties: [PartyDefinition] {
         PartyCatalog.allParties()
@@ -105,6 +106,22 @@ struct SetupSheet: View {
 
                 Section("My Location") {
                     if let party {
+                        // The other half of "what I send", for the parties
+                        // whose exchange carries a name (NAQP, MNQP). One
+                        // name for the whole contest — the sponsors' own
+                        // rule — so it is set here, not per contact.
+                        if party.exchangeIncludesName {
+                            LabeledContent("Exchange name") {
+                                TextField("", text: $exchangeName.uppercasing)
+                                    .textFieldStyle(.roundedBorder)
+                                    .font(.body.monospaced())
+                                    .focused($focused, equals: .exchangeName)
+                                    .frame(width: 120)
+                            }
+                            Text("Sent in every exchange; the rules require one name for the whole contest.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                         Picker("Operating from", selection: $isInState) {
                             Text("Outside \(party.inStateLabel)").tag(false)
                             Text("Inside \(party.inStateLabel)").tag(true)
@@ -168,6 +185,11 @@ struct SetupSheet: View {
             } else {
                 focused = stateToken.isEmpty ? .stateToken : nil
             }
+        }
+        // Landing on a name party seeds the name the moment the field
+        // appears, not only when the sheet opened on one.
+        .onChange(of: partyID) { _, _ in
+            seedExchangeName()
         }
     }
 
@@ -315,10 +337,16 @@ struct SetupSheet: View {
 
     private var canSave: Bool {
         guard !station.callsign.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
+        guard let party else { return false }
+        // A name party without a name cannot produce one submittable line —
+        // gated exactly as the location token is.
+        if party.exchangeIncludesName,
+           exchangeName.trimmingCharacters(in: .whitespaces).isEmpty {
+            return false
+        }
         if isInState {
             return !selectedCounties.isEmpty
         }
-        guard let party else { return false }
         return party.validOutStateTokens.contains(stateToken.trimmingCharacters(in: .whitespaces).uppercased())
     }
 
@@ -336,6 +364,18 @@ struct SetupSheet: View {
         if stateToken.isEmpty {
             stateToken = station.stateProvince.uppercased()
         }
+        exchangeName = document.log.exchangeName
+        seedExchangeName()
+    }
+
+    /// A name party with no name yet starts from the operator's own first
+    /// name — the overwhelmingly common choice, and one keystroke to replace.
+    private func seedExchangeName() {
+        guard party?.exchangeIncludesName == true,
+              exchangeName.trimmingCharacters(in: .whitespaces).isEmpty,
+              let first = station.name.split(separator: " ").first
+        else { return }
+        exchangeName = first.uppercased()
     }
 
     private func save() {
@@ -343,7 +383,10 @@ struct SetupSheet: View {
         let location: MyLocation = isInState
             ? .inState(counties: selectedCounties)
             : .outOfState(location: stateToken.trimmingCharacters(in: .whitespaces).uppercased())
-        document.updateStation(station, location: location, partyID: partyID, undoManager: undoManager)
+        document.updateStation(
+            station, location: location, partyID: partyID,
+            exchangeName: exchangeName, undoManager: undoManager
+        )
         dismiss()
     }
 }

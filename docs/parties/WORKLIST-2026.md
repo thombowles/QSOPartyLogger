@@ -383,34 +383,25 @@ its own commit (Article 4).
   ×1.5 on an odd points×mults product lands on a half exactly half the time.
   Its own commit, adding no party (Article 4), with every existing party's score
   proved unchanged; then VTQP gains the field in a second commit.
-- **THE EXCHANGE CANNOT CARRY A NAME — and it is the only gap so far that blocks
-  log submission.** MNQP's exchange is a **first name** plus a location, with no
-  signal report at all: *"MN Stations: First name & county (three letter
-  designator). W/VE Stations: First name and state / province. DX Stations: First
-  name only."* `QSO` has `call`, `rstSent/Rcvd`, `serialSent/Rcvd`, `myLoc`,
-  `theirLoc` — and no name. `CabrilloExporter.qsoLine` writes
-  `exchangeNumber(serial:rst:)` into the `ex1` column the sponsor reserves for
-  the name, which for a party with neither resolves to the **empty string**, so
-  the exported log has the right columns with the names missing. The sponsor's
-  own template shows the cost:
-
-  ```
-  QSO: 14042 CW 2010-02-06 1200 AC0W  BILL  MOW N2CU  TOM  NY
-                                      ^ex1=Name           ^ex1=Name
-  ```
-
-  **Scoring is entirely unaffected** — names are not multipliers, not points, and
-  not part of the dupe key — so live operating, dupe checking and the score are
-  all correct. Cabrillo is *required* for submission, though, so an MNQP log
-  needs its name column filled in by hand. Sketch: `QSO.nameSent/nameRcvd:
-  String?` plus `PartyDefinition.exchangeIncludesName: Bool` defaulting false,
-  with `ex1` preferring name → serial → RST; the entry bar and edit sheet each
-  gain a field, and `ExchangeParser` learns a `NAME LOC` form. That touches
-  `Sources/UI/`, so it is its own commit under Article 4 and cannot ride along
-  with a party under Article 9. Pinned by
-  `MinnesotaQSOPartyTests.testKnownGapTheNameHalfOfTheExchangeIsNotLogged`.
-  **Watch for a second user** — a name exchange is common in the parties still
-  to be built, and the count matters for the schema's shape.
+- ~~**THE EXCHANGE CANNOT CARRY A NAME.**~~ **Done 2026-07-27.** The second and
+  third users arrived at once — the **North American QSO Parties, CW and SSB**
+  (NCJ; not State QSO Parties, deliberately absent from the Challenge's
+  approved list, requested by KE5CW) — which met the two-user bar and the
+  sketch shipped nearly unchanged: `QSO.nameSent/nameRcvd`,
+  `PartyDefinition.exchangeIncludesName`, `ContestLog.exchangeName` (the
+  contest-long sent name, set in Contest Setup and stamped per row), Cabrillo's
+  ex1 element preferring name → serial → report, ADIF `name`/`my_name`, a
+  `{NAME}` macro in the party-default message shapes, and a received-name
+  field on the entry row's Space chain that **gates logging** — rule 12 counts
+  only a complete copied exchange. One sketch item died on contact:
+  `ExchangeParser` learned no `NAME LOC` form, because Space is a field
+  separator, not a token separator — the name is its own field, like the
+  serial. MNQP's flag flipped in its own commit and its `exportBlocking`
+  caveat closed: **no bundled party's export is blocked any more**, pinned by
+  `CaveatRosterTests.testNoPartyIsExportBlocked`. NAQP itself needed **no
+  other schema change**: its 46-of-47 country checklist rides in the county
+  slot (the BCQP precedent), and its no-mult `DX` token is the NDQP shape.
+  Design: [`2026-07-27-name-exchanges-design.md`](../superpowers/specs/2026-07-27-name-exchanges-design.md).
 - **Bonuses cannot be restricted to one side of the party.** VTQP rule 1A(F):
   *"Stations OUTSIDE of Vermont will get an additional 2 point bonus for each
   W1AW/1 station they work"*, ending *"Vermont stations will not get this

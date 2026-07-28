@@ -62,10 +62,13 @@ struct MessageSets: Codable, Equatable, Sendable {
     static func defaults(for party: PartyDefinition?) -> MessageSets {
         let includesRST = party?.exchangeIncludesRST ?? true
         let includesSerial = party?.exchangeIncludesSerial ?? false
-        // Report, then number, then location — the order they are sent in.
+        let includesName = party?.exchangeIncludesName ?? false
+        // Report, then number, then name, then location — the order they are
+        // sent in ("BILL MOW", "TOM TX": the name leads the location).
         let exchange: [MacroToken?] = [
             includesRST ? .rst : nil,
             includesSerial ? .serial : nil,
+            includesName ? .name : nil,
             .exchange,
         ]
         let sent = exchange.compactMap { $0?.rawValue }.joined(separator: " ")

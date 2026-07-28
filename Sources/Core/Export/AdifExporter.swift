@@ -78,6 +78,11 @@ enum AdifExporter {
         // exchanges one, so every other party's ADIF is byte-identical.
         if let stx = q.serialSent { r += field("stx", String(stx)) }
         if let srx = q.serialRcvd { r += field("srx", String(srx)) }
+        // ADIF 3.1.4's fields for a name exchange (NAQP, MNQP). Written only
+        // where the row carries one, so every other party's ADIF is
+        // byte-identical; locations stay in stx_string/srx_string.
+        r += field("my_name", (q.nameSent ?? "").uppercased())
+        r += field("name", (q.nameRcvd ?? "").uppercased())
         r += field("stx_string", q.myLoc.uppercased())
         r += field("srx_string", q.theirLoc.uppercased())
         r += field("contest_id", party.cabrilloContest)

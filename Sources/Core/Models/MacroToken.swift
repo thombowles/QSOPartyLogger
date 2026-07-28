@@ -21,13 +21,16 @@ enum MacroToken: String, CaseIterable, Sendable {
     /// The QSO number being sent, for parties that exchange one (CQP, PAQP).
     /// Cut when cut numbers are on, and empty for every other party.
     case serial = "{SERIAL}"
+    /// The operator name being sent, for parties whose exchange carries one
+    /// (NAQP, MNQP) — the log's single contest-long name. Empty elsewhere.
+    case name = "{NAME}"
     /// The exchange being sent — county, section, or whatever this party's
     /// rules ask for.
     case exchange = "{EXCH}"
 
     /// The macros as the messages editor lists them, in case order:
-    /// `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}`. Derived from `allCases` so
-    /// that list can never again be missing one.
+    /// `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH}`. Derived from
+    /// `allCases` so that list can never again be missing one.
     static var helpList: String {
         allCases.map(\.rawValue).joined(separator: " ")
     }

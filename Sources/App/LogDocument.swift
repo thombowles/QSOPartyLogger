@@ -178,13 +178,23 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     }
 
     @MainActor
-    func updateStation(_ station: StationProfile, location: MyLocation, partyID: String, undoManager: UndoManager?) {
+    func updateStation(
+        _ station: StationProfile,
+        location: MyLocation,
+        partyID: String,
+        exchangeName: String? = nil,
+        undoManager: UndoManager?
+    ) {
         let (oldStation, oldLoc, oldParty) = (log.station, log.myLocation, log.partyID)
         let oldMessages = log.messages
         let oldMode = log.operatingMode
+        let oldExchangeName = log.exchangeName
         log.station = station
         log.myLocation = location
         log.partyID = partyID
+        if let exchangeName {
+            log.exchangeName = exchangeName.trimmingCharacters(in: .whitespaces).uppercased()
+        }
         log.setupCompleted = true
         // Macros the operator never edited follow the new party's exchange
         // shape — this is what gives a CQP log {SERIAL} instead of Kansas's
@@ -203,7 +213,10 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         AppSettings.shared.lastStationProfile = station
         undoManager?.registerUndo(withTarget: self) { doc in
             MainActor.assumeIsolated {
-                doc.updateStation(oldStation, location: oldLoc, partyID: oldParty, undoManager: undoManager)
+                doc.updateStation(
+                    oldStation, location: oldLoc, partyID: oldParty,
+                    exchangeName: oldExchangeName, undoManager: undoManager
+                )
                 // Restore the macros and the mode exactly afterwards, whatever
                 // the nested call's own re-derivation decided: both are
                 // conditionally re-derived above, so without this, undo would

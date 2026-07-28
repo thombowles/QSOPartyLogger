@@ -105,9 +105,24 @@ KINDS = {
     "miqp": [
         (0, "provenance", "Partial only because the 2026 rules came from an archive rather than a live page."),
     ],
+    # The exportBlocking entry closed 2026-07-27: name exchanges landed
+    # (forced in by the NAQP pair) and MNQP's flag is on, so the name is
+    # logged and exported. The notes record the closure per Article 20.
     "mnqp": [
-        (0, "exportBlocking", "The exchange carries a name this app cannot log, so an exported Cabrillo needs its name column filled in before you submit. Scoring is unaffected."),
-        (2, "provenance", "The 2026 rules were recovered from a web archive and cannot be re-fetched from the sponsor."),
+        (0, "provenance", "The 2026 rules were recovered from a web archive and cannot be re-fetched from the sponsor."),
+    ],
+    # The NAQP pair's caveats are also written by gen_naqp.py, which builds
+    # notes and caveats from the same constants — these entries must match it
+    # exactly, so running either generator leaves the files identical.
+    "naqpcw": [
+        (0, "scoreAffecting", "A Dominican Republic (HI) contact is credited as Hawaii - work both on one band and the score is one multiplier low."),
+        (1, "cosmetic", "US/VE entrants: set up as Outside with your state or province. Entrants in another NA country: Inside, then hand-fix the Cabrillo LOCATION header to DX."),
+        (2, "cosmetic", "Log United Nations HQ as 4U1 - the checklist's '4U1/u' cannot be typed because '/' separates county lines."),
+    ],
+    "naqpssb": [
+        (0, "scoreAffecting", "A Dominican Republic (HI) contact is credited as Hawaii - work both on one band and the score is one multiplier low."),
+        (1, "cosmetic", "US/VE entrants: set up as Outside with your state or province. Entrants in another NA country: Inside, then hand-fix the Cabrillo LOCATION header to DX."),
+        (2, "cosmetic", "Log United Nations HQ as 4U1 - the checklist's '4U1/u' cannot be typed because '/' separates county lines."),
     ],
     "moqp": [
         (0, "scoreAffecting", "The 40 and 80 m daytime bonus is not applied."),
@@ -220,7 +235,7 @@ VALID_KINDS = {"exportBlocking", "scoreAffecting", "ruleInference", "provenance"
 
 def main():
     files = sorted(f for f in os.listdir(PARTIES) if f.endswith(".json"))
-    assert len(files) == 46, f"expected 46 bundled parties, found {len(files)}"
+    assert len(files) == 48, f"expected 48 bundled parties, found {len(files)}"
 
     unclassified = []
     badge_count = 0

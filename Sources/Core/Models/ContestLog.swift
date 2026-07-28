@@ -17,6 +17,12 @@ struct ContestLog: Codable, Equatable, Sendable {
     /// Whether the operator has been through Contest Setup for this log —
     /// new documents prompt for setup immediately.
     var setupCompleted: Bool
+    /// The operator name sent in every exchange, for parties that carry one
+    /// (NAQP rule 10: "a single name throughout the entire contest period").
+    /// Set in Contest Setup; stamped into each row's `nameSent` at logging.
+    /// Empty for every party that exchanges no name — and for documents
+    /// written before the setting existed, which decode to empty.
+    var exchangeName: String
 
     /// The QSO number to send for the next contact, for parties whose exchange
     /// carries one. Derived from the highest number already sent rather than
@@ -51,7 +57,8 @@ struct ContestLog: Codable, Equatable, Sendable {
         qsos: [QSO] = [],
         messages: MessageSets = .standard,
         operatingMode: OperatingMode? = nil,
-        setupCompleted: Bool = false
+        setupCompleted: Bool = false,
+        exchangeName: String = ""
     ) {
         self.partyID = partyID
         self.station = station
@@ -60,10 +67,12 @@ struct ContestLog: Codable, Equatable, Sendable {
         self.messages = messages
         self.operatingMode = operatingMode ?? Self.deriveOperatingMode(from: myLocation)
         self.setupCompleted = setupCompleted
+        self.exchangeName = exchangeName
     }
 
     private enum CodingKeys: String, CodingKey {
         case schemaVersion, partyID, station, myLocation, qsos, messages, operatingMode, setupCompleted
+        case exchangeName
     }
 
     init(from decoder: Decoder) throws {
@@ -82,6 +91,8 @@ struct ContestLog: Codable, Equatable, Sendable {
         // Legacy docs in active use (callsign set) count as already set up.
         setupCompleted = try c.decodeIfPresent(Bool.self, forKey: .setupCompleted)
             ?? !station.callsign.isEmpty
+        // Documents written before name exchanges existed carry no name.
+        exchangeName = try c.decodeIfPresent(String.self, forKey: .exchangeName) ?? ""
     }
 
     static func decode(from data: Data) throws -> ContestLog {

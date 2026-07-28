@@ -14,7 +14,7 @@ final class PartyCatalogTests: XCTestCase {
             Set(parties.map(\.id)),
             ["alqp", "arqp", "azqp", "bcqp", "coqp", "cqp", "deqp", "fqp", "gaqp", "hqp", "iaqp", "in7qpne", "idqp", "ilqp", "inqp", "ksqp", "kyqp", "mdc",
              "meqp", "miqp",
-             "laqp", "mnqp", "moqp", "msqp", "ncqp", "ndqp", "neqp", "newenglandqp", "nhqp", "nmqp", "njqp", "nyqp", "ohqp", "okqp", "oqp", "paqp", "qcqp", "scqp", "sdqp", "sevenqp", "tnqp", "tqp", "vaqp", "vtqp",
+             "laqp", "mnqp", "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp", "newenglandqp", "nhqp", "nmqp", "njqp", "nyqp", "ohqp", "okqp", "oqp", "paqp", "qcqp", "scqp", "sdqp", "sevenqp", "tnqp", "tqp", "vaqp", "vtqp",
              "warun", "wiqp"]
         )
     }
@@ -36,9 +36,12 @@ final class PartyCatalogTests: XCTestCase {
     /// must be a deliberate edit backed by rule text, never incidental.
     ///
     /// Maine is the standing exception: its out-of-state entrants score each
-    /// other, in the sponsor's own wording.
+    /// other, in the sponsor's own wording. NAQP joins it because it has no
+    /// home state at all — rule 12 counts "a complete, correctly copied and
+    /// logged two-way exchange between a North American station and any other
+    /// station", so everyone works everyone.
     func testOutOfStateCreditRestrictionPerParty() {
-        let unrestricted: Set<String> = ["meqp"]
+        let unrestricted: Set<String> = ["meqp", "naqpcw", "naqpssb"]
         for party in PartyCatalog.loadBundled() {
             XCTAssertEqual(
                 party.outStateWorksHomeStationsOnly,

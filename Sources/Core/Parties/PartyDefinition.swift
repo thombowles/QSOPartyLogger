@@ -126,6 +126,18 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     var exchangeIncludesSerial: Bool { exchangeIncludesSerialRaw ?? false }
     private let exchangeIncludesSerialRaw: Bool?
 
+    /// Whether the exchange carries an operator name. NAQP rule 10: "Operator
+    /// name and station location (state, province, or country) for North
+    /// American stations"; MNQP is the same shape. The name is the Cabrillo
+    /// ex1 element wherever it exists, ahead of a serial or a report — which
+    /// is why a name party's log cannot be submitted without one.
+    ///
+    /// Independent of `exchangeIncludesRST` and `exchangeIncludesSerial`;
+    /// both bundled name parties pair the name with a location and nothing
+    /// else.
+    var exchangeIncludesName: Bool { exchangeIncludesNameRaw ?? false }
+    private let exchangeIncludesNameRaw: Bool?
+
     /// Whether an out-of-state entrant earns credit *only* for contacts with
     /// home-state stations. MDC rule 10b: "Stations not located in the state of
     /// Maryland, or the District of Columbia may only receive credit for
@@ -611,6 +623,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case sectionsRaw = "sections"
         case exchangeIncludesRSTRaw = "exchangeIncludesRST"
         case exchangeIncludesSerialRaw = "exchangeIncludesSerial"
+        case exchangeIncludesNameRaw = "exchangeIncludesName"
         case outStateWorksHomeStationsOnlyRaw = "outStateWorksHomeStationsOnly"
     }
 }

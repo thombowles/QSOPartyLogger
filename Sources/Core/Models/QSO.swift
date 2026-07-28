@@ -26,6 +26,14 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
     /// shared by every row it expands into (see `CountyLineExpander`).
     var serialSent: Int?
     var serialRcvd: Int?
+    /// Operator names sent and received, for parties whose exchange carries
+    /// one (NAQP: "Operator name and station location"; MNQP: "First name &
+    /// county"). `nil` everywhere else, so logs written before name support
+    /// decode unchanged. The sent name is the log's single contest-long name
+    /// (both sponsors require one), stamped per row so the record shows what
+    /// went out.
+    var nameSent: String?
+    var nameRcvd: String?
     /// My sent location for this row: county abbreviation (in-state) or state/province.
     var myLoc: String
     /// Their location for this row: county abbreviation, state, province, or "DX".
@@ -44,6 +52,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         rstRcvd: String,
         serialSent: Int? = nil,
         serialRcvd: Int? = nil,
+        nameSent: String? = nil,
+        nameRcvd: String? = nil,
         myLoc: String,
         theirLoc: String
     ) {
@@ -59,6 +69,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         self.rstRcvd = rstRcvd
         self.serialSent = serialSent
         self.serialRcvd = serialRcvd
+        self.nameSent = nameSent
+        self.nameRcvd = nameRcvd
         self.myLoc = myLoc
         self.theirLoc = theirLoc
     }

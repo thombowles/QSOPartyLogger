@@ -313,22 +313,33 @@ final class MinnesotaQSOPartyTests: XCTestCase {
         }
     }
 
-    /// KNOWN LIMITATION 1, pinned. The exchange's name half has nowhere to live:
-    /// `QSO` has no name field, and `CabrilloExporter` writes the
-    /// serial/report slot into the `ex1` column the sponsor reserves for the
-    /// name — which, for a party with neither, is empty. Scoring is unaffected;
-    /// submission is not.
-    func testKnownGapTheNameHalfOfTheExchangeIsNotLogged() throws {
-        let notes = try XCTUnwrap(mnqp.notes)
-        XCTAssertTrue(notes.contains("KNOWN LIMITATION 1"))
-        XCTAssertTrue(notes.contains("NEEDS ITS NAME COLUMN FILLED IN BEFORE IT IS SUBMITTED"),
-                      "the operator must be told what to do before submitting")
+    /// KNOWN LIMITATION 1, closed 2026-07-27. The name half of the exchange
+    /// was the one gap that blocked submission — `QSO` had no name field and
+    /// the ex1 column exported empty. Name exchanges (forced in by the NAQP
+    /// pair) closed it: the flag is on, the received name gates logging, and
+    /// Cabrillo writes the sponsor's own template (`AC0W BILL MOW`).
+    func testTheNameHalfOfTheExchangeIsLoggedAndExported() throws {
+        XCTAssertTrue(mnqp.exchangeIncludesName)
+        XCTAssertFalse(mnqp.exchangeIncludesRST, "a name and a location, nothing else")
 
-        // The exchange columns really do come out empty, which is the symptom.
-        let line = CabrilloExporter.qsoLine(qso(call: "W0AA", their: "DAK"), myCall: "KE5CW")
-        XCTAssertTrue(line.contains("W0AA"))
-        XCTAssertTrue(line.contains("DAK"))
-        XCTAssertFalse(line.contains("599"), "there is no report to write, and no name either")
+        let notes = try XCTUnwrap(mnqp.notes)
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION"),
+                       "the export blocker is closed; only the archive question remains")
+        XCTAssertTrue(notes.contains("NAME EXCHANGES LANDED 2026-07-27"),
+                      "Article 20: the caveat's disappearance must read as a fix")
+        XCTAssertFalse(mnqp.caveats.contains { $0.kind == .exportBlocking })
+
+        let named = QSO(
+            timestampUTC: Date(timeIntervalSince1970: 1_770_000_000),
+            call: "W0AA", band: .m20, modeClass: .cw, rawMode: "CW",
+            rstSent: "", rstRcvd: "",
+            nameSent: "TOM", nameRcvd: "BILL",
+            myLoc: "TX", theirLoc: "DAK"
+        )
+        let fields = CabrilloExporter.qsoLine(named, myCall: "KE5CW")
+            .split(separator: " ").map(String.init)
+        XCTAssertEqual(Array(fields.suffix(6)), ["KE5CW", "TOM", "TX", "W0AA", "BILL", "DAK"],
+                       "the sponsor's template: name in ex1, ahead of the location")
     }
 
     /// "MN stations work everyone; all other W/VE & DX work MN stations."
@@ -384,13 +395,16 @@ final class MinnesotaQSOPartyTests: XCTestCase {
         XCTAssertTrue(notes.contains("NO LONGER PUBLISHES THE 2026 RULES"))
     }
 
-    func testNotesRecordTheLimitationAndBothOpenQuestions() throws {
+    /// One open question remains — the archive provenance — and it is the
+    /// whole reason the party is still `verified: partial`. The name gap that
+    /// used to be question (1) closed 2026-07-27 and is recorded as prose,
+    /// not as a marked item, so it cannot re-raise the alert it resolves.
+    func testNotesRecordTheOneRemainingOpenQuestion() throws {
         let notes = try XCTUnwrap(mnqp.notes)
         XCTAssertTrue(notes.contains("verified: partial"))
-        XCTAssertTrue(notes.contains("KNOWN LIMITATION 1"))
         let questions = try XCTUnwrap(mnqp.openQuestions)
-        XCTAssertTrue(questions.contains("name half of the exchange is not logged"))
         XCTAssertTrue(questions.contains("web archive"))
         XCTAssertTrue(questions.contains("mnqp-committee@w0aa.org"))
+        XCTAssertEqual(mnqp.operatorAlerts.count, 1, "\(mnqp.operatorAlerts)")
     }
 }

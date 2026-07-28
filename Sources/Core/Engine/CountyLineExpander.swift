@@ -15,8 +15,11 @@ enum CountyLineExpander {
         /// counties "in a single exchange" (CQP), so every row this expands
         /// into carries the same pair — the operator sent one number on the
         /// air, and the log must not claim several.
-        var serialSent: Int?
-        var serialRcvd: Int?
+        var serialSent: Int? = nil
+        var serialRcvd: Int? = nil
+        /// One contact, one name each way, for the same reason.
+        var nameSent: String? = nil
+        var nameRcvd: String? = nil
         var band: Band
         var modeClass: ModeClass
         var rawMode: String
@@ -40,6 +43,8 @@ enum CountyLineExpander {
                     rstRcvd: entry.rstRcvd,
                     serialSent: entry.serialSent,
                     serialRcvd: entry.serialRcvd,
+                    nameSent: entry.nameSent,
+                    nameRcvd: entry.nameRcvd,
                     myLoc: mine,
                     theirLoc: theirs
                 )
