@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// State for the Contest Dashboard window: loads the archive (merging any
 /// iCloud conflict versions and a pre-iCloud local archive first), selects a
@@ -154,6 +155,42 @@ final class DashboardModel {
     }
 
     // MARK: Actions
+
+    /// The export staged for the contests section's save panel — cleared
+    /// when the panel closes — and the content type that rides along with
+    /// it, because the panel's allowed extensions follow the type: ADIF
+    /// needs UTType.adi to keep a ".adi" name, while Cabrillo's ".log" is
+    /// a name plain text already claims.
+    var stagedExport: ArchivedLogExport.Export?
+    var stagedExportType: UTType = .plainText
+
+    /// Whether the record's party rules are installed right now — the same
+    /// catalog snapshot the row's name and score affordances read.
+    func partyInstalled(_ partyID: String) -> Bool {
+        partyNames[partyID] != nil
+    }
+
+    func exportADIF(_ record: ContestRecord) {
+        do {
+            stagedExportType = .adi
+            stagedExport = try ArchivedLogExport.adif(
+                record: record, folder: CloudMirror.activeFolder()
+            )
+        } catch {
+            NSLog("Dashboard: ADIF export failed: \(error)")
+        }
+    }
+
+    func exportCabrillo(_ record: ContestRecord) {
+        do {
+            stagedExportType = .plainText
+            stagedExport = try ArchivedLogExport.cabrillo(
+                record: record, folder: CloudMirror.activeFolder()
+            )
+        } catch {
+            NSLog("Dashboard: Cabrillo export failed: \(error)")
+        }
+    }
 
     func openLog(_ record: ContestRecord) {
         guard let name = record.sourceFileName,
