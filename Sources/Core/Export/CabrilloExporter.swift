@@ -17,6 +17,7 @@ enum CabrilloExporter {
         lines.append("CALLSIGN: \(s.callsign.uppercased())")
         lines.append("LOCATION: \(cabrilloLocation(log: log, party: party))")
         lines.append("CATEGORY-OPERATOR: \(s.categoryOperator.rawValue)")
+        lines.append("CATEGORY-ASSISTED: \(s.categoryAssisted.rawValue)")
         lines.append("CATEGORY-BAND: ALL")
         lines.append("CATEGORY-MODE: \(categoryMode(log.qsos))")
         lines.append("CATEGORY-POWER: \(s.categoryPower.rawValue)")
@@ -31,6 +32,7 @@ enum CabrilloExporter {
         if !s.stateProvince.isEmpty { lines.append("ADDRESS-STATE-PROVINCE: \(s.stateProvince)") }
         if !s.postalCode.isEmpty { lines.append("ADDRESS-POSTALCODE: \(s.postalCode)") }
         if !s.country.isEmpty { lines.append("ADDRESS-COUNTRY: \(s.country)") }
+        if !s.gridLocator.isEmpty { lines.append("GRID-LOCATOR: \(s.gridLocator.uppercased())") }
         if !s.email.isEmpty { lines.append("EMAIL: \(s.email)") }
         lines.append("SOAPBOX: ")
 

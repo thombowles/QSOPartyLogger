@@ -112,7 +112,7 @@ final class ModelTests: XCTestCase {
     /// falling back to Run for an operator who will never call CQ.
     ///
     /// The fixture is built by encoding a real log and deleting the key, not
-    /// hand-typed: `StationProfile` has eighteen fields and a hand-written
+    /// hand-typed: `StationProfile` has sixteen fields and a hand-written
     /// stand-in would drift from the model the first time one is added.
     func testLogWithoutAStoredModeDerivesItFromLocation() throws {
         var log = ContestLog(partyID: "ksqp")
@@ -130,6 +130,69 @@ final class ModelTests: XCTestCase {
         let decoded = try ContestLog.decode(from: legacy)
         XCTAssertEqual(decoded.operatingMode, .searchPounce,
                        "out of state, so S&P — not the old unconditional Run")
+    }
+
+    /// A station profile stored before a field existed decodes to that
+    /// field's default instead of failing the whole document — the same
+    /// tolerance `ContestLog` itself already has. Proven by stripping a key
+    /// that exists today, so the fixture is real, not hypothetical.
+    func testStationProfileDecodesWhenAStoredKeyIsMissing() throws {
+        var log = ContestLog(partyID: "ksqp")
+        log.station.callsign = "KE5CW"
+        log.station.operators = "KE5CW N0XYZ"
+        var object = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: log.encoded()) as? [String: Any]
+        )
+        var station = try XCTUnwrap(object["station"] as? [String: Any])
+        XCTAssertNotNil(
+            station.removeValue(forKey: "operators"),
+            "the key must exist before removing it, or this proves nothing"
+        )
+        object["station"] = station
+        let legacy = try JSONSerialization.data(withJSONObject: object)
+
+        let decoded = try ContestLog.decode(from: legacy)
+        XCTAssertEqual(decoded.station.operators, "", "missing key → the default")
+        XCTAssertEqual(decoded.station.callsign, "KE5CW", "neighbouring values intact")
+    }
+
+    /// The entry-classification fields — NAQP rule 5's SO/SOA distinction
+    /// and the grid square the reference N1MM log carries — survive a
+    /// document round trip.
+    func testStationProfileRoundTripsTheEntryFields() throws {
+        var log = ContestLog(partyID: "naqpcw")
+        log.station.categoryAssisted = .assisted
+        log.station.gridLocator = "EM13le"
+        let decoded = try ContestLog.decode(from: log.encoded())
+        XCTAssertEqual(decoded.station.categoryAssisted, .assisted)
+        XCTAssertEqual(decoded.station.gridLocator, "EM13le",
+                       "stored as typed; the exporter owns uppercasing")
+    }
+
+    /// A profile saved before the entry fields existed decodes to their
+    /// defaults: unassisted, no grid. Fixture built by encoding and deleting
+    /// the keys, so it is the real pre-field shape.
+    func testStationProfileWithoutTheEntryFieldsDecodesToDefaults() throws {
+        var log = ContestLog(partyID: "naqpcw")
+        log.station.callsign = "KE5CW"
+        log.station.categoryAssisted = .assisted
+        log.station.gridLocator = "EM13LE"
+        var object = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: log.encoded()) as? [String: Any]
+        )
+        var station = try XCTUnwrap(object["station"] as? [String: Any])
+        XCTAssertNotNil(station.removeValue(forKey: "categoryAssisted"),
+                        "the key must exist before removing it")
+        XCTAssertNotNil(station.removeValue(forKey: "gridLocator"),
+                        "the key must exist before removing it")
+        object["station"] = station
+        let legacy = try JSONSerialization.data(withJSONObject: object)
+
+        let decoded = try ContestLog.decode(from: legacy)
+        XCTAssertEqual(decoded.station.categoryAssisted, .nonAssisted,
+                       "absent means unassisted — the claim is opt-in")
+        XCTAssertEqual(decoded.station.gridLocator, "")
+        XCTAssertEqual(decoded.station.callsign, "KE5CW")
     }
 
     /// A stored mode wins, so reopening a log mid-contest restores the mode

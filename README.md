@@ -712,11 +712,16 @@ parties, and the remaining engine gaps. Adding a party is governed by
   single-state party's grid is unchanged.
 - **RST pre-filled** (599/59 by mode) after every contact, so the exchange
   is two keystrokes on a normal run.
-- **Exports**: Cabrillo V3 (per-county-line QSO rows, category headers,
-  claimed score) and ADIF 3.1.4 (`CNTY`/`MY_CNTY` with full county names,
-  `STX_STRING`/`SRX_STRING`, group ids in an APP_ field). The app declares
-  the ADIF file type (`.adi`/`.adif`, plain text), so ⌘E's save panel keeps
-  the `.adi` name instead of appending `.txt`, and Finder labels the file
+- **Exports**: Cabrillo V3 (per-county-line QSO rows, claimed score, and the
+  full entry declaration — operator / assisted / power / station /
+  transmitter categories, a multi-op `OPERATORS:` list with the spec's
+  `@host` convention, club, grid locator, and the address block. Contest
+  Setup collects every one of them, so an NAQP Single Op **Assisted** or
+  Multi-Two entry exports as exactly that) and ADIF 3.1.4
+  (`CNTY`/`MY_CNTY` with full county names, `STX_STRING`/`SRX_STRING`,
+  group ids in an APP_ field). The app declares the ADIF file type
+  (`.adi`/`.adif`, plain text), so ⌘E's save panel keeps the `.adi` name
+  instead of appending `.txt`, and Finder labels the file
   "ADIF Amateur Radio Log".
 - **Documents**: each contest is a `.qplog` file (JSON) with undo. New logs
   auto-save into your logs folder on setup, then **every QSO change writes
@@ -1094,6 +1099,16 @@ station profile, radio wiring and cluster history untouched.
 
 ## Data provenance
 
+- Cabrillo V3 header values — the `CATEGORY-*` enumerations (including
+  `CATEGORY-ASSISTED`), the `OPERATORS:` `@host` convention, and
+  `GRID-LOCATOR:` — from the WWROF Cabrillo specification
+  (wwrof.org/cabrillo, fetched 2026-07-28), banked in
+  [`docs/research/cabrillo_v3_headers.md`](docs/research/cabrillo_v3_headers.md)
+  with KE5CW's own January 2026 NAQP CW submission (N1MM) as the reference
+  log. The NAQP rule 5/6 → `CATEGORY-*` mapping (SO / SOA / M2, QRP / Low /
+  check log) is recorded in
+  [`docs/research/naqpcw_rules.md`](docs/research/naqpcw_rules.md) §11; team
+  competition stays out of the log by rule 14's own words.
 - NAQP CW + SSB: rules from NCJ's own "Rules: 2026 North American QSO Party
   (CW/SSB/RTTY)" (ncjweb.com, printed NCJ Oct/Nov 2025), the official paper
   log form whose Multiplier Check List is the country list, and the ARRL DXCC

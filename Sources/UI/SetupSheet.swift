@@ -83,12 +83,27 @@ struct SetupSheet: View {
                         TextField("State", text: $station.stateProvince).frame(width: 70)
                         TextField("ZIP", text: $station.postalCode).frame(width: 90)
                     }
+                    HStack {
+                        TextField("Country", text: $station.country)
+                        TextField("Grid square", text: $station.gridLocator)
+                            .textCase(.uppercase)
+                            .font(.body.monospaced())
+                            .frame(width: 110)
+                    }
                     TextField("Club (optional)", text: $station.club)
                 }
 
                 Section("Category") {
                     Picker("Operator", selection: $station.categoryOperator) {
                         ForEach(StationProfile.CategoryOperator.allCases, id: \.self) {
+                            Text($0.rawValue).tag($0)
+                        }
+                    }
+                    // SO vs SOA is its own axis, not an operator class — NAQP
+                    // rule 5A/5B is the canonical pair, and the sponsors that
+                    // do not split on it simply ignore the header.
+                    Picker("Assisted", selection: $station.categoryAssisted) {
+                        ForEach(StationProfile.CategoryAssisted.allCases, id: \.self) {
                             Text($0.rawValue).tag($0)
                         }
                     }
@@ -102,6 +117,17 @@ struct SetupSheet: View {
                             Text($0.rawValue).tag($0)
                         }
                     }
+                    Picker("Transmitters", selection: $station.categoryTransmitter) {
+                        ForEach(StationProfile.CategoryTransmitter.allCases, id: \.self) {
+                            Text($0.rawValue).tag($0)
+                        }
+                    }
+                    TextField("Operators (multi-op)", text: $station.operators)
+                        .textCase(.uppercase)
+                        .font(.body.monospaced())
+                    Text("Space-separated calls; @ marks the host station. Blank = your callsign.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 Section("My Location") {
@@ -168,7 +194,7 @@ struct SetupSheet: View {
             }
             .padding()
         }
-        .frame(width: 560, height: 640)
+        .frame(width: 560, height: 700)
         // Land on whatever still needs an answer, rather than opening with no
         // focus at all and making the operator hunt for the field with a mouse.
         .onAppear {
