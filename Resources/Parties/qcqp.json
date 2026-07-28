@@ -52,6 +52,7 @@
     "cw"
   ],
   "maxSimultaneousCounties": 1,
+  "countyTerm": "region",
   "provinces": [
     "NF",
     "LB",

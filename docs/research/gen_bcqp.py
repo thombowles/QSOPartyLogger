@@ -228,6 +228,10 @@ bcqp = {
     # No mobile or rover category exists at all (FAQ), so no station may claim
     # two districts.
     "maxSimultaneousCounties": 1,
+    # The sponsor's own word, quoted in bcqp_rules.md: "British Columbia
+    # stations send: RS(T) and District (three letter abbreviation)". The 43
+    # entries are BC electoral districts, not counties.
+    "countyTerm": "district",
     # "Maryland and DC are lumped together as MD." The sponsor's own US-state
     # table has 50 rows and no DC row.
     "stateAliases": {"DC": "MD"},

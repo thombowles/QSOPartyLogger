@@ -255,12 +255,14 @@ CAVEAT_HI = (
     "resolves the token by callsign; this app cannot."
 )
 CAVEAT_LOCATION = (
-    "SETUP FOR US AND CANADIAN ENTRANTS IS 'OUTSIDE' PLUS YOUR STATE OR PROVINCE TOKEN; "
-    "entrants in one of the 46 listed NA countries choose Inside and pick their country, "
-    "and their exported Cabrillo LOCATION header then reads NA and must be hand-corrected "
-    "to DX before submission. Entrants outside North America can log (location DX) but "
-    "get no valid-contact filtering for non-NA-to-non-NA contacts, which the rules "
-    "exclude. Neither affects a US or Canadian entrant."
+    "AN ENTRANT OUTSIDE NORTH AMERICA GETS NO VALID-CONTACT FILTERING FOR CONTACTS "
+    "WITH OTHER NON-NA STATIONS, which rule 12 excludes by requiring that a valid "
+    "contact be 'between a North American station and any other station'. Such an "
+    "entrant sets their location to DX and logs normally; a non-NA-to-non-NA row is "
+    "credited here and would be removed by the sponsor. This party has no home region, "
+    "so setup asks one question - your location - and takes your state, province, NA "
+    "country prefix, or DX; whatever you enter is what the Cabrillo LOCATION header "
+    "carries. Does not affect a US or Canadian entrant."
 )
 CAVEAT_4U1 = (
     "THE CHECKLIST TOKEN '4U1/u' SHIPS AS 4U1, because '/' is reserved for county-line "
@@ -340,7 +342,20 @@ def party(pid, pname, cabrillo, mode, schedule, note_text):
         "dxStyle": "token",
         "allowedModes": [mode],
         "maxSimultaneousCounties": 1,
-        "inStateLabel": "the other NA countries",
+        # These are not counties, and the interface must not call them that.
+        # Rule 11 counts "other North American entities as defined by the ARRL
+        # DXCC List" -- entity, not country: the shipped list carries United
+        # Nations HQ, Desecheo I. and Aves I. Lowercase; the UI capitalizes
+        # the first letter for a heading and leaves the acronym alone.
+        "countyTerm": "NA entity",
+        "countyTermPlural": "NA entities",
+        # No home region: rule 10 gives every NA entrant the same exchange
+        # shape, and these "counties" are the sponsor's own country tokens --
+        # peers of the states and provinces, not sub-regions of a host state.
+        # So setup asks one location question and the exports carry whatever
+        # the entrant sends. `inStateLabel` is deliberately absent: nothing
+        # names an inside/outside choice this party does not have.
+        "hasHomeRegion": False,
         "exchangeIncludesRST": False,
         "exchangeIncludesName": True,
         "schedule": schedule,
@@ -355,9 +370,9 @@ def party(pid, pname, cabrillo, mode, schedule, note_text):
             },
             {
                 "kind": "cosmetic",
-                "summary": "US/VE entrants: set up as Outside with your state or "
-                           "province. Entrants in another NA country: Inside, then "
-                           "hand-fix the Cabrillo LOCATION header to DX.",
+                "summary": "Entrants outside North America: contacts with other "
+                           "non-NA stations are credited here but removed by the "
+                           "sponsor. No effect on NA entrants.",
                 "detail": CAVEAT_LOCATION,
             },
             {

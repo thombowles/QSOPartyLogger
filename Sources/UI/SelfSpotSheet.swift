@@ -55,7 +55,7 @@ struct SelfSpotSheet: View {
                     }
                 }
                 GridRow {
-                    Text("County").gridColumnAlignment(.trailing)
+                    Text(party.countyTerm.sentenceCased).gridColumnAlignment(.trailing)
                     TextField("optional — MDSN, or MDSN/LIME on a line", text: countyBinding)
                         .textFieldStyle(.roundedBorder)
                         .focused($focused, equals: .county)

@@ -27,12 +27,15 @@ enum AdifExporter {
         return out
     }
 
+    /// A host-state entrant reports the party's state as-is — including the
+    /// province codes the Canadian parties use, which are not US state
+    /// tokens. Everyone else reports their own token only when it really is
+    /// a state, so an NAQP entrant in Mexico leaves the field empty rather
+    /// than claiming `XE` is a US state.
     private static func adifState(for log: ContestLog, party: PartyDefinition) -> String {
-        switch log.myLocation {
-        case .inState: party.homeState
-        case .outOfState(let loc):
-            MultClass.acceptedStateTokens.contains(loc.uppercased()) ? loc.uppercased() : ""
-        }
+        if case .inState = log.myLocation, party.hasHomeRegion { return party.homeState }
+        let token = log.myLocation.entrantToken(party: party)
+        return MultClass.acceptedStateTokens.contains(token) ? token : ""
     }
 
     private static let dateF: DateFormatter = {
