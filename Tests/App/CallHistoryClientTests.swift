@@ -1,0 +1,333 @@
+import XCTest
+@testable import QSOPartyLogger
+
+/// The download orchestration, scripted end to end against a mock site —
+/// no test here touches the network (constitution Article 5). The failure
+/// posture under test throughout: whatever file is cached stays in service.
+@MainActor
+final class CallHistoryClientTests: XCTestCase {
+
+    // MARK: Scripted site
+
+    final class MockFetcher: CallHistoryFetching, @unchecked Sendable {
+        private let lock = NSLock()
+        private var _requests: [String] = []
+        var requests: [String] {
+            lock.lock(); defer { lock.unlock() }
+            return _requests
+        }
+
+        /// Substring-matched, first hit wins. A URL nothing matches throws.
+        var getResponses: [(match: String, status: Int, body: Data)] = []
+        var postResponses: [(match: String, status: Int, body: Data)] = []
+        var error: Error?
+
+        private func record(_ line: String) {
+            lock.lock(); defer { lock.unlock() }
+            _requests.append(line)
+        }
+
+        func get(_ url: URL) async throws -> (Data, HTTPURLResponse) {
+            record("GET \(url.absoluteString)")
+            if let error { throw error }
+            guard let scripted = getResponses.first(
+                where: { url.absoluteString.contains($0.match) }) else {
+                throw URLError(.unsupportedURL)
+            }
+            return (scripted.body, response(url: url, status: scripted.status))
+        }
+
+        func post(
+            _ url: URL, form: [String: String], referer: String
+        ) async throws -> (Data, HTTPURLResponse) {
+            let fields = form.sorted { $0.key < $1.key }
+                .map { "\($0.key)=\($0.value)" }.joined(separator: "&")
+            record("POST \(url.absoluteString) referer=\(referer) \(fields)")
+            if let error { throw error }
+            guard let scripted = postResponses.first(
+                where: { url.absoluteString.contains($0.match) }) else {
+                throw URLError(.unsupportedURL)
+            }
+            return (scripted.body, response(url: url, status: scripted.status))
+        }
+
+        private func response(url: URL, status: Int) -> HTTPURLResponse {
+            HTTPURLResponse(
+                url: url, statusCode: status, httpVersion: nil, headerFields: nil)!
+        }
+    }
+
+    // MARK: Fixtures
+
+    private var folder: URL!
+    private var store: CallHistoryStore!
+    private var fetcher: MockFetcher!
+    private var client: CallHistoryClient!
+    private var published: [(partyID: String, records: Int)] = []
+
+    private let now = Date(timeIntervalSince1970: 1_800_000_000)
+
+    override func setUpWithError() throws {
+        folder = FileManager.default.temporaryDirectory
+            .appendingPathComponent("CallHistoryClientTests-\(UUID().uuidString)")
+        store = CallHistoryStore(folder: folder)
+        fetcher = MockFetcher()
+        client = CallHistoryClient(store: store, fetcher: fetcher)
+        published = []
+        client.onIndex = { [weak self] id, parsed in
+            self?.published.append((id, parsed.recordCount))
+        }
+    }
+
+    override func tearDownWithError() throws {
+        try? FileManager.default.removeItem(at: folder)
+    }
+
+    private func party(_ id: String) throws -> PartyDefinition {
+        try XCTUnwrap(PartyCatalog.party(id: id), id)
+    }
+
+    private let fileText = """
+    !!Order!!,Call,Name,Exch1,UserText,
+    # QSOPARTY KS
+    # QSOP_KS
+    K0VBU,Bill,JOH
+    W0BH,Bob,BAR
+    """
+
+    private func listingHTML(_ rows: [(file: String, slug: String, date: String)]) -> String {
+        let items = rows.map { row in
+            """
+            <li><span>
+            <a href="https://n1mmwp.hamdocs.com/mmfiles/\(row.slug)/">
+            <span class="cmdm-list-item-title">\(row.file)</span></a>
+            <div class="cmdm-list-item-desc"> \(row.date) </div></span></li>
+            """
+        }.joined()
+        return "<div class=\"CMDM-list-view\"><ul>\(items)</ul></div>"
+    }
+
+    private func filePageHTML(file: String, nonce: String = "abc123", id: String = "99") -> String {
+        """
+        <form method="post" class="CMDM-downloadForm" \
+        action="https://n1mmwp.hamdocs.com/mmfile/get/file/\(file)">
+        <input type="hidden" name="cmdm_nonce" value="\(nonce)" />
+        <input type="hidden" name="id" value="\(id)" />
+        </form>
+        """
+    }
+
+    private func scriptHappyPath(
+        file: String = "QSOP_KS-2025-002.txt",
+        slug: String = "qsop_ks-2025-002-txt",
+        date: String = "2025-08-24",
+        body: String? = nil
+    ) {
+        fetcher.getResponses = [
+            ("CMDsearch", 200, Data(listingHTML([(file, slug, date)]).utf8)),
+            ("/mmfiles/\(slug)/", 200, Data(filePageHTML(file: file).utf8)),
+        ]
+        fetcher.postResponses = [
+            ("/mmfile/get/file/", 200, Data((body ?? fileText).utf8)),
+        ]
+    }
+
+    // MARK: Install
+
+    func testDownloadsVerifiesAndInstalls() async throws {
+        scriptHappyPath()
+        await client.refreshIfStale(party: try party("ksqp"), now: now)
+
+        XCTAssertEqual(client.status, .ready(
+            partyID: "ksqp", revision: "QSOP_KS-2025-002.txt", records: 2))
+        XCTAssertEqual(published.map(\.partyID), ["ksqp"])
+        XCTAssertEqual(published.first?.records, 2)
+
+        let cached = try XCTUnwrap(store.loadCached(partyID: "ksqp"))
+        XCTAssertEqual(cached.meta?.sourceFileName, "QSOP_KS-2025-002.txt")
+        XCTAssertEqual(cached.meta?.listedDate, "2025-08-24")
+        XCTAssertEqual(cached.parsed.entry(for: "K0VBU")?.locations, ["JOH"])
+
+        // The POST carried the form's nonce and rode on the page as referer.
+        let post = try XCTUnwrap(fetcher.requests.last)
+        XCTAssertTrue(post.contains("cmdm_nonce=abc123"))
+        XCTAssertTrue(post.contains("id=99"))
+        XCTAssertTrue(post.contains("referer=https://n1mmwp.hamdocs.com/mmfiles/qsop_ks-2025-002-txt/"))
+    }
+
+    /// The listing's newest *claimed* row wins — New England's file above
+    /// Nebraska's must be passed over for Nebraska (the separator rule,
+    /// live).
+    func testPicksTheNewestClaimedRow() async throws {
+        fetcher.getResponses = [
+            ("CMDsearch", 200, Data(listingHTML([
+                ("QSOP_NEWE-2026-001.txt", "qsop_newe-2026-001-txt", "2026-04-30"),
+                ("QSOP_NE-2026-002.txt", "qsop_ne-2026-002-txt", "2026-04-15"),
+            ]).utf8)),
+            ("/mmfiles/qsop_ne-2026-002-txt/", 200,
+             Data(filePageHTML(file: "QSOP_NE-2026-002.txt").utf8)),
+        ]
+        fetcher.postResponses = [
+            ("/mmfile/get/file/", 200, Data("""
+            !!Order!!,Call,Exch1
+            # QSOPARTY NE
+            AA0W,DIXO
+            """.utf8)),
+        ]
+        await client.refreshIfStale(party: try party("neqp"), now: now)
+        XCTAssertEqual(client.status, .ready(
+            partyID: "neqp", revision: "QSOP_NE-2026-002.txt", records: 1))
+        XCTAssertFalse(fetcher.requests.joined().contains("qsop_newe"),
+                       "New England's page must never have been touched")
+    }
+
+    // MARK: Short circuits
+
+    func testCurrentRevisionChecksButDoesNotDownload() async throws {
+        try store.save(
+            partyID: "ksqp", data: Data(fileText.utf8),
+            meta: .init(sourceFileName: "QSOP_KS-2025-002.txt",
+                        listedDate: "2025-08-24",
+                        fetchedAt: now.addingTimeInterval(-100_000),
+                        lastCheckedAt: now.addingTimeInterval(-100_000)))
+        scriptHappyPath()
+
+        await client.refreshIfStale(party: try party("ksqp"), now: now)
+
+        XCTAssertEqual(fetcher.requests.count, 1, "one listing GET, nothing else")
+        XCTAssertEqual(store.loadMeta(partyID: "ksqp")?.lastCheckedAt
+                        .timeIntervalSince1970 ?? 0,
+                       now.timeIntervalSince1970, accuracy: 1,
+                       "the throttle clock advanced")
+        XCTAssertEqual(client.status, .ready(
+            partyID: "ksqp", revision: "QSOP_KS-2025-002.txt", records: 2),
+            "the cached copy is (re)published as ready")
+    }
+
+    func testRecentCheckSkipsTheNetworkEntirely() async throws {
+        try store.save(
+            partyID: "ksqp", data: Data(fileText.utf8),
+            meta: .init(sourceFileName: "QSOP_KS-2025-002.txt",
+                        listedDate: "2025-08-24",
+                        fetchedAt: now.addingTimeInterval(-3600),
+                        lastCheckedAt: now.addingTimeInterval(-3600)))
+        scriptHappyPath()
+
+        await client.refreshIfStale(party: try party("ksqp"), now: now)
+        XCTAssertEqual(fetcher.requests, [], "checked an hour ago — leave the site alone")
+
+        await client.refreshIfStale(party: try party("ksqp"), now: now, force: true)
+        XCTAssertFalse(fetcher.requests.isEmpty, "the Refresh button overrides the throttle")
+    }
+
+    func testPartyWithoutASourceIsUntouched() async throws {
+        await client.refreshIfStale(party: try party("azqp"), now: now)
+        XCTAssertEqual(fetcher.requests, [])
+        XCTAssertEqual(client.status, .idle)
+    }
+
+    // MARK: Failures keep the cache
+
+    private func preSeedCache() throws {
+        try store.save(
+            partyID: "ksqp", data: Data(fileText.utf8),
+            meta: .init(sourceFileName: "QSOP_KS-2025-001.txt",
+                        listedDate: "2025-07-01",
+                        fetchedAt: now.addingTimeInterval(-200_000),
+                        lastCheckedAt: now.addingTimeInterval(-200_000)))
+    }
+
+    private func assertCacheIntact(file: StaticString = #filePath, line: UInt = #line) {
+        let cached = store.loadCached(partyID: "ksqp")
+        XCTAssertEqual(cached?.meta?.sourceFileName, "QSOP_KS-2025-001.txt",
+                       "the cached revision must have survived", file: file, line: line)
+        XCTAssertEqual(cached?.parsed.recordCount, 2, file: file, line: line)
+    }
+
+    func testTokenMismatchIsNotInstalled() async throws {
+        try preSeedCache()
+        scriptHappyPath(body: """
+        !!Order!!,Call,Exch1
+        # QSOPARTY TX
+        AA5AH,DALS
+        """)
+        await client.refreshIfStale(party: try party("ksqp"), now: now)
+
+        guard case .failed(let message) = client.status else {
+            return XCTFail("expected a failure, got \(client.status)")
+        }
+        XCTAssertTrue(message.contains("does not declare"), message)
+        assertCacheIntact()
+        XCTAssertTrue(published.isEmpty, "a rejected file must not reach prefill")
+    }
+
+    /// The site answers a refused download with its access-denied *page*,
+    /// status 200 — bytes that would otherwise install as an empty file.
+    func testHTMLBodyIsRefusedNotInstalled() async throws {
+        try preSeedCache()
+        scriptHappyPath(body: "<!DOCTYPE html>\n<html><body>Access denied</body></html>")
+        await client.refreshIfStale(party: try party("ksqp"), now: now)
+
+        guard case .failed(let message) = client.status else {
+            return XCTFail("expected a failure, got \(client.status)")
+        }
+        XCTAssertTrue(message.contains("refused"), message)
+        assertCacheIntact()
+    }
+
+    func testReshapedListingFailsLoudly() async throws {
+        try preSeedCache()
+        fetcher.getResponses = [
+            ("CMDsearch", 200, Data("<html><body>redesign!</body></html>".utf8)),
+        ]
+        await client.refreshIfStale(party: try party("ksqp"), now: now)
+
+        guard case .failed(let message) = client.status else {
+            return XCTFail("expected a failure, got \(client.status)")
+        }
+        XCTAssertTrue(message.contains("changed shape"), message)
+        assertCacheIntact()
+    }
+
+    func testEmptyListingNamesThePrefix() async throws {
+        try preSeedCache()
+        fetcher.getResponses = [
+            ("CMDsearch", 200, Data(listingHTML([]).utf8)),
+        ]
+        await client.refreshIfStale(party: try party("ksqp"), now: now)
+
+        guard case .failed(let message) = client.status else {
+            return XCTFail("expected a failure, got \(client.status)")
+        }
+        XCTAssertTrue(message.contains("QSOP_KS"), message)
+        assertCacheIntact()
+    }
+
+    func testNetworkFailureKeepsTheCache() async throws {
+        try preSeedCache()
+        fetcher.error = URLError(.notConnectedToInternet)
+        await client.refreshIfStale(party: try party("ksqp"), now: now)
+
+        guard case .failed = client.status else {
+            return XCTFail("expected a failure, got \(client.status)")
+        }
+        XCTAssertNotNil(client.lastError)
+        assertCacheIntact()
+    }
+
+    // MARK: Cached publication
+
+    func testPublishCachedServesTheStoredFile() throws {
+        try preSeedCache()
+        client.publishCached(party: try party("ksqp"))
+        XCTAssertEqual(published.map(\.partyID), ["ksqp"])
+        XCTAssertEqual(client.status, .ready(
+            partyID: "ksqp", revision: "QSOP_KS-2025-001.txt", records: 2))
+    }
+
+    func testPublishCachedIsQuietWithNothingCached() throws {
+        client.publishCached(party: try party("ksqp"))
+        XCTAssertTrue(published.isEmpty)
+        XCTAssertEqual(client.status, .idle)
+    }
+}
