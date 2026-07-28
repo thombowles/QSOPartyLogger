@@ -1,9 +1,9 @@
 import SwiftUI
 
-/// Radio connection, live frequency/mode, WPM, and keying backend. Control
-/// clusters sit in a wrapping FlowLayout, so narrowing the window (or
-/// widening the score panel) reflows them onto more rows instead of
-/// clipping or truncating.
+/// Radio connection (with inline status and errors), live frequency/mode,
+/// WPM, and keying backend. Control clusters sit in a wrapping FlowLayout,
+/// so narrowing the window (or widening the score panel) reflows them onto
+/// more rows instead of clipping or truncating.
 struct RadioBar: View {
     @Bindable var settings: AppSettings
     var radio: RadioController
@@ -70,6 +70,11 @@ struct RadioBar: View {
             .labelsHidden()
             .frame(maxWidth: 190)
             .disabled(radio.isConnected)
+            // Only reachable while disconnected — picking a different radio
+            // retires the previous attempt's inline error.
+            .onChange(of: settings.radioID) {
+                radio.clearError()
+            }
         }
     }
 
@@ -128,16 +133,61 @@ struct RadioBar: View {
         }
     }
 
+    /// What the bar's status slot should show — pure, so the truth table is
+    /// testable without rendering.
+    enum ConnectionStatus: Equatable {
+        /// Disconnected, nothing to report: "No radio".
+        case idle
+        /// Transport up, first answer still pending: progress + text.
+        case waiting
+        /// Something is wrong: inline summary, full story in the tooltip.
+        case trouble(summary: String, detail: String)
+        /// The radio is talking: show the frequency display.
+        case live
+    }
+
+    /// The connect button's label per phase — "Disconnect" is reserved for a
+    /// link the radio has actually answered on; an unproven link offers
+    /// "Cancel" instead of implying success.
+    static func connectButtonTitle(for phase: RadioConnectionPhase) -> String {
+        switch phase {
+        case .disconnected: "Connect"
+        case .waitingForRadio, .unresponsive: "Cancel"
+        case .connected: "Disconnect"
+        }
+    }
+
+    static func status(
+        phase: RadioConnectionPhase, error: RadioConnectionError?
+    ) -> ConnectionStatus {
+        switch phase {
+        case .connected:
+            .live
+        case .waitingForRadio:
+            .waiting
+        case .unresponsive:
+            // The stored error normally exists here; the fallback keeps the
+            // warning honest if it was somehow cleared.
+            .trouble(summary: error?.summary ?? "Radio not answering", detail: error?.detail ?? "")
+        case .disconnected:
+            if let error {
+                .trouble(summary: error.summary, detail: error.detail)
+            } else {
+                .idle
+            }
+        }
+    }
+
     private var connectButton: some View {
-        Button(radio.isConnected ? "Disconnect" : "Connect") {
+        Button(Self.connectButtonTitle(for: radio.connectionPhase)) {
             if radio.isConnected {
                 radio.disconnect()
             } else {
-                radio.connectManually(settings: settings)
+                radio.connect(settings: settings)
             }
         }
         .fixedSize()
-        .tint(radio.isConnected ? .red : .accentColor)
+        .tint(radio.connectionPhase == .connected ? .red : .accentColor)
     }
 
     private var bandGroup: some View {
@@ -202,37 +252,63 @@ struct RadioBar: View {
         }
     }
 
+    /// The status slot after the connect button: live frequency when the
+    /// radio is talking, otherwise what is happening with the link — where
+    /// the modal "Radio error" alert used to interrupt instead.
     @ViewBuilder
     private var frequencyDisplay: some View {
-        if let state = radio.radioState {
-            HStack(spacing: 8) {
-                Text(state.displayFrequency)
-                    .font(.system(.title3, design: .monospaced).weight(.semibold))
-                    .fixedSize()
-                Text(state.rawMode)
-                    .font(.callout.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                    .fixedSize()
-                if radio.isTransmitting {
-                    Text("TX")
-                        .font(.caption.weight(.heavy))
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(.red, in: Capsule())
-                        .foregroundStyle(.white)
-                        .fixedSize()
-                }
-                if let band = state.band, let party, !party.validBands.contains(band) {
-                    Label("\(band.rawValue) not valid for \(party.name)", systemImage: "exclamationmark.triangle.fill")
-                        .font(.caption)
-                        .foregroundStyle(.orange)
-                }
+        switch Self.status(phase: radio.connectionPhase, error: radio.lastError) {
+        case .live:
+            if let state = radio.radioState {
+                liveDisplay(state)
             }
-        } else {
+        case .idle:
             Text("No radio")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .fixedSize()
+        case .waiting:
+            HStack(spacing: 6) {
+                ProgressView()
+                    .controlSize(.small)
+                Text("Waiting for radio…")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .fixedSize()
+            }
+        case .trouble(let summary, let detail):
+            Label(summary, systemImage: "exclamationmark.triangle.fill")
+                .font(.callout)
+                .foregroundStyle(.orange)
+                .fixedSize()
+                .help(detail)
+                .accessibilityHint(Text(detail))
+        }
+    }
+
+    private func liveDisplay(_ state: RadioState) -> some View {
+        HStack(spacing: 8) {
+            Text(state.displayFrequency)
+                .font(.system(.title3, design: .monospaced).weight(.semibold))
+                .fixedSize()
+            Text(state.rawMode)
+                .font(.callout.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .fixedSize()
+            if radio.isTransmitting {
+                Text("TX")
+                    .font(.caption.weight(.heavy))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(.red, in: Capsule())
+                    .foregroundStyle(.white)
+                    .fixedSize()
+            }
+            if let band = state.band, let party, !party.validBands.contains(band) {
+                Label("\(band.rawValue) not valid for \(party.name)", systemImage: "exclamationmark.triangle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+            }
         }
     }
 

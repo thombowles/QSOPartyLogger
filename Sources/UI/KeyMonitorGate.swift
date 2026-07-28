@@ -96,6 +96,8 @@ enum KeyMonitorGate {
         case sendMessage(index: Int)
         case clearEntry
         case abortCW
+        case exportADIF
+        case exportCabrillo
     }
 
     /// F1–F8 → message index 0–7.
@@ -107,8 +109,8 @@ enum KeyMonitorGate {
     ///
     /// A ⌘ chord that isn't in the command table falls through to the plain
     /// keys, so ⌘F2 still sends message 2 exactly as it always has.
-    static func action(keyCode: UInt16, command: Bool) -> Action? {
-        if command, let chord = commandAction(keyCode: keyCode) {
+    static func action(keyCode: UInt16, command: Bool, shift: Bool = false) -> Action? {
+        if command, let chord = commandAction(keyCode: keyCode, shift: shift) {
             return chord
         }
         if let index = fKeyIndex[keyCode] {
@@ -121,9 +123,9 @@ enum KeyMonitorGate {
         }
     }
 
-    private static func commandAction(keyCode: UInt16) -> Action? {
+    private static func commandAction(keyCode: UInt16, shift: Bool) -> Action? {
         switch keyCode {
-        case 24, 69: return .adjustWPM(by: 2)  // '=' / keypad '+'
+        case 24, 69: return .adjustWPM(by: 2)  // '=' / keypad '+' (⇧= is '+' too)
         case 27, 78: return .adjustWPM(by: -2)  // '-' / keypad '-'
         case 123: return .previousSpot  // ←
         case 124: return .nextSpot  // →
@@ -132,6 +134,9 @@ enum KeyMonitorGate {
         case 125: return .previousSpot  // ↓
         case 38: return .jumpToCQFrequency  // 'j'
         case 11: return .toggleBandMap  // 'b'
+        // The only chord ⇧ distinguishes. In the toolbar's Export menu these
+        // are badge text; the gate is what actually fires them.
+        case 14: return shift ? .exportCabrillo : .exportADIF  // 'e'
         default: return nil
         }
     }

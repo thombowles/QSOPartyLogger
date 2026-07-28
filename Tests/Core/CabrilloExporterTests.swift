@@ -48,11 +48,42 @@ final class CabrilloExporterTests: XCTestCase {
         XCTAssertTrue(lines.contains("CALLSIGN: KE5CW"))
         XCTAssertTrue(lines.contains("LOCATION: TX"))
         XCTAssertTrue(lines.contains("CATEGORY-OPERATOR: SINGLE-OP"))
+        XCTAssertTrue(lines.contains("CATEGORY-ASSISTED: NON-ASSISTED"),
+                      "the default claim, stated rather than implied")
         XCTAssertTrue(lines.contains("CATEGORY-MODE: CW"))
         XCTAssertTrue(lines.contains("CATEGORY-POWER: LOW"))
+        XCTAssertTrue(lines.contains("CATEGORY-TRANSMITTER: ONE"))
         XCTAssertTrue(lines.contains("CLAIMED-SCORE: 3"), "3 pts × 1 mult")
         XCTAssertTrue(lines.contains("OPERATORS: KE5CW"))
         XCTAssertTrue(lines.contains("NAME: Tom Bowles"))
+        XCTAssertFalse(text.contains("GRID-LOCATOR:"), "no grid entered, no header")
+    }
+
+    /// The reference for content and placement is KE5CW's January 2026 NAQP
+    /// CW log as N1MM wrote it: ASSISTED directly under the operator class,
+    /// the grid between the address block and the email.
+    func testEntryHeadersForAnAssistedMultiTwoEntry() throws {
+        var log = makeLog()
+        log.station.categoryOperator = .multiOp
+        log.station.categoryAssisted = .assisted
+        log.station.categoryTransmitter = .two
+        log.station.operators = "ke5cw n0xyz @k5hog"
+        log.station.gridLocator = "em13le"
+        log.station.email = "op@example.com"
+        let text = CabrilloExporter.export(log: log, party: ksqp, score: .init())
+        let lines = text.components(separatedBy: "\n")
+
+        let op = try XCTUnwrap(lines.firstIndex(of: "CATEGORY-OPERATOR: MULTI-OP"))
+        XCTAssertEqual(lines[op + 1], "CATEGORY-ASSISTED: ASSISTED")
+        XCTAssertTrue(lines.contains("CATEGORY-TRANSMITTER: TWO"))
+        XCTAssertTrue(lines.contains("OPERATORS: KE5CW N0XYZ @K5HOG"),
+                      "uppercased, spec's @host convention intact")
+
+        let grid = try XCTUnwrap(lines.firstIndex(of: "GRID-LOCATOR: EM13LE"),
+                                 "grid uppercased on the way out")
+        let country = try XCTUnwrap(lines.firstIndex(of: "ADDRESS-COUNTRY: USA"))
+        let email = try XCTUnwrap(lines.firstIndex(of: "EMAIL: op@example.com"))
+        XCTAssertTrue(country < grid && grid < email, "the reference log's placement")
     }
 
     func testInStateLocationUsesHomeState() {

@@ -60,6 +60,15 @@ final class SpotStore {
         all.removeAll { now.timeIntervalSince($0.receivedAt) > maxAge(for: $0.source) }
     }
 
+    /// Drop everything a spotting network provided, keeping the contacts that
+    /// came from the operator's own log. Used when an entry declares itself
+    /// NON-ASSISTED mid-contest: closing the connection is not enough on its
+    /// own, because the spots already drawn would keep the assistance in
+    /// front of the operator after the claim says there is none.
+    func removeNetworkSpots() {
+        all.removeAll { $0.source != .local }
+    }
+
     /// Spots on one band, sorted by frequency (the band-map order).
     func spots(band: Band) -> [Spot] {
         all.filter { $0.band == band }.sorted { $0.freqKHz < $1.freqKHz }
