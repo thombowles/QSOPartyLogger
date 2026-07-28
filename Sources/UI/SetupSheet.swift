@@ -192,54 +192,20 @@ struct SetupSheet: View {
     /// and so said nothing. Stale sources, inferred readings and cosmetic notes
     /// keep the informational tone; the full provenance paragraph stays behind
     /// the disclosure, and is offered for every party.
+    ///
+    /// Which group a line belongs to is decided by `PartyNotice`, and **every
+    /// group it hands back is drawn with its own heading** — colour on its own
+    /// never has to explain why one bullet is orange and the next is grey.
     @ViewBuilder
     private func verificationNotice(_ party: PartyDefinition) -> some View {
-        let blocking = party.blockingCaveats
-        let advisory = party.advisoryCaveats
-        // A party with no typed caveats -- not yet classified, or user-installed
-        // -- still shows whatever its notes carry, in the quiet tone.
-        let fallback = party.caveats.isEmpty ? party.operatorAlerts : []
+        let notice = PartyNotice(party: party)
 
-        if !blocking.isEmpty {
-            Label(
-                blocking.contains { $0.kind == .exportBlocking }
-                    ? "This log needs checking before you submit it."
-                    : "\(blocking.count) thing\(blocking.count == 1 ? "" : "s") this app "
-                      + "cannot score for you here.",
-                systemImage: "exclamationmark.triangle.fill"
-            )
-            .font(.caption.weight(.semibold))
-            .foregroundStyle(.orange)
-
-            ForEach(Array(blocking.enumerated()), id: \.offset) { _, caveat in
-                Text("• \(caveat.summary)")
-                    .font(.caption2.weight(.medium))
-                    .foregroundStyle(.orange)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .textSelection(.enabled)
-            }
+        if let warning = notice.warning {
+            noticeGroup(warning)
         }
-
         // Everything that is worth reading but not worth interrupting for.
-        let quiet = advisory.map(\.summary) + fallback
-        if !quiet.isEmpty {
-            if blocking.isEmpty {
-                Label(
-                    "\(quiet.count) note\(quiet.count == 1 ? "" : "s") on how this app "
-                        + "handles this party.",
-                    systemImage: "info.circle.fill"
-                )
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
-            }
-
-            ForEach(Array(quiet.enumerated()), id: \.offset) { _, line in
-                Text("• \(line)")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .textSelection(.enabled)
-            }
+        if let informational = notice.informational {
+            noticeGroup(informational)
         }
 
         if let notes = party.notes {
@@ -251,6 +217,24 @@ struct SetupSheet: View {
                     .textSelection(.enabled)
             }
             .font(.caption)
+        }
+    }
+
+    /// One tone's heading and its bullets. The heading is drawn unconditionally
+    /// — it is what tells the operator that the colour changed on purpose, and
+    /// its icon carries the same distinction where colour cannot.
+    @ViewBuilder
+    private func noticeGroup(_ group: PartyNotice.Group) -> some View {
+        Label(group.header, systemImage: group.systemImage)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(group.tone.style)
+
+        ForEach(Array(group.lines.enumerated()), id: \.offset) { _, line in
+            Text("• \(line)")
+                .font(group.tone.bulletFont)
+                .foregroundStyle(group.tone.style)
+                .fixedSize(horizontal: false, vertical: true)
+                .textSelection(.enabled)
         }
     }
 
