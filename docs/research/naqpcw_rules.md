@@ -257,13 +257,27 @@ CY9 → St. Paul I., CY0 → Sable I.
    column is the name, so without it no NAQP log is submittable. Ships only
    after the name-exchange capability commit
    (`2026-07-27-name-exchanges-design.md`).
-4. **Every entrant is out-of-state to the engine.** A US/VE entrant's setup
-   is "Outside" + their state/province token; `myLoc` is that token,
-   Cabrillo `LOCATION:` follows it. Both mult rules are identical, so the
-   in/out classification cannot move a score. An entrant in one of the 46
-   listed countries picks "Inside" and their country; their Cabrillo
-   `LOCATION:` then exports as `NA` and must be hand-corrected to `DX`
-   (cosmetic caveat — this app's audience is a US entrant).
+4. **This party has no home region — `hasHomeRegion: false`** (added
+   2026-07-28). Rule 10 gives every North American entrant the same exchange
+   shape, so the engine's inside/outside geometry has nothing to bite on:
+   there is no host state, and the 46 country tokens are peers of the states
+   and provinces. Setup therefore asks one question — your location — and
+   accepts any of the three classes plus `DX` (`validEntrantTokens`); `myLoc`
+   and Cabrillo `LOCATION:` are whatever the entrant typed, for a Texan
+   (`TX`) and a Mexican (`XE`) alike. Both mult rules are identical, which is
+   what makes collapsing the two cases score-neutral — pinned by
+   `testTheClassificationCannotMoveTheScore`.
+
+   **Superseded reading**, recorded per Article 20: NAQP originally shipped
+   with the standard picker, so a US/VE entrant chose "Outside" plus their
+   token while an entrant in one of the 46 countries chose "Inside" and
+   picked their country — after which the Cabrillo `LOCATION:` header
+   exported as the pseudo-state `NA` and the operator was instructed by a
+   cosmetic caveat to hand-correct it to `DX` before submitting. Nothing in
+   the sponsor's rules changed; the app was making the operator absorb a
+   modelling artifact. Logs written that way still export the right header —
+   `entrantToken(party:)` reads the stored county as the location it always
+   was, and setup migrates it into the field on open.
 5. **Not modeled, deliberately:** the SO 10-of-12-hour / 30-minute off-time
    accounting (no bundled party models operating-time caps); M2's 10-minute
    band timer (rule 5C(vi)) and its QSO invalidation; the rule 12 penalty

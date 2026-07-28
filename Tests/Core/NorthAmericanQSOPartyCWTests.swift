@@ -311,6 +311,90 @@ final class NorthAmericanQSOPartyCWTests: XCTestCase {
         XCTAssertEqual(Array(fields.suffix(6)), ["KE5CW", "TOM", "TX", "N2CU", "BILL", "NY"])
     }
 
+    // MARK: No home region — one location question, no hand-fixed header
+
+    /// NAQP has no home state to be *inside* of. Rule 10 gives every North
+    /// American entrant the same exchange shape, and the 46 country tokens
+    /// riding in the county slot are peers of the states and provinces, not
+    /// sub-regions of a host state. The Inside/Outside binary every state
+    /// party needs is meaningless here, so this party turns it off.
+    func testNAQPHasNoHomeRegion() throws {
+        XCTAssertFalse(naqp.hasHomeRegion)
+        let ssb = try XCTUnwrap(PartyCatalog.party(id: "naqpssb"))
+        XCTAssertFalse(ssb.hasHomeRegion)
+
+        let ksqp = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        XCTAssertTrue(ksqp.hasHomeRegion, "every other party keeps the default")
+    }
+
+    /// So an entrant may claim any of the peer classes — their state, their
+    /// province, their NA country, or the DX token rule 11 sends non-NA
+    /// stations to.
+    func testAnEntrantMayClaimAnyPeerLocation() throws {
+        XCTAssertTrue(
+            naqp.validEntrantTokens.isSuperset(of: ["TX", "ON", "XE", "VP9", "8P", "DX"]),
+            "states, provinces, countries and DX are one flat list here"
+        )
+
+        let ksqp = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        XCTAssertEqual(ksqp.validEntrantTokens, ksqp.validOutStateTokens,
+                       "a party with a home region is untouched")
+        XCTAssertFalse(ksqp.validEntrantTokens.contains("MRN"),
+                       "a Kansas county is not something a Kansas entrant types here")
+    }
+
+    /// The jank this replaces: an entrant in Mexico picked "Inside", and the
+    /// header exported as the pseudo-state `NA` — the app told them to
+    /// hand-fix it before submitting. Whatever they send is what ships.
+    func testTheEntrantsOwnTokenIsTheCabrilloLocation() {
+        var contest = log([qso(call: "N2CU", my: "XE", their: "NY")])
+        contest.myLocation = .outOfState(location: "XE")
+        let export = CabrilloExporter.export(log: contest, party: naqp, score: .init())
+        XCTAssertTrue(export.contains("LOCATION: XE"), export)
+    }
+
+    /// And a log written the old way — the country stored as an in-state
+    /// county — exports the same header without being opened in setup again.
+    func testALegacyInsideLogStillExportsItsCountry() {
+        var contest = log([qso(call: "N2CU", my: "XE", their: "NY")])
+        contest.myLocation = .inState(counties: ["XE"])
+        let export = CabrilloExporter.export(log: contest, party: naqp, score: .init())
+        XCTAssertTrue(export.contains("LOCATION: XE"), "not the pseudo-state: \(export)")
+        XCTAssertFalse(export.contains("LOCATION: NA"))
+    }
+
+    /// What makes collapsing the two cases safe: rule 11 has no asymmetry,
+    /// so both mult rules are identical and the classification cannot move a
+    /// score either way.
+    func testTheClassificationCannotMoveTheScore() {
+        let rows = [
+            qso(call: "N2CU", their: "NY"),
+            qso(call: "W0BH", band: .m40, their: "KS"),
+        ]
+        var inside = log(rows)
+        inside.myLocation = .inState(counties: ["XE"])
+        var outside = log(rows)
+        outside.myLocation = .outOfState(location: "XE")
+
+        let a = ScoreEngine.score(log: inside, party: naqp)
+        let b = ScoreEngine.score(log: outside, party: naqp)
+        XCTAssertEqual(a.total, b.total)
+        XCTAssertEqual(a.multiplierCount, b.multiplierCount)
+        XCTAssertEqual(a.validQSOs, b.validQSOs)
+    }
+
+    /// Widening what an entrant may *claim* must not widen what they may
+    /// *receive*: the country tokens stay county-class multipliers, taken by
+    /// the county branch of the parser exactly as before.
+    func testReceivedCountryTokensAreStillCountyClass() {
+        guard case .success(let parsed) =
+                ExchangeParser.parse("XE", party: naqp, role: .outOfState) else {
+            return XCTFail("XE must still parse")
+        }
+        XCTAssertTrue(parsed.isInStateCounties, "the county branch, not the out-token branch")
+        XCTAssertEqual(parsed.locations, ["XE"])
+    }
+
     // MARK: Entry classifications (rules 5 and 6)
 
     /// Rule 5B — Single Operator Assisted: one operator, spotting allowed —

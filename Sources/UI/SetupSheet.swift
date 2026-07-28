@@ -148,13 +148,22 @@ struct SetupSheet: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
-                        Picker("Operating from", selection: $isInState) {
-                            Text("Outside \(party.inStateLabel)").tag(false)
-                            Text("Inside \(party.inStateLabel)").tag(true)
+                        // A party with no home region has no inside to be on
+                        // one side of, so it is never asked: NAQP's entrants
+                        // all send the same shape, and the old segmented
+                        // picker made a Texan choose "Outside the other NA
+                        // countries" and a Mexican choose "Inside" — after
+                        // which the header exported as a pseudo-state the
+                        // operator was told to hand-fix. One question now.
+                        if party.hasHomeRegion {
+                            Picker("Operating from", selection: $isInState) {
+                                Text("Outside \(party.inStateLabel)").tag(false)
+                                Text("Inside \(party.inStateLabel)").tag(true)
+                            }
+                            .pickerStyle(.segmented)
                         }
-                        .pickerStyle(.segmented)
 
-                        if isInState {
+                        if isInState && party.hasHomeRegion {
                             countyPicker(party)
                         } else {
                             // LabeledContent, not the TextField's own title. In
@@ -167,16 +176,17 @@ struct SetupSheet: View {
                             // at. Splitting them means the width applies to the
                             // control alone, and .textCase stops leaking into
                             // the label and shouting it in caps.
-                            LabeledContent("State / DX") {
+                            LabeledContent(party.hasHomeRegion ? "State / DX" : "My location") {
                                 TextField("", text: $stateToken)
                                     .textFieldStyle(.roundedBorder)
                                     .textCase(.uppercase)
                                     .focused($focused, equals: .stateToken)
                                     .frame(width: 120)
                             }
-                            Text("Two-letter state or province, or DX.")
+                            Text(locationHint(party))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                 }
@@ -327,6 +337,17 @@ struct SetupSheet: View {
         }
     }
 
+    /// What may be typed in the location field. A party with a home region
+    /// asks only about the outside world; a party without one accepts its own
+    /// code list too, so the hint names it and shows the shape of a code —
+    /// an entrant in Bermuda should not have to guess between VP9 and BDA.
+    private func locationHint(_ party: PartyDefinition) -> String {
+        guard !party.hasHomeRegion else { return "Two-letter state or province, or DX." }
+        let examples = party.counties.prefix(3).map(\.abbr).joined(separator: ", ")
+        return "Your state or province, DX, or one of this party's "
+            + "\(party.counties.count) location codes (\(examples), …)."
+    }
+
     private func countyCapText(_ party: PartyDefinition) -> String {
         let cap = min(ExchangeParser.maxCounties, party.maxSimultaneousCounties)
         return cap == 1
@@ -370,10 +391,11 @@ struct SetupSheet: View {
            exchangeName.trimmingCharacters(in: .whitespaces).isEmpty {
             return false
         }
-        if isInState {
+        if isInState && party.hasHomeRegion {
             return !selectedCounties.isEmpty
         }
-        return party.validOutStateTokens.contains(stateToken.trimmingCharacters(in: .whitespaces).uppercased())
+        return party.validEntrantTokens
+            .contains(stateToken.trimmingCharacters(in: .whitespaces).uppercased())
     }
 
     private func load() {
@@ -386,6 +408,15 @@ struct SetupSheet: View {
         case .outOfState(let location):
             isInState = false
             stateToken = location
+        }
+        // A log written before this party dropped its inside/outside choice —
+        // or one carried over from a party that has one — arrives as a county
+        // selection there is no longer a control for. Its token *is* the
+        // location, so it lands in the field the operator can see.
+        if party?.hasHomeRegion == false, isInState {
+            isInState = false
+            stateToken = selectedCounties.first ?? ""
+            selectedCounties = []
         }
         if stateToken.isEmpty {
             stateToken = station.stateProvince.uppercased()
@@ -406,7 +437,9 @@ struct SetupSheet: View {
 
     private func save() {
         station.callsign = station.callsign.trimmingCharacters(in: .whitespaces).uppercased()
-        let location: MyLocation = isInState
+        // No home region, no in-state case: every entrant is a peer location,
+        // and the token they typed is what the exports carry.
+        let location: MyLocation = isInState && party?.hasHomeRegion != false
             ? .inState(counties: selectedCounties)
             : .outOfState(location: stateToken.trimmingCharacters(in: .whitespaces).uppercased())
         document.updateStation(

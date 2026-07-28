@@ -87,6 +87,20 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     var inStateLabel: String { inStateLabelRaw ?? homeState }
     private let inStateLabelRaw: String?
 
+    /// Is there a home region an entrant can be *inside* of? Default true —
+    /// a state QSO party's whole geometry is host state versus everyone else.
+    ///
+    /// NAQP is the exception: rule 10 gives every North American entrant the
+    /// same exchange (name + their own location), and the country tokens
+    /// riding in the county slot are peers of the states and provinces, not
+    /// sub-regions of a host state. Asking such an entrant whether they are
+    /// "inside" is a question with no answer, and answering it wrong used to
+    /// put the pseudo-`homeState` in the Cabrillo `LOCATION:` header. Where
+    /// this is false the setup sheet asks one question — where are you — and
+    /// the exports read the entrant's own token.
+    var hasHomeRegion: Bool { hasHomeRegionRaw ?? true }
+    private let hasHomeRegionRaw: Bool?
+
     /// State tokens that are not valid in this party beyond the home state
     /// (MDC: DC arrives as the WDC county entity, so both MD and DC are out).
     /// Defaults to **all** of `homeStates`, so a multi-state party excludes
@@ -556,6 +570,21 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         return tokens
     }
 
+    /// What an entrant may claim as their *own* location in setup. Normally
+    /// the out-of-state set. A party with no home region has no "outside", so
+    /// its own token list joins it as a peer class — an NAQP entrant in
+    /// Bermuda types VP9 exactly as a Texan types TX.
+    ///
+    /// Deliberately separate from `validOutStateTokens`, which the exchange
+    /// parser reads for *received* locations: what an entrant may be and what
+    /// they may work are different questions, and merging them would put
+    /// county-class tokens in the out-of-state branch for every party.
+    var validEntrantTokens: Set<String> {
+        hasHomeRegion
+            ? validOutStateTokens
+            : validOutStateTokens.union(counties.map(\.abbr))
+    }
+
     /// Could this token be a DX prefix under `.prefix` style? 1–5 chars,
     /// letters/digits with at least one letter, and not a county or any
     /// state/province/DX token — including excluded ones like the home state,
@@ -614,6 +643,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case combinesRaw = "combines"
         case homeStatesRaw = "homeStates"
         case inStateLabelRaw = "inStateLabel"
+        case hasHomeRegionRaw = "hasHomeRegion"
         case dxStyleRaw = "dxStyle"
         case allowedModeClassesRaw = "allowedModes"
         case maxSimultaneousCountiesRaw = "maxSimultaneousCounties"

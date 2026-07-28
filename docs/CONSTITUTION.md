@@ -393,6 +393,8 @@ question under Article 3, not an invitation to infer.
 | Home state's own token never sent | `excludedStateTokens` (defaults to `[homeState]`) |
 | A short province list (OhQP counts 11) | `provinces` |
 | Exchange carries no RST | `exchangeIncludesRST: false` |
+| Exchange carries an operator name | `exchangeIncludesName: true` |
+| No host region — every entrant sends the same shape (NAQP) | `hasHomeRegion: false` |
 | Bonus station | `bonuses: [{"type": "workStation", …}]` with the right `scope` |
 | Per-N-counties mobile bonus | `mobileCountyCount` |
 | Bonus for counties *I* activate | `activatedCountyCount` |
