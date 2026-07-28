@@ -319,4 +319,40 @@ final class LogDocumentTests: XCTestCase {
         XCTAssertEqual(doc.log.operatingMode, .run,
                        "the manual choice survives; re-deriving would give S&P")
     }
+
+    // MARK: Export file naming (2026-07-28)
+
+    /// The export panel offers the log's own name, not the bare callsign: a
+    /// saved document exports under its file name...
+    func testExportBaseNameUsesTheSavedFilesName() {
+        let url = URL(fileURLWithPath: "/logs/2026-08-29 KSQP KE5CW.qplog")
+        XCTAssertEqual(
+            LogDocument.exportBaseName(fileURL: url, log: ContestLog(partyID: "ksqp")),
+            "2026-08-29 KSQP KE5CW"
+        )
+    }
+
+    /// ...and an unsaved draft exports under the same dated name the
+    /// first auto-save is about to give its file.
+    func testExportBaseNameForADraftMatchesItsFutureFileName() {
+        var log = ContestLog(partyID: "moqp")
+        log.station.callsign = "KE5CW"
+        log.qsos = [
+            QSO(
+                timestampUTC: Date(timeIntervalSince1970: 1_788_013_920),  // 2026-08-29Z
+                call: "W0AAA",
+                band: .m20,
+                modeClass: .cw,
+                rawMode: "CW",
+                rstSent: "599",
+                rstRcvd: "599",
+                myLoc: "ADR",
+                theirLoc: "SED"
+            )
+        ]
+        XCTAssertEqual(
+            LogDocument.exportBaseName(fileURL: nil, log: log),
+            "2026-08-29 MOQP KE5CW"
+        )
+    }
 }

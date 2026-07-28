@@ -181,4 +181,36 @@ final class KeyMonitorGateTests: XCTestCase {
         XCTAssertNil(KeyMonitorGate.action(keyCode: 126, command: false))
         XCTAssertNil(KeyMonitorGate.action(keyCode: 125, command: false))
     }
+
+    // MARK: Export shortcuts (2026-07-28)
+
+    /// ⌘E and ⇧⌘E moved into the gate when the toolbar buttons became one
+    /// Export menu — SwiftUI shortcuts on toolbar-menu items are not a
+    /// dependable path, and the gate already enforces the sheet and
+    /// which-window rules the exports should obey anyway.
+    func testCommandEExportsADIF() {
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 14, command: true), .exportADIF)
+    }
+
+    func testShiftedCommandEExportsCabrillo() {
+        XCTAssertEqual(
+            KeyMonitorGate.action(keyCode: 14, command: true, shift: true),
+            .exportCabrillo
+        )
+    }
+
+    /// A bare or shifted 'e' is the operator typing a callsign.
+    func testPlainEStaysTypeable() {
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 14, command: false))
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 14, command: false, shift: true))
+    }
+
+    /// ⇧ must only ever distinguish the E chord: ⌘⇧= is how a '+' actually
+    /// arrives on the keyboard, and it has always meant WPM up.
+    func testShiftDoesNotDisturbOtherCommandChords() {
+        XCTAssertEqual(
+            KeyMonitorGate.action(keyCode: 24, command: true, shift: true),
+            .adjustWPM(by: 2)
+        )
+    }
 }
