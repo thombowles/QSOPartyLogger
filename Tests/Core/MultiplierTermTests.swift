@@ -47,6 +47,14 @@ final class MultiplierTermTests: XCTestCase {
         XCTAssertEqual(qcqp.countyTermPlural, "regions")
     }
 
+    /// HQP's rules: "Non-Hawaiian stations: 14 Hawai'i districts per band."
+    /// Hawaii does have counties; they are not what this party counts.
+    func testHQPCountsDistricts() throws {
+        let hqp = try XCTUnwrap(PartyCatalog.party(id: "hqp"))
+        XCTAssertEqual(hqp.countyTerm, "district")
+        XCTAssertEqual(hqp.countyTermPlural, "districts")
+    }
+
     /// Terms are stored lowercase so a heading can capitalize the first
     /// letter without flattening an acronym in the middle of one.
     func testSentenceCasingKeepsAnAcronymIntact() {
