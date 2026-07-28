@@ -1,0 +1,145 @@
+Rules: 2026 North American
+QSO Party (CW/SSB/RTTY)
+1. Eligibility: Any amateur radio licensee may enter.
+2. Object: To work as many North American stations as possible during the contest period.
+3. North American Station: Defined by the ARRL DXCC List, with the addition of Hawaii.
+4. Contest calendar:
+Mode     Times/Dates                          Logs Due                  Contest Weekend
+CW       1800 UTC Jan 10 to 0559 UTC Jan 11 0600 UTC January 18        2nd full weekend January
+         1800 UTC Aug 1 to 0559 UTC Aug 2 0600 UTC August 9            1st full weekend August
+SSB      1800 UTC Jan 17 to 0559 UTC Jan 18 0600 UTC January 25        3rd full weekend January
+         1800 UTC Aug 15 to 0559 UTC Aug 16 0600 UTC August 23         3rd full weekend August
+RTTY     1800 UTC Feb 28 to 0559 UTC Mar 1 0600 UTC March 8            Starts last Saturday in February
+         1800 UTC Jul 18 to 0559 UTC Jul 19 0600 UTC July 26           3rd full weekend July
+            Submit logs via www.ncjweb.com/naqplogsubmit — See Rule 16
+5. Entry Classifications:
+    A) Single Operator (SO):
+      i) One person performs all transmitting, receiving, and logging functions as well as equipment and antenna
+           adjustments.
+      ii) Access to spotting information obtained directly or indirectly from any source other than the station operator,
+           such as from other stations or automated tools, spotting networks, skimmers, social media, watching par-
+           ticipating stations live streaming, etc., is prohibited. Spotting other stations and self-spotting are prohibited.
+      iii) Use of a CW decoder or wide-band multi-channel RTTY decoder (RTTY Skimmer) is prohibited.
+      iv) Only one transmitted signal allowed at a time.
+      v) May operate up to 10 out of the 12 hours of the contest. Off-times must be at least 30 minutes in length. To
+           count as off-time, the difference between the times of consecutive contacts must be greater than or equal
+           to 31 minutes (i.e., 30 intervening minutes, during which no contacts occur). The contest period ends at
+           05:59:59 UTC.
+    B) Single Operator Assisted (SOA):
+      i) One person performs all transmitting, receiving, and logging functions as well as equipment and antenna
+           adjustments.
+      ii) May use spotting information obtained directly or indirectly from any source such as from other stations,
+           automated tools, spotting networks, skimmers, social media, watching live streaming, etc. Soliciting contacts
+           via social media is not allowed. Spotting other stations and self-spotting are allowed.
+      iii) May use a CW decoder or wide-band multi-channel RTTY decoder (RTTY Skimmer).
+      iv) Only one transmitted signal allowed at a time.
+      v) May operate up to 10 out of the 12 hours of the contest. Off-times must be at least 30 minutes. To count as off
+           time, the difference between the times of consecutive contacts must be greater than or equal to 31 minutes
+           (i.e., 30 intervening minutes, during which no contacts occur). The contest period ends at 05:59:59 UTC.
+    C) Multioperator Two-Transmitter (M2):
+      i) More than one person performs transmitting, receiving, and logging functions, etc.
+      ii) May use assistance such as packet spotting networks, skimmers, social media, live streaming and the
+           like. Soliciting contacts via social media is not allowed. Spotting other stations or self-spotting is allowed.
+      iii) May use a CW decoder or wide-band multi-channel RTTY decoder (RTTY Skimmer).
+      iv) A maximum of two transmitted signals at any given time, each on a different band. Both transmitters may
+           work any and all stations.
+      v) May operate for the entire 12 hours of the contest.
+      vi) Starting when the first QSO on a band is logged, a station may not transmit on a different band until 10 full
+           minutes have passed. Any QSOs made on a different band before 10 minutes have passed will not count
+           for scoring. The other station will receive full credit for the QSO.
+      vii) Multioperator entries are required to use only one name throughout the entire contest.
+
+
+26     October/November 2025       NCJ
+       viii)Multioperator entries with only one operator may be reclassified to Single Operator Assisted (SOA).
+6. Output Power: Maximum of 100 W from the output of the final amplifier. QRP (5 W or less) entries will be rec-
+   ognized in the results. Entries from stations choosing to use more than 100 W or entered as High Power will be
+   classified as check logs. Entries found to use more power than claimed will be disqualified. Power categories are:
+     A) 5 W or less – QRP
+     B) 5 – 100 W – Low Power
+     C) Over 100 W – Check Log
+7. Mode: CW only in CW parties. SSB only in phone parties. RTTY only in RTTY parties.
+8. Bands: 160, 80, 40, 20, 15, and 10 meters only, except no 160 meters for the RTTY contest.
+9. Station: All radio transmitters, receivers, and antennas used by an entrant must be associated with one station. A
+   station may be operated remotely. Use of multiple stations during the contest using the same call sign, whether
+   directly or remotely operated, is prohibited. Entrants must use only one call sign per station operated and may
+   not work themselves.
+10. Exchange: Operator name and station location (state, province, or country) for North American stations; operator
+   name only for non-North American stations. Each entrant is required to use a single name throughout the entire
+   contest period, including multi-operator entries.
+11. Multipliers: Multipliers are all 50 US states, including Alaska and Hawaii, the District of Columbia (DC), the 13
+   Canadian provinces/territories (British Columbia, Alberta, Saskatchewan, Manitoba, Ontario, Quebec, New Bruns-
+   wick, Nova Scotia, Prince Edward Island, Newfoundland-Labrador, Yukon, Northwest Territories, and Nunavut)
+   and other North American entities as defined by the ARRL DXCC List. For other North American entities, please
+   use the standard DXCC prefix for the country in the received location field in your log. See multiplier list included
+   with sample paper logs. Multipliers count again on each band. Non-North American countries, maritime mobiles,
+   and aeronautical mobiles do not count as multipliers but may be worked for QSO credit; these should be entered
+   as DX in the received location field.
+12. Valid Contact: Stations may be worked once per band. Duplicate contacts on a band will not receive credit as
+   a valid contact. A valid contact consists of a complete, correctly copied and logged two-way exchange between
+   a North American station and any other station. Contacts with an incorrectly received exchange are removed
+   with no additional penalty. Call sign errors (bust) or call signs not in the other log (NIL) are removed and receive
+   a penalty of one QSO point value. Proper logging requires including the time in UTC and band for each contact.
+13. Scoring: Multiply total valid contacts by the sum of the number of multipliers worked on each band.
+14. Team Competition: You may wish to form a team with fellow NAQP participants. If so, your team must consist of
+   two to five Single Operator and Single Operator Assisted stations whose individual scores are added together to
+   produce a team score. Although clubs or other groups having more than five members may form multiple teams,
+   there are no club membership, distance, or meeting requirements for a team entry. Teams must be registered prior
+   to the start of the contest. Use one of the following online forms to register your team:
+   CW team registration: www.ncjweb.com/cwnaqpteamreg
+   SSB team registration: www.ncjweb.com/ssbnaqpteamreg
+   RTTY team registration: www.ncjweb.com/rttynaqpteamreg
+   These team registration forms automatically provide confirmation of team registration by return e-mail. Inclusion
+of team information in submitted Cabrillo logs is not required, as teams are determined ahead of time through the
+team registration system.
+15. Log Formatting: All logs must be submitted electronically via web upload. The file format for electronic logs for
+   NCJ-sponsored contests is Cabrillo; see wwrof.org/cabrillo/ for details. For those participants logging on paper,
+   please use the manual log entry Web-to-Cabrillo online forms available at the links below to submit your logs.
+16. Log Submission: Entries must be received no later than 7 days after the end of the contest.
+     A) Cabrillo-formatted logs must be uploaded via web form (use for all modes): www.ncjweb.com/naqplogsubmit
+     B) To manually convert paper or non-Cabrillo log to Cabrillo log, consider using one of the following tools:
+          CW: www.b4h.net/cabforms/naqpcw_cab.php
+          SSB: www.b4h.net/cabforms/naqpssb_cab.php
+          RTTY: www.b4h.net/cabforms/naqprtty_cab.php
+17. Disqualifications: Any entry may be disqualified for illegal operation, unethical operation, excessive score re-
+   duction, excessive error rates, or rules violation. Such disqualification is at the discretion of the contest manager.
+18. More Information: Questions regarding the contests, including requests for Log Check Reports, may be ad-
+   dressed to the appropriate contest manager at the e-mail address listed below:
+   CW: Dave Mueller, N2NL, cwnaqpmgr@ncjweb.com
+   SSB: Bill Lippert, ACØW, ssbnaqpmgr@ncjweb.com
+
+                                                                                  NCJ     October/November 2025       27
+  RTTY: Mark Aaker, K6UFO, rttynaqpmgr@ncjweb.com
+19. Awards:
+    A) Plaques will be awarded for the high score in each of the categories given below, provided there are a mini-
+       mum of five entries in the category. If a plaque is not sponsored, the winner may purchase it. Plaques will be
+       awarded as follows:
+Mode                        Category                           Sponsor
+CW                          Single Op, North America            Florida Contest Group
+CW                          Single Op QRP, North America        Grand Mesa Contesters of Colorado
+CW                          Single Op Assisted, North America Arizona Outlaws Contest Club
+CW                          Multiop, North America              Minnesota Wireless Association in memory of Dave, KTØR
+CW                          Team                                The CW Operators’ Club
+SSB                         Single Op, North America            South East Contest Club
+SSB                         Single Op Assisted, North America Grand Mesa Contesters of Colorado
+SSB                         Multiop, North America              Tennessee Contest Group
+SSB                         Team                                No sponsor
+Combined Score CW/SSB       Single-Op unassisted, North America Southern California Contest Club
+RTTY                        Single Op, North America            Icom America, Inc.
+RTTY                        Single Op Assisted, North America Icom America, Inc.
+RTTY                        Multiop, North America              Icom America, Inc.
+RTTY                        Team                                Icom America, Inc.
+
+       i) Combined score plaque recognizes the single unassisted operator producing the highest total combined
+           normalized score from the CW and SSB events separately by season (January/August). Scores are nor-
+           malized to 500 points for the top scorer and added together.
+     B) Certificates of merit will be awarded to all participants with a final score greater than zero.
+       i) Single operator certificates will display the top 20 ranking by category; call area; and state, province, or
+           North American country.
+       ii) Multi-operator certificates will display overall ranking for the top 10 multi-operator logs.
+
+
+
+
+28     October/November 2025     NCJ
+
