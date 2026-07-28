@@ -199,7 +199,8 @@ struct ScoreSidebar: View {
                 let values = score.workedValues(multClass)
                 if !values.isEmpty {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(label(for: multClass) + " (\(score.classCounts[multClass] ?? 0))")
+                        Text(label(for: multClass, party: party)
+                             + " (\(score.classCounts[multClass] ?? 0))")
                             .font(.caption2.weight(.semibold))
                             .foregroundStyle(.secondary)
                         Text(values.sorted().joined(separator: " "))
@@ -237,9 +238,11 @@ struct ScoreSidebar: View {
         return classes
     }
 
-    private func label(for multClass: MultClass) -> String {
+    /// The county class is named by the party — its slot holds whatever the
+    /// sponsor enumerates, which is not always a county.
+    private func label(for multClass: MultClass, party: PartyDefinition) -> String {
         switch multClass {
-        case .county: "Counties"
+        case .county: party.countyTermPlural.sentenceCased
         case .state: "States"
         case .province: "Provinces"
         case .section: "Sections"
@@ -262,7 +265,8 @@ struct ScoreSidebar: View {
         let groups = CountyGrouping.groups(for: party, members: members)
 
         return VStack(alignment: .leading, spacing: 3) {
-            Text("Counties \(worked.count)/\(party.counties.count)\(isMultClass ? "" : " (award tracking)")")
+            Text("\(party.countyTermPlural.sentenceCased) \(worked.count)/\(party.counties.count)"
+                 + (isMultClass ? "" : " (award tracking)"))
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(.secondary)
             ForEach(groups) { group in

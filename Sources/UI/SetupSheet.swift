@@ -308,7 +308,7 @@ struct SetupSheet: View {
                         .foregroundStyle(.blue)
                 }
             }
-            TextField("Search counties…", text: $countySearch)
+            TextField("Search \(party.countyTermPlural)…", text: $countySearch)
                 .focused($focused, equals: .countySearch)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 118), spacing: 4)], spacing: 4) {
@@ -350,9 +350,10 @@ struct SetupSheet: View {
 
     private func countyCapText(_ party: PartyDefinition) -> String {
         let cap = min(ExchangeParser.maxCounties, party.maxSimultaneousCounties)
+        let term = party.countyTerm
         return cap == 1
-            ? "County (this party does not permit county-line operation):"
-            : "Counties (1–\(cap); more than one = county line):"
+            ? "\(term.sentenceCased) (this party does not permit \(term)-line operation):"
+            : "\(party.countyTermPlural.sentenceCased) (1–\(cap); more than one = \(term) line):"
     }
 
     private func scheduleText(_ windows: [PartyDefinition.ScheduleWindow]) -> String {

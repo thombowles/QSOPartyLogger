@@ -395,6 +395,7 @@ question under Article 3, not an invitation to infer.
 | Exchange carries no RST | `exchangeIncludesRST: false` |
 | Exchange carries an operator name | `exchangeIncludesName: true` |
 | No host region — every entrant sends the same shape (NAQP) | `hasHomeRegion: false` |
+| The county slot holds something else — districts, regions, DXCC entities | `countyTerm` / `countyTermPlural` (lowercase; UI capitalizes) |
 | Bonus station | `bonuses: [{"type": "workStation", …}]` with the right `scope` |
 | Per-N-counties mobile bonus | `mobileCountyCount` |
 | Bonus for counties *I* activate | `activatedCountyCount` |

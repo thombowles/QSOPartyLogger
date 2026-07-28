@@ -342,6 +342,13 @@ def party(pid, pname, cabrillo, mode, schedule, note_text):
         "dxStyle": "token",
         "allowedModes": [mode],
         "maxSimultaneousCounties": 1,
+        # These are not counties, and the interface must not call them that.
+        # Rule 11 counts "other North American entities as defined by the ARRL
+        # DXCC List" -- entity, not country: the shipped list carries United
+        # Nations HQ, Desecheo I. and Aves I. Lowercase; the UI capitalizes
+        # the first letter for a heading and leaves the acronym alone.
+        "countyTerm": "NA entity",
+        "countyTermPlural": "NA entities",
         # No home region: rule 10 gives every NA entrant the same exchange
         # shape, and these "counties" are the sponsor's own country tokens --
         # peers of the states and provinces, not sub-regions of a host state.

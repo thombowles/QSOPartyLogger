@@ -45,6 +45,8 @@
     "cw"
   ],
   "maxSimultaneousCounties": 1,
+  "countyTerm": "NA entity",
+  "countyTermPlural": "NA entities",
   "hasHomeRegion": false,
   "exchangeIncludesRST": false,
   "exchangeIncludesName": true,

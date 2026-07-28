@@ -60,7 +60,8 @@ struct CombinedBreakdownSection: View {
                     .font(.caption.monospacedDigit().weight(.semibold))
             }
             HStack(spacing: 6) {
-                Text("\(line.countiesWorked.count)/\(line.party.counties.count) counties")
+                Text("\(line.countiesWorked.count)/\(line.party.counties.count) "
+                     + line.party.countyTermPlural)
                 if !line.qualifiesForChallenge {
                     Text("· needs \(2 - line.validQSOs) more")
                         .foregroundStyle(.orange)
@@ -80,7 +81,8 @@ struct CombinedBreakdownSection: View {
     private func helpText(_ line: CombinedLogSplit.MemberLine) -> String {
         var text = "\(line.party.name): \(line.validQSOs) valid QSO"
             + (line.validQSOs == 1 ? "" : "s")
-            + ", \(line.countiesWorked.count) of \(line.party.counties.count) counties."
+            + ", \(line.countiesWorked.count) of \(line.party.counties.count) "
+            + "\(line.party.countyTermPlural)."
         if !line.qualifiesForChallenge {
             text += " Two are needed before it counts as a Challenge multiplier."
         }

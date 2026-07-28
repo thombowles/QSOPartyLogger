@@ -87,6 +87,34 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     var inStateLabel: String { inStateLabelRaw ?? homeState }
     private let inStateLabelRaw: String?
 
+    /// What this party calls the class in its `counties` slot, **lowercase
+    /// and singular**. Default "county", which is what the overwhelming
+    /// majority of the catalogue actually enumerates.
+    ///
+    /// The slot holds whatever a sponsor's finest enumerated multiplier class
+    /// is, and that is not always a county: NAQP's rule 11 counts "other
+    /// North American entities as defined by the ARRL DXCC List", BCQP counts
+    /// electoral districts, QCQP counts Quebec's administrative regions.
+    /// Naming the class per party is what stops the score sidebar telling an
+    /// operator their contest has counties when it does not.
+    ///
+    /// Lowercase because call sites capitalize the first letter for a heading
+    /// (`sentenceCased`); storing "NA entity" capitalized would either shout
+    /// mid-sentence or, run through `capitalized`, come back as "Na Entity".
+    var countyTerm: String { countyTermRaw ?? "county" }
+    private let countyTermRaw: String?
+
+    /// The plural of `countyTerm`. Defaults to "counties" for the default
+    /// term, and otherwise to the singular plus "s" — so a party whose plural
+    /// is regular ("district") spends one line, and one whose plural is not
+    /// ("parish") supplies it outright.
+    var countyTermPlural: String {
+        if let plural = countyTermPluralRaw { return plural }
+        guard let singular = countyTermRaw else { return "counties" }
+        return singular + "s"
+    }
+    private let countyTermPluralRaw: String?
+
     /// Is there a home region an entrant can be *inside* of? Default true —
     /// a state QSO party's whole geometry is host state versus everyone else.
     ///
@@ -644,6 +672,8 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case homeStatesRaw = "homeStates"
         case inStateLabelRaw = "inStateLabel"
         case hasHomeRegionRaw = "hasHomeRegion"
+        case countyTermRaw = "countyTerm"
+        case countyTermPluralRaw = "countyTermPlural"
         case dxStyleRaw = "dxStyle"
         case allowedModeClassesRaw = "allowedModes"
         case maxSimultaneousCountiesRaw = "maxSimultaneousCounties"
@@ -762,5 +792,17 @@ enum BonusRule: Codable, Equatable, Sendable {
             try c.encode("sweepTiers", forKey: .type)
             try c.encode(tiers, forKey: .tiers)
         }
+    }
+}
+
+extension String {
+    /// The first character uppercased, everything after it untouched.
+    ///
+    /// `capitalized` would lowercase the rest of every word, turning the
+    /// multiplier term "NA entities" into "Na Entities". Headings need the
+    /// first letter and nothing else touched.
+    var sentenceCased: String {
+        guard let first else { return self }
+        return first.uppercased() + dropFirst()
     }
 }

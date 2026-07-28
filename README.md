@@ -700,6 +700,13 @@ parties, and the remaining engine gaps. Adding a party is governed by
   codes read as four contests and sixteen states instead of one wall. Standalone
   multi-state parties (7QP, New England) get the state headings too; a
   single-state party's grid is unchanged.
+
+  **Each party names its own multiplier class**, because not every sponsor
+  counts counties: the score sidebar, setup sheet, entry bar and self-spot
+  sheet read `countyTerm` from the party file, so NAQP counts *NA entities*
+  (rule 11's ARRL DXCC entities), BCQP *districts*, QCQP *regions* — and the
+  40-odd parties that really do count counties say so without carrying the
+  word at all.
 - **RST pre-filled** (599/59 by mode) after every contact, so the exchange
   is two keystrokes on a normal run.
 - **Exports**: Cabrillo V3 (per-county-line QSO rows, claimed score, and the
@@ -1048,7 +1055,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1703 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1708 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
