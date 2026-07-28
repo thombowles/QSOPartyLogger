@@ -158,6 +158,29 @@ final class SpottingTests: XCTestCase {
         XCTAssertEqual(store.spots(band: .m20).map(\.call), ["B1BB", "C1CC", "A1AA"])
     }
 
+    /// Declaring NON-ASSISTED mid-contest takes the network feeds off the
+    /// band map as well as off the wire — leaving forty spots on screen would
+    /// keep the assistance in front of the operator after the claim says
+    /// there is none. Contacts from the operator's own log are not spotting
+    /// information and stay.
+    @MainActor
+    func testStoreRemovesNetworkSpotsButKeepsYourOwnLog() {
+        let store = SpotStore()
+        var cluster = spot(call: "A1AA", freqKHz: 14040.0)
+        cluster.source = .cluster
+        var hub = spot(call: "B1BB", freqKHz: 14005.0)
+        hub.source = .hub
+        var mine = spot(call: "C1CC", freqKHz: 14026.0)
+        mine.source = .local
+        for each in [cluster, hub, mine] { store.add(each) }
+        XCTAssertEqual(store.spots(band: .m20).count, 3, "precondition")
+
+        store.removeNetworkSpots()
+
+        XCTAssertEqual(store.spots(band: .m20).map(\.call), ["C1CC"],
+                       "cluster and hub go; the station you worked yourself stays")
+    }
+
     // MARK: Next/previous spot navigation
 
     func testNextSpotUpDownWithWrap() {

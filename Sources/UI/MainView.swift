@@ -305,11 +305,15 @@ struct MainView: View {
             spotStore.purge(now: Date())
         }
         .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
-        // A conflict that returns — the profile flipped away from
-        // NON-ASSISTED and back, spots still on the record — stands the
-        // warning back up; going quiet leaves the dismissal alone.
+        // Declaring NON-ASSISTED takes effect at once — an open connection is
+        // dropped and the network spots come off the map, because a claim
+        // that only applies to future spots is not a claim.
+        .onChange(of: document.log.station.categoryAssisted) { enforceSpottingPolicy() }
+        // A conflict that returns — spots on the record from an assisted
+        // stretch, the claim now back to NON-ASSISTED — stands the badge back
+        // up; going quiet leaves the dismissal alone.
         .onChange(of: document.log.spotsContradictNonAssistedClaim) { _, conflict in
-            spotWarningDismissed = AssistedSpotWarning.rearm(
+            spotWarningDismissed = SpottingPolicy.rearm(
                 dismissed: spotWarningDismissed, conflict: conflict
             )
         }
@@ -403,12 +407,12 @@ struct MainView: View {
                     .background(.blue.opacity(0.2), in: Capsule())
             }
 
-            if AssistedSpotWarning.isVisible(
+            if SpottingPolicy.isVisible(
                 conflict: document.log.spotsContradictNonAssistedClaim,
                 dismissed: spotWarningDismissed
             ) {
                 HStack(spacing: 5) {
-                    Label(AssistedSpotWarning.badge, systemImage: "exclamationmark.triangle.fill")
+                    Label(SpottingPolicy.badge, systemImage: "exclamationmark.triangle.fill")
                         .font(.caption.weight(.bold))
                     Button {
                         spotWarningDismissed = true
@@ -424,7 +428,7 @@ struct MainView: View {
                 .padding(.vertical, 2)
                 .background(.orange.opacity(0.2), in: Capsule())
                 .foregroundStyle(.orange)
-                .help(AssistedSpotWarning.detail)
+                .help(SpottingPolicy.detail)
             }
 
             Spacer()
@@ -567,12 +571,13 @@ struct MainView: View {
             Toggle("Connect automatically when a contest opens", isOn: $settings.clusterAutoConnect)
                 .font(.callout)
 
-            // Status by the control that creates the condition, before the
-            // first spot lands. The strip badge takes over once one does.
-            if document.log.station.categoryAssisted == .nonAssisted {
-                Label(AssistedSpotWarning.connectCaution, systemImage: "exclamationmark.triangle.fill")
+            // The block is stated where the connect controls are, so a
+            // switched-off Connect button is never a mystery.
+            if !spottingAllowed {
+                Label(SpottingPolicy.blockedReason, systemImage: "lock.fill")
                     .font(.caption)
                     .foregroundStyle(.orange)
+                    .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: 250, alignment: .leading)
             }
 
@@ -585,6 +590,7 @@ struct MainView: View {
                 if spotClient.status == .disconnected {
                     Button("Connect") { connectCluster() }
                         .keyboardShortcut(.defaultAction)
+                        .disabled(!spottingAllowed)
                 } else {
                     Button("Disconnect") {
                         spotClient.disconnect()
@@ -671,7 +677,29 @@ struct MainView: View {
         clusterCommand = ""
     }
 
+    /// Whether this entry's declared category permits incoming spots at all.
+    private var spottingAllowed: Bool {
+        SpottingPolicy.allowsIncomingSpots(document.log.station.categoryAssisted)
+    }
+
+    /// Make the world match the declared category: no feeds, and no spots
+    /// left on the map from before the declaration. Runs whenever the claim
+    /// changes, so a mid-contest switch to NON-ASSISTED takes effect at once
+    /// rather than at the next launch.
+    private func enforceSpottingPolicy() {
+        guard !spottingAllowed else {
+            syncHubSpotClient()  // back to ASSISTED: the hub may resume
+            return
+        }
+        spotClient.disconnect()
+        hubSpotClient.stop()
+        spotStore.removeNetworkSpots()
+    }
+
     private func connectCluster() {
+        // The one gate every path funnels through — the button, the Recent
+        // Clusters menu, and auto-connect all land here.
+        guard spottingAllowed else { return }
         let port: UInt16 = (1...65535).contains(settings.clusterPort)
             ? UInt16(settings.clusterPort) : 7300
         spotClient.connect(
@@ -699,10 +727,12 @@ struct MainView: View {
         installKeyMonitor()
         radio.autoConnect(settings: settings)
 
+        // A spot can only get this far under an ASSISTED declaration, so the
+        // record is of assistance legitimately taken — and it is what makes a
+        // later switch to NON-ASSISTED visible, since prevention cannot reach
+        // backwards into contacts already made.
         spotClient.onSpot = { spot in
             spotStore.add(spot)
-            // Reception is use: a delivered spot is "access to spotting
-            // information", whatever the profile currently claims.
             document.noteSpotsUsed()
         }
         // Hub spots land in the same store, so the band map, filters, stacking
@@ -1084,7 +1114,11 @@ struct MainView: View {
     /// Two of the nineteen bundled parties have no hub page at all, so this
     /// quietly does nothing for them rather than polling a dead URL.
     private func syncHubSpotClient() {
-        guard settings.hubSpotsEnabled, let party, let source = party.hubSpots else {
+        guard SpottingPolicy.hubShouldPoll(
+            enabled: settings.hubSpotsEnabled,
+            hasSource: party?.hubSpots != nil,
+            claim: document.log.station.categoryAssisted
+        ), let party, let source = party.hubSpots else {
             hubSpotClient.stop()
             return
         }
@@ -1347,7 +1381,7 @@ struct MainView: View {
         // dismissed earlier. The export itself proceeds untouched — the
         // warning is advice, and the file is never rewritten. ADIF (⌘E)
         // carries no CATEGORY-ASSISTED claim and does not re-arm.
-        spotWarningDismissed = AssistedSpotWarning.rearm(
+        spotWarningDismissed = SpottingPolicy.rearm(
             dismissed: spotWarningDismissed,
             conflict: document.log.spotsContradictNonAssistedClaim
         )

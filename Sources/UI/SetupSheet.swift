@@ -107,13 +107,17 @@ struct SetupSheet: View {
                             Text($0.rawValue).tag($0)
                         }
                     }
-                    // Status by the control that fixes it: the log already
-                    // has spots on the record, so NON-ASSISTED is the one
-                    // selection that contradicts it.
-                    if document.log.usedSpots, station.categoryAssisted == .nonAssisted {
-                        Label(AssistedSpotWarning.setupCaution, systemImage: "exclamationmark.triangle.fill")
+                    // The consequence, stated by the control that causes it.
+                    // Orange only once it actually bites — this log already
+                    // has spots on the record that the claim now contradicts;
+                    // otherwise it is a plain statement of what the default
+                    // selection means.
+                    if station.categoryAssisted == .nonAssisted {
+                        Label(SpottingPolicy.setupCaution, systemImage: "exclamationmark.triangle.fill")
                             .font(.caption)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(document.log.usedSpots
+                                             ? AnyShapeStyle(Color.orange)
+                                             : AnyShapeStyle(HierarchicalShapeStyle.secondary))
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     Picker("Power", selection: $station.categoryPower) {
