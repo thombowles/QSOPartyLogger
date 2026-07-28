@@ -38,11 +38,18 @@ final class MultiStatePartyTests: XCTestCase {
         let bundled = PartyCatalog.loadBundled().filter { !Self.multiState.contains($0.id) }
         XCTAssertGreaterThan(bundled.count, 30, "sanity — the catalog loaded")
 
+        // The NAQP pair are single-"state" (the NA pseudo-state) but supply
+        // their own label deliberately: their "in-state" side is the sponsor's
+        // other-NA-country list, and "Inside NA" would say nothing.
+        let labelled: Set<String> = ["naqpcw", "naqpssb"]
+
         for party in bundled {
             XCTAssertEqual(party.homeStates, [party.homeState],
                            "\(party.id) should still have exactly one home state")
-            XCTAssertEqual(party.inStateLabel, party.homeState,
-                           "\(party.id)'s setup sheet should read as before")
+            if !labelled.contains(party.id) {
+                XCTAssertEqual(party.inStateLabel, party.homeState,
+                               "\(party.id)'s setup sheet should read as before")
+            }
             XCTAssertTrue(party.counties.allSatisfy { $0.state == nil },
                           "\(party.id) is single-state; no county should name one")
             for county in party.counties {

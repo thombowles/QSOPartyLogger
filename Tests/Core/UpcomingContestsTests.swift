@@ -29,8 +29,12 @@ final class UpcomingContestsTests: XCTestCase {
         XCTAssertEqual(first?.isLive, false)
         XCTAssertEqual(first?.isApproved, true)
         XCTAssertEqual(first?.nextWindow.start, instant("2026-07-25T15:00:00Z"))
-        // Sorted by next start: Maryland-DC follows on Aug 8.
-        XCTAssertEqual(list.dropFirst().first?.partyID, "mdc")
+        // Sorted by next start: NAQP CW follows on Aug 1 — a bundled
+        // non-Challenge contest takes its place in the list like any other —
+        // and Maryland-DC after it on Aug 8.
+        XCTAssertEqual(list.dropFirst().first?.partyID, "naqpcw")
+        XCTAssertEqual(list.dropFirst().first?.isApproved, false)
+        XCTAssertEqual(list.dropFirst(2).first?.partyID, "mdc")
     }
 
     func testLiveWindowIsFlaggedAndStaysFirst() {

@@ -90,11 +90,15 @@ final class NameExchangeTests: XCTestCase {
         XCTAssertFalse(nameNoRST.exchangeIncludesSerial)
     }
 
-    /// The capability ships first and no bundled party uses it — each flag
-    /// flip is its own commit (NAQP CW, NAQP SSB, then the MNQP fix).
-    func testNoBundledPartyExchangesANameYet() {
+    /// The bundled parties whose exchange carries a name, named so a party
+    /// cannot gain one incidentally — each flag flip is its own commit.
+    func testWhichPartiesExchangeAName() {
         let withNames = PartyCatalog.loadBundled().filter(\.exchangeIncludesName).map(\.id)
-        XCTAssertEqual(withNames, [])
+        XCTAssertEqual(withNames, ["naqpcw"],
+                       "NAQP rule 10: name and location, no report")
+        for party in PartyCatalog.loadBundled() where party.exchangeIncludesName {
+            XCTAssertFalse(party.exchangeIncludesRST, "\(party.id) sends a name and no report")
+        }
     }
 
     // MARK: One contact, one name
