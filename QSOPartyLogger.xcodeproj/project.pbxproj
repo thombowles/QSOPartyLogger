@@ -45,6 +45,7 @@
 		241A9D98907398CD1DFD522A /* DelawareQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2052FF6C863AA0209875C20 /* DelawareQSOPartyTests.swift */; };
 		25593919ADA400E0D07798E1 /* SpotLabelSizePreferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A83B90871BA86343AB446AA /* SpotLabelSizePreferenceTests.swift */; };
 		264E62D0F6ACC6D98F5A9006 /* ContestHistorian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 306444778B57CE85A2F717FA /* ContestHistorian.swift */; };
+		27B19A152DE00AAC7DE72A7E /* AdifExportTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E158548019775B5706D58253 /* AdifExportTypeTests.swift */; };
 		2972D77BFB792F27EE319AAD /* DashboardUpcomingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEEA567ED7931AA58B6885D /* DashboardUpcomingSection.swift */; };
 		2AAD513E3761DAD300741555 /* TCPTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522A7E3D7B2C6485763680DB /* TCPTransport.swift */; };
 		2B2A1A856A6A6B9837A2EFB1 /* ElecraftK3Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6991F8344C755AD580ADCF48 /* ElecraftK3Driver.swift */; };
@@ -432,6 +433,7 @@
 		DFC488FDCD9B9458276688D9 /* ContestArchiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestArchiveTests.swift; sourceTree = "<group>"; };
 		E0173AC4FD078C2202756941 /* NameExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameExchangeTests.swift; sourceTree = "<group>"; };
 		E0A02DEF03C814CF8D2DD737 /* NewMexicoQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMexicoQSOPartyTests.swift; sourceTree = "<group>"; };
+		E158548019775B5706D58253 /* AdifExportTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdifExportTypeTests.swift; sourceTree = "<group>"; };
 		E4C943C5C616ADB650DA248E /* CWKeyer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CWKeyer.swift; sourceTree = "<group>"; };
 		E4D8CF7496BE7953659E708C /* FloridaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloridaQSOPartyTests.swift; sourceTree = "<group>"; };
 		E53DC8597A1A918FA7CB32D4 /* K3ProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K3ProtocolTests.swift; sourceTree = "<group>"; };
@@ -807,6 +809,7 @@
 		D7D85D0B7071B633C7CF23AE /* App */ = {
 			isa = PBXGroup;
 			children = (
+				E158548019775B5706D58253 /* AdifExportTypeTests.swift */,
 				725F2EE6C91643ADCAC4B72C /* BandMapObservationTests.swift */,
 				57263564A0C38ADE1B3E1897 /* CloudMirrorTests.swift */,
 				2E700FD390A66A174C5681EA /* ContestHistorianTests.swift */,
@@ -1012,6 +1015,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27B19A152DE00AAC7DE72A7E /* AdifExportTypeTests.swift in Sources */,
 				45800F9A79A1866E099BDAB9 /* AdifExporterTests.swift in Sources */,
 				FBF94AC519A65928C7634BA7 /* AlabamaQSOPartyTests.swift in Sources */,
 				9DA45D4E865C553118FE4CD1 /* ArchiveStoreTests.swift in Sources */,
