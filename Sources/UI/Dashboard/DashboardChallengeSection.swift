@@ -5,6 +5,10 @@ import SwiftUI
 /// the challenge won't count — labeled, never silently dropped.
 struct DashboardChallengeSection: View {
     let standing: ChallengeStanding
+    /// Set when a combined entry was split into its member contests to build
+    /// this standing, so four lines the operator never opened separately are
+    /// explained rather than left to be discovered.
+    var includesSplitEntry = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -111,6 +115,13 @@ struct DashboardChallengeSection: View {
                 Text("None yet this season.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
+            }
+
+            if includesSplitEntry {
+                Text("A combined entry is listed as the contests it is made of — the Challenge counts each sponsor separately, and each takes its own log.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             ForEach(standing.lines) { line in

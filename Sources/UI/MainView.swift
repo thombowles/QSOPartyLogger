@@ -168,7 +168,9 @@ struct MainView: View {
         HSplitView {
             leftPane
                 .layoutPriority(1)
-            ScoreSidebar(log: document.log, party: party, score: score)
+            ScoreSidebar(
+                log: document.log, party: party, score: score, members: flow.combinedMembers
+            )
         }
     }
 

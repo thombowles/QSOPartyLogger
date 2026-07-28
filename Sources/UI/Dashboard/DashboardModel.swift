@@ -36,14 +36,29 @@ final class DashboardModel {
         SeasonStats.compute(records: archive.records, year: selectedYear)
     }
 
+    /// A combined entry is not a contest the Challenge tracks — `in7qpne` is not
+    /// on the approved list and never will be — so its record is split into the
+    /// member contests it is actually made of first. Unsplit it would count for
+    /// nothing; split, one May weekend is worth up to four multipliers, which is
+    /// what the four sponsors say it is.
     var standing: ChallengeStanding? {
         challengeCalendar.map {
             ChallengeStanding.compute(
-                records: archive.records,
+                records: CombinedLogSplit.expand(records: archive.records, parties: parties),
                 calendar: $0,
                 year: selectedYear,
                 partyNames: partyNames
             )
+        }
+    }
+
+    /// True when a combined log for the selected year was split for the standing
+    /// above, so the Challenge section can say where four contests came from
+    /// when the operator only opened one.
+    var standingIncludesSplitEntry: Bool {
+        let combined = Set(parties.filter { !$0.combines.isEmpty }.map(\.id))
+        return archive.records.contains {
+            $0.year == selectedYear && combined.contains($0.partyID)
         }
     }
 

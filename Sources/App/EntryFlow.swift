@@ -135,6 +135,20 @@ final class EntryFlow {
         return looked
     }
 
+    /// The definitions of whatever the active party `combines` — empty for
+    /// every ordinary party. Cached for the same reason `party` is: the score
+    /// sidebar reads it on every render, and resolving four ids means four
+    /// passes over the bundle and the user's parties folder.
+    @ObservationIgnored private var membersCache: (id: String, members: [PartyDefinition])?
+
+    var combinedMembers: [PartyDefinition] {
+        let id = document.log.partyID
+        if let cached = membersCache, cached.id == id { return cached.members }
+        let looked = (party?.combines ?? []).compactMap { PartyCatalog.party(id: $0) }
+        membersCache = (id, looked)
+        return looked
+    }
+
     /// The QSO number the next contact will send, or nil for the parties that
     /// exchange none.
     var nextSerialIfUsed: Int? {

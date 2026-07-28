@@ -266,6 +266,20 @@ Built for KE5CW. Bundled parties, all with official county data:
   Hartford is not a multiplier any more. Its id is **`newenglandqp`**, because
   Nebraska already holds `neqp`. Digital scores as CW by the sponsor's own
   words. `verified: partial`.
+- **Combined: Indiana + 7th Call Area + New England + Delaware** (May 2–3,
+  2026) — the four above accept **one shared log**, and this is it: the union
+  of their county lists (422 codes across 16 states, generated from the four
+  bundled definitions so it cannot drift from them), modelled on N1MM's
+  `IN7QPNE` module including who it is for. **Use it only if you are outside
+  all four regions** — an Indiana station is in-state for Indiana and
+  out-of-state for the other three, so it picks Indiana, which is why all four
+  members stay selectable and the party picker nests them under this entry.
+  **It cannot give you a score**: the four sponsors pay different points and
+  count multipliers on different scopes, so no single set of numbers is right
+  for all of them — submit the same Cabrillo to all four and use the 4QP
+  parsing tool at stateqsoparty.com. What it does do correctly is log, export,
+  and — see Features — **tell you what each of the four would count**, which is
+  what the State QSO Party Challenge needs. `verified: partial`.
 - **Arkansas QSO Party** (May 16, 2026) — 75 counties whose codes are **not
   truncations**: Clark is `CLK` because Clay took `CLA`, and there is an
   Arkansas County coded `ARK`. Its "**mobile stations claim 2 points per QSO**"
@@ -637,6 +651,25 @@ parties, and the remaining engine gaps. Adding a party is governed by
   (like an RST) are ignored.
 - **Score sidebar**: running total, QSOs-by-band/mode matrix, county grid
   with award tracking, per-class multiplier chips, bonus status, spots.
+- **Per-party breakdown for a combined entry**: the first May weekend is one
+  log for four contests, and the Challenge counts each of them separately, so
+  the sidebar shows **QSOs by party** — Indiana, the 7th Call Area, New England
+  and Delaware — each with its own counties-worked count and a ✓ once it clears
+  the Challenge's two-QSO bar. **Delaware is three counties**, and it is the one
+  an out-of-region operator finishes the weekend without.
+
+  The counts are each sponsor's own, not a share-out of the total: **the four do
+  not run the same bands or modes.** Indiana runs no digital and New England no
+  160 m, while the combined entry's lists are the union of all four, so two
+  digital Indiana contacts are logged, exported, and worth **zero** to Indiana.
+  Each member's rows are narrowed to the contacts it would look at and scored by
+  its own definition, so no sponsor's rules are restated anywhere. Contacts a
+  sponsor ignores are shown as ignored rather than dropped.
+
+  The **county grid groups the same way** — by contest, then by state — so 422
+  codes read as four contests and sixteen states instead of one wall. Standalone
+  multi-state parties (7QP, New England) get the state headings too; a
+  single-state party's grid is unchanged.
 - **RST pre-filled** (599/59 by mode) after every contact, so the exchange
   is two keystrokes on a normal run.
 - **Exports**: Cabrillo V3 (per-county-line QSO rows, category headers,
@@ -659,6 +692,15 @@ parties, and the remaining engine gaps. Adding a party is governed by
   count"; parties logged but not on the 2026 approved list (Maine) are shown
   and excluded rather than silently dropped. Labeled an estimate: the
   official score comes from what you post to 3830scores.com.
+
+  **A combined entry is counted as the contests it is made of.** `in7qpne` is
+  not on the approved list and never will be — it is an entry, not a contest —
+  so a combined May weekend is split into Indiana, the 7th Call Area, New
+  England and Delaware first, each qualifying on its own two QSOs under its own
+  rules. Unsplit it would be worth nothing; split, one weekend is worth **up to
+  four multipliers**, which is what the four sponsors say it is. A member you
+  never worked contributes no line at all, and the section says where the four
+  came from when you only opened one log.
 - **Upcoming contests**: everything left this season, soonest first — an ON
   AIR badge while a window is open, countdowns, "entered ✓" once you've
   logged it, and all 47 SQP-Challenge-approved parties included: bundled

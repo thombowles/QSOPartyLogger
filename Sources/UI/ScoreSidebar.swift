@@ -6,12 +6,16 @@ struct ScoreSidebar: View {
     let log: ContestLog
     let party: PartyDefinition?
     let score: ScoreEngine.ScoreBreakdown
+    /// The definitions of whatever `party` combines — empty for every ordinary
+    /// party. Drives the per-contest QSO breakdown and the county grouping.
+    var members: [PartyDefinition] = []
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 totalsCard
                 if let party {
+                    CombinedBreakdownSection(log: log, party: party, members: members)
                     bandModeSection(party)
                     bonusSection(party)
                     multiplierSection(party)
@@ -252,23 +256,64 @@ struct ScoreSidebar: View {
                 let abbrs = Set(party.counties.map(\.abbr))
                 return Set(log.qsos.map { $0.theirLoc.uppercased() }).intersection(abbrs)
             }()
-        let columns = [GridItem(.adaptive(minimum: 40), spacing: 3)]
+        // By member contest, then by state. A single-state party that combines
+        // nothing comes back as one unnamed, single-state group, which draws
+        // exactly the grid it always has.
+        let groups = CountyGrouping.groups(for: party, members: members)
+
         return VStack(alignment: .leading, spacing: 3) {
             Text("Counties \(worked.count)/\(party.counties.count)\(isMultClass ? "" : " (award tracking)")")
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(.secondary)
-            LazyVGrid(columns: columns, spacing: 3) {
-                ForEach(party.counties) { county in
-                    Text(county.abbr)
-                        .font(.system(size: 9, design: .monospaced).weight(.medium))
-                        .padding(.vertical, 2)
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            worked.contains(county.abbr) ? Color.green.opacity(0.35) : Color.gray.opacity(0.12),
-                            in: RoundedRectangle(cornerRadius: 3)
-                        )
-                        .help(county.name)
+            ForEach(groups) { group in
+                VStack(alignment: .leading, spacing: 3) {
+                    if let name = group.partyName {
+                        heading(name, worked: worked, of: group.counties, weight: .bold)
+                            .padding(.top, 2)
+                    }
+                    ForEach(group.states) { state in
+                        // A single-state group is already named by the heading
+                        // above it — "Delaware QSO Party" then "DE 1/3" is the
+                        // same fact twice — and for an ordinary party the
+                        // "Counties 12/105" line above says it.
+                        if !group.isSingleState {
+                            heading(state.state, worked: worked, of: state.counties, weight: .semibold)
+                                .padding(.leading, 4)
+                        }
+                        chips(state.counties, worked: worked)
+                    }
                 }
+            }
+        }
+    }
+
+    private func heading(
+        _ text: String, worked: Set<String>, of counties: [County], weight: Font.Weight
+    ) -> some View {
+        let hit = counties.filter { worked.contains($0.abbr) }.count
+        return HStack(spacing: 4) {
+            Text(text)
+            Spacer(minLength: 4)
+            Text("\(hit)/\(counties.count)")
+                .monospacedDigit()
+                .foregroundStyle(hit == counties.count ? .green : .secondary)
+        }
+        .font(.caption2.weight(weight))
+        .foregroundStyle(.secondary)
+    }
+
+    private func chips(_ counties: [County], worked: Set<String>) -> some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 40), spacing: 3)], spacing: 3) {
+            ForEach(counties) { county in
+                Text(county.abbr)
+                    .font(.system(size: 9, design: .monospaced).weight(.medium))
+                    .padding(.vertical, 2)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        worked.contains(county.abbr) ? Color.green.opacity(0.35) : Color.gray.opacity(0.12),
+                        in: RoundedRectangle(cornerRadius: 3)
+                    )
+                    .help(county.name)
             }
         }
     }
