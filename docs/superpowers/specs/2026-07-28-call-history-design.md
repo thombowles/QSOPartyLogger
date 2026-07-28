@@ -106,8 +106,12 @@ what you copy."
 - Other `!!…!!` directive lines ignored.
 - Comma **or semicolon** delimited (docs); CRLF and blank lines tolerated;
   UTF-8 with Windows-1252 fallback.
-- Duplicate call: last occurrence wins (file order is import order into
-  N1MM's own table).
+- Duplicate call: later rows win **per field**, never blanking an earlier
+  one — the real Alabama file lists WA1FCN once with his county
+  (`WA1FCN,,WLKR,WALKER`) and once with his name (`WA1FCN,BOB,`) in a
+  separate roster section, and both halves must survive. (Found by running
+  the full downloaded file through the parser; whole-row last-wins lost the
+  county.)
 - Lookup: exact normalized call; on miss, the *typed* call is retried with
   portable suffixes stripped (`AA2IL/6` → `AA2IL`). Exchange candidate = first
   of Exch1, Sect, State that the party's parser accepts for the operator's

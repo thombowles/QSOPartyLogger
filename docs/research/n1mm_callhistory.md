@@ -44,7 +44,8 @@ ban on N1MM files as rule authority stands untouched — nothing here feeds
 | NAQPCW-004 | `Call,Name,State,UserText,` | location in **State**, not Exch1; one file declares NAQPCW/NAQPSSB/NAQPRTTY/Sprints |
 | QSOP_IN7QPNE_DE-2026-006 | `Call,Name,Exch1,UserText,` | one file for five parties: "There will be only one file for all, in 2026"; declares `QSOPARTY 7QP / DE / IN / IN7QPNE / NEWE` |
 | QSOP_QC-2026-011 | `, Call, Name, Exch1, UserText` | UTF-8 French comments |
-| QSOP_KS-2025-002 | `Call,Name,Exch1,UserText,` | 1×1 bonus calls listed first; duplicate calls possible → last wins |
+| QSOP_KS-2025-002 | `Call,Name,Exch1,UserText,` | 1×1 bonus calls listed first |
+| QSOP_AL (again) | — | **duplicate calls across sections**: `WA1FCN,,WLKR,WALKER` in the counties body, `WA1FCN,BOB,` in the out-of-state roster — rows merge per field, later wins, empties never blank |
 
 Record shapes worth remembering: empty Exch1 with `MOBILE`/`Multiple` in
 UserText (rovers with no fixed county); county-line values as slash pairs
