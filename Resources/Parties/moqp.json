@@ -563,5 +563,9 @@
       "summary": "The county-line cap and the out-of-state restriction are both this app’s defaults, not the sponsor’s numbers.",
       "detail": "above; the first two change every entrant's claimed score and the notes give the arithmetic. (2) The county-line limit. The rules permit 'two or more counties' and cap nothing, so this ships on this app's own maximum of four, which is a default rather than a sponsor's number. (3) No rule states whether stations outside Missouri may work only Missouri stations; the objective points that way and out-of-state multipliers are MO counties only, but the same objective also offers Missouri stations 'an opportunity to work other states and countries'. The restriction ships ON as for seven other parties, so a stray non-Missouri contact is visibly flagged NO CREDIT."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_MO",
+    "token": "QSOPARTY MO"
+  }
 }

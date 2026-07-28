@@ -117,5 +117,9 @@
       "summary": "The sponsor’s stated 36 hours and its own local times disagree; the shipped window matches both.",
       "detail": "(why this is partial): rule 1 reads 'Operating period is 36 hours from 1800 UTC Aug 22 through 0359 UTC Aug 24, 2026. Note: That's 6am Saturday Aug 22 to start and end at 6pm Sunday in Hawaii.' Those claims disagree — the literal UTC pair spans 33h59m, not 36 hours, and 1800Z is 8am HST, not 6am. 1600Z->0400Z is the only span matching both the stated 36 hours and both Hawaii times, so that is what ships; the State QSO Party Challenge calendar instead says 1600Z->0200Z (34h). Confirm with info@hawaiiqsoparty.org before submitting a log. Not modeled: grid squares as a substitute QTH for modes that cannot send a name (rules allow it, sponsor's log checker resolves them)."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_HI",
+    "token": "QSOPARTY HI"
+  }
 }

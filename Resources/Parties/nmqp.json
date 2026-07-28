@@ -228,5 +228,9 @@
       "summary": "The W1AW/5 bonus is 2026-only and must be removed when the 2027 rules are read.",
       "detail": "(why this is partial): (1) The DX multiplier collapse above, which is a missing app feature rather than a rule in doubt, and which affects New Mexico entrants only. (2) The W1AW/5 bonus is explicitly 2026-only and must be removed for 2027; the generator asserts the marker is still present so its disappearance is noticed."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_NM",
+    "token": "QSOPARTY NM"
+  }
 }

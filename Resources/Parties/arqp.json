@@ -393,5 +393,9 @@
       "summary": "The 500-point live-streaming bonus is not applied.",
       "detail": "THE 500-POINT LIVE-STREAMING BONUS IS NOT MODELLED, new for 2026: it pays for streaming to YouTube or Twitch, which is not something a logger can observe, and no BonusRule shape describes it. County lines let a station within three miles send every applicable county with no stated cap, so the schema default of 4 ships. WATCH THE COUNTY CODES: they are not truncations. Clark is CLK BECAUSE CLAY TOOK CLA; Polk is PLK and Jackson is JAK with POL and JAC simply unused - and there is an ARKANSAS County in Arkansas, coded ARK. The list dates itself, 'Three- letter designation is NEW for 2022', so its 2022 file date is intent rather than staleness and any pre-2022 list uses different abbreviations entirely. The Cabrillo CONTEST header is the one thing not from the sponsor, so AR-QSO-PARTY comes from WA7BNM under Article 1's exception."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_AR",
+    "token": "QSOPARTY AR"
+  }
 }

@@ -1080,5 +1080,9 @@
   "hubSpots": {
     "tableURL": "http://qsopartyhub.com/txqp-table.php",
     "postURL": "http://qsopartyhub.com/txqp-spots.php"
+  },
+  "callHistory": {
+    "filePrefix": "QSOP_TX",
+    "token": "QSOPARTY TX"
   }
 }

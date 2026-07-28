@@ -41,6 +41,7 @@ struct MainView: View {
     @State private var spotStore = SpotStore()
     @State private var spotClient = SpotClient()
     @State private var hubSpotClient = HubSpotClient()
+    @State private var callHistoryClient = CallHistoryClient()
     @State private var showSelfSpot = false
     @State private var selfSpotFields = HubSelfSpot.Fields(
         station: "", frequencyKHz: 0, county: nil, comment: "", poster: ""
@@ -116,7 +117,7 @@ struct MainView: View {
             .onAppear(perform: onAppear)
             .onDisappear(perform: onDisappear)
             .sheet(isPresented: $showSetup) {
-                SetupSheet(document: document)
+                SetupSheet(document: document, callHistory: callHistoryClient)
             }
             .sheet(isPresented: $showMessagesEditor) {
                 MessagesEditor(document: document, settings: settings)
@@ -183,13 +184,23 @@ struct MainView: View {
     }
 
     /// "KSQP 2025 — JOH" when previous contests know the station and this one
-    /// does not. It is where a pre-filled exchange came from, which is why it
+    /// does not — or, failing that, what the party's call history file says
+    /// he sends. It is where a pre-filled exchange came from, which is why it
     /// belongs on screen rather than only in the field.
     private var workedBeforeArchiveLine: String? {
-        guard workedBefore.isEmpty, !entry.callNormalized.isEmpty,
-              let seen = flow.archiveIndex.entries(for: entry.callNormalized).first
+        guard workedBefore.isEmpty, !entry.callNormalized.isEmpty else { return nil }
+        if let seen = flow.archiveIndex.entries(for: entry.callNormalized).first {
+            return "\(seen.partyID.uppercased()) \(seen.year) — \(seen.theirLoc)"
+        }
+        guard let (partyID, parsed) = flow.callHistoryIndex,
+              partyID == party?.id,
+              let known = parsed.entry(for: entry.callNormalized),
+              !known.isEmpty
         else { return nil }
-        return "\(seen.partyID.uppercased()) \(seen.year) — \(seen.theirLoc)"
+        let bits = [known.name, known.locations.first, known.userText]
+            .compactMap { $0 }
+            .filter { !$0.isEmpty }
+        return "Call history — \(bits.joined(separator: " · "))"
     }
 
     private var workedBeforeHeight: CGFloat {
@@ -337,7 +348,9 @@ struct MainView: View {
             bandMapModel?.party = party
             bandMapModel?.canSpotToHub = canSpotToHub
             syncHubSpotClient()
+            activateCallHistory()
         }
+        .onChange(of: settings.callHistoryEnabled) { activateCallHistory() }
     }
 
     private var logTable: some View {
@@ -743,6 +756,13 @@ struct MainView: View {
             if !spots.isEmpty { document.noteSpotsUsed() }
         }
         syncHubSpotClient()
+        // The download may land after the operator has moved to another
+        // party; the tag check keeps a late file from leaking into it.
+        callHistoryClient.onIndex = { [weak flow] partyID, parsed in
+            guard let flow, flow.party?.id == partyID else { return }
+            flow.callHistoryIndex = (partyID, parsed)
+        }
+        activateCallHistory()
         if settings.clusterAutoConnect,
            !settings.clusterHost.trimmingCharacters(in: .whitespaces).isEmpty,
            !document.log.station.callsign.isEmpty,
@@ -780,6 +800,18 @@ struct MainView: View {
             }
             bandMapModel = model
         }
+    }
+
+    /// Serve the active party's cached call history at once, then let the
+    /// client consult the listing in the background. Runs at appear, at party
+    /// change, and when the toggle flips — and clears the index first, so a
+    /// disabled toggle or a party with no file stops the offers immediately.
+    private func activateCallHistory() {
+        flow.callHistoryIndex = nil
+        guard settings.callHistoryEnabled,
+              let party, party.callHistory != nil else { return }
+        callHistoryClient.publishCached(party: party)
+        Task { await callHistoryClient.refreshIfStale(party: party) }
     }
 
     /// Previous contests, read once and indexed by call — what a prefill falls

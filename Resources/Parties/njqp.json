@@ -170,5 +170,9 @@
       "summary": "The sponsor’s table has no DC row, so DC cannot be logged at all here.",
       "detail": "(why this is partial): (1) The sponsor's states table has NO District of Columbia row and counts only 49 states, so DC ships as an excluded token and cannot be logged at all. NJQP's tables simply have no answer for DC, and inventing a DC-counts-as-Maryland alias would be a rule this sponsor never wrote (ALQP/TnQP/COQP each state that alias explicitly; NJQP does not). (2) No rule says outright that non-NJ stations may work only NJ stations - the Objectives imply it and the live page contains no 'only NJ' phrasing. Shipped with the restriction ON, matching the objectives, the multiplier structure and universal convention; with it on, a stray non-NJ contact is visibly flagged NO CREDIT rather than silently scoring. Confirm both with NewJerseyQSOParty@gmail.com before submitting a log. Not modeled: the 1000-foot circle, the Rookie overlay, the call-suffix convention for NJ stations changing county, and club aggregate scoring."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_NJ",
+    "token": "QSOPARTY NJ"
+  }
 }

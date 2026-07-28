@@ -328,5 +328,9 @@
   "hubSpots": {
     "tableURL": "http://qsopartyhub.com/alqp-table.php",
     "postURL": "http://qsopartyhub.com/alqp-spots.php"
+  },
+  "callHistory": {
+    "filePrefix": "QSOP_AL",
+    "token": "QSOPARTY AL"
   }
 }

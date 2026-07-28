@@ -434,5 +434,9 @@
       "summary": "The sponsor counts 14 Canadian areas but names none of them; NF and LB ship as the split.",
       "detail": "THE CANADIAN LIST HAS FOURTEEN ENTRIES AND THE SPONSOR NAMES NONE OF THEM. 'Canadian provinces(14 - VO1/VO2 are separate)' gives the count and the reason - Newfoundland and Labrador split - but no abbreviations. NF and LB ship, following North Dakota's and Quebec's lists, which are the only other sponsors in this app to split it; an operator should confirm the tokens before 2027. County lines are logged as two separate QSOs, so maxSimultaneousCounties is 1. No bonus points and no power multiplier: 'Total score is QSO points times the multiplier.' The Cabrillo CONTEST header is the one thing not from the sponsor - the rules ask for Cabrillo without naming it - so NEQP comes from WA7BNM under Article 1's exception."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_IN7QPNE_DE",
+    "token": "QSOPARTY NEWE"
+  }
 }

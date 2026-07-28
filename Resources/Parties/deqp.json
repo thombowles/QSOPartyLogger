@@ -111,5 +111,9 @@
       "summary": "FT8/FT4 use a Field Day exchange grammar that is not modelled.",
       "detail": "FT8/FT4 use a Field Day exchange entirely ('1A DE' for New Castle, '2A DE' for Kent), which is a different exchange grammar, not a different token; it is not modelled. Multipliers count PER BAND. Delaware entrants count states, provinces and DXCC countries - NOT counties, so a Delaware-to-Delaware contact yields points only, which the rules say outright. The power multiplier fits: over 100 W x1, 100 W or less x2, 5 W or less x3 - the fourth party to ship one. County lines are logged as two separate QSOs, so maxSimultaneousCounties is 1. The Cabrillo CONTEST header is the one thing not from the sponsor - it has a whole Cabrillo Info page and still never names the header - so DE-QSO-PARTY comes from WA7BNM under Article 1's exception."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_IN7QPNE_DE",
+    "token": "QSOPARTY DE"
+  }
 }

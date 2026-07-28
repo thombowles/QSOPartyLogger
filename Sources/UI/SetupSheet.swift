@@ -4,8 +4,13 @@ import SwiftUI
 /// (state or 1–4 counties for county-line operation).
 struct SetupSheet: View {
     let document: LogDocument
+    /// The download client, for the party section's call history row. `nil`
+    /// in previews; the row simply hides.
+    var callHistory: CallHistoryClient?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.undoManager) private var undoManager
+
+    @State private var settings = AppSettings.shared
 
     @State private var partyID = "ksqp"
     @State private var station = StationProfile()
@@ -67,6 +72,9 @@ struct SetupSheet: View {
                     }
                     if let party {
                         verificationNotice(party)
+                    }
+                    if let party {
+                        callHistoryRow(party)
                     }
                 }
 
@@ -289,6 +297,58 @@ struct SetupSheet: View {
             }
             .font(.caption)
         }
+    }
+
+    /// The party's N1MM call history file: the toggle, what revision is
+    /// cached, and a Refresh that overrides the once-a-day check. Hidden for
+    /// the parties with no file upstream — there is nothing to control.
+    @ViewBuilder
+    private func callHistoryRow(_ party: PartyDefinition) -> some View {
+        if party.callHistory != nil {
+            Toggle("Download call history (what stations usually send)",
+                   isOn: $settings.callHistoryEnabled)
+                .font(.caption)
+            if settings.callHistoryEnabled {
+                HStack(spacing: 8) {
+                    let status = callHistoryStatus(party)
+                    Text(status.text)
+                        .font(.caption)
+                        .foregroundStyle(status.isError
+                                         ? AnyShapeStyle(.orange)
+                                         : AnyShapeStyle(.secondary))
+                        .fixedSize(horizontal: false, vertical: true)
+                    if let callHistory {
+                        Button("Refresh") {
+                            Task {
+                                await callHistory.refreshIfStale(
+                                    party: party, force: true)
+                            }
+                        }
+                        .font(.caption)
+                    }
+                }
+            }
+        }
+    }
+
+    private func callHistoryStatus(_ party: PartyDefinition) -> (text: String, isError: Bool) {
+        guard let callHistory else { return ("", false) }
+        switch callHistory.status {
+        case .checking:
+            return ("Checking the community listing…", false)
+        case .downloading:
+            return ("Downloading…", false)
+        case .ready(let partyID, let revision, let records) where partyID == party.id:
+            return ("\(revision) — \(records) stations", false)
+        case .failed(let message):
+            return (message, true)
+        default:
+            break
+        }
+        if let meta = callHistory.cachedMeta(partyID: party.id) {
+            return ("\(meta.sourceFileName) — updated \(meta.listedDate)", false)
+        }
+        return ("Downloads automatically when this contest starts.", false)
     }
 
     /// A heading or a bullet — never both for one `Row.id`, so the branch a row

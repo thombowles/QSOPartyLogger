@@ -163,5 +163,9 @@
       "summary": "Whether 60 m is legal is ambiguous; seven bands ship without it.",
       "detail": "IS 60 M LEGAL? 'All amateur bands between 80 et 2 m, excepted WARC bands' puts 60 m inside the range and 60 m is not strictly WARC - the same ambiguity Ontario and North Dakota have, resolved the same way. Seven bands ship without it, and no 5 MHz frequency appears in the sponsor's suggested list."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_QC",
+    "token": "QSOPARTY QC"
+  }
 }

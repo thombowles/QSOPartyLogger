@@ -399,5 +399,9 @@
       "summary": "Whether Oklahoma counts as its own state multiplier is inferred; shipped as counting.",
       "detail": "(why this is partial): whether Oklahoma itself counts as a state multiplier for Oklahoma entrants. The rules say 'The 50 states' without qualification and Oklahoma is one of them, while OK stations always send a county so the token OK is never received - and, unlike MNQP ('49 states, does not include Minnesota') and NCQP ('49 US States (not NC)'), this sponsor does not exclude its own state. Shipped as COUNTING, via the county. The 2003 edition said so outright - 'Oklahoma stations working other Oklahoma stations must log the complete exchange, including county even though they all count as the OK multiplier' - which is not authority for a 2026 rule but does show the plain reading is long-standing sponsor practice. Confirm with K5CW/K5CM before submitting a log."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_OK",
+    "token": "QSOPARTY OK"
+  }
 }

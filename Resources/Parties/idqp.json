@@ -257,5 +257,9 @@
       "summary": "The sponsor’s own date block contradicts itself; three derivations agree on the shipped window.",
       "detail": "(why this is partial): (1) THE DATES, per the reconstruction above. Three independent derivations and an outside calendar agree, but the sponsor's own block contradicts itself, so one email to idahoqso@gmail.com would settle it. (2) Whether stations outside Idaho may work only Idaho stations. The objective and the multiplier rules both point that way but no sentence forbids other contacts outright, unlike MNQP and NCQP; the restriction ships ON, as for six other parties, so a stray non-Idaho contact is visibly flagged NO CREDIT rather than silently scored. (3) Whether an Idaho station counts a received Idaho county as a multiplier in its own right, on top of the Idaho state multiplier it yields; the county classes ship on for in-state entrants, which is the reading that makes the received token meaningful. (4) 'Multiply QSO x Mode multiplier x Mults' in the final-score rule uses a term defined nowhere else; read as a restatement of the once-per-mode multiplier scope, which is how this app behaves. (5) The two"
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_ID",
+    "token": "QSOPARTY ID"
+  }
 }

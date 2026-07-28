@@ -55,6 +55,12 @@ final class EntryFlow {
     /// costs nothing but a missed prefill in the first second of a contest.
     var archiveIndex = StationMemory.Index.empty
 
+    /// The active party's N1MM call history file, when one is downloaded —
+    /// tagged with the party it was parsed for, because the download lands
+    /// asynchronously and the operator may have changed parties while it was
+    /// in flight. A mismatched tag is simply not consulted.
+    var callHistoryIndex: (partyID: String, parsed: CallHistoryFile.Parsed)?
+
     /// Everything that changes between one Return and the next and is owned by
     /// the view — the radio's band and mode, where the cursor is, whether the
     /// radio is connected at all.
@@ -354,7 +360,7 @@ final class EntryFlow {
         stashPending()
         entry.exchangeTyped = ""
         entry.serialRcvd = ""
-        entry.nameRcvd = ""
+        entry.nameTyped = ""
         entry.call = call
         // Tied to the call it arrived with, so typing over a busted spot does
         // not carry the old station's county to the new one.
@@ -371,11 +377,14 @@ final class EntryFlow {
 
     private func stashPending() {
         let outgoing = entry.callNormalized
-        guard !outgoing.isEmpty, !entry.exchangeIsAutoFilled else { return }
+        guard !outgoing.isEmpty else { return }
+        // Only the operator's own text is worth keeping — an auto-filled
+        // field is re-derivable, and stashing it would launder a hint into
+        // "something he copied".
         let pending = EntryState.Pending(
-            exchange: entry.exchange,
+            exchange: entry.exchangeIsAutoFilled ? "" : entry.exchange,
             serialRcvd: entry.serialRcvd,
-            nameRcvd: entry.nameRcvd
+            nameRcvd: entry.nameIsAutoFilled ? "" : entry.nameRcvd
         )
         guard !pending.isEmpty else { return }
         entry.pendingExchanges[outgoing] = pending
@@ -391,42 +400,79 @@ final class EntryFlow {
     /// Offer what we know about the call now in the field, or take back what we
     /// offered for the last one.
     private func refreshPrefill(_ context: Context) {
-        guard let party,
-              entry.exchange.isEmpty || entry.exchangeIsAutoFilled else { return }
+        guard let party else { return }
 
         let call = entry.callNormalized
         guard !call.isEmpty else {
             entry.clearAutoFilledExchange()
-            return
-        }
-
-        // What the operator copied outranks anything the app can derive.
-        if let pending = entry.pendingExchanges[call] {
-            entry.restorePending(pending)
+            entry.clearAutoFilledName()
             return
         }
 
         let role: ExchangeParser.Role =
             document.log.myLocation.isInState ? .inState : .outOfState
-        guard let candidate = StationMemory.candidate(
-            call: call,
-            log: document.log.qsos,
-            index: archiveIndex,
-            party: party,
-            role: role
-        ) else {
-            // Nothing of our own to offer. A spot's county is the last resort
-            // and the weakest evidence there is — a stranger's claim about a
-            // station we have never worked — so it fills the field marked
-            // unconfirmed rather than leaving it blank.
-            if let hint = spotCountyHint, hint.call == call {
-                entry.autoFillExchange(hint.county, origin: .spot)
-            } else {
-                entry.clearAutoFilledExchange()
+        let history = callHistoryCandidate(call: call, party: party, role: role)
+
+        if entry.exchange.isEmpty || entry.exchangeIsAutoFilled {
+            // What the operator copied outranks anything the app can derive
+            // — including what he copied for this station and never logged.
+            if let pending = entry.pendingExchanges[call] {
+                entry.restorePending(pending)
             }
-            return
+            // The pending stash can hold a serial or name with no exchange;
+            // an exchange the operator owns ends the matter, an empty one
+            // still deserves a hint.
+            if entry.exchange.isEmpty || entry.exchangeIsAutoFilled {
+                if let candidate = StationMemory.candidate(
+                    call: call,
+                    log: document.log.qsos,
+                    index: archiveIndex,
+                    party: party,
+                    role: role
+                ) {
+                    entry.autoFillExchange(candidate.text)
+                } else if let exchange = history?.exchange {
+                    // The community's roster of what this station sends —
+                    // curated, but still third-party and last season's, so it
+                    // ranks below anything we copied ourselves.
+                    entry.autoFillExchange(exchange, origin: .callHistory)
+                } else if let hint = spotCountyHint, hint.call == call {
+                    // A spot's county is the last resort and the weakest
+                    // evidence there is — a stranger's claim about a station
+                    // we have never worked — so it fills the field marked
+                    // unconfirmed rather than leaving it blank.
+                    entry.autoFillExchange(hint.county, origin: .spot)
+                } else {
+                    entry.clearAutoFilledExchange()
+                }
+            }
         }
-        entry.autoFillExchange(candidate.text)
+
+        // The name has its own chain: this log first (a name party's rows
+        // carry what was copied), then the call history file. Independent of
+        // the exchange chain, because either half can be known without the
+        // other.
+        if party.exchangeIncludesName,
+           entry.nameRcvd.isEmpty || entry.nameIsAutoFilled {
+            let logged = document.log.qsos.last {
+                $0.call.uppercased() == call
+            }?.nameRcvd
+            if let name = logged ?? history?.name {
+                entry.autoFillName(name)
+            } else {
+                entry.clearAutoFilledName()
+            }
+        }
+    }
+
+    private func callHistoryCandidate(
+        call: String, party: PartyDefinition, role: ExchangeParser.Role
+    ) -> CallHistoryFile.Candidate? {
+        guard let callHistoryIndex, callHistoryIndex.partyID == party.id else {
+            return nil
+        }
+        return CallHistoryFile.candidate(
+            for: call, in: callHistoryIndex.parsed, party: party, role: role)
     }
 
     /// Mode changes (radio or manual): swap pre-filled RST defaults (599 ↔ 59)

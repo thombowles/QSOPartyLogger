@@ -422,5 +422,9 @@
   "hubSpots": {
     "tableURL": "http://qsopartyhub.com/ohqp-table.php",
     "postURL": "http://qsopartyhub.com/ohqp-spots.php"
+  },
+  "callHistory": {
+    "filePrefix": "QSOP_OH",
+    "token": "QSOPARTY OH"
   }
 }

@@ -300,5 +300,9 @@
       "summary": "The “no FT8” rule cannot be enforced by this app.",
       "detail": "'NO FT8' CANNOT BE ENFORCED. ModeClass.digital is one class and this party admits RTTY and PSK under it, so a logged FT8 row will score. SECOND USER of that gap after Illinois ('FT4 and FT8 contacts will receive no contact credit'), which meets the repo's two-user bar and makes it buildable: QSO.rawMode already carries the concrete mode, so the fix is a party-level list of excluded raw modes. The Cabrillo CONTEST header is the one thing not from the sponsor - its five pages never state one, though they do ask for Cabrillo logs - so ND-QSO-PARTY comes from WA7BNM's Cabrillo Names table under Article 1's exception. SPONSOR ERRORS SHIPPED AS PRINTED: a 'May 15th, 2025' deadline two lines above the 2026 one, 'January 2025' immediately before 'Revised January 2026', a CW frequency printed '3705' without its decimal point, 'Northwest Territory' singular, and 'La Moure' for the county that spells itself LaMoure."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_ND",
+    "token": "QSOPARTY ND"
+  }
 }

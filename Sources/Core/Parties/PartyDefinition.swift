@@ -29,6 +29,12 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     /// stub, and WA Salmon Run has no page at all.
     let hubSpots: HubSpotSource?
 
+    /// This party's N1MM call history file in the community listing, when one
+    /// exists. `nil` for the three with no file upstream (azqp, mdc, vtqp) —
+    /// pinned by `CallHistorySourceTests`, so a party joining or leaving the
+    /// set is a deliberate edit backed by a regenerated mapping.
+    let callHistory: CallHistorySource?
+
     // MARK: Optional rule shapes (defaults preserve original behavior)
 
     /// How DX stations identify themselves in the exchange.
@@ -666,7 +672,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case schemaVersion, id, name, cabrilloContest, homeState, countyAbbrLength
         case validBands, points, dupeScope, multipliers, bonuses, oneByOne
         case schedule, counties, notes, scoreMultipliers, homeStationPoints
-        case hubSpots
+        case hubSpots, callHistory
         case caveatsRaw = "caveats"
         case combinesRaw = "combines"
         case homeStatesRaw = "homeStates"

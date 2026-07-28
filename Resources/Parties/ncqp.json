@@ -478,5 +478,9 @@
       "summary": "In-state entrants are short the self-activation multiplier for each county they operate from.",
       "detail": "NC stations may count the county they operate from as a multiplier 'regardless of whether any QSOs are logged from that same county', and mobile and portable stations may count each county they activate. This app has no self-activation multiplier, so an in-state entrant is short by the number of counties they operated from. OUT-OF-STATE ENTRANTS ARE UNAFFECTED by this one. Cabrillo CONTEST value NC-QSO-PARTY per the WA7BNM registry - the rules enumerate the CATEGORY headers an entrant must set and omit CONTEST:. Logs are due 2026-03-15, Cabrillo only, paper no longer accepted."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_NC",
+    "token": "QSOPARTY NC"
+  }
 }

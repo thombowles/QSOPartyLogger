@@ -324,5 +324,9 @@
       "summary": "The rules are the 2025 edition; the date comes from the formula in their own title block.",
       "detail": "(why this is partial): (1) The published rules are the 2025 edition and no 2026 revision has been posted. The DATE is not in doubt: the formula is printed in the document's own title block ('Third Saturday in October'), 17 October 2026 is the third Saturday, and the rules' own parentheticals pin the offset - 1400 UTC = 10 AM Eastern and 01:59:59 UTC = 9:59:59 PM Eastern, both still true in 2026 since DST ends 1 November. What is unverified is whether any RULE changed for 2026. Re-check nyqp.org before 17 October 2026 and re-run gen_nyqp.py, whose quoted-sentence assertions fail loudly if the text moved. (2) No rule states whether stations outside New York may work only New York stations. The Objective reads 'Work as many New York stations and as many New York counties as possible', which is an aim rather than a limit, and out-of-state multipliers are NY counties only. Shipped with the restriction ON, as for NJQP, IAQP, NHQP, PAQP and SDQP, so a stray non-NY contact is visibly flagged NO CREDIT rather than silently adding points. Confirm both, and the 60 m reading, with the sponsor before submitting a log."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_NY",
+    "token": "QSOPARTY NY"
+  }
 }

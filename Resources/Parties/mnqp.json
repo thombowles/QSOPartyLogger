@@ -415,5 +415,9 @@
       "summary": "The 2026 rules were recovered from a web archive and cannot be re-fetched from the sponsor.",
       "detail": "(why this is still partial): The 2026 rules are no longer published by the sponsor and were recovered from a web archive; they are the right document - the archived rules page of the same date names them - but they cannot be re-fetched from w0aa.org to confirm. If MNQP is ever re-verified for 2027, note that the 2027 edition is a DIFFERENT PARTY in four fields, all of which this schema already has: countScope perMode, homeStateCountsViaCounty true, points phone 2 / CW 3, and maxSimultaneousCounties 2. Confirm with the Rules Committee at mnqp-committee@w0aa.org."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_MN",
+    "token": "QSOPARTY MN"
+  }
 }
