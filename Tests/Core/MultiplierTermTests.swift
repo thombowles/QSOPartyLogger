@@ -39,6 +39,14 @@ final class MultiplierTermTests: XCTestCase {
         XCTAssertEqual(bcqp.countyTermPlural, "districts")
     }
 
+    /// QCQP's rules: "VE2 stations … must send a signal report and their
+    /// administrative region."
+    func testQCQPCountsRegions() throws {
+        let qcqp = try XCTUnwrap(PartyCatalog.party(id: "qcqp"))
+        XCTAssertEqual(qcqp.countyTerm, "region")
+        XCTAssertEqual(qcqp.countyTermPlural, "regions")
+    }
+
     /// Terms are stored lowercase so a heading can capitalize the first
     /// letter without flattening an acronym in the middle of one.
     func testSentenceCasingKeepsAnAcronymIntact() {
