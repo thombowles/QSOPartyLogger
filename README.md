@@ -932,6 +932,13 @@ is what 39 of 46 parties used to do. A file with no `caveats` falls back to
 whatever `OPEN QUESTION` / `KNOWN LIMITATION` items its notes carry, shown in the
 quiet informational tone.
 
+Each tone is drawn as its own headed group — an orange ⚠︎ heading over the
+warnings, a grey ⓘ heading over the notes — so where a party carries both (19 of
+46 do) the change in colour part-way down the list is announced rather than left
+for you to infer, and the icon says which is which without relying on colour at
+all. The grouping is `PartyNotice`, tested in
+[`Tests/UI/PartyNoticeTests.swift`](Tests/UI/PartyNoticeTests.swift).
+
 ## Adding a radio
 
 Implement `RadioDriver` (see `Sources/Hardware/Radio/ElecraftK3Driver.swift`
@@ -956,7 +963,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1604 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1613 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
