@@ -704,7 +704,10 @@ parties, and the remaining engine gaps. Adding a party is governed by
   is two keystrokes on a normal run.
 - **Exports**: Cabrillo V3 (per-county-line QSO rows, category headers,
   claimed score) and ADIF 3.1.4 (`CNTY`/`MY_CNTY` with full county names,
-  `STX_STRING`/`SRX_STRING`, group ids in an APP_ field).
+  `STX_STRING`/`SRX_STRING`, group ids in an APP_ field). The app declares
+  the ADIF file type (`.adi`/`.adif`, plain text), so ⌘E's save panel keeps
+  the `.adi` name instead of appending `.txt`, and Finder labels the file
+  "ADIF Amateur Radio Log".
 - **Documents**: each contest is a `.qplog` file (JSON) with undo. New logs
   auto-save into your logs folder on setup, then **every QSO change writes
   straight to disk** (and mirrors to iCloud Drive if configured) — a crash
@@ -1043,7 +1046,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1691 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1695 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,

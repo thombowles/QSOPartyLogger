@@ -1292,7 +1292,9 @@ struct MainView: View {
     private func exportADIF() {
         guard let party else { return }
         exportDoc = TextExportDocument(text: AdifExporter.export(log: document.log, party: party))
-        exportType = .plainText
+        // Through .plainText the save panel would append ".txt" — .adi is not
+        // an extension of any plain-text type. .adi (LogDocument.swift) is.
+        exportType = .adi
         exportName = "\(document.log.station.callsign.isEmpty ? "log" : document.log.station.callsign).adi"
         isExporting = true
     }
@@ -1334,6 +1336,7 @@ struct WindowAccessor: NSViewRepresentable {
 /// Plain-text FileDocument for save panels.
 struct TextExportDocument: FileDocument {
     static var readableContentTypes: [UTType] { [.plainText] }
+    static var writableContentTypes: [UTType] { [.plainText, .adi] }
     var text: String
 
     init(text: String) {

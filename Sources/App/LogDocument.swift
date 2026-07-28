@@ -5,6 +5,23 @@ extension UTType {
     static var qplog: UTType {
         UTType(exportedAs: "org.b5n.qsopartylogger.log")
     }
+
+    /// The type behind the ⌘E save panel. The panel only keeps a `.adi`
+    /// filename if an allowed content type claims that extension —
+    /// `.plainText` does not, and third parties that do claim it (SmartSDR)
+    /// don't conform to plain text, so exports came back `.adi.txt`.
+    ///
+    /// Built by shape, not by identifier: this Mac carries dozens of
+    /// registered dev builds of this app, and `UTType(importedAs:)` was
+    /// observed resolving to a stale conformance-less shape while the
+    /// Info.plist declaration (project.yml) was correct. Shape lookup returns
+    /// that declaration when LaunchServices is coherent and synthesizes an
+    /// equivalent dynamic type when it is not; the panel keeps `.adi` either
+    /// way. The declaration still supplies Finder's "ADIF Amateur Radio Log"
+    /// description and the `.adif` alternate-extension claim.
+    static var adi: UTType {
+        UTType(filenameExtension: "adi", conformingTo: .plainText) ?? .plainText
+    }
 }
 
 /// Document wrapper around `ContestLog`. Mutations are main-actor and register
