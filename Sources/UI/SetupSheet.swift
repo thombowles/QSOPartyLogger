@@ -196,16 +196,16 @@ struct SetupSheet: View {
     /// Which group a line belongs to is decided by `PartyNotice`, and **every
     /// group it hands back is drawn with its own heading** — colour on its own
     /// never has to explain why one bullet is orange and the next is grey.
+    ///
+    /// **One `ForEach`, over `PartyNotice.rows`.** Drawing the two groups from
+    /// two sibling `ForEach`es gave this section two rows identified `0`, and
+    /// on a re-diff — opening *Rules provenance* — the first orange bullet
+    /// came back carrying the grey line's text and colour. `Row.id` is
+    /// namespaced by tone; there is nothing left for a row to collide with.
     @ViewBuilder
     private func verificationNotice(_ party: PartyDefinition) -> some View {
-        let notice = PartyNotice(party: party)
-
-        if let warning = notice.warning {
-            noticeGroup(warning)
-        }
-        // Everything that is worth reading but not worth interrupting for.
-        if let informational = notice.informational {
-            noticeGroup(informational)
+        ForEach(PartyNotice(party: party).rows) { row in
+            noticeRow(row)
         }
 
         if let notes = party.notes {
@@ -220,19 +220,18 @@ struct SetupSheet: View {
         }
     }
 
-    /// One tone's heading and its bullets. The heading is drawn unconditionally
-    /// — it is what tells the operator that the colour changed on purpose, and
-    /// its icon carries the same distinction where colour cannot.
+    /// A heading or a bullet — never both for one `Row.id`, so the branch a row
+    /// takes is fixed for the life of its identity.
     @ViewBuilder
-    private func noticeGroup(_ group: PartyNotice.Group) -> some View {
-        Label(group.header, systemImage: group.systemImage)
-            .font(.caption.weight(.semibold))
-            .foregroundStyle(group.tone.style)
-
-        ForEach(Array(group.lines.enumerated()), id: \.offset) { _, line in
-            Text("• \(line)")
-                .font(group.tone.bulletFont)
-                .foregroundStyle(group.tone.style)
+    private func noticeRow(_ row: PartyNotice.Row) -> some View {
+        if let systemImage = row.systemImage {
+            Label(row.text, systemImage: systemImage)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(row.tone.style)
+        } else {
+            Text("• \(row.text)")
+                .font(row.tone.bulletFont)
+                .foregroundStyle(row.tone.style)
                 .fixedSize(horizontal: false, vertical: true)
                 .textSelection(.enabled)
         }
