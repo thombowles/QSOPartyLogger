@@ -12,7 +12,7 @@ final class CaveatRosterTests: XCTestCase {
     /// means a real scoring gap was found; a departure means one was closed.
     private static let badges: Set<String> = [
         "arqp", "deqp", "fqp", "idqp", "ilqp", "in7qpne", "kyqp", "laqp",
-        "mnqp", "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp",
+        "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp",
         "nmqp", "oqp", "qcqp", "scqp", "vaqp", "vtqp", "warun", "wiqp",
     ]
 
@@ -36,14 +36,16 @@ final class CaveatRosterTests: XCTestCase {
         XCTAssertLessThan(Double(badging), Double(parties.count) * 0.6)
     }
 
-    /// Minnesota is the one party whose export is genuinely blocked: the
-    /// exchange carries a name this app has no field for, and the sponsor's
-    /// robot expects it in ex1.
-    func testMinnesotaIsTheOnlyExportBlockedParty() {
+    /// No party's export is blocked any more. Minnesota was the one — the
+    /// exchange name had no field and the sponsor's robot expects it in ex1 —
+    /// until name exchanges landed 2026-07-27 and closed it. A party joining
+    /// this list means a submission-blocking gap shipped; treat it as the
+    /// alarm it is.
+    func testNoPartyIsExportBlocked() {
         let blocked = parties
             .filter { $0.caveats.contains { $0.kind == .exportBlocking } }
             .map(\.id)
-        XCTAssertEqual(blocked, ["mnqp"])
+        XCTAssertEqual(blocked, [])
     }
 
     /// Every party is classified. An unclassified one would silently fall back

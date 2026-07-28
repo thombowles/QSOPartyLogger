@@ -53,12 +53,14 @@ Built for KE5CW. Bundled parties, all with official county data:
   multipliers count **once overall**, the only bundled party with that scope on
   both sides; all DX is worth exactly **one** multiplier. The sponsor states its
   own in-state maximum of **151**, and the app reproduces it exactly. DC counts
-  as itself here, not as MD. County-line operation is **forbidden**.
-  `verified: partial`: the exchange is a **first name** plus a location with no
-  signal report, and this app has no name field — scoring is unaffected, but an
-  exported Cabrillo log needs its name column filled in before submission.
-  **Built from the archived 2026 edition** (`rev 31`): the sponsor now publishes
-  only the 2027 rules, which change four scoring rules.
+  as itself here, not as MD. County-line operation is **forbidden**. The
+  exchange is a **first name** plus a location with no signal report — the
+  party that banked the name-exchange gap, closed 2026-07-27 when the NAQP
+  pair forced the capability in: the name is now logged, required before a
+  contact logs, and exported in the ex1 column the sponsor's robot expects.
+  `verified: partial` only for provenance: **built from the archived 2026
+  edition** (`rev 31`), since the sponsor now publishes only the 2027 rules,
+  which change four scoring rules.
 - **British Columbia QSO Party** (Feb 7–8, 2026) — **the first non-US party**.
   BC has no counties, so the county field carries its **43 federal electoral
   districts**, a list redrawn for the October 2025 election and new for 2026 —

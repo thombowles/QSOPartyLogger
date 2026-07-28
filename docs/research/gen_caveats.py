@@ -105,9 +105,11 @@ KINDS = {
     "miqp": [
         (0, "provenance", "Partial only because the 2026 rules came from an archive rather than a live page."),
     ],
+    # The exportBlocking entry closed 2026-07-27: name exchanges landed
+    # (forced in by the NAQP pair) and MNQP's flag is on, so the name is
+    # logged and exported. The notes record the closure per Article 20.
     "mnqp": [
-        (0, "exportBlocking", "The exchange carries a name this app cannot log, so an exported Cabrillo needs its name column filled in before you submit. Scoring is unaffected."),
-        (2, "provenance", "The 2026 rules were recovered from a web archive and cannot be re-fetched from the sponsor."),
+        (0, "provenance", "The 2026 rules were recovered from a web archive and cannot be re-fetched from the sponsor."),
     ],
     # The NAQP pair's caveats are also written by gen_naqp.py, which builds
     # notes and caveats from the same constants — these entries must match it

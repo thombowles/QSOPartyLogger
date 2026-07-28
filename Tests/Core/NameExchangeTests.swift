@@ -94,8 +94,9 @@ final class NameExchangeTests: XCTestCase {
     /// cannot gain one incidentally — each flag flip is its own commit.
     func testWhichPartiesExchangeAName() {
         let withNames = PartyCatalog.loadBundled().filter(\.exchangeIncludesName).map(\.id)
-        XCTAssertEqual(withNames, ["naqpcw", "naqpssb"],
-                       "NAQP rule 10: name and location, no report")
+        XCTAssertEqual(withNames, ["mnqp", "naqpcw", "naqpssb"],
+                       "NAQP rule 10 and MNQP's 'First name & county' — "
+                           + "a name, a location, and no report")
         for party in PartyCatalog.loadBundled() where party.exchangeIncludesName {
             XCTAssertFalse(party.exchangeIncludesRST, "\(party.id) sends a name and no report")
         }

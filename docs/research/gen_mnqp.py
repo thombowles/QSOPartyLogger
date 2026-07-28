@@ -255,7 +255,10 @@ mnqp = {
     # NO stateAliases, deliberately: the sponsor counts "1 District of Columbia"
     # as a multiplier SEPARATE from the 50 states, so DC must stay itself.
     # The exchange is name + location. There is no signal report at all.
+    # The name half landed 2026-07-27 (forced in by the NAQP pair), which is
+    # what closed this party's export-blocking caveat.
     "exchangeIncludesRST": False,
+    "exchangeIncludesName": True,
     # "MN stations work everyone; all other W/VE & DX work MN stations."
     "outStateWorksHomeStationsOnly": True,
     # "first Saturday of February from 1400 through 2359 UTC" (rules) and
@@ -306,19 +309,18 @@ mnqp = {
         "counties is rejected, as in ALQP. Minnesota entrants are capped at 100 watts by class "
         "(5 W for QRP) while W/VE classes run to 1500 W - an eligibility rule, not a scoring one. "
         "No bonus stations and no final-score multiplier of any kind. "
-        "KNOWN LIMITATION 1 - THE EXCHANGE IS A NAME AND THIS APP CANNOT LOG IT, WHICH BLOCKS "
-        "SUBMISSION. MNQP exchanges a FIRST NAME plus a location and NO signal report: 'MN "
-        "Stations: First name & county (three letter designator). W/VE Stations: First name and "
-        "state / province. DX Stations: First name only.' This app has no name field on a QSO, so "
-        "the name is not captured, and the Cabrillo exporter writes the signal-report/serial slot "
-        "into the ex1 column the sponsor reserves for the name - which for a party with neither "
-        "is EMPTY. SCORING IS COMPLETELY UNAFFECTED: names are not multipliers, not points and "
-        "not part of the dupe key, so live operating, dupe checking, multiplier tracking and the "
-        "score are all correct. But Cabrillo is REQUIRED for submission and the log robot expects "
-        "the name in ex1, so AN EXPORTED MNQP LOG NEEDS ITS NAME COLUMN FILLED IN BEFORE IT IS "
-        "SUBMITTED. Recorded as a deferred engine gap; the fix is a name field on the QSO plus an "
-        "exchangeIncludesName flag, which touches the entry bar and the edit sheet and is "
-        "therefore its own commit. "
+        "THE EXCHANGE IS A FIRST NAME PLUS A LOCATION AND NO SIGNAL REPORT: 'MN Stations: First "
+        "name & county (three letter designator). W/VE Stations: First name and state / "
+        "province. DX Stations: First name only.' NAME EXCHANGES LANDED 2026-07-27 "
+        "(QSO.nameSent/nameRcvd + exchangeIncludesName, forced in by the NAQP pair), SO THE NAME "
+        "IS NOW LOGGED AND EXPORTED: the entry row requires the received name before a contact "
+        "logs, the contest-long sent name is set in Contest Setup, and Cabrillo writes it in the "
+        "ex1 column the sponsor reserves for it. Until then this was the app's one export "
+        "blocker, shipped as a numbered limitation with the instruction to fill the name column "
+        "in by hand - the closure is recorded here per Article 20 so the caveat's disappearance "
+        "reads as a fix, not an accident. (The marker words themselves are avoided in this "
+        "paragraph: operatorAlerts and the caveats pass both match them literally, and a "
+        "historical mention would re-raise the alert it is describing the end of.) "
         "Cabrillo CONTEST value MN-QSO-PARTY per the WA7BNM registry, entry 238 - the rules "
         "require Cabrillo but print no header token. Logs are due within 7 days at "
         "https://mnqp.contesting.com/mnqpsubmitlog.php. Counties are 87 with uniform 3-letter "
@@ -327,9 +329,7 @@ mnqp = {
         "KND, so KAN is not either; Marshall MRS and Martin MRT sit one letter apart. St Louis is "
         "printed without a period as 'St Louis' (STL) and Otter Tail as one word, 'Ottertail' "
         "(OTT); both ship as the sponsor prints them. "
-        "OPEN QUESTIONS (why this is partial): (1) KNOWN LIMITATION 1 above - the name half of "
-        "the exchange is not logged, so the exported Cabrillo is not submittable as it stands. "
-        "This is a missing app feature, not a rule in doubt. (2) The 2026 rules are no longer "
+        "OPEN QUESTION (why this is still partial): The 2026 rules are no longer "
         "published by the sponsor and were recovered from a web archive; they are the right "
         "document - the archived rules page of the same date names them - but they cannot be "
         "re-fetched from w0aa.org to confirm. If MNQP is ever re-verified for 2027, note that the "

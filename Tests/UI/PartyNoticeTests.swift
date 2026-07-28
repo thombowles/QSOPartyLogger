@@ -94,13 +94,13 @@ final class PartyNoticeTests: XCTestCase {
         }
     }
 
-    /// 21 of 47 bundled parties carry both kinds, so the two-group case is not
+    /// 20 of 48 bundled parties carry both kinds, so the two-group case is not
     /// an edge case — it is what most warned-about parties look like. A change
-    /// here means a party's caveats were reclassified (or, as with the NAQP
-    /// pair, a new party arrived carrying both kinds).
+    /// here means a party's caveats were reclassified (the NAQP pair arrived
+    /// carrying both kinds; MNQP left when its export blocker closed).
     func testTheTwoGroupCaseIsCommon() {
         let mixed = parties.filter { PartyNotice(party: $0).groups.count == 2 }.map(\.id)
-        XCTAssertEqual(mixed.count, 21, "got: \(mixed)")
+        XCTAssertEqual(mixed.count, 20, "got: \(mixed)")
     }
 
     /// Delaware is the worked example: three things the app cannot score, two
@@ -138,10 +138,25 @@ final class PartyNoticeTests: XCTestCase {
         }
     }
 
-    /// Minnesota's export is genuinely blocked, so its heading says that rather
-    /// than counting scoring gaps. Its one advisory line still gets a heading.
+    /// An export-blocked party's heading says so rather than counting scoring
+    /// gaps. No bundled party is export-blocked any more — Minnesota, the
+    /// last, closed 2026-07-27 when name exchanges landed — so the fixture is
+    /// inline: the headline path must survive for the day a gap ships again.
     func testExportBlockedPartyGetsItsOwnHeadline() throws {
-        let notice = PartyNotice(party: try party("mnqp"))
+        let json = """
+        {"schemaVersion":1,"id":"n","name":"N","cabrilloContest":"N","homeState":"KS",
+        "countyAbbrLength":3,"validBands":["40m"],"points":{"phone":1,"cw":1,"digital":1},
+        "dupeScope":"bandMode",
+        "multipliers":{"inState":{"classes":["state"],"homeStateCountsViaCounty":false,"countScope":"once"},
+        "outState":{"classes":["county"],"homeStateCountsViaCounty":false,"countScope":"once"}},
+        "bonuses":[],"counties":[{"abbr":"ALL","name":"Allen"}],
+        "caveats":[
+          {"kind":"exportBlocking","summary":"The log cannot be submitted as-is."},
+          {"kind":"provenance","summary":"Re-check the source next season."}
+        ]}
+        """
+        let blocked = try PartyCatalog.decode(Data(json.utf8))
+        let notice = PartyNotice(party: blocked)
 
         XCTAssertEqual(notice.warning?.header, "This log needs checking before you submit it.")
         XCTAssertEqual(notice.informational?.header, "1 note on how this app handles this party.")
