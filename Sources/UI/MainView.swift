@@ -442,21 +442,19 @@ struct MainView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup {
-            Button {
-                exportADIF()
+            // One export affordance, two formats. The shortcuts on the items
+            // are the menu's badge text — the keystrokes themselves are
+            // handled by the key monitor (KeyMonitorGate), which consumes
+            // them first wherever document focus rules allow an export.
+            Menu {
+                Button("ADIF (.adi)…") { exportADIF() }
+                    .keyboardShortcut("e", modifiers: .command)
+                Button("Cabrillo (.log)…") { exportCabrillo() }
+                    .keyboardShortcut("e", modifiers: [.command, .shift])
             } label: {
-                Label("Export ADIF", systemImage: "square.and.arrow.up")
+                Label("Export", systemImage: "square.and.arrow.up")
             }
-            .keyboardShortcut("e", modifiers: .command)
-            .help("Export ADIF (⌘E)")
-
-            Button {
-                exportCabrillo()
-            } label: {
-                Label("Export Cabrillo", systemImage: "doc.plaintext")
-            }
-            .keyboardShortcut("e", modifiers: [.command, .shift])
-            .help("Export Cabrillo (⇧⌘E)")
+            .help("Export the log — ADIF (⌘E) or Cabrillo (⇧⌘E)")
 
             Button {
                 beginSpotForMode()
@@ -1275,7 +1273,8 @@ struct MainView: View {
             guard
                 let action = KeyMonitorGate.action(
                     keyCode: event.keyCode,
-                    command: event.modifierFlags.contains(.command)
+                    command: event.modifierFlags.contains(.command),
+                    shift: event.modifierFlags.contains(.shift)
                 )
             else { return event }
 
@@ -1319,10 +1318,19 @@ struct MainView: View {
         case .sendMessage(let index): sendMessageAt(index)
         case .clearEntry: clearEntry()
         case .abortCW: radio.abortCW(settings: settings)
+        case .exportADIF: exportADIF()
+        case .exportCabrillo: exportCabrillo()
         }
     }
 
     // MARK: Export
+
+    /// The log's file as the window knows it right now — `knownFileURL` alone
+    /// can lag a Save As.
+    private var exportFileURL: URL? {
+        (hostWindow?.windowController?.document as? NSDocument)?.fileURL
+            ?? document.knownFileURL
+    }
 
     private func exportADIF() {
         guard let party else { return }
@@ -1330,7 +1338,7 @@ struct MainView: View {
         // Through .plainText the save panel would append ".txt" — .adi is not
         // an extension of any plain-text type. .adi (LogDocument.swift) is.
         exportType = .adi
-        exportName = "\(document.log.station.callsign.isEmpty ? "log" : document.log.station.callsign).adi"
+        exportName = LogDocument.exportBaseName(fileURL: exportFileURL, log: document.log) + ".adi"
         isExporting = true
     }
 
@@ -1348,7 +1356,7 @@ struct MainView: View {
             text: CabrilloExporter.export(log: document.log, party: party, score: score)
         )
         exportType = .plainText
-        exportName = "\(document.log.station.callsign.isEmpty ? "log" : document.log.station.callsign).log"
+        exportName = LogDocument.exportBaseName(fileURL: exportFileURL, log: document.log) + ".log"
         isExporting = true
     }
 }

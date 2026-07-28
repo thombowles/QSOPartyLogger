@@ -731,10 +731,13 @@ parties, and the remaining engine gaps. Adding a party is governed by
   Setup collects every one of them, so an NAQP Single Op **Assisted** or
   Multi-Two entry exports as exactly that) and ADIF 3.1.4
   (`CNTY`/`MY_CNTY` with full county names, `STX_STRING`/`SRX_STRING`,
-  group ids in an APP_ field). The app declares the ADIF file type
-  (`.adi`/`.adif`, plain text), so ⌘E's save panel keeps the `.adi` name
-  instead of appending `.txt`, and Finder labels the file
-  "ADIF Amateur Radio Log".
+  group ids in an APP_ field). One **Export** menu in the toolbar offers
+  both formats, with ⌘E / ⇧⌘E shown beside them; the suggested filename is
+  the log's own name ("2026-08-29 KSQP KE5CW.adi"), the file's for a saved
+  log or the dated name a draft's first auto-save is about to use. The app
+  declares the ADIF file type (`.adi`/`.adif`, plain text), so the save
+  panel keeps the `.adi` name instead of appending `.txt`, and Finder
+  labels the file "ADIF Amateur Radio Log".
 - **Documents**: each contest is a `.qplog` file (JSON) with undo. New logs
   auto-save into your logs folder on setup, then **every QSO change writes
   straight to disk** (and mirrors to iCloud Drive if configured) — a crash
@@ -795,7 +798,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `⌘J` | Jump back to your CQ run frequency (Run mode) |
 | `⌘B` | Toggle the band map window |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
-| `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
+| `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo (the toolbar's Export menu) |
 | `⌘.` | Dismiss the assisted-category warning for this sitting (it returns at Cabrillo export) |
 | `⇧⌘S` | Spot to the QSO Party Hub — yourself in Run, the call field in S&P (Return sends, Esc cancels) |
 | `⌘⇧D` | Contest Dashboard (season history + SQP Challenge) |
@@ -1074,7 +1077,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1737 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1743 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
