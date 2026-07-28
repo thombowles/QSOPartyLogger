@@ -31,6 +31,14 @@ final class MultiplierTermTests: XCTestCase {
         }
     }
 
+    /// BCQP's rules, quoted in its research: "British Columbia stations send:
+    /// RS(T) and District (three letter abbreviation)."
+    func testBCQPCountsDistricts() throws {
+        let bcqp = try XCTUnwrap(PartyCatalog.party(id: "bcqp"))
+        XCTAssertEqual(bcqp.countyTerm, "district")
+        XCTAssertEqual(bcqp.countyTermPlural, "districts")
+    }
+
     /// Terms are stored lowercase so a heading can capitalize the first
     /// letter without flattening an acronym in the middle of one.
     func testSentenceCasingKeepsAnAcronymIntact() {

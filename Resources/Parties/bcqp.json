@@ -51,6 +51,7 @@
     "cw"
   ],
   "maxSimultaneousCounties": 1,
+  "countyTerm": "district",
   "stateAliases": {
     "DC": "MD"
   },
