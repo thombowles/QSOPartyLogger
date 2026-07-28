@@ -1,15 +1,80 @@
 import Foundation
 import Observation
 
+/// Where the radio link stands, as one value the radio bar can render.
+/// Top-level (not nested in `RadioController`) so nonisolated UI helpers can
+/// touch it — a type nested in a `@MainActor` class inherits the isolation.
+enum RadioConnectionPhase: Sendable {
+    /// No transport. The button reads "Connect".
+    case disconnected
+    /// Transport is up, nothing heard yet, validation clock still running.
+    case waitingForRadio
+    /// The validation window elapsed without a word from the radio. The
+    /// link stays up — a late answer still promotes to `.connected`.
+    case unresponsive
+    /// The radio has actually answered — the only state that earns
+    /// a "Disconnect" button.
+    case connected
+}
+
+/// A connection problem, shaped for the radio bar: `summary` fits inline,
+/// `detail` feeds the tooltip.
+struct RadioConnectionError: Equatable, Sendable {
+    var summary: String
+    var detail: String
+}
+
 /// Glue between the hardware layer and SwiftUI: connection lifecycle, live
 /// radio state, and CW sending over the selected backend.
 @MainActor
 @Observable
 final class RadioController {
 
+    typealias ConnectionPhase = RadioConnectionPhase
+    typealias ConnectionError = RadioConnectionError
+
     private(set) var isConnected = false
     private(set) var radioState: RadioState?
-    private(set) var lastError: String?
+    private(set) var lastError: ConnectionError?
+    /// How long a silent radio gets before `.unresponsive` — app-layer
+    /// policy, not a per-radio constant. Tunable so tests need not wait 4 s.
+    var validationWindow: TimeInterval = 4
+    /// Set by the validation task when the window closes unanswered.
+    private var validationExpired = false
+
+    /// The error shown when the validation window closes unanswered —
+    /// separated out so the wording is testable without a transport.
+    static func unresponsiveError(target: String, isNetwork: Bool) -> ConnectionError {
+        let networkHint = isNetwork
+            ? " If macOS asked about finding devices on the local network, allow it (System "
+                + "Settings → Privacy & Security → Local Network → QSO Party Logger)."
+            : ""
+        return ConnectionError(
+            summary: "Radio not answering",
+            detail: "Connected to \(target), but the radio isn't answering. "
+                + "Check power, cable/network, and settings. The connection stays up — the "
+                + "frequency display will light up as soon as the radio responds.\(networkHint)"
+        )
+    }
+
+    /// Pure phase derivation — the truth table behind `connectionPhase`.
+    /// A radio that has answered is connected even if the validation clock
+    /// ran out first: a late answer wins.
+    static func phase(
+        transportUp: Bool, radioAnswered: Bool, validationExpired: Bool
+    ) -> ConnectionPhase {
+        guard transportUp else { return .disconnected }
+        if radioAnswered { return .connected }
+        return validationExpired ? .unresponsive : .waitingForRadio
+    }
+
+    var connectionPhase: ConnectionPhase {
+        Self.phase(
+            transportUp: isConnected,
+            radioAnswered: radioState != nil,
+            validationExpired: validationExpired
+        )
+    }
     private(set) var nowSending: String?
     /// Keyer speed the radio last reported (its front-panel speed knob) —
     /// observed by the UI to sync `AppSettings.wpm`.
@@ -49,9 +114,12 @@ final class RadioController {
 
     func connect(settings: AppSettings) {
         disconnect()
-        lastError = nil
         guard let descriptor = RadioRegistry.descriptor(id: settings.radioID) else {
-            lastError = "Unknown radio '\(settings.radioID)'."
+            lastError = ConnectionError(
+                summary: "Unknown radio",
+                detail: "No radio matches the saved id '\(settings.radioID)'. "
+                    + "Pick a radio in the radio bar and connect again."
+            )
             return
         }
 
@@ -59,14 +127,21 @@ final class RadioController {
         switch descriptor.connection {
         case .serial:
             guard !settings.portPath.isEmpty else {
-                lastError = "Choose a serial port first."
+                lastError = ConnectionError(
+                    summary: "No serial port selected",
+                    detail: "Choose a serial port in the radio bar, then Connect. "
+                        + "The ⟳ button rescans if the adapter was just plugged in."
+                )
                 return
             }
             let newPort = SerialPort(path: settings.portPath)
             do {
                 try newPort.open(baudRate: settings.baudRate)
             } catch {
-                lastError = error.localizedDescription
+                lastError = ConnectionError(
+                    summary: "Couldn't open port",
+                    detail: error.localizedDescription
+                )
                 return
             }
             newTransport = newPort
@@ -74,16 +149,18 @@ final class RadioController {
         case .network(let defaultPort):
             let host = settings.tcpHost.trimmingCharacters(in: .whitespaces)
             guard !host.isEmpty else {
-                lastError = "Enter the radio's IP address or hostname."
+                lastError = ConnectionError(
+                    summary: "No radio address",
+                    detail: "Enter the radio's IP address or hostname in the radio bar, "
+                        + "then Connect."
+                )
                 return
             }
             let port = (1...65535).contains(settings.tcpPort) ? UInt16(settings.tcpPort) : defaultPort
             let tcp = TCPTransport(host: host, port: port)
             tcp.onDisconnect = { [weak self] reason in
                 Task { @MainActor [weak self] in
-                    guard let self, self.isConnected else { return }
-                    self.lastError = "Radio connection lost: \(reason)"
-                    self.disconnect()
+                    self?.transportDidDisconnect(reason: reason)
                 }
             }
             try? tcp.open(baudRate: 0)  // connects asynchronously; validation reports failures
@@ -93,7 +170,7 @@ final class RadioController {
         let newDriver = descriptor.makeDriver()
         newDriver.onStateChange = { [weak self] state in
             Task { @MainActor [weak self] in
-                self?.radioState = state
+                self?.driverDidReportState(state)
             }
         }
         newDriver.onKeyerSpeedChange = { [weak self] wpm in
@@ -120,13 +197,18 @@ final class RadioController {
         internalKeyer = RadioInternalKeyer(driver: newDriver, wpm: settings.wpm)
         connectedDescriptor = descriptor
         isConnected = true
+
+        // Every connect gets the response check. A TCP connection to the
+        // wrong IP "succeeds" silently, and an opened serial port with a
+        // powered-off radio looks identical — the phase (and the bar) must
+        // say which link actually proved out.
+        startValidation(settings: settings)
     }
 
     /// Auto-connect on document open. Silently does nothing when the target
     /// isn't configured (or a serial port isn't currently present); otherwise
-    /// connects and then verifies the radio actually answers within a few
-    /// seconds, surfacing an error if it doesn't.
-    func connectAndValidate(settings: AppSettings) {
+    /// connects — and `connect` verifies the radio actually answers.
+    func autoConnect(settings: AppSettings) {
         guard !isConnected else { return }
         guard let descriptor = RadioRegistry.descriptor(id: settings.radioID) else { return }
         switch descriptor.connection {
@@ -139,16 +221,29 @@ final class RadioController {
         }
 
         connect(settings: settings)
-        startValidation(settings: settings)
     }
 
-    /// Manual Connect button. Network radios get the response check too —
-    /// a TCP connection to the wrong IP "succeeds" silently otherwise.
-    func connectManually(settings: AppSettings) {
-        connect(settings: settings)
-        if case .network = connectedDescriptor?.connection {
-            startValidation(settings: settings)
-        }
+    /// The transport dropped out from under us (TCP reset, remote close).
+    /// Tear down first, then record why: `disconnect()` wipes the slate, and
+    /// an involuntary drop is the one story that must survive it. A late
+    /// callback after a deliberate disconnect is not news and stays silent.
+    func transportDidDisconnect(reason: String) {
+        guard isConnected else { return }
+        disconnect()
+        lastError = ConnectionError(
+            summary: "Connection lost",
+            detail: "Radio connection lost: \(reason)"
+        )
+    }
+
+    /// Single funnel for driver state updates. The first word from the radio
+    /// is what "connected" means, so it also retires any silence warning.
+    /// Updates already in flight when the link went down are dropped — they
+    /// must not resurrect the frequency display or wipe a loss error.
+    func driverDidReportState(_ state: RadioState) {
+        guard isConnected else { return }
+        radioState = state
+        lastError = nil
     }
 
     private func startValidation(settings: AppSettings) {
@@ -159,29 +254,22 @@ final class RadioController {
         default:
             (settings.portPath as NSString).lastPathComponent
         }
+        let isNetwork = if case .network = connectedDescriptor?.connection { true } else { false }
 
         validationTask?.cancel()
+        // Serial radios: first poll at +0.2 s, repeating 0.5 s. Network
+        // radios: status arrives right after the subscribe. The default 4 s
+        // window is generous for both.
+        let deadline = Date().addingTimeInterval(validationWindow)
         validationTask = Task { [weak self] in
-            // Serial radios: first poll at +0.2 s, repeating 0.5 s. Network
-            // radios: status arrives right after the subscribe. 4 s is
-            // generous for both, and is app-layer policy — how long to wait
-            // before warning the operator — not a per-radio constant.
-            let deadline = Date().addingTimeInterval(4)
             while Date() < deadline {
                 try? await Task.sleep(nanoseconds: 200_000_000)
                 guard let self, !Task.isCancelled, self.isConnected else { return }
                 if self.radioState != nil { return }  // validated — radio is talking
             }
             guard let self, !Task.isCancelled, self.isConnected, self.radioState == nil else { return }
-            let networkHint = if case .network = self.connectedDescriptor?.connection {
-                " If macOS asked about finding devices on the local network, allow it (System "
-                    + "Settings → Privacy & Security → Local Network → QSO Party Logger)."
-            } else {
-                ""
-            }
-            self.lastError = "Connected to \(target), but the radio isn't answering. "
-                + "Check power, cable/network, and settings. The connection stays up — the "
-                + "frequency display will light up as soon as the radio responds.\(networkHint)"
+            self.validationExpired = true
+            self.lastError = Self.unresponsiveError(target: target, isNetwork: isNetwork)
         }
     }
 
@@ -198,6 +286,11 @@ final class RadioController {
         connectedDescriptor = nil
         isConnected = false
         radioState = nil
+        // A deliberate disconnect is a clean slate — Cancel on a silent radio
+        // must not leave its warning behind. Involuntary drops re-set their
+        // error *after* calling this (`transportDidDisconnect`).
+        lastError = nil
+        validationExpired = false
         sendingClearTask?.cancel()
         sendingClearTask = nil
         nowSending = nil

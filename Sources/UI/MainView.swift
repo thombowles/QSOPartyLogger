@@ -148,20 +148,6 @@ struct MainView: View {
                 defaultFilename: exportName
             ) { _ in }
             .toolbar { toolbarContent }
-            .alert("Radio error", isPresented: radioErrorPresented) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(radio.lastError ?? "")
-            }
-    }
-
-    private var radioErrorPresented: Binding<Bool> {
-        Binding(
-            get: { radio.lastError != nil },
-            set: { presented in
-                if !presented { radio.clearError() }
-            }
-        )
     }
 
     private var splitContent: some View {
@@ -669,7 +655,7 @@ struct MainView: View {
         focusedField = .call
         flow.onAppear(operatingContext)
         installKeyMonitor()
-        radio.connectAndValidate(settings: settings)
+        radio.autoConnect(settings: settings)
 
         spotClient.onSpot = { spot in
             spotStore.add(spot)
