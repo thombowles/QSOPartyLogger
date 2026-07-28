@@ -1,18 +1,18 @@
 import XCTest
 @testable import QSOPartyLogger
 
-/// The dashboard's per-row ADIF export: an archived record plus the logs
-/// folder in, ADIF text and a save-panel filename out. The saved .qplog is
+/// The dashboard's per-row exports: an archived record plus the logs
+/// folder in, export text and a save-panel filename out. The saved .qplog is
 /// the source — never the archive's embedded QSO copy, which can lag a save
 /// synced from another Mac.
-final class ArchivedAdifExportTests: XCTestCase {
+final class ArchivedLogExportTests: XCTestCase {
 
     private var folder: URL!
     private let t = Date(timeIntervalSince1970: 1_788_013_920)  // 2026-08-29 14:32:00Z
 
     override func setUpWithError() throws {
         folder = FileManager.default.temporaryDirectory
-            .appendingPathComponent("ArchivedAdifExportTests-\(UUID().uuidString)", isDirectory: true)
+            .appendingPathComponent("ArchivedLogExportTests-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     }
 
@@ -42,7 +42,7 @@ final class ArchivedAdifExportTests: XCTestCase {
         ))
     }
 
-    func testExportReadsTheSavedFileNotTheArchivedCopy() throws {
+    func testAdifReadsTheSavedFileNotTheArchivedCopy() throws {
         // The record was archived from a one-QSO log; the file on disk has
         // since gained a second contact. Both must export.
         let archived = makeLog()
@@ -53,7 +53,7 @@ final class ArchivedAdifExportTests: XCTestCase {
         ))
         try saved.encoded().write(to: folder.appendingPathComponent("2026-08-29 KSQP KE5CW.qplog"))
 
-        let export = try AdifExporter.exportArchived(
+        let export = try ArchivedLogExport.adif(
             record: record(from: archived, sourceFileName: "2026-08-29 KSQP KE5CW.qplog"),
             folder: folder
         )
@@ -68,7 +68,7 @@ final class ArchivedAdifExportTests: XCTestCase {
     func testFileNameSwapsQplogExtensionForAdi() throws {
         let log = makeLog()
         try log.encoded().write(to: folder.appendingPathComponent("My Renamed Log.qplog"))
-        let export = try AdifExporter.exportArchived(
+        let export = try ArchivedLogExport.adif(
             record: record(from: log, sourceFileName: "My Renamed Log.qplog"),
             folder: folder
         )
@@ -77,22 +77,22 @@ final class ArchivedAdifExportTests: XCTestCase {
 
     func testMissingFileThrows() throws {
         let rec = try record(from: makeLog(), sourceFileName: "gone.qplog")
-        XCTAssertThrowsError(try AdifExporter.exportArchived(record: rec, folder: folder)) {
-            XCTAssertEqual($0 as? AdifExporter.ArchiveFailure, .logFileMissing)
+        XCTAssertThrowsError(try ArchivedLogExport.adif(record: rec, folder: folder)) {
+            XCTAssertEqual($0 as? ArchivedLogExport.Failure, .logFileMissing)
         }
     }
 
     func testRecordWithoutSourceFileThrows() throws {
         let rec = try record(from: makeLog(), sourceFileName: nil)
-        XCTAssertThrowsError(try AdifExporter.exportArchived(record: rec, folder: folder)) {
-            XCTAssertEqual($0 as? AdifExporter.ArchiveFailure, .logFileMissing)
+        XCTAssertThrowsError(try ArchivedLogExport.adif(record: rec, folder: folder)) {
+            XCTAssertEqual($0 as? ArchivedLogExport.Failure, .logFileMissing)
         }
     }
 
     func testNoLogsFolderThrows() throws {
         let rec = try record(from: makeLog(), sourceFileName: "a.qplog")
-        XCTAssertThrowsError(try AdifExporter.exportArchived(record: rec, folder: nil)) {
-            XCTAssertEqual($0 as? AdifExporter.ArchiveFailure, .logFileMissing)
+        XCTAssertThrowsError(try ArchivedLogExport.adif(record: rec, folder: nil)) {
+            XCTAssertEqual($0 as? ArchivedLogExport.Failure, .logFileMissing)
         }
     }
 
@@ -100,16 +100,58 @@ final class ArchivedAdifExportTests: XCTestCase {
         let log = makeLog(partyID: "zzqp")
         try log.encoded().write(to: folder.appendingPathComponent("z.qplog"))
         let rec = try record(from: log, sourceFileName: "z.qplog")
-        XCTAssertThrowsError(try AdifExporter.exportArchived(record: rec, folder: folder)) {
-            XCTAssertEqual($0 as? AdifExporter.ArchiveFailure, .partyNotInstalled)
+        XCTAssertThrowsError(try ArchivedLogExport.adif(record: rec, folder: folder)) {
+            XCTAssertEqual($0 as? ArchivedLogExport.Failure, .partyNotInstalled)
         }
     }
 
     func testCorruptFileThrows() throws {
         try Data("not a log".utf8).write(to: folder.appendingPathComponent("bad.qplog"))
         let rec = try record(from: makeLog(), sourceFileName: "bad.qplog")
-        XCTAssertThrowsError(try AdifExporter.exportArchived(record: rec, folder: folder)) {
-            XCTAssertEqual($0 as? AdifExporter.ArchiveFailure, .logUnreadable)
+        XCTAssertThrowsError(try ArchivedLogExport.adif(record: rec, folder: folder)) {
+            XCTAssertEqual($0 as? ArchivedLogExport.Failure, .logUnreadable)
+        }
+    }
+
+    // MARK: Cabrillo
+
+    func testCabrilloReadsTheSavedFileAndRecomputesScore() throws {
+        // Same discipline as the ADIF test: the file on disk carries a QSO
+        // the archived record lacks, and CLAIMED-SCORE must come from
+        // scoring the file's log under today's installed rules — the figure
+        // reopening the log and pressing ⇧⌘E would claim — never from the
+        // archived snapshot.
+        let archived = makeLog()
+        var saved = archived
+        saved.qsos.append(QSO(
+            timestampUTC: t.addingTimeInterval(60), call: "N0R", band: .m40, modeClass: .cw,
+            rawMode: "CW", rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: "MO"
+        ))
+        try saved.encoded().write(to: folder.appendingPathComponent("2026-08-29 KSQP KE5CW.qplog"))
+
+        let export = try ArchivedLogExport.cabrillo(
+            record: record(from: archived, sourceFileName: "2026-08-29 KSQP KE5CW.qplog"),
+            folder: folder
+        )
+        let party = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        let lines = export.text.components(separatedBy: "\n")
+        XCTAssertEqual(export.fileName, "2026-08-29 KSQP KE5CW.log")
+        XCTAssertEqual(lines.first, "START-OF-LOG: 3.0")
+        XCTAssertTrue(lines.contains("CONTEST: KS-QSO-PARTY"))
+        XCTAssertTrue(export.text.contains("W0BH"))
+        XCTAssertTrue(export.text.contains("N0R"))
+        XCTAssertTrue(lines.contains(
+            "CLAIMED-SCORE: \(ScoreEngine.score(log: saved, party: party).total)"
+        ))
+        XCTAssertTrue(export.text.hasSuffix("END-OF-LOG:\n"))
+    }
+
+    func testCabrilloUninstalledPartyThrows() throws {
+        let log = makeLog(partyID: "zzqp")
+        try log.encoded().write(to: folder.appendingPathComponent("z.qplog"))
+        let rec = try record(from: log, sourceFileName: "z.qplog")
+        XCTAssertThrowsError(try ArchivedLogExport.cabrillo(record: rec, folder: folder)) {
+            XCTAssertEqual($0 as? ArchivedLogExport.Failure, .partyNotInstalled)
         }
     }
 }

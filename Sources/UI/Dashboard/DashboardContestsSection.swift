@@ -3,9 +3,9 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 /// The year's contests: sortable score table (Return or double-click opens
-/// the .qplog, ⌘E exports it as ADIF), a QSOs-per-contest chart, and — with
-/// a row selected — that party's all-years trend with the personal best
-/// called out.
+/// the .qplog, ⌘E exports it as ADIF, ⇧⌘E as Cabrillo), a QSOs-per-contest
+/// chart, and — with a row selected — that party's all-years trend with the
+/// personal best called out.
 struct DashboardContestsSection: View {
     @Bindable var model: DashboardModel
 
@@ -27,7 +27,18 @@ struct DashboardContestsSection: View {
                 }
                 .keyboardShortcut("e", modifiers: .command)
                 .disabled(!(selectedRow?.exportable ?? false))
-                .help(exportHelp)
+                .help(exportBlockedReason ?? "Export the selected contest's log as ADIF (⌘E)")
+
+                Button {
+                    if let row = selectedRow {
+                        model.exportCabrillo(row.record)
+                    }
+                } label: {
+                    Label("Export Cabrillo…", systemImage: "doc.plaintext")
+                }
+                .keyboardShortcut("e", modifiers: [.command, .shift])
+                .disabled(!(selectedRow?.exportable ?? false))
+                .help(exportBlockedReason ?? "Export the selected contest's log as Cabrillo (⇧⌘E)")
             }
 
             if rows.isEmpty {
@@ -40,15 +51,15 @@ struct DashboardContestsSection: View {
         }
         .padding(14)
         .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
-        // .adi, not .plainText, so the save panel keeps the .adi name
-        // (see UTType.adi in LogDocument.swift).
+        // The content type follows the staged export — UTType.adi for ADIF
+        // so the save panel keeps the .adi name (see LogDocument.swift).
         .fileExporter(
             isPresented: exportPresented,
-            document: model.adifExport.map { TextExportDocument(text: $0.text) },
-            contentType: .adi,
-            defaultFilename: model.adifExport?.fileName
+            document: model.stagedExport.map { TextExportDocument(text: $0.text) },
+            contentType: model.stagedExportType,
+            defaultFilename: model.stagedExport?.fileName
         ) { _ in
-            model.adifExport = nil
+            model.stagedExport = nil
         }
     }
 
@@ -56,14 +67,16 @@ struct DashboardContestsSection: View {
     /// (save or cancel) clears it.
     private var exportPresented: Binding<Bool> {
         Binding(
-            get: { model.adifExport != nil },
-            set: { if !$0 { model.adifExport = nil } }
+            get: { model.stagedExport != nil },
+            set: { if !$0 { model.stagedExport = nil } }
         )
     }
 
-    private var exportHelp: String {
+    /// Why the selection can't export — nil when it can. Shared by both
+    /// formats: each needs the saved file and the installed rules alike.
+    private var exportBlockedReason: String? {
         guard let row = selectedRow else {
-            return "Select a contest, then export its log as ADIF (⌘E)"
+            return "Select a contest, then export its log (⌘E ADIF, ⇧⌘E Cabrillo)"
         }
         if !row.fileAvailable {
             return "Can't export — the log file is no longer in the logs folder"
@@ -71,7 +84,7 @@ struct DashboardContestsSection: View {
         if !row.partyInstalled {
             return "Can't export — \(row.partyName) rules are not installed"
         }
-        return "Export the selected contest's log as ADIF (⌘E)"
+        return nil
     }
 
     // MARK: Rows
@@ -185,6 +198,8 @@ struct DashboardContestsSection: View {
                     Button("Open Log") { model.openLog(row.record) }
                 }
                 Button("Export ADIF…") { model.exportADIF(row.record) }
+                    .disabled(!row.exportable)
+                Button("Export Cabrillo…") { model.exportCabrillo(row.record) }
                     .disabled(!row.exportable)
             }
         } primaryAction: { ids in

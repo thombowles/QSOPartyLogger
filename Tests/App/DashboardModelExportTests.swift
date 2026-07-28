@@ -1,3 +1,4 @@
+import UniformTypeIdentifiers
 import XCTest
 @testable import QSOPartyLogger
 
@@ -65,16 +66,37 @@ final class DashboardModelExportTests: XCTestCase {
         let model = DashboardModel()
         model.exportADIF(record)
 
-        let export = try XCTUnwrap(model.adifExport)
+        let export = try XCTUnwrap(model.stagedExport)
         XCTAssertEqual(export.fileName, "2026-08-29 KSQP KE5CW.adi")
         XCTAssertTrue(export.text.contains("<call:4>W0BH"))
         XCTAssertTrue(export.text.contains("<contest_id:12>KS-QSO-PARTY"))
+        XCTAssertEqual(model.stagedExportType, .adi)
     }
 
     func testExportADIFWithMissingFileStagesNothing() throws {
         let record = try makeRecord(sourceFileName: "gone.qplog", writeFile: false)
         let model = DashboardModel()
         model.exportADIF(record)
-        XCTAssertNil(model.adifExport)
+        XCTAssertNil(model.stagedExport)
+    }
+
+    func testExportCabrilloStagesSavedLogAsCabrillo() throws {
+        let record = try makeRecord(sourceFileName: "2026-08-29 KSQP KE5CW.qplog", writeFile: true)
+        let model = DashboardModel()
+        model.exportCabrillo(record)
+
+        let export = try XCTUnwrap(model.stagedExport)
+        XCTAssertEqual(export.fileName, "2026-08-29 KSQP KE5CW.log")
+        XCTAssertTrue(export.text.hasPrefix("START-OF-LOG: 3.0"))
+        // .plainText, not .adi: the panel's allowed extensions follow the
+        // type, and "X.log" is a name plain text already claims.
+        XCTAssertEqual(model.stagedExportType, .plainText)
+    }
+
+    func testExportCabrilloWithMissingFileStagesNothing() throws {
+        let record = try makeRecord(sourceFileName: "gone.qplog", writeFile: false)
+        let model = DashboardModel()
+        model.exportCabrillo(record)
+        XCTAssertNil(model.stagedExport)
     }
 }
