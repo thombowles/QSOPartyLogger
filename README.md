@@ -608,6 +608,18 @@ parties, and the remaining engine gaps. Adding a party is governed by
   unfinished stub), WA Salmon Run (no page), the multi-state and combined
   entries, and NAQP. Polling only runs inside the
   party's own operating window.
+- **Assisted-category honesty**: the first spot either feed delivers —
+  cluster or hub — is recorded on the log itself (it survives a restart),
+  and if Contest Setup still declares `CATEGORY-ASSISTED: NON-ASSISTED`, an
+  orange badge stands in the station strip: most sponsors score any
+  spotting-network use as Assisted (NAQP rule 5A is the canonical wording).
+  Non-blocking throughout — dismiss it with ⌘. (or the ×), and it stands
+  back up exactly once more per sitting: at Cabrillo export, where the
+  claim ships. The export itself is never altered or held up; switching
+  Assisted in Contest Setup (which carries its own inline caution, as does
+  the cluster connect popover) is what clears it. Self-spotting alone never
+  trips it — sending a spot receives no assistance, and self-spotting rules
+  genuinely vary by sponsor.
 - **Exchange pre-fill from a spot**: when nothing in your own log or the
   archive knows a station, a hub spot's county fills the exchange as a last
   resort — shown **unconfirmed** (dashed, with a reminder) rather than merely
@@ -712,11 +724,16 @@ parties, and the remaining engine gaps. Adding a party is governed by
   single-state party's grid is unchanged.
 - **RST pre-filled** (599/59 by mode) after every contact, so the exchange
   is two keystrokes on a normal run.
-- **Exports**: Cabrillo V3 (per-county-line QSO rows, category headers,
-  claimed score) and ADIF 3.1.4 (`CNTY`/`MY_CNTY` with full county names,
-  `STX_STRING`/`SRX_STRING`, group ids in an APP_ field). The app declares
-  the ADIF file type (`.adi`/`.adif`, plain text), so ⌘E's save panel keeps
-  the `.adi` name instead of appending `.txt`, and Finder labels the file
+- **Exports**: Cabrillo V3 (per-county-line QSO rows, claimed score, and the
+  full entry declaration — operator / assisted / power / station /
+  transmitter categories, a multi-op `OPERATORS:` list with the spec's
+  `@host` convention, club, grid locator, and the address block. Contest
+  Setup collects every one of them, so an NAQP Single Op **Assisted** or
+  Multi-Two entry exports as exactly that) and ADIF 3.1.4
+  (`CNTY`/`MY_CNTY` with full county names, `STX_STRING`/`SRX_STRING`,
+  group ids in an APP_ field). The app declares the ADIF file type
+  (`.adi`/`.adif`, plain text), so ⌘E's save panel keeps the `.adi` name
+  instead of appending `.txt`, and Finder labels the file
   "ADIF Amateur Radio Log".
 - **Documents**: each contest is a `.qplog` file (JSON) with undo. New logs
   auto-save into your logs folder on setup, then **every QSO change writes
@@ -779,6 +796,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `⌘B` | Toggle the band map window |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
+| `⌘.` | Dismiss the assisted-category warning for this sitting (it returns at Cabrillo export) |
 | `⇧⌘S` | Spot to the QSO Party Hub — yourself in Run, the call field in S&P (Return sends, Esc cancels) |
 | `⌘⇧D` | Contest Dashboard (season history + SQP Challenge) |
 | `⌘[` / `⌘]` | Dashboard: previous / next year |
@@ -1056,7 +1074,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1721 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1737 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1065,7 +1083,9 @@ spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, contacts
 from your own log reaching the band map (and never displacing somebody else's
 spot), what a spot sheet may offer as a county for any station, cluster
-history, the band map scale and its column stacking (including that every
+history, the assisted-category warning (the spot-use record on the log, its
+decode tolerance, and every string and show/hide rule — including that none
+of them names a party), the band map scale and its column stacking (including that every
 label-size preset still leaves room for two columns, so a pile-up never falls
 back to pushing labels off frequency), the band plan and its
 CW/phone crossovers, typed QSY commands, the key-monitor focus gate and its key
@@ -1094,6 +1114,16 @@ station profile, radio wiring and cluster history untouched.
 
 ## Data provenance
 
+- Cabrillo V3 header values — the `CATEGORY-*` enumerations (including
+  `CATEGORY-ASSISTED`), the `OPERATORS:` `@host` convention, and
+  `GRID-LOCATOR:` — from the WWROF Cabrillo specification
+  (wwrof.org/cabrillo, fetched 2026-07-28), banked in
+  [`docs/research/cabrillo_v3_headers.md`](docs/research/cabrillo_v3_headers.md)
+  with KE5CW's own January 2026 NAQP CW submission (N1MM) as the reference
+  log. The NAQP rule 5/6 → `CATEGORY-*` mapping (SO / SOA / M2, QRP / Low /
+  check log) is recorded in
+  [`docs/research/naqpcw_rules.md`](docs/research/naqpcw_rules.md) §11; team
+  competition stays out of the log by rule 14's own words.
 - NAQP CW + SSB: rules from NCJ's own "Rules: 2026 North American QSO Party
   (CW/SSB/RTTY)" (ncjweb.com, printed NCJ Oct/Nov 2025), the official paper
   log form whose Multiplier Check List is the country list, and the ARRL DXCC

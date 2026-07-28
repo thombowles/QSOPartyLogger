@@ -98,7 +98,11 @@ SSB). Six bands, no WARC, no VHF.
 
 Rule 5/6: SO, SOA, M2; QRP and Low power (over 100 W = check log). Team
 competition is registration-side only. M2's 10-minute band timer is not
-modeled (see CW §14).
+modeled (see CW §14). The Cabrillo `CATEGORY-*` mapping for the three
+classifications is identical to CW — the table added 2026-07-28 in
+`naqpcw_rules.md` §11 governs both, with `CATEGORY-MODE: SSB` the only
+difference (value authority:
+[`cabrillo_v3_headers.md`](cabrillo_v3_headers.md)).
 
 ## 12. Cabrillo `CONTEST:` header
 
