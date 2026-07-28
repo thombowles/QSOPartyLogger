@@ -75,5 +75,26 @@
 			</dict>
 		</dict>
 	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>ADIF Amateur Radio Log</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.b5n.qsopartylogger.adif</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>adi</string>
+					<string>adif</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -107,6 +107,19 @@ struct SetupSheet: View {
                             Text($0.rawValue).tag($0)
                         }
                     }
+                    // The consequence, stated by the control that causes it.
+                    // Orange only once it actually bites — this log already
+                    // has spots on the record that the claim now contradicts;
+                    // otherwise it is a plain statement of what the default
+                    // selection means.
+                    if station.categoryAssisted == .nonAssisted {
+                        Label(SpottingPolicy.setupCaution, systemImage: "exclamationmark.triangle.fill")
+                            .font(.caption)
+                            .foregroundStyle(document.log.usedSpots
+                                             ? AnyShapeStyle(Color.orange)
+                                             : AnyShapeStyle(HierarchicalShapeStyle.secondary))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                     Picker("Power", selection: $station.categoryPower) {
                         ForEach(StationProfile.CategoryPower.allCases, id: \.self) {
                             Text($0.rawValue).tag($0)
