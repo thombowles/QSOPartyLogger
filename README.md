@@ -539,6 +539,14 @@ parties, and the remaining engine gaps. Adding a party is governed by
   survive the current party's own exchange parser before it is offered.
   Pre-filled text is greyed until you type over it, and it withdraws itself if
   the call changes.
+- **Call history files, N1MM style — downloaded for you.** 45 of the 48
+  bundled parties have a community call history file on the N1MM site (the
+  VE2FK-maintained rosters of what each station sends); select the party and
+  the app finds the newest revision, verifies it, and offers what it knows the
+  moment you type a call — county, state, and in the name parties the
+  operator's name. It ranks below anything you copied yourself and above a
+  spot's claim, greys until accepted, and the entry row says
+  "log what you copy". See **Call history files** below.
 - **Copied, not lost**: a station you can hear but who cannot hear you takes an
   exchange to copy and gives no contact for it. Moving to the next spot clears
   the field so nothing is logged against the wrong station, and keeps what you
@@ -942,6 +950,46 @@ Node notes: verified end-to-end against `dxc.wa9pie.net:8000` (DXSpider),
 prints its banner, but never answers the login from this client — nothing
 sent to it gets a reply — so use another node if you hit that.
 
+## Call history files
+
+The N1MM community maintains per-contest **call history files** — rosters,
+mostly curated by VE2FK, of what each station sends: `AI4AL` is Etowah county,
+`K5ZD` is RANDY in OH, `K4ZGB` is a mobile. N1MM users download them by hand
+from [the listing](https://n1mmwp.hamdocs.com/mmfiles/categories/callhistory/);
+this app does it for you. Select a party and the newest revision for it is
+found, downloaded, verified and cached; from then on, typing or tuning to a
+call puts what the file knows in the entry row before the station has said
+anything.
+
+- **Automatic and current.** Revisions get fresh uploads days before each
+  contest, so no URL is bundled: the app searches the listing for the party's
+  stable file prefix (`QSOP_KS`, `NAQPCW`) and takes the newest matching
+  filename, checking at most once a day — or on the **Refresh** button in
+  Contest Setup, next to the cached revision and its date. The toggle beside
+  them turns the whole feature off.
+- **Verified before installed.** The files declare who they serve
+  (`# QSOPARTY KS`); a download that does not declare the active party — or
+  that comes back as the site's access-denied page, or empty — is discarded
+  and the previous copy stays in service. Failures are quiet and never touch
+  the entry path.
+- **A hint, never authority.** Every offered value must survive the party's
+  own exchange parser for *your* operating role first — the home-state token,
+  a county that does not exist, a state an out-of-state entrant cannot log,
+  all withheld. Offers rank below your own log and archive and above a spot's
+  claim, grey out until you accept or type over them, and the row carries the
+  files' own advice: **log what you copy.** Nothing from a call history file
+  ever reaches the score.
+- **Names too.** In NAQP and MNQP the file's name fills the Name field the
+  same provisional way, and what a station actually sent you earlier in the
+  log outranks the file.
+- The three bundled parties with no file upstream (Arizona, MDC, Vermont)
+  simply have no row in Contest Setup; the covered set is pinned by test and
+  regenerated per season with
+  [`docs/research/gen_callhistory.py`](docs/research/gen_callhistory.py).
+
+Cached files live in `~/Library/Application Support/QSOPartyLogger/CallHistory/`,
+one per party, beside a sidecar recording the revision and dates.
+
 ## Adding a QSO party (no code)
 
 Drop a JSON file in `~/Library/Application Support/QSOPartyLogger/Parties/`
@@ -1043,9 +1091,13 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1691 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1750 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
+call history files (the N1MM text format against two complete real files,
+the listing and download-form pages against captured HTML, the store, the
+scripted download client including every keep-the-cache failure path, and
+the prefill priority chain with its name half),
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, contacts
 from your own log reaching the band map (and never displacing somebody else's
@@ -1079,6 +1131,17 @@ station profile, radio wiring and cluster history untouched.
 
 ## Data provenance
 
+- Call history: file format from the N1MM Logger+ documentation
+  (n1mmwp.hamdocs.com/setup/call-history/, fetched 2026-07-28); the 45-party
+  prefix mapping generated by
+  [`docs/research/gen_callhistory.py`](docs/research/gen_callhistory.py) from
+  the full 504-file listing scraped the same day, each mapped file downloaded
+  and its own `# QSOPARTY` declaration verified (whitespace-blind — Ohio's
+  writes `QSO PARTY OH`). Banked inventory, per-party verification and
+  mechanics in [`docs/research/n1mm_callhistory.md`](docs/research/n1mm_callhistory.md).
+  **Hint data only, never rule authority** (constitution Article 1): nothing
+  from these files reaches scoring, and every value is re-parsed by the
+  party's own rules before being offered.
 - NAQP CW + SSB: rules from NCJ's own "Rules: 2026 North American QSO Party
   (CW/SSB/RTTY)" (ncjweb.com, printed NCJ Oct/Nov 2025), the official paper
   log form whose Multiplier Check List is the country list, and the ARRL DXCC
