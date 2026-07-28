@@ -40,6 +40,60 @@ final class PartyNoticeTests: XCTestCase {
         }
     }
 
+    /// The identity regression, and the one that actually loses a line on
+    /// screen. Two sibling `ForEach`es in one `Form` section each identified
+    /// their lines by offset, so the row id `0` existed twice; on a re-diff the
+    /// collision resolved to one element and the first orange bullet came back
+    /// grey. Every row the sheet draws must be distinguishable from every other.
+    func testEveryRowIdIsUniqueAcrossTheWholeNotice() {
+        for party in parties {
+            let ids = PartyNotice(party: party).rows.map(\.id)
+            XCTAssertEqual(
+                Set(ids).count, ids.count,
+                "\(party.id): two rows share an identity — \(ids.sorted())"
+            )
+        }
+    }
+
+    /// Missouri is the reported case: three orange lines, then one grey one.
+    /// The line that used to vanish is `rows[1]`, and it is orange.
+    func testMissouriDrawsEveryLineOnceInOrder() throws {
+        let rows = PartyNotice(party: try party("moqp")).rows
+
+        XCTAssertEqual(rows.count, 6)
+        XCTAssertEqual(rows.map(\.tone), [
+            .warning, .warning, .warning, .warning, .informational, .informational,
+        ])
+        XCTAssertEqual(rows.map(\.id), [
+            "warning.heading", "warning.0", "warning.1", "warning.2",
+            "informational.heading", "informational.0",
+        ])
+        XCTAssertEqual(rows[0].text, "3 things this app cannot score for you here.")
+        XCTAssertEqual(rows[1].text, "The 40 and 80 m daytime bonus is not applied.")
+        XCTAssertEqual(rows[4].text, "1 note on how this app handles this party.")
+        XCTAssertTrue(
+            rows[5].text.hasPrefix("The county-line cap"),
+            "got: \(rows[5].text)"
+        )
+        // The advisory line is drawn once, not once per colliding slot.
+        XCTAssertEqual(rows.filter { $0.text == rows[5].text }.count, 1)
+    }
+
+    /// Only headings carry an icon, and every group contributes exactly one.
+    func testHeadingRowsAreExactlyTheGroupHeadings() {
+        for party in parties {
+            let notice = PartyNotice(party: party)
+            let headings = notice.rows.filter { $0.systemImage != nil }
+            XCTAssertEqual(headings.map(\.text), notice.groups.map(\.header))
+            XCTAssertEqual(headings.map(\.tone), notice.groups.map(\.tone))
+            XCTAssertEqual(
+                notice.rows.filter { $0.systemImage == nil }.map(\.text),
+                notice.groups.flatMap(\.lines),
+                "\(party.id): the bullets drawn are not the lines the groups hold"
+            )
+        }
+    }
+
     /// 19 of 46 bundled parties carry both kinds, so the two-group case is not
     /// an edge case — it is what most warned-about parties look like. A change
     /// here means a party's caveats were reclassified.

@@ -981,6 +981,13 @@ for you to infer, and the icon says which is which without relying on colour at
 all. The grouping is `PartyNotice`, tested in
 [`Tests/UI/PartyNoticeTests.swift`](Tests/UI/PartyNoticeTests.swift).
 
+The whole notice is drawn from **one** `ForEach` over `PartyNotice.rows`, whose
+identities are namespaced by tone. Two sibling `ForEach`es share a row-identity
+space inside a `Form` section, so identifying each group's lines by offset gave
+the section two rows called `0` — and on a re-diff, which is what opening *Rules
+provenance* forces, the first orange bullet came back carrying the grey line's
+text and colour while its own line vanished.
+
 ## Adding a radio
 
 Implement `RadioDriver` (see `Sources/Hardware/Radio/ElecraftK3Driver.swift`
@@ -1005,7 +1012,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1642 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1645 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
