@@ -706,6 +706,12 @@ it and `F1`–`F8` do not transmit, so revising F2 and pressing it never keys th
 old message. `Esc` still aborts CW instantly in either place (Article 11). With
 two logs open, the F-keys act on the one you are typing in.
 
+Setup opens with the cursor already on the first field that still needs an
+answer — the callsign when it is blank, otherwise your location. Switching
+*Operating from* between inside and outside moves the cursor to the field that
+toggle just revealed, so choosing where you are operating from never needs the
+mouse.
+
 ## K3 wiring for direct CW keying
 
 1. Connect the K3's RS-232 port (or KUSB adapter) to the Mac.

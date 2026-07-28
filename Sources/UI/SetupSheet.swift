@@ -14,6 +14,10 @@ struct SetupSheet: View {
     @State private var selectedCounties: [String] = []
     @State private var countySearch = ""
 
+    @FocusState private var focused: Field?
+
+    private enum Field: Hashable { case callsign, stateToken, countySearch }
+
     private var parties: [PartyDefinition] {
         PartyCatalog.allParties()
     }
@@ -69,6 +73,7 @@ struct SetupSheet: View {
                     TextField("Callsign", text: $station.callsign)
                         .textCase(.uppercase)
                         .font(.body.monospaced())
+                        .focused($focused, equals: .callsign)
                     TextField("Name", text: $station.name)
                     TextField("Email", text: $station.email)
                     TextField("Address", text: $station.address)
@@ -109,9 +114,23 @@ struct SetupSheet: View {
                         if isInState {
                             countyPicker(party)
                         } else {
-                            TextField("State / Province / DX", text: $stateToken)
-                                .textCase(.uppercase)
-                                .frame(width: 160)
+                            // LabeledContent, not the TextField's own title. In
+                            // a grouped Form the title is pulled out into the
+                            // leading label column, so a .frame(width:) on the
+                            // field sizes the label *and* the field together --
+                            // which is what collapsed this row: "State /
+                            // Province / DX" wrapped to three lines and left a
+                            // borderless sliver with nothing on screen to aim
+                            // at. Splitting them means the width applies to the
+                            // control alone, and .textCase stops leaking into
+                            // the label and shouting it in caps.
+                            LabeledContent("State / DX") {
+                                TextField("", text: $stateToken)
+                                    .textFieldStyle(.roundedBorder)
+                                    .textCase(.uppercase)
+                                    .focused($focused, equals: .stateToken)
+                                    .frame(width: 120)
+                            }
                             Text("Two-letter state or province, or DX.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
@@ -133,7 +152,36 @@ struct SetupSheet: View {
             .padding()
         }
         .frame(width: 560, height: 640)
-        .onAppear(perform: load)
+        // Land on whatever still needs an answer, rather than opening with no
+        // focus at all and making the operator hunt for the field with a mouse.
+        .onAppear {
+            load()
+            focused = initialFocus
+        }
+        // Flipping to "Outside" reveals an empty field that Save is gated on;
+        // flipping to "Inside" reveals a county list nobody can filter without
+        // the cursor in the search box. Either way the work is in the field the
+        // toggle just exposed, so put the cursor there.
+        .onChange(of: isInState) { _, nowInState in
+            if nowInState {
+                focused = selectedCounties.isEmpty ? .countySearch : nil
+            } else {
+                focused = stateToken.isEmpty ? .stateToken : nil
+            }
+        }
+    }
+
+    /// Callsign first when it is missing — nothing can be saved without it.
+    /// Otherwise the location token, which is the other half of `canSave` and
+    /// the field most likely to be blank on a freshly opened log.
+    private var initialFocus: Field {
+        if station.callsign.trimmingCharacters(in: .whitespaces).isEmpty {
+            return .callsign
+        }
+        if !isInState && stateToken.isEmpty {
+            return .stateToken
+        }
+        return isInState ? .countySearch : .stateToken
     }
 
     /// What this app will and will not do for the selected party.
@@ -220,6 +268,7 @@ struct SetupSheet: View {
                 }
             }
             TextField("Search counties…", text: $countySearch)
+                .focused($focused, equals: .countySearch)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 118), spacing: 4)], spacing: 4) {
                     ForEach(filteredCounties(party)) { county in
