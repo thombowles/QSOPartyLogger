@@ -88,6 +88,41 @@ final class UpcomingContestsTests: XCTestCase {
         XCTAssertEqual(list.filter { $0.name == "New Jersey QSO Party" }.count, 1)
     }
 
+    /// The challenge's approved list spells two contests differently than
+    /// their sponsors do: "Maryland/DC QSO Party" for the sponsor's
+    /// "Maryland-DC QSO Party", "Washington State Salmon Run" for "Washington
+    /// Salmon Run". Both spellings are sourced — the site's list and the
+    /// sponsor's own rules — so neither may be hand-edited into agreement, and
+    /// dedup by name alone listed each of those contests twice. The calendar
+    /// row already carries the bundled party's id; that is what has to claim it.
+    ///
+    /// **Computed, not named.** Every id-mapped contest is checked, so a
+    /// spelling that diverges in some future calendar is caught for free.
+    func testCalendarNeverAddsAPhantomRowForABundledParty() throws {
+        let scheduled = Set(parties.filter { !($0.schedule ?? []).isEmpty }.map(\.id))
+        let mapped = calendar.approvedContests.filter { $0.partyID.map(scheduled.contains) ?? false }
+        XCTAssertFalse(mapped.isEmpty, "the calendar maps bundled parties by id")
+
+        let list = upcoming(now: "2026-01-01T00:00:00Z")   // whole season ahead
+        let byName = Dictionary(grouping: list, by: \.name)
+
+        for contest in mapped {
+            let party = try XCTUnwrap(parties.first { $0.id == contest.partyID })
+            let rows = byName[contest.name, default: []]
+                + (contest.name == party.name ? [] : byName[party.name, default: []])
+            XCTAssertEqual(
+                rows.count, 1,
+                "\(party.name) (\(party.id)) should list once, got \(rows.map(\.name))"
+            )
+            XCTAssertEqual(rows.first?.partyID, party.id)
+            XCTAssertEqual(rows.first?.dateSource, .partyDefinition)
+        }
+
+        // `UpcomingContest.id` is the name — a repeat would also collide in
+        // any SwiftUI ForEach over this list.
+        XCTAssertEqual(Set(list.map(\.id)).count, list.count, "row ids must be unique")
+    }
+
     func testEnteredThisYearComesFromRecords() throws {
         var log = ContestLog(partyID: "ksqp")
         log.station.callsign = "KE5CW"
