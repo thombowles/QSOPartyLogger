@@ -101,6 +101,13 @@ final class AppSettings {
         didSet { defaults.set(prefillExchangeFromSpots, forKey: "prefillExchangeFromSpots") }
     }
 
+    /// Download the active party's N1MM community call history file and offer
+    /// what it says a station sends. On by default, like the hub: the file is
+    /// fetched at party selection and at most once a day, never mid-contact.
+    var callHistoryEnabled: Bool {
+        didSet { defaults.set(callHistoryEnabled, forKey: "callHistoryEnabled") }
+    }
+
     /// Feeds to show on the band map; empty means every feed.
     var spotSources: Set<SpotSource> {
         didSet { defaults.set(spotSources.map(\.rawValue), forKey: "spotSources") }
@@ -259,6 +266,7 @@ final class AppSettings {
         hubSpotsEnabled = defaults.object(forKey: "hubSpotsEnabled") as? Bool ?? true
         prefillExchangeFromSpots =
             defaults.object(forKey: "prefillExchangeFromSpots") as? Bool ?? true
+        callHistoryEnabled = defaults.object(forKey: "callHistoryEnabled") as? Bool ?? true
         spotSources = Set((defaults.stringArray(forKey: "spotSources") ?? [])
             .compactMap(SpotSource.init(rawValue:)))
         followBandPlan = defaults.object(forKey: "followBandPlan") as? Bool ?? true

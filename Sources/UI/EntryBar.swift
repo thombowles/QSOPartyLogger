@@ -49,7 +49,8 @@ struct EntryBar: View {
                     field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
                 }
                 if party?.exchangeIncludesName ?? false {
-                    field("Name", text: $entry.nameRcvd.uppercasing, width: 100, focusTag: .nameRcvd)
+                    field("Name", text: $entry.nameTyped.uppercasing, width: 100,
+                          focusTag: .nameRcvd, provisional: entry.nameIsAutoFilled)
                 }
                 field(
                     exchangeLabel,
@@ -95,6 +96,14 @@ struct EntryBar: View {
                       systemImage: "dot.radiowaves.left.and.right")
                     .font(.callout)
                     .foregroundStyle(.orange)
+            } else if entry.exchangeIsAutoFilled, entry.exchangeOrigin == .callHistory {
+                // Quieter than the spot warning on purpose: the file is a
+                // curated roster, not a stranger's live claim — but it is
+                // still last season's data, and what is heard always wins.
+                Label("From the call history file — log what you copy",
+                      systemImage: "text.book.closed")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
             }
         }
         .onChange(of: focus) { _, landed in

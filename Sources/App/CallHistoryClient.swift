@@ -67,6 +67,12 @@ final class CallHistoryClient {
         self.fetcher = fetcher
     }
 
+    /// What the setup sheet shows for a party: the cached revision and its
+    /// dates, independent of whichever party this client last refreshed.
+    func cachedMeta(partyID: String) -> CallHistoryStore.Meta? {
+        store.loadMeta(partyID: partyID)
+    }
+
     /// The cached index for a party, published immediately — what a party
     /// selection calls before any network is considered.
     func publishCached(party: PartyDefinition) {
