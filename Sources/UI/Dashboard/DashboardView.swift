@@ -32,7 +32,10 @@ struct DashboardView: View {
             VStack(alignment: .leading, spacing: 18) {
                 summaryCards
                 if let standing = model.standing {
-                    DashboardChallengeSection(standing: standing)
+                    DashboardChallengeSection(
+                        standing: standing,
+                        includesSplitEntry: model.standingIncludesSplitEntry
+                    )
                 }
                 DashboardContestsSection(model: model)
                 DashboardUpcomingSection(model: model)
