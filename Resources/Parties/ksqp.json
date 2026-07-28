@@ -490,5 +490,9 @@
   "hubSpots": {
     "tableURL": "http://qsopartyhub.com/ksqp-table.php",
     "postURL": "http://qsopartyhub.com/ksqp-spots.php"
+  },
+  "callHistory": {
+    "filePrefix": "QSOP_KS",
+    "token": "QSOPARTY KS"
   }
 }

@@ -710,5 +710,9 @@
       "summary": "No maximum for simultaneous counties is stated; the schema default of four ships.",
       "detail": "NO STATED MAXIMUM FOR SIMULTANEOUS COUNTIES. The sponsor defers to MARAC's county-hunter rules and its worked example shows two (KU8E/HARR/MUSC), so the schema default of 4 ships - the choice that never refuses a legal exchange mid-contest. Both are re-checked in the late re-verification pass."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_GA",
+    "token": "QSOPARTY GA"
+  }
 }

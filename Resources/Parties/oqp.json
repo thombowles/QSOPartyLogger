@@ -307,5 +307,9 @@
       "summary": "Whether 60 m is legal is ambiguous; eight bands ship without it.",
       "detail": "IS 60 M LEGAL? 'All Bands 160-2 meters with the exception of the WARC bands' puts 60 m inside the range and 60 m is not strictly WARC, but it is channelised in Canada, absent from the sponsor's suggested frequencies and universally excluded from contests. Eight bands ship without it; North Dakota's wording has the identical ambiguity and was resolved the same way."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_ON",
+    "token": "QSOPARTY ON"
+  }
 }

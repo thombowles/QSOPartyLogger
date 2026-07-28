@@ -417,5 +417,9 @@
       "summary": "County lines are unmentioned in the rules; a two-county entry is refused on the reading that silence is not permission.",
       "detail": "above, all consequences of FT4/8 being a first-class mode here; limitation 1 changes the score for every entrant who works any FT4/8. (2) COUNTY LINES ARE NOT MENTIONED ANYWHERE in the rules - neither permitted nor forbidden - so a two-county entry is rejected here on the reading that silence is not permission, and because the Portable/Mobile scoring model reads as one county at a time. (3) No rule states whether stations outside Mississippi may work only Mississippi stations; the objectives and the multiplier list both point that way, and the restriction ships ON as for six other parties, so a stray non-MS contact is visibly flagged NO CREDIT. Confirm all three with W5XX at ARRL.NET."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_MS",
+    "token": "QSOPARTY MS"
+  }
 }

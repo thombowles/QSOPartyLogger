@@ -342,5 +342,9 @@
       "summary": "CW and digital are one mode for the sponsor and two here, which moves the score.",
       "detail": "CW AND DIGITAL ARE ONE MODE FOR THE SPONSOR AND TWO FOR THIS APP, AND HERE THAT MOVES THE SCORE. The rules say fixed stations 'may be worked once on CW/Digital and once on Phone PER BAND' and that 'CW/Digital and Phone contacts count as separate multipliers' - a TWO-WAY split, where this app keys on three mode classes. So working one station on CW and again on RTTY on the same band shows here as two valid QSOs and TWO MULTIPLIERS, while the sponsor counts one of each. Illinois has the identical rule, but there it touched only dupe accounting because ILQP counts multipliers once overall; LOUISIANA COUNTS THEM PER BAND AND MODE, so the over-count reaches the final score. If you work any station on both CW and a digital mode on the same band, delete the second contact before submitting. Cabrillo CONTEST value LA-QSO-PARTY per the WA7BNM registry - the rules require Cabrillo but print no header token. Parishes are 64 with MIXED 3- AND 4-CHARACTER codes: five are three characters, all contractions of long names - EBR East Baton Rouge, WBR West Baton Rouge, PCP Pointe Coupee, SJB St. John Baptist and SMT St. Martin. THERE ARE NINE 'St.' PARISHES AND NO TWO FOLLOW THE SAME PATTERN; watch SMT St. Martin against SMAR St. Mary in particular, three characters against four for two parishes three letters apart. Note also the East/West triples - EBR/WBR, ECAR/WCAR, EFEL/WFEL - of which only the Baton Rouges contract, and JEFF Jefferson against JFDV Jefferson Davis. The sponsor prints 'St. John Baptist', dropping the 'the' of the official St. John the Baptist Parish; it ships as printed."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_LA",
+    "token": "QSOPARTY LA"
+  }
 }

@@ -233,5 +233,9 @@
       "summary": "A DXCC prefix that equals a state or province code is read as that state, which can leave the 10-DXCC allowance under-used.",
       "detail": ", and it matters more here than anywhere else because this is the only party where DX prefixes carry multiplier weight: a real DXCC prefix that happens to equal a US state or Canadian province code is read as that state or province, not as DX. PA (Netherlands) is credited as Pennsylvania, OK (Slovakia) as Oklahoma, LA (Norway) as Louisiana, ON (Belgium) as Ontario. That is the same resolution sponsors' log checkers apply, but it means a WA station working those entities sees them as state/province multipliers rather than DXCC ones, which can leave the 10-DXCC allowance under-used. Not modeled: the single-mode-entry restriction (contacts on other modes earning no credit) is an entry-class matter this app does not track; mobile and expedition entrants counting multipliers only once across all counties activated, which matches the engine's behaviour anyway; and the requirement that claimed DXCC prefixes match the current ARRL DXCC Entities List."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_WA",
+    "token": "QSOPARTY WA"
+  }
 }

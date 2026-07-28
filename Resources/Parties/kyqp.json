@@ -564,5 +564,9 @@
       "summary": "County-line permission is per category in the rules and per party in this app.",
       "detail": "COUNTY-LINE PERMISSION IS PER CATEGORY AND THE SCHEMA IS PER PARTY. 'KY Fixed stations on a county line must choose a KY county... No multiple county exchanges', while KY Mobile and Expedition stations may send several. maxSimultaneousCounties is one number for the whole party, so the schema default of 4 ships - permissive for mobiles, which is right, and permissive for fixed stations, which the sponsor forbids. Refusing a legal mobile exchange would be the worse failure."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_KY",
+    "token": "QSOPARTY KY"
+  }
 }

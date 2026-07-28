@@ -261,5 +261,9 @@
       "summary": "Log United Nations HQ as 4U1 - the checklist's '4U1/u' cannot be typed because '/' separates county lines.",
       "detail": "THE CHECKLIST TOKEN '4U1/u' SHIPS AS 4U1, because '/' is reserved for county-line entry and cannot be typed in the exchange field. Log United Nations HQ as 4U1; the other 4U1 station (4U1WB, World Bank, Washington DC) sends DC and is unaffected."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "NAQPCW",
+    "token": "NAQPCW"
+  }
 }

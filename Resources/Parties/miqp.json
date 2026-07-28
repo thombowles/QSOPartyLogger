@@ -397,5 +397,9 @@
       "summary": "Partial only because the 2026 rules came from an archive rather than a live page.",
       "detail": "every modelled rule is stated, the changed sentence is settled by a second source, and the date formula is confirmed against the sponsor's own future date. It is partial only because the 2026 rules came from an archive rather than a live page."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_MI",
+    "token": "QSOPARTY MI"
+  }
 }

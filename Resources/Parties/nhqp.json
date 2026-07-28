@@ -105,5 +105,9 @@
       "summary": "Whether NH counts itself as a multiplier, and whether outside stations may work only NH, are both inferred.",
       "detail": "(why this is partial): (1) No rule states whether stations outside NH may work only NH stations. The Objective reads 'Stations outside of NH contact as many NH stations as possible' — an aim, not a limit — and the rules are otherwise silent. Shipped with the restriction ON for consistency with every other bundled party, and because a stray non-NH contact is then visibly flagged NO CREDIT rather than silently adding points. (2) Whether NH itself counts as a state multiplier for NH stations is not stated, and unlike KSQP/COQP/IAQP there is no in-state maximum to settle it by arithmetic; shipped as NOT counting, so as not to credit a multiplier the sponsor never described. Confirm both with the sponsor before submitting a log."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_NH",
+    "token": "QSOPARTY NH"
+  }
 }

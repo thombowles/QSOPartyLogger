@@ -352,5 +352,9 @@
       "summary": "The out-of-state restriction is implied by the rules rather than stated.",
       "detail": "IS THE OUT-OF-STATE RESTRICTION STATED OR ONLY IMPLIED? The Object is asymmetric - non-Florida amateurs are directed at Florida stations while 'Florida operators can work anyone outside and within Florida' - and non-Florida entrants' only multipliers are Florida counties, but no sentence forbids a non-Florida station from claiming points for another non-Florida contact. outStateWorksHomeStationsOnly ships true as the reading every FQP summary takes; worth confirming with the sponsor before 2027."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_FL",
+    "token": "QSOPARTY FL"
+  }
 }

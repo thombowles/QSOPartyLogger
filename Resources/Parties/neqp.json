@@ -513,5 +513,9 @@
       "summary": "The rare-grid bonus is not applied.",
       "detail": "THE RARE GRID BONUS IS NOT MODELLED: it pays on activating one of three named grid squares (DN91CE, DN91DE, DN91EE) and the app has no notion of the operator's grid; the rule's own worked example is internally muddled too. The Cabrillo CONTEST header is the one thing not from the sponsor - the rules demand Cabrillo without naming it - so NE-QSO-PARTY comes from WA7BNM under Article 1's exception. SPONSOR MISSPELLING SHIPPED AS PRINTED: CUMI is 'Cumming' where Nebraska's county is Cuming, one m. The county list is the sponsor's own PDF, which the rules describe candidly - 'It is the same list used in 2016' - so its 2022 file date is intent, not staleness."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_NE",
+    "token": "QSOPARTY NE"
+  }
 }

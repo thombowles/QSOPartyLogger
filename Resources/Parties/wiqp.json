@@ -388,5 +388,9 @@
       "summary": "33 cm and 23 cm are plausibly legal here and cannot be logged at all.",
       "detail": "the fractional power multiplier, which changes the final score for every entrant who is not running high power. (2) and (3) - the two bonus rules above, each of which over-credits a narrow case. None of the three is a rule in doubt; all three are missing app features. Note also that the sponsor's do-not-use list names 906.50 and 1294.50 MHz, so 33 cm and 23 cm contacts are plausibly legal here and cannot be logged at all - the same gap NYQP has."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_WI",
+    "token": "QSOPARTY WI"
+  }
 }

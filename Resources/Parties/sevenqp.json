@@ -1379,5 +1379,9 @@
       "summary": "No maximum for simultaneous counties is stated; the schema default of four ships.",
       "detail": "NO MAXIMUM IS STATED FOR SIMULTANEOUS COUNTIES. The rules require county-line operation within 500 feet of the line and print a two-county example (UTRIC/IDBEA), but cap nothing; the schema default of 4 ships, which never refuses a legal exchange. NOTE ALSO the sponsor's county-line shorthand 'ORDES/JEF', where the second county reuses the first's state - this app requires both codes in full (ORDES/ORJEF), which is a keystroke difference and not a scoring one. The Cabrillo CONTEST header is the one thing not from the sponsor - the rules demand Cabrillo without naming it - so 7QP comes from WA7BNM under Article 1's exception. THE SPOT HUB DOES NOT SERVE THIS PARTY: 7qp-table.php 302-redirects to a login page, the same trap California's qp-table.php sets, so hubSpots is null."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_IN7QPNE_DE",
+    "token": "QSOPARTY 7QP"
+  }
 }

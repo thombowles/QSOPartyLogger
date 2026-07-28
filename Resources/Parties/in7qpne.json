@@ -2207,5 +2207,9 @@
       "summary": "Bands and modes are the union of four contests, so a QSO one member would ignore can still be logged.",
       "detail": "the band and mode lists are unions too, so a QSO can be logged that one member contest would not count - a digital QSO counts for the 7th Call Area and Delaware but not for Indiana or New England, and 160 m counts for the 7th Call Area but for none of the others. The sponsors' own instruction covers this: QSOs not applicable to a contest are ignored by that contest."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_IN7QPNE_DE",
+    "token": "QSOPARTY IN7QPNE"
+  }
 }

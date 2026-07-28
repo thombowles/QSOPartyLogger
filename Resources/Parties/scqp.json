@@ -280,5 +280,9 @@
       "summary": "The rules cap no county-line count; this app’s default of four ships.",
       "detail": "(why this is partial): (1) The county-line limit. The rules permit county-line contacts and mandate only how they are logged - '\"County-line\" contacts must appear in the log as separate contacts' - but cap nothing, not two and not four. Shipped on this app's own maximum of four, which is a default rather than a sponsor's number; inventing a cap of two would be no better founded and would reject a legal entry. (2) The mobile/expedition activation multiplier above, which is a missing app feature rather than a rule in doubt. Confirm (1) with the SCQP Team via scqso.com before submitting a county-line log."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_SC",
+    "token": "QSOPARTY SC"
+  }
 }

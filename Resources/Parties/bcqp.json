@@ -270,5 +270,9 @@
       "summary": "Whether British Columbia counts as its own province multiplier is inferred — shipped as not counting.",
       "detail": "(why this is partial): (1) Whether British Columbia itself counts as a province multiplier for BC entrants. THREE sponsor documents list BC among the countable provinces - the rules' enumeration, the summary sheet's bracketed list and the FAQ - but NO BC STATION CAN EVER SEND THE TOKEN 'BC', because the exchange from British Columbia is always a district, and the FAQ tells an operator who does not know their district to look it up rather than fall back to the province. Shipped as NOT counting, on the reading that the enumerations are reference boilerplate listing the standard 13 with their prefixes; BC is accordingly not a loggable token here either. If that reading is wrong a BC entrant is one multiplier short per band per mode. (2) The ADIF county-field limitation above. Confirm (1) with the Contest Coordinator at va7bec@gmail.com before submitting a log."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_BC",
+    "token": "QSOPARTY BC"
+  }
 }

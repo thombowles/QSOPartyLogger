@@ -624,5 +624,9 @@
       "summary": "In-state rovers are short the self-activation multiplier for each county or city they work ten stations from.",
       "detail": "Virginia mobiles, rovers and expeditions may also claim a county or city as a MULTIPLIER when they work ten or more different stations from it 'if not otherwise worked'; this app has no self-activation multiplier, so an in-state roving entrant is short by that count. Out-of-state entrants are unaffected. Satellite contacts are allowed and this app has no concept of them, though a satellite QSO still lands on a band it knows. Cabrillo CONTEST value VA-QSO-PARTY per the WA7BNM registry - the rules print no header token and give no Cabrillo example."
     }
-  ]
+  ],
+  "callHistory": {
+    "filePrefix": "QSOP_VA",
+    "token": "QSOPARTY VA"
+  }
 }
