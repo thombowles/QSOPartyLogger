@@ -8,7 +8,7 @@ struct EntryBar: View {
     let onLog: () -> Void
 
     enum Field: Hashable {
-        case call, rstSent, rstRcvd, serialSent, serialRcvd, exchange
+        case call, rstSent, rstRcvd, serialSent, serialRcvd, nameRcvd, exchange
 
         /// Where Space moves next, cycling back to the call from the exchange.
         /// Call jumps straight to the exchange because the RSTs are pre-filled
@@ -18,14 +18,17 @@ struct EntryBar: View {
         ///
         /// A received QSO number is the one numeric field an operator *must*
         /// type every contact, so where a party exchanges one, Call lands there
-        /// first and it leads on to the exchange.
-        func next(includesRST: Bool, includesSerial: Bool = false) -> Field {
+        /// first and it leads on to the exchange. A received name is the same
+        /// kind of field, and it arrives before the location on the air
+        /// ("TOM TX"), so it sits between the two.
+        func next(includesRST: Bool, includesSerial: Bool = false, includesName: Bool = false) -> Field {
             switch self {
-            case .call: includesSerial ? .serialRcvd : .exchange
+            case .call: includesSerial ? .serialRcvd : (includesName ? .nameRcvd : .exchange)
             case .rstSent: includesRST ? .rstRcvd : .exchange
-            case .rstRcvd: includesSerial ? .serialRcvd : .exchange
+            case .rstRcvd: includesSerial ? .serialRcvd : (includesName ? .nameRcvd : .exchange)
             case .serialSent: .serialRcvd
-            case .serialRcvd: .exchange
+            case .serialRcvd: includesName ? .nameRcvd : .exchange
+            case .nameRcvd: .exchange
             case .exchange: .call
             }
         }
@@ -44,6 +47,9 @@ struct EntryBar: View {
                 if party?.exchangeIncludesSerial ?? false {
                     field("Ser S", text: $entry.serialSent, width: 60, focusTag: .serialSent)
                     field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
+                }
+                if party?.exchangeIncludesName ?? false {
+                    field("Name", text: $entry.nameRcvd.uppercasing, width: 100, focusTag: .nameRcvd)
                 }
                 field(
                     exchangeLabel,
@@ -122,7 +128,7 @@ struct EntryBar: View {
 
     private var canLog: Bool {
         if case .valid = entry.exchangeStatus, !entry.callNormalized.isEmpty {
-            return true
+            return !entry.missingName(party: party)
         }
         return false
     }
@@ -182,7 +188,8 @@ struct EntryBar: View {
                 .onKeyPress(.space) {
                     focus = focusTag.next(
                         includesRST: party?.exchangeIncludesRST ?? true,
-                        includesSerial: party?.exchangeIncludesSerial ?? false
+                        includesSerial: party?.exchangeIncludesSerial ?? false,
+                        includesName: party?.exchangeIncludesName ?? false
                     )
                     return .handled
                 }

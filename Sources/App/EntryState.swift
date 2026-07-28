@@ -8,6 +8,10 @@ final class EntryState {
     var rstSent = ""
     var rstRcvd = ""
     var serialRcvd = ""
+    /// The name copied from the other station, for parties whose exchange
+    /// carries one (NAQP, MNQP). The *sent* name is not entry state at all:
+    /// it is the log's contest-long setting, typed once in Contest Setup.
+    var nameRcvd = ""
 
     var exchange = ""
 
@@ -57,10 +61,12 @@ final class EntryState {
     struct Pending: Equatable {
         var exchange: String
         var serialRcvd: String
+        var nameRcvd: String = ""
 
         var isEmpty: Bool {
             exchange.trimmingCharacters(in: .whitespaces).isEmpty
                 && serialRcvd.trimmingCharacters(in: .whitespaces).isEmpty
+                && nameRcvd.trimmingCharacters(in: .whitespaces).isEmpty
         }
     }
 
@@ -70,6 +76,7 @@ final class EntryState {
     func restorePending(_ pending: Pending) {
         exchange = pending.exchange
         serialRcvd = pending.serialRcvd
+        nameRcvd = pending.nameRcvd
         exchangeIsAutoFilled = false
     }
 
@@ -131,6 +138,15 @@ final class EntryState {
         guard party?.exchangeIncludesSerial ?? false else { return (nil, nil) }
         return (Int(serialSent.trimmingCharacters(in: .whitespaces)),
                 Int(serialRcvd.trimmingCharacters(in: .whitespaces)))
+    }
+
+    /// Whether this party requires a received name the operator has not
+    /// copied yet. A name party will not log without one — the sponsors count
+    /// only a "complete, correctly copied" exchange, and a nameless row is
+    /// the blank ex1 column that blocks submission.
+    func missingName(party: PartyDefinition?) -> Bool {
+        (party?.exchangeIncludesName ?? false)
+            && nameRcvd.trimmingCharacters(in: .whitespaces).isEmpty
     }
 
     /// Re-validate the exchange and refresh dupe/new-mult hints.
@@ -209,6 +225,7 @@ final class EntryState {
         // contact, not this one.
         serialOverride = nil
         serialRcvd = ""
+        nameRcvd = ""
         exchange = ""
         exchangeIsAutoFilled = false
         exchangeStatus = .idle

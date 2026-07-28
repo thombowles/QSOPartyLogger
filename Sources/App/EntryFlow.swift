@@ -169,6 +169,7 @@ final class EntryFlow {
             rst: entry.rstSent.isEmpty ? context.modeClass.defaultRST : entry.rstSent,
             exchange: document.log.myLocation.displayText,
             serial: entry.serialSent,
+            name: document.log.exchangeName.uppercased(),
             cutNumbers: context.keying.cutNumbers && context.modeClass == .cw,
             cutOne: context.keying.cutOne
         )
@@ -273,6 +274,12 @@ final class EntryFlow {
         guard case .valid(let theirLocs) = entry.exchangeStatus,
               !entry.callNormalized.isEmpty else { return .nothing }
 
+        // A name party's exchange is not complete without the name — logging
+        // a nameless row is the blank ex1 column that blocks submission, and
+        // the ESM path must not key a report for a contact that did not
+        // happen.
+        guard !entry.missingName(party: party) else { return .nothing }
+
         let myLocs = document.log.myLocation.sentExchanges.filter { !$0.isEmpty }
         guard !myLocs.isEmpty else { return .needsSetup }
 
@@ -284,6 +291,15 @@ final class EntryFlow {
             ? (serials.sent ?? document.log.nextSerial)
             : nil
 
+        // One contact, one name each way. The sent name is the log's
+        // contest-long setting; the row records what actually went out.
+        let sentName = party.exchangeIncludesName
+            ? normalizedName(document.log.exchangeName)
+            : nil
+        let rcvdName = party.exchangeIncludesName
+            ? normalizedName(entry.nameRcvd)
+            : nil
+
         let rows = CountyLineExpander.expand(
             entry: .init(
                 call: entry.callNormalized,
@@ -291,6 +307,8 @@ final class EntryFlow {
                 rstRcvd: entry.rstRcvd.isEmpty ? context.modeClass.defaultRST : entry.rstRcvd,
                 serialSent: sentSerial,
                 serialRcvd: serials.rcvd,
+                nameSent: sentName,
+                nameRcvd: rcvdName,
                 band: context.band,
                 modeClass: context.modeClass,
                 rawMode: context.rawMode,
@@ -336,6 +354,7 @@ final class EntryFlow {
         stashPending()
         entry.exchangeTyped = ""
         entry.serialRcvd = ""
+        entry.nameRcvd = ""
         entry.call = call
         // Tied to the call it arrived with, so typing over a busted spot does
         // not carry the old station's county to the new one.
@@ -355,10 +374,18 @@ final class EntryFlow {
         guard !outgoing.isEmpty, !entry.exchangeIsAutoFilled else { return }
         let pending = EntryState.Pending(
             exchange: entry.exchange,
-            serialRcvd: entry.serialRcvd
+            serialRcvd: entry.serialRcvd,
+            nameRcvd: entry.nameRcvd
         )
         guard !pending.isEmpty else { return }
         entry.pendingExchanges[outgoing] = pending
+    }
+
+    /// Trimmed and uppercased, nil when nothing is left — the form a name
+    /// takes on a QSO row.
+    private func normalizedName(_ raw: String) -> String? {
+        let name = raw.trimmingCharacters(in: .whitespaces).uppercased()
+        return name.isEmpty ? nil : name
     }
 
     /// Offer what we know about the call now in the field, or take back what we

@@ -89,20 +89,28 @@ enum CabrilloExporter {
             + mode.padded(to: 2) + " "
             + when + " "
             + myCall.padded(to: 13) + " "
-            + exchangeNumber(serial: q.serialSent, rst: q.rstSent).padded(to: 3) + " "
+            + exchangeElement(name: q.nameSent, serial: q.serialSent, rst: q.rstSent).padded(to: 3) + " "
             + q.myLoc.uppercased().padded(to: 6) + " "
             + q.call.uppercased().padded(to: 13) + " "
-            + exchangeNumber(serial: q.serialRcvd, rst: q.rstRcvd).padded(to: 3) + " "
+            + exchangeElement(name: q.nameRcvd, serial: q.serialRcvd, rst: q.rstRcvd).padded(to: 3) + " "
             + q.theirLoc.uppercased().padded(to: 6)
     }
 
+    /// The ex1 element: name → QSO number → signal report, driven by the
+    /// row's own data rather than by the party, so the exporter cannot
+    /// disagree with the log. A name owns the slot wherever it exists —
+    /// NAQP's and MNQP's own log templates put it there (`AC0W BILL MOW`) —
+    /// and no bundled party carries more than one of the three.
+    static func exchangeElement(name: String?, serial: Int?, rst: String) -> String {
+        if let name, !name.isEmpty { return name.uppercased() }
+        return exchangeNumber(serial: serial, rst: rst)
+    }
+
     /// The numeric exchange element: a QSO number where the party sends one
-    /// (CQP), otherwise the signal report. Driven by the row's own data rather
-    /// than by the party, so the exporter cannot disagree with the log.
+    /// (CQP), otherwise the signal report.
     ///
     /// No leading zeros — CQP: "It is unnecessary to send leading zeros in the
-    /// QSO number." No bundled party sends *both* a report and a number; if one
-    /// ever does, the column order is a decision to make then, not to guess now.
+    /// QSO number."
     static func exchangeNumber(serial: Int?, rst: String) -> String {
         serial.map(String.init) ?? rst
     }

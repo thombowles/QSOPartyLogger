@@ -532,10 +532,11 @@ parties, and the remaining engine gaps. Adding a party is governed by
 - **CW keying two ways**: direct DTR/RTS line keying with sub-millisecond
   software timing (8–50 WPM, optional PTT line with lead/tail), or the
   radio's internal keyer (K3 `KY` / Flex CWX). F1–F8 messages with
-  `{MYCALL} {CALL} {RST} {SERIAL} {EXCH}` macros (defined once, in
+  `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH}` macros (defined once, in
   `MacroToken` — the editor lists whatever that enum holds), **defaulting to the party's
   own exchange shape** — CQP and PAQP send `{SERIAL}` where the report would
-  go, MDC sends call and location only, and the messages editor warns (with a
+  go, a name party sends `{NAME}` ahead of its location, MDC sends call and
+  location only, and the messages editor warns (with a
   one-key fix, ⇧⌘R) when any message in either set contradicts its party's
   exchange. **Esc aborts instantly.** Optional cut numbers for reports and QSO
   numbers (0→T, 9→N: 599 → 5NN, 40 → 4T) in the CW Messages editor, with 1→A
@@ -722,7 +723,7 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | Keys | Action |
 | --- | --- |
 | `Enter` | Log (or ESM next-message; or execute a typed QSY command) |
-| `Space` | Cycle the entry fields — Call → Exchange → Call, via QSO nr rcvd where the party sends one. Signal reports are stepped over |
+| `Space` | Cycle the entry fields — Call → Exchange → Call, via QSO nr rcvd where the party sends one and Name where the exchange carries one. Signal reports are stepped over |
 | `Tab` | Walk every entry field, signal reports included — landing in one selects the S digit, so 599 → 579 is a single keystroke |
 | `F12` | Wipe the entry fields and start the contact over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
@@ -1012,7 +1013,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1645 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1661 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, cluster login/telnet handling,
 spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,

@@ -304,6 +304,7 @@ final class AppSettings {
         rst: String,
         exchange: String,
         serial: String = "",
+        name: String = "",
         cutNumbers: Bool = false,
         cutOne: Bool = false
     ) -> String {
@@ -319,6 +320,9 @@ final class AppSettings {
             // report (CQP). Defaults to empty, so message sets that never
             // mention it expand exactly as before.
             case .serial: cut(serial)
+            // The sent name, for parties whose exchange carries one (NAQP,
+            // MNQP). Never cut — it is not a number.
+            case .name: name
             case .exchange: exchange
             }
         }

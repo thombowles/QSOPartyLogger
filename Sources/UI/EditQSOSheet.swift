@@ -15,6 +15,8 @@ struct EditQSOSheet: View {
     @State private var rstRcvd = ""
     @State private var serialSent = ""
     @State private var serialRcvd = ""
+    @State private var nameSent = ""
+    @State private var nameRcvd = ""
     @State private var theirLoc = ""
     @State private var myLoc = ""
     @State private var band: Band = .m20
@@ -69,6 +71,17 @@ struct EditQSOSheet: View {
                         }
                     }
                 }
+                // A miscopied name costs the contact at log checking exactly
+                // as a serial does, so it is editable the same way.
+                if party?.exchangeIncludesName ?? false {
+                    GridRow {
+                        Text("Name sent / rcvd")
+                        HStack {
+                            TextField("", text: $nameSent.uppercasing).frame(width: 90)
+                            TextField("", text: $nameRcvd.uppercasing).frame(width: 90)
+                        }
+                    }
+                }
                 GridRow {
                     Text("My exchange")
                     TextField("", text: $myLoc.uppercasing)
@@ -105,6 +118,8 @@ struct EditQSOSheet: View {
             rstRcvd = original.rstRcvd
             serialSent = original.serialSent.map(String.init) ?? ""
             serialRcvd = original.serialRcvd.map(String.init) ?? ""
+            nameSent = original.nameSent ?? ""
+            nameRcvd = original.nameRcvd ?? ""
             theirLoc = original.theirLoc
             myLoc = original.myLoc
             band = original.band
@@ -134,6 +149,10 @@ struct EditQSOSheet: View {
         updated.rstRcvd = rstRcvd.trimmingCharacters(in: .whitespaces)
         updated.serialSent = Int(serialSent.trimmingCharacters(in: .whitespaces))
         updated.serialRcvd = Int(serialRcvd.trimmingCharacters(in: .whitespaces))
+        let sentName = nameSent.trimmingCharacters(in: .whitespaces).uppercased()
+        let rcvdName = nameRcvd.trimmingCharacters(in: .whitespaces).uppercased()
+        updated.nameSent = sentName.isEmpty ? nil : sentName
+        updated.nameRcvd = rcvdName.isEmpty ? nil : rcvdName
         updated.theirLoc = theirTrimmed
         updated.myLoc = myLoc.trimmingCharacters(in: .whitespaces).uppercased()
         updated.band = band
