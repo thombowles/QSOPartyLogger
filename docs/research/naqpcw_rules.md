@@ -171,6 +171,25 @@ amplifier"). Rule 14 team competition is a registration-side arrangement
 ("Inclusion of team information in submitted Cabrillo logs is not required").
 M2 carries a 10-minute band timer (rule 5C(vi)) the app does not model — §14.
 
+**Cabrillo `CATEGORY-*` mapping** (added 2026-07-28; header value authority
+is the wwrof spec, [`cabrillo_v3_headers.md`](cabrillo_v3_headers.md)):
+
+| Rule 5/6 entry | `CATEGORY-OPERATOR` | `CATEGORY-ASSISTED` | `CATEGORY-TRANSMITTER` |
+| --- | --- | --- | --- |
+| SO (5A) | `SINGLE-OP` | `NON-ASSISTED` | `ONE` |
+| SOA (5B) | `SINGLE-OP` | `ASSISTED` | `ONE` |
+| M2 (5C) | `MULTI-OP` | `ASSISTED` allowed (5C(ii)) | `TWO`, `OPERATORS:` lists the crew |
+
+Power: rule 6 A/B → `CATEGORY-POWER: QRP` / `LOW`; a station "choosing to
+use more than 100 W or entered as High Power" exports `HIGH` and is received
+as a check log by the sponsor — the export stays honest rather than
+blocking. `CATEGORY-BAND:` is always `ALL` (no single-band awards exist in
+rule 19), `CATEGORY-MODE: CW`. No overlay or time categories exist. The
+reference for a real accepted submission is KE5CW's January 2026 log (N1MM):
+`SINGLE-OP` + `ASSISTED` + `LOW` + `ONE` — SOA, the category rule 5B
+defines. The sponsor's upload form (read 2026-07-28) separately asks for
+power bucket, spotting assistance, and operator count at submission time.
+
 ## 12. Cabrillo `CONTEST:` header
 
 The rules print no header token, so per constitution Article 1's codified
@@ -238,13 +257,27 @@ CY9 → St. Paul I., CY0 → Sable I.
    column is the name, so without it no NAQP log is submittable. Ships only
    after the name-exchange capability commit
    (`2026-07-27-name-exchanges-design.md`).
-4. **Every entrant is out-of-state to the engine.** A US/VE entrant's setup
-   is "Outside" + their state/province token; `myLoc` is that token,
-   Cabrillo `LOCATION:` follows it. Both mult rules are identical, so the
-   in/out classification cannot move a score. An entrant in one of the 46
-   listed countries picks "Inside" and their country; their Cabrillo
-   `LOCATION:` then exports as `NA` and must be hand-corrected to `DX`
-   (cosmetic caveat — this app's audience is a US entrant).
+4. **This party has no home region — `hasHomeRegion: false`** (added
+   2026-07-28). Rule 10 gives every North American entrant the same exchange
+   shape, so the engine's inside/outside geometry has nothing to bite on:
+   there is no host state, and the 46 country tokens are peers of the states
+   and provinces. Setup therefore asks one question — your location — and
+   accepts any of the three classes plus `DX` (`validEntrantTokens`); `myLoc`
+   and Cabrillo `LOCATION:` are whatever the entrant typed, for a Texan
+   (`TX`) and a Mexican (`XE`) alike. Both mult rules are identical, which is
+   what makes collapsing the two cases score-neutral — pinned by
+   `testTheClassificationCannotMoveTheScore`.
+
+   **Superseded reading**, recorded per Article 20: NAQP originally shipped
+   with the standard picker, so a US/VE entrant chose "Outside" plus their
+   token while an entrant in one of the 46 countries chose "Inside" and
+   picked their country — after which the Cabrillo `LOCATION:` header
+   exported as the pseudo-state `NA` and the operator was instructed by a
+   cosmetic caveat to hand-correct it to `DX` before submitting. Nothing in
+   the sponsor's rules changed; the app was making the operator absorb a
+   modelling artifact. Logs written that way still export the right header —
+   `entrantToken(party:)` reads the stored county as the location it always
+   was, and setup migrates it into the field on open.
 5. **Not modeled, deliberately:** the SO 10-of-12-hour / 30-minute off-time
    accounting (no bundled party models operating-time caps); M2's 10-minute
    band timer (rule 5C(vi)) and its QSO invalidation; the rule 12 penalty

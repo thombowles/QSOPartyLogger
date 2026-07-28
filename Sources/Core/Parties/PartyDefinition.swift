@@ -93,6 +93,48 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     var inStateLabel: String { inStateLabelRaw ?? homeState }
     private let inStateLabelRaw: String?
 
+    /// What this party calls the class in its `counties` slot, **lowercase
+    /// and singular**. Default "county", which is what the overwhelming
+    /// majority of the catalogue actually enumerates.
+    ///
+    /// The slot holds whatever a sponsor's finest enumerated multiplier class
+    /// is, and that is not always a county: NAQP's rule 11 counts "other
+    /// North American entities as defined by the ARRL DXCC List", BCQP counts
+    /// electoral districts, QCQP counts Quebec's administrative regions.
+    /// Naming the class per party is what stops the score sidebar telling an
+    /// operator their contest has counties when it does not.
+    ///
+    /// Lowercase because call sites capitalize the first letter for a heading
+    /// (`sentenceCased`); storing "NA entity" capitalized would either shout
+    /// mid-sentence or, run through `capitalized`, come back as "Na Entity".
+    var countyTerm: String { countyTermRaw ?? "county" }
+    private let countyTermRaw: String?
+
+    /// The plural of `countyTerm`. Defaults to "counties" for the default
+    /// term, and otherwise to the singular plus "s" — so a party whose plural
+    /// is regular ("district") spends one line, and one whose plural is not
+    /// ("parish") supplies it outright.
+    var countyTermPlural: String {
+        if let plural = countyTermPluralRaw { return plural }
+        guard let singular = countyTermRaw else { return "counties" }
+        return singular + "s"
+    }
+    private let countyTermPluralRaw: String?
+
+    /// Is there a home region an entrant can be *inside* of? Default true —
+    /// a state QSO party's whole geometry is host state versus everyone else.
+    ///
+    /// NAQP is the exception: rule 10 gives every North American entrant the
+    /// same exchange (name + their own location), and the country tokens
+    /// riding in the county slot are peers of the states and provinces, not
+    /// sub-regions of a host state. Asking such an entrant whether they are
+    /// "inside" is a question with no answer, and answering it wrong used to
+    /// put the pseudo-`homeState` in the Cabrillo `LOCATION:` header. Where
+    /// this is false the setup sheet asks one question — where are you — and
+    /// the exports read the entrant's own token.
+    var hasHomeRegion: Bool { hasHomeRegionRaw ?? true }
+    private let hasHomeRegionRaw: Bool?
+
     /// State tokens that are not valid in this party beyond the home state
     /// (MDC: DC arrives as the WDC county entity, so both MD and DC are out).
     /// Defaults to **all** of `homeStates`, so a multi-state party excludes
@@ -562,6 +604,21 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         return tokens
     }
 
+    /// What an entrant may claim as their *own* location in setup. Normally
+    /// the out-of-state set. A party with no home region has no "outside", so
+    /// its own token list joins it as a peer class — an NAQP entrant in
+    /// Bermuda types VP9 exactly as a Texan types TX.
+    ///
+    /// Deliberately separate from `validOutStateTokens`, which the exchange
+    /// parser reads for *received* locations: what an entrant may be and what
+    /// they may work are different questions, and merging them would put
+    /// county-class tokens in the out-of-state branch for every party.
+    var validEntrantTokens: Set<String> {
+        hasHomeRegion
+            ? validOutStateTokens
+            : validOutStateTokens.union(counties.map(\.abbr))
+    }
+
     /// Could this token be a DX prefix under `.prefix` style? 1–5 chars,
     /// letters/digits with at least one letter, and not a county or any
     /// state/province/DX token — including excluded ones like the home state,
@@ -620,6 +677,9 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case combinesRaw = "combines"
         case homeStatesRaw = "homeStates"
         case inStateLabelRaw = "inStateLabel"
+        case hasHomeRegionRaw = "hasHomeRegion"
+        case countyTermRaw = "countyTerm"
+        case countyTermPluralRaw = "countyTermPlural"
         case dxStyleRaw = "dxStyle"
         case allowedModeClassesRaw = "allowedModes"
         case maxSimultaneousCountiesRaw = "maxSimultaneousCounties"
@@ -738,5 +798,17 @@ enum BonusRule: Codable, Equatable, Sendable {
             try c.encode("sweepTiers", forKey: .type)
             try c.encode(tiers, forKey: .tiers)
         }
+    }
+}
+
+extension String {
+    /// The first character uppercased, everything after it untouched.
+    ///
+    /// `capitalized` would lowercase the rest of every word, turning the
+    /// multiplier term "NA entities" into "Na Entities". Headings need the
+    /// first letter and nothing else touched.
+    var sentenceCased: String {
+        guard let first else { return self }
+        return first.uppercased() + dropFirst()
     }
 }

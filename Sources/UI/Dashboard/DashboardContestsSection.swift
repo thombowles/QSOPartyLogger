@@ -1,9 +1,11 @@
 import Charts
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// The year's contests: sortable score table (Return or double-click opens
-/// the .qplog), a QSOs-per-contest chart, and — with a row selected — that
-/// party's all-years trend with the personal best called out.
+/// the .qplog, ⌘E exports it as ADIF, ⇧⌘E as Cabrillo), a QSOs-per-contest
+/// chart, and — with a row selected — that party's all-years trend with the
+/// personal best called out.
 struct DashboardContestsSection: View {
     @Bindable var model: DashboardModel
 
@@ -12,8 +14,32 @@ struct DashboardContestsSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Contests in \(String(model.selectedYear))", systemImage: "list.number")
-                .font(.title3.weight(.semibold))
+            HStack {
+                Label("Contests in \(String(model.selectedYear))", systemImage: "list.number")
+                    .font(.title3.weight(.semibold))
+                Spacer()
+                Button {
+                    if let row = selectedRow {
+                        model.exportADIF(row.record)
+                    }
+                } label: {
+                    Label("Export ADIF…", systemImage: "square.and.arrow.up")
+                }
+                .keyboardShortcut("e", modifiers: .command)
+                .disabled(!(selectedRow?.exportable ?? false))
+                .help(exportBlockedReason ?? "Export the selected contest's log as ADIF (⌘E)")
+
+                Button {
+                    if let row = selectedRow {
+                        model.exportCabrillo(row.record)
+                    }
+                } label: {
+                    Label("Export Cabrillo…", systemImage: "doc.plaintext")
+                }
+                .keyboardShortcut("e", modifiers: [.command, .shift])
+                .disabled(!(selectedRow?.exportable ?? false))
+                .help(exportBlockedReason ?? "Export the selected contest's log as Cabrillo (⇧⌘E)")
+            }
 
             if rows.isEmpty {
                 Text("Nothing logged in \(String(model.selectedYear)).")
@@ -25,6 +51,40 @@ struct DashboardContestsSection: View {
         }
         .padding(14)
         .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
+        // The content type follows the staged export — UTType.adi for ADIF
+        // so the save panel keeps the .adi name (see LogDocument.swift).
+        .fileExporter(
+            isPresented: exportPresented,
+            document: model.stagedExport.map { TextExportDocument(text: $0.text) },
+            contentType: model.stagedExportType,
+            defaultFilename: model.stagedExport?.fileName
+        ) { _ in
+            model.stagedExport = nil
+        }
+    }
+
+    /// Presented exactly while an export is staged; dismissing the panel
+    /// (save or cancel) clears it.
+    private var exportPresented: Binding<Bool> {
+        Binding(
+            get: { model.stagedExport != nil },
+            set: { if !$0 { model.stagedExport = nil } }
+        )
+    }
+
+    /// Why the selection can't export — nil when it can. Shared by both
+    /// formats: each needs the saved file and the installed rules alike.
+    private var exportBlockedReason: String? {
+        guard let row = selectedRow else {
+            return "Select a contest, then export its log (⌘E ADIF, ⇧⌘E Cabrillo)"
+        }
+        if !row.fileAvailable {
+            return "Can't export — the log file is no longer in the logs folder"
+        }
+        if !row.partyInstalled {
+            return "Can't export — \(row.partyName) rules are not installed"
+        }
+        return nil
     }
 
     // MARK: Rows
@@ -34,6 +94,11 @@ struct DashboardContestsSection: View {
         let record: ContestRecord
         let partyName: String
         let fileAvailable: Bool
+        let partyInstalled: Bool
+
+        /// ADIF export needs both the saved .qplog (to read) and the party's
+        /// installed rules (to render county names and the contest id).
+        var exportable: Bool { fileAvailable && partyInstalled }
 
         var id: String { record.id }
         var date: Date { record.earliestQSO ?? .distantPast }
@@ -52,7 +117,8 @@ struct DashboardContestsSection: View {
             ContestRow(
                 record: $0,
                 partyName: model.partyName(for: $0.partyID),
-                fileAvailable: model.logFileExists($0)
+                fileAvailable: model.logFileExists($0),
+                partyInstalled: model.partyInstalled($0.partyID)
             )
         }
     }
@@ -127,9 +193,14 @@ struct DashboardContestsSection: View {
             return .handled
         }
         .contextMenu(forSelectionType: ContestRow.ID.self) { ids in
-            if let id = ids.first, let row = rows.first(where: { $0.id == id }),
-               row.fileAvailable {
-                Button("Open Log") { model.openLog(row.record) }
+            if let id = ids.first, let row = rows.first(where: { $0.id == id }) {
+                if row.fileAvailable {
+                    Button("Open Log") { model.openLog(row.record) }
+                }
+                Button("Export ADIF…") { model.exportADIF(row.record) }
+                    .disabled(!row.exportable)
+                Button("Export Cabrillo…") { model.exportCabrillo(row.record) }
+                    .disabled(!row.exportable)
             }
         } primaryAction: { ids in
             if let id = ids.first, let row = rows.first(where: { $0.id == id }),

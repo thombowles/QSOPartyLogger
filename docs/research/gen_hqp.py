@@ -88,6 +88,15 @@ hqp = {
     "outStateWorksHomeStationsOnly": True,
     # No district-line provision exists, and there is no mobile/rover category.
     "maxSimultaneousCounties": 1,
+    # The sponsor's own multiplier text, quoted in hqp_rules.md: "Non-Hawaiian
+    # stations: 14 Hawai'i districts per band." These 14 codes are districts,
+    # and Hawaii's five actual counties are not what this party counts.
+    "countyTerm": "district",
+    # NOTE: this dict does NOT carry `hubSpots` or `caveats`, which are written
+    # by later passes -- so running this script alone drops both from the file.
+    # After any run: python3 gen_hub_map.py && python3 gen_caveats.py.
+    # (gen_caveats.py says the same; the hub block is the one it cannot
+    # restore, and HubSpotSourceTests is what catches its loss.)
     # See hqp_rules.md §2: the sponsor's rule 1 contradicts itself. 1600Z ->
     # 0400Z is the only reading matching its stated 36 hours AND both of its
     # Hawaii-time anchors (6am Sat / 6pm Sun, HST = UTC-10).

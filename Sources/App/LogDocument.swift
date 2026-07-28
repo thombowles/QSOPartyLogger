@@ -113,6 +113,15 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         return FileWrapper(regularFileWithContents: data)
     }
 
+    /// The stem the export save panel offers: the log's own name — the file's
+    /// for a saved document, the dated name the first auto-save is about to
+    /// use for a draft. "2026-08-29 KSQP KE5CW.adi" sorts and reads; the bare
+    /// callsign the exports used to offer did neither.
+    nonisolated static func exportBaseName(fileURL: URL?, log: ContestLog) -> String {
+        fileURL.map { $0.deletingPathExtension().lastPathComponent }
+            ?? mirrorFileName(for: log)
+    }
+
     /// Stable per-contest mirror name: dated by the first QSO (or today for
     /// an empty log) so a contest keeps one file across saves.
     nonisolated static func mirrorFileName(for log: ContestLog) -> String {
@@ -169,6 +178,17 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
             }
         }
         undoManager?.setActionName("Edit Contact")
+    }
+
+    /// A spot from either feed — cluster or hub — reached this session.
+    /// An observation, not an operator edit, so it registers no undo: ⌘Z
+    /// must never clear an integrity record. Direct mutation is the same
+    /// dirty-tracking class as the Run/S&P binding, and the flag rides
+    /// along with every subsequent save.
+    @MainActor
+    func noteSpotsUsed() {
+        guard !log.usedSpots else { return }
+        log.usedSpots = true
     }
 
     /// "2026-07-25 ALQP KE5CW" — default display name for unsaved logs.

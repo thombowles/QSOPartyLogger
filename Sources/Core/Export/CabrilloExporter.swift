@@ -17,6 +17,7 @@ enum CabrilloExporter {
         lines.append("CALLSIGN: \(s.callsign.uppercased())")
         lines.append("LOCATION: \(cabrilloLocation(log: log, party: party))")
         lines.append("CATEGORY-OPERATOR: \(s.categoryOperator.rawValue)")
+        lines.append("CATEGORY-ASSISTED: \(s.categoryAssisted.rawValue)")
         lines.append("CATEGORY-BAND: ALL")
         lines.append("CATEGORY-MODE: \(categoryMode(log.qsos))")
         lines.append("CATEGORY-POWER: \(s.categoryPower.rawValue)")
@@ -31,6 +32,7 @@ enum CabrilloExporter {
         if !s.stateProvince.isEmpty { lines.append("ADDRESS-STATE-PROVINCE: \(s.stateProvince)") }
         if !s.postalCode.isEmpty { lines.append("ADDRESS-POSTALCODE: \(s.postalCode)") }
         if !s.country.isEmpty { lines.append("ADDRESS-COUNTRY: \(s.country)") }
+        if !s.gridLocator.isEmpty { lines.append("GRID-LOCATOR: \(s.gridLocator.uppercased())") }
         if !s.email.isEmpty { lines.append("EMAIL: \(s.email)") }
         lines.append("SOAPBOX: ")
 
@@ -43,12 +45,11 @@ enum CabrilloExporter {
     }
 
     /// In-state logs use the party state; out-of-state use the operator's
-    /// state/province, or "DX" for entrants outside US/Canada.
+    /// state/province — or, for a party with no home region, whatever token
+    /// the entrant sends. "DX" for entrants outside US/Canada.
     static func cabrilloLocation(log: ContestLog, party: PartyDefinition) -> String {
-        switch log.myLocation {
-        case .inState: party.homeState
-        case .outOfState(let loc): loc.isEmpty ? "DX" : loc.uppercased()
-        }
+        let token = log.myLocation.entrantToken(party: party)
+        return token.isEmpty ? "DX" : token
     }
 
     static func categoryMode(_ qsos: [QSO]) -> String {

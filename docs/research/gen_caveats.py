@@ -116,12 +116,12 @@ KINDS = {
     # exactly, so running either generator leaves the files identical.
     "naqpcw": [
         (0, "scoreAffecting", "A Dominican Republic (HI) contact is credited as Hawaii - work both on one band and the score is one multiplier low."),
-        (1, "cosmetic", "US/VE entrants: set up as Outside with your state or province. Entrants in another NA country: Inside, then hand-fix the Cabrillo LOCATION header to DX."),
+        (1, "cosmetic", "Entrants outside North America: contacts with other non-NA stations are credited here but removed by the sponsor. No effect on NA entrants."),
         (2, "cosmetic", "Log United Nations HQ as 4U1 - the checklist's '4U1/u' cannot be typed because '/' separates county lines."),
     ],
     "naqpssb": [
         (0, "scoreAffecting", "A Dominican Republic (HI) contact is credited as Hawaii - work both on one band and the score is one multiplier low."),
-        (1, "cosmetic", "US/VE entrants: set up as Outside with your state or province. Entrants in another NA country: Inside, then hand-fix the Cabrillo LOCATION header to DX."),
+        (1, "cosmetic", "Entrants outside North America: contacts with other non-NA stations are credited here but removed by the sponsor. No effect on NA entrants."),
         (2, "cosmetic", "Log United Nations HQ as 4U1 - the checklist's '4U1/u' cannot be typed because '/' separates county lines."),
     ],
     "moqp": [

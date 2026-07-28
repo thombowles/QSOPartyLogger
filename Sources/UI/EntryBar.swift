@@ -131,8 +131,16 @@ struct EntryBar: View {
         }
     }
 
+    /// What the exchange field is asking for, in the party's own words. A
+    /// party with no home region has no host-state codes to hint at — every
+    /// token is a peer location — and one whose multipliers are not counties
+    /// must not be told they are. The old "Cty" shorthand goes with them: the
+    /// leading term already names what the code is.
     private var exchangeLabel: String {
-        party.map { "County/State (\($0.homeState) Cty ×\($0.countyAbbrLengthHint))" } ?? "Exchange"
+        guard let party else { return "Exchange" }
+        guard party.hasHomeRegion else { return "Location" }
+        return "\(party.countyTerm.sentenceCased)/State "
+            + "(\(party.homeState) ×\(party.countyAbbrLengthHint))"
     }
 
     private var canLog: Bool {

@@ -616,6 +616,25 @@ parties, and the remaining engine gaps. Adding a party is governed by
   unfinished stub), WA Salmon Run (no page), the multi-state and combined
   entries, and NAQP. Polling only runs inside the
   party's own operating window.
+- **A NON-ASSISTED entry gets no spots, full stop**: declare
+  `CATEGORY-ASSISTED: NON-ASSISTED` in Contest Setup and spotting is
+  switched off — Connect is disabled (with the reason and the fix right
+  there in the popover), auto-connect does not fire, hub polling does not
+  start, and declaring it mid-contest drops an open connection and clears
+  the network spots off the band map. Sponsors score any spotting-network
+  use as Assisted (NAQP rule 5A is the canonical wording), so the app makes
+  the claim true rather than warning you afterwards that it wasn't.
+  Changing Assisted back is the whole of the override; there is no other
+  one. Two things stay outside the block: **self-spotting** (⇧⌘S sends, it
+  doesn't receive, and sponsors split on whether it's allowed at all), and
+  **contacts from your own log** on the band map, which aren't spotting
+  information.
+- **The record prevention can't reach**: spots taken while ASSISTED are
+  noted on the log itself and survive a restart, so switching to
+  NON-ASSISTED *afterwards* raises an orange badge in the station strip —
+  the contacts are already made and can't be un-assisted. Non-blocking:
+  dismiss with ⌘. (or the ×), and it returns once more at Cabrillo export,
+  where the claim ships. The export is never altered or held up.
 - **Exchange pre-fill from a spot**: when nothing in your own log or the
   archive knows a station, a hub spot's county fills the exchange as a last
   resort — shown **unconfirmed** (dashed, with a reminder) rather than merely
@@ -718,14 +737,29 @@ parties, and the remaining engine gaps. Adding a party is governed by
   codes read as four contests and sixteen states instead of one wall. Standalone
   multi-state parties (7QP, New England) get the state headings too; a
   single-state party's grid is unchanged.
+
+  **Each party names its own multiplier class**, because not every sponsor
+  counts counties: the score sidebar, setup sheet, entry bar and self-spot
+  sheet read `countyTerm` from the party file, so NAQP counts *NA entities*
+  (rule 11's ARRL DXCC entities), BCQP *districts*, QCQP *regions* — and the
+  40-odd parties that really do count counties say so without carrying the
+  word at all.
 - **RST pre-filled** (599/59 by mode) after every contact, so the exchange
   is two keystrokes on a normal run.
-- **Exports**: Cabrillo V3 (per-county-line QSO rows, category headers,
-  claimed score) and ADIF 3.1.4 (`CNTY`/`MY_CNTY` with full county names,
-  `STX_STRING`/`SRX_STRING`, group ids in an APP_ field). The app declares
-  the ADIF file type (`.adi`/`.adif`, plain text), so ⌘E's save panel keeps
-  the `.adi` name instead of appending `.txt`, and Finder labels the file
-  "ADIF Amateur Radio Log".
+- **Exports**: Cabrillo V3 (per-county-line QSO rows, claimed score, and the
+  full entry declaration — operator / assisted / power / station /
+  transmitter categories, a multi-op `OPERATORS:` list with the spec's
+  `@host` convention, club, grid locator, and the address block. Contest
+  Setup collects every one of them, so an NAQP Single Op **Assisted** or
+  Multi-Two entry exports as exactly that) and ADIF 3.1.4
+  (`CNTY`/`MY_CNTY` with full county names, `STX_STRING`/`SRX_STRING`,
+  group ids in an APP_ field). One **Export** menu in the toolbar offers
+  both formats, with ⌘E / ⇧⌘E shown beside them; the suggested filename is
+  the log's own name ("2026-08-29 KSQP KE5CW.adi"), the file's for a saved
+  log or the dated name a draft's first auto-save is about to use. The app
+  declares the ADIF file type (`.adi`/`.adif`, plain text), so the save
+  panel keeps the `.adi` name instead of appending `.txt`, and Finder
+  labels the file "ADIF Amateur Radio Log".
 - **Documents**: each contest is a `.qplog` file (JSON) with undo. New logs
   auto-save into your logs folder on setup, then **every QSO change writes
   straight to disk** (and mirrors to iCloud Drive if configured) — a crash
@@ -735,7 +769,12 @@ parties, and the remaining engine gaps. Adding a party is governed by
   score sidebar computed it (QSOs, mults, bonus, on-air time with ≥30-min
   breaks excluded), QSO and score charts, and each party's year-over-year
   trend with your personal best flagged. Return (or double-click) on a row
-  reopens that contest's `.qplog`.
+  reopens that contest's `.qplog`; ⌘E exports it as ADIF and ⇧⌘E as
+  Cabrillo (both also in the row's right-click menu), straight from the
+  saved log — no need to reopen it. The Cabrillo CLAIMED-SCORE is
+  recomputed under the rules installed today, exactly what exporting from
+  the reopened document would claim. Both are grayed out when the log file
+  is missing from the logs folder or the party's rules aren't installed.
 - **State QSO Party Challenge tracker**: estimated standing by the sponsor's
   own formula — total QSOs × parties entered, with the official ≥2-QSO
   multiplier floor and the Bronze 500 → Diamond 100,000 ladder (levels
@@ -786,12 +825,14 @@ parties, and the remaining engine gaps. Adding a party is governed by
 | `⌘J` | Jump back to your CQ run frequency (Run mode) |
 | `⌘B` | Toggle the band map window |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY / band / mode |
-| `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
+| `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo (the toolbar's Export menu) |
+| `⌘.` | Dismiss the spots-already-used badge for this sitting (it returns at Cabrillo export) |
 | `⇧⌘S` | Spot to the QSO Party Hub — yourself in Run, the call field in S&P (Return sends, Esc cancels) |
 | `⌘⇧D` | Contest Dashboard (season history + SQP Challenge) |
 | `⌘[` / `⌘]` | Dashboard: previous / next year |
 | `⌘R` | Dashboard: re-read the history file |
 | `Return` on a dashboard row | Open that contest's log |
+| `⌘E` / `⇧⌘E` on a dashboard row | Export that contest as ADIF / Cabrillo (grayed out without its log file or installed rules) |
 
 These keys belong to the log window that has focus. While a sheet is open —
 Setup, the Messages editor, Edit QSO — the sheet owns the keyboard: `Esc` closes
@@ -1104,7 +1145,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1795 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1849 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1117,7 +1158,11 @@ spot parsing (broadcast and `sh/dx`), spot filtering (continent, mode, band,
 worked, skimmer), spot navigation including worked-station skipping, contacts
 from your own log reaching the band map (and never displacing somebody else's
 spot), what a spot sheet may offer as a county for any station, cluster
-history, the band map scale and its column stacking (including that every
+history, the spotting policy (which entry categories may take spots at all,
+that hub polling obeys the same claim, the spot-use record on the log and its
+decode tolerance, that clearing network spots spares your own log's contacts,
+and every string and show/hide rule — including that none of them names a
+party), the band map scale and its column stacking (including that every
 label-size preset still leaves room for two columns, so a pile-up never falls
 back to pushing labels off frequency), the band plan and its
 CW/phone crossovers, typed QSY commands, the key-monitor focus gate and its key
@@ -1146,6 +1191,16 @@ station profile, radio wiring and cluster history untouched.
 
 ## Data provenance
 
+- Cabrillo V3 header values — the `CATEGORY-*` enumerations (including
+  `CATEGORY-ASSISTED`), the `OPERATORS:` `@host` convention, and
+  `GRID-LOCATOR:` — from the WWROF Cabrillo specification
+  (wwrof.org/cabrillo, fetched 2026-07-28), banked in
+  [`docs/research/cabrillo_v3_headers.md`](docs/research/cabrillo_v3_headers.md)
+  with KE5CW's own January 2026 NAQP CW submission (N1MM) as the reference
+  log. The NAQP rule 5/6 → `CATEGORY-*` mapping (SO / SOA / M2, QRP / Low /
+  check log) is recorded in
+  [`docs/research/naqpcw_rules.md`](docs/research/naqpcw_rules.md) §11; team
+  competition stays out of the log by rule 14's own words.
 - Call history: file format from the N1MM Logger+ documentation
   (n1mmwp.hamdocs.com/setup/call-history/, fetched 2026-07-28); the 45-party
   prefix mapping generated by
@@ -1168,7 +1223,10 @@ station profile, radio wiring and cluster history untouched.
   Cabrillo headers `NAQP-CW` / `NAQP-SSB` from the WA7BNM registry (entries
   218 and 229), the one value the sponsor does not print. **Not State QSO
   Party Challenge contests**, by the Challenge's own approved list and
-  KE5CW's requirement.
+  KE5CW's requirement. **No home region** (`hasHomeRegion: false`, 2026-07-28):
+  rule 10 gives every North American entrant the same exchange, so setup asks
+  one location question — your state, province, NA country code, or DX — and
+  the export carries exactly what you entered.
 - KSQP: rules + county abbreviations fetched from ksqsoparty.org (2026 rules
   PDF, official mults PDF) on 2026-07-23. County JSON generated by script
   from the official file — never hand-typed.

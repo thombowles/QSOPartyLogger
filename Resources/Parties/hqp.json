@@ -41,6 +41,7 @@
   "bonuses": [],
   "outStateWorksHomeStationsOnly": true,
   "maxSimultaneousCounties": 1,
+  "countyTerm": "district",
   "schedule": [
     {
       "start": "2026-08-22T16:00:00Z",

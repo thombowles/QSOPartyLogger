@@ -52,6 +52,9 @@ struct MainView: View {
     @State private var spotPurgeTask: Task<Void, Never>?
     @State private var showClusterPopover = false
     @State private var clusterCommand = ""
+    /// Session-scoped on purpose: a claim that is still wrong earns one nag
+    /// per sitting, and the Cabrillo export stands it back up regardless.
+    @State private var spotWarningDismissed = false
     /// Reference frequency for ⌘←/⌘→ when no live radio frequency exists.
     @State private var spotCursorKHz: Double?
     /// Run frequency captured when CQ is sent; ⌘J jumps back to it.
@@ -313,6 +316,18 @@ struct MainView: View {
             spotStore.purge(now: Date())
         }
         .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
+        // Declaring NON-ASSISTED takes effect at once — an open connection is
+        // dropped and the network spots come off the map, because a claim
+        // that only applies to future spots is not a claim.
+        .onChange(of: document.log.station.categoryAssisted) { enforceSpottingPolicy() }
+        // A conflict that returns — spots on the record from an assisted
+        // stretch, the claim now back to NON-ASSISTED — stands the badge back
+        // up; going quiet leaves the dismissal alone.
+        .onChange(of: document.log.spotsContradictNonAssistedClaim) { _, conflict in
+            spotWarningDismissed = SpottingPolicy.rearm(
+                dismissed: spotWarningDismissed, conflict: conflict
+            )
+        }
         .onChange(of: document.log.myLocation.sentExchanges) { offerReSpotOnCountyChange() }
         // Setup is where a rover changes county, so the offer waits for it to
         // close rather than stacking a sheet on top of it.
@@ -405,6 +420,30 @@ struct MainView: View {
                     .background(.blue.opacity(0.2), in: Capsule())
             }
 
+            if SpottingPolicy.isVisible(
+                conflict: document.log.spotsContradictNonAssistedClaim,
+                dismissed: spotWarningDismissed
+            ) {
+                HStack(spacing: 5) {
+                    Label(SpottingPolicy.badge, systemImage: "exclamationmark.triangle.fill")
+                        .font(.caption.weight(.bold))
+                    Button {
+                        spotWarningDismissed = true
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                    .buttonStyle(.plain)
+                    .keyboardShortcut(".", modifiers: .command)
+                    .accessibilityLabel("Dismiss assisted-category warning")
+                    .help("Dismiss for this sitting (⌘.) — it returns at Cabrillo export")
+                }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(.orange.opacity(0.2), in: Capsule())
+                .foregroundStyle(.orange)
+                .help(SpottingPolicy.detail)
+            }
+
             Spacer()
 
             Text("\(currentBand.rawValue) \(currentRawMode)")
@@ -420,21 +459,19 @@ struct MainView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup {
-            Button {
-                exportADIF()
+            // One export affordance, two formats. The shortcuts on the items
+            // are the menu's badge text — the keystrokes themselves are
+            // handled by the key monitor (KeyMonitorGate), which consumes
+            // them first wherever document focus rules allow an export.
+            Menu {
+                Button("ADIF (.adi)…") { exportADIF() }
+                    .keyboardShortcut("e", modifiers: .command)
+                Button("Cabrillo (.log)…") { exportCabrillo() }
+                    .keyboardShortcut("e", modifiers: [.command, .shift])
             } label: {
-                Label("Export ADIF", systemImage: "square.and.arrow.up")
+                Label("Export", systemImage: "square.and.arrow.up")
             }
-            .keyboardShortcut("e", modifiers: .command)
-            .help("Export ADIF (⌘E)")
-
-            Button {
-                exportCabrillo()
-            } label: {
-                Label("Export Cabrillo", systemImage: "doc.plaintext")
-            }
-            .keyboardShortcut("e", modifiers: [.command, .shift])
-            .help("Export Cabrillo (⇧⌘E)")
+            .help("Export the log — ADIF (⌘E) or Cabrillo (⇧⌘E)")
 
             Button {
                 beginSpotForMode()
@@ -547,6 +584,16 @@ struct MainView: View {
             Toggle("Connect automatically when a contest opens", isOn: $settings.clusterAutoConnect)
                 .font(.callout)
 
+            // The block is stated where the connect controls are, so a
+            // switched-off Connect button is never a mystery.
+            if !spottingAllowed {
+                Label(SpottingPolicy.blockedReason, systemImage: "lock.fill")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: 250, alignment: .leading)
+            }
+
             Text("Spot filters (continent, mode, band, age) live in the band map window — ⌘B.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -556,6 +603,7 @@ struct MainView: View {
                 if spotClient.status == .disconnected {
                     Button("Connect") { connectCluster() }
                         .keyboardShortcut(.defaultAction)
+                        .disabled(!spottingAllowed)
                 } else {
                     Button("Disconnect") {
                         spotClient.disconnect()
@@ -642,7 +690,29 @@ struct MainView: View {
         clusterCommand = ""
     }
 
+    /// Whether this entry's declared category permits incoming spots at all.
+    private var spottingAllowed: Bool {
+        SpottingPolicy.allowsIncomingSpots(document.log.station.categoryAssisted)
+    }
+
+    /// Make the world match the declared category: no feeds, and no spots
+    /// left on the map from before the declaration. Runs whenever the claim
+    /// changes, so a mid-contest switch to NON-ASSISTED takes effect at once
+    /// rather than at the next launch.
+    private func enforceSpottingPolicy() {
+        guard !spottingAllowed else {
+            syncHubSpotClient()  // back to ASSISTED: the hub may resume
+            return
+        }
+        spotClient.disconnect()
+        hubSpotClient.stop()
+        spotStore.removeNetworkSpots()
+    }
+
     private func connectCluster() {
+        // The one gate every path funnels through — the button, the Recent
+        // Clusters menu, and auto-connect all land here.
+        guard spottingAllowed else { return }
         let port: UInt16 = (1...65535).contains(settings.clusterPort)
             ? UInt16(settings.clusterPort) : 7300
         spotClient.connect(
@@ -670,13 +740,20 @@ struct MainView: View {
         installKeyMonitor()
         radio.autoConnect(settings: settings)
 
+        // A spot can only get this far under an ASSISTED declaration, so the
+        // record is of assistance legitimately taken — and it is what makes a
+        // later switch to NON-ASSISTED visible, since prevention cannot reach
+        // backwards into contacts already made.
         spotClient.onSpot = { spot in
             spotStore.add(spot)
+            document.noteSpotsUsed()
         }
         // Hub spots land in the same store, so the band map, filters, stacking
-        // and ⌘←/⌘→ treat them exactly like any other spot.
+        // and ⌘←/⌘→ treat them exactly like any other spot — including the
+        // assisted-category record.
         hubSpotClient.onSpots = { spots in
             for spot in spots { spotStore.add(spot) }
+            if !spots.isEmpty { document.noteSpotsUsed() }
         }
         syncHubSpotClient()
         // The download may land after the operator has moved to another
@@ -1069,7 +1146,11 @@ struct MainView: View {
     /// Two of the nineteen bundled parties have no hub page at all, so this
     /// quietly does nothing for them rather than polling a dead URL.
     private func syncHubSpotClient() {
-        guard settings.hubSpotsEnabled, let party, let source = party.hubSpots else {
+        guard SpottingPolicy.hubShouldPoll(
+            enabled: settings.hubSpotsEnabled,
+            hasSource: party?.hubSpots != nil,
+            claim: document.log.station.categoryAssisted
+        ), let party, let source = party.hubSpots else {
             hubSpotClient.stop()
             return
         }
@@ -1258,7 +1339,8 @@ struct MainView: View {
             guard
                 let action = KeyMonitorGate.action(
                     keyCode: event.keyCode,
-                    command: event.modifierFlags.contains(.command)
+                    command: event.modifierFlags.contains(.command),
+                    shift: event.modifierFlags.contains(.shift)
                 )
             else { return event }
 
@@ -1302,10 +1384,19 @@ struct MainView: View {
         case .sendMessage(let index): sendMessageAt(index)
         case .clearEntry: clearEntry()
         case .abortCW: radio.abortCW(settings: settings)
+        case .exportADIF: exportADIF()
+        case .exportCabrillo: exportCabrillo()
         }
     }
 
     // MARK: Export
+
+    /// The log's file as the window knows it right now — `knownFileURL` alone
+    /// can lag a Save As.
+    private var exportFileURL: URL? {
+        (hostWindow?.windowController?.document as? NSDocument)?.fileURL
+            ?? document.knownFileURL
+    }
 
     private func exportADIF() {
         guard let party else { return }
@@ -1313,17 +1404,25 @@ struct MainView: View {
         // Through .plainText the save panel would append ".txt" — .adi is not
         // an extension of any plain-text type. .adi (LogDocument.swift) is.
         exportType = .adi
-        exportName = "\(document.log.station.callsign.isEmpty ? "log" : document.log.station.callsign).adi"
+        exportName = LogDocument.exportBaseName(fileURL: exportFileURL, log: document.log) + ".adi"
         isExporting = true
     }
 
     private func exportCabrillo() {
+        // The claim ships here, so a standing conflict re-surfaces even if
+        // dismissed earlier. The export itself proceeds untouched — the
+        // warning is advice, and the file is never rewritten. ADIF (⌘E)
+        // carries no CATEGORY-ASSISTED claim and does not re-arm.
+        spotWarningDismissed = SpottingPolicy.rearm(
+            dismissed: spotWarningDismissed,
+            conflict: document.log.spotsContradictNonAssistedClaim
+        )
         guard let party else { return }
         exportDoc = TextExportDocument(
             text: CabrilloExporter.export(log: document.log, party: party, score: score)
         )
         exportType = .plainText
-        exportName = "\(document.log.station.callsign.isEmpty ? "log" : document.log.station.callsign).log"
+        exportName = LogDocument.exportBaseName(fileURL: exportFileURL, log: document.log) + ".log"
         isExporting = true
     }
 }

@@ -334,6 +334,10 @@ party = {
     "dxStyle": "token",
     "allowedModes": ["phone", "cw"],
     "maxSimultaneousCounties": 1,
+    # Quebec has no counties in this contest: the sponsor's own exchange rule
+    # (qcqp_rules.md) is that "VE2 stations ... must send a signal report and
+    # their administrative region". The 17 codes are those regions.
+    "countyTerm": "region",
     "provinces": provinces,
     "exchangeIncludesRST": True,
     "outStateWorksHomeStationsOnly": True,
