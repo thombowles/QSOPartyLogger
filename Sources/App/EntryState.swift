@@ -21,14 +21,16 @@ final class EntryState {
     /// back when the call it belonged to leaves the field.
     private(set) var exchangeIsAutoFilled = false
 
-    /// Where auto-filled text came from, because the two sources do not
-    /// deserve equal faith. Our own log is something the operator copied and
-    /// logged; a spot is a stranger's claim, and the captured hub corpus shows
-    /// those go wrong — a busted call, a frequency 29 kHz off, an unparseable
-    /// typo. A wrong county is cross-checked against the other station's log
-    /// and costs the contact.
+    /// Where auto-filled text came from, because the sources do not deserve
+    /// equal faith. Our own log is something the operator copied and logged;
+    /// a call history file is a curated community roster of what a station
+    /// usually sends; a spot is a stranger's live claim, and the captured hub
+    /// corpus shows those go wrong — a busted call, a frequency 29 kHz off,
+    /// an unparseable typo. A wrong county is cross-checked against the other
+    /// station's log and costs the contact.
     enum ExchangeOrigin: Equatable, Sendable {
         case ownLog
+        case callHistory
         case spot
     }
 
@@ -52,6 +54,37 @@ final class EntryState {
         exchange = text
         exchangeIsAutoFilled = true
         exchangeOrigin = origin
+    }
+
+    // MARK: Received-name ownership
+
+    /// Whether `nameRcvd` holds text the app put there — the same ownership
+    /// rule the exchange has, for the same reason: an offered name must
+    /// vanish when its call leaves the field, and must never overwrite what
+    /// the operator copied off the air.
+    private(set) var nameIsAutoFilled = false
+
+    /// The received name as the operator edits it. Writing through here is
+    /// what marks the text as theirs; the view binds to this, never to
+    /// `nameRcvd` directly.
+    var nameTyped: String {
+        get { nameRcvd }
+        set {
+            nameRcvd = newValue
+            nameIsAutoFilled = false
+        }
+    }
+
+    func autoFillName(_ text: String) {
+        nameRcvd = text
+        nameIsAutoFilled = true
+    }
+
+    /// Take back a name the app offered. Text the operator typed is untouched.
+    func clearAutoFilledName() {
+        guard nameIsAutoFilled else { return }
+        nameRcvd = ""
+        nameIsAutoFilled = false
     }
 
     /// What the operator copied for a station and never logged. Hunting a
@@ -78,6 +111,7 @@ final class EntryState {
         serialRcvd = pending.serialRcvd
         nameRcvd = pending.nameRcvd
         exchangeIsAutoFilled = false
+        nameIsAutoFilled = false
     }
 
     /// Take back text the app put there. Text the operator typed is untouched.
@@ -226,6 +260,7 @@ final class EntryState {
         serialOverride = nil
         serialRcvd = ""
         nameRcvd = ""
+        nameIsAutoFilled = false
         exchange = ""
         exchangeIsAutoFilled = false
         exchangeStatus = .idle
