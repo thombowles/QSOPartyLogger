@@ -279,9 +279,39 @@ enum ScoreEngine {
                 if let best = tiers.filter({ worked >= $0.count }).max(by: { $0.count < $1.count }) {
                     total += best.points
                 }
+
+            case .designatedCountySweep(let counties, let need, let points):
+                // "If at least one QSO is made with a station in five of the
+                // 'Rarest of NC' counties, 500 additional bonus points" — once,
+                // at the threshold or past it, however many of the ten are
+                // worked.
+                if designatedCounties(counties, workedIn: valid).count >= need {
+                    total += points
+                }
             }
         }
         return total
+    }
+
+    /// Which of a designated county list this log has valid-QSO credit for —
+    /// the predicate behind `.designatedCountySweep`, exposed so the sidebar's
+    /// progress readout is the same set the score pays on.
+    static func designatedCountiesWorked(
+        _ designated: [String], log: ContestLog, party: PartyDefinition
+    ) -> Set<String> {
+        let allowed = Set(party.allowedModeClasses)
+        let rows = inScopeRows(
+            log.qsos.sortedChronologically().filter { allowed.contains($0.modeClass) },
+            log: log,
+            party: party,
+            countyAbbrs: Set(party.counties.map(\.abbr))
+        )
+        return designatedCounties(designated, workedIn: rows)
+    }
+
+    private static func designatedCounties(_ designated: [String], workedIn rows: [QSO]) -> Set<String> {
+        Set(rows.map { $0.theirLoc.uppercased() })
+            .intersection(designated.map { $0.uppercased() })
     }
 
     private static func isRovingCategory(_ category: StationProfile.CategoryStation) -> Bool {

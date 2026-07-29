@@ -175,6 +175,17 @@ struct ScoreSidebar: View {
                             )
                             .foregroundStyle(worked >= tier.count ? .green : .secondary)
                         }
+                    case .designatedCountySweep(let counties, let need, let points):
+                        // Counted through the engine's own predicate, so the
+                        // progress shown is the set the bonus is paid on.
+                        let worked = ScoreEngine
+                            .designatedCountiesWorked(counties, log: log, party: party).count
+                        Label(
+                            "+\(points) at \(need) of \(counties.count) designated"
+                                + " (\(worked)/\(need))",
+                            systemImage: worked >= need ? "checkmark.seal.fill" : "seal"
+                        )
+                        .foregroundStyle(worked >= need ? .green : .secondary)
                     }
                 }
                 .font(.callout)
