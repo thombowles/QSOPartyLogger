@@ -156,6 +156,19 @@ final class ScoreFactorTests: XCTestCase {
                        "the two sponsors that print ×1.5 for low power")
     }
 
+    // MARK: What the score sidebar shows
+
+    /// The "Category ×" row reads as the sponsor prints it — "1.5", not "3/2",
+    /// and not a float's "1.5000000000000002". A whole factor keeps its bare
+    /// digits, and ×1 shows nothing at all.
+    func testTheSidebarRendersTheFactorAsTheSponsorPrintsIt() {
+        XCTAssertEqual(ScoreFactor(numerator: 3, denominator: 2).displayString, "1.5")
+        XCTAssertEqual(ScoreFactor(numerator: 5, denominator: 4).displayString, "1.25")
+        XCTAssertEqual(ScoreFactor(5).displayString, "5")
+        XCTAssertTrue(ScoreFactor.one.isOne, "×1 earns no row")
+        XCTAssertFalse(ScoreFactor(numerator: 3, denominator: 2).isOne)
+    }
+
     // MARK: The wire form
 
     /// A party file writes what the sponsor prints. `2` and `1.5` are both
