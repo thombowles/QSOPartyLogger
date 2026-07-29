@@ -255,15 +255,20 @@ final class DesignatedCountyScoringTests: XCTestCase {
         XCTAssertEqual(round, p.bonuses)
     }
 
-    /// The Article 4 guarantee, stated as a test. Adding these two shapes cannot
-    /// move any bundled party's score, because this roster is what uses them —
-    /// a party joining it is a deliberate edit with its own commit.
+    /// The Article 4 guarantee, stated as a roster. These two shapes move only
+    /// the parties named here, so a party joining is a deliberate edit with its
+    /// own commit and every other party still scores as it did.
+    ///
+    /// North Carolina is the only entry: its "Rarest of NC" 10× QSO points and
+    /// its 500-point five-county sweep are what the shapes were built for.
+    /// Ontario wants points by *callsign* and Delaware wants them by *band* —
+    /// neither is county-keyed, so neither is covered here.
     func testTheBundledRosterForBothShapesIsPinned() {
         let parties = PartyCatalog.loadBundled()
         XCTAssertGreaterThan(parties.count, 40, "the catalogue loaded")
 
         let withFactor = Set(parties.filter { $0.countyPointFactor != nil }.map(\.id))
-        XCTAssertEqual(withFactor, [], "no bundled party pays by county yet")
+        XCTAssertEqual(withFactor, ["ncqp"])
 
         let withSweep = Set(parties.filter { party in
             party.bonuses.contains {
@@ -271,6 +276,6 @@ final class DesignatedCountyScoringTests: XCTestCase {
                 return false
             }
         }.map(\.id))
-        XCTAssertEqual(withSweep, [], "no bundled party sweeps a named subset yet")
+        XCTAssertEqual(withSweep, ["ncqp"])
     }
 }

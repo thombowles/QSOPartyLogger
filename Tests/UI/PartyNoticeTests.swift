@@ -202,6 +202,10 @@ final class PartyNoticeTests: XCTestCase {
     }
 
     /// Singular and plural both read as English.
+    ///
+    /// **Amended 2026-07-28**: North Carolina was the plural example at three,
+    /// and is down to one now that its "Rarest of NC" 10× points and its
+    /// five-county sweep both score. Ontario carries three of its own.
     func testHeadingsAgreeInNumber() throws {
         XCTAssertEqual(
             PartyNotice(party: try party("warun")).warning?.header,
@@ -209,6 +213,10 @@ final class PartyNoticeTests: XCTestCase {
         )
         XCTAssertEqual(
             PartyNotice(party: try party("ncqp")).warning?.header,
+            "1 thing this app cannot score for you here."
+        )
+        XCTAssertEqual(
+            PartyNotice(party: try party("oqp")).warning?.header,
             "3 things this app cannot score for you here."
         )
         XCTAssertEqual(

@@ -19,6 +19,21 @@
     "cw": 3,
     "digital": 5
   },
+  "countyPointFactor": {
+    "counties": [
+      "ALL",
+      "CAB",
+      "CAS",
+      "CUR",
+      "DAV",
+      "GRM",
+      "MAC",
+      "PAM",
+      "PER",
+      "VAN"
+    ],
+    "factor": 10
+  },
   "dupeScope": "bandMode",
   "multipliers": {
     "inState": {
@@ -39,7 +54,25 @@
       "countScope": "once"
     }
   },
-  "bonuses": [],
+  "bonuses": [
+    {
+      "type": "designatedCountySweep",
+      "counties": [
+        "ALL",
+        "CAB",
+        "CAS",
+        "CUR",
+        "DAV",
+        "GRM",
+        "MAC",
+        "PAM",
+        "PER",
+        "VAN"
+      ],
+      "need": 5,
+      "points": 500
+    }
+  ],
   "dxStyle": "token",
   "allowedModes": [
     "phone",
@@ -461,22 +494,12 @@
     "tableURL": "http://qsopartyhub.com/ncqp-table.php",
     "postURL": "http://qsopartyhub.com/ncqp-spots.php"
   },
-  "notes": "verified: partial - rules from the North Carolina QSO Party Committee's official 2026 PDF ('2026 North Carolina QSO Party Contest Rules', Updated 10/13/2025) and the sponsor's official county abbreviation sheet, both read verbatim 2026-07-26. Ten hours, 1500Z to 0100Z, SUNDAY 1 MARCH 2026 - a Sunday-only party like ILQP, and the day after South Carolina finishes. The sponsor prints a round end instant, so unlike MNQP, BCQP and SCQP there is no last-minute notation to resolve. THE COUNTY CODES ARE ENCODED BY COLOUR, NOT BY CASE. The sponsor's sheet prints each county name with its code picked out in dark red - 'Abbreviation in dark red capital letters' - so CABarrus is CAB, GRahaM is GRM and DaViDson is DVD. CASE ALONE IS NOT ENOUGH AND ONE COUNTY PROVES IT: 'NEW Hanover' has a capital H, so reading the capitals gives NEWH, while the colour shows NEW in dark red and ' Hanover' in black. The code is NEW and every code here is three letters. gen_ncqp.py therefore parses the colour and cross-checks all ten codes the rules PDF prints in plain text. Watch DVD Davidson against DAV Davie - two different counties one letter apart, and DAV is one of the ten rare ones, so confusing them swaps a 2-point QSO for a 20-point one. Also GRM Graham vs GRA Granville, PEQ Perquimans vs PER Person, and WLK Wilkes vs WIL Wilson. Phone 2 points, CW 3, DIGITAL 5 - the only bundled party where digital outscores CW. FT8 AND FT4 ARE NOT PART OF THIS CONTEST: they belong to the separate Weak Signal Showcase, which is scored on its own, submitted as its own ADIF file, and multiplied by grid squares rather than counties. The rules say 'DO NOT INCLUDE FT-8/4 QSOS in the regular Cabrillo log'. This app cannot tell FT8 from other digital modes when scoring, so KEEP FT8/FT4 OUT OF THIS LOG ENTIRELY and use the sponsor's separate Showcase form. Multipliers count ONCE overall - not per band, not per mode. NC stations count the 100 counties, 49 states (explicitly NOT North Carolina), DC, the 13 provinces and territories and ONE DX for any and all DX worked, which is the sponsor's stated 164 maximum and is exactly what this app produces. Everyone else counts the 100 NC counties. The exchange is CALL SIGN AND LOCATION with NO SIGNAL REPORT - 'Sending signal report (i.e., 59) is optional' - the third party after MDC and MNQP to drop it, and unlike MNQP nothing replaces it, so nothing is missing from the log. County lines pay two counties, logged as two separate lines, which is what this app writes; the sponsor delegates the definition of a county border to MARAC's county-hunter rules by reference. KNOWN LIMITATION 1 - THE 'RAREST OF NC' 10X QSO POINTS ARE NOT APPLIED, AND THIS IS THE LARGEST SCORING GAP IN THIS APP. A QSO with one of ten designated counties scores TEN TIMES the normal points - phone 20, CW 30, digital 50 - and the sponsor stresses that these are 'added to the rest of the regular QSO Points PRIOR TO MULT multiplication so they have a significant positive effect on the final score'. This app pays points by MODE only, with no way to pay more for a particular county, so every rare-county QSO is scored at one tenth of its value BEFORE being multiplied. The ten counties are CAB Cabarrus, GRM Graham, VAN Vance, MAC Macon, DAV Davie, CUR Currituck, PAM Pamlico, ALL Alleghany, PER Person and CAS Caswell. TO CORRECT BY HAND: for each such QSO add nine times its normal points (18 phone, 27 CW, 45 digital) to your QSO-point total, THEN multiply. KNOWN LIMITATION 2 - THE 500-POINT SWEEP IS NOT APPLIED. Working at least one station in five of those ten counties adds 500 points after multiplication. This app's sweep rule counts any counties rather than membership of a named set, so using it would pay almost every log; nothing ships instead. Add 500 yourself if you worked five of the ten. KNOWN LIMITATION 3 - NC stations may count the county they operate from as a multiplier 'regardless of whether any QSOs are logged from that same county', and mobile and portable stations may count each county they activate. This app has no self-activation multiplier, so an in-state entrant is short by the number of counties they operated from. OUT-OF-STATE ENTRANTS ARE UNAFFECTED by this one. Cabrillo CONTEST value NC-QSO-PARTY per the WA7BNM registry - the rules enumerate the CATEGORY headers an entrant must set and omit CONTEST:. Logs are due 2026-03-15, Cabrillo only, paper no longer accepted. OPEN QUESTIONS (why this is partial): (1) and (2) are KNOWN LIMITATIONS 1 and 2 above - both are fully verified rules that this app cannot express, and BOTH CHANGE THE FINAL SCORE FOR EVERY ENTRANT, in state and out. Until they are built, an NCQP score from this app is a floor, not a total, and the arithmetic to correct it is given above. (3) The self-activation multiplier, which affects in-state entrants only. None of the three is a rule in doubt; all three are missing app features. Verify against the sponsor's own scoring when results are posted at http://www.ncqsoparty.org.",
+  "notes": "verified: partial - rules from the North Carolina QSO Party Committee's official 2026 PDF ('2026 North Carolina QSO Party Contest Rules', Updated 10/13/2025) and the sponsor's official county abbreviation sheet, both read verbatim 2026-07-26. Ten hours, 1500Z to 0100Z, SUNDAY 1 MARCH 2026 - a Sunday-only party like ILQP, and the day after South Carolina finishes. The sponsor prints a round end instant, so unlike MNQP, BCQP and SCQP there is no last-minute notation to resolve. THE COUNTY CODES ARE ENCODED BY COLOUR, NOT BY CASE. The sponsor's sheet prints each county name with its code picked out in dark red - 'Abbreviation in dark red capital letters' - so CABarrus is CAB, GRahaM is GRM and DaViDson is DVD. CASE ALONE IS NOT ENOUGH AND ONE COUNTY PROVES IT: 'NEW Hanover' has a capital H, so reading the capitals gives NEWH, while the colour shows NEW in dark red and ' Hanover' in black. The code is NEW and every code here is three letters. gen_ncqp.py therefore parses the colour and cross-checks all ten codes the rules PDF prints in plain text. Watch DVD Davidson against DAV Davie - two different counties one letter apart, and DAV is one of the ten rare ones, so confusing them swaps a 2-point QSO for a 20-point one. Also GRM Graham vs GRA Granville, PEQ Perquimans vs PER Person, and WLK Wilkes vs WIL Wilson. Phone 2 points, CW 3, DIGITAL 5 - the only bundled party where digital outscores CW. FT8 AND FT4 ARE NOT PART OF THIS CONTEST: they belong to the separate Weak Signal Showcase, which is scored on its own, submitted as its own ADIF file, and multiplied by grid squares rather than counties. The rules say 'DO NOT INCLUDE FT-8/4 QSOS in the regular Cabrillo log'. This app cannot tell FT8 from other digital modes when scoring, so KEEP FT8/FT4 OUT OF THIS LOG ENTIRELY and use the sponsor's separate Showcase form. Multipliers count ONCE overall - not per band, not per mode. NC stations count the 100 counties, 49 states (explicitly NOT North Carolina), DC, the 13 provinces and territories and ONE DX for any and all DX worked, which is the sponsor's stated 164 maximum and is exactly what this app produces. Everyone else counts the 100 NC counties. The exchange is CALL SIGN AND LOCATION with NO SIGNAL REPORT - 'Sending signal report (i.e., 59) is optional' - the third party after MDC and MNQP to drop it, and unlike MNQP nothing replaces it, so nothing is missing from the log. County lines pay two counties, logged as two separate lines, which is what this app writes; the sponsor delegates the definition of a county border to MARAC's county-hunter rules by reference. Cabrillo CONTEST value NC-QSO-PARTY per the WA7BNM registry - the rules enumerate the CATEGORY headers an entrant must set and omit CONTEST:. Logs are due 2026-03-15, Cabrillo only, paper no longer accepted. THE 'RAREST OF NC' SCORING IS APPLIED, BOTH HALVES OF IT. A QSO with one of ten designated counties scores TEN TIMES the normal points - phone 20, CW 30, digital 50 - and the sponsor stresses that these are 'added to the rest of the regular QSO Points PRIOR TO MULT multiplication so they have a significant positive effect on the final score', so this ships as a POINTS rule (countyPointFactor) rather than a bonus: the 10X lands INSIDE the multiplication, where a bonus would land after it and pay a fraction of what the sponsor intends. The ten counties are CAB Cabarrus, GRM Graham, VAN Vance, MAC Macon, DAV Davie, CUR Currituck, PAM Pamlico, ALL Alleghany, PER Person and CAS Caswell. BOTH SIDES EARN THE 10X: the rule is stated unconditionally, two paragraphs after the multiplier rules split 'NC participants' from 'Non-NC participants', so an NC station working Graham earns it exactly as a Texan does. Working at least one station in FIVE of those ten adds 500 points AFTER multiplication, paid ONCE - 'This would constitute a sweep' is singular, and 'at least' means all ten still pays the one 500. Both numbers are parsed from the rules text by gen_ncqp.py, which also asserts that 10 x the ordinary points reproduces the 20/30/50 table the sponsor prints alongside the factor. KNOWN LIMITATION 1 - NC stations may count the county they operate from as a multiplier 'regardless of whether any QSOs are logged from that same county', and mobile and portable stations may count each county they activate. This app has no self-activation multiplier, so an in-state entrant is short by the number of counties they operated from. OUT-OF-STATE ENTRANTS ARE UNAFFECTED by this one, and it is the only scoring rule of this party the app still does not express. OPEN QUESTIONS (why this is partial): (1) is KNOWN LIMITATION 1 above - the self-activation multiplier, which affects in-state entrants only. It is not a rule in doubt; it is a missing app feature. AN OUT-OF-STATE NCQP SCORE FROM THIS APP IS NOW A TOTAL RATHER THAN A FLOOR, and an in-state one is short only the counties the entrant operated from. Verify against the sponsor's own scoring when results are posted at http://www.ncqsoparty.org.",
   "caveats": [
     {
       "kind": "scoreAffecting",
-      "summary": "Score is a floor: the “Rarest of NC” 10× QSO points are not applied, and this is the largest scoring gap in the app.",
-      "detail": "THE 'RAREST OF NC' 10X QSO POINTS ARE NOT APPLIED, AND THIS IS THE LARGEST SCORING GAP IN THIS APP. A QSO with one of ten designated counties scores TEN TIMES the normal points - phone 20, CW 30, digital 50 - and the sponsor stresses that these are 'added to the rest of the regular QSO Points PRIOR TO MULT multiplication so they have a significant positive effect on the final score'. This app pays points by MODE only, with no way to pay more for a particular county, so every rare-county QSO is scored at one tenth of its value BEFORE being multiplied. The ten counties are CAB Cabarrus, GRM Graham, VAN Vance, MAC Macon, DAV Davie, CUR Currituck, PAM Pamlico, ALL Alleghany, PER Person and CAS Caswell. TO CORRECT BY HAND: for each such QSO add nine times its normal points (18 phone, 27 CW, 45 digital) to your QSO-point total, THEN multiply."
-    },
-    {
-      "kind": "scoreAffecting",
-      "summary": "The 500-point rare-county sweep is not applied.",
-      "detail": "THE 500-POINT SWEEP IS NOT APPLIED. Working at least one station in five of those ten counties adds 500 points after multiplication. This app's sweep rule counts any counties rather than membership of a named set, so using it would pay almost every log; nothing ships instead. Add 500 yourself if you worked five of the ten."
-    },
-    {
-      "kind": "scoreAffecting",
       "summary": "In-state entrants are short the self-activation multiplier for each county they operate from.",
-      "detail": "NC stations may count the county they operate from as a multiplier 'regardless of whether any QSOs are logged from that same county', and mobile and portable stations may count each county they activate. This app has no self-activation multiplier, so an in-state entrant is short by the number of counties they operated from. OUT-OF-STATE ENTRANTS ARE UNAFFECTED by this one. Cabrillo CONTEST value NC-QSO-PARTY per the WA7BNM registry - the rules enumerate the CATEGORY headers an entrant must set and omit CONTEST:. Logs are due 2026-03-15, Cabrillo only, paper no longer accepted."
+      "detail": "NC stations may count the county they operate from as a multiplier 'regardless of whether any QSOs are logged from that same county', and mobile and portable stations may count each county they activate. This app has no self-activation multiplier, so an in-state entrant is short by the number of counties they operated from. OUT-OF-STATE ENTRANTS ARE UNAFFECTED by this one, and it is the only scoring rule of this party the app still does not express."
     }
   ],
   "callHistory": {

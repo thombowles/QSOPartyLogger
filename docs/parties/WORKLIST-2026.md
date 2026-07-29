@@ -331,34 +331,37 @@ its own commit (Article 4).
   *Still worth checking when Pennsylvania is built: if PAQP also exchanges a QSO
   number, it now just sets the flag.*
 
-- **NO POINTS-BY-COUNTY, and no named-subset sweep — NCQP needs both, and
-  together they are now the largest scoring gap in the repo.** Added 2026-07-26.
+- ~~**NO POINTS-BY-COUNTY, and no named-subset sweep — NCQP needs both, and
+  together they are now the largest scoring gap in the repo.**~~ Added
+  2026-07-26, **BUILT 2026-07-28.** Both ship, and the repo's largest scoring
+  gap is closed.
 
-  *(a) Points by county.* NCQP designates ten "Rarest of NC" counties and pays
-  **10× QSO points** for working them — phone 20, CW 30, digital 50 — and the
-  sponsor stresses the placement: *"These points are added to the rest of the
-  regular QSO Points **prior to MULT multiplication** so they have a significant
-  positive effect on the final score."* `PointsTable` is keyed by mode alone.
-  Sketch: an optional `bonusCountyPoints: {counties: [...], factor: Int}` (or an
-  explicit per-mode table) consulted by
-  `PartyDefinition.pointsTable(forTheirLoc:countyAbbrs:)` — **the hook already
-  exists**, since that method already takes the received location and already
-  chooses between two tables for `homeStationPoints`. This is the cheapest of the
-  outstanding gaps and the highest-value; build it first.
+  *(a) Points by county* → **`countyPointFactor: {counties: [...], factor: Int}`**,
+  consulted by `PartyDefinition.pointsTable(forTheirLoc:countyAbbrs:)` as
+  sketched — the hook was already there, so `ScoreEngine` needed no change for
+  the 10× at all: a scaled table flows through the existing `qsoPoints +=` and
+  lands inside the multiplication by construction. It scales whichever table
+  applied rather than replacing it, so it composes with `homeStationPoints`. The
+  factor ships, not the sponsor's worked-out 20/30/50 table, and `gen_ncqp.py`
+  asserts the one reproduces the other.
 
-  *(b) Named-subset sweep.* *"If at least one QSO is made with a station in five
-  of the 'Rarest of NC' counties, 500 additional bonus points are added to the
-  score after multiplication."* `BonusRule.sweepTiers` lands in the right place
-  but counts `workedValues(.county).count` — *any* counties — so reusing it would
-  pay nearly every log. Sketch: a `sweepOf(counties: [String], need: Int, points:
-  Int)` case; only the predicate is new.
+  *(b) Named-subset sweep* → **`BonusRule.designatedCountySweep(counties:need:points:)`**.
+  A new case rather than a flag on `sweepTiers`, because the two read different
+  things: tiers count `workedValues(.county)`, the multiplier tally, while the
+  sponsor's predicate is *"at least one QSO is made with a station in five of
+  the … counties"* — rows, not mults. Pays once at the threshold or past it.
 
-  **Both affect every entrant, in state and out** — unlike SCQP's activation
-  multiplier or VTQP's power factor, which each hit one class of operator. Until
-  they are built an NCQP score is a floor; `ncqp.json` gives the operator the
-  correcting arithmetic, and
-  `NorthCarolinaQSOPartyTests.testKnownGapRarestCountiesDoNotPayTenTimes` and
-  `…testKnownGapTheFiveRareCountySweepIsNotPaid` pin the current behaviour.
+  Design:
+  [`2026-07-28-designated-county-scoring-design.md`](../superpowers/specs/2026-07-28-designated-county-scoring-design.md).
+  Engine first, party-free, then NCQP alone (Article 9). *NCQP stays
+  `verified: partial` on the self-activation multiplier below, which is
+  in-state-only.*
+
+  **The shape does not cover the other two points-table users.** Ontario wants
+  points by *callsign* and at a flat rate, Delaware by *band* and by the
+  entrant's own role — neither is county-keyed, so both still wait. What this
+  settles is that a points rule keyed on the received location has a home, and
+  the next one adds a sibling field rather than reopening the argument.
 - **FRACTIONAL SCORE MULTIPLIERS — SECOND USER FOUND 2026-07-26, so the repo's
   two-user bar is met and this is now buildable.** WIQP's power factors are QRP
   ×2, LOW ×1.5, high ×1 — **identical to VTQP's, down to the same three

@@ -95,12 +95,17 @@ Built for KE5CW. Bundled parties, all with official county data:
   PDF's colour and cross-checks all ten "Rarest of NC" codes against the rules.
   Phone 2 / CW 3 / **digital 5**, the only bundled party where digital outscores
   CW; multipliers count once overall to the sponsor's stated 164. No 160 m.
-  **`verified: partial`, and this one's gaps are the largest in the app**: QSOs
-  with ten designated "Rarest of NC" counties are worth **10×** *before*
-  multiplication, and five of those ten pays a further 500 — neither is
-  expressible, so an NCQP score here is a floor, with the correcting arithmetic
-  spelled out in the party's notes. FT8/FT4 belong to a separate Weak Signal
-  Showcase and must be kept out of this log.
+  **The party that put points-by-county in the schema**: QSOs with ten
+  designated "Rarest of NC" counties are worth **10×** — phone 20, CW 30,
+  digital 50 — and the sponsor stresses the placement, *"prior to MULT
+  multiplication"*, so it scores as a points rule inside the multiplier rather
+  than a bonus outside it. Five of those ten pays a further 500 afterwards,
+  once. Both sides earn the 10×, and both numbers are parsed out of the rules
+  text by the generator, which asserts that 10× the ordinary points reproduces
+  the table the sponsor prints beside the factor. Still `verified: partial` for
+  one rule: an in-state entrant may count each county they operate *from*, and
+  this app has no self-activation multiplier. FT8/FT4 belong to a separate Weak
+  Signal Showcase and must be kept out of this log.
 - **Oklahoma QSO Party** (Mar 14–15, 2026) — 20 hours in two windows. 77
   counties, and **the sponsor names its own traps**: seven pairs it says "cause
   considerable confusion" (`GAR`/`GRV`, `GRA`/`GNT`, `HAR`/`HRP`, `MCL`/`MCU`,
@@ -1145,7 +1150,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1862 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1869 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1530,7 +1535,12 @@ station profile, radio wiring and cluster history untouched.
   Independent validation: 99 of the 100 names match the real North Carolina
   county list exactly, and the hundredth is the sponsor's own typo — the sheet
   spells Chowan "Chowen", which ships as printed and is asserted, the same call
-  the repo makes for NHQP's "Merrimac".
+  the repo makes for NHQP's "Merrimac". The **rare-county scoring is parsed, not
+  typed**: the generator reads the 10× factor, the sweep's threshold of five and
+  its 500 points out of the sponsor's own sentences, and asserts that the factor
+  times the ordinary points reproduces the 20/30/50 table printed beside it — so
+  an edition that changes either half of the rule fails the run instead of
+  quietly scoring last year's numbers.
 - OKQP: rules from the sponsor's official 2026 PDF (`k5cm.com/okqp2026rules.pdf`)
   with its county locator page and its own 2026 summary, read verbatim
   2026-07-26. **The first search result for this party is the 2003 rules** —
