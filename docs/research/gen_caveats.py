@@ -225,11 +225,12 @@ KINDS = {
     "warun": [
         (0, "scoreAffecting", "A DXCC prefix that equals a state or province code is read as that state, which can leave the 10-DXCC allowance under-used."),
     ],
+    # The power multiplier's caveat is gone as of 2026-07-28: x1.5 is applied,
+    # so the score is no longer a floor. Only the two bonus rules remain.
     "wiqp": [
-        (0, "scoreAffecting", "Score is a floor: the fractional power multiplier is not applied. Multiply by 2 for QRP or 1.5 for low power yourself."),
-        (1, "scoreAffecting", "The 500-point county bonus is credited for your home county too; subtract it."),
-        (2, "scoreAffecting", "The W9FK bonus is credited above 50 MHz, where the sponsor pays nothing; subtract it."),
-        (4, "cosmetic", "33 cm and 23 cm are plausibly legal here and cannot be logged at all."),
+        (0, "scoreAffecting", "The 500-point county bonus is credited for your home county too; subtract it."),
+        (1, "scoreAffecting", "The W9FK bonus is credited above 50 MHz, where the sponsor pays nothing; subtract it."),
+        (2, "cosmetic", "33 cm and 23 cm are plausibly legal here and cannot be logged at all."),
     ],
 }
 

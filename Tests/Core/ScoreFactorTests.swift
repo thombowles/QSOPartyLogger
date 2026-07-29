@@ -152,7 +152,8 @@ final class ScoreFactorTests: XCTestCase {
                 }
             }
         }
-        XCTAssertEqual(fractional, ["vtqp"], "Vermont rule 7(D)(1): low power ×1.5")
+        XCTAssertEqual(fractional, ["vtqp", "wiqp"],
+                       "the two sponsors that print ×1.5 for low power")
     }
 
     // MARK: The wire form

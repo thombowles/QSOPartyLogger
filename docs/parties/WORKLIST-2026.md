@@ -359,8 +359,9 @@ its own commit (Article 4).
   correcting arithmetic, and
   `NorthCarolinaQSOPartyTests.testKnownGapRarestCountiesDoNotPayTenTimes` and
   `…testKnownGapTheFiveRareCountySweepIsNotPaid` pin the current behaviour.
-- **FRACTIONAL SCORE MULTIPLIERS — the engine landed 2026-07-28; the two parties
-  that want it follow.** WIQP's power factors are QRP ×2, LOW ×1.5, high ×1 —
+- ~~**FRACTIONAL SCORE MULTIPLIERS.**~~ **Done 2026-07-28**, in three commits:
+  the engine, then VTQP, then WIQP. WIQP's power factors are QRP ×2, LOW ×1.5,
+  high ×1 —
   **identical to VTQP's, down to the same three numbers** (VTQP rule 7(D)(1)) —
   and `ScoreMultipliers` held `[String: Int]`, so ×1.5 could not be represented
   and shipping ×1 for low power would have understated the most common power
@@ -387,7 +388,8 @@ its own commit (Article 4).
   existing party's score proved unchanged by the full suite;
   `ScoreFactorTests.testOnlyTheRosteredPartiesShipAFractionalFactor` is the
   roster that makes a party gaining a fraction deliberate. **VTQP and WIQP each
-  gain the field in their own commit next** (Article 9).
+  gained the field in their own commit** (Article 9), and both parties' "score is
+  a floor" caveat is gone — the score is the sponsor's.
 - ~~**THE EXCHANGE CANNOT CARRY A NAME.**~~ **Done 2026-07-27.** The second and
   third users arrived at once — the **North American QSO Parties, CW and SSB**
   (NCJ; not State QSO Parties, deliberately absent from the Challenge's

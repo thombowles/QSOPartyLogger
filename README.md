@@ -133,8 +133,9 @@ Built for KE5CW. Bundled parties, all with official county data:
   largest list here — derived from the suggested-frequency table, since the rules
   publish none. **Reading the sponsor's Cabrillo guide changed a field:** its
   rules say DX sends "Country", but its own example logs `DL6QK` as the literal
-  token `DX`. `verified: partial` — its power multiplier is **×1.5 for low
-  power**, the same gap Vermont has.
+  token `DX`. Its power multiplier — **×2 QRP, ×1.5 low power, ×1 high** — is
+  the same table Vermont prints, and **is applied in full**. `verified: partial`,
+  for two bonus rules that over-credit a narrow case.
 - **Virginia QSO Party** (Mar 21–22, 2026) — 26 hours, and **the first bundled
   party whose entities are not all counties**: 95 counties *and* 38 independent
   cities, 133 in all. **Four names appear twice** — Fairfax, Franklin, Richmond
@@ -1151,7 +1152,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1865 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1868 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1582,8 +1583,18 @@ station profile, radio wiring and cluster history untouched.
   `dxStyle` and rejected the sponsor's own sample line. The same example confirms
   the exchange carries no signal report, and the guide prints the `CONTEST:`
   value. DC appears **nowhere in the rules** and only in the multiplier list, as
-  the single row `MD Maryland/(D.C.)`. *Retrieval note:* warac.org 403s a plain
-  fetch of its multiplier page and needs both a browser User-Agent and a Referer.
+  the single row `MD Maryland/(D.C.)`. **The POWER LEVEL table — QRP ×2, low
+  power ×1.5, high ×1 — is applied in full since 2026-07-28**, and its SCORING
+  section states the order this app computes outright: *"Then multiply by Power
+  Level multiplier. Then multiply by your multiplier count under MULTIPLIERS.
+  Finally, add your bonus points."* **The sponsor states no rounding rule
+  anywhere** — none of the three documents contains any rounding language, and
+  all three were searched for it on 2026-07-28 — so a fractional total is
+  rounded **down**, once, on the points × multipliers product: the direction
+  that cannot overstate a claimed score, and the same rule Vermont gets, where
+  the sponsor does at least round its own fractions down. *Retrieval note:*
+  warac.org 403s a plain fetch of its multiplier page and needs both a browser
+  User-Agent and a Referer.
 - VAQP: rules from the Sterling Park Amateur Radio Club's official 2026 PDF and
   the sponsor's entity list, read verbatim 2026-07-26. **Its entity list is 95
   counties and 38 independent cities**, and four names — Fairfax, Franklin,
