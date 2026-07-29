@@ -152,7 +152,7 @@ final class ScoreFactorTests: XCTestCase {
                 }
             }
         }
-        XCTAssertEqual(fractional, [], "no bundled party ships a fractional factor yet")
+        XCTAssertEqual(fractional, ["vtqp"], "Vermont rule 7(D)(1): low power ×1.5")
     }
 
     // MARK: The wire form

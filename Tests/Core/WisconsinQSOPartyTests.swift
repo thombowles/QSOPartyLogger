@@ -248,13 +248,16 @@ final class WisconsinQSOPartyTests: XCTestCase {
     }
 
     /// **KNOWN LIMITATION 1, pinned — and the second party to hit it.** WIQP's
-    /// power factors are QRP ×2, LOW ×1.5, high ×1: **identical to VTQP's**, and
-    /// `ScoreMultipliers` is `[String: Int]`. Two sponsors now want the field.
+    /// power factors are QRP ×2, LOW ×1.5, high ×1: **identical to VTQP's**.
+    /// Vermont's now ship, as exact fractions; Wisconsin's follow in their own
+    /// commit (Article 9).
     func testKnownGapPowerMultiplierIsNotAppliedBecauseItIsFractional() throws {
         XCTAssertNil(wiqp.scoreMultipliers,
                      "×1.5 cannot be represented; a wrong whole number is worse than none")
         let vtqp = try XCTUnwrap(PartyCatalog.party(id: "vtqp"))
-        XCTAssertNil(vtqp.scoreMultipliers, "the same gap, the same three factors")
+        XCTAssertEqual(vtqp.scoreMultipliers?.factor(power: .low, station: .fixed),
+                       ScoreFactor(numerator: 3, denominator: 2),
+                       "the same three factors — Vermont's are applied already")
 
         let s = ScoreEngine.score(log: outLog([qso(their: "MIL")]), party: wiqp)
         XCTAssertEqual(s.categoryFactor, 1)

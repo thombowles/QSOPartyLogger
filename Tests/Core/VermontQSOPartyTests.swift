@@ -37,16 +37,29 @@ final class VermontQSOPartyTests: XCTestCase {
         )
     }
 
-    func outLog(_ qsos: [QSO]) -> ContestLog {
+    /// Both helpers default to **high power**, whose factor is ×1, so that every
+    /// test about points, multipliers or dupes measures what it is about. Rule 4
+    /// makes it the sponsor's own default too: *"Logs not showing power output
+    /// category will be listed as high power."*
+    func outLog(
+        _ qsos: [QSO],
+        power: StationProfile.CategoryPower = .high
+    ) -> ContestLog {
         var log = ContestLog(partyID: "vtqp")
         log.myLocation = .outOfState(location: "TX")
+        log.station.categoryPower = power
         log.qsos = qsos
         return log
     }
 
-    func inLog(_ qsos: [QSO], from county: String = "CHI") -> ContestLog {
+    func inLog(
+        _ qsos: [QSO],
+        from county: String = "CHI",
+        power: StationProfile.CategoryPower = .high
+    ) -> ContestLog {
         var log = ContestLog(partyID: "vtqp")
         log.myLocation = .inState(counties: [county])
+        log.station.categoryPower = power
         log.qsos = qsos
         return log
     }
@@ -104,24 +117,66 @@ final class VermontQSOPartyTests: XCTestCase {
         XCTAssertTrue(vtqp.isPartiallyVerified)
     }
 
-    /// KNOWN LIMITATION 1, pinned. The sponsor's power multiplier is QRP x2, LOW
-    /// POWER x1.5, high x1 — and `ScoreMultipliers` is `[String: Int]`. Shipping
-    /// x1 for low power would understate a low-power score by a third while
-    /// looking right, so nothing ships and the operator is told to do the
-    /// arithmetic. When fractional factors land, this test is what changes.
-    func testKnownGapPowerMultiplierIsNotAppliedBecauseItIsFractional() throws {
-        XCTAssertNil(vtqp.scoreMultipliers,
-                     "x1.5 cannot be represented; a wrong whole number is worse than none")
-        let notes = try XCTUnwrap(vtqp.notes)
-        XCTAssertTrue(notes.contains("KNOWN LIMITATION 1"))
-        XCTAssertTrue(notes.contains("MULTIPLY THE FINAL SCORE YOURSELF"),
-                      "the operator must be told, in the notes, what the app is not doing")
+    /// Rule 7(D)(1), and the first fractional factor in the repo:
+    ///
+    /// > "If all QSO's were made using 5W or less, multiply your score by 2 · If
+    /// > all QSO's were made using more than 5W and less than or equal to 150W
+    /// > output, multiply your score by 1.5 · If any or all QSO's were made
+    /// > using more than 150W, multiply your score by 1"
+    func testThePowerMultiplierShipsIncludingItsHalf() throws {
+        let mults = try XCTUnwrap(vtqp.scoreMultipliers)
+        XCTAssertEqual(mults.factor(power: .qrp, station: .fixed), 2)
+        XCTAssertEqual(mults.factor(power: .high, station: .fixed), 1)
+        XCTAssertEqual(mults.factor(power: .low, station: .fixed),
+                       ScoreFactor(numerator: 3, denominator: 2), "×1.5, exactly")
+    }
 
-        // The score really is the unmultiplied product, so nothing silently
-        // half-applies the rule.
-        let s = ScoreEngine.score(log: outLog([qso(their: "CHI")]), party: vtqp)
-        XCTAssertEqual(s.categoryFactor, 1)
-        XCTAssertEqual(s.total, s.qsoPoints * s.multiplierCount + s.bonusPoints)
+    /// Applied, not merely stored. Four CW QSOs in four counties: 12 QSO points
+    /// × 4 multipliers = 48, and low power takes that to 72.
+    func testTheLowPowerHalfReachesTheScore() {
+        let rows = ["CHI", "ADD", "BEN", "CAL"].enumerated().map {
+            qso(call: "W1\($0.offset)", their: $0.element)
+        }
+        let high = ScoreEngine.score(log: outLog(rows, power: .high), party: vtqp)
+        XCTAssertEqual(high.qsoPoints, 12, "4 CW QSOs at 3 points")
+        XCTAssertEqual(high.multiplierCount, 4)
+        XCTAssertEqual(high.total, 48)
+
+        let low = ScoreEngine.score(log: outLog(rows, power: .low), party: vtqp)
+        XCTAssertEqual(low.total, 72, "48 × 1.5")
+
+        let qrp = ScoreEngine.score(log: outLog(rows, power: .qrp), party: vtqp)
+        XCTAssertEqual(qrp.total, 96, "48 × 2")
+    }
+
+    /// **The sponsor states no rounding rule for the final score.** Its only
+    /// rounding instruction anywhere is rule 7(B)(f), on a fractional multiplier
+    /// count: *"dividing by 3, and rounding down"*. One CW QSO — 3 points ×
+    /// 1 multiplier — lands a low-power entrant on 4.5, and this app rounds it
+    /// down, which is both the sponsor's own idiom and the direction that cannot
+    /// overstate a `CLAIMED-SCORE:`.
+    func testAHalfPointIsRoundedDownAsTheSponsorRoundsItsOwnFractions() {
+        let s = ScoreEngine.score(log: outLog([qso(mode: .cw)], power: .low), party: vtqp)
+        XCTAssertEqual(s.qsoPoints, 3, "CW is 3 points, the highest of any bundled party")
+        XCTAssertEqual(s.multiplierCount, 1)
+        XCTAssertEqual(s.total, 4, "3 × 1 × 1.5 = 4.5 → 4, never 5")
+    }
+
+    /// KNOWN LIMITATION 1, pinned — and the reason it is an *inference* rather
+    /// than a gap. Rule 1A(F) calls the W1AW/1 credit "an additional 2 point
+    /// bonus", which reads as QSO points, but rule 7(D)'s formula names only
+    /// "Total Points X Total Multipliers X Power Multiplier" and the bonus lives
+    /// in section 1A rather than section 7. This app adds it last, so it is
+    /// scaled by neither the multipliers nor the power factor.
+    func testTheW1AWBonusIsAddedAfterThePowerFactorRatherThanInsideIt() throws {
+        let rows = [qso(call: "W1AW/1", their: "CHI")]
+        let low = ScoreEngine.score(log: outLog(rows, power: .low), party: vtqp)
+
+        XCTAssertEqual(low.bonusPoints, 2, "rule 1A(F): 2 points per W1AW/1 QSO")
+        XCTAssertEqual(low.qsoPoints, 3)
+        XCTAssertEqual(low.multiplierCount, 1)
+        XCTAssertEqual(low.total, 6, "⌊3 × 1 × 1.5⌋ = 4, + 2 unscaled — not (3 + 2) × 1.5 = 7")
+        XCTAssertTrue(try XCTUnwrap(vtqp.notes).contains("KNOWN LIMITATION 1"))
     }
 
     /// No band list is published — rule 8 gives one prohibition and one blanket

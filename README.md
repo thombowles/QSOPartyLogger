@@ -42,10 +42,10 @@ Built for KE5CW. Bundled parties, all with official county data:
   DC→MD, county lines paying "2 QSO's and 2 multipliers", and `W1AW/1` worth +2
   per QSO — a 2026-only America250 rule. The sponsor names its own worst trap and
   it became the spot check: `WNH` Windham vs `WNS` Windsor, neither of them
-  `WIN`. `verified: partial`, with five limitations recorded — chief among them
-  that VTQP's power multiplier is **×1.5 for low power**, which this app's
-  whole-number score multiplier cannot represent, so **none is applied and you
-  multiply the final score yourself**.
+  `WIN`. Its power multiplier — **×2 QRP, ×1.5 low power, ×1 high** — is the
+  first fraction in the catalogue and **is applied in full**, rounded down once
+  on the points × multipliers product. `verified: partial`, with five
+  limitations recorded.
 - **Minnesota QSO Party** (Feb 7, 2026) — ten hours, one Saturday. 87 counties,
   and the sponsor prints them **twice** — alphabetically by county and again by
   designator — so [`gen_mnqp.py`](docs/research/gen_mnqp.py) requires its two
@@ -176,10 +176,10 @@ Built for KE5CW. Bundled parties, all with official county data:
   modelled; a 40/80 m daytime +1-per-QSO bonus capped at 250 and a flat 100 for
   submitting a Cabrillo log are not. `verified: partial`.
 - **New Mexico QSO Party** (Apr 11, 2026) — 12 hours, sharing Missouri's day,
-  and **the first bundled party whose power multiplier actually fits**: QRP ×5,
-  Low ×2, High ×1 are whole numbers, so the score multiplier ships. Vermont's and
-  Wisconsin's are the same shape with a ×1.5 low-power factor and still cannot be
-  modelled. 33 counties, where **`SAN` is Sandoval** — not San Juan (`SJU`), San
+  and **the first bundled party whose power multiplier fit a whole number**: QRP
+  ×5, Low ×2, High ×1, where Vermont's and Wisconsin's are the same shape with a
+  ×1.5 low-power factor and had to wait for exact fractions. 33 counties, where
+  **`SAN` is Sandoval** — not San Juan (`SJU`), San
   Miguel (`SMI`) or Santa Fe (`SFE`). The largest activation bonus in the app,
   **5,000 points per county with 15+ QSOs**, plus a 2026-only 250 for W1AW/5 —
   250 because the packet's own change log records it being cut from 500 on 9
@@ -1151,7 +1151,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1862 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1865 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1452,7 +1452,8 @@ station profile, radio wiring and cluster history untouched.
   document** (`ranv.org/vtqso.doc`, titled "VERMONT QSO Party Rules", created
   2026-01-13, footer `13-JAN-2026`) with the RANV summary page
   (`ranv.org/vtqso.html`, page-dated January 31 2026) alongside it, both read
-  verbatim 2026-07-26. The page says outright that it is a summary and that the
+  verbatim 2026-07-26, and re-read 2026-07-28 for the rounding question below.
+  The page says outright that it is a summary and that the
   `.doc` carries the specific rules, so the `.doc` is the authority; the page
   supplies only the county **names**, since the `.doc` prints abbreviations only.
   [`gen_vtqp.py`](docs/research/gen_vtqp.py) makes the two documents check each
@@ -1462,14 +1463,24 @@ station profile, radio wiring and cluster history untouched.
   (WNH) and WiNdSor (WNS)!!") and that `GRA` is Grand Isle, not the "Grand Island"
   that appears in one operating-schedule line. **This is the first party in the
   repo built entirely from a current-year rules document since MEQP** — nothing
-  here rests on a stale edition. `verified: partial` all the same, because five
-  verified rules cannot be expressed: the **×1.5 low-power score multiplier**
-  (whole numbers only, so none is applied), the W1AW/1 bonus being out-of-state
+  here rests on a stale edition. **The power multiplier of rule 7(D)(1) — QRP
+  ×2, low power ×1.5, high ×1 — is applied in full since 2026-07-28**, when the
+  score factor became an exact fraction; before that this party shipped no power
+  multiplier rather than a wrong whole number. **The sponsor states no rounding
+  rule for a fractional final score**, and its only rounding instruction
+  anywhere is rule 7(B)(f)'s grid-square count, *"dividing by 3, and rounding
+  down"* — so this app rounds **down**, once, on the points × multipliers
+  product, following the sponsor's own idiom and taking the direction that
+  cannot overstate a claimed score. `verified: partial` all the same, because
+  four verified rules cannot be expressed — the W1AW/1 bonus being out-of-state
   only, RTTY and FT8 sharing one mode class where the sponsor counts two,
   30/17/12 m shipping as fully valid when the sponsor allows them for FT8/FT4
-  only, and two absent multiplier kinds — approved club stations (`W1NVT`) and
-  grid squares. Two genuine unknowns are open: whether Vermont is a state
-  multiplier for Vermont entrants, and whether 60 m is legal.
+  only, and two absent multiplier kinds (approved club stations `W1NVT`, and
+  grid squares) — and one placement cannot be settled: rule 1A(F) calls the
+  W1AW/1 credit "an additional 2 point bonus" while rule 7(D)'s formula has no
+  bonus term, so this app adds it after the power multiplier rather than inside
+  it. Two genuine unknowns are open: whether Vermont is a state multiplier for
+  Vermont entrants, and whether 60 m is legal.
 - MNQP: rules from the Minnesota Wireless Association's **2026** document,
   `MNQP_Contest_Rules rev 31.pdf`, footer `Rev 31 – December 31, 2025`, read
   verbatim 2026-07-26, with the sponsor's official county multiplier list PDF.

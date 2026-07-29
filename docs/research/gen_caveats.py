@@ -211,12 +211,15 @@ KINDS = {
         (1, "scoreAffecting", "The bonus stations are not shipped; confirm the list before submitting."),
         (2, "scoreAffecting", "In-state rovers are short the self-activation multiplier for each county or city they work ten stations from."),
     ],
+    # The power multiplier's caveat is gone as of 2026-07-28: x1.5 is applied,
+    # so the score is no longer a floor. What replaces it is narrower and
+    # inferred -- where the W1AW/1 bonus points enter the formula.
     "vtqp": [
-        (0, "scoreAffecting", "Score is a floor: the fractional power multiplier is not applied. Multiply by 2 for QRP or 1.5 for low power yourself."),
-        (1, "scoreAffecting", "The W1AW/1 bonus is credited to Vermont entrants, who the sponsor says get nothing."),
-        (2, "scoreAffecting", "RTTY and FT8 are one mode here and two for the sponsor."),
-        (3, "cosmetic", "30, 17 and 12 m ship as fully valid although the sponsor allows them for FT8/FT4 only."),
-        (4, "scoreAffecting", "Club-station and grid-square multipliers are missing entirely; add both by hand."),
+        (0, "scoreAffecting", "The W1AW/1 bonus is credited to Vermont entrants, who the sponsor says get nothing."),
+        (1, "scoreAffecting", "RTTY and FT8 are one mode here and two for the sponsor."),
+        (2, "cosmetic", "30, 17 and 12 m ship as fully valid although the sponsor allows them for FT8/FT4 only."),
+        (3, "scoreAffecting", "Club-station and grid-square multipliers are missing entirely; add both by hand."),
+        (4, "ruleInference", "The W1AW/1 bonus is added after the power multiplier; the sponsor never says where it belongs."),
         (5, "ruleInference", "Whether Vermont counts itself, and whether 60 m is legal, are both inferred."),
     ],
     "warun": [
