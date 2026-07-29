@@ -2,6 +2,13 @@ import Foundation
 
 /// Pure rules-driven scoring: fold the log against a party definition.
 /// Score = QSO points × multipliers × category factors + bonuses.
+///
+/// The category factor may be a fraction (VTQP and WIQP both pay ×1.5 for low
+/// power), so it is applied to the `QSO points × multipliers` product and
+/// resolved down to a whole number there — **before** bonuses, which the
+/// sponsors add afterwards and never scale. Wisconsin states the order
+/// outright: *"Then multiply by your multiplier count under MULTIPLIERS.
+/// Finally, add your bonus points."*
 enum ScoreEngine {
 
     /// One counted multiplier. `scope` is "" (once), a mode raw value
@@ -19,7 +26,7 @@ enum ScoreEngine {
         var qsoPoints = 0
         var multiplierKeys: Set<MultKey> = []
         var bonusPoints = 0
-        var categoryFactor = 1
+        var categoryFactor: ScoreFactor = .one
         var outOfScopeCount = 0
         var dupeRowIDs: Set<UUID> = []
         var invalidRowIDs: Set<UUID> = []
@@ -41,7 +48,7 @@ enum ScoreEngine {
         }
 
         var total: Int {
-            qsoPoints * multiplierCount * categoryFactor + bonusPoints
+            categoryFactor.applied(to: qsoPoints * multiplierCount) + bonusPoints
         }
 
         /// Unique values worked for a class, regardless of scope — for the
@@ -130,7 +137,7 @@ enum ScoreEngine {
         result.categoryFactor = party.scoreMultipliers?.factor(
             power: log.station.categoryPower,
             station: log.station.categoryStation
-        ) ?? 1
+        ) ?? .one
 
         result.bonusPoints = bonusPoints(
             rows: contestRows,

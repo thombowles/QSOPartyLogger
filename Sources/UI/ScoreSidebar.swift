@@ -118,10 +118,10 @@ struct ScoreSidebar: View {
                     Text("Bonus")
                     Text("+\(score.bonusPoints)")
                 }
-                if score.categoryFactor != 1 {
+                if !score.categoryFactor.isOne {
                     GridRow {
                         Text("Category ×")
-                        Text("\(score.categoryFactor)")
+                        Text(score.categoryFactor.displayString)
                     }
                 }
                 if score.dupeCount > 0 {

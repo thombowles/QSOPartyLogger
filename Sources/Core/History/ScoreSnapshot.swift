@@ -16,10 +16,68 @@ struct ScoreSnapshot: Codable, Equatable, Sendable {
         var multiplierCount: Int
         var multiplierCap: Int?
         var bonusPoints: Int
-        var categoryFactor: Int
+        /// The final-score factor as applied, exact — VTQP and WIQP both pay
+        /// ×1.5 for low power. Archives written before fractional factors
+        /// existed carry only the whole-number `categoryFactor` key, which is
+        /// precisely what they meant, so they decode unchanged.
+        var categoryFactor: ScoreFactor
         var total: Int
         /// Scoped multiplier counts keyed by `MultClass` raw value.
         var multsByClass: [String: Int]
+
+        init(
+            qsoPoints: Int,
+            multiplierCount: Int,
+            multiplierCap: Int?,
+            bonusPoints: Int,
+            categoryFactor: ScoreFactor,
+            total: Int,
+            multsByClass: [String: Int]
+        ) {
+            self.qsoPoints = qsoPoints
+            self.multiplierCount = multiplierCount
+            self.multiplierCap = multiplierCap
+            self.bonusPoints = bonusPoints
+            self.categoryFactor = categoryFactor
+            self.total = total
+            self.multsByClass = multsByClass
+        }
+
+        private enum CodingKeys: String, CodingKey {
+            case qsoPoints, multiplierCount, multiplierCap, bonusPoints, total, multsByClass
+            case categoryFactor, categoryFactorExact
+        }
+
+        init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            qsoPoints = try c.decode(Int.self, forKey: .qsoPoints)
+            multiplierCount = try c.decode(Int.self, forKey: .multiplierCount)
+            multiplierCap = try c.decodeIfPresent(Int.self, forKey: .multiplierCap)
+            bonusPoints = try c.decode(Int.self, forKey: .bonusPoints)
+            total = try c.decode(Int.self, forKey: .total)
+            multsByClass = try c.decode([String: Int].self, forKey: .multsByClass)
+            categoryFactor = try c.decodeIfPresent(ScoreFactor.self, forKey: .categoryFactorExact)
+                ?? ScoreFactor(try c.decode(Int.self, forKey: .categoryFactor))
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var c = encoder.container(keyedBy: CodingKeys.self)
+            try c.encode(qsoPoints, forKey: .qsoPoints)
+            try c.encode(multiplierCount, forKey: .multiplierCount)
+            try c.encodeIfPresent(multiplierCap, forKey: .multiplierCap)
+            try c.encode(bonusPoints, forKey: .bonusPoints)
+            try c.encode(total, forKey: .total)
+            try c.encode(multsByClass, forKey: .multsByClass)
+            // The whole-number key every archive has always carried, so a build
+            // without fractional factors still reads this file: it holds 1 where
+            // the true factor is a fraction, which is exactly what such a build
+            // would have applied. `categoryFactorExact` is the truth, and is
+            // written only where the two differ.
+            try c.encode(categoryFactor.wholeNumber ?? 1, forKey: .categoryFactor)
+            if !categoryFactor.isWholeNumber {
+                try c.encode(categoryFactor, forKey: .categoryFactorExact)
+            }
+        }
     }
 
     var validQSOs: Int
