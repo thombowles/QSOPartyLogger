@@ -17,6 +17,15 @@ enum ModeClass: String, Codable, CaseIterable, Sendable, Identifiable {
         }
     }
 
+    /// Column-width label for the sidebar's band/mode grids.
+    var shortLabel: String {
+        switch self {
+        case .phone: "PH"
+        case .cw: "CW"
+        case .digital: "DIG"
+        }
+    }
+
     /// Default RST for the class (599 for keyed modes, 59 for phone).
     var defaultRST: String {
         self == .phone ? "59" : "599"

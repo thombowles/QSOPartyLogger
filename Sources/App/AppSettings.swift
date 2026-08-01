@@ -229,6 +229,13 @@ final class AppSettings {
         didSet { defaults.set(repeatIntervalSeconds, forKey: "repeatIntervalSeconds") }
     }
 
+    /// Multiplier roster sections the operator has collapsed, keyed
+    /// `"<partyID>.<multClass>"`. Absent means expanded, so a party seen for
+    /// the first time shows its whole checklist rather than hiding it.
+    var collapsedMultSections: Set<String> {
+        didSet { defaults.set(Array(collapsedMultSections), forKey: "collapsedMultSections") }
+    }
+
     var lastStationProfile: StationProfile? {
         didSet {
             if let profile = lastStationProfile,
@@ -269,6 +276,7 @@ final class AppSettings {
         callHistoryEnabled = defaults.object(forKey: "callHistoryEnabled") as? Bool ?? true
         spotSources = Set((defaults.stringArray(forKey: "spotSources") ?? [])
             .compactMap(SpotSource.init(rawValue:)))
+        collapsedMultSections = Set(defaults.stringArray(forKey: "collapsedMultSections") ?? [])
         followBandPlan = defaults.object(forKey: "followBandPlan") as? Bool ?? true
         spotModes = Set((defaults.stringArray(forKey: "spotModes") ?? []).compactMap(ModeClass.init(rawValue:)))
         spotBands = Set((defaults.stringArray(forKey: "spotBands") ?? []).compactMap(Band.init(rawValue:)))

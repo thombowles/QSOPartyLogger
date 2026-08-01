@@ -339,6 +339,19 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         /// …once per band *and* per mode (MEQP: "Each multiplier may be counted
         /// once on each mode on each of the six contest bands").
         case perBandMode
+
+        /// The `scope` component of a `ScoreEngine.MultKey` under this scope.
+        /// Both the scorer and the sidebar's roster call this, so a drawn
+        /// block and a counted multiplier can never disagree about what
+        /// "worked on 20m" means.
+        func component(band: Band, modeClass: ModeClass) -> String {
+            switch self {
+            case .once: ""
+            case .perMode: modeClass.rawValue
+            case .perBand: band.rawValue
+            case .perBandMode: "\(band.rawValue)/\(modeClass.rawValue)"
+            }
+        }
     }
 
     struct OneByOneConfig: Codable, Equatable, Sendable {

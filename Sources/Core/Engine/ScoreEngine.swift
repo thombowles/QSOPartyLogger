@@ -162,12 +162,7 @@ enum ScoreEngine {
     private static func scopeComponent(
         _ scope: PartyDefinition.CountScope, band: Band, modeClass: ModeClass
     ) -> String {
-        switch scope {
-        case .once: ""
-        case .perMode: modeClass.rawValue
-        case .perBand: band.rawValue
-        case .perBandMode: "\(band.rawValue)/\(modeClass.rawValue)"
-        }
+        scope.component(band: band, modeClass: modeClass)
     }
 
     private static func isHomeStateViaCounty(

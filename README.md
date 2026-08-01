@@ -119,6 +119,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `⇧⌘S` | Spot to the QSO Party Hub — yourself in Run, the call field in S&P |
 | `⇧⌘R` | Restore the party's default CW messages (Messages editor) |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
+| `⇧⌘M` | Expand / collapse every multiplier list in the score sidebar |
 | `⌘.` | Dismiss the spots-already-used badge for this sitting |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY, change band, change mode |
 
@@ -169,17 +170,41 @@ keys the old message. `Esc` still aborts CW instantly either way.
 
 ## Scoring
 
-The score sidebar shows a running total, a QSOs-by-band/mode matrix, a county
-grid with award tracking, per-class multiplier chips and bonus status — all
-computed from the active party's own rules. Points by mode, multiplier scope
-(once, per band, per mode, or both), bonus stations, mobile activation bonuses,
-power and station-category multipliers, and 1×1 word trackers where the sponsor
-runs one. Dupes are flagged but kept, because sponsors want them in the log. A
-**NEW MULT** badge appears before you log.
+The score sidebar shows a running total, a QSOs-by-band/mode matrix, the full
+multiplier checklist and bonus status — all computed from the active party's own
+rules. Points by mode, multiplier scope (once, per band, per mode, or both),
+bonus stations, mobile activation bonuses, power and station-category
+multipliers, and 1×1 word trackers where the sponsor runs one. Dupes are flagged
+but kept, because sponsors want them in the log. A **NEW MULT** badge appears
+before you log.
 
 Each party names its own multiplier class, so NAQP counts *NA entities*, BCQP
 *districts* and QCQP *regions* — nothing says "county" at a party that doesn't
 have any.
+
+### The multiplier checklist
+
+Every class the party counts is drawn whole — worked *and* still needed — so the
+sidebar answers "what am I missing", not just "what have I done". NAQP shows all
+50 states plus DC, the 13 provinces and the sponsor's 46 NA entities from the
+first contact of the weekend.
+
+Where a party counts a multiplier more than once, each chip carries a strip of
+blocks beneath it, one per band, filled as that band is worked — N1MM's
+Multipliers window in a 270pt column. A chip only goes fully green once every
+band is done, so it can never read "worked" while five multipliers remain on it.
+Hover any chip for what's still needed. **⇧⌘M** expands or collapses every list
+at once, and each party remembers what you left collapsed.
+
+The lists come from the party definition, so they are exactly what that sponsor
+credits: a party that aliases DC to Maryland never lists DC as its own chip, a
+home state reachable only through its counties is still listed, and OhQP shows
+11 provinces where NAQP shows 13. Two tests drive every roster token of every
+bundled party through the scorer in both directions to keep the checklist and
+the score from ever disagreeing.
+
+DX is the one class with no checklist: under prefix style any plausible prefix
+is a multiplier, so worked prefixes are listed as text with no roster to chase.
 
 For the combined May weekend the sidebar breaks down **QSOs by party** —
 Indiana, 7QP, New England, Delaware — each with its own counties-worked count
@@ -465,7 +490,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**1849 unit tests**, none of which need hardware or a network — no serial port,
+**1862 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history

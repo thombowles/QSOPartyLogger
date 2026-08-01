@@ -134,6 +134,7 @@
 		73942B2919A08066576E5060 /* alqp-table-2026-07-25-busy.html in Resources */ = {isa = PBXBuildFile; fileRef = 468D38B74FF2D7C5B9DBDFF9 /* alqp-table-2026-07-25-busy.html */; };
 		74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */; };
 		75B4B677B2E8E0D1B4F0795D /* AdifExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A779F556F857265114F40CB4 /* AdifExporter.swift */; };
+		7AE3D4F81276D6F42E895941 /* MultiplierRosterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AACC54DA31CF56398BD99B6 /* MultiplierRosterTests.swift */; };
 		7AFC46B00E954C466FB322F6 /* ClusterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F09518732D969C418274DB /* ClusterProtocol.swift */; };
 		7BD916C1B52B135ADEA0EB0E /* EntryBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */; };
 		7BE97A35880D3C0C58FBF1FC /* CaveatRosterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CBF19C2B05E02E5B784A9 /* CaveatRosterTests.swift */; };
@@ -193,6 +194,7 @@
 		BDE105E89B5774A9A615D824 /* MississippiQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44F85963D8820FBCA6986965 /* MississippiQSOPartyTests.swift */; };
 		BEB6284CA706FC461D203DAE /* HubFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC05BC2077B42827CBC8A537 /* HubFrequency.swift */; };
 		BF4B93C891EBDA79CBD3E843 /* ChallengeStanding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B598E336484B5D8CC5B9A2F9 /* ChallengeStanding.swift */; };
+		C25E39578901DDEEB086BD35 /* MultiplierRoster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9EEF88A7F58AFB94F83B07 /* MultiplierRoster.swift */; };
 		C46093573C4E0C33B0EE6086 /* QSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28174F39D351A29CC80B77F2 /* QSO.swift */; };
 		C4A0BBE3CA76C438A158B860 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4617D5E5CB3103CD4E042746 /* MainView.swift */; };
 		C58A052DB7DBAC19355917EA /* CallHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCF2F37A32D904FCCB58446 /* CallHistoryStoreTests.swift */; };
@@ -332,6 +334,7 @@
 		359DF0F30A9EF39FE37A2287 /* CallHistoryPrefillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryPrefillTests.swift; sourceTree = "<group>"; };
 		364B004532E156F89351C6BC /* SpottingPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpottingPolicy.swift; sourceTree = "<group>"; };
 		3B07E26A34F4A74B9165A344 /* EntryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryState.swift; sourceTree = "<group>"; };
+		3C9EEF88A7F58AFB94F83B07 /* MultiplierRoster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplierRoster.swift; sourceTree = "<group>"; };
 		3E3270C8AA34DCB8481F768F /* PartyModeInferenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyModeInferenceTests.swift; sourceTree = "<group>"; };
 		3EF36ECEA568E47C2F9D6778 /* ClusterHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterHistoryTests.swift; sourceTree = "<group>"; };
 		3FD300005CA528B8CA373476 /* Spot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
@@ -399,6 +402,7 @@
 		8199BE77C57911CB47B7B016 /* StationMemoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMemoryTests.swift; sourceTree = "<group>"; };
 		82A15E4511652305732261EE /* SetupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupSheet.swift; sourceTree = "<group>"; };
 		831C1B0D852691D58AD871CC /* BandMapLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapLayout.swift; sourceTree = "<group>"; };
+		8AACC54DA31CF56398BD99B6 /* MultiplierRosterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplierRosterTests.swift; sourceTree = "<group>"; };
 		8C7C1B661CE889D39EFE333E /* ContestArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestArchive.swift; sourceTree = "<group>"; };
 		8CE0321C50DA1A9D4AEB58D0 /* County.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = County.swift; sourceTree = "<group>"; };
 		8E91F46A9B0E33BC6E1FC0F5 /* HubPollPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubPollPolicy.swift; sourceTree = "<group>"; };
@@ -543,6 +547,7 @@
 				FCA279B8AFAB9972853CCA93 /* CountyGrouping.swift */,
 				52C79995543D0CB2BED77E11 /* HubSpotSource.swift */,
 				2559BE76C4D55ED692590BD6 /* MultClass.swift */,
+				3C9EEF88A7F58AFB94F83B07 /* MultiplierRoster.swift */,
 				9CDA62C0033DE71F4781CC89 /* PartyCatalog.swift */,
 				B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */,
 			);
@@ -689,6 +694,7 @@
 				44F85963D8820FBCA6986965 /* MississippiQSOPartyTests.swift */,
 				7A13480F81C3AAAF48E260E3 /* MissouriQSOPartyTests.swift */,
 				245471C16B083B398057F4A0 /* ModelTests.swift */,
+				8AACC54DA31CF56398BD99B6 /* MultiplierRosterTests.swift */,
 				7E2F19912CD8C3334A165D73 /* MultiplierTermTests.swift */,
 				E57CEF931EEFE52947A0DC75 /* MultiStatePartyTests.swift */,
 				E0173AC4FD078C2202756941 /* NameExchangeTests.swift */,
@@ -1186,6 +1192,7 @@
 				6A3CA6D517471AE74A517ECA /* ModelTests.swift in Sources */,
 				ED5F3D5F6931292ADBF3E385 /* MorseCodeTests.swift in Sources */,
 				AB9A54854A5FB453F503C85E /* MultiStatePartyTests.swift in Sources */,
+				7AE3D4F81276D6F42E895941 /* MultiplierRosterTests.swift in Sources */,
 				5D99EF910C46F58428506244 /* MultiplierTermTests.swift in Sources */,
 				DBAD1FCCE33BEB6229EB8E52 /* NameExchangeTests.swift in Sources */,
 				4A57F99BE9580955BE968B72 /* NebraskaQSOPartyTests.swift in Sources */,
@@ -1315,6 +1322,7 @@
 				92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */,
 				1A483EEB4F78C27DB1D7EC6D /* MorseCode.swift in Sources */,
 				FEFDD64CFF603D6BBD4A5EAC /* MultClass.swift in Sources */,
+				C25E39578901DDEEB086BD35 /* MultiplierRoster.swift in Sources */,
 				D7F2318518DBD917270727B9 /* MyLocation.swift in Sources */,
 				F068DB1B3C0A793714CC7745 /* OneByOneTracker.swift in Sources */,
 				D9CBAA91D8BCAD19385482BA /* PartyCatalog.swift in Sources */,
