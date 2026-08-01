@@ -590,5 +590,5 @@ Copied from Article 22 so it can be ticked off in place:
 - [ ] `Resources/Parties/<id>.json` with provenance + any `verified: partial` questions
 - [ ] per-party test file meeting the Article 18 floor
 - [ ] full suite green, command and output recorded
-- [ ] README: bundled-parties entry, test count, provenance
+- [ ] docs: README table row + test count, `PARTIES.md` entry, `PROVENANCE.md` sources
 - [ ] committed alone

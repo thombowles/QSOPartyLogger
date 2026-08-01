@@ -142,10 +142,20 @@ A test suite that needs a K3 on the desk is a suite that stops being run.
 
 A change that adds a party or a radio also updates, in the same commit:
 
-- the README's bundled-parties list or radio feature bullet,
+- the README's supported-parties table or radio feature bullet,
+- the party's entry in [`PARTIES.md`](PARTIES.md) — what is unusual about it,
+  and every rule that could not be modelled,
 - the README's test count,
-- the README's **Data provenance** section (source + fetch date),
-- the keyboard reference table, if any key gained a behavior.
+- [`PROVENANCE.md`](PROVENANCE.md) (source + fetch date),
+- the README's keyboard reference table, if any key gained a behavior.
+
+The README is the operator's document and stays short: one table row per party,
+one line per feature. Detail belongs in `PARTIES.md`, sources in
+`PROVENANCE.md`. A party's row is derived from its JSON — dates, window length
+and multiplier count are never hand-typed (Article 2). The row names the
+entities the way the sponsor does (parishes, districts, regions), which is
+`countyTerm` where the party sets one and the sponsor's own word where it
+does not.
 
 ### Article 7 — Keyboard-first
 
@@ -483,7 +493,8 @@ A party is **done** when all of these are true:
       open questions in `notes` (Article 3)
 - [ ] per-party test file meeting the floor (Article 18)
 - [ ] **full suite green** — command and output recorded (Article 8)
-- [ ] README: bundled-parties entry, test count, provenance (Article 6)
+- [ ] docs: README table row + test count, `PARTIES.md` entry, `PROVENANCE.md`
+      sources (Article 6)
 - [ ] committed alone (Article 9)
 
 A radio is **done** when Articles 10–14 are each satisfied and the README
