@@ -7,7 +7,7 @@ import XCTest
 /// `DupeChecker.DupeKey` already includes `theirLoc`, so the scoring engine
 /// knows a mobile in a new county is a new contact — but the band map has
 /// always keyed worked-tracking on the callsign alone. Left that way, a rover
-/// you have worked stays greyed, skipped by ⌘←/⌘→ and hidden under "hide
+/// you have worked stays greyed, skipped by ⌘↓/⌘↑ and hidden under "hide
 /// worked" for the rest of the contest, however many needed counties it drives
 /// through. Rovers are the largest multiplier source in a state QSO party.
 final class HubSpotFilteringTests: XCTestCase {
@@ -60,7 +60,7 @@ final class HubSpotFilteringTests: XCTestCase {
         )
     }
 
-    /// ⌘←/⌘→ works from the same judgement, so the keys cannot disagree with
+    /// ⌘↓/⌘↑ works from the same judgement, so the keys cannot disagree with
     /// what the map is showing.
     func testSpotKeysStopOnARoverThatHasMoved() {
         let spots = [

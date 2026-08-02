@@ -127,9 +127,9 @@ enum KeyMonitorGate {
         switch keyCode {
         case 24, 69: return .adjustWPM(by: 2)  // '=' / keypad '+' (⇧= is '+' too)
         case 27, 78: return .adjustWPM(by: -2)  // '-' / keypad '-'
-        case 123: return .previousSpot  // ←
-        case 124: return .nextSpot  // →
-        // The map draws high frequency at the top, so up the map is up the band.
+        // Spot stepping is the vertical axis only: ⌘← / ⌘→ are macOS's own
+        // beginning/end-of-line keys and stay with whatever has focus. The map
+        // draws high frequency at the top, so up the map is up the band.
         case 126: return .nextSpot  // ↑
         case 125: return .previousSpot  // ↓
         case 38: return .jumpToCQFrequency  // 'j'

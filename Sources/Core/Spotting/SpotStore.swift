@@ -79,7 +79,7 @@ final class SpotStore {
     }
 
     /// Next spot from a frequency within a frequency-sorted list, wrapping at
-    /// the band edges (⌘→ / ⌘← navigation). The tolerance skips the spot the
+    /// the band edges (⌘↑ / ⌘↓ navigation). The tolerance skips the spot the
     /// operator is already sitting on.
     ///
     /// Worked stations are stepped over — they stay on the band map, greyed,

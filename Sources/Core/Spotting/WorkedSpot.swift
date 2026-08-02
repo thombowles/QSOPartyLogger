@@ -5,7 +5,7 @@ import Foundation
 /// A station nobody posted left no trace on the map: you work him, and ten
 /// minutes later his frequency reads as empty. N1MM's bandmap carries calls
 /// the operator typed alongside network spots for exactly this reason. These
-/// arrive already worked, so they draw struck-through and ⌘←/⌘→ steps over
+/// arrive already worked, so they draw struck-through and ⌘↑/⌘↓ steps over
 /// them — the point is knowing the frequency is taken, not being sent back.
 enum WorkedSpot {
 

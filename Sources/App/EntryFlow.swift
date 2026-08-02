@@ -350,7 +350,7 @@ final class EntryFlow {
         revalidate(context)
     }
 
-    /// A different station, chosen whole — a spot click or ⌘← / ⌘→ / ⌘↑ / ⌘↓.
+    /// A different station, chosen whole — a spot click or ⌘↑ / ⌘↓.
     ///
     /// Distinct from `callChanged` on purpose. Typing is incremental and must
     /// never cost the operator text they typed; arriving at a new station is a

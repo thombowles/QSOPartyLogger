@@ -111,8 +111,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `F1`–`F8` | Send CW message (Run or S&P set) |
 | `Esc` | Abort CW, stop repeat-CQ, close an open sheet |
 | `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
-| `⌘←` / `⌘→` | Tune to the previous / next unworked spot on the band |
-| `⌘↓` / `⌘↑` | The same on the vertical axis — `⌘↑` goes up the band map |
+| `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
 | `⌘R` | Toggle Run / Search & Pounce |
 | `⌘J` | Jump back to your CQ run frequency |
 | `⌘B` | Toggle the band map window |
@@ -278,7 +277,7 @@ stays on screen when another app takes focus, so it can sit beside a panadapter.
   mode, per band, and how long spots live (5 min – 2 hr). It's a panel, not a
   menu — tick everything you want in one visit. All off by default.
 - **Worked stations stay visible**, greyed and struck through so you can watch
-  the band fill up, and ⌘← / ⌘→ steps straight over them.
+  the band fill up, and ⌘↓ / ⌘↑ steps straight over them.
 - **Rovers stop hiding.** A mobile that changes county is a new contact: work
   them in one county and they grey out, then come back the moment they spot from
   a county you still need.
@@ -493,7 +492,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**1865 unit tests**, none of which need hardware or a network — no serial port,
+**1866 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history

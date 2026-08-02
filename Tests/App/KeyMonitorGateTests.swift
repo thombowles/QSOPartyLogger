@@ -123,17 +123,14 @@ final class KeyMonitorGateTests: XCTestCase {
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 69, command: true), .adjustWPM(by: 2))
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 27, command: true), .adjustWPM(by: -2))
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 78, command: true), .adjustWPM(by: -2))
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 123, command: true), .previousSpot)
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 124, command: true), .nextSpot)
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 38, command: true), .jumpToCQFrequency)
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 11, command: true), .toggleBandMap)
     }
 
     /// Those same keys unmodified are ordinary typing and must reach the entry
-    /// field: '=' and '-' are characters, ←/→ move the caret, 'j' and 'b' are
-    /// letters in a callsign.
+    /// field: '=' and '-' are characters, 'j' and 'b' are letters in a callsign.
     func testCommandChordKeysAreInertWithoutCommand() {
-        for code: UInt16 in [24, 69, 27, 78, 123, 124, 38, 11] {
+        for code: UInt16 in [24, 69, 27, 78, 38, 11] {
             XCTAssertNil(
                 KeyMonitorGate.action(keyCode: code, command: false),
                 "keyCode \(code) must pass through without ⌘"
@@ -159,20 +156,25 @@ final class KeyMonitorGateTests: XCTestCase {
     // MARK: Vertical spot stepping
 
     /// The band map draws high frequency at the top, so ⌘↑ means "up the map",
-    /// which is the higher frequency — the same station ⌘→ lands on.
-    func testCommandUpAndDownStepSpotsLikeCommandRightAndLeft() {
+    /// which is the higher frequency.
+    func testCommandUpAndDownStepSpots() {
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 126, command: true), .nextSpot)
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 125, command: true), .previousSpot)
-        XCTAssertEqual(
-            KeyMonitorGate.action(keyCode: 126, command: true),
-            KeyMonitorGate.action(keyCode: 124, command: true),
-            "⌘↑ and ⌘→ are the same action"
-        )
-        XCTAssertEqual(
-            KeyMonitorGate.action(keyCode: 125, command: true),
+    }
+
+    /// Stepping spots is the vertical axis only. ⌘← / ⌘→ are macOS's own
+    /// beginning/end-of-line keys, and the entry field gets to keep them.
+    func testCommandLeftAndRightDoNotStepSpots() {
+        XCTAssertNil(
             KeyMonitorGate.action(keyCode: 123, command: true),
-            "⌘↓ and ⌘← are the same action"
+            "⌘← belongs to the text field, not the band map"
         )
+        XCTAssertNil(
+            KeyMonitorGate.action(keyCode: 124, command: true),
+            "⌘→ belongs to the text field, not the band map"
+        )
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 123, command: true, shift: true))
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 124, command: true, shift: true))
     }
 
     /// Without ⌘ the arrows belong to whatever has focus — a text field, the
