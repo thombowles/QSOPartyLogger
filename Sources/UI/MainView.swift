@@ -1329,39 +1329,25 @@ struct MainView: View {
     private func installKeyMonitor() {
         guard keyMonitor == nil else { return }
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-            // The monitor is app-wide, so the first question is always whether
-            // this keystroke is even ours — see `KeyMonitorGate`.
-            let focus = KeyMonitorGate.focus(currentWindows())
-            guard focus != .elsewhere else { return event }
+            // The monitor is app-wide, and every rule — which window owns the
+            // keystroke, what it does, whether it is swallowed — lives in
+            // `KeyMonitorGate` where it can be tested. This closure reads the
+            // window state, asks, and dispatches, in that order: the loop stops
+            // and the transmitter comes down *before* the key's own action, so
+            // F2 during a repeating CQ replaces the CQ instead of stacking
+            // behind it.
+            let response = KeyMonitorGate.response(
+                keyCode: event.keyCode,
+                command: event.modifierFlags.contains(.command),
+                shift: event.modifierFlags.contains(.shift),
+                focus: KeyMonitorGate.focus(currentWindows()),
+                repeatRunning: repeatTask != nil
+            )
 
-            // Any keystroke cancels a running repeat-CQ loop (per Tom's spec:
-            // "typing anything cancels repeat"). Typing in *another* log's
-            // window no longer stops this one's CQ.
-            if repeatTask != nil {
-                stopRepeat()
-            }
-
-            guard
-                let action = KeyMonitorGate.action(
-                    keyCode: event.keyCode,
-                    command: event.modifierFlags.contains(.command),
-                    shift: event.modifierFlags.contains(.shift)
-                )
-            else { return event }
-
-            // A sheet owns the keyboard. Article 11 still holds — Esc aborts
-            // instantly wherever it is pressed — but the key is never consumed,
-            // so Esc also closes the sheet and F1–F8 cannot transmit a macro the
-            // operator is in the middle of editing.
-            if focus == .sheet {
-                if action == .abortCW {
-                    radio.abortCW(settings: settings)
-                }
-                return event
-            }
-
-            perform(action)
-            return nil
+            if response.stopsRepeat { stopRepeat() }
+            if response.abortsCW { radio.abortCW(settings: settings) }
+            if let action = response.action { perform(action) }
+            return response.consumesEvent ? nil : event
         }
     }
 
@@ -1388,6 +1374,9 @@ struct MainView: View {
         case .toggleBandMap: toggleBandMap()
         case .sendMessage(let index): sendMessageAt(index)
         case .clearEntry: clearEntry()
+        // The gate hoists Esc into `Response.abortsCW` — which every key does
+        // during a repeat — so this never arrives here. It keeps the table
+        // exhaustive.
         case .abortCW: radio.abortCW(settings: settings)
         case .exportADIF: exportADIF()
         case .exportCabrillo: exportCabrillo()

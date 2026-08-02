@@ -13,9 +13,11 @@ import Foundation
 /// than on the window the operator is typing in.
 ///
 /// The event plumbing itself is not unit-testable — an `NSEvent` built in a test
-/// and dispatched by hand never traverses a local monitor — so the two decisions
-/// the monitor makes are pure functions here, and the closure in `MainView` does
-/// nothing but read the window state, ask this type, and dispatch.
+/// and dispatched by hand never traverses a local monitor — so every decision the
+/// monitor makes is a pure function here, and the closure in `MainView` does
+/// nothing but read the window state, ask this type, and dispatch. `response` is
+/// the whole of it; `focus` and `action` are the two halves it is built from,
+/// tested on their own because their key tables are worth pinning directly.
 enum KeyMonitorGate {
 
     // MARK: Which window the keystroke belongs to
@@ -121,6 +123,64 @@ enum KeyMonitorGate {
         case 53: return .abortCW  // Esc
         default: return nil
         }
+    }
+
+    // MARK: The whole decision for one key down
+
+    /// Everything the monitor does with a single key down, in the order it
+    /// must happen: stop the loop, take the transmitter down, then dispatch.
+    ///
+    /// `abortsCW` is the only place an abort is decided — `Action.abortCW`
+    /// never reaches `action`, so no caller can abort twice or abort *after*
+    /// starting the message the same keystroke asked for.
+    struct Response: Equatable {
+        /// Cancel a running repeat-CQ loop.
+        var stopsRepeat = false
+        /// Force key and PTT up now, discarding whatever is on the air.
+        var abortsCW = false
+        /// The action to dispatch, once the transmitter is down.
+        var action: Action?
+        /// Swallow the event so it never reaches the focused control.
+        var consumesEvent = false
+    }
+
+    /// While a repeat-CQ loop is running, *every* key does what Esc does: the
+    /// operator has started answering someone, and the half-sent CQ must come
+    /// off the air mid-character rather than talk over him. A key that has its
+    /// own job still does it afterwards, so F2 replaces the CQ instead of
+    /// queueing behind it, and a letter is left unconsumed so it still lands in
+    /// the call field.
+    ///
+    /// With no repeat running nothing is aborted but Esc — typing the next call
+    /// while an F2 exchange goes out must let the exchange finish.
+    static func response(
+        keyCode: UInt16,
+        command: Bool,
+        shift: Bool = false,
+        focus: Focus,
+        repeatRunning: Bool
+    ) -> Response {
+        // Another document, the dashboard, or no window at all: not ours to
+        // stop, abort, or consume.
+        guard focus != .elsewhere else { return Response() }
+
+        var response = Response()
+        if repeatRunning {
+            response.stopsRepeat = true
+            response.abortsCW = true
+        }
+
+        let mapped = action(keyCode: keyCode, command: command, shift: shift)
+        if mapped == .abortCW { response.abortsCW = true }
+
+        // A sheet owns the keyboard: the abort above still stands, but the key
+        // is never consumed and no action is dispatched, so Esc also closes the
+        // sheet and F1–F8 cannot key a macro that is being edited.
+        guard focus == .document else { return response }
+
+        if let mapped, mapped != .abortCW { response.action = mapped }
+        response.consumesEvent = mapped != nil
+        return response
     }
 
     private static func commandAction(keyCode: UInt16, shift: Bool) -> Action? {

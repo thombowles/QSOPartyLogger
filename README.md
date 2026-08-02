@@ -110,6 +110,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `F12` | Wipe the entry fields and start over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
 | `Esc` | Abort CW, stop repeat-CQ, close an open sheet |
+| Any key | While repeat-CQ is running: stop it and abort the CQ on the air, then do the key's own job |
 | `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
 | `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
 | `⌘R` | Toggle Run / Search & Pounce |
@@ -124,6 +125,14 @@ Per-party detail — what's unusual about each, and every known limitation — i
 
 In the Contest Dashboard (**⌘⇧D**): `⌘[` / `⌘]` change year, `⌘R` re-reads the
 history file, `Return` opens that contest's log, and `⌘E` / `⇧⌘E` export it.
+
+While repeat-CQ is running, **any key does what `Esc` does**: the loop stops and
+the CQ on the air comes down mid-character, so the moment you start typing his
+call you are not talking over him. A key that has its own job still does it,
+after the abort — `F2` replaces the CQ with the exchange, `F1` starts the CQ
+over — and an ordinary letter still lands in the call field. With repeat off
+nothing is cut short: typing the next call while an `F2` exchange goes out lets
+the exchange finish.
 
 These keys belong to the log window with focus. While a sheet is open it owns
 the keyboard — `F1`–`F8` do not transmit, so revising F2 and pressing it never
@@ -492,7 +501,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**1866 unit tests**, none of which need hardware or a network — no serial port,
+**1876 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history
