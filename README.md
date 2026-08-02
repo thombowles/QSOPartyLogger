@@ -282,8 +282,11 @@ stays on screen when another app takes focus, so it can sit beside a panadapter.
 - **Rovers stop hiding.** A mobile that changes county is a new contact: work
   them in one county and they grey out, then come back the moment they spot from
   a county you still need.
-- **Stations you worked land on the map**, at the frequency you worked them, so
-  a station nobody spotted doesn't leave a hole in the band.
+- **Stations you worked land on the map** while you're searching, at the
+  frequency you worked them, so a station nobody spotted doesn't leave a hole in
+  the band. **Running, they don't** — everyone answering your CQ is on your own
+  frequency, which the map already marks, so a good run would otherwise bury it
+  under a stack of its own callsigns.
 - **Stacked spots** fan out sideways into extra columns rather than being shoved
   off frequency. Twenty calls on one frequency show all twenty. Label size is
   adjustable S/M/L/XL for reading across the room.
@@ -490,7 +493,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**1862 unit tests**, none of which need hardware or a network — no serial port,
+**1865 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history

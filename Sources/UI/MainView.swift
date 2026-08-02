@@ -887,8 +887,13 @@ struct MainView: View {
     /// map too — one spot per contact, only where nobody has spotted him
     /// already, and only when the radio gave us a frequency to put him on.
     /// It arrives worked, so it draws struck-through and ⌘←/⌘→ steps over it.
+    ///
+    /// Searching only. Running, the mode is passed in and `WorkedSpot` returns
+    /// nothing — see there for why a run frequency is the one that needs no
+    /// marking.
     private func addWorkedStationsToBandMap(_ rows: [QSO]) {
-        for spot in WorkedSpot.spots(for: rows, myCall: document.log.station.callsign) {
+        for spot in WorkedSpot.spots(for: rows, myCall: document.log.station.callsign,
+                                     mode: operatingMode.wrappedValue) {
             spotStore.addIfAbsent(spot)
         }
     }

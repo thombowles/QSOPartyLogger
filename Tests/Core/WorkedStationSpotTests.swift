@@ -30,7 +30,7 @@ final class WorkedStationSpotTests: XCTestCase {
     // MARK: A contact becomes a spot
 
     func testALoggedContactBecomesASpotAtItsOwnFrequency() throws {
-        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW"))
+        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW", mode: .searchPounce))
 
         XCTAssertEqual(spot.call, "K0ABC")
         XCTAssertEqual(spot.freqKHz, 7047)
@@ -39,7 +39,7 @@ final class WorkedStationSpotTests: XCTestCase {
 
     /// It came from your log, not from a feed — and the spotter is you.
     func testTheSpotIsMarkedAsComingFromYourOwnLog() throws {
-        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "ke5cw"))
+        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "ke5cw", mode: .searchPounce))
 
         XCTAssertEqual(spot.source, .local)
         XCTAssertEqual(spot.spotter, "KE5CW")
@@ -49,7 +49,7 @@ final class WorkedStationSpotTests: XCTestCase {
     /// through is what makes the spot draw struck-through the instant it lands
     /// rather than looking like a fresh station to call.
     func testTheContactsLocationRidesAlongSoTheSpotGreysOutAtOnce() throws {
-        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(theirLoc: "mdsn"), myCall: "KE5CW"))
+        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(theirLoc: "mdsn"), myCall: "KE5CW", mode: .searchPounce))
 
         XCTAssertEqual(spot.county, "MDSN")
         XCTAssertTrue(
@@ -60,7 +60,7 @@ final class WorkedStationSpotTests: XCTestCase {
     /// No radio, no frequency, nowhere to draw it. Inventing one would put a
     /// station on a frequency he was never on.
     func testAContactLoggedWithoutARadioMakesNoSpot() {
-        XCTAssertNil(WorkedSpot.spot(for: qso(freqKHz: nil), myCall: "KE5CW"))
+        XCTAssertNil(WorkedSpot.spot(for: qso(freqKHz: nil), myCall: "KE5CW", mode: .searchPounce))
     }
 
     /// A county-line contact expands to one row per county but is one contact,
@@ -72,7 +72,37 @@ final class WorkedStationSpotTests: XCTestCase {
             qso(groupID: group, myLoc: "LIME"),
         ]
 
-        XCTAssertEqual(WorkedSpot.spots(for: rows, myCall: "KE5CW").count, 1)
+        XCTAssertEqual(WorkedSpot.spots(for: rows, myCall: "KE5CW", mode: .searchPounce).count, 1)
+    }
+
+    // MARK: Running
+
+    /// Running, every station you work is on *your* frequency, so each contact
+    /// would stack another call on the one spot you never need marked — the
+    /// map already carries your run as the CQ marker, and ⌘J goes back to it.
+    /// The pile is the whole reason: a good run buries the band under itself.
+    func testAContactWorkedWhileRunningNeverReachesTheMap() {
+        XCTAssertNil(WorkedSpot.spot(for: qso(), myCall: "KE5CW", mode: .run))
+    }
+
+    /// Searching is where a locally-added call earns its place: he is on a
+    /// frequency you found, and nobody else posted him.
+    func testTheSameContactSearchingStillLands() throws {
+        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW", mode: .searchPounce))
+
+        XCTAssertEqual(spot.call, "K0ABC")
+        XCTAssertEqual(spot.freqKHz, 7047)
+    }
+
+    /// The run itself: a stream of contacts on one frequency, leaving nothing.
+    func testARunOnOneFrequencyLeavesNothingOnTheMap() {
+        let rows = [
+            qso(call: "K0ABC", groupID: UUID()),
+            qso(call: "W1XYZ", groupID: UUID()),
+            qso(call: "N4EMP", groupID: UUID()),
+        ]
+
+        XCTAssertTrue(WorkedSpot.spots(for: rows, myCall: "KE5CW", mode: .run).isEmpty)
     }
 
     // MARK: Only when the band is clear
@@ -80,7 +110,7 @@ final class WorkedStationSpotTests: XCTestCase {
     @MainActor
     func testAWorkedStationIsAddedWhenNothingElseHasSpottedHim() throws {
         let store = SpotStore()
-        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW"))
+        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW", mode: .searchPounce))
 
         store.addIfAbsent(spot)
 
@@ -96,7 +126,7 @@ final class WorkedStationSpotTests: XCTestCase {
         store.add(Spot(call: "K0ABC", freqKHz: 7042.5, spotter: "N4EMP", comment: "",
                        receivedAt: Self.logged, county: "MDSN", source: .hub))
 
-        store.addIfAbsent(try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW")))
+        store.addIfAbsent(try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW", mode: .searchPounce)))
 
         XCTAssertEqual(store.all.count, 1)
         XCTAssertEqual(store.all.first?.freqKHz, 7042.5)
@@ -110,7 +140,7 @@ final class WorkedStationSpotTests: XCTestCase {
         store.add(Spot(call: "K0ABC", freqKHz: 14042.5, spotter: "N4EMP", comment: "",
                        receivedAt: Self.logged, county: "MDSN", source: .hub))
 
-        store.addIfAbsent(try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW")))
+        store.addIfAbsent(try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW", mode: .searchPounce)))
 
         XCTAssertEqual(store.all.count, 2)
     }
@@ -125,7 +155,7 @@ final class WorkedStationSpotTests: XCTestCase {
         let store = SpotStore()
         store.maxAgeMinutes = 15
         store.hubMaxAgeMinutes = 60
-        store.addIfAbsent(try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW")))
+        store.addIfAbsent(try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW", mode: .searchPounce)))
         store.add(Spot(call: "W1XYZ", freqKHz: 7052, spotter: "N4EMP", comment: "",
                        receivedAt: Self.logged, county: "LIME", source: .hub))
 
@@ -142,7 +172,7 @@ final class WorkedStationSpotTests: XCTestCase {
         var options = SpotFilter.Options()
         options.sources = [.hub]
 
-        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW"))
+        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW", mode: .searchPounce))
 
         XCTAssertTrue(SpotFilter.matches(spot, options: options))
     }
@@ -154,7 +184,7 @@ final class WorkedStationSpotTests: XCTestCase {
         options.hideWorked = true
         options.workedCallCounties = ["K0ABC|MDSN"]
 
-        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW"))
+        let spot = try XCTUnwrap(WorkedSpot.spot(for: qso(), myCall: "KE5CW", mode: .searchPounce))
 
         XCTAssertFalse(SpotFilter.matches(spot, options: options))
     }
