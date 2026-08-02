@@ -151,6 +151,11 @@ keys the old message. `Esc` still aborts CW instantly either way.
   report, the entry bar shows yours (pre-filled) and a field for theirs. A
   county-line contact is one contact and carries one number. Deleting a QSO
   never renumbers the rest.
+- **The log shows the exchange you actually ran.** Ten of the bundled parties
+  send no signal report at all, and the Sent and Rcvd columns follow each one:
+  `TOM TX` for a name party (NAQP, MNQP), `1 SCLA` for a number party (CQP,
+  PAQP, VAQP), the location alone for MDC, IdQP, NCQP and WIQP, and `599 MRN`
+  everywhere a report is genuinely exchanged.
 - **Run vs Search & Pounce follows your location** — an in-state log opens in
   Run, an out-of-state log in S&P. The mode is stored in the log, so reopening
   mid-contest puts you back where you were.
@@ -501,7 +506,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**1876 unit tests**, none of which need hardware or a network — no serial port,
+**1886 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history
