@@ -195,6 +195,24 @@ Each party names its own multiplier class, so NAQP counts *NA entities*, BCQP
 *districts* and QCQP *regions* — nothing says "county" at a party that doesn't
 have any.
 
+### Rate
+
+Beside the score, on the same lines, four figures in QSOs per hour:
+
+| | |
+| --- | --- |
+| **Last 10** | Across the last ten QSOs, measured to *now* — so it falls away while you are off the air instead of reporting a run that has already died |
+| **60 min** | Contacts in the trailing hour. A count, not a projection, and the one figure that reaches zero when the band does |
+| **Hour** | This UTC clock hour so far, and where it lands at the current pace — `15→39` |
+| **On air** | Averaged across time in the chair, breaks of 30 minutes or more excluded, so an overnight does not halve it |
+
+Short windows are counted in QSOs and long ones in minutes on purpose: a
+ten-QSO window always holds data and widens itself when things go quiet, while
+only a clock-based window can fall to zero. Anything the log cannot yet support
+reads `—` rather than a confident number — two contacts ten seconds apart are
+not 120/hr. Dupes and out-of-scope contacts are excluded, so rate and the QSO
+count beside it always agree.
+
 ### The multiplier checklist
 
 Every class the party counts is drawn whole — worked *and* still needed — so the
@@ -506,7 +524,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**1886 unit tests**, none of which need hardware or a network — no serial port,
+**1910 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history

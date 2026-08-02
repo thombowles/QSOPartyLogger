@@ -28,8 +28,11 @@ struct ScoreSidebar: View {
             .padding(12)
         }
         // Capped so a fresh launch can't hand the sidebar half the window —
-        // the entry/log side holds layout priority and takes the slack.
-        .frame(minWidth: 230, idealWidth: 270, maxWidth: 400)
+        // the entry/log side holds layout priority and takes the slack. The
+        // floor is 250 rather than 230 because the score card now carries two
+        // columns of figures, and a rate the operator reads at a glance can
+        // neither shrink nor truncate.
+        .frame(minWidth: 250, idealWidth: 270, maxWidth: 400)
         .background(.background.secondary)
     }
 
@@ -88,49 +91,119 @@ struct ScoreSidebar: View {
         }
     }
 
+    private struct Figure {
+        var label: String
+        var value: String
+        var tint: Color?
+    }
+
+    /// The score rows, in the order they are drawn. Category and dupes are
+    /// conditional; the four above them never are, which is what lets the rate
+    /// figures line up against them without any special-casing.
+    private var scoreFigures: [Figure] {
+        var figures = [
+            Figure(label: "QSOs", value: "\(score.validQSOs)"),
+            Figure(label: "Points", value: "\(score.qsoPoints)"),
+            Figure(label: "Mults", value: "\(score.multiplierCount)"),
+            Figure(label: "Bonus", value: "+\(score.bonusPoints)"),
+        ]
+        if score.categoryFactor != 1 {
+            figures.append(Figure(label: "Category ×", value: "\(score.categoryFactor)"))
+        }
+        if score.dupeCount > 0 {
+            figures.append(
+                Figure(label: "Dupes", value: "\(score.dupeCount)", tint: .orange)
+            )
+        }
+        return figures
+    }
+
+    /// Timestamps of the rows the score counts. Dupes, wrong-mode and
+    /// out-of-scope rows are not contest QSOs, so they are not rate either —
+    /// and a county-line contact contributes all of its rows, because the
+    /// `QSOs` figure beside it counts them that way.
+    private var scoredTimestamps: [Date] {
+        let excluded = score.dupeRowIDs
+            .union(score.invalidRowIDs)
+            .union(score.outOfScopeRowIDs)
+        return log.qsos.filter { !excluded.contains($0.id) }.map(\.timestampUTC)
+    }
+
+    /// Score on the left, rate on the right.
+    ///
+    /// The tick is what makes the rate figures honest: without it every
+    /// time-based window freezes between QSOs, and a run that died twenty
+    /// minutes ago goes on reporting the rate it had when it was alive. 15
+    /// seconds is finer than any figure's resolution, and only this card
+    /// redraws — the rosters and county chips below are outside it.
     private var totalsCard: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("SCORE")
-                .font(.caption.weight(.bold))
-                .foregroundStyle(.secondary)
-            Text("\(score.total.formatted())")
-                .font(.system(size: 30, weight: .bold, design: .rounded))
-                .monospacedDigit()
-            Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 3) {
-                GridRow {
-                    Text("QSOs")
-                    Text("\(score.validQSOs)").gridColumnAlignment(.trailing)
-                }
-                GridRow {
-                    Text("Points")
-                    Text("\(score.qsoPoints)")
-                }
-                GridRow {
-                    Text("Mults")
-                    Text("\(score.multiplierCount)")
-                }
-                GridRow {
-                    Text("Bonus")
-                    Text("+\(score.bonusPoints)")
-                }
-                if score.categoryFactor != 1 {
-                    GridRow {
-                        Text("Category ×")
-                        Text("\(score.categoryFactor)")
-                    }
-                }
-                if score.dupeCount > 0 {
-                    GridRow {
-                        Text("Dupes").foregroundStyle(.orange)
-                        Text("\(score.dupeCount)").foregroundStyle(.orange)
-                    }
-                }
-            }
-            .font(.callout.monospacedDigit())
+        TimelineView(.periodic(from: .now, by: 15)) { context in
+            totalsGrid(
+                rate: RateColumn.rows(
+                    RateMeter.reading(timestamps: scoredTimestamps, now: context.date)
+                )
+            )
         }
         .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(.background, in: RoundedRectangle(cornerRadius: 8))
+    }
+
+    /// One `Grid`, not two stacks side by side: the rate rows have to sit on
+    /// the same baselines as the score rows, and aligning independent stacks
+    /// means hardcoding an offset for the 30pt total that breaks at any other
+    /// font size. Four columns — label, value, label, value.
+    private func totalsGrid(rate: [RateColumn.Row]) -> some View {
+        let figures = scoreFigures
+        return Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 3) {
+            GridRow {
+                heading("SCORE").gridCellColumns(2)
+            }
+            GridRow {
+                Text("\(score.total.formatted())")
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .gridCellColumns(2)
+                // Alongside SCORE this sat a whole 30pt total above the
+                // figures it names, reading as a heading for the card rather
+                // than for the column. Anchored to the bottom of the total's
+                // row it lands directly on top of them.
+                heading("RATE")
+                    .padding(.leading, gutter)
+                    .gridCellAnchor(.bottomLeading)
+                heading("/hr")
+                    .gridCellAnchor(.bottomTrailing)
+            }
+            ForEach(0..<max(figures.count, rate.count), id: \.self) { index in
+                GridRow {
+                    let figure = figures.indices.contains(index) ? figures[index] : nil
+                    Text(figure?.label ?? "")
+                        .foregroundStyle(figure?.tint ?? .primary)
+                    Text(figure?.value ?? "")
+                        .foregroundStyle(figure?.tint ?? .primary)
+                        .gridColumnAlignment(.trailing)
+
+                    let row = rate.indices.contains(index) ? rate[index] : nil
+                    Text(row?.label ?? "")
+                        .foregroundStyle(.secondary)
+                        .padding(.leading, gutter)
+                        .help(row?.help ?? "")
+                    Text(row?.value ?? "")
+                        .gridColumnAlignment(.trailing)
+                        .help(row?.help ?? "")
+                }
+            }
+        }
+        .font(.callout.monospacedDigit())
+    }
+
+    /// Keeps the two halves of the card from reading as one run of columns.
+    private let gutter: CGFloat = 10
+
+    private func heading(_ text: String) -> some View {
+        Text(text)
+            .font(.caption.weight(.bold))
+            .foregroundStyle(.secondary)
     }
 
     @ViewBuilder
