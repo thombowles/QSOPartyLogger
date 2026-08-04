@@ -36,7 +36,8 @@
         "dx"
       ],
       "homeStateCountsViaCounty": false,
-      "countScope": "perBand"
+      "countScope": "perBand",
+      "dxCountsEntities": true
     },
     "outState": {
       "classes": [
@@ -85,6 +86,10 @@
   ],
   "hubSpots": null,
   "notes": "verified: partial - rules from the First State Amateur Radio Club (FSARC), read verbatim 2026-07-26. THREE COUNTIES, the smallest list in this app, and the codes are the county's INITIAL plus DE: New Castle is NDE, not a truncation. THE NEWEST RULES ARE TITLED 2024 - rules-2025 and rules-2026 both 404 - so this party ships against a two-year-old document, which is why it is partial. WORSE, THE SITE'S OWN LINKS LAND SHORT: /qsoparty/rules.htm redirects to rules-2022.htm, which redirects to rules-2023.html and stops there; only the home page's /qso-rules link reaches rules-2024.html. Every Last-Modified on the site reads 2026-07-17, a server-wide touch, so header dates prove nothing. OPEN QUESTION 1: THE RULES STATE NO CONTEST TIMES AT ALL, only 'Date: First full weekend in May'. The DATE is the sponsor's; the HOURS exist in no sponsor document and come from the SQP Challenge calendar (1700Z 2 May to 2359Z 3 May). Article 19 wants the sponsor's own times and there are none, so the calendar's ship with this flagged - an operator should confirm before 2027. KNOWN LIMITATION 1 - QSO POINTS DEPEND ON WHICH SIDE YOU ARE ON, and the schema keys points on what you RECEIVE. 'Stations inside DE earn 1 point per phone QSO, 2 for digital and 2 per CW. Stations outside DE earn 10 per phone, 20 per digital and 20 per CW' - exactly ten times as much. homeStationPoints fires whenever the received location is a Delaware county, which is right for every out-of-state entrant (all their valid QSOs are with Delaware) and right for a Delaware station working outside, but WRONG for a DELAWARE STATION WORKING ANOTHER DELAWARE STATION, which scores 10/20/20 where the sponsor pays 1/2/2. That is the smallest wrong case available: those contacts earn no multiplier either way, by the sponsor's own rule, and they are a minority of a Delaware log. The fix is to give pointsTable the entrant's role as well as the received location. KNOWN LIMITATION 2 - VHF AND UP SCORE DIFFERENTLY: 'DEQP also allows contacts on any band and mode 6 meters and up to include repeater contacts within Delaware. 1 point per voice contact, 2 points per digital contact to include CW.' Points are keyed by mode, never by band, so a 6 m contact scores the HF value. Second user of a points-table gap after North Carolina's points-by-county and Ontario's points-by-call. KNOWN LIMITATION 3 - the 50-point electronic-submission bonus is not modelled: it pays for how the log is SENT, not for anything on the air, and no BonusRule shape describes that. KNOWN LIMITATION 4 - FT8/FT4 use a Field Day exchange entirely ('1A DE' for New Castle, '2A DE' for Kent), which is a different exchange grammar, not a different token; it is not modelled. Multipliers count PER BAND. Delaware entrants count states, provinces and DXCC countries - NOT counties, so a Delaware-to-Delaware contact yields points only, which the rules say outright. The power multiplier fits: over 100 W x1, 100 W or less x2, 5 W or less x3 - the fourth party to ship one. County lines are logged as two separate QSOs, so maxSimultaneousCounties is 1. The Cabrillo CONTEST header is the one thing not from the sponsor - it has a whole Cabrillo Info page and still never names the header - so DE-QSO-PARTY comes from WA7BNM under Article 1's exception.",
+  "callHistory": {
+    "filePrefix": "QSOP_IN7QPNE_DE",
+    "token": "QSOPARTY DE"
+  },
   "caveats": [
     {
       "kind": "provenance",
@@ -111,9 +116,5 @@
       "summary": "FT8/FT4 use a Field Day exchange grammar that is not modelled.",
       "detail": "FT8/FT4 use a Field Day exchange entirely ('1A DE' for New Castle, '2A DE' for Kent), which is a different exchange grammar, not a different token; it is not modelled. Multipliers count PER BAND. Delaware entrants count states, provinces and DXCC countries - NOT counties, so a Delaware-to-Delaware contact yields points only, which the rules say outright. The power multiplier fits: over 100 W x1, 100 W or less x2, 5 W or less x3 - the fourth party to ship one. County lines are logged as two separate QSOs, so maxSimultaneousCounties is 1. The Cabrillo CONTEST header is the one thing not from the sponsor - it has a whole Cabrillo Info page and still never names the header - so DE-QSO-PARTY comes from WA7BNM under Article 1's exception."
     }
-  ],
-  "callHistory": {
-    "filePrefix": "QSOP_IN7QPNE_DE",
-    "token": "QSOPARTY DE"
-  }
+  ]
 }
