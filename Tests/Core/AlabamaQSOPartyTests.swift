@@ -153,7 +153,8 @@ final class AlabamaQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.workedValues(.county), ["SHEL"])
         XCTAssertEqual(s.workedValues(.state), ["AL", "TX", "MD"], "AL via county; DC credited as MD")
         XCTAssertEqual(s.workedValues(.province), ["ON"])
-        XCTAssertEqual(s.workedValues(.dx), ["DL", "G"], "each DXCC prefix is its own mult")
+        XCTAssertEqual(s.workedValues(.dx), ["Germany", "England"],
+                       "each DXCC entity is its own mult, named from the ARRL list")
         XCTAssertEqual(s.multiplierCount, 7)
     }
 
