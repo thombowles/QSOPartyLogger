@@ -225,11 +225,12 @@ Built for KE5CW. Bundled parties, all with official county data:
   municipalities, so the list mixes counties, districts, regional
   municipalities, cities, towns and united counties. **`HAL` is the Town of
   Haldimand, not Halton** (`HTN`). Multipliers count **per band**, not per mode.
-  Three limitations are recorded rather than papered over: the five 10-point
+  Two limitations are recorded rather than papered over: the five 10-point
   club stations are *QSO* points that sit inside the multiplication and have no
-  schema shape, the literal `DX` cannot be logged because counting DXCC
-  entities individually requires prefix mode, and the activation bonus counts
-  three QSOs where the sponsor wants three different stations. `verified: partial`.
+  schema shape, and the activation bonus counts three QSOs where the sponsor
+  wants three different stations. **Both DX forms the sponsor names now work** —
+  each DXCC entity is its own multiplier, and the literal `DX` the rules call
+  "also acceptable" logs alongside the prefix. `verified: partial`.
 - **Quebec QSO Party** (Apr 19, 2026) — 11 hours in one window, overlapping
   Ontario's Sunday leg. **17 administrative regions**, where **`QUE` is the
   Capitale-Nationale around Quebec City, not the province** — which is not a

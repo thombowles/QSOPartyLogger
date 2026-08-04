@@ -194,25 +194,39 @@ final class OntarioQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.multiplierCount, 4)
     }
 
-    /// **KNOWN LIMITATION 2, pinned.** The sponsor counts DXCC countries
-    /// individually, so `prefix` ships and each entity is its own multiplier.
-    /// The cost is the literal `DX`, which the rules call "also acceptable" and
-    /// `isPlausibleDXPrefix` rejects by design. This is the exact mirror of
-    /// North Dakota, where the same two settings traded places.
-    func testDXCCCountriesCountIndividuallyAndTheLiteralDXCannotBeLogged() throws {
+    /// The sponsor counts DXCC countries individually, so `prefix` ships and
+    /// each entity is its own multiplier — and it also says that when an
+    /// Ontario station logs one, "the abbreviation 'DX' is also acceptable".
+    /// Both now hold: the literal token used to be rejected because prefix
+    /// mode had no way to admit it, and it is loggable again.
+    func testDXCCCountriesCountIndividuallyAndTheLiteralDXIsLoggable() throws {
         XCTAssertEqual(oqp.dxStyle, .prefix)
         XCTAssertTrue(ExchangeParser.acceptsDXPrefix(party: oqp, role: .inState))
 
+        XCTAssertTrue(oqp.multipliers.inState.dxCountsEntities)
         let s = ScoreEngine.score(log: inLog([
             qso(call: "DL1AA", band: .m20, my: "TOR", their: "DL"),
             qso(call: "JA1BB", band: .m20, my: "TOR", their: "JA"),
         ]), party: oqp)
         XCTAssertEqual(s.multiplierCount, 2, "two entities, two multipliers")
+        XCTAssertEqual(Set(s.workedValues(.dx)), ["Germany", "Japan"],
+                       "named from the ARRL list, not left as bare prefixes")
 
-        guard case .failure = ExchangeParser.parse("DX", party: oqp, role: .inState) else {
-            return XCTFail("the literal DX is what prefix mode gives up — pin it")
-        }
-        XCTAssertTrue(try XCTUnwrap(oqp.notes).contains("KNOWN LIMITATION 2"))
+        // Two prefixes of one entity are one multiplier — the whole point of
+        // counting entities rather than tokens.
+        let sameEntity = ScoreEngine.score(log: inLog([
+            qso(call: "DL1AA", band: .m20, my: "TOR", their: "DL"),
+            qso(call: "DJ2BB", band: .m20, my: "TOR", their: "DJ"),
+        ]), party: oqp)
+        XCTAssertEqual(sameEntity.workedValues(.dx), ["Germany"])
+        XCTAssertEqual(sameEntity.multiplierCount, 1, "DL and DJ are both Germany")
+
+        XCTAssertTrue(oqp.acceptsDXToken)
+        XCTAssertEqual(
+            try ExchangeParser.parse("DX", party: oqp, role: .inState).get().locations,
+            ["DX"],
+            "the rules call the literal DX acceptable, so it must log"
+        )
 
         // The mirror image: North Dakota keeps DX and loses the prefix.
         let ndqp = try XCTUnwrap(PartyCatalog.party(id: "ndqp"))
@@ -270,7 +284,7 @@ final class OntarioQSOPartyTests: XCTestCase {
         log.myLocation = .inState(counties: ["TOR"])
         XCTAssertEqual(ScoreEngine.score(log: log, party: oqp).bonusPoints, 300,
                        "the sponsor would want three different stations")
-        XCTAssertTrue(try XCTUnwrap(oqp.notes).contains("KNOWN LIMITATION 3"))
+        XCTAssertTrue(try XCTUnwrap(oqp.notes).contains("KNOWN LIMITATION 2"))
     }
 
     /// "Ontario stations work everyone. **Non-Ontario stations work Ontario
@@ -359,9 +373,12 @@ final class OntarioQSOPartyTests: XCTestCase {
         XCTAssertTrue(notes.contains("verified: partial"))
         XCTAssertTrue(notes.contains("THE SITE ROLLED FORWARD TO 2027 BUT THE RULES DID NOT"))
         XCTAssertTrue(notes.contains("PRE-2026 SOURCE IS WRONG"))
-        for n in ["KNOWN LIMITATION 1", "KNOWN LIMITATION 2", "KNOWN LIMITATION 3"] {
+        for n in ["KNOWN LIMITATION 1", "KNOWN LIMITATION 2"] {
             XCTAssertTrue(notes.contains(n), n)
         }
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION 3"),
+                       "the literal-DX limitation closed and the rest renumbered")
+        XCTAssertTrue(notes.contains("BOTH DX FORMS THE SPONSOR NAMES NOW WORK"))
         XCTAssertTrue(notes.contains("OPEN QUESTION 1"))
     }
 }

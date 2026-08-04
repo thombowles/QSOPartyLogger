@@ -178,9 +178,8 @@ KINDS = {
     ],
     "oqp": [
         (0, "scoreAffecting", "The five 10-point club stations are not modelled."),
-        (1, "scoreAffecting", "The literal “DX” token cannot be logged."),
-        (2, "scoreAffecting", "The activation bonus can be over-credited, bounded at 300 points per multiplier area."),
-        (3, "ruleInference", "Whether 60 m is legal is ambiguous; eight bands ship without it."),
+        (1, "scoreAffecting", "The activation bonus can be over-credited, bounded at 300 points per multiplier area."),
+        (2, "ruleInference", "Whether 60 m is legal is ambiguous; eight bands ship without it."),
     ],
     "paqp": [
         (0, "cosmetic", "630 m, 2200 m and anything above 70 cm are legal here but cannot be logged."),
