@@ -166,7 +166,7 @@ final class IllinoisQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.workedValues(.county), ["LEE"])
         XCTAssertEqual(s.workedValues(.state), ["TX"])
         XCTAssertEqual(s.workedValues(.province), ["ON"])
-        XCTAssertEqual(s.workedValues(.dx), ["DL"])
+        XCTAssertEqual(s.workedValues(.dx), ["Germany"])
         XCTAssertEqual(s.multiplierCount, 4)
     }
 
