@@ -7,17 +7,18 @@ final class CaveatRosterTests: XCTestCase {
 
     private var parties: [PartyDefinition] { PartyCatalog.loadBundled() }
 
-    /// The parties where this app will mis-score or mis-export, as against the
-    /// 39 that `verified: partial` used to warn about. A new entry here means
-    /// a real scoring gap was found; a departure means one was closed.
+    /// The 20 parties where this app will mis-score or mis-export, as against
+    /// the 39 that `verified: partial` used to warn about. A new entry here
+    /// means a real scoring gap was found; a departure means one was closed.
     ///
-    /// **NMQP and NDQP left on 2026-08-01**: the DX collapse and the
-    /// unloggable DX country were each a party's only blocking caveat, and
-    /// the ARRL entity table fixed both.
+    /// **Three left on 2026-08-01**, when the ARRL DXCC entity table landed:
+    /// `ndqp` (its DX country is loggable now), `nmqp` (DX entities count one
+    /// by one) and `warun` (a prefix equal to a state code is decided by the
+    /// callsign). All three were the same missing table.
     private static let badges: Set<String> = [
         "arqp", "deqp", "fqp", "idqp", "ilqp", "in7qpne", "kyqp", "laqp",
         "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "neqp",
-        "oqp", "qcqp", "scqp", "vaqp", "vtqp", "warun", "wiqp",
+        "oqp", "qcqp", "scqp", "vaqp", "vtqp", "wiqp",
     ]
 
     func testBadgeRosterIsExactlyAsExpected() {
@@ -81,13 +82,19 @@ final class CaveatRosterTests: XCTestCase {
         }
     }
 
-    /// A fully verified party can still carry a caveat — the Salmon Run does,
-    /// and NAQP's Dominican-Republic shadow is the same prefix-collision
-    /// class — so the two statuses must stay independent.
+    /// A fully verified party can still carry a caveat — NAQP's
+    /// Dominican-Republic shadow is one — so the two statuses must stay
+    /// independent. The Salmon Run used to be the other example and left the
+    /// list on 2026-08-01: its prefix-collision caveat is fixed, not
+    /// reclassified, so it is now verified *and* caveat-free.
     func testVerifiedPartiesMayStillCarryCaveats() {
         let verifiedWithCaveats = parties
             .filter { !$0.isPartiallyVerified && !$0.caveats.isEmpty }
             .map(\.id)
-        XCTAssertEqual(verifiedWithCaveats, ["naqpcw", "naqpssb", "warun"])
+        XCTAssertEqual(verifiedWithCaveats, ["naqpcw", "naqpssb"])
+
+        let warun = parties.first { $0.id == "warun" }
+        XCTAssertFalse(warun?.isPartiallyVerified ?? true)
+        XCTAssertEqual(warun?.caveats.count, 0, "fixed outright, not downgraded")
     }
 }

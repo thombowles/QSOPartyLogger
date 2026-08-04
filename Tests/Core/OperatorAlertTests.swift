@@ -77,16 +77,23 @@ final class OperatorAlertTests: XCTestCase {
                        "a party gained or lost its operator alerts — check deliberately")
     }
 
-    /// **A verified party can still have something to say.** The Salmon Run's
-    /// rules are fully confirmed, yet it carries a modelling limitation the
-    /// operator should know about — so alerts are not tied to partial
-    /// verification, and the sheet shows them either way, with the warning tone
-    /// reserved for parties whose rules could not be confirmed.
+    /// **A verified party can still have something to say.** NAQP's rules are
+    /// fully confirmed, yet it carries modelling limitations the operator
+    /// should know about — so alerts are not tied to partial verification, and
+    /// the sheet shows them either way, with the warning tone reserved for
+    /// parties whose rules could not be confirmed.
+    ///
+    /// The Salmon Run was this example until 2026-08-01, when its one
+    /// limitation was fixed rather than reclassified.
     func testAVerifiedPartyCanStillCarryALimitation() throws {
-        let warun = try XCTUnwrap(PartyCatalog.party(id: "warun"))
-        XCTAssertFalse(warun.isPartiallyVerified, "the Salmon Run's rules are confirmed")
-        XCTAssertFalse(warun.operatorAlerts.isEmpty,
+        let naqp = try XCTUnwrap(PartyCatalog.party(id: "naqpcw"))
+        XCTAssertFalse(naqp.isPartiallyVerified, "NAQP's rules are confirmed")
+        XCTAssertFalse(naqp.operatorAlerts.isEmpty,
                        "…and it still has a limitation worth showing")
+
+        let warun = try XCTUnwrap(PartyCatalog.party(id: "warun"))
+        XCTAssertFalse(warun.isPartiallyVerified)
+        XCTAssertTrue(warun.operatorAlerts.isEmpty, "nothing left to warn about")
     }
 
     /// **The two accessors have different jobs and both are kept.**

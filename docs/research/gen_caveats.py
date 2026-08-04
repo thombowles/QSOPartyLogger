@@ -215,9 +215,7 @@ KINDS = {
         (4, "scoreAffecting", "Club-station and grid-square multipliers are missing entirely; add both by hand."),
         (5, "ruleInference", "Whether Vermont counts itself, and whether 60 m is legal, are both inferred."),
     ],
-    "warun": [
-        (0, "scoreAffecting", "A DXCC prefix that equals a state or province code is read as that state, which can leave the 10-DXCC allowance under-used."),
-    ],
+    "warun": [],
     "wiqp": [
         (0, "scoreAffecting", "Score is a floor: the fractional power multiplier is not applied. Multiply by 2 for QRP or 1.5 for low power yourself."),
         (1, "scoreAffecting", "The 500-point county bonus is credited for your home county too; subtract it."),
