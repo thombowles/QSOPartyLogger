@@ -262,7 +262,8 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   document** (`ranv.org/vtqso.doc`, titled "VERMONT QSO Party Rules", created
   2026-01-13, footer `13-JAN-2026`) with the RANV summary page
   (`ranv.org/vtqso.html`, page-dated January 31 2026) alongside it, both read
-  verbatim 2026-07-26. The page says outright that it is a summary and that the
+  verbatim 2026-07-26, and re-read 2026-07-28 for the rounding question below.
+  The page says outright that it is a summary and that the
   `.doc` carries the specific rules, so the `.doc` is the authority; the page
   supplies only the county **names**, since the `.doc` prints abbreviations only.
   [`gen_vtqp.py`](research/gen_vtqp.py) makes the two documents check each
@@ -272,14 +273,24 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   (WNH) and WiNdSor (WNS)!!") and that `GRA` is Grand Isle, not the "Grand Island"
   that appears in one operating-schedule line. **This is the first party in the
   repo built entirely from a current-year rules document since MEQP** — nothing
-  here rests on a stale edition. `verified: partial` all the same, because five
-  verified rules cannot be expressed: the **×1.5 low-power score multiplier**
-  (whole numbers only, so none is applied), the W1AW/1 bonus being out-of-state
+  here rests on a stale edition. **The power multiplier of rule 7(D)(1) — QRP
+  ×2, low power ×1.5, high ×1 — is applied in full since 2026-07-28**, when the
+  score factor became an exact fraction; before that this party shipped no power
+  multiplier rather than a wrong whole number. **The sponsor states no rounding
+  rule for a fractional final score**, and its only rounding instruction
+  anywhere is rule 7(B)(f)'s grid-square count, *"dividing by 3, and rounding
+  down"* — so this app rounds **down**, once, on the points × multipliers
+  product, following the sponsor's own idiom and taking the direction that
+  cannot overstate a claimed score. `verified: partial` all the same, because
+  four verified rules cannot be expressed — the W1AW/1 bonus being out-of-state
   only, RTTY and FT8 sharing one mode class where the sponsor counts two,
   30/17/12 m shipping as fully valid when the sponsor allows them for FT8/FT4
-  only, and two absent multiplier kinds — approved club stations (`W1NVT`) and
-  grid squares. Two genuine unknowns are open: whether Vermont is a state
-  multiplier for Vermont entrants, and whether 60 m is legal.
+  only, and two absent multiplier kinds (approved club stations `W1NVT`, and
+  grid squares) — and one placement cannot be settled: rule 1A(F) calls the
+  W1AW/1 credit "an additional 2 point bonus" while rule 7(D)'s formula has no
+  bonus term, so this app adds it after the power multiplier rather than inside
+  it. Two genuine unknowns are open: whether Vermont is a state multiplier for
+  Vermont entrants, and whether 60 m is legal.
 - MNQP: rules from the Minnesota Wireless Association's **2026** document,
   `MNQP_Contest_Rules rev 31.pdf`, footer `Rev 31 – December 31, 2025`, read
   verbatim 2026-07-26, with the sponsor's official county multiplier list PDF.
@@ -386,8 +397,18 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   `dxStyle` and rejected the sponsor's own sample line. The same example confirms
   the exchange carries no signal report, and the guide prints the `CONTEST:`
   value. DC appears **nowhere in the rules** and only in the multiplier list, as
-  the single row `MD Maryland/(D.C.)`. *Retrieval note:* warac.org 403s a plain
-  fetch of its multiplier page and needs both a browser User-Agent and a Referer.
+  the single row `MD Maryland/(D.C.)`. **The POWER LEVEL table — QRP ×2, low
+  power ×1.5, high ×1 — is applied in full since 2026-07-28**, and its SCORING
+  section states the order this app computes outright: *"Then multiply by Power
+  Level multiplier. Then multiply by your multiplier count under MULTIPLIERS.
+  Finally, add your bonus points."* **The sponsor states no rounding rule
+  anywhere** — none of the three documents contains any rounding language, and
+  all three were searched for it on 2026-07-28 — so a fractional total is
+  rounded **down**, once, on the points × multipliers product: the direction
+  that cannot overstate a claimed score, and the same rule Vermont gets, where
+  the sponsor does at least round its own fractions down. *Retrieval note:*
+  warac.org 403s a plain fetch of its multiplier page and needs both a browser
+  User-Agent and a Referer.
 - VAQP: rules from the Sterling Park Amateur Radio Club's official 2026 PDF and
   the sponsor's entity list, read verbatim 2026-07-26. **Its entity list is 95
   counties and 38 independent cities**, and four names — Fairfax, Franklin,

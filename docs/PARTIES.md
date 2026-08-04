@@ -40,10 +40,10 @@ Entries are in contest-date order.
   DC→MD, county lines paying "2 QSO's and 2 multipliers", and `W1AW/1` worth +2
   per QSO — a 2026-only America250 rule. The sponsor names its own worst trap and
   it became the spot check: `WNH` Windham vs `WNS` Windsor, neither of them
-  `WIN`. `verified: partial`, with five limitations recorded — chief among them
-  that VTQP's power multiplier is **×1.5 for low power**, which this app's
-  whole-number score multiplier cannot represent, so **none is applied and you
-  multiply the final score yourself**.
+  `WIN`. Its power multiplier — **×2 QRP, ×1.5 low power, ×1 high** — is the
+  first fraction in the catalogue and **is applied in full**, rounded down once
+  on the points × multipliers product. `verified: partial`, with five
+  limitations recorded.
 - **Minnesota QSO Party** (Feb 7, 2026) — ten hours, one Saturday. 87 counties,
   and the sponsor prints them **twice** — alphabetically by county and again by
   designator — so [`gen_mnqp.py`](research/gen_mnqp.py) requires its two
@@ -136,8 +136,9 @@ Entries are in contest-date order.
   largest list here — derived from the suggested-frequency table, since the rules
   publish none. **Reading the sponsor's Cabrillo guide changed a field:** its
   rules say DX sends "Country", but its own example logs `DL6QK` as the literal
-  token `DX`. `verified: partial` — its power multiplier is **×1.5 for low
-  power**, the same gap Vermont has.
+  token `DX`. Its power multiplier — **×2 QRP, ×1.5 low power, ×1 high** — is
+  the same table Vermont prints, and **is applied in full**. `verified: partial`,
+  for two bonus rules that over-credit a narrow case.
 - **Virginia QSO Party** (Mar 21–22, 2026) — 26 hours, and **the first bundled
   party whose entities are not all counties**: 95 counties *and* 38 independent
   cities, 133 in all. **Four names appear twice** — Fairfax, Franklin, Richmond
@@ -179,10 +180,10 @@ Entries are in contest-date order.
   modelled; a 40/80 m daytime +1-per-QSO bonus capped at 250 and a flat 100 for
   submitting a Cabrillo log are not. `verified: partial`.
 - **New Mexico QSO Party** (Apr 11, 2026) — 12 hours, sharing Missouri's day,
-  and **the first bundled party whose power multiplier actually fits**: QRP ×5,
-  Low ×2, High ×1 are whole numbers, so the score multiplier ships. Vermont's and
-  Wisconsin's are the same shape with a ×1.5 low-power factor and still cannot be
-  modelled. 33 counties, where **`SAN` is Sandoval** — not San Juan (`SJU`), San
+  and **the first bundled party whose power multiplier fit a whole number**: QRP
+  ×5, Low ×2, High ×1, where Vermont's and Wisconsin's are the same shape with a
+  ×1.5 low-power factor and had to wait for exact fractions. 33 counties, where
+  **`SAN` is Sandoval** — not San Juan (`SJU`), San
   Miguel (`SMI`) or Santa Fe (`SFE`). The largest activation bonus in the app,
   **5,000 points per county with 15+ QSOs**, plus a 2026-only 250 for W1AW/5 —
   250 because the packet's own change log records it being cut from 500 on 9

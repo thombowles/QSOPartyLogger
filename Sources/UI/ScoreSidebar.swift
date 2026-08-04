@@ -107,8 +107,8 @@ struct ScoreSidebar: View {
             Figure(label: "Mults", value: "\(score.multiplierCount)"),
             Figure(label: "Bonus", value: "+\(score.bonusPoints)"),
         ]
-        if score.categoryFactor != 1 {
-            figures.append(Figure(label: "Category ×", value: "\(score.categoryFactor)"))
+        if !score.categoryFactor.isOne {
+            figures.append(Figure(label: "Category ×", value: score.categoryFactor.displayString))
         }
         if score.dupeCount > 0 {
             figures.append(

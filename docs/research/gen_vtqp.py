@@ -18,11 +18,14 @@ The two documents cross-check each other on the county list: names come from the
 page's table, and the resulting abbreviation set must equal the .doc's own
 sentence "14 Vermont Counties: ADD, BEN, ...". Neither is trusted alone.
 
-WHAT DELIBERATELY DOES NOT SHIP, all verified and all unrepresentable today —
+THE POWER MULTIPLIER SHIPS, x1.5 AND ALL. Rule 7(D)(1) pays QRP x2, low power
+x1.5 and high power x1, and until 2026-07-28 ScoreMultipliers was [String: Int],
+so nothing shipped at all: {QRP:2, LOW:1, HIGH:1} would have under-scored every
+low-power entrant by 33% while looking correct. ScoreFactor made the factor an
+exact fraction and this was the first party to want it.
+
+WHAT STILL DELIBERATELY DOES NOT SHIP, both verified and both unrepresentable —
 see vtqp_rules.md section 14 and the notes field:
-  * the POWER MULTIPLIER, because Low Power is x1.5 and ScoreMultipliers is
-    [String: Int]. Shipping {QRP:2, LOW:1, HIGH:1} would under-score every
-    low-power entrant by 33% while looking correct.
   * approved Vermont CLUB STATION multipliers (W1NVT for 2026) — a multiplier
     keyed on callsign, which MultClass has no case for.
   * GRID SQUARE multipliers on WSJT-X modes (in-state: grids/3 rounded down;
@@ -139,11 +142,11 @@ for quote in [
 ]:
     assert quote in rules, f"official rules no longer contain: {quote!r}"
 
-# The power multiplier is real, is fractional, and is deliberately not shipped.
-# If this assertion ever fails the sponsor changed the factors, which is the
-# moment to revisit whether the engine gap is still acceptable.
+# The power multiplier is real, is fractional, and SHIPS. If either assertion
+# fails the sponsor changed the factors, which is the moment to change
+# scoreMultipliers below to match — a wrong factor is a wrong score.
 assert "multiply your score by 1.5" in rules, \
-    "the x1.5 low-power multiplier changed — revisit KNOWN LIMITATION 1"
+    "the x1.5 low-power multiplier changed — update scoreMultipliers"
 assert "If all QSO's were made using 5W or less, multiply your score by 2" in rules
 
 # W1AW/1 is a 2026-only America250/YOTC rule and must not survive into 2027.
@@ -213,6 +216,13 @@ vtqp = {
     "exchangeIncludesRST": True,
     # "Stations outside Vermont work Vermont stations." Stated outright, twice.
     "outStateWorksHomeStationsOnly": True,
+    # Rule 7(D)(1), verbatim: "If all QSO's were made using 5W or less, multiply
+    # your score by 2 / ... more than 5W and less than or equal to 150W output,
+    # multiply your score by 1.5 / ... more than 150W, multiply your score by 1".
+    # THE 1.5 IS THE POINT: it is why ScoreFactor exists. Rule 4 makes an
+    # unmarked log high power. The sponsor states no rounding rule for the
+    # resulting fraction; the app rounds down, once, per rules_md §8.
+    "scoreMultipliers": {"power": {"QRP": 2, "LOW": 1.5, "HIGH": 1}},
     # "0000 UTC on February 7, 2026 ... 2400 UTC on February 8, 2026 ... a 48
     # hour period". 2400Z Feb 8 is 0000Z Feb 9. Longest window of any bundled
     # party.
@@ -230,70 +240,80 @@ vtqp = {
         "the approved-club list. The page says outright that it is a summary and that the .doc "
         "carries the specific rules, so the .doc is the authority throughout. Sponsor: Radio "
         "Amateurs of Northern Vermont; Contest Manager W1SJ, w1sj@arrl.net. UNUSUALLY FOR THIS "
-        "REPO THE RULES ARE THE CURRENT YEAR'S - nothing here rests on a stale edition. "
-        "48 hours in one window, 0000Z Sat 7 Feb to 2400Z Sun 8 Feb 2026, the longest window of "
-        "any bundled party; the sponsor states the length ('This is a 48 hour period') and both "
+        "REPO THE RULES ARE THE CURRENT YEAR'S - nothing here rests on a stale edition. 48 hours "
+        "in one window, 0000Z Sat 7 Feb to 2400Z Sun 8 Feb 2026, the longest window of any "
+        "bundled party; the sponsor states the length ('This is a 48 hour period') and both "
         "local anchors (7PM EST Fri to 7PM EST Sun) agree, which settles the one-minute "
-        "discrepancy in sub-rule 1A(H), where the same window is restated as ending 2359Z. "
-        "Phone 1 point, CW 3 - the highest CW value of any bundled party - RTTY 2 and digital 2. "
+        "discrepancy in sub-rule 1A(H), where the same window is restated as ending 2359Z. Phone "
+        "1 point, CW 3 - the highest CW value of any bundled party - RTTY 2 and digital 2. "
         "Multipliers count ONCE PER MODE on both sides. Vermont stations count US states, "
         "Canadian provinces, DXCC countries, the 14 VT counties and approved VT club stations; "
         "everyone else counts VT counties and VT club stations only. The province list is the "
-        "standard 13 with the standard NL spelling, read and confirmed rather than assumed. "
-        "'DC is counted as MD', so DC logs and credits Maryland. Alaska and Hawaii are W/VE here "
-        "and send AK/HI - they are explicitly NOT DXCC multipliers. County lines pay '2 QSO's and "
-        "2 multipliers'; enter them as ADD/CHI and the app writes the two separate log lines the "
+        "standard 13 with the standard NL spelling, read and confirmed rather than assumed. 'DC "
+        "is counted as MD', so DC logs and credits Maryland. Alaska and Hawaii are W/VE here and "
+        "send AK/HI - they are explicitly NOT DXCC multipliers. County lines pay '2 QSO's and 2 "
+        "multipliers'; enter them as ADD/CHI and the app writes the two separate log lines the "
         "sponsor asks for. Stations outside Vermont work Vermont stations only, stated outright "
         "in rule 1 and repeated on the page. No band list is published - 30, 17 and 12 m are "
         "prohibited EXCEPT for FT8/FT4 on named frequencies, VHF and UHF are allowed, and any "
-        "other licensed frequency is permitted. "
-        "KNOWN LIMITATION 1 - THE POWER MULTIPLIER IS NOT APPLIED, AND IT IS THE BIGGEST NUMBER "
-        "HERE. The sponsor's final score is points x multipliers x power, where QRP (5W or less) "
-        "is x2, LOW POWER (over 5W to 150W) is x1.5, and high power is x1. This app's score "
-        "multiplier field holds whole numbers only, so x1.5 cannot be represented; shipping x1 "
-        "for low power would understate a low-power entrant's score by a third while looking "
-        "right. Nothing ships instead: MULTIPLY THE FINAL SCORE YOURSELF - by 2 for QRP, by 1.5 "
-        "for low power - before submitting. Logs not showing a power category are scored as high "
-        "power. KNOWN LIMITATION 2 - the W1AW/1 bonus is credited to everyone. Rule 1A(F) gives "
-        "'an additional 2 point bonus for each W1AW/1 station they work' to stations OUTSIDE "
-        "Vermont only, and says 'Vermont stations will not get this bonus'; this app applies "
-        "station bonuses without regard to the entrant's own location, so a VERMONT entrant is "
-        "over-credited 2 points per W1AW/1 QSO and should subtract them. Note also that W1AW/1 "
-        "IS A 2026-ONLY RULE, for the America250 WAS and ARRL Year of the Club celebration - it "
-        "must be deleted when the 2027 rules are read. W1AW active from other states (AL, IN, KS) "
-        "earns no VTQP credit, which this app already flags because those contacts are not "
-        "Vermont stations. KNOWN LIMITATION 3 - RTTY AND FT8 ARE ONE MODE HERE AND TWO FOR THE "
-        "SPONSOR. The page says 'RTTY is considered a legacy mode and is not part of this digital "
-        "group', and the two families do not even share a multiplier kind: RTTY counts states and "
-        "countries, WSJT-X counts grid squares. Since multipliers count once per mode, a Vermont "
-        "entrant working one state on both RTTY and FT8 earns two multipliers from the sponsor "
-        "and one here. KNOWN LIMITATION 4 - 30, 17 and 12 m are shipped as fully valid bands "
-        "although the sponsor allows them for FT8/FT4 only, on 10.136/10.140, 18.110/18.104 and "
-        "24.915/24.919 MHz USB. Including them lets a legal digital QSO be logged; the cost is "
-        "that a phone or CW QSO there is not flagged. KNOWN LIMITATION 5 - TWO MULTIPLIER KINDS "
-        "ARE MISSING ENTIRELY. Approved Vermont CLUB STATIONS count as multipliers on each mode "
-        "and the 2026 approved club is W1NVT; a multiplier keyed on a callsign has no class in "
-        "this app. And on WSJT-X modes, Vermont entrants count grid squares worked divided by 3 "
-        "rounded down, while entrants outside Vermont count Vermont grid squares worked to a "
-        "maximum of 5 (FN34, FN33, FN32, FN44, FN35). Add both by hand on the summary sheet if "
-        "you work them. "
-        "Cabrillo CONTEST value VT-QSO-PARTY per the WA7BNM registry, entry 236 - the rules "
-        "require Cabrillo but print no header token. Digital contacts are submitted separately as "
-        "ADIF, not Cabrillo. Logs go to https://vtqp.contesting.com/vtqpsubmitlog.php by "
-        "2026-02-22 2359Z. Counties are 14 with uniform 3-letter codes, the smallest county list "
-        "of any bundled party. The sponsor names its own worst trap and the generator asserts it: "
-        "'Take care to not mix up WiNdHam (WNH) and WiNdSor (WNS)!!' - neither is the naive WIN. "
-        "GRA is Grand Isle, not 'Grand Island', which appears only in an operating-schedule note. "
-        "OPEN QUESTIONS (why this is partial): (1) Whether Vermont itself counts as a state "
-        "multiplier for Vermont entrants is not stated, and there is no stated multiplier total "
-        "to settle it by arithmetic; shipped as NOT counting, the same call as NHQP, MEQP, SDQP "
-        "and ILQP. (2) Whether 60 m is legal here. The rules prohibit only 30, 17 and 12 m and "
-        "otherwise permit 'any frequency allowed by their license', which would admit 60 m, but "
-        "the sponsor never lists it, suggests no frequency for it, and US 60 m is five fixed "
+        "other licensed frequency is permitted. THE POWER MULTIPLIER IS APPLIED IN FULL, "
+        "INCLUDING ITS HALF. Rule 7(D)(1): QRP (5W or less) x2, LOW POWER (over 5W to 150W) "
+        "x1.5, high power x1, and rule 7(D) gives the formula as 'Final Score = Total Points X "
+        "Total Multipliers X Power Multiplier'. The x1.5 shipped once the score factor became an "
+        "exact fraction on 2026-07-28; before that this party shipped no power multiplier at all "
+        "rather than a wrong whole number. THE SPONSOR STATES NO ROUNDING RULE FOR A FRACTIONAL "
+        "FINAL SCORE - its only rounding instruction anywhere is rule 7(B)(f), on a fractional "
+        "multiplier count, 'dividing by 3, and rounding down' - so this app rounds DOWN, once, "
+        "on the whole points x multipliers product, which is the sponsor's own idiom and the "
+        "direction that cannot overstate a claimed score. Rule 4: 'Logs not showing power output "
+        "category will be listed as high power.' KNOWN LIMITATION 1 - the W1AW/1 bonus is "
+        "credited to everyone. Rule 1A(F) gives 'an additional 2 point bonus for each W1AW/1 "
+        "station they work' to stations OUTSIDE Vermont only, and says 'Vermont stations will "
+        "not get this bonus'; this app applies station bonuses without regard to the entrant's "
+        "own location, so a VERMONT entrant is over-credited 2 points per W1AW/1 QSO and should "
+        "subtract them. Note also that W1AW/1 IS A 2026-ONLY RULE, for the America250 WAS and "
+        "ARRL Year of the Club celebration - it must be deleted when the 2027 rules are read. "
+        "W1AW active from other states (AL, IN, KS) earns no VTQP credit, which this app already "
+        "flags because those contacts are not Vermont stations. KNOWN LIMITATION 2 - RTTY AND "
+        "FT8 ARE ONE MODE HERE AND TWO FOR THE SPONSOR. The page says 'RTTY is considered a "
+        "legacy mode and is not part of this digital group', and the two families do not even "
+        "share a multiplier kind: RTTY counts states and countries, WSJT-X counts grid squares. "
+        "Since multipliers count once per mode, a Vermont entrant working one state on both RTTY "
+        "and FT8 earns two multipliers from the sponsor and one here. KNOWN LIMITATION 3 - 30, "
+        "17 and 12 m are shipped as fully valid bands although the sponsor allows them for "
+        "FT8/FT4 only, on 10.136/10.140, 18.110/18.104 and 24.915/24.919 MHz USB. Including them "
+        "lets a legal digital QSO be logged; the cost is that a phone or CW QSO there is not "
+        "flagged. KNOWN LIMITATION 4 - TWO MULTIPLIER KINDS ARE MISSING ENTIRELY. Approved "
+        "Vermont CLUB STATIONS count as multipliers on each mode and the 2026 approved club is "
+        "W1NVT; a multiplier keyed on a callsign has no class in this app. And on WSJT-X modes, "
+        "Vermont entrants count grid squares worked divided by 3 rounded down, while entrants "
+        "outside Vermont count Vermont grid squares worked to a maximum of 5 (FN34, FN33, FN32, "
+        "FN44, FN35). Add both by hand on the summary sheet if you work them. Cabrillo CONTEST "
+        "value VT-QSO-PARTY per the WA7BNM registry, entry 236 - the rules require Cabrillo but "
+        "print no header token. Digital contacts are submitted separately as ADIF, not Cabrillo. "
+        "Logs go to https://vtqp.contesting.com/vtqpsubmitlog.php by 2026-02-22 2359Z. Counties "
+        "are 14 with uniform 3-letter codes, the smallest county list of any bundled party. The "
+        "sponsor names its own worst trap and the generator asserts it: 'Take care to not mix up "
+        "WiNdHam (WNH) and WiNdSor (WNS)!!' - neither is the naive WIN. GRA is Grand Isle, not "
+        "'Grand Island', which appears only in an operating-schedule note. KNOWN LIMITATION 5 - "
+        "THE W1AW/1 BONUS IS ADDED AFTER THE POWER MULTIPLIER, NOT INSIDE IT. Rule 1A(F) calls "
+        "it 'an additional 2 point bonus', which reads as QSO points, but it lives in section 1A "
+        "rather than in the scoring section, and rule 7(D)'s formula names only 'Total Points X "
+        "Total Multipliers X Power Multiplier' with no bonus term - so where the 2 points enter "
+        "is not stated. This app adds them last, scaled by neither the multipliers nor the power "
+        "factor. A low-power station outside Vermont who works W1AW/1 may therefore be "
+        "under-credited by half a point per such QSO if the sponsor counts the bonus as QSO "
+        "points; add it by hand if you want the other reading. Moot from 2027, when W1AW/1 goes "
+        "away. OPEN QUESTIONS (why this is partial): (1) Whether Vermont itself counts as a "
+        "state multiplier for Vermont entrants is not stated, and there is no stated multiplier "
+        "total to settle it by arithmetic; shipped as NOT counting, the same call as NHQP, MEQP, "
+        "SDQP and ILQP. (2) Whether 60 m is legal here. The rules prohibit only 30, 17 and 12 m "
+        "and otherwise permit 'any frequency allowed by their license', which would admit 60 m, "
+        "but the sponsor never lists it, suggests no frequency for it, and US 60 m is five fixed "
         "channels. Excluded rather than silently included. (3) The five KNOWN LIMITATIONS above "
-        "are rules this app cannot express, not rules in doubt - limitation 1 in particular "
-        "changes the final score and needs manual arithmetic. Confirm (1) and (2) with the "
-        "Contest Manager at w1sj@arrl.net before submitting a log."
+        "are rules this app cannot express or, in limitation 5, cannot place with certainty - "
+        "not rules in doubt. Confirm (1) and (2) with the Contest Manager at w1sj@arrl.net "
+        "before submitting a log."
     ),
 }
 
@@ -308,4 +328,5 @@ print(f"  multipliers: perMode both sides; in-state county+state+province+dx, ou
 print(f"  bands: {len(BANDS)} - no published list; 30/17/12 in for FT8/FT4, 60 m out (open question)")
 print(f"  bonus: W1AW/1 +2 per QSO (2026 only)")
 print(f"  schedule: 1 window, 48 h (0000Z 7 Feb -> 0000Z 9 Feb 2026) - longest in repo")
-print(f"  NOT shipped: x1.5 power multiplier, club-station mults, grid-square mults")
+print(f"  power mult: QRP x2 / LOW x1.5 / HIGH x1 - rule 7(D)(1), applied in full")
+print(f"  NOT shipped: club-station mults, grid-square mults")

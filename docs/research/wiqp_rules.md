@@ -3,8 +3,8 @@
 Per [Article 15](../CONSTITUTION.md#article-15--research-before-code). All
 quotations are the sponsor's own words, from the documents in §1.
 
-**The second party to want a fractional power multiplier**, which meets the
-repo's own two-user bar for building the field — see §8 and §14.
+**The second party to want a fractional power multiplier**, which met the
+repo's own two-user bar and got the field built — see §8 and §14.
 
 ## 1. Sponsor / sources
 
@@ -171,17 +171,27 @@ over-credited 100. Recorded; see §14.
 > Then multiply by your multiplier count** under MULTIPLIERS. Finally, add your
 > bonus points."
 
-`PartyDefinition.ScoreMultipliers` is `[String: Int]` and **cannot hold 1.5** —
-identical to VTQP's problem, down to the same three factors. So `scoreMultipliers`
-is **not shipped**, for the same reason: `{QRP: 2, LOW: 1, HIGH: 1}` would
-understate the most common power class by a third while looking correct.
+**Shipped in full on 2026-07-28.** `ScoreMultipliers` was `[String: Int]` and
+**could not hold 1.5** — identical to VTQP's problem, down to the same three
+factors — so `scoreMultipliers` was **not shipped** rather than have
+`{QRP: 2, LOW: 1, HIGH: 1}` understate the most common power class by a third
+while looking correct. **WIQP was the second user of that gap, which met the
+repo's own bar of waiting for a second party**, and both parties gained the
+field once `ScoreFactor` made the factor an exact rational.
 
-**WIQP is therefore the second user of the fractional-score-multiplier gap,
-meeting the repo's own bar of waiting for a second party.** See §14.
+The stated order — points × power × multipliers, *then* bonuses — is exactly
+what `ScoreEngine` computes, and the "finally" is load-bearing: the county and
+W9FK bonuses are added after the power factor and are never scaled by it.
 
-The stated order — points × power × multipliers + bonus — is what `ScoreEngine`
-already computes, since multiplication commutes; only the factor's *type* is the
-obstacle.
+**Rounding: the sponsor states nothing, anywhere.** Searching the rules page,
+the official Multiplier List and the Cabrillo guide for *round*, *nearest*,
+*fraction*, *decimal*, *integer* and *whole* returns **no hits at all**, and
+×1.5 on an odd points × multipliers product lands on a half. This app rounds
+**down**, once, on the whole product — the direction that cannot overstate a
+`CLAIMED-SCORE:`, and the same rule Vermont gets, where the sponsor at least has
+its own idiom for it (rule 7(B)(f) rounds a fractional multiplier count down).
+Recorded as an inference. If WARAC ever prints a worked example whose score
+lands on a half, it settles this and supersedes the inference.
 
 ## 9. County-line rules
 
@@ -260,14 +270,15 @@ Traps worth spot-checking — Wisconsin's clusters are dense:
 
 ## 14. Engine shapes to watch
 
-1. **FRACTIONAL SCORE MULTIPLIERS — SECOND USER, so the repo's bar is met.** §8.
-   VTQP's power factors are QRP ×2 / low ×1.5 / high ×1; WIQP's are **identical**.
-   Two sponsors, the same three numbers, and neither expressible in `[String:
-   Int]`. The worklist's existing sketch stands — carry the factor as a rational
-   rather than a `Double` so the final score stays exact, and remember
-   `ScoreSnapshot.categoryFactor: Int` is persisted to the iCloud archive, so it
-   is a stored-history migration as well as a schema change. **When it lands, both
-   VTQP and WIQP gain the field.**
+1. ~~**FRACTIONAL SCORE MULTIPLIERS — SECOND USER, so the repo's bar is met.**~~
+   **Done 2026-07-28.** §8. VTQP's power factors are QRP ×2 / low ×1.5 / high
+   ×1; WIQP's are **identical**, and neither was expressible in `[String: Int]`.
+   The sketch shipped as written: `ScoreFactor` carries the factor as a rational
+   rather than a `Double` so the final score stays exact, and
+   `ScoreSnapshot.Figures` kept its whole-number key and gained
+   `categoryFactorExact` beside it, since it is persisted to the iCloud archive
+   and this was a stored-history migration as well as a schema change. Both VTQP
+   and WIQP gained the field, each in its own commit (Article 9).
 2. **`activatedCountyCount` cannot exclude the home county.** §7. WIQP pays 500
    "for each county that you operate from **outside your home county**"; the
    engine counts every county with ≥12 QSOs. Over-credits a Wisconsin

@@ -202,6 +202,11 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
 
     /// Final-score multipliers by entry category (NJQP power; MDC power ×
     /// station category). Keys are the Cabrillo raw values ("QRP", "ROVER"…).
+    ///
+    /// Whole numbers or decimals — a sponsor's "multiply your score by 1.5" is
+    /// written `1.5` and carried as an exact fraction, never a float. The factor
+    /// multiplies QSO points × multipliers and the result is rounded **down**
+    /// once; bonus points are added after it and are never scaled.
     let scoreMultipliers: ScoreMultipliers?
 
     /// Points for a contact with a **home-state** station, where the party pays
@@ -291,12 +296,20 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case prefix
     }
 
+    /// Final-score factors by entry category. Values are whole numbers in most
+    /// of the catalogue and fractions in two parties (VTQP and WIQP each print
+    /// ×1.5 for low power), so each is an exact `ScoreFactor` — a file written
+    /// with `"QRP": 5` decodes to 5⁄1 and scores exactly as it always did.
     struct ScoreMultipliers: Codable, Equatable, Sendable {
-        let power: [String: Int]?
-        let stationCategory: [String: Int]?
+        let power: [String: ScoreFactor]?
+        let stationCategory: [String: ScoreFactor]?
 
-        func factor(power p: StationProfile.CategoryPower, station s: StationProfile.CategoryStation) -> Int {
-            (power?[p.rawValue] ?? 1) * (stationCategory?[s.rawValue] ?? 1)
+        /// The two compose by multiplication, exactly — MDC's power × station
+        /// pair is the case that needs it, and ×1.5 × ×2 is ×3 with no residue.
+        func factor(
+            power p: StationProfile.CategoryPower, station s: StationProfile.CategoryStation
+        ) -> ScoreFactor {
+            (power?[p.rawValue] ?? .one) * (stationCategory?[s.rawValue] ?? .one)
         }
     }
 

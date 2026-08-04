@@ -124,16 +124,20 @@ final class NewMexicoQSOPartyTests: XCTestCase {
         XCTAssertEqual(high.total, qrp.total / 5, "the QRP entrant scores five times as much")
     }
 
-    /// The contrast that explains why two other parties ship none: their shape is
-    /// identical except for a **×1.5** low-power factor, which `[String: Int]`
-    /// cannot hold. NMQP's is ×2, so it fits.
+    /// The contrast with the two parties whose shape is identical except for a
+    /// **×1.5** low-power factor. That fraction is why `ScoreFactor` exists;
+    /// New Mexico's ×2 never needed it, and every NMQP factor is still a whole
+    /// number.
     func testTheContrastWithVermontAndWisconsin() throws {
-        for id in ["vtqp", "wiqp"] {
-            let other = try XCTUnwrap(PartyCatalog.party(id: id))
-            XCTAssertNil(other.scoreMultipliers,
-                         "\(id)'s low-power factor is ×1.5 and cannot be represented")
+        let mults = try XCTUnwrap(nmqp.scoreMultipliers)
+        for power in StationProfile.CategoryPower.allCases {
+            XCTAssertTrue(mults.factor(power: power, station: .fixed).isWholeNumber,
+                          "\(power.rawValue) fits in a whole number, which is why NMQP shipped first")
         }
-        XCTAssertNotNil(nmqp.scoreMultipliers)
+        let vtqp = try XCTUnwrap(PartyCatalog.party(id: "vtqp"))
+        XCTAssertEqual(vtqp.scoreMultipliers?.factor(power: .low, station: .fixed),
+                       ScoreFactor(numerator: 3, denominator: 2),
+                       "Vermont's ×1.5 is the fraction New Mexico's rules did not have")
     }
 
     // MARK: Multipliers — once overall

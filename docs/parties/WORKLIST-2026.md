@@ -362,30 +362,37 @@ its own commit (Article 4).
   entrant's own role — neither is county-keyed, so both still wait. What this
   settles is that a points rule keyed on the received location has a home, and
   the next one adds a sibling field rather than reopening the argument.
-- **FRACTIONAL SCORE MULTIPLIERS — SECOND USER FOUND 2026-07-26, so the repo's
-  two-user bar is met and this is now buildable.** WIQP's power factors are QRP
-  ×2, LOW ×1.5, high ×1 — **identical to VTQP's, down to the same three
-  numbers**. Two sponsors, one gap; when it lands, both parties gain the field. `ScoreMultipliers` is
-  `[String: Int]`, and VTQP's power multiplier is **QRP ×2, LOW POWER ×1.5, high
-  ×1** (rule 7(D)(1)). ×1.5 cannot be represented, and shipping ×1 for low power
-  would understate the most common power category by a third *while looking
-  right* — the exact failure the constitution's preamble names. So VTQP ships
-  with **no `scoreMultipliers` at all** and an operator-facing instruction to do
-  the arithmetic by hand (`vtqp.json` KNOWN LIMITATION 1, pinned by
-  `VermontQSOPartyTests.testKnownGapPowerMultiplierIsNotAppliedBecauseItIsFractional`).
-  **This is bigger than a schema change.** The `Int` runs all the way through:
-  `MultRule.factor(power:station:) -> Int`, `ScoreBreakdown.categoryFactor: Int`,
-  `ScoreEngine.total = qsoPoints * multiplierCount * categoryFactor + bonusPoints`,
-  `ScoreSidebar`'s `Text("\(score.categoryFactor)")` — and
-  **`ScoreSnapshot.categoryFactor: Int` is persisted to the iCloud contest
-  archive**, so widening it is a stored-history migration as well. Sketch: keep
-  the JSON key, accept either an integer or a decimal, carry the factor as a
-  rational (numerator/denominator) rather than a `Double` so the final score
-  stays exact and the sidebar can render "×1.5" without float formatting, and
-  decide the rounding rule explicitly — VTQP's sponsor does not state one, and
-  ×1.5 on an odd points×mults product lands on a half exactly half the time.
-  Its own commit, adding no party (Article 4), with every existing party's score
-  proved unchanged; then VTQP gains the field in a second commit.
+- ~~**FRACTIONAL SCORE MULTIPLIERS.**~~ **Done 2026-07-28**, in three commits:
+  the engine, then VTQP, then WIQP. WIQP's power factors are QRP ×2, LOW ×1.5,
+  high ×1 —
+  **identical to VTQP's, down to the same three numbers** (VTQP rule 7(D)(1)) —
+  and `ScoreMultipliers` held `[String: Int]`, so ×1.5 could not be represented
+  and shipping ×1 for low power would have understated the most common power
+  category by a third *while looking right*, the exact failure the
+  constitution's preamble names. Both parties therefore shipped with **no
+  `scoreMultipliers` at all** and an operator-facing instruction to do the
+  arithmetic by hand.
+  **The `Int` ran all the way through**, which is why this was bigger than a
+  schema change: `factor(power:station:)`, `ScoreBreakdown.categoryFactor`,
+  `ScoreEngine.total`, `ScoreSidebar`'s `Text("\(score.categoryFactor)")` — and
+  `ScoreSnapshot.Figures.categoryFactor`, persisted to the iCloud contest
+  archive, so it was a stored-history migration too. Shipped as sketched:
+  [`ScoreFactor`](../../Sources/Core/Parties/ScoreFactor.swift) is an exact
+  rational (numerator/denominator, never a `Double`), a party file writes the
+  number the sponsor prints (`1.5`), the archive keeps its whole-number key and
+  adds `categoryFactorExact` beside it, and the sidebar renders "×1.5" without
+  float formatting. **The rounding rule: down, once, on the whole
+  `points × multipliers` product, before bonuses.** Neither sponsor states one
+  — VTQP's only rounding instruction anywhere is rule 7(B)(f)'s grid-square
+  count, *"dividing by 3, and rounding down"*, and WIQP's rules, multiplier list
+  and Cabrillo guide contain no rounding language at all — so down is the
+  sponsors' own idiom where either states one, and elsewhere the direction that
+  cannot overstate a claimed score. Party-free commit (Article 4), every
+  existing party's score proved unchanged by the full suite;
+  `ScoreFactorTests.testOnlyTheRosteredPartiesShipAFractionalFactor` is the
+  roster that makes a party gaining a fraction deliberate. **VTQP and WIQP each
+  gained the field in their own commit** (Article 9), and both parties' "score is
+  a floor" caveat is gone — the score is the sponsor's.
 - ~~**THE EXCHANGE CANNOT CARRY A NAME.**~~ **Done 2026-07-27.** The second and
   third users arrived at once — the **North American QSO Parties, CW and SSB**
   (NCJ; not State QSO Parties, deliberately absent from the Challenge's
