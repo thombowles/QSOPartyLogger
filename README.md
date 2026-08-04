@@ -1146,7 +1146,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1864 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1865 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1393,9 +1393,10 @@ station profile, radio wiring and cluster history untouched.
   two-point Maine contacts). The PDF's contest-period line misprints the year as
   2025; its own title block, its Oct 12 2026 deadline, the "last full weekend in
   September" formula, and the fact that 2025-09-26 was a Friday all settle it.
-  **Known scoring limitation:** DXCC entities are multipliers for every entrant
-  and uncapped, but the exchange is the literal token "DX" — the same missing
-  prefix table that limits NHQP, biting harder here.
+  DXCC entities are multipliers for every entrant, uncapped, counted once per
+  band *and* per mode — and all of them used to collapse into one, which made
+  this the largest single scoring gap in the catalogue. The entity now comes
+  from the **worked callsign** against the ARRL list above.
 - CQP: rules from NCCC's official page and PDF (cqp.org/Rules.html and
   cqp.org/pdf/CQP_2026_Rules.pdf, both stamped "Last Update: 19-July-2026 at
   1500 UTC"), plus cqp.org/cqp_multipliers.html, which alone carries the county
