@@ -229,7 +229,7 @@ final class OklahomaQSOPartyTests: XCTestCase {
             qso(call: "KP4C", my: "TUL", their: "KP4"),
         ]), party: okqp)
         XCTAssertEqual(s.workedValues(.state), ["AK"])
-        XCTAssertEqual(Set(s.workedValues(.dx)), ["KH2", "KP4"], "US territories are DX here")
+        XCTAssertEqual(Set(s.workedValues(.dx)), ["Guam", "Puerto Rico"], "US territories are DX here")
     }
 
     func testTheStandardThirteenProvinces() {
