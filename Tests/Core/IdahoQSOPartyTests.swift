@@ -223,7 +223,7 @@ final class IdahoQSOPartyTests: XCTestCase {
             qso(call: "KH2B", my: "ADA", their: "KH2"),
         ]), party: idqp)
         XCTAssertEqual(s.workedValues(.state), ["AK"])
-        XCTAssertEqual(s.workedValues(.dx), ["KH2"])
+        XCTAssertEqual(s.workedValues(.dx), ["Guam"])
     }
 
     // MARK: County lines — two
