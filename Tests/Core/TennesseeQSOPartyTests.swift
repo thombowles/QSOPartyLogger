@@ -153,7 +153,7 @@ final class TennesseeQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.workedValues(.county), ["KNOX"])
         XCTAssertEqual(s.workedValues(.state), ["TX"])
         XCTAssertEqual(s.workedValues(.province), ["ON"])
-        XCTAssertEqual(s.workedValues(.dx), ["DL", "G"])
+        XCTAssertEqual(s.workedValues(.dx), ["Germany", "England"])
         XCTAssertEqual(s.multiplierCount, 5)
     }
 
