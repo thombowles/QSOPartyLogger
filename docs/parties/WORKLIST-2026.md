@@ -472,32 +472,47 @@ its own commit (Article 4).
   "may I guess a prefix" from "is DX a multiplier" — perhaps gating on
   `dxStyle == .prefix` instead, which is what the setting was named for.
   Recorded in `ndqp.json` as KNOWN LIMITATION 1.
-- **Self-activation multipliers — SECOND USER FOUND 2026-07-26, so the repo's own
-  bar is met and this is now buildable.** TnQP: "Tennessee mobiles and rovers may
-  claim one multiplier for any Tennessee county from which they complete at least
-  10 QSOs if they do not earn a multiplier for that county otherwise." The
-  matching 500-point *bonus* is modeled (`activatedCountyCount`); the extra
-  *multiplier* is not, so a TN mobile/rover sees a slightly low multiplier count.
-  COQP turned out **not** to need it — its activation rule is a bonus only.
+- ~~**Self-activation multipliers.**~~ **Done 2026-08-04**, all five sponsors,
+  one commit each after a party-free engine commit (Articles 4 and 9).
+  `MultRule.activatedCountyMultiplier`, and **every field is required** because
+  no two of the five agree on any of them:
 
-  **VAQP is the FOURTH user, added 2026-07-26**, and the first to attach a condition: its mobiles/rovers/expeditions may claim an entity worked from with ten or more different stations *"if not otherwise worked"* — so the sketch must carry that too. **NCQP is the third user**, and in its broadest form yet: *"NC stations may include the county from which operation takes place in the Multiplier count **regardless of whether any QSOs are logged from that same county**"* — so a fixed NC station counts its own county unconditionally. Three sponsors, three scopes (TnQP once, SCQP per band per mode, NCQP once and unconditional), which settles that the field must carry its scope rather than assume one.
+  | | `minCount` | `countUnit` | `countScope` | `categories` | `notOtherwiseWorked` |
+  | --- | --- | --- | --- | --- | --- |
+  | SCQP | 1 | qsos | `perBandMode` | mobile, portable, expedition | **false** |
+  | NCQP | 1 | qsos | `once` | **all six** | true |
+  | VAQP | 10 | **stations** | `once` | mobile, rover, expedition | true |
+  | MOQP | 50 | qsos | `once` | mobile, portable, expedition | true |
+  | TnQP | 10 | qsos | `once` | mobile, rover | true |
 
-  **SCQP rule 9.2.2 is the second user**, and states it as a multiplier outright:
-  SC Mobile and Expedition stations count "Each SC county activated. At least one
-  (1) QSO must be made from a county in order for it to count as activated", and
-  "Expedition stations that operate from more than one county will receive a
-  multiplier (ONCE PER MODE PER BAND) for each county activated". Note SCQP scopes
-  it **per band per mode** while TnQP's is once — so the field must carry the
-  scope, not assume one. Sketch: an optional `activatedCountyMultiplier: {minQSOs:
-  Int}` on `MultRule`, credited from `log.myLoc` values rather than `theirLoc`,
-  honouring the side's existing `countScope`, and gated on
-  `isRovingCategory(log.station.categoryStation)` exactly as the bonus already is.
-  Its own commit under Article 4, adding no party.
+  **The sketch this entry carried was wrong on four of the five axes**, and is
+  recorded here rather than deleted because the way it was wrong is the lesson.
+  It proposed `{minQSOs: Int}`, inheriting the side's `countScope` and gated on
+  `isRovingCategory` — written when TnQP and SCQP were the only known users.
 
-  **Who is affected:** only in-state mobile/rover/expedition entrants. A fixed
-  in-state station and *every* out-of-state entrant score identically today,
-  which is why both parties shipped without it. Recorded in `scqp.json`'s notes
-  as a KNOWN LIMITATION so an SC mobile operator sees it.
+  - **The unit is not always QSOs.** VAQP counts "10 (ten) or more different
+    **stations**"; TnQP's near-identical sentence counts QSOs. One chaser worked
+    on ten bands satisfies one and not the other.
+  - **The scope is never inherited.** TnQP grants "**one** multiplier" while
+    counting worked multipliers per band, so the side's scope is the wrong
+    answer for the one party the sketch was written from.
+  - **It is not a roving-category rule.** NCQP says "**NC stations**", naming
+    Mobile and Portable only as the multi-county case, so a fixed NC station
+    counts the county it sits in.
+  - **Whether working the county forfeits it is per sponsor.** TnQP and VAQP
+    say so outright; NCQP's printed "164 total possible" and MOQP's "115
+    maximum" are exactly their entity lists and so say it by arithmetic; SCQP,
+    alone in printing no ceiling, lists worked and activated counties as
+    separate numbered multipliers and is additive.
+
+  `MultKey` gained an `activated` component for that last one, and
+  `wouldAddMultiplier` a net-gain check so the NEW MULT badge does not promise a
+  multiplier the forfeit takes away. COQP was checked and does **not** need any
+  of this — its activation rule is a bonus only.
+
+  Design:
+  [`2026-07-28-activated-county-multipliers-design.md`](../superpowers/specs/2026-07-28-activated-county-multipliers-design.md).
+  SCQP left the badge roster: this was its only `scoreAffecting` caveat.
 - ~~**No 222 MHz band.**~~ **Done 2026-07-24.** `Band.cm125` = `1.25m`,
   222000–225000 kHz, default 222100 — ADIF 3.1.4 for the band string and edges,
   47 CFR §97.301(a) as cross-check, ARRL band plan for the calling frequency.
