@@ -375,9 +375,10 @@ Built for KE5CW. Bundled parties, all with official county data:
   multiplier scope runs **opposite** to most parties: out-of-state count NH
   counties **per band** (stated ceiling 50 = 10 × 5), while NH stations count one
   combined list **once**. Two operating windows totalling the rules' stated 22
-  hours. `verified: partial` — and note the rules allow NH stations "up to 10
-  DXCC country" while the exchange is the literal word "DX", so this app can only
-  credit DX once (see provenance below).
+  hours. `verified: partial`. The rules allow NH stations "up to 10 DXCC
+  country" while the exchange is the literal word "DX" — **the entity comes
+  from the worked callsign**, so the ten-entity allowance counts properly (see
+  provenance below).
 - **Texas QSO Party** (Sep 19–20, 2026) — rules verified against txqp.net
   2026 (bands: all except 60/30/17/12; Cabrillo name `TXQP` per WA7BNM;
   robot site not yet live).
@@ -1145,7 +1146,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1861 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1864 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1294,11 +1295,12 @@ station profile, radio wiring and cluster history untouched.
 - NHQP: rules from w1wqm.org (revision "August 19, 2025", the one carrying the
   2026 dates), read verbatim 2026-07-24. The generator asserts the rules' own
   stated figures — a 50-multiplier out-of-state ceiling (10 counties × 5 bands)
-  and a 22-hour total across two windows. **Known scoring limitation:** NH
-  stations may count "up to 10 DXCC country", but every DX station sends the
-  same literal token "DX", so without a DXCC prefix table this app credits DX as
-  one multiplier and an NH entrant's count can run up to 9 low. Out-of-state
-  entrants are unaffected — DX is not one of their multiplier classes.
+  and a 22-hour total across two windows. NH stations may count "up to 10 DXCC
+  country" while every DX station sends the same literal token "DX" — the
+  entity is resolved from the **worked callsign** against the ARRL list above,
+  so ten entities count ten and `dxMultCap` finally binds. Out-of-state
+  entrants are unaffected either way — DX is not one of their multiplier
+  classes.
 - ALQP: the **2026 rules page** (alabamacontestgroup.org/aqp/rules/, fetched
   2026-07-25, extracted to [`alqp_rules_2026.txt`](docs/research/alqp_rules_2026.txt))
   states it as the party Object — "Stations outside of Alabama make contact with
