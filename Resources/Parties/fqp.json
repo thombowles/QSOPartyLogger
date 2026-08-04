@@ -25,7 +25,8 @@
         "dx"
       ],
       "homeStateCountsViaCounty": true,
-      "countScope": "perMode"
+      "countScope": "perMode",
+      "dxCountsEntities": true
     },
     "outState": {
       "classes": [
