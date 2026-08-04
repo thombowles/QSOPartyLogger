@@ -190,9 +190,12 @@ KINDS = {
         (0, "scoreAffecting", "The mobile activation bonus can be over-credited when one station is worked on three bands."),
         (1, "ruleInference", "Whether 60 m is legal is ambiguous; seven bands ship without it."),
     ],
+    # The activation multiplier landed 2026-08-04, which removed the party's
+    # only scoreAffecting item and de-badged it. What is left is one item
+    # carrying two inferences: the county-line default, and the additive
+    # reading of 9.2.2's numbered list.
     "scqp": [
-        (0, "scoreAffecting", "SC mobile and expedition stations undercount their multipliers."),
-        (1, "ruleInference", "The rules cap no county-line count; this app’s default of four ships."),
+        (0, "ruleInference", "An activated county that was also worked counts twice, and the county-line cap is this app’s default of four."),
     ],
     "sdqp": [
         (0, "ruleInference", "Whether South Dakota counts itself, and whether outside stations may work only SD, are both inferred."),

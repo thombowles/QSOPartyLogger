@@ -43,9 +43,14 @@ final class SouthCarolinaQSOPartyTests: XCTestCase {
         return log
     }
 
-    func inLog(_ qsos: [QSO], from county: String = "RICH") -> ContestLog {
+    func inLog(
+        _ qsos: [QSO],
+        from county: String = "RICH",
+        station: StationProfile.CategoryStation = .fixed
+    ) -> ContestLog {
         var log = ContestLog(partyID: "scqp")
         log.myLocation = .inState(counties: [county])
+        log.station.categoryStation = station
         log.qsos = qsos
         return log
     }
@@ -250,6 +255,113 @@ final class SouthCarolinaQSOPartyTests: XCTestCase {
         XCTAssertEqual(Set(s.workedValues(.state)), ["DC", "MD"], "two multipliers, not one")
     }
 
+    // MARK: 9.2.2 item 3 — each SC county activated
+
+    /// "**Each SC county activated.** At least one (1) QSO must be made from a
+    /// county in order for it to count as activated." — 9.2.2, whose heading is
+    /// *SC Mobile/Expedition Stations*.
+    func testMobileCountsEachCountyItActivates() throws {
+        let act = try XCTUnwrap(scqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(act.minCount, 1, "\"At least one (1) QSO\"")
+        XCTAssertEqual(act.countUnit, .qsos)
+
+        // A mobile that has worked one Texan from each of two SC counties.
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "K5A", band: .m20, mode: .cw, my: "RICH", their: "TX"),
+            qso(call: "K5B", band: .m20, mode: .cw, my: "CHAR", their: "TX"),
+        ], station: .mobile), party: scqp)
+        XCTAssertEqual(s.selfActivatedCounties, ["RICH", "CHAR"])
+        XCTAssertEqual(s.multiplierCount, 3, "TX worked, plus the two counties sat in")
+    }
+
+    /// "Expedition stations that operate from more than one county will receive
+    /// a multiplier (**ONCE PER MODE PER BAND**) for each county activated" —
+    /// the sponsor scopes it themselves, and it matches how SCQP counts
+    /// everything else.
+    func testTheActivationCountsOncePerBandPerMode() throws {
+        let act = try XCTUnwrap(scqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(act.countScope, .perBandMode)
+
+        // One county, four band/mode slots operated from it.
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "K5A", band: .m20, mode: .cw, my: "RICH", their: "TX"),
+            qso(call: "K5B", band: .m20, mode: .phone, my: "RICH", their: "TX"),
+            qso(call: "K5C", band: .m40, mode: .cw, my: "RICH", their: "TX"),
+            qso(call: "K5D", band: .m40, mode: .phone, my: "RICH", their: "TX"),
+        ], station: .expedition), party: scqp)
+        XCTAssertEqual(
+            s.multiplierKeys.filter { $0.activated }.count, 4,
+            "RICH once in each of the four slots it was operated from"
+        )
+        // The case that would pass under the wrong scope: `once` would give 1.
+        XCTAssertEqual(s.multiplierCount, 8, "four TX slots plus four RICH slots")
+    }
+
+    /// Mobile, Portable and Expedition qualify; Fixed does not, and neither does
+    /// Rover — SCQP has no such class. 6.2.1 is why Portable is in: "A single
+    /// mobile **or portable** station that operates from at least two (2)
+    /// different South Carolina counties".
+    func testOnlyTheCategoriesRule922NamesQualify() throws {
+        let act = try XCTUnwrap(scqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(Set(act.categories), [.mobile, .portable, .expedition])
+
+        let rows = [qso(call: "K5A", my: "RICH", their: "TX")]
+        for category in StationProfile.CategoryStation.allCases {
+            let s = ScoreEngine.score(log: inLog(rows, station: category), party: scqp)
+            XCTAssertEqual(
+                s.selfActivatedCounties,
+                [.mobile, .portable, .expedition].contains(category) ? ["RICH"] : [],
+                "\(category.rawValue)"
+            )
+        }
+
+        // And an out-of-state entrant never reaches the rule at all.
+        XCTAssertNil(scqp.multipliers.outState.activatedCountyMultiplier)
+        XCTAssertEqual(
+            ScoreEngine.score(log: outLog([qso(call: "W4A", their: "RICH")]), party: scqp)
+                .selfActivatedCounties, []
+        )
+    }
+
+    /// **SCQP is the only one of the five parties with this rule that is
+    /// additive.** 9.2.2 lists "1. Each South Carolina county" and "3. Each SC
+    /// county activated" as separate numbered multipliers, adds no "if not
+    /// otherwise worked" clause, and prints no county ceiling — so a mobile that
+    /// both sits in a county and works somebody there counts it twice in that
+    /// slot. Recorded as an open question; see `notes`.
+    func testAnActivatedCountyThatWasAlsoWorkedCountsTwice() throws {
+        let act = try XCTUnwrap(scqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertFalse(act.notOtherwiseWorked)
+
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "W4A", band: .m20, mode: .cw, my: "RICH", their: "RICH"),
+        ], station: .mobile), party: scqp)
+        XCTAssertEqual(s.workedValues(.county), ["RICH"])
+        XCTAssertEqual(s.selfActivatedCounties, ["RICH"])
+        XCTAssertEqual(
+            s.multiplierCount, 3,
+            "RICH worked, RICH activated, and SC via the county"
+        )
+    }
+
+    /// The activation is a multiplier, not a bonus: it multiplies QSO points.
+    /// SCQP has no `activatedCountyCount` bonus, so this is the whole of it.
+    func testTheActivationMultipliesRatherThanAdds() {
+        XCTAssertFalse(
+            scqp.bonuses.contains {
+                if case .activatedCountyCount = $0 { return true }
+                return false
+            },
+            "SCQP pays for activation with a multiplier and nothing else"
+        )
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "K5A", band: .m20, mode: .cw, my: "RICH", their: "TX"),
+        ], station: .mobile), party: scqp)
+        XCTAssertEqual(s.qsoPoints, 4, "a Texan is worth 4")
+        XCTAssertEqual(s.multiplierCount, 2, "TX worked, RICH activated")
+        XCTAssertEqual(s.total, 4 * 2, "no bonus points anywhere in this log")
+    }
+
     // MARK: Three bonus stations, once per band per mode
 
     /// "Bonus Stations may be worked ONCE per BAND per MODE for bonus points…
@@ -393,14 +505,23 @@ final class SouthCarolinaQSOPartyTests: XCTestCase {
                        "the only bundled party whose window ends in another month")
     }
 
-    func testNotesRecordTheLimitationAndBothOpenQuestions() throws {
+    func testNotesRecordBothOpenQuestions() throws {
         let notes = try XCTUnwrap(scqp.notes)
         XCTAssertTrue(notes.contains("verified: partial"))
         XCTAssertTrue(notes.contains("THE FILENAME LIES"),
                       "the 2024-looking URL for a 2026 document must stay recorded")
-        XCTAssertTrue(notes.contains("KNOWN LIMITATION"), "the activation multiplier")
         let questions = try XCTUnwrap(scqp.openQuestions)
         XCTAssertTrue(questions.contains("county-line limit"))
-        XCTAssertTrue(questions.contains("activation multiplier"))
+        XCTAssertTrue(questions.contains("COUNTS ONCE OR TWICE"),
+                      "the additive reading of 9.2.2's numbered list")
+    }
+
+    /// The activation multiplier closed this party's only `scoreAffecting`
+    /// item, so SCQP no longer warns. What remains is an inference about how
+    /// 9.2.2 reads, which is real and auditable and not worth interrupting a
+    /// contest for.
+    func testThePartyNoLongerRaisesAWarning() {
+        XCTAssertEqual(scqp.blockingCaveats, [], "the undercount is fixed, not deferred")
+        XCTAssertEqual(scqp.advisoryCaveats.map(\.kind), [.ruleInference])
     }
 }

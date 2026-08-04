@@ -16,6 +16,13 @@ Two phases:
             Resources/Parties/*.json with `callHistory` blocks.
             Offline; deterministic from the banked data.
 
+RUN THE DEFAULT PHASE AFTER ANY PARTY GENERATOR, exactly as with
+gen_caveats.py. A `gen_<party>.py` rewrites its JSON file whole and knows
+nothing about `callHistory`, so it silently drops the block. That is caught
+rather than trusted — `CallHistorySourceTests.testExactlyThreePartiesHaveNoCallHistoryFile`
+fails, naming the party as a fourth file-less one — and re-running this is
+idempotent and fixes it.
+
 Provenance: docs/research/n1mm_callhistory.md.
 """
 

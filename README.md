@@ -83,10 +83,13 @@ Built for KE5CW. Bundled parties, all with official county data:
   multiplier reachable only through a county, which the sponsor states more
   plainly than any other party here. DC counts in its own right; US territories
   are DX. 46 counties with mixed 3/4 codes (`LEE` alone is three), and Calhoun is
-  `CHOU` — the same code Alabama uses for its own Calhoun. `verified: partial`:
-  the rules cap county-line operation nowhere, and SC mobile/expedition entrants
-  undercount, since their per-county-activated **multiplier** is modelled here
-  only as a bonus.
+  `CHOU` — the same code Alabama uses for its own Calhoun. **SC mobile, portable
+  and expedition stations count each county they activate as a multiplier**, once
+  per band per mode, exactly as 9.2.2 and 6.2.3 word it. `verified: partial`: the
+  rules cap county-line operation nowhere, and 9.2.2 lists worked and activated
+  counties as separate numbered multipliers with no exclusion clause and no
+  county ceiling — so a county both sat in and worked ships counting **twice**,
+  which is the one reading of the five parties with this rule that is additive.
 - **North Carolina QSO Party** (Mar 1, 2026) — ten hours, Sunday only. 100
   counties, and **the sponsor encodes each code as the dark-red letters of the
   county name**, not as its capitals: `CABarrus` is `CAB`, `DaViDson` is `DVD`.
@@ -1184,7 +1187,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1867 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1873 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1556,7 +1559,9 @@ station profile, radio wiring and cluster history untouched.
   them: never take a year from a URL.
   [`gen_scqp.py`](docs/research/gen_scqp.py) asserts all four of the sponsor's
   point sentences, because the pay-by-who-was-worked shape is the easiest thing
-  here to get backwards.
+  here to get backwards — and, since 2026-08-04, all three sentences of the
+  county-activation multiplier, so a revision that moves its threshold or its
+  scope fails the generator rather than scoring on last year's reading.
 - NCQP: rules from the North Carolina QSO Party Committee's official 2026 PDF
   ("Updated 10/13/2025") plus the sponsor's county abbreviation sheet, both read
   verbatim 2026-07-26. **The abbreviation is encoded by colour, not by case** —

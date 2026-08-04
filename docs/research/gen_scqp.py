@@ -150,10 +150,15 @@ assert "county line" not in rules.lower().replace('"county-line"', ""), \
     "the rules now say something more about county lines - re-read rule 12"
 
 # 9.2.2 gives SC Mobile/Expedition stations a multiplier per county ACTIVATED,
-# which this schema models only as a bonus. Assert it is still there so the gap
-# cannot quietly disappear or quietly grow. See scqp_rules.md section 14.
+# now carried by `activatedCountyMultiplier`. Assert both halves of the rule are
+# still printed, so a revision that drops the threshold or changes the scope
+# fails here rather than scoring silently on last year's reading.
 assert "Each SC county activated" in rules, \
-    "the self-activation MULTIPLIER rule changed - revisit the deferred engine gap"
+    "the self-activation MULTIPLIER rule changed - re-read 9.2.2 against activatedCountyMultiplier"
+assert "At least one (1) QSO must be made from a county" in rules, \
+    "the activation threshold changed - minCount is no longer 1"
+assert "will receive a multiplier (ONCE PER MODE PER BAND) for each county activated" in rules, \
+    "the activation scope changed - countScope is no longer perBandMode"
 
 scqp = {
     "schemaVersion": 1,
@@ -192,6 +197,33 @@ scqp = {
             # token is forbidden.
             "homeStateCountsViaCounty": True,
             "countScope": "perBandMode",
+            # 9.2.2 item 3, for SC Mobile/Expedition stations: "Each SC county
+            # activated. At least one (1) QSO must be made from a county in
+            # order for it to count as activated."
+            "activatedCountyMultiplier": {
+                "minCount": 1,
+                "countUnit": "qsos",
+                # 6.2.3, stated outright and matching how SCQP counts every
+                # other multiplier: "Expedition stations that operate from more
+                # than one county will receive a multiplier (ONCE PER MODE PER
+                # BAND) for each county activated."
+                "countScope": "perBandMode",
+                # 9.2.2's heading is "SC Mobile/Expedition Stations"; 6.2.1
+                # defines Mobile Single as "A single mobile OR PORTABLE station
+                # that operates from at least two (2) different South Carolina
+                # counties". ROVER is excluded because SCQP has no such class.
+                "categories": ["MOBILE", "PORTABLE", "EXPEDITION"],
+                # THE ONLY ADDITIVE ONE OF THE FIVE. 9.2.2 lists "1. Each South
+                # Carolina county" and "3. Each SC county activated" as separate
+                # numbered multipliers, with no exclusion clause; and SCQP is
+                # alone among the five in printing no county ceiling for the
+                # activation to violate (its scope is per band per mode, so no
+                # fixed maximum exists). TnQP and VAQP say "if not otherwise
+                # worked" outright; NCQP's "164 total possible" and MOQP's "115
+                # maximum" are exactly their entity lists and so say it by
+                # arithmetic. Nothing here says either.
+                "notOtherwiseWorked": False,
+            },
         },
         # "Each SC county" - and nothing else.
         "outState": {
@@ -269,14 +301,16 @@ scqp = {
         "contact on the same band with the same station is considered a dupe', which is how this "
         "app already behaves and is the exact opposite of VTQP. County-line contacts are "
         "permitted and must be logged as separate contacts, which is what this app produces. "
-        "KNOWN LIMITATION - SC MOBILE AND EXPEDITION STATIONS UNDERCOUNT THEIR MULTIPLIERS. Rule "
-        "9.2.2 gives them a multiplier for 'Each SC county activated', once per mode per band, on "
-        "top of the counties they work. This app models county activation as a BONUS (points) "
-        "rather than as a multiplier, so an SC mobile or expedition entrant sees a multiplier "
-        "total short by the number of counties they activated. FIXED SC STATIONS AND EVERY "
-        "OUT-OF-STATE ENTRANT ARE UNAFFECTED - which is every operator this app is likely to be "
-        "used by. Recorded as a deferred engine gap; TnQP wants the same shape, so SCQP is the "
-        "second party to need it. "
+        "SC MOBILE, PORTABLE AND EXPEDITION STATIONS COUNT THE COUNTIES THEY ACTIVATE. Rule 9.2.2 "
+        "item 3 gives them 'Each SC county activated. At least one (1) QSO must be made from a "
+        "county in order for it to count as activated', and 6.2.3 scopes it: 'Expedition stations "
+        "that operate from more than one county will receive a multiplier (ONCE PER MODE PER BAND) "
+        "for each county activated.' The app now counts it, per band and per mode, alongside the "
+        "counties worked; the matching bonus points are a separate rule this party does not have. "
+        "PORTABLE is included because 6.2.1 defines Mobile Single as 'A single mobile or portable "
+        "station that operates from at least two (2) different South Carolina counties'; ROVER is "
+        "not, because SCQP has no such class. FIXED SC STATIONS AND EVERY OUT-OF-STATE ENTRANT ARE "
+        "UNAFFECTED. "
         "Cabrillo CONTEST value SC-QSO-PARTY, printed by the sponsor in its own example log. Logs "
         "are due within 14 days and CABRILLO ONLY - the sponsor no longer accepts paper. Counties "
         "are 46 with MIXED 3- AND 4-CHARACTER abbreviations: LEE is the only three, and unlike "
@@ -289,9 +323,15 @@ scqp = {
         "must appear in the log as separate contacts' - but cap nothing, not two and not four. "
         "Shipped on this app's own maximum of four, which is a default rather than a sponsor's "
         "number; inventing a cap of two would be no better founded and would reject a legal "
-        "entry. (2) The mobile/expedition activation multiplier above, which is a missing app "
-        "feature rather than a rule in doubt. Confirm (1) with the SCQP Team via scqso.com before "
-        "submitting a county-line log."
+        "entry. (2) WHETHER AN ACTIVATED COUNTY THAT WAS ALSO WORKED COUNTS ONCE OR TWICE. 9.2.2 "
+        "lists '1. Each South Carolina county' and '3. Each SC county activated' as separate "
+        "numbered multipliers, and unlike TnQP and VAQP adds no 'if not otherwise worked' clause; "
+        "unlike NCQP and MOQP it also prints no county ceiling that double-counting would break. "
+        "Shipped ADDITIVE, on that reading: an SC mobile that both sits in a county and works "
+        "somebody there counts it twice in that band/mode slot. If the SCQP Team reads their own "
+        "list as one set of counties rather than two, a mobile log claims one multiplier per such "
+        "county too many. Confirm both with the SCQP Team via scqso.com before submitting a mobile "
+        "or county-line log."
     ),
 }
 
