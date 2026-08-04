@@ -169,6 +169,19 @@ for quote in [
     "extra DX multiplier for U.S. (including Alaska and Hawaii), Virginia, and Canada",
     "Outside of Virginia station multipliers are the total number of Virginia Counties (95)",
     "may claim it as a multiplier,",
+    # The self-activation rule, in three pieces: who, how many, and of what.
+    # The unit is what makes this party different from the other four, so a
+    # revision that changed "stations" to "QSOs" must fail here rather than
+    # over-credit every roving log by silently reusing TnQP's reading.
+    #
+    # Quoted line by line: the PDF sets this page in TWO COLUMNS, so the
+    # right-hand column's text is interleaved into the middle of the sentence
+    # once whitespace is collapsed. A quote spanning a line break here would
+    # never match, however faithfully it copies the sponsor.
+    "Mobile, Rover, and Expedition stations that contact 10",
+    "(ten) or more different stations while operating from a",
+    "county or independent city may claim it as a multiplier,",
+    "if not otherwise worked",
     # Bonuses
     "bonus of 100 additional points for each Virginia",
     "one-time bonus of 50 points. Bonus",
@@ -225,6 +238,32 @@ vaqp = {
             # "Multipliers are only counted once, i.e., contacting the same ...
             # using a different band or mode counts only as a new QSO."
             "countScope": "once",
+            # "Mobile, Rover, and Expedition stations that contact 10 (ten) or
+            # more different stations while operating from a county or
+            # independent city may claim it as a multiplier, if not otherwise
+            # worked."
+            "activatedCountyMultiplier": {
+                "minCount": 10,
+                # THE ONLY PARTY OF THE FIVE THAT COUNTS STATIONS. "contact
+                # 10 (ten) or more DIFFERENT STATIONS" - a mobile that works one
+                # chaser on five bands from one city has made five QSOs and
+                # contacted one station, and only the second number is the
+                # sponsor's. Do not read this across from TnQP's "at least 10
+                # QSOs", which looks identical and is not.
+                "countUnit": "stations",
+                # "Multipliers are only counted once" - the same scope as
+                # everything else this party counts.
+                "countScope": "once",
+                # "Mobile, Rover, and Expedition stations". VAQP defines its
+                # station classes as Fixed, Mobile, Expedition and Rover, and
+                # has no Portable, so those three are the whole of the roving
+                # side here.
+                "categories": ["MOBILE", "ROVER", "EXPEDITION"],
+                # "IF NOT OTHERWISE WORKED", stated outright - the first of the
+                # five sponsors to attach the condition explicitly, and the
+                # reason this is a field rather than an assumption.
+                "notOtherwiseWorked": True,
+            },
         },
         # "the total number of Virginia Counties (95) and Independent Cities
         # (38) worked" - 133.
@@ -311,18 +350,24 @@ vaqp = {
         "QSO Party Bonus Station gives a one-time bonus of 50 points. Bonus stations are listed on "
         "the VaQP Web Site' - and the rules do not name them, so none can be encoded. Check the "
         "VaQP site before the contest and add 50 points per distinct bonus station worked. This is "
-        "the same call PAQP's unannounced 2026 station got. KNOWN LIMITATION 3 - Virginia mobiles, "
-        "rovers and expeditions may also claim a county or city as a MULTIPLIER when they work ten "
-        "or more different stations from it 'if not otherwise worked'; this app has no "
-        "self-activation multiplier, so an in-state roving entrant is short by that count. "
-        "Out-of-state entrants are unaffected. Satellite contacts are allowed and this app has no "
+        "the same call PAQP's unannounced 2026 station got. "
+        "VIRGINIA MOBILES, ROVERS AND EXPEDITIONS COUNT EACH COUNTY OR CITY THEY WORK TEN "
+        "STATIONS FROM. 'Mobile, Rover, and Expedition stations that contact 10 (ten) or more "
+        "different stations while operating from a county or independent city may claim it as a "
+        "multiplier, if not otherwise worked.' The app now counts it. NOTE THE UNIT: TEN DIFFERENT "
+        "STATIONS, NOT TEN QSOS - working one chaser on five bands from one city is five QSOs and "
+        "one station, and only the second number counts here. TnQP's rule reads almost identically "
+        "and is ten QSOs, so the two must not be read across. 'If not otherwise worked' is honoured "
+        "too: a county or city you have already worked somebody in does not also pay for sitting "
+        "in it. Out-of-state entrants are unaffected. The separate 100-point activation BONUS is a "
+        "different rule with a different threshold - one valid QSO, not ten stations - and both "
+        "apply. Satellite contacts are allowed and this app has no "
         "concept of them, though a satellite QSO still lands on a band it knows. "
         "Cabrillo CONTEST value VA-QSO-PARTY per the WA7BNM registry - the rules print no header "
         "token and give no Cabrillo example. "
         "OPEN QUESTIONS (why this is partial): (1) and (2) above change the score for ordinary "
-        "entrants - the 3-point mobile rule especially - and (3) affects in-state rovers. All "
-        "three are missing app features rather than rules in doubt. Confirm the bonus-station list "
-        "at the VaQP web site before submitting."
+        "entrants - the 3-point mobile rule especially. Both are missing app features rather than "
+        "rules in doubt. Confirm the bonus-station list at the VaQP web site before submitting."
     ),
 }
 

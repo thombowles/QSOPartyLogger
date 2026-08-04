@@ -152,9 +152,13 @@ Built for KE5CW. Bundled parties, all with official county data:
   Fairfax *County*, so the letter is not a test. Exchange is a **QSO number and a
   location, with no signal report**. Multipliers once overall; Virginia itself
   explicitly excluded. County lines are permitted and pay for **one** entity —
-  neither of the usual shapes. `verified: partial`: contacts with Virginia
-  mobiles are worth 3 points and this app pays 1 or 2, and the 50-point bonus
-  stations are published only on the sponsor's web site.
+  neither of the usual shapes. Virginia mobiles, rovers and expeditions claim an
+  entity as a **multiplier** once they work **ten different stations** from it —
+  the only party here whose threshold counts stations rather than QSOs, so one
+  chaser worked on ten bands pays nothing — and that is on top of the separate
+  100-point bonus, which needs only one QSO. `verified: partial`: contacts with
+  Virginia mobiles are worth 3 points and this app pays 1 or 2, and the 50-point
+  bonus stations are published only on the sponsor's web site.
 - **Louisiana QSO Party** (Apr 4, 2026) — **the first bundled party whose home
   entities are parishes**, all 64 of them, with mixed 3/4-character codes. Nine
   are `St.` parishes and no two follow the same pattern — watch `SMT` St. Martin
@@ -1192,7 +1196,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1877 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1882 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial

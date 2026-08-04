@@ -212,10 +212,11 @@ KINDS = {
         (0, "provenance", "The rules document is titled 2025 and no 2026 revision exists yet."),
     ],
     "tqp": [],
+    # The third item — in-state rovers short the county they work ten stations
+    # from — left 2026-08-04, when `activatedCountyMultiplier` landed.
     "vaqp": [
         (0, "scoreAffecting", "Contacts with Virginia mobiles, expeditions and rovers are worth 3 points and are paid 1 or 2 here."),
         (1, "scoreAffecting", "The bonus stations are not shipped; confirm the list before submitting."),
-        (2, "scoreAffecting", "In-state rovers are short the self-activation multiplier for each county or city they work ten stations from."),
     ],
     "vtqp": [
         (0, "scoreAffecting", "Score is a floor: the fractional power multiplier is not applied. Multiply by 2 for QRP or 1.5 for low power yourself."),
