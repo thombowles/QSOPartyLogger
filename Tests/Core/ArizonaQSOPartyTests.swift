@@ -197,7 +197,7 @@ final class ArizonaQSOPartyTests: XCTestCase {
         ]), party: azqp)
         XCTAssertEqual(s.workedValues(.state), ["TX"])
         XCTAssertEqual(s.workedValues(.province), ["ON"])
-        XCTAssertEqual(s.workedValues(.dx), ["DL"])
+        XCTAssertEqual(s.workedValues(.dx), ["Germany"])
         XCTAssertEqual(s.multiplierCount, 3)
     }
 
@@ -239,22 +239,31 @@ final class ArizonaQSOPartyTests: XCTestCase {
             qso(call: "JA1B", my: "MCP", their: "JA"),
             qso(call: "G4C", my: "MCP", their: "G"),
         ]), party: azqp)
-        XCTAssertEqual(s.workedValues(.dx), ["DL", "JA", "G"],
+        XCTAssertEqual(s.workedValues(.dx), ["Germany", "Japan", "England"],
                        "prefix style, so unlike NHQP/MEQP each entity counts")
         XCTAssertEqual(s.multiplierCount, 3)
     }
 
-    /// Standing limitation, pinned so it stays deliberate: a DXCC prefix that
-    /// equals a US state or Canadian province code is read as that
-    /// state/province — the resolution sponsors' log checkers also apply.
-    func testDXPrefixesShadowedByStateCodes() {
-        let s = ScoreEngine.score(log: inLog([
+    /// A DXCC prefix that equals a US state or Canadian province code used to
+    /// be read as that state or province. The worked callsign decides now, and
+    /// only when it names the very same entity the token would — so these two
+    /// are DX, while `W3XYZ` sending `PA` is still Pennsylvania.
+    func testTheCallsignDecidesAPrefixThatEqualsAStateCode() {
+        let dx = ScoreEngine.score(log: inLog([
             qso(call: "PA0ABC", my: "MCP", their: "PA"),   // Netherlands
             qso(call: "ON4XYZ", my: "MCP", their: "ON"),   // Belgium
         ]), party: azqp)
-        XCTAssertEqual(s.workedValues(.state), ["PA"], "read as Pennsylvania")
-        XCTAssertEqual(s.workedValues(.province), ["ON"], "read as Ontario")
-        XCTAssertEqual(s.workedValues(.dx), [], "neither reaches the DX class")
+        XCTAssertEqual(dx.workedValues(.state), [])
+        XCTAssertEqual(dx.workedValues(.province), [])
+        XCTAssertEqual(Set(dx.workedValues(.dx)), ["Netherlands", "Belgium"])
+
+        let home = ScoreEngine.score(log: inLog([
+            qso(call: "W3XYZ", my: "MCP", their: "PA"),
+            qso(call: "VE3ABC", my: "MCP", their: "ON"),
+        ]), party: azqp)
+        XCTAssertEqual(home.workedValues(.state), ["PA"], "read as Pennsylvania")
+        XCTAssertEqual(home.workedValues(.province), ["ON"], "read as Ontario")
+        XCTAssertEqual(home.workedValues(.dx), [])
     }
 
     // MARK: The K7A bonus
