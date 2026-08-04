@@ -1086,6 +1086,45 @@ for a complete example):
 Malformed files are reported with the reason; the app keeps running with the
 bundled parties.
 
+### Multipliers for the counties *you* activate
+
+Five sponsors give an in-state station a multiplier for each home-state county
+it **operates from**, on top of the counties it works — distinct from the
+per-county *bonus points* that `bonuses: [{"type": "activatedCountyCount"}]`
+models, because a multiplier compounds against every QSO point in the log
+rather than being added once at the end. It goes on the **`inState`** side:
+
+```jsonc
+"inState": {
+  "classes": ["county", "state", "province", "dx"],
+  "homeStateCountsViaCounty": false,
+  "countScope": "once",
+  "activatedCountyMultiplier": {
+    "minCount": 10,              // how many before the county counts
+    "countUnit": "stations",     // "qsos", or "stations" for distinct callsigns
+    "countScope": "once",        // this multiplier's own scope, NOT the side's
+    "categories": ["MOBILE", "ROVER", "EXPEDITION"],
+    "notOtherwiseWorked": true   // working the county forfeits it?
+  }
+}
+```
+
+**Every field is required, deliberately.** No two of the five sponsors agree on
+any of them, so a default would be one sponsor's rule silently applied to the
+next: VAQP counts ten *different stations* where MOQP counts fifty *QSOs*;
+TnQP grants it **once** while counting worked multipliers per band, so the
+scope cannot be inherited from the side it sits on; NCQP gives it to **every**
+in-state entrant including fixed stations, so it is not a roving-category rule;
+and SCQP alone is additive, listing worked and activated counties as separate
+numbered multipliers, while TnQP and VAQP say the activation is forfeit
+outright and NCQP and MOQP say so by arithmetic — their printed maxima (164
+total, 115 counties) are exactly their entity lists.
+
+The threshold reads all of that county's valid QSOs; the granted multiplier is
+then scoped to each band/mode slot actually operated from it, which collapses
+to one key under `once`. `ActivatedCountyMultiplierTests` pins all five axes
+against one another on a synthetic party.
+
 ### Caveats — what the setup sheet warns about
 
 `caveats` is optional and never affects scoring. It classifies the gaps between
@@ -1145,7 +1184,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1849 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1867 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial

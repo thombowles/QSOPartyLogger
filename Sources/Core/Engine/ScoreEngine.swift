@@ -10,6 +10,23 @@ enum ScoreEngine {
         let multClass: MultClass
         let value: String
         let scope: String
+        /// Earned by **operating from** the county rather than by working it
+        /// (`MultRule.activatedCountyMultiplier`). Defaults false, so every key
+        /// built before this existed is unchanged.
+        ///
+        /// It is part of the key because SCQP 9.2.2 lists "Each South Carolina
+        /// county" and "Each SC county activated" as separate numbered
+        /// multipliers with no ceiling, so the two must be able to coexist at
+        /// the same scope. Where a sponsor forfeits one for the other,
+        /// `notOtherwiseWorked` suppresses the activated key instead.
+        let activated: Bool
+
+        init(multClass: MultClass, value: String, scope: String, activated: Bool = false) {
+            self.multClass = multClass
+            self.value = value
+            self.scope = scope
+            self.activated = activated
+        }
     }
 
     struct ScoreBreakdown: Equatable {
@@ -29,6 +46,11 @@ enum ScoreEngine {
         var outOfScopeRowIDs: Set<UUID> = []
         /// Rows that added at least one new multiplier when first logged.
         var newMultRowIDs: Set<UUID> = []
+        /// Counties credited by `MultRule.activatedCountyMultiplier` — earned by
+        /// operating from them rather than by working them. Empty for every
+        /// party without that rule, which is every party and every out-of-state
+        /// log.
+        var selfActivatedCounties: Set<String> = []
         /// Set from the entrant's `MultRule.maxScoredMultipliers` where the
         /// party pays for fewer multipliers than it recognises (CQP: 58 of 63).
         var multiplierCap: Int?
@@ -140,7 +162,71 @@ enum ScoreEngine {
             countyAbbrs: countyAbbrs,
             breakdown: result
         )
+
+        // Deliberately last. After the worked loop, so a forfeiting rule can see
+        // which counties were worked; after the bonuses, so `sweepTiers` keeps
+        // counting counties **worked** rather than one the operator sat in.
+        addActivatedCountyMultipliers(
+            to: &result,
+            rows: contestRows.filter { firstIDs.contains($0.id) },
+            log: log,
+            rule: rule,
+            countyAbbrs: countyAbbrs
+        )
         return result
+    }
+
+    /// The multiplier five sponsors give an in-state entrant for each home-state
+    /// county they operate from. A no-op for every party without the rule.
+    private static func addActivatedCountyMultipliers(
+        to result: inout ScoreBreakdown,
+        rows valid: [QSO],
+        log: ContestLog,
+        rule: PartyDefinition.MultRule,
+        countyAbbrs: Set<String>
+    ) {
+        guard let act = rule.activatedCountyMultiplier,
+              log.myLocation.isInState,
+              rule.classes.contains(.county),
+              act.categories.contains(log.station.categoryStation)
+        else { return }
+
+        for (county, rows) in Dictionary(grouping: valid, by: { $0.myLoc.uppercased() })
+        where countyAbbrs.contains(county) {
+            // The threshold reads all of that county's valid rows, not one
+            // scope's worth: every sponsor words it that way ("50 or more valid
+            // contacts from a county", "10 or more different stations while
+            // operating from a county").
+            let count = switch act.countUnit {
+            case .qsos: rows.count
+            case .stations: Set(rows.map { $0.call.uppercased() }).count
+            }
+            guard count >= act.minCount else { continue }
+
+            // "…if they do not earn a multiplier for that county otherwise"
+            // (TnQP) / "if not otherwise worked" (VAQP). Checked at **any**
+            // scope, which is the case set semantics alone cannot handle: TnQP
+            // counts worked multipliers per band and grants this one once, so
+            // the two keys would never have collided.
+            if act.notOtherwiseWorked, workedCounty(county, in: result) { continue }
+
+            // One key per scope component present among that county's own rows,
+            // which collapses to a single key under `once` and gives SCQP the
+            // "ONCE PER MODE PER BAND" it asks for.
+            for scope in Set(rows.map { scopeComponent(act.countScope, row: $0) }) {
+                let key = MultKey(multClass: .county, value: county, scope: scope, activated: true)
+                if result.multiplierKeys.insert(key).inserted {
+                    result.selfActivatedCounties.insert(county)
+                }
+            }
+        }
+    }
+
+    /// Was this county earned by working somebody in it, at any scope?
+    private static func workedCounty(_ county: String, in result: ScoreBreakdown) -> Bool {
+        result.multiplierKeys.contains {
+            !$0.activated && $0.multClass == .county && $0.value == county
+        }
     }
 
     /// Drops contacts an out-of-state entrant earns no credit for, in parties
@@ -337,10 +423,34 @@ enum ScoreEngine {
             ) where wantedClasses.contains(multClass) || isHomeStateViaCounty(multClass, value, party, rule) {
                 let key = MultKey(multClass: multClass, value: value, scope: scope)
                 if !current.contains(key) {
+                    // A county the operator has already self-activated under a
+                    // forfeiting rule trades one key for another rather than
+                    // adding one, so the badge would send them chasing a
+                    // multiplier that pays nothing — the same failure the cap
+                    // guard above exists to prevent.
+                    if multClass == .county,
+                       let act = rule.activatedCountyMultiplier, act.notOtherwiseWorked,
+                       !countyGains(value, addingScope: scope, to: current) {
+                        continue
+                    }
                     return true
                 }
             }
         }
         return false
+    }
+
+    /// Would working `county` at `scope` raise this log's multiplier total?
+    /// Only asked where the entrant's rule forfeits the activation multiplier on
+    /// a worked county — everywhere else a key that is absent is a gain.
+    private static func countyGains(
+        _ county: String, addingScope scope: String, to current: Set<MultKey>
+    ) -> Bool {
+        let keys = current.filter { $0.multClass == .county && $0.value == county }
+        let worked = Set(keys.filter { !$0.activated }.map(\.scope))
+        let activated = keys.filter(\.activated).count
+        let before = worked.count + activated
+        let after = worked.union([scope]).count      // the forfeited activation goes to zero
+        return after > before
     }
 }
