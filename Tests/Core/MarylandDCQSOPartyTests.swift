@@ -130,7 +130,7 @@ final class MarylandDCQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.workedValues(.county), ["BAL"])
         XCTAssertEqual(s.workedValues(.state), ["OK"])
         XCTAssertEqual(s.workedValues(.province), ["ON"])
-        XCTAssertEqual(s.workedValues(.dx), ["DL", "G"], "§16d: each DXCC country")
+        XCTAssertEqual(s.workedValues(.dx), ["Germany", "England"], "§16d: each DXCC country")
         XCTAssertEqual(s.multiplierCount, 5, "§16e: all classes summed")
     }
 
