@@ -7,13 +7,16 @@ final class CaveatRosterTests: XCTestCase {
 
     private var parties: [PartyDefinition] { PartyCatalog.loadBundled() }
 
-    /// The 22 parties where this app will mis-score or mis-export, as against
-    /// the 39 that `verified: partial` used to warn about. A new entry here
-    /// means a real scoring gap was found; a departure means one was closed.
+    /// The parties where this app will mis-score or mis-export, as against the
+    /// 39 that `verified: partial` used to warn about. A new entry here means
+    /// a real scoring gap was found; a departure means one was closed.
+    ///
+    /// **NMQP left on 2026-08-01**: its only blocking caveat was the DX
+    /// collapse, which the ARRL entity table fixed.
     private static let badges: Set<String> = [
         "arqp", "deqp", "fqp", "idqp", "ilqp", "in7qpne", "kyqp", "laqp",
         "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp",
-        "nmqp", "oqp", "qcqp", "scqp", "vaqp", "vtqp", "warun", "wiqp",
+        "oqp", "qcqp", "scqp", "vaqp", "vtqp", "warun", "wiqp",
     ]
 
     func testBadgeRosterIsExactlyAsExpected() {

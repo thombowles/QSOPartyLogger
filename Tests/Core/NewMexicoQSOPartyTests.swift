@@ -179,18 +179,35 @@ final class NewMexicoQSOPartyTests: XCTestCase {
                        "one multiplier, not two")
     }
 
-    /// **KNOWN LIMITATION, pinned.** The rules count "DX entities worked"
-    /// individually, but the log format carries the literal `DX` — the packet
-    /// says so and its sample log shows `LY2ZZ 599 DX`. So ten entities become
-    /// one multiplier. The sponsor's own scorer faces the same problem, since the
-    /// field it reads is `DX` too.
-    func testKnownGapAllDXCollapsesToOneMultiplier() throws {
+    /// The rules count "DX entities worked" individually while the log format
+    /// carries the literal `DX` — the packet says so and its sample log shows
+    /// `LY2ZZ 599 DX`. Ten entities used to become one multiplier. The
+    /// sponsor's own scorer faces the same problem and must derive the entity
+    /// from the callsign, which is now exactly what this does.
+    func testEachDXEntityCountsIndividually() throws {
         XCTAssertEqual(nmqp.dxStyle, .token)
+        XCTAssertTrue(nmqp.multipliers.inState.dxCountsEntities)
+
+        // Ten different entities, one contact each.
+        let calls = ["DL1AA", "JA1BB", "G4CC", "F5DD", "I2EE",
+                     "EA3FF", "SM4GG", "OZ5HH", "HB9II", "LZ6JJ"]
+        let s = ScoreEngine.score(log: inLog(calls.map {
+            qso(call: $0, my: "BER", their: "DX")
+        }), party: nmqp)
+        XCTAssertEqual(s.validQSOs, 10, "all ten count for points")
+        XCTAssertEqual(s.workedValues(.dx).count, 10, "…and yield ten multipliers, not one")
+
+        // The packet's own sample log row.
+        XCTAssertEqual(DXCCTable.shared.entity(forCallsign: "LY2ZZ")?.name, "Lithuania")
+        XCTAssertTrue(try XCTUnwrap(nmqp.notes).contains("DX ENTITIES COUNT ONE BY ONE"))
+    }
+
+    /// Ten contacts with one entity are still one multiplier.
+    func testTenContactsInOneEntityAreOneMultiplier() {
         let rows = (0..<10).map { qso(call: "DL\($0)AA", my: "BER", their: "DX") }
         let s = ScoreEngine.score(log: inLog(rows), party: nmqp)
-        XCTAssertEqual(s.validQSOs, 10, "all ten count for points")
-        XCTAssertEqual(s.workedValues(.dx), ["DX"], "…and yield one multiplier, not ten")
-        XCTAssertTrue(try XCTUnwrap(nmqp.notes).contains("DX COLLAPSES TO ONE MULTIPLIER"))
+        XCTAssertEqual(s.validQSOs, 10)
+        XCTAssertEqual(s.workedValues(.dx), ["Germany"])
     }
 
     // MARK: Bonuses — both fit
@@ -322,6 +339,8 @@ final class NewMexicoQSOPartyTests: XCTestCase {
                       "the change log's cut must stay recorded")
         XCTAssertTrue(notes.contains("2026-ONLY RULE"),
                       "so a 2027 session deletes the W1AW/5 bonus")
-        XCTAssertTrue(notes.contains("KNOWN LIMITATION"))
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION"),
+                       "the DX collapse was the only one, and it is closed")
+        XCTAssertEqual(nmqp.caveats.count, 1, "only the 2026-only bonus remains")
     }
 }

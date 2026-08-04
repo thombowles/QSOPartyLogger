@@ -163,8 +163,7 @@ KINDS = {
         (0, "ruleInference", "The sponsor’s table has no DC row, so DC cannot be logged at all here."),
     ],
     "nmqp": [
-        (0, "scoreAffecting", "DX collapses to one multiplier where the sponsor counts entities. Affects New Mexico entrants only."),
-        (1, "provenance", "The W1AW/5 bonus is 2026-only and must be removed when the 2027 rules are read."),
+        (0, "provenance", "The W1AW/5 bonus is 2026-only and must be removed when the 2027 rules are read."),
     ],
     "nyqp": [
         (0, "cosmetic", "The sponsor’s own sample log uses bands above 70 cm, which cannot be logged here."),
