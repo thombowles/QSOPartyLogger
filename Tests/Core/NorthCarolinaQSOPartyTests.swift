@@ -47,9 +47,14 @@ final class NorthCarolinaQSOPartyTests: XCTestCase {
         return log
     }
 
-    func inLog(_ qsos: [QSO], from county: String = "WAK") -> ContestLog {
+    func inLog(
+        _ qsos: [QSO],
+        from county: String = "WAK",
+        station: StationProfile.CategoryStation = .fixed
+    ) -> ContestLog {
         var log = ContestLog(partyID: "ncqp")
         log.myLocation = .inState(counties: [county])
+        log.station.categoryStation = station
         log.qsos = qsos
         return log
     }
@@ -229,6 +234,11 @@ final class NorthCarolinaQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.workedValues(.province).count, 13)
         XCTAssertEqual(s.workedValues(.dx), ["DX"], "'plus one DX' — all DX is one multiplier")
         XCTAssertEqual(s.multiplierCount, 164, "the sponsor's own stated maximum")
+        // …and WAK, the county this log is operating from, is among the 100 it
+        // worked. The county-activation multiplier is forfeit on a worked county
+        // precisely so that this stays 164 rather than becoming 165, which is
+        // how the arithmetic settles a rule the sponsor never qualified.
+        XCTAssertEqual(s.selfActivatedCounties, [])
     }
 
     /// "49 US States (**not NC**)" — stated outright in the negative, as MNQP
@@ -244,6 +254,71 @@ final class NorthCarolinaQSOPartyTests: XCTestCase {
         XCTAssertEqual(ncqp.stateAliases, [:])
         XCTAssertEqual(try ExchangeParser.parse("DC", party: ncqp, role: .inState).get().locations,
                        ["DC"])
+    }
+
+    // MARK: The county you operate from — every NC station, fixed included
+
+    /// "Note: **NC stations** may include the county from which operation takes
+    /// place in the Multiplier count regardless of whether any QSOs are logged
+    /// from that same county."
+    ///
+    /// **The broadest form of this rule in the catalogue.** Four other sponsors
+    /// give it to roving categories; NCQP says "NC stations", naming Mobile and
+    /// Portable only as the multi-county case — so a *fixed* NC station counts
+    /// the county it sits in, and NCQP is the only party where that is true.
+    func testEveryNCStationCountsTheCountyItOperatesFrom() throws {
+        let act = try XCTUnwrap(ncqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(Set(act.categories), Set(StationProfile.CategoryStation.allCases))
+
+        for category in StationProfile.CategoryStation.allCases {
+            let s = ScoreEngine.score(
+                log: inLog([qso(call: "K5A", my: "WAK", their: "TX")], station: category),
+                party: ncqp
+            )
+            XCTAssertEqual(s.selfActivatedCounties, ["WAK"], "\(category.rawValue)")
+            XCTAssertEqual(s.multiplierCount, 2, "TX worked, WAK sat in")
+        }
+    }
+
+    /// "…this provision is applied to **each county activated where at least one
+    /// QSO was completed**." A mobile counts every county it made a QSO from.
+    func testAMobileCountsEachCountyItActivated() throws {
+        let act = try XCTUnwrap(ncqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(act.minCount, 1)
+        XCTAssertEqual(act.countUnit, .qsos)
+        XCTAssertEqual(act.countScope, .once, "counted once, like everything else here")
+
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "K5A", my: "WAK", their: "TX"),
+            qso(call: "K5B", my: "MEC", their: "OK"),
+            qso(call: "K5C", my: "GRM", their: "VA"),
+        ], station: .mobile), party: ncqp)
+        XCTAssertEqual(s.selfActivatedCounties, ["WAK", "MEC", "GRM"])
+        XCTAssertEqual(s.multiplierCount, 6, "three states worked, three counties sat in")
+    }
+
+    /// **The 164 ceiling is what settles this**, since the rules attach no "if
+    /// not otherwise worked" clause the way TnQP and VAQP do: 100 counties + 50
+    /// state-class tokens + 13 provinces + 1 DX is exactly 164, so a county both
+    /// operated from and worked cannot make it 165.
+    func testACountyBothOperatedFromAndWorkedCountsOnce() throws {
+        let act = try XCTUnwrap(ncqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertTrue(act.notOtherwiseWorked, "165 is not an available total")
+
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "W4A", my: "WAK", their: "WAK"),
+        ], station: .mobile), party: ncqp)
+        XCTAssertEqual(s.workedValues(.county), ["WAK"])
+        XCTAssertEqual(s.selfActivatedCounties, [], "already earned by working it")
+        XCTAssertEqual(s.multiplierCount, 1)
+    }
+
+    /// Out-of-state entrants never reach the rule: it lives on the in-state side.
+    func testOutOfStateEntrantsAreUnaffected() {
+        XCTAssertNil(ncqp.multipliers.outState.activatedCountyMultiplier)
+        let s = ScoreEngine.score(log: outLog([qso(call: "W4A", their: "WAK")]), party: ncqp)
+        XCTAssertEqual(s.selfActivatedCounties, [])
+        XCTAssertEqual(s.multiplierCount, 1)
     }
 
     // MARK: County lines — two, logged as two
@@ -338,9 +413,14 @@ final class NorthCarolinaQSOPartyTests: XCTestCase {
     func testNotesRecordEveryLimitationAndTheFT8Exclusion() throws {
         let notes = try XCTUnwrap(ncqp.notes)
         XCTAssertTrue(notes.contains("verified: partial"))
-        for n in 1...3 {
+        // Two, not three: the county-activation multiplier stopped being a
+        // limitation on 2026-08-04 and its prose is now a plain statement of
+        // what the app does.
+        for n in 1...2 {
             XCTAssertTrue(notes.contains("KNOWN LIMITATION \(n)"), "limitation \(n)")
         }
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION 3"))
+        XCTAssertTrue(notes.contains("EVERY NC STATION COUNTS THE COUNTY IT OPERATES FROM"))
         XCTAssertTrue(notes.contains("KEEP FT8/FT4 OUT OF THIS LOG"),
                       "FT8/FT4 belong to the separate Weak Signal Showcase")
         XCTAssertTrue(notes.contains("ENCODED BY COLOUR"))

@@ -225,6 +225,10 @@ for quote in [
     "QSO's made using FT-8/4 should not be included",
     "DO NOT INCLUDE FT-8/4 QSOS in the regular Cabrillo log",
     "NC stations may include the county from which operation takes place in the Multiplier count",
+    # The threshold half of the same rule. It is what `minCount: 1` encodes, and
+    # the only half of the sentence that can discriminate one county from
+    # another, so a revision dropping it must not pass silently.
+    "each county activated where at least one QSO was completed",
 ]:
     assert quote in rules, f"the 2026 rules no longer contain: {quote!r}"
 
@@ -276,6 +280,37 @@ ncqp = {
             # and operating location."
             "countScope": "once",
             # "plus ONE DX" falls out of dxStyle "token"; no numeric cap needed.
+            #
+            # "Note: NC stations may include the county from which operation
+            # takes place in the Multiplier count regardless of whether any QSOs
+            # are logged from that same county. This includes Mobile and
+            # Portable stations where operations may take place in more than one
+            # county. In that case this provision is applied to each county
+            # activated where at least one QSO was completed."
+            "activatedCountyMultiplier": {
+                # "each county activated where AT LEAST ONE QSO was completed" -
+                # the sponsor's own threshold, and the only one of the two
+                # sentences that can discriminate. "Regardless of whether any
+                # QSOs are logged" would be minCount 0, which behaves
+                # identically here: a county the operator logged nothing from
+                # leaves no trace in the log to count.
+                "minCount": 1,
+                "countUnit": "qsos",
+                # Same scope as everything else this party counts.
+                "countScope": "once",
+                # "NC STATIONS may include the county from which operation takes
+                # place" - every NC entrant, with Mobile and Portable called out
+                # as the multi-county case rather than as the qualifying set. So
+                # this is NOT a roving-category rule, and a fixed NC station
+                # counts the county it sits in.
+                "categories": ["FIXED", "MOBILE", "PORTABLE", "ROVER", "EXPEDITION", "SCHOOL"],
+                # BY ARITHMETIC, not by a clause. The sponsor prints "164 total
+                # possible", which is exactly 100 counties + 50 state-class
+                # tokens + 13 provinces + 1 DX; if a station's own county could
+                # count on top of working it the ceiling would be 165. So the
+                # activated county is part of the 100, not extra.
+                "notOtherwiseWorked": True,
+            },
         },
         # "Non-NC participants: Work stations in 100 North Carolina Counties."
         "outState": {
@@ -354,20 +389,27 @@ ncqp = {
         "station in five of those ten counties adds 500 points after multiplication. This app's "
         "sweep rule counts any counties rather than membership of a named set, so using it would "
         "pay almost every log; nothing ships instead. Add 500 yourself if you worked five of the "
-        "ten. KNOWN LIMITATION 3 - NC stations may count the county they operate from as a "
-        "multiplier 'regardless of whether any QSOs are logged from that same county', and mobile "
-        "and portable stations may count each county they activate. This app has no "
-        "self-activation multiplier, so an in-state entrant is short by the number of counties "
-        "they operated from. OUT-OF-STATE ENTRANTS ARE UNAFFECTED by this one. "
+        "ten. "
+        "EVERY NC STATION COUNTS THE COUNTY IT OPERATES FROM. 'NC stations may include the county "
+        "from which operation takes place in the Multiplier count regardless of whether any QSOs "
+        "are logged from that same county. This includes Mobile and Portable stations where "
+        "operations may take place in more than one county. In that case this provision is "
+        "applied to each county activated where at least one QSO was completed.' The app now "
+        "counts it, for FIXED ENTRANTS TOO - the rule says 'NC stations', naming Mobile and "
+        "Portable only as the multi-county case, so this is not a roving-category rule and NCQP "
+        "is the only one of the five parties with this rule where a fixed station gains a "
+        "multiplier from it. A county that was also WORKED counts once, not twice: the sponsor's "
+        "printed '164 total possible' is exactly 100 counties + 50 state-class tokens + 13 "
+        "provinces + 1 DX, so a ceiling of 165 is not available. OUT-OF-STATE ENTRANTS ARE "
+        "UNAFFECTED. "
         "Cabrillo CONTEST value NC-QSO-PARTY per the WA7BNM registry - the rules enumerate the "
         "CATEGORY headers an entrant must set and omit CONTEST:. Logs are due 2026-03-15, "
         "Cabrillo only, paper no longer accepted. "
         "OPEN QUESTIONS (why this is partial): (1) and (2) are KNOWN LIMITATIONS 1 and 2 above - "
         "both are fully verified rules that this app cannot express, and BOTH CHANGE THE FINAL "
         "SCORE FOR EVERY ENTRANT, in state and out. Until they are built, an NCQP score from this "
-        "app is a floor, not a total, and the arithmetic to correct it is given above. (3) The "
-        "self-activation multiplier, which affects in-state entrants only. None of the three is a "
-        "rule in doubt; all three are missing app features. Verify against the sponsor's own "
+        "app is a floor, not a total, and the arithmetic to correct it is given above. Neither is "
+        "a rule in doubt; both are missing app features. Verify against the sponsor's own "
         "scoring when results are posted at http://www.ncqsoparty.org."
     ),
 }
@@ -383,4 +425,5 @@ print(f"  points: phone 2, CW 3, digital 5 - the only party where digital beats 
 print(f"  multipliers: once overall; in-state 100+50+13+1 = 164 (sponsor's own total)")
 print(f"  bands: {len(BANDS)} - 80 m up, 160 m explicitly excluded")
 print(f"  schedule: 1 window, 10 h Sunday-only (1500Z -> 0100Z, 1-2 Mar 2026)")
-print(f"  NOT shipped: Rarest-of-NC 10x points, the 500-point sweep, activation mults")
+print(f"  activation mults: every NC station, minCount 1, once, forfeited if worked")
+print(f"  NOT shipped: Rarest-of-NC 10x points, the 500-point sweep")

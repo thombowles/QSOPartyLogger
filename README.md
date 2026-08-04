@@ -98,6 +98,11 @@ Built for KE5CW. Bundled parties, all with official county data:
   PDF's colour and cross-checks all ten "Rarest of NC" codes against the rules.
   Phone 2 / CW 3 / **digital 5**, the only bundled party where digital outscores
   CW; multipliers count once overall to the sponsor's stated 164. No 160 m.
+  **Every NC entrant counts the county it operates from as a multiplier**, fixed
+  stations included — the rule says "NC stations", naming mobiles and portables
+  only as the multi-county case, which makes this the one party in the catalogue
+  where a fixed station gains a multiplier that way. A county both sat in and
+  worked counts once: 164 is the sponsor's own ceiling, so 165 is not available.
   **`verified: partial`, and this one's gaps are the largest in the app**: QSOs
   with ten designated "Rarest of NC" counties are worth **10×** *before*
   multiplication, and five of those ten pays a further 500 — neither is
@@ -1187,7 +1192,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1873 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1877 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial

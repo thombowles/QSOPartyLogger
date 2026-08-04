@@ -209,9 +209,11 @@ final class PartyNoticeTests: XCTestCase {
             PartyNotice(party: try party("warun")).warning?.header,
             "1 thing this app cannot score for you here."
         )
+        // Was three until 2026-08-04, when the county-activation multiplier
+        // landed and left the "Rarest of NC" 10× points and the 500-point sweep.
         XCTAssertEqual(
             PartyNotice(party: try party("ncqp")).warning?.header,
-            "3 things this app cannot score for you here."
+            "2 things this app cannot score for you here."
         )
         XCTAssertEqual(
             PartyNotice(party: try party("hqp")).informational?.header,

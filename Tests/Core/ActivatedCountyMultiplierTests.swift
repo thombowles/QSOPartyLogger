@@ -464,6 +464,6 @@ final class ActivatedCountyMultiplierTests: XCTestCase {
             }
             .map(\.id)
             .sorted()
-        XCTAssertEqual(users, ["scqp"])
+        XCTAssertEqual(users, ["ncqp", "scqp"])
     }
 }
