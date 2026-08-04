@@ -214,14 +214,76 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     /// identically (constitution Article 4).
     let homeStationPoints: PointsTable?
 
+    /// Counties the sponsor designates as paying a **multiple** of the ordinary
+    /// QSO points, applied *before* the multiplier product. NCQP's "Rarest of
+    /// NC": "A QSO with someone in one of these counties will be scored 10X QSO
+    /// points… **These points are added to the rest of the regular QSO Points
+    /// prior to MULT multiplication** so they have a significant positive effect
+    /// on the final score."
+    ///
+    /// Deliberately not a `BonusRule`: bonuses are added *after* multiplication,
+    /// and the sponsor's placement is the whole point. Keyed on the **received**
+    /// county, with no in-state/out-of-state split — NCQP states the rule
+    /// unconditionally, two paragraphs after splitting its multiplier rules by
+    /// side, so both entrants earn it.
+    ///
+    /// `nil` (every other bundled party) leaves `pointsTable` returning exactly
+    /// what it returned before (constitution Article 4).
+    let countyPointFactor: CountyPointFactor?
+
     /// The points table governing a contact whose received location is
     /// `theirLoc`. Home-state stations are recognised the only way the exchange
     /// allows — they send a county — so `countyAbbrs` is the party's county set.
+    ///
+    /// A designated county scales whichever table applies rather than replacing
+    /// it, because "10× QSO points" means ten times what the contact was
+    /// otherwise worth.
     func pointsTable(forTheirLoc theirLoc: String, countyAbbrs: Set<String>) -> PointsTable {
-        guard let homeStationPoints,
-              countyAbbrs.contains(theirLoc.uppercased())
-        else { return points }
-        return homeStationPoints
+        let loc = theirLoc.uppercased()
+        var table = points
+        if let homeStationPoints, countyAbbrs.contains(loc) {
+            table = homeStationPoints
+        }
+        if let countyPointFactor, countyPointFactor.applies(to: loc) {
+            table = table.scaled(by: countyPointFactor.factor)
+        }
+        return table
+    }
+
+    /// A designated subset of counties and what a QSO with one of them pays,
+    /// as a multiple of the ordinary rate.
+    struct CountyPointFactor: Codable, Equatable, Sendable {
+        /// The sponsor's designated county abbreviations.
+        let counties: [String]
+        /// The multiple — NCQP's 10, giving phone 20, CW 30, digital 50.
+        let factor: Int
+
+        /// Uppercased once at decode rather than per logged row.
+        private let abbrs: Set<String>
+
+        func applies(to loc: String) -> Bool { abbrs.contains(loc.uppercased()) }
+
+        init(counties: [String], factor: Int) {
+            self.counties = counties
+            self.factor = factor
+            self.abbrs = Set(counties.map { $0.uppercased() })
+        }
+
+        private enum CodingKeys: String, CodingKey { case counties, factor }
+
+        init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            self.init(
+                counties: try c.decode([String].self, forKey: .counties),
+                factor: try c.decode(Int.self, forKey: .factor)
+            )
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var c = encoder.container(keyedBy: CodingKeys.self)
+            try c.encode(counties, forKey: .counties)
+            try c.encode(factor, forKey: .factor)
+        }
     }
 
     enum DXStyle: String, Codable, Sendable {
@@ -254,6 +316,14 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
             case .cw: cw
             case .digital: digital
             }
+        }
+
+        /// Every rate multiplied — a party paying "10X QSO points" for certain
+        /// counties (`countyPointFactor`) scales the table rather than
+        /// replacing it, so the multiple applies to whatever the contact was
+        /// otherwise worth.
+        func scaled(by factor: Int) -> PointsTable {
+            PointsTable(phone: phone * factor, cw: cw * factor, digital: digital * factor)
         }
     }
 
@@ -685,6 +755,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case schemaVersion, id, name, cabrilloContest, homeState, countyAbbrLength
         case validBands, points, dupeScope, multipliers, bonuses, oneByOne
         case schedule, counties, notes, scoreMultipliers, homeStationPoints
+        case countyPointFactor
         case hubSpots, callHistory
         case caveatsRaw = "caveats"
         case combinesRaw = "combines"
@@ -736,6 +807,17 @@ enum BonusRule: Codable, Equatable, Sendable {
     /// MDC-style tiered sweep of county-class entities: highest reached tier
     /// pays (non-stacking). Tiers must be sorted ascending by count.
     case sweepTiers([SweepTier])
+    /// NCQP-style sweep of a **named subset**: "If at least one QSO is made with
+    /// a station in five of the 'Rarest of NC' counties, 500 additional bonus
+    /// points are added to the score after multiplication."
+    ///
+    /// Pays once at `need` or more — the sponsor's threshold is "at least", and
+    /// working all ten still pays the one 500. Distinct from `sweepTiers`, which
+    /// counts *any* county and reads the multiplier tally; this counts valid
+    /// QSOs with the listed counties, which is the sponsor's own wording and
+    /// stays right for an entrant whose side does not count counties as
+    /// multipliers.
+    case designatedCountySweep(counties: [String], need: Int, points: Int)
 
     enum WorkStationScope: String, Codable, Sendable {
         case once       // KSQP KS0KS, MDC W3VPR
@@ -758,7 +840,7 @@ enum BonusRule: Codable, Equatable, Sendable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case type, call, points, per, scope, minQSOs, tiers
+        case type, call, points, per, scope, minQSOs, tiers, counties, need
     }
 
     init(from decoder: Decoder) throws {
@@ -783,6 +865,12 @@ enum BonusRule: Codable, Equatable, Sendable {
             )
         case "sweepTiers":
             self = .sweepTiers(try c.decode([SweepTier].self, forKey: .tiers))
+        case "designatedCountySweep":
+            self = .designatedCountySweep(
+                counties: try c.decode([String].self, forKey: .counties),
+                need: try c.decode(Int.self, forKey: .need),
+                points: try c.decode(Int.self, forKey: .points)
+            )
         default:
             throw DecodingError.dataCorruptedError(
                 forKey: .type, in: c,
@@ -810,6 +898,11 @@ enum BonusRule: Codable, Equatable, Sendable {
         case .sweepTiers(let tiers):
             try c.encode("sweepTiers", forKey: .type)
             try c.encode(tiers, forKey: .tiers)
+        case .designatedCountySweep(let counties, let need, let points):
+            try c.encode("designatedCountySweep", forKey: .type)
+            try c.encode(counties, forKey: .counties)
+            try c.encode(need, forKey: .need)
+            try c.encode(points, forKey: .points)
         }
     }
 }

@@ -3,10 +3,11 @@
 Per [Article 15](../CONSTITUTION.md#article-15--research-before-code). All
 quotations are the sponsor's own words, from the documents in §1.
 
-**The party with the most unmodellable scoring in the repo.** Two of its rules —
-the 10× "Rarest of NC" QSO points and the five-county sweep — move every
-entrant's score, in-state and out, and neither fits the schema. §14 is the
-important section here.
+**The party that put points-by-county in the schema.** Two of its rules — the
+10× "Rarest of NC" QSO points and the five-county sweep — move every entrant's
+score, in-state and out, and neither fitted the schema when this was written.
+**Both were built on 2026-07-28** as `countyPointFactor` and
+`BonusRule.designatedCountySweep`; §14 records what shipped and what did not.
 
 ## 1. Sponsor / sources
 
@@ -181,9 +182,10 @@ counts with *no* QSOs from it at all. See §14.
 | Person | `PER` |
 | Caswell | `CAS` |
 
-**Nothing in the schema pays points by county.** `PointsTable` is keyed by mode
-alone, and `BonusRule` adds *after* multiplication — which the sponsor
-specifically says this is not. See §14, limitation 1.
+**Nothing in the schema paid points by county** when this was written:
+`PointsTable` was keyed by mode alone, and `BonusRule` adds *after*
+multiplication — which the sponsor specifically says this is not. Built
+2026-07-28 as `countyPointFactor`; see §14, item 1.
 
 ## 8. Bonus points and final-score multipliers
 
@@ -195,8 +197,8 @@ specifically says this is not. See §14, limitation 1.
 
 `BonusRule.sweepTiers` exists and adds after multiplication in the right place —
 but it counts `workedValues(.county).count`, i.e. *any* five counties, not five
-of a named ten. Shipping it would pay the 500 to almost every log. See §14,
-limitation 2.
+of a named ten. Shipping it would have paid the 500 to almost every log, so a
+`designatedCountySweep` case was added instead on 2026-07-28. See §14, item 2.
 
 **No power multiplier.** Power selects the award class only.
 
@@ -204,9 +206,9 @@ limitation 2.
 > the total multiplier value. Add bonus points to score (as applicable) after the
 > multiplication."
 
-`ScoreEngine`'s `qsoPoints * multiplierCount + bonusPoints` is the right *shape*;
-what it cannot do is get the right `qsoPoints` (§7) or the right `bonusPoints`
-(here).
+`ScoreEngine`'s `qsoPoints * multiplierCount + bonusPoints` is the right *shape*,
+and since 2026-07-28 it also gets the right `qsoPoints` (§7) and the right
+`bonusPoints` (here).
 
 ## 9. County-line rules
 
@@ -326,32 +328,42 @@ Traps worth spot-checking:
 
 ## 14. Engine shapes to watch
 
-**Three gaps, and the first two are the largest scoring gaps in the repo** —
-larger than VTQP's ×1.5 power multiplier, because they affect *every* entrant
-rather than one power class, and because they compound with the multiplier.
+Three gaps when this was written; **two are built, and they were the largest
+scoring gaps in the repo** — larger than VTQP's ×1.5 power multiplier, because
+they affect *every* entrant rather than one power class, and because the first
+compounds with the multiplier.
 
-1. **NO POINTS-BY-COUNTY: the "Rarest of NC" 10× is not applied.** §7. A QSO with
+1. **POINTS BY COUNTY — BUILT 2026-07-28 as `countyPointFactor`.** §7. A QSO with
    one of the ten rare counties is worth 20 / 30 / 50 instead of 2 / 3 / 5, and
-   the sponsor stresses that these land *before* multiplication. `PointsTable` is
-   keyed by mode alone. Sketch: an optional `bonusCountyPoints: {counties: [...],
-   factor: 10}` (or an explicit per-mode table) consulted by
-   `ScoreEngine.pointsTable(forTheirLoc:)`, which already takes the received
-   location and already chooses between two tables for `homeStationPoints` — so
-   the hook exists and the change is small. **This is the one to build first.**
-2. **NO NAMED-SUBSET SWEEP: the 500-point five-rare-county bonus is not applied.**
-   §8. `sweepTiers` counts any counties, not five of a named ten, so it cannot be
-   reused without paying nearly every log. Sketch: a `sweepOf(counties: [String],
-   need: Int, points: Int)` `BonusRule` case; it lands after multiplication where
-   `bonusPoints` already goes, so only the predicate is new.
-3. **Self-activation multipliers — THIRD user.** §6, and the broadest form yet: a
-   fixed NC station counts its own county with no QSOs from it. TnQP (once), SCQP
-   (per band per mode) and now NCQP (once, and unconditional for the operating
-   county) — three sponsors, three scopes, which settles that the field must
-   carry its scope. Affects in-state entrants only.
+   the sponsor stresses that these land *before* multiplication.
+   `PartyDefinition.pointsTable(forTheirLoc:countyAbbrs:)` was already the right
+   hook — it already takes the received location and already chooses between two
+   tables for `homeStationPoints` — so it returns a scaled table and `ScoreEngine`
+   needed no change at all: the 10× lands inside the multiplication by
+   construction. **The factor is what ships**, not the sponsor's worked-out
+   20/30/50, because the factor is the rule as written and the table is its
+   arithmetic; `gen_ncqp.py` parses both and asserts the one produces the other.
+   Applies to **both sides**: the rule is stated unconditionally, two paragraphs
+   after the multiplier rules split "NC participants" from "Non-NC participants".
+2. **NAMED-SUBSET SWEEP — BUILT 2026-07-28 as
+   `BonusRule.designatedCountySweep(counties:need:points:)`.** §8. `sweepTiers`
+   counts any counties, not five of a named ten, so it could not be reused
+   without paying nearly every log — and restricting it was rejected because its
+   tier machinery reads the *multiplier* tally where the sponsor's predicate is
+   "at least one QSO is made with a station in", which is row-derived. Pays
+   **once** at the threshold or past it: "This would constitute a sweep" is
+   singular, and "at least" means all ten still pays the one 500.
+3. **Self-activation multipliers — THIRD user, STILL OPEN.** §6, and the broadest
+   form yet: a fixed NC station counts its own county with no QSOs from it. TnQP
+   (once), SCQP (per band per mode) and now NCQP (once, and unconditional for the
+   operating county) — three sponsors, three scopes, which settles that the field
+   must carry its scope. Affects in-state entrants only, and is the sole reason
+   this party is still `verified: partial`.
 
-Both 1 and 2 are recorded in `notes` as KNOWN LIMITATIONs with the arithmetic an
-operator needs to correct by hand, per Article 17's allowance for shipping ahead
-of the field.
+Design:
+[`2026-07-28-designated-county-scoring-design.md`](../superpowers/specs/2026-07-28-designated-county-scoring-design.md).
+Item 3 remains in `notes` as KNOWN LIMITATION 1, per Article 17's allowance for
+shipping ahead of the field.
 
 Everything else maps cleanly:
 

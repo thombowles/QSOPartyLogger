@@ -346,7 +346,12 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   Independent validation: 99 of the 100 names match the real North Carolina
   county list exactly, and the hundredth is the sponsor's own typo — the sheet
   spells Chowan "Chowen", which ships as printed and is asserted, the same call
-  the repo makes for NHQP's "Merrimac".
+  the repo makes for NHQP's "Merrimac". The **rare-county scoring is parsed, not
+  typed**: the generator reads the 10× factor, the sweep's threshold of five and
+  its 500 points out of the sponsor's own sentences, and asserts that the factor
+  times the ordinary points reproduces the 20/30/50 table printed beside it — so
+  an edition that changes either half of the rule fails the run instead of
+  quietly scoring last year's numbers.
 - OKQP: rules from the sponsor's official 2026 PDF (`k5cm.com/okqp2026rules.pdf`)
   with its county locator page and its own 2026 summary, read verbatim
   2026-07-26. **The first search result for this party is the 2003 rules** —

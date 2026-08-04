@@ -93,12 +93,17 @@ Entries are in contest-date order.
   PDF's colour and cross-checks all ten "Rarest of NC" codes against the rules.
   Phone 2 / CW 3 / **digital 5**, the only bundled party where digital outscores
   CW; multipliers count once overall to the sponsor's stated 164. No 160 m.
-  **`verified: partial`, and this one's gaps are the largest in the app**: QSOs
-  with ten designated "Rarest of NC" counties are worth **10×** *before*
-  multiplication, and five of those ten pays a further 500 — neither is
-  expressible, so an NCQP score here is a floor, with the correcting arithmetic
-  spelled out in the party's notes. FT8/FT4 belong to a separate Weak Signal
-  Showcase and must be kept out of this log.
+  **The party that put points-by-county in the schema**: QSOs with ten
+  designated "Rarest of NC" counties are worth **10×** — phone 20, CW 30,
+  digital 50 — and the sponsor stresses the placement, *"prior to MULT
+  multiplication"*, so it scores as a points rule inside the multiplier rather
+  than a bonus outside it. Five of those ten pays a further 500 afterwards,
+  once. Both sides earn the 10×, and both numbers are parsed out of the rules
+  text by the generator, which asserts that 10× the ordinary points reproduces
+  the table the sponsor prints beside the factor. Still `verified: partial` for
+  one rule: an in-state entrant may count each county they operate *from*, and
+  this app has no self-activation multiplier. FT8/FT4 belong to a separate Weak
+  Signal Showcase and must be kept out of this log.
 - **Oklahoma QSO Party** (Mar 14–15, 2026) — 20 hours in two windows. 77
   counties, and **the sponsor names its own traps**: seven pairs it says "cause
   considerable confusion" (`GAR`/`GRV`, `GRA`/`GNT`, `HAR`/`HRP`, `MCL`/`MCU`,

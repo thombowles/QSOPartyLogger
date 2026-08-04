@@ -137,10 +137,12 @@ KINDS = {
         (3, "scoreAffecting", "Portable and mobile stations score differently, which is not modelled."),
         (5, "ruleInference", "County lines are unmentioned in the rules; a two-county entry is refused on the reading that silence is not permission."),
     ],
+    # The "Rarest of NC" 10× points and the 500-point sweep both ship now
+    # (countyPointFactor and a designatedCountySweep bonus), so the two
+    # scoreAffecting caveats they carried are gone. The self-activation
+    # multiplier is what is left, and it is why this party stays partial.
     "ncqp": [
-        (0, "scoreAffecting", "Score is a floor: the “Rarest of NC” 10× QSO points are not applied, and this is the largest scoring gap in the app."),
-        (1, "scoreAffecting", "The 500-point rare-county sweep is not applied."),
-        (2, "scoreAffecting", "In-state entrants are short the self-activation multiplier for each county they operate from."),
+        (0, "scoreAffecting", "In-state entrants are short the self-activation multiplier for each county they operate from."),
     ],
     "ndqp": [
         (0, "scoreAffecting", "A North Dakota station cannot log a DX country the way the rules ask."),
