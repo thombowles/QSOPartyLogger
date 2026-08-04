@@ -34,6 +34,7 @@
         "province",
         "dx"
       ],
+      "dxCountsEntities": true,
       "homeStateCountsViaCounty": false,
       "countScope": "perMode"
     },
