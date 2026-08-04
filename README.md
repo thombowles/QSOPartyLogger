@@ -368,8 +368,13 @@ Built for KE5CW. Bundled parties, all with official county data:
 - **Tennessee QSO Party** (Sep 6, 2026) — 95 counties, flat 3 points in every
   mode, mults **per band** (all 95 on two bands = 190), two-county lines
   allowed, DC counts as Maryland, K4TCG pays 100 bonus **per QSO** and TN
-  mobiles 500 per county activated with 10+ QSOs. `verified: partial` — the
-  posted rules document is still the 2025 edition.
+  mobiles 500 per county activated with 10+ QSOs. Those same ten QSOs also earn
+  a **multiplier** for the county — and the sponsor says "**one** multiplier",
+  so unlike everything else here it is counted once rather than per band, which
+  is why the schema makes each party state that scope rather than inherit it.
+  Work somebody in the county on any band and the multiplier is forfeit; the
+  bonus still pays. `verified: partial` — the posted rules document is still the
+  2025 edition.
 - **Colorado QSO Party** (Sep 12, 2026) — verified against rules the sponsor
   itself dates "revised as of July 15, 2026". 64 counties with famously
   collision-prone codes (`MON` is Monte**zuma**, not Montrose), flat 2 points,
@@ -1202,7 +1207,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1887 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1893 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial

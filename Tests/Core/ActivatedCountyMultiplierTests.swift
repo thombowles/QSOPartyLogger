@@ -453,10 +453,13 @@ final class ActivatedCountyMultiplierTests: XCTestCase {
         XCTAssertEqual(PartyDefinition.ActivatedCountyMultiplier.CountUnit.stations.rawValue, "stations")
     }
 
-    /// The Article 4 guarantee stated as a roster: this commit adds the field
-    /// and no party uses it, so no bundled score can have moved. Each party
-    /// commit that follows adds itself here.
-    func testNoBundledPartyCarriesTheFieldYet() {
+    /// The roster of parties that carry the field. It began empty — the field
+    /// landed in its own party-free commit, which is how Article 4's "every
+    /// bundled party scores identically" was proved — and each party commit
+    /// since has added itself. These five are every sponsor known to have the
+    /// rule; a sixth arriving means a new sponsor's sentence was read, not that
+    /// one of these was generalised.
+    func testTheRosterOfPartiesUsingTheField() {
         let users = PartyCatalog.loadBundled()
             .filter {
                 $0.multipliers.inState.activatedCountyMultiplier != nil
@@ -464,6 +467,6 @@ final class ActivatedCountyMultiplierTests: XCTestCase {
             }
             .map(\.id)
             .sorted()
-        XCTAssertEqual(users, ["moqp", "ncqp", "scqp", "vaqp"])
+        XCTAssertEqual(users, ["moqp", "ncqp", "scqp", "tnqp", "vaqp"])
     }
 }

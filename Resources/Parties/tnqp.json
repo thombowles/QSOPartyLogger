@@ -32,7 +32,17 @@
         "dx"
       ],
       "homeStateCountsViaCounty": false,
-      "countScope": "perBand"
+      "countScope": "perBand",
+      "activatedCountyMultiplier": {
+        "minCount": 10,
+        "countUnit": "qsos",
+        "countScope": "once",
+        "categories": [
+          "MOBILE",
+          "ROVER"
+        ],
+        "notOtherwiseWorked": true
+      }
     },
     "outState": {
       "classes": [
@@ -449,7 +459,11 @@
       "name": "Wilson"
     }
   ],
-  "notes": "verified: partial — rules from the Tennessee Contest Group's posted document (tnqp.org/rules/, embedded DOCX 'Tennessee-QSO-Party-2024-Rule-Revisions-.docx', uploaded 2025/09), read 2026-07-23 and re-checked 2026-07-24: the page still embeds that same document and announces no 2026 revision. The 2026 date (September 6) is confirmed by the tnqp.org home page and is the first Sunday of September. Counties generated from the sponsor's official abbreviation PDF via tnqp_counties.tsv — never hand-typed; note HARD=Hardeman vs HARN=Hardin, and the official list's own spellings 'Dekalb' and 'Van Buren' are preserved. 3 points per QSO in every mode. Multipliers accumulate PER BAND for both in-state and out-of-state entrants (95 counties per band out-of-state); Tennessee is never a state multiplier, DC counts as Maryland, and AK/HI count as states only, never DXCC. Out-of-state stations work only Tennessee stations. County lines allowed up to 2 counties at once (three- and four-county lines are forbidden). K4TCG pays 100 bonus points PER QSO, and TN mobiles/rovers 500 per county with 10+ QSOs; bonuses are added after the multiplier. No power or category multiplier. All amateur bands are valid except 60, 30, 17 and 12 m — 1.25 m included, shipped since 2026-07-24 when the app gained the band; the sponsor's rule itself never changed. OPEN QUESTIONS (why this is partial): (1) the posted rules document is titled for 2025 and no 2026-specific revision exists yet — re-check tnqp.org/rules/ in late August 2026. (2) Not modeled: 'Tennessee mobiles and rovers may claim one MULTIPLIER for any Tennessee county from which they complete at least 10 QSOs if they do not earn a multiplier for that county otherwise' — the matching 500-point BONUS is modeled, but this extra self-activation multiplier is not, so a TN mobile/rover may see a slightly low multiplier count.",
+  "notes": "verified: partial — rules from the Tennessee Contest Group's posted document (tnqp.org/rules/, embedded DOCX 'Tennessee-QSO-Party-2024-Rule-Revisions-.docx', uploaded 2025/09), read 2026-07-23 and re-checked 2026-07-24: the page still embeds that same document and announces no 2026 revision. The 2026 date (September 6) is confirmed by the tnqp.org home page and is the first Sunday of September. Counties generated from the sponsor's official abbreviation PDF via tnqp_counties.tsv — never hand-typed; note HARD=Hardeman vs HARN=Hardin, and the official list's own spellings 'Dekalb' and 'Van Buren' are preserved. 3 points per QSO in every mode. Multipliers accumulate PER BAND for both in-state and out-of-state entrants (95 counties per band out-of-state); Tennessee is never a state multiplier, DC counts as Maryland, and AK/HI count as states only, never DXCC. Out-of-state stations work only Tennessee stations. County lines allowed up to 2 counties at once (three- and four-county lines are forbidden). K4TCG pays 100 bonus points PER QSO, and TN mobiles/rovers 500 per county with 10+ QSOs; bonuses are added after the multiplier. TN MOBILES AND ROVERS ALSO CLAIM A MULTIPLIER FOR EACH COUNTY THEY MAKE 10 QSOS FROM: 'Tennessee mobiles and rovers may claim one multiplier for any Tennessee county from which they complete at least 10 QSOs if they do not earn a multiplier for that county otherwise.' The app now counts it, alongside the 500-point bonus the same threshold pays. NOTE THE WORD 'ONE': this multiplier is counted ONCE for the log, while every other multiplier in this party accumulates PER BAND - so a mobile that works four bands from a county gets one activation multiplier, not four. And 'if they do not earn a multiplier for that county otherwise' is honoured on ANY band: work somebody in that county on any one band and the activation multiplier is forfeit. No power or category multiplier. All amateur bands are valid except 60, 30, 17 and 12 m — 1.25 m included, shipped since 2026-07-24 when the app gained the band; the sponsor's rule itself never changed. OPEN QUESTIONS (why this is partial): (1) the posted rules document is titled for 2025 and no 2026-specific revision exists yet — re-check tnqp.org/rules/ in late August 2026.",
+  "callHistory": {
+    "filePrefix": "QSOP_TN",
+    "token": "QSOPARTY TN"
+  },
   "hubSpots": {
     "tableURL": "http://qsopartyhub.com/tnqp-table.php",
     "postURL": "http://qsopartyhub.com/tnqp-spots.php"
@@ -458,11 +472,7 @@
     {
       "kind": "provenance",
       "summary": "The rules document is titled 2025 and no 2026 revision exists yet.",
-      "detail": "(why this is partial): (1) the posted rules document is titled for 2025 and no 2026-specific revision exists yet — re-check tnqp.org/rules/ in late August 2026. (2) Not modeled: 'Tennessee mobiles and rovers may claim one MULTIPLIER for any Tennessee county from which they complete at least 10 QSOs if they do not earn a multiplier for that county otherwise' — the matching 500-point BONUS is modeled, but this extra self-activation multiplier is not, so a TN mobile/rover may see a slightly low multiplier count."
+      "detail": "(why this is partial): (1) the posted rules document is titled for 2025 and no 2026-specific revision exists yet — re-check tnqp.org/rules/ in late August 2026."
     }
-  ],
-  "callHistory": {
-    "filePrefix": "QSOP_TN",
-    "token": "QSOPARTY TN"
-  }
+  ]
 }
