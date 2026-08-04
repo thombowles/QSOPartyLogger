@@ -143,8 +143,7 @@ KINDS = {
         (2, "scoreAffecting", "In-state entrants are short the self-activation multiplier for each county they operate from."),
     ],
     "ndqp": [
-        (0, "scoreAffecting", "A North Dakota station cannot log a DX country the way the rules ask."),
-        (1, "cosmetic", "The “no FT8” rule cannot be enforced by this app."),
+        (0, "cosmetic", "The “no FT8” rule cannot be enforced by this app."),
     ],
     "neqp": [
         (0, "provenance", "The rules’ UTC figures and their local-time glosses are an hour apart; the sponsor’s UTC ships."),

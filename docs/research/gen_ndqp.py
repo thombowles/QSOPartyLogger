@@ -218,16 +218,19 @@ NOTES = (
     "stated twice. No power categories, no multi-op, no bonuses: 'Final Total = Contact "
     "Total X Multiplier Total'. A mobile may park on a county line but each county must be "
     "worked in a SEPARATE CONTACT, so maxSimultaneousCounties is 1 - the opposite of "
-    "Georgia, where the rover sends both at once. KNOWN LIMITATION 1 - AN ND STATION "
-    "CANNOT LOG A DX COUNTRY THE WAY THE RULES ASK. The rules want the DX country in the "
-    "log, but ExchangeParser only guesses at DXCC prefixes where DX is a multiplier class "
-    "for that operator - a deliberate gate, since the guess is loose enough to turn every "
-    "mistyped county into a valid exchange. North Dakota grants DX no multipliers, so "
-    "dxStyle 'prefix' would be INERT here and would additionally remove the literal DX "
-    "token, leaving no way to log the contact at all; 'token' is therefore strictly "
-    "better. The operator enters DX where the sponsor would rather see DL. THE SCORE IS "
-    "UNAFFECTED - DX is never a multiplier and every mode pays the same one point. KNOWN "
-    "LIMITATION 2 - 'NO FT8' CANNOT BE ENFORCED. ModeClass.digital is one class and this "
+    "Georgia, where the rover sends both at once. AN ND STATION CAN NOW LOG THE DX COUNTRY "
+    "THE RULES ASK FOR, which it could not before 2026-08-01. The rules want the country "
+    "in the log, and ExchangeParser used to guess at DXCC prefixes by shape - loose enough "
+    "to turn every mistyped county into a valid exchange - so the guess was gated to "
+    "operators for whom DX was a multiplier class. North Dakota grants DX no multipliers, "
+    "which left dxStyle 'prefix' inert AND stripped the literal DX token, so 'token' "
+    "shipped and the operator typed DX where the sponsor wanted DL. The DXCC entity table "
+    "(Resources/DXCC, ARRL DXCC List January 2026 edition) checks tokens against the real "
+    "list instead of guessing, so the gate is gone: dxStyle 'prefix' now accepts DL, and "
+    "acceptsDXToken keeps the literal DX for a country the operator did not catch. THE "
+    "SCORE IS UNAFFECTED EITHER WAY - DX is never a multiplier here and every mode pays "
+    "the same one point; only the log's fidelity to the rules changes. KNOWN "
+    "LIMITATION 1 - 'NO FT8' CANNOT BE ENFORCED. ModeClass.digital is one class and this "
     "party admits RTTY and PSK under it, so a logged FT8 row will score. SECOND USER of "
     "that gap after Illinois ('FT4 and FT8 contacts will receive no contact credit'), which "
     "meets the repo's two-user bar and makes it buildable: QSO.rawMode already carries the "
@@ -265,7 +268,12 @@ party = {
         },
     },
     "bonuses": [],
-    "dxStyle": "token",
+    # The rules want the DX country in the log, and with the ARRL entity table
+    # checking tokens against the real list, prefix mode can finally deliver
+    # it. DX earns no multiplier here either way.
+    "dxStyle": "prefix",
+    # ...and the literal DX stays loggable, for a country not caught.
+    "acceptsDXToken": True,
     "allowedModes": ["phone", "cw", "digital"],
     "maxSimultaneousCounties": 1,
     "provinces": sorted(provinces),

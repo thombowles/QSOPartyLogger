@@ -94,14 +94,14 @@ final class PartyNoticeTests: XCTestCase {
         }
     }
 
-    /// 19 of 48 bundled parties carry both kinds, so the two-group case is not
+    /// 18 of 48 bundled parties carry both kinds, so the two-group case is not
     /// an edge case — it is what most warned-about parties look like. A change
     /// here means a party's caveats were reclassified (the NAQP pair arrived
     /// carrying both kinds; MNQP left when its export blocker closed; NMQP
-    /// left when the DXCC entity table closed its scoring gap).
+    /// and NDQP left when the DXCC entity table closed their scoring gaps).
     func testTheTwoGroupCaseIsCommon() {
         let mixed = parties.filter { PartyNotice(party: $0).groups.count == 2 }.map(\.id)
-        XCTAssertEqual(mixed.count, 19, "got: \(mixed)")
+        XCTAssertEqual(mixed.count, 18, "got: \(mixed)")
     }
 
     /// Delaware is the worked example: three things the app cannot score, two

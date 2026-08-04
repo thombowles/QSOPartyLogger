@@ -228,9 +228,11 @@ final class OntarioQSOPartyTests: XCTestCase {
             "the rules call the literal DX acceptable, so it must log"
         )
 
-        // The mirror image: North Dakota keeps DX and loses the prefix.
+        // North Dakota used to be the mirror image — it kept DX and lost the
+        // prefix. Both parties get both forms now.
         let ndqp = try XCTUnwrap(PartyCatalog.party(id: "ndqp"))
-        XCTAssertEqual(ndqp.dxStyle, .token)
+        XCTAssertEqual(ndqp.dxStyle, .prefix)
+        XCTAssertTrue(ndqp.acceptsDXToken)
         XCTAssertEqual(
             try ExchangeParser.parse("DX", party: ndqp, role: .inState).get().locations, ["DX"])
     }

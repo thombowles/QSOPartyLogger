@@ -11,11 +11,12 @@ final class CaveatRosterTests: XCTestCase {
     /// 39 that `verified: partial` used to warn about. A new entry here means
     /// a real scoring gap was found; a departure means one was closed.
     ///
-    /// **NMQP left on 2026-08-01**: its only blocking caveat was the DX
-    /// collapse, which the ARRL entity table fixed.
+    /// **NMQP and NDQP left on 2026-08-01**: the DX collapse and the
+    /// unloggable DX country were each a party's only blocking caveat, and
+    /// the ARRL entity table fixed both.
     private static let badges: Set<String> = [
         "arqp", "deqp", "fqp", "idqp", "ilqp", "in7qpne", "kyqp", "laqp",
-        "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp",
+        "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "neqp",
         "oqp", "qcqp", "scqp", "vaqp", "vtqp", "warun", "wiqp",
     ]
 
