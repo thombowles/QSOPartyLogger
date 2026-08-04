@@ -231,12 +231,16 @@ NOTES = (
     "replace it. KNOWN LIMITATION 1 - MARITIME MOBILE ITU REGIONS CANNOT BE COUNTED. The "
     "rules give maritime-mobile stations their own exchange ('send ITU Region (1, 2 or 3)') "
     "and make R1, R2 and R3 multipliers for Florida entrants, and the schema has no class "
-    "for them: MultClass covers county, state, province and dx. AND THEY DO NOT MERELY "
-    "FAIL TO COUNT - because dxStyle is 'prefix', R1, R2 and R3 are accepted as PLAUSIBLE "
-    "DXCC PREFIXES and silently credited as country multipliers instead, which is the same "
-    "shape as the Mississippi grid-square finding. The exchange logs and the QSO scores; "
-    "only the multiplier class is wrong, and since both classes count once per mode the "
-    "total usually lands right by accident. First user of that gap. OPEN QUESTION 1: IS THE OUT-OF-STATE RESTRICTION STATED OR ONLY "
+    "for them: MultClass covers county, state, province and dx. THEY ARE CREDITED AS DX "
+    "INSTEAD, WHICH IS THE WRONG CLASS AND THE RIGHT COUNT. That used to happen by "
+    "accident - dxStyle is 'prefix', and the old shape guess accepted R1, R2 and R3 as "
+    "PLAUSIBLE DXCC prefixes because they were short and matched nothing else, the same "
+    "shape as the Mississippi grid-square finding. The ARRL DXCC table now rejects any "
+    "token the list does not carry, which would have stopped a Florida entrant logging a "
+    "maritime-mobile contact at all, so the three tokens are DECLARED in dxTokenAliases "
+    "rather than guessed: identical score, same wrong class, now written down. The "
+    "exchange logs and the QSO scores; only the multiplier class is wrong, and since both "
+    "classes count once per mode the total usually lands right by accident. OPEN QUESTION 1: IS THE OUT-OF-STATE RESTRICTION STATED OR ONLY "
     "IMPLIED? The Object is asymmetric - non-Florida amateurs are directed at Florida "
     "stations while 'Florida operators can work anyone outside and within Florida' - and "
     "non-Florida entrants' only multipliers are Florida counties, but no sentence forbids "
@@ -272,6 +276,11 @@ party = {
     "bonuses": [],
     "oneByOne": {"words": [BEE_WORD]},
     "dxStyle": "prefix",
+    # The sponsor's maritime-mobile exchange: "send ITU Region (1, 2 or 3)".
+    # Not DXCC prefixes, so the ARRL table rejects them; declared here so a
+    # Florida entrant can still log the contact and still earn the multiplier
+    # the rules give them. See KNOWN LIMITATION 1 in the notes for the class.
+    "dxTokenAliases": ["R1", "R2", "R3"],
     "allowedModes": ["phone", "cw"],
     "maxSimultaneousCounties": 2,
     "exchangeIncludesRST": True,

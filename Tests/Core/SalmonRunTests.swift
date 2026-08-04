@@ -184,7 +184,7 @@ final class SalmonRunTests: XCTestCase {
     }
 
     /// Salmon Run is the party where DX prefixes actually carry multiplier
-    /// weight, so it is also where `isPlausibleDXPrefix`'s documented collision
+    /// weight, so it is also where the state/prefix collision
     /// limitation bites: a real DXCC prefix that happens to equal a US state or
     /// Canadian province code is read as that state/province. PA is the
     /// Netherlands, OK is Slovakia, LA is Norway, ON is Belgium — all shadowed.
@@ -202,8 +202,8 @@ final class SalmonRunTests: XCTestCase {
                        "three DXCC prefixes shadowed by state codes")
         XCTAssertEqual(s.workedValues(.province), ["ON"], "and one by a province code")
         XCTAssertEqual(s.workedValues(.dx), ["DL"], "only the non-colliding prefix is DX")
-        XCTAssertFalse(warun.isPlausibleDXPrefix("PA"))
-        XCTAssertTrue(warun.isPlausibleDXPrefix("DL"))
+        XCTAssertFalse(warun.isDXPrefix("PA"))
+        XCTAssertTrue(warun.isDXPrefix("DL"))
     }
 
     func testWashingtonIsNeverAStateMultiplier() {

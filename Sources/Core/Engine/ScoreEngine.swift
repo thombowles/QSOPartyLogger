@@ -207,21 +207,57 @@ enum ScoreEngine {
             }
             return []
         }
-        if let aliased = party.stateAliases[theirLoc] {
-            return [(.state, aliased)]
-        }
-        if MultClass.acceptedStateTokens.contains(theirLoc),
-           !party.excludedStateTokens.contains(theirLoc) {
-            return [(.state, theirLoc)]
-        }
-        if party.provinces.contains(theirLoc) {
-            return [(.province, theirLoc)]
+        // A token that is BOTH a state or province code and a real DXCC
+        // prefix — PA is Pennsylvania and the Netherlands, ON is Ontario and
+        // Belgium — is decided by the worked callsign, and only when the call
+        // names the very same entity the token would. So PA0AAA sending "PA"
+        // is the Netherlands, while W3XYZ sending it is Pennsylvania, and a
+        // VE5 sending "SK" stays Saskatchewan even though SK is Sweden's.
+        //
+        // The two-channel split is N1MM's: the exchange field says which
+        // location was sent, the callsign says which entity sent it. Its
+        // manual is blunt about the exchange half — "There is a check on
+        // provinces and states, no check on countries."
+        //
+        // A US or Canadian callsign never triggers it, however well the token
+        // matches: the ARRL list's US row is "K, W, N, AA-AK", so Alberta's
+        // "AB" falls inside it, and a Canadian entrant would lose AB and SK to
+        // a country they are not in. Salmon Run's own rule says the same thing
+        // from the other side — "DXCC entities other than US and VE".
+        let collidesWithDXCC = rule.dxCountsEntities
+            && !DXCCTable.shared.isDomestic(callsign: call)
+            && DXCCTable.shared.entity(forPrefix: theirLoc) != nil
+            && DXCCTable.shared.entity(forCallsign: call)?.code
+                == DXCCTable.shared.entity(forPrefix: theirLoc)?.code
+
+        if !collidesWithDXCC {
+            if let aliased = party.stateAliases[theirLoc] {
+                return [(.state, aliased)]
+            }
+            if MultClass.acceptedStateTokens.contains(theirLoc),
+               !party.excludedStateTokens.contains(theirLoc) {
+                return [(.state, theirLoc)]
+            }
+            if party.provinces.contains(theirLoc) {
+                return [(.province, theirLoc)]
+            }
         }
         if theirLoc == MultClass.dxToken {
-            return [(.dx, MultClass.dxToken)]
+            // The exchange carries no country, so the callsign names it —
+            // which is the whole reason NHQP's "up to 10 DXCC country" and
+            // MEQP's uncapped entities could not be counted before.
+            guard rule.dxCountsEntities,
+                  let entity = DXCCTable.shared.entity(forCallsign: call)
+            else { return [(.dx, MultClass.dxToken)] }
+            return [(.dx, entity.name)]
         }
-        if party.isPlausibleDXPrefix(theirLoc) {
-            return [(.dx, theirLoc)]
+        if party.isDXPrefix(theirLoc) || collidesWithDXCC {
+            // Here the exchange DOES carry the country, and the sponsor's own
+            // received datum outranks a prefix match on the call.
+            guard rule.dxCountsEntities,
+                  let entity = DXCCTable.shared.entity(forPrefix: theirLoc)
+            else { return [(.dx, theirLoc)] }
+            return [(.dx, entity.name)]
         }
         return []
     }

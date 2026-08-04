@@ -183,31 +183,40 @@ final class MississippiQSOPartyTests: XCTestCase {
     /// *grids ÷ 4 rounded up*, uncapped, for an MS entrant. `MultClass` has no
     /// grid case and `QSO` has no grid field, so none of it is counted.
     ///
-    /// **And it is worse than simply not counting them.** Because this party's
-    /// DX style is `.prefix`, `isPlausibleDXPrefix` accepts any 1–5 alphanumeric
-    /// token with a letter in it — so a grid square like `EM42` parses happily
-    /// **as a DX prefix**, and an MS entrant who logs one gets a *phantom DXCC
-    /// multiplier*. That is the concrete reason the notes say to keep FT4/8
-    /// contacts out of this log rather than merely to add grids by hand.
-    func testKnownGapGridSquaresParseAsAPhantomDXPrefix() throws {
-        XCTAssertEqual(
-            try ExchangeParser.parse("EM42", party: msqp, role: .inState).get().locations,
-            ["EM42"],
-            "current behaviour — a grid square is accepted as though it were a DX prefix"
-        )
+    /// The grids still are not counted, and that half of the limitation
+    /// stands. What is gone is the *phantom*: this party's DX style is
+    /// `.prefix`, and the old `isPlausibleDXPrefix` accepted any 1–5
+    /// alphanumeric token with a letter in it, so `EM42` parsed happily as a
+    /// DX prefix and an MS entrant who logged one earned a DXCC multiplier
+    /// that does not exist. `DXCCTable` checks the ARRL list instead, so the
+    /// grid square is an error again.
+    func testGridSquaresAreRejectedRatherThanCountedAsAPhantomEntity() throws {
+        guard case .failure(let error) =
+                ExchangeParser.parse("EM42", party: msqp, role: .inState) else {
+            return XCTFail("a grid square is not a DXCC prefix and must not validate")
+        }
+        guard case .unknownAbbreviation(let token, _) = error else {
+            return XCTFail("expected an unknown-abbreviation error, got \(error)")
+        }
+        XCTAssertEqual(token, "EM42")
+
+        // `EM` alone IS Ukraine's, which is exactly why shape was never a safe
+        // test: the grid square's own first two letters are a real prefix.
+        XCTAssertTrue(msqp.isDXPrefix("EM"))
+        XCTAssertFalse(msqp.isDXPrefix("EM42"))
+
         let s = ScoreEngine.score(log: inLog([
             qso(call: "W1AW", mode: .digital, my: "HIN", their: "EM42"),
         ]), party: msqp)
-        XCTAssertEqual(s.workedValues(.dx), ["EM42"],
-                       "and it is credited as a DXCC entity, which it is not")
-        XCTAssertEqual(s.multiplierCount, 1, "a phantom multiplier")
+        XCTAssertEqual(s.workedValues(.dx), [], "no phantom entity")
+        XCTAssertEqual(s.multiplierCount, 0)
 
         let notes = try XCTUnwrap(msqp.notes)
         XCTAssertTrue(notes.contains("KNOWN LIMITATION 1"))
         XCTAssertTrue(notes.contains("ADD THEM BY HAND"))
         XCTAssertTrue(notes.contains("FT4/8 CONTACTS ARE BEST KEPT OUT OF THIS LOG"))
-        XCTAssertTrue(notes.contains("PHANTOM DX MULTIPLIER"),
-                      "the operator must be warned that a grid square is silently accepted")
+        XCTAssertFalse(notes.contains("PHANTOM DX MULTIPLIER"),
+                       "the phantom is fixed — the warning must not outlive it")
     }
 
     /// **KNOWN LIMITATION 3, pinned.** The sponsor's own example works one
