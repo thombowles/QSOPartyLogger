@@ -198,9 +198,8 @@ KINDS = {
         (0, "ruleInference", "Whether South Dakota counts itself, and whether outside stations may work only SD, are both inferred."),
     ],
     "sevenqp": [
-        (0, "cosmetic", "The 10-entity DXCC cap can never bind, because the exchange is the literal “DX” token."),
-        (1, "cosmetic", "The sponsor bars WSJT modes and this app cannot enforce it."),
-        (2, "ruleInference", "No maximum for simultaneous counties is stated; the schema default of four ships."),
+        (0, "cosmetic", "The sponsor bars WSJT modes and this app cannot enforce it."),
+        (1, "ruleInference", "No maximum for simultaneous counties is stated; the schema default of four ships."),
     ],
     "tnqp": [
         (0, "provenance", "The rules document is titled 2025 and no 2026 revision exists yet."),
