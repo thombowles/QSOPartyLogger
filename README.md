@@ -1341,6 +1341,13 @@ station profile, radio wiring and cluster history untouched.
   digits glued to prefixes (`TR32`, `BS711`, `9G7`) using the NOTES section's
   own `(TR)`/`(BS7)`/`(9G)` attributions rather than by eye.
 
+  **22 of the 35 parties that count DX set `dxCountsEntities`.** The other 13
+  grant exactly one DX multiplier in their sponsors' own words — OhQP's
+  multipliers end "and 1 DX", MnQP gives "1 multiplier for working a DX
+  station", NCQP "only one 'DX' multiplier … representing all DX worked" — so
+  the flag is opt-in per party, and a party whose rules nobody has re-read with
+  this question in mind keeps scoring exactly as before.
+
   **Resolution follows N1MM's split, which is prior art for behaviour and never
   for a rule:** the exchange field says which *location* was sent and the
   callsign says which *entity* sent it. N1MM matches the entity from the call
