@@ -42,9 +42,14 @@ final class MissouriQSOPartyTests: XCTestCase {
         return log
     }
 
-    func inLog(_ qsos: [QSO], from county: String = "SLC") -> ContestLog {
+    func inLog(
+        _ qsos: [QSO],
+        from county: String = "SLC",
+        station: StationProfile.CategoryStation = .fixed
+    ) -> ContestLog {
         var log = ContestLog(partyID: "moqp")
         log.myLocation = .inState(counties: [county])
+        log.station.categoryStation = station
         log.qsos = qsos
         return log
     }
@@ -162,6 +167,102 @@ final class MissouriQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.validQSOs, 5)
         XCTAssertEqual(s.workedValues(.dx), ["DX"])
         XCTAssertEqual(s.multiplierCount, 1)
+    }
+
+    // MARK: Rule 3 — the county you make fifty contacts from
+
+    /// "Any mobile or portable category entry that makes **50 or more valid
+    /// contacts** from a county or county lines will be given the multiplier for
+    /// that county or counties."
+    ///
+    /// **The highest threshold of the five parties with this rule** — five times
+    /// TnQP's and VaQP's ten, fifty times SCQP's and NCQP's one.
+    func testFiftyContactsFromACountyEarnsIt() throws {
+        let act = try XCTUnwrap(moqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(act.minCount, 50)
+        XCTAssertEqual(act.countUnit, .qsos, "\"50 or more valid CONTACTS\"")
+        XCTAssertEqual(act.countScope, .once, "the stated maximum of 115 is a whole-log count")
+
+        func rows(from county: String, _ n: Int) -> [QSO] {
+            (0..<n).map { i in
+                qso(call: "K5C\(county)\(i)", band: .m40, mode: .cw, my: county, their: "TX")
+            }
+        }
+        // SLC qualifies with 50; JAC falls one short with 49.
+        let s = ScoreEngine.score(
+            log: inLog(rows(from: "SLC", 50) + rows(from: "JAC", 49), station: .mobile),
+            party: moqp
+        )
+        XCTAssertEqual(s.validQSOs, 99)
+        XCTAssertEqual(s.selfActivatedCounties, ["SLC"], "fifty qualifies, forty-nine does not")
+    }
+
+    /// **The unit is contacts, not stations** — VaQP's rule reads almost the
+    /// same and counts distinct callsigns. Fifty QSOs with one chaser would pay
+    /// nothing there and pays here.
+    func testTheThresholdCountsContactsRatherThanDistinctStations() {
+        // Five chasers worked on ten bands each: fifty contacts, five stations.
+        var rows: [QSO] = []
+        for band in moqp.validBands {
+            for i in 0..<5 {
+                rows.append(qso(call: "K5C\(i)", band: band, mode: .cw, my: "SLC", their: "TX"))
+            }
+        }
+        XCTAssertEqual(rows.count, 50, "ten bands × five stations")
+        let s = ScoreEngine.score(log: inLog(rows, station: .mobile), party: moqp)
+        XCTAssertEqual(s.validQSOs, 50)
+        XCTAssertEqual(s.selfActivatedCounties, ["SLC"])
+    }
+
+    /// **OPEN QUESTION 1, pinned.** Rule 3 names "mobile or portable", and MOQP
+    /// defines a third roving class it does not name there — Missouri
+    /// Expedition. Expedition ships covered, because rule 3 pays "from a county
+    /// or **county lines**" and the expedition is the class MOQP permits at
+    /// "the intersection of two or more counties". A fixed station gains
+    /// nothing either way.
+    func testMobilePortableAndExpeditionQualifyAndFixedDoesNot() throws {
+        let act = try XCTUnwrap(moqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(Set(act.categories), [.mobile, .portable, .expedition])
+
+        let rows = (0..<50).map { i in
+            qso(call: "K5C\(i)", band: .m40, mode: .cw, my: "SLC", their: "TX")
+        }
+        for category in StationProfile.CategoryStation.allCases {
+            let s = ScoreEngine.score(log: inLog(rows, station: category), party: moqp)
+            XCTAssertEqual(
+                s.selfActivatedCounties,
+                [.mobile, .portable, .expedition].contains(category) ? ["SLC"] : [],
+                "\(category.rawValue)"
+            )
+        }
+        XCTAssertTrue(try XCTUnwrap(moqp.notes).contains("WHETHER AN EXPEDITION EARNS"))
+    }
+
+    /// **The 115 ceiling settles this**, since rule 3 attaches no "if not
+    /// otherwise worked" clause: "Missouri counties (**115 maximum**)" is
+    /// exactly the entity list, so 116 is not an available total.
+    func testACountyBothOperatedFromAndWorkedCountsOnce() throws {
+        let act = try XCTUnwrap(moqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertTrue(act.notOtherwiseWorked, "116 is not an available total")
+
+        var rows = (0..<49).map { i in
+            qso(call: "K5C\(i)", band: .m40, mode: .cw, my: "SLC", their: "TX")
+        }
+        rows.append(qso(call: "W0SLC", band: .m40, mode: .cw, my: "SLC", their: "SLC"))
+        let s = ScoreEngine.score(log: inLog(rows, station: .mobile), party: moqp)
+        XCTAssertEqual(s.validQSOs, 50)
+        XCTAssertEqual(s.workedValues(.county), ["SLC"])
+        XCTAssertEqual(s.selfActivatedCounties, [], "already earned by working it")
+        XCTAssertEqual(s.multiplierCount, 2, "SLC worked, and TX")
+    }
+
+    /// Out-of-state entrants never reach the rule.
+    func testOutOfStateEntrantsAreUnaffected() {
+        XCTAssertNil(moqp.multipliers.outState.activatedCountyMultiplier)
+        XCTAssertEqual(
+            ScoreEngine.score(log: outLog([qso(call: "W0A", their: "SLC")]), party: moqp)
+                .selfActivatedCounties, []
+        )
     }
 
     // MARK: Bonuses — two of the sponsor's five
@@ -294,13 +395,16 @@ final class MissouriQSOPartyTests: XCTestCase {
         }
     }
 
-    func testNotesRecordTheEasterMoveAndAllThreeLimitations() throws {
+    func testNotesRecordTheEasterMoveAndBothRemainingLimitations() throws {
         let notes = try XCTUnwrap(moqp.notes)
         XCTAssertTrue(notes.contains("verified: partial"))
         XCTAssertTrue(notes.contains("DOES NOT FOLLOW THE USUAL FORMULA"))
-        for n in 1...3 {
+        // Two, not three: rule 3's multiplier landed 2026-08-04.
+        for n in 1...2 {
             XCTAssertTrue(notes.contains("KNOWN LIMITATION \(n)"), "limitation \(n)")
         }
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION 3"))
+        XCTAssertTrue(notes.contains("FIFTY IS THE HIGHEST THRESHOLD OF ANY PARTY"))
         XCTAssertTrue(notes.contains("THE TRAP THIS PARTY TURNS ON IS STL versus SLC"))
     }
 }

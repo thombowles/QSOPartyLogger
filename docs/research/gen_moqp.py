@@ -129,6 +129,10 @@ for quote in [
     "An additional multiplier of the value of one will be added if at least one DX station is worked",
     "The multipliers for Non-Missouri and DX stations are Missouri Counties (115 maximum)",
     "makes 50 or more valid contacts from a county or county lines",
+    # Rule 3's qualifying classes. The shipped set adds EXPEDITION on the
+    # county-lines reading (see the notes' OPEN QUESTION 1), so a revision
+    # that names expeditions outright - or drops portables - must fail here.
+    "Any mobile or portable category entry",
     # Dupes
     "once per mode on each band per Missouri county",
     # County lines
@@ -183,6 +187,33 @@ moqp = {
             # The stated maxima settle the scope: a per-band count could not have
             # a maximum of 115.
             "countScope": "once",
+            # Rule 3: "Any mobile or portable category entry that makes 50 or
+            # more valid contacts from a county or county lines will be given
+            # the multiplier for that county or counties."
+            "activatedCountyMultiplier": {
+                # THE HIGHEST THRESHOLD OF THE FIVE by a factor of five - SCQP
+                # and NCQP 1, TnQP and VAQP 10, this 50.
+                "minCount": 50,
+                # "50 or more valid CONTACTS", not stations. VAQP's rule looks
+                # similar and counts distinct callsigns; this one does not.
+                "countUnit": "qsos",
+                # The stated maximum of 115 is a whole-log count, so the
+                # activation is scoped the same way everything else here is.
+                "countScope": "once",
+                # RULE 3 NAMES "mobile or portable" AND MOQP DEFINES A THIRD
+                # ROVING CLASS, Missouri Expedition, which it does not name.
+                # EXPEDITION SHIPS COVERED ANYWAY: rule 3 pays "from a county or
+                # COUNTY LINES", and the expedition is the class MOQP permits at
+                # "the intersection of two or more counties". Recorded as an
+                # OPEN QUESTION, because the literal list is two classes and
+                # this is three - the one place in these five parties where the
+                # shipped set is wider than the sponsor's sentence.
+                "categories": ["MOBILE", "PORTABLE", "EXPEDITION"],
+                # BY ARITHMETIC, as with NCQP. "Missouri counties (115 MAXIMUM)"
+                # is exactly the entity list - 114 counties plus St. Louis City
+                # - so a county both operated from and worked cannot make 116.
+                "notOtherwiseWorked": True,
+            },
         },
         # "Missouri Counties (115 maximum) worked."
         "outState": {
@@ -255,10 +286,15 @@ moqp = {
         "QSOs made in those two six-hour windows, cap the total at 250, and add it to your QSO "
         "points BEFORE multiplying. KNOWN LIMITATION 2 - the flat 100-point bonus for submitting "
         "a Cabrillo log electronically is not applied either, because it is not about contacts at "
-        "all. Add 100 to your claimed score. KNOWN LIMITATION 3 - a mobile or portable entry that "
-        "makes 50 or more valid contacts from a county or county line is given that county as a "
-        "multiplier; this app has no self-activation multiplier, so an in-state roving entrant is "
-        "short by that count. Out-of-state entrants are unaffected. "
+        "all. Add 100 to your claimed score. "
+        "A ROVING MISSOURI ENTRY COUNTS EACH COUNTY IT MAKES 50 CONTACTS FROM. Rule 3: 'Any "
+        "mobile or portable category entry that makes 50 or more valid contacts from a county or "
+        "county lines will be given the multiplier for that county or counties.' The app now "
+        "counts it. FIFTY IS THE HIGHEST THRESHOLD OF ANY PARTY WITH THIS RULE - five times "
+        "TnQP's and VaQP's ten - and it counts CONTACTS, not distinct stations the way VaQP's "
+        "does. A county that was also WORKED counts once, not twice: 'Missouri counties (115 "
+        "maximum)' is exactly the entity list, so 116 is not available. Out-of-state entrants are "
+        "unaffected. "
         "Cabrillo CONTEST value MO-QSO-PARTY per the WA7BNM registry - the rules require Cabrillo, "
         "and even pay 100 points for it, but never print the header token. "
         "THE ENTITY LIST IS 115, NOT 114: Missouri's counties PLUS the independent City of St. "
@@ -270,10 +306,16 @@ moqp = {
         "S block (Saline SAL, Schuyler SCH, St. Clair SCL, Scott SCO, Scotland SCT, St. Charles "
         "STC, St. Francois STF, St. Genevieve STG). The sponsor prints 'St. Genevieve' where the "
         "county is officially Ste. Genevieve; it ships as printed. "
-        "OPEN QUESTIONS (why this is partial): (1) The three KNOWN LIMITATIONS above; the first "
-        "two change every entrant's claimed score and the notes give the arithmetic. (2) The "
-        "county-line limit. The rules permit 'two or more counties' and cap nothing, so this ships "
-        "on this app's own maximum of four, which is a default rather than a sponsor's number. "
+        "OPEN QUESTIONS (why this is partial): (1) WHETHER AN EXPEDITION EARNS THE "
+        "COUNTY-ACTIVATION MULTIPLIER. Rule 3 names 'any mobile or portable category entry', and "
+        "MOQP defines a third roving class it does not name there - Missouri Expedition. "
+        "Expedition ships COVERED, because rule 3 pays 'from a county or COUNTY LINES' and the "
+        "expedition is the class MOQP permits at 'the intersection of two or more counties'. It "
+        "is the one place in this rule where what ships is wider than the sponsor's sentence, so "
+        "an expedition entrant may be claiming one multiplier per activated county too many; "
+        "confirm with BEARS-St. Louis before submitting. (2) The county-line limit. The rules "
+        "permit 'two or more counties' and cap nothing, so this ships on this app's own maximum "
+        "of four, which is a default rather than a sponsor's number. "
         "(3) No rule states whether stations outside Missouri may work only Missouri stations; the "
         "objective points that way and out-of-state multipliers are MO counties only, but the same "
         "objective also offers Missouri stations 'an opportunity to work other states and "
@@ -292,5 +334,6 @@ print(f"  points: phone 1, CW/digital 2; multipliers ONCE overall (maxima 115/49
 print(f"  bands: {len(BANDS)} - joint-largest in the repo")
 print(f"  bonuses: W0MA 100 once + K0GQ 100 once (2 of the sponsor's FIVE rules)")
 print(f"  schedule: 2 windows, 14 h + 6 h = 20 h, MOVED A WEEK FOR EASTER")
+print(f"  activation mults: mobile/portable/expedition, 50 contacts, once, forfeited if worked")
 print(f"  NOT shipped: the 40/80 m daytime +1/QSO bonus capped at 250,")
-print(f"    the 100-point Cabrillo-submission bonus, and activation multipliers")
+print(f"    and the 100-point Cabrillo-submission bonus")

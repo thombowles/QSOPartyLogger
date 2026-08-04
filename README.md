@@ -186,7 +186,13 @@ Built for KE5CW. Bundled parties, all with official county data:
   whose codes share all three letters in a different order. Ten bands.
   **Five bonus rules, of which only two fit**: `WØMA` and `KØGQ` at 100 each are
   modelled; a 40/80 m daytime +1-per-QSO bonus capped at 250 and a flat 100 for
-  submitting a Cabrillo log are not. `verified: partial`.
+  submitting a Cabrillo log are not. A roving Missouri entry claims each county
+  it makes **50 contacts** from as a multiplier — **the highest threshold of the
+  five parties with that rule**, five times Tennessee's and Virginia's ten.
+  `verified: partial`, and one of its open questions is that rule: it names
+  "mobile or portable", MOQP defines a third roving class it does not name, and
+  Expedition ships covered on the strength of the same rule paying "from a
+  county or *county lines*".
 - **New Mexico QSO Party** (Apr 11, 2026) — 12 hours, sharing Missouri's day,
   and **the first bundled party whose power multiplier actually fits**: QRP ×5,
   Low ×2, High ×1 are whole numbers, so the score multiplier ships. Vermont's and
@@ -1196,7 +1202,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1882 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1887 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial

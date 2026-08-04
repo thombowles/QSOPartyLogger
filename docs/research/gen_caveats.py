@@ -124,11 +124,14 @@ KINDS = {
         (1, "cosmetic", "Entrants outside North America: contacts with other non-NA stations are credited here but removed by the sponsor. No effect on NA entrants."),
         (2, "cosmetic", "Log United Nations HQ as 4U1 - the checklist's '4U1/u' cannot be typed because '/' separates county lines."),
     ],
+    # The third scoreAffecting item — in-state rovers short the counties they
+    # made 50 contacts from — left 2026-08-04 when `activatedCountyMultiplier`
+    # landed, which also renumbered the open questions: the shipped set now
+    # covers Missouri Expedition, which rule 3 does not name.
     "moqp": [
         (0, "scoreAffecting", "The 40 and 80 m daytime bonus is not applied."),
         (1, "scoreAffecting", "The 100-point electronic-submission bonus is not applied."),
-        (2, "scoreAffecting", "In-state rovers are short the self-activation multiplier for each county they work 50+ QSOs from."),
-        (4, "ruleInference", "The county-line cap and the out-of-state restriction are both this app’s defaults, not the sponsor’s numbers."),
+        (2, "ruleInference", "An expedition is credited for the counties it activates, which rule 3 names only mobiles and portables for."),
     ],
     "msqp": [
         (0, "scoreAffecting", "Grid-square multipliers are not counted, and this is the biggest gap here."),

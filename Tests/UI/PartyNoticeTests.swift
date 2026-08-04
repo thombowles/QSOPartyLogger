@@ -55,28 +55,34 @@ final class PartyNoticeTests: XCTestCase {
         }
     }
 
-    /// Missouri is the reported case: three orange lines, then one grey one.
-    /// The line that used to vanish is `rows[1]`, and it is orange.
+    /// Missouri is the reported case: orange lines, then a grey one. The line
+    /// that used to vanish is `rows[1]`, and it is orange.
+    ///
+    /// **It was three orange and one grey until 2026-08-04**, when rule 3's
+    /// county-activation multiplier landed: the third orange line went away and
+    /// the open question about which categories it covers became the party's
+    /// second advisory. Two and two now — still both groups, still the same
+    /// identity contract.
     func testMissouriDrawsEveryLineOnceInOrder() throws {
         let rows = PartyNotice(party: try party("moqp")).rows
 
-        XCTAssertEqual(rows.count, 6)
+        XCTAssertEqual(rows.count, 5)
         XCTAssertEqual(rows.map(\.tone), [
-            .warning, .warning, .warning, .warning, .informational, .informational,
+            .warning, .warning, .warning, .informational, .informational,
         ])
         XCTAssertEqual(rows.map(\.id), [
-            "warning.heading", "warning.0", "warning.1", "warning.2",
+            "warning.heading", "warning.0", "warning.1",
             "informational.heading", "informational.0",
         ])
-        XCTAssertEqual(rows[0].text, "3 things this app cannot score for you here.")
+        XCTAssertEqual(rows[0].text, "2 things this app cannot score for you here.")
         XCTAssertEqual(rows[1].text, "The 40 and 80 m daytime bonus is not applied.")
-        XCTAssertEqual(rows[4].text, "1 note on how this app handles this party.")
+        XCTAssertEqual(rows[3].text, "1 note on how this app handles this party.")
         XCTAssertTrue(
-            rows[5].text.hasPrefix("The county-line cap"),
-            "got: \(rows[5].text)"
+            rows[4].text.hasPrefix("An expedition is credited"),
+            "got: \(rows[4].text)"
         )
         // The advisory line is drawn once, not once per colliding slot.
-        XCTAssertEqual(rows.filter { $0.text == rows[5].text }.count, 1)
+        XCTAssertEqual(rows.filter { $0.text == rows[4].text }.count, 1)
     }
 
     /// Only headings carry an icon, and every group contributes exactly one.
