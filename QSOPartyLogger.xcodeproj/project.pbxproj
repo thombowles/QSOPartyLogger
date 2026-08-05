@@ -132,6 +132,7 @@
 		654D25391076282E66654B42 /* ChallengeCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2811B1BB0F44782A35E7B4E /* ChallengeCalendar.swift */; };
 		65E5DFBFDD4BE2CD4549A134 /* BandMapLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C1B0D852691D58AD871CC /* BandMapLayout.swift */; };
 		65EA39B0B0AE20B7666BF414 /* SpotFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14042D5B6DD33CC2A46A276C /* SpotFilter.swift */; };
+		6615F01A1746C284C34DD7C4 /* SCPStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A7D51B8CF8AFE96129EA2F /* SCPStoreTests.swift */; };
 		688F883E10245C3D0543C4F7 /* NewHampshireQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3451A53ECE9C61AD37E8E16C /* NewHampshireQSOPartyTests.swift */; };
 		698B227926FB01BE3C96A295 /* SerialTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87C8AFF4402D21D499C37A /* SerialTransport.swift */; };
 		69C27FF9CA35A238F328CAD7 /* SpotParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731055DFF68E6AF98B5FD807 /* SpotParser.swift */; };
@@ -162,6 +163,7 @@
 		850DACFDE512111523B875A3 /* SouthDakotaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE324A25B998F570B53C353 /* SouthDakotaQSOPartyTests.swift */; };
 		85A69706B637C953E611533F /* LouisianaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9E076B4DB0EFFC60C9304 /* LouisianaQSOPartyTests.swift */; };
 		86B1E04C188E5B0B49E0A635 /* alqp-table-2026-07-25-late.html in Resources */ = {isa = PBXBuildFile; fileRef = F9DC0A15D96B2BE826452A38 /* alqp-table-2026-07-25-late.html */; };
+		87DEFAA494644FF89C542876 /* SCPStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E178815CECB3CA7EA9B358A7 /* SCPStore.swift */; };
 		87DFF3866AB92FA4A0F51166 /* DupeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A13A0105A3055F65F9C60 /* DupeChecker.swift */; };
 		8B798A3A385449902326AB88 /* QuebecQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7194268CC1DFB2953FFDE8 /* QuebecQSOPartyTests.swift */; };
 		8E0C9BB5C8132A2F521070E4 /* SeventhCallAreaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */; };
@@ -422,6 +424,7 @@
 		725F2EE6C91643ADCAC4B72C /* BandMapObservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapObservationTests.swift; sourceTree = "<group>"; };
 		731055DFF68E6AF98B5FD807 /* SpotParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotParser.swift; sourceTree = "<group>"; };
 		734E327D94C25EFA4A5DCBA4 /* NewYorkQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewYorkQSOPartyTests.swift; sourceTree = "<group>"; };
+		73A7D51B8CF8AFE96129EA2F /* SCPStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCPStoreTests.swift; sourceTree = "<group>"; };
 		7486E1CA45DB77F701EB47EA /* ArchivedLogExport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedLogExport.swift; sourceTree = "<group>"; };
 		75970653CB7669E2A41577F5 /* Challenge */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Challenge; path = Resources/Challenge; sourceTree = SOURCE_ROOT; };
 		771A2A2E70C2A91608F19549 /* RadioBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioBar.swift; sourceTree = "<group>"; };
@@ -523,6 +526,7 @@
 		E0173AC4FD078C2202756941 /* NameExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameExchangeTests.swift; sourceTree = "<group>"; };
 		E0A02DEF03C814CF8D2DD737 /* NewMexicoQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMexicoQSOPartyTests.swift; sourceTree = "<group>"; };
 		E158548019775B5706D58253 /* AdifExportTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdifExportTypeTests.swift; sourceTree = "<group>"; };
+		E178815CECB3CA7EA9B358A7 /* SCPStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCPStore.swift; sourceTree = "<group>"; };
 		E4C943C5C616ADB650DA248E /* CWKeyer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CWKeyer.swift; sourceTree = "<group>"; };
 		E4D8CF7496BE7953659E708C /* FloridaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloridaQSOPartyTests.swift; sourceTree = "<group>"; };
 		E53DC8597A1A918FA7CB32D4 /* K3ProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K3ProtocolTests.swift; sourceTree = "<group>"; };
@@ -775,6 +779,7 @@
 				EDEF6EE3217F107C7332AC6D /* ScoreFactorTests.swift */,
 				1D9A6BB88648696A07EDF1BB /* ScoreSnapshotTests.swift */,
 				FA412B8BE898C741ABE51422 /* SCPDatabaseTests.swift */,
+				73A7D51B8CF8AFE96129EA2F /* SCPStoreTests.swift */,
 				FB3B5E5F871969EC7046D82E /* SeasonStatsTests.swift */,
 				9B143A6F4360839CB52EFA48 /* SectionMultiplierTests.swift */,
 				14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */,
@@ -1006,6 +1011,7 @@
 				9392F2187275B71B5789F836 /* CallHistoryPageParser.swift */,
 				D4DADB486A8C86FA27396EB4 /* CallHistoryStore.swift */,
 				1B5620BAC49FB9D14CC47186 /* SCPDatabase.swift */,
+				E178815CECB3CA7EA9B358A7 /* SCPStore.swift */,
 			);
 			path = CallHistory;
 			sourceTree = "<group>";
@@ -1291,6 +1297,7 @@
 				7820E065122DA7959EF0D0DC /* RateColumnTests.swift in Sources */,
 				3A857866492731ADB2E7B655 /* RateMeterTests.swift in Sources */,
 				9A1D1AAD285B8D3F63E205C6 /* SCPDatabaseTests.swift in Sources */,
+				6615F01A1746C284C34DD7C4 /* SCPStoreTests.swift in Sources */,
 				36855A41F241A73EAF900267 /* SalmonRunTests.swift in Sources */,
 				4499E2CE096927357D50EABF /* ScoreEngineTests.swift in Sources */,
 				D3C262F0AB8FAFD31D1B4EB6 /* ScoreFactorTests.swift in Sources */,
@@ -1416,6 +1423,7 @@
 				ED92C6E0F5A3EBEAAB9FEE33 /* RateColumn.swift in Sources */,
 				305E1E7BCE5D2DD20771B8DB /* RateMeter.swift in Sources */,
 				962C83188C384DA2D6A8362D /* SCPDatabase.swift in Sources */,
+				87DEFAA494644FF89C542876 /* SCPStore.swift in Sources */,
 				C939C4DD4B704413B9161F73 /* ScoreEngine.swift in Sources */,
 				4ADAC8F139A627D1ED0F8F1B /* ScoreFactor.swift in Sources */,
 				12C6DC13CA936881DB5F134C /* ScoreSidebar.swift in Sources */,
