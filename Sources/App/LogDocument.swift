@@ -180,6 +180,31 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         undoManager?.setActionName("Edit Contact")
     }
 
+    /// One field changed across many rows — the bulk editor's single mutation.
+    ///
+    /// Not `update(qso:)` in a loop. That registers one undo step per row, so
+    /// reverting a change whose whole purpose was to touch fifteen rows would
+    /// cost fifteen ⌘Z presses. One registration, one action name, one press
+    /// back. Rows no longer in the log are skipped rather than re-appended —
+    /// undo of a *deletion* is `append`'s job.
+    @MainActor
+    func update(qsos: [QSO], actionName: String, undoManager: UndoManager?) {
+        let byID = Dictionary(qsos.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
+        var previous: [QSO] = []
+        for idx in log.qsos.indices {
+            guard let updated = byID[log.qsos[idx].id] else { continue }
+            previous.append(log.qsos[idx])
+            log.qsos[idx] = updated
+        }
+        guard !previous.isEmpty else { return }
+        undoManager?.registerUndo(withTarget: self) { doc in
+            MainActor.assumeIsolated {
+                doc.update(qsos: previous, actionName: actionName, undoManager: undoManager)
+            }
+        }
+        undoManager?.setActionName(actionName)
+    }
+
     /// A spot from either feed — cluster or hub — reached this session.
     /// An observation, not an operator edit, so it registers no undo: ⌘Z
     /// must never clear an integrity record. Direct mutation is the same

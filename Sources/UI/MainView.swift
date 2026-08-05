@@ -28,6 +28,7 @@ struct MainView: View {
     @State private var showSetup = false
     @State private var showMessagesEditor = false
     @State private var editingQSO: QSO?
+    @State private var bulkEditing: BulkEditSheet.Request?
     @State private var exportDoc: TextExportDocument?
     @State private var exportType: UTType = .plainText
     @State private var exportName = ""
@@ -146,6 +147,21 @@ struct MainView: View {
                     role: document.log.myLocation.isInState ? .inState : .outOfState
                 ) { updated in
                     document.update(qso: updated, undoManager: undoManager)
+                }
+            }
+            .sheet(item: $bulkEditing) { request in
+                BulkEditSheet(
+                    rows: request.rows,
+                    allRows: document.log.qsos,
+                    party: party,
+                    isInState: document.log.myLocation.isInState
+                ) { updated in
+                    document.update(
+                        qsos: updated,
+                        actionName: updated.count == 1
+                            ? "Change 1 Contact" : "Change \(updated.count) Contacts",
+                        undoManager: undoManager
+                    )
                 }
             }
             .fileExporter(
@@ -393,9 +409,10 @@ struct MainView: View {
             qsos: document.log.qsos,
             score: score,
             party: party,
-            onDeleteRow: { document.remove(ids: [$0.id], undoManager: undoManager) },
+            onDeleteRows: { document.remove(ids: $0, undoManager: undoManager) },
             onDeleteGroup: { document.removeGroup(groupID: $0.groupID, undoManager: undoManager) },
             onEdit: { editingQSO = $0 },
+            onBulkEdit: { bulkEditing = BulkEditSheet.Request(rows: $0) },
             canSpotToHub: canSpotToHub,
             onSpotToHub: { qso in
                 beginSpot(

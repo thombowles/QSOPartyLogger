@@ -80,11 +80,20 @@ therefore holds rows that differ **only** in `myLoc`. Bulk-setting My exchange
 across them would mint literally duplicate rows, which the dupe checker then
 flags — the app creating the defect it exists to catch.
 
-So: for a **My exchange** change, rows belonging to a multi-row group whose
-`myLoc` values differ are excluded. The sheet names the excluded count before
-Apply is enabled ("3 county-line rows are left unchanged — edit those
-individually"). Band, mode and the sent elements are shared by every row of a
-group, so they carry no such exclusion.
+So for a **My exchange** change, a row is written only when its group is a
+single row, or when the whole group is selected *and* already carries one
+location — in which case the rows stay distinct by what the other station sent.
+Two cases are therefore excluded:
+
+- a group holding two of my counties (collapsing it mints duplicates);
+- a **partly selected** group, which is the case the first rule alone misses —
+  changing half of one contact's rows leaves that contact claiming two of my
+  locations. This is why the partition reads the whole log rather than the
+  selection: a group's other rows are exactly what the selection may be missing.
+
+The sheet names the excluded count before Apply is enabled ("3 county-line rows
+are left unchanged — edit those individually"). Band, mode and the sent elements
+are shared by every row of a group, so they carry no such exclusion.
 
 ### Undo
 

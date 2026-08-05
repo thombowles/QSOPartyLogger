@@ -372,4 +372,71 @@ final class LogDocumentTests: XCTestCase {
         doc.noteSpotsUsed()  // the thousandth spot says nothing the first didn't
         XCTAssertTrue(doc.log.usedSpots)
     }
+
+    // MARK: Bulk row edits are one undoable step (2026-08-05)
+
+    @MainActor
+    func bulkDocument(count: Int) -> LogDocument {
+        let doc = LogDocument()
+        doc.log.qsos = (0..<count).map { index in
+            QSO(
+                call: "W\(index)AW", band: .m40, modeClass: .cw, rawMode: "CW",
+                rstSent: "599", rstRcvd: "599", myLoc: "JOH", theirLoc: "TX"
+            )
+        }
+        return doc
+    }
+
+    /// The whole point of a bulk change is that it touches many rows, so undo
+    /// has to give them all back at once. Fifteen `update(qso:)` calls would
+    /// cost fifteen ⌘Z presses.
+    @MainActor
+    func testABulkChangeUndoesInOneStep() {
+        let undo = UndoManager()
+        let doc = bulkDocument(count: 5)
+        let moved = doc.log.qsos.map { row -> QSO in
+            var row = row
+            row.band = .m20
+            return row
+        }
+
+        doc.update(qsos: moved, actionName: "Change 5 Contacts", undoManager: undo)
+        XCTAssertEqual(doc.log.qsos.map(\.band), Array(repeating: .m20, count: 5))
+        XCTAssertEqual(undo.undoActionName, "Change 5 Contacts")
+
+        undo.undo()
+        XCTAssertEqual(
+            doc.log.qsos.map(\.band), Array(repeating: .m40, count: 5),
+            "one undo restores every row the change touched"
+        )
+
+        undo.redo()
+        XCTAssertEqual(doc.log.qsos.map(\.band), Array(repeating: .m20, count: 5))
+    }
+
+    /// Only the rows handed in move. A bulk change is a selection, not the log.
+    @MainActor
+    func testABulkChangeLeavesUnselectedRowsAlone() {
+        let doc = bulkDocument(count: 3)
+        var first = doc.log.qsos[0]
+        first.myLoc = "MIA"
+
+        doc.update(qsos: [first], actionName: "Change 1 Contact", undoManager: nil)
+        XCTAssertEqual(doc.log.qsos.map(\.myLoc), ["MIA", "JOH", "JOH"])
+    }
+
+    /// A row deleted while the sheet was open is simply not written — undo of
+    /// a deletion is `append`'s job, and resurrecting it here would make a
+    /// bulk edit quietly undo someone else's delete.
+    @MainActor
+    func testARowNoLongerInTheLogIsNotResurrected() {
+        let doc = bulkDocument(count: 2)
+        var stale = doc.log.qsos[0]
+        doc.remove(ids: [stale.id], undoManager: nil)
+        stale.band = .m20
+
+        doc.update(qsos: [stale], actionName: "Change 1 Contact", undoManager: nil)
+        XCTAssertEqual(doc.log.qsos.count, 1)
+        XCTAssertFalse(doc.log.qsos.contains { $0.id == stale.id })
+    }
 }

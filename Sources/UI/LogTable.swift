@@ -6,9 +6,12 @@ struct LogTable: View {
     let qsos: [QSO]
     let score: ScoreEngine.ScoreBreakdown
     let party: PartyDefinition?
-    let onDeleteRow: (QSO) -> Void
+    let onDeleteRows: (Set<QSO.ID>) -> Void
     let onDeleteGroup: (QSO) -> Void
     let onEdit: (QSO) -> Void
+    /// Two or more rows selected → the bulk editor, with the selection in
+    /// chronological order so its seed value is the earliest contact's.
+    let onBulkEdit: ([QSO]) -> Void
     /// Whether this party is on the QSO Party Hub and there is a callsign to
     /// post under. False leaves the menu item out rather than offering
     /// something that cannot work.
@@ -17,7 +20,10 @@ struct LogTable: View {
     /// sheet; nothing is posted from the menu itself.
     let onSpotToHub: (QSO) -> Void
 
-    @State private var selection: QSO.ID?
+    /// A set, not one id: shift-click for a range, ⌘-click for scattered rows,
+    /// ⌘A for the lot — the selection model N1MM's Log window documents, and
+    /// `Table` gives every one of those keyboard paths for free.
+    @State private var selection = Set<QSO.ID>()
 
     private var rows: [QSO] {
         qsos.sortedChronologically().reversed()
@@ -109,13 +115,22 @@ struct LogTable: View {
             .width(min: 70, ideal: 90)
         }
         .contextMenu(forSelectionType: QSO.ID.self) { ids in
-            if let id = ids.first, let qso = qsos.first(where: { $0.id == id }) {
+            let selected = selectedRows(ids)
+            if selected.count > 1 {
+                Button("Edit \(selected.count) Contacts…") { onBulkEdit(selected) }
+                Divider()
+                Button("Delete \(selected.count) Rows", role: .destructive) {
+                    onDeleteRows(ids)
+                }
+            } else if let qso = selected.first {
                 Button("Edit…") { onEdit(qso) }
+                // One station per post, so this stays single-row however many
+                // are selected.
                 if canSpotToHub {
                     Button("Spot \(qso.call) to QSO Party Hub…") { onSpotToHub(qso) }
                 }
                 Divider()
-                Button("Delete Row", role: .destructive) { onDeleteRow(qso) }
+                Button("Delete Row", role: .destructive) { onDeleteRows([qso.id]) }
                 if (groupSizes[qso.groupID] ?? 1) > 1 {
                     Button("Delete Contact Group (×\(groupSizes[qso.groupID]!))", role: .destructive) {
                         onDeleteGroup(qso)
@@ -123,10 +138,21 @@ struct LogTable: View {
                 }
             }
         } primaryAction: { ids in
-            if let id = ids.first, let qso = qsos.first(where: { $0.id == id }) {
+            let selected = selectedRows(ids)
+            if selected.count > 1 {
+                onBulkEdit(selected)
+            } else if let qso = selected.first {
                 onEdit(qso)
             }
         }
+    }
+
+    /// The selected rows, oldest first. Chronological rather than the table's
+    /// newest-first display order, so "the first contact in the selection" —
+    /// which is what the bulk sheet seeds from — means the one the operator
+    /// worked first.
+    private func selectedRows(_ ids: Set<QSO.ID>) -> [QSO] {
+        qsos.sortedChronologically().filter { ids.contains($0.id) }
     }
 
     private func pointsText(_ q: QSO) -> String {

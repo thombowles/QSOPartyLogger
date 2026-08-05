@@ -138,6 +138,7 @@
 		65E5DFBFDD4BE2CD4549A134 /* BandMapLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C1B0D852691D58AD871CC /* BandMapLayout.swift */; };
 		65EA39B0B0AE20B7666BF414 /* SpotFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14042D5B6DD33CC2A46A276C /* SpotFilter.swift */; };
 		6615F01A1746C284C34DD7C4 /* SCPStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A7D51B8CF8AFE96129EA2F /* SCPStoreTests.swift */; };
+		67A80A778F35F15BE390F382 /* BulkEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64840D9ACF7A45698878A84 /* BulkEditSheet.swift */; };
 		688F883E10245C3D0543C4F7 /* NewHampshireQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3451A53ECE9C61AD37E8E16C /* NewHampshireQSOPartyTests.swift */; };
 		698B227926FB01BE3C96A295 /* SerialTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87C8AFF4402D21D499C37A /* SerialTransport.swift */; };
 		69C27FF9CA35A238F328CAD7 /* SpotParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731055DFF68E6AF98B5FD807 /* SpotParser.swift */; };
@@ -208,6 +209,7 @@
 		B44F4F99DF83E5711D8DAB06 /* UppercasingBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEDB395B8108B260AD62BD1 /* UppercasingBinding.swift */; };
 		B465CCF2CC896B496165BEE0 /* NewJerseyQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E346D3641AA9C7153747275 /* NewJerseyQSOPartyTests.swift */; };
 		B54E33A3B66DFC8C6151A7C0 /* listing-qsop_al-2026-07-28.html in Resources */ = {isa = PBXBuildFile; fileRef = 1C3AC5AB9FAD96FFE2C6ADA3 /* listing-qsop_al-2026-07-28.html */; };
+		B56E15627B99B1F7E3CBFEF8 /* BulkEditTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6303BA9E80467E06D2B64C54 /* BulkEditTests.swift */; };
 		B697AC58255763D8708239E5 /* SCPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA34D87EC7908A404F08591 /* SCPClient.swift */; };
 		B6FBE02A952C1AE6A69D169F /* StationMemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8199BE77C57911CB47B7B016 /* StationMemoryTests.swift */; };
 		B99DE9236CC16993B455BC8E /* SpottingPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C881733E52B4CD62D43604 /* SpottingPolicyTests.swift */; };
@@ -278,6 +280,7 @@
 		F067C727C4F4076315B221F1 /* RadioState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C366652F539E9935BD0A4502 /* RadioState.swift */; };
 		F068DB1B3C0A793714CC7745 /* OneByOneTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E7C41D9406F1E08708929F /* OneByOneTracker.swift */; };
 		F12378741285B339A876009B /* CountyLineExpander.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6B397C7B014ACA6232F8F /* CountyLineExpander.swift */; };
+		F159E9D83D3C5AB7516EE0A7 /* BulkEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D04ED5B420AD1B33E3EB2F9 /* BulkEdit.swift */; };
 		F163F72E6DB347B808CAE90A /* CallHistoryPageParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69FC9A0E6956A1F2C208BF1 /* CallHistoryPageParserTests.swift */; };
 		F238FDC861C993F998E5890A /* SkeeterHuntTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369C26C343E2C414BF592CC6 /* SkeeterHuntTests.swift */; };
 		F2BE6B5E0868F72361011DCF /* EditQSOSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F01ACCE3E8BBB30BB6AFFB0 /* EditQSOSheet.swift */; };
@@ -426,6 +429,7 @@
 		60F9E076B4DB0EFFC60C9304 /* LouisianaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LouisianaQSOPartyTests.swift; sourceTree = "<group>"; };
 		6183074E6FEE712AC9AAA24B /* RateColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateColumn.swift; sourceTree = "<group>"; };
 		62CD3096B56AD7C6DE79D6B9 /* WorkedStationSpotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedStationSpotTests.swift; sourceTree = "<group>"; };
+		6303BA9E80467E06D2B64C54 /* BulkEditTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkEditTests.swift; sourceTree = "<group>"; };
 		64ADDA6B23BDF320E013D346 /* JSONValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONValue.swift; sourceTree = "<group>"; };
 		64E7C41D9406F1E08708929F /* OneByOneTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneByOneTracker.swift; sourceTree = "<group>"; };
 		65578A775A74FB103913C439 /* SpotStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotStore.swift; sourceTree = "<group>"; };
@@ -463,6 +467,7 @@
 		8AACC54DA31CF56398BD99B6 /* MultiplierRosterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplierRosterTests.swift; sourceTree = "<group>"; };
 		8C7C1B661CE889D39EFE333E /* ContestArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestArchive.swift; sourceTree = "<group>"; };
 		8CE0321C50DA1A9D4AEB58D0 /* County.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = County.swift; sourceTree = "<group>"; };
+		8D04ED5B420AD1B33E3EB2F9 /* BulkEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkEdit.swift; sourceTree = "<group>"; };
 		8E91F46A9B0E33BC6E1FC0F5 /* HubPollPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubPollPolicy.swift; sourceTree = "<group>"; };
 		909A650EB49961812900CFD5 /* HubSelfSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSelfSpot.swift; sourceTree = "<group>"; };
 		9183D3107E206A940C2DCDCB /* HubSpotSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotSourceTests.swift; sourceTree = "<group>"; };
@@ -507,6 +512,7 @@
 		B53EC04A80BE35768462933D /* NorthDakotaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorthDakotaQSOPartyTests.swift; sourceTree = "<group>"; };
 		B54B32AF67B7058055ADD0B7 /* SpotLabelSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotLabelSize.swift; sourceTree = "<group>"; };
 		B598E336484B5D8CC5B9A2F9 /* ChallengeStanding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeStanding.swift; sourceTree = "<group>"; };
+		B64840D9ACF7A45698878A84 /* BulkEditSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkEditSheet.swift; sourceTree = "<group>"; };
 		B7580B0CD758A93D4F6B5422 /* KentuckyQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KentuckyQSOPartyTests.swift; sourceTree = "<group>"; };
 		B768FEBEB75AB19F20D486E6 /* sdqp-table-2024-10-12.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "sdqp-table-2024-10-12.html"; sourceTree = "<group>"; };
 		B8F437B56480EB7F8E109AF5 /* BandPlanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandPlanTests.swift; sourceTree = "<group>"; };
@@ -728,6 +734,7 @@
 				B8F437B56480EB7F8E109AF5 /* BandPlanTests.swift */,
 				BEFD29B68C87E0D24267605B /* BonusScopeTests.swift */,
 				42368D9706B3F36B3537C216 /* BritishColumbiaQSOPartyTests.swift */,
+				6303BA9E80467E06D2B64C54 /* BulkEditTests.swift */,
 				AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */,
 				715DC2AC0C0FD0301DA7FF0B /* CaliforniaQSOPartyTests.swift */,
 				CBC49C26B1FFD6EC5D00830A /* CallAreaSumBonusTests.swift */,
@@ -865,6 +872,7 @@
 			isa = PBXGroup;
 			children = (
 				EF27EC7CAEAE6E71B85FD5E9 /* BandMap.swift */,
+				B64840D9ACF7A45698878A84 /* BulkEditSheet.swift */,
 				02590141050CF40EEF90B0C1 /* CombinedBreakdownSection.swift */,
 				5F01ACCE3E8BBB30BB6AFFB0 /* EditQSOSheet.swift */,
 				5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */,
@@ -1095,6 +1103,7 @@
 		FDD94321082321BD5D776867 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				8D04ED5B420AD1B33E3EB2F9 /* BulkEdit.swift */,
 				C6C60E6C8DA6D7E3E33B0BE0 /* CombinedLogSplit.swift */,
 				95D6B397C7B014ACA6232F8F /* CountyLineExpander.swift */,
 				658A13A0105A3055F65F9C60 /* DupeChecker.swift */,
@@ -1242,6 +1251,7 @@
 				EC56BDD4BA4DD578EFC84597 /* BandPlanTests.swift in Sources */,
 				2116FEE0D5157A280241DAE1 /* BonusScopeTests.swift in Sources */,
 				7E095A753F6C058F8D0F402E /* BritishColumbiaQSOPartyTests.swift in Sources */,
+				B56E15627B99B1F7E3CBFEF8 /* BulkEditTests.swift in Sources */,
 				74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */,
 				0C98121EB0A1EFAF11C23781 /* CaliforniaQSOPartyTests.swift in Sources */,
 				AFABF3686AB980194F459E40 /* CallAreaSumBonusTests.swift in Sources */,
@@ -1393,6 +1403,8 @@
 				65E5DFBFDD4BE2CD4549A134 /* BandMapLayout.swift in Sources */,
 				4B8F195A6C31CC6820EDE455 /* BandMapScale.swift in Sources */,
 				0E122728DD4F2CC234B5E788 /* BandPlan.swift in Sources */,
+				F159E9D83D3C5AB7516EE0A7 /* BulkEdit.swift in Sources */,
+				67A80A778F35F15BE390F382 /* BulkEditSheet.swift in Sources */,
 				C6FA714C3CDFA18E1988D2E3 /* CWKeyer.swift in Sources */,
 				E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */,
 				07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */,

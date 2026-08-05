@@ -123,6 +123,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `⇧⌘R` | Restore the party's default CW messages (Messages editor) |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
 | `⇧⌘M` | Expand / collapse every multiplier list in the score sidebar |
+| `⌘A` | Select every row in the log (`⇧`-click for a range, `⌘`-click for scattered rows) |
 | `⌘.` | Dismiss the spots-already-used badge for this sitting |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY, change band, change mode |
 
@@ -183,6 +184,18 @@ keys the old message. `Esc` still aborts CW instantly either way.
   **AGN?** — they're already talking to you. The F-key Return will send next is
   outlined.
 - **RST pre-filled** (599/59 by mode) after every contact.
+- **Fixing rows in bulk.** Select a range of log rows (`⇧`-click, `⌘`-click,
+  `⌘A`) and right-click → **Edit N Contacts…** to change one field across all of
+  them: band, mode, the location you were sending, and — where the party's
+  exchange carries them — the name or member number you sent. That's the rover's
+  fix for twenty contacts logged from the county you left half an hour ago. One
+  ⌘Z puts them all back.
+
+  What the *other* station sent is never edited in bulk. Their county, their
+  name, their number are a different fact per station, and there is no one
+  correct value across fifteen of them — those stay on the single-row editor.
+  County-line rows are held back from a location change too, and the sheet says
+  how many: your two counties collapsed onto one would leave two identical rows.
 
 ## Scoring
 
