@@ -330,4 +330,134 @@ final class CallHistoryClientTests: XCTestCase {
         XCTAssertTrue(published.isEmpty)
         XCTAssertEqual(client.status, .idle)
     }
+
+    // MARK: The roster-page kind (Skeeter Hunt)
+
+    /// A synthetic roster-kind party — the capability ships before any
+    /// bundled party carries the kind, so the definition is decoded inline.
+    private func rosterParty() throws -> PartyDefinition {
+        let json = """
+        {"schemaVersion":1,"id":"rp","name":"RP","cabrilloContest":"RP","homeState":"NA",
+        "countyAbbrLength":2,"validBands":["40m"],"points":{"phone":1,"cw":1,"digital":1},
+        "dupeScope":"bandMode","hasHomeRegion":false,
+        "multipliers":{"inState":{"classes":["state"],"homeStateCountsViaCounty":false,"countScope":"once"},
+        "outState":{"classes":["state"],"homeStateCountsViaCounty":false,"countScope":"once"}},
+        "bonuses":[],"counties":[],
+        "callHistory":{"kind":"w2ljRosterPage","pageURL":"https://sponsor.test/skeeter.html",
+        "filePrefix":"SKEETER","token":"SKEETER ROSTER"}}
+        """
+        return try PartyCatalog.decode(Data(json.utf8))
+    }
+
+    private let rosterPageHTML = """
+    <p>The entire 2026 Skeeter Hunt roster can be seen
+    https://docs.google.com/spreadsheets/d/SHEETID123/edit?usp=drivesdk.</p>
+    <p>2025 Scoreboard - click
+    <a href="https://docs.google.com/spreadsheets/d/SCOREBOARD999/edit">here</a></p>
+    """
+
+    private let rosterCSV = """
+    Skeeter #,Call,Name,S/P/C,Mode,Skeeter QSOs
+    13,W2LJ,Larry,NJ, ,0
+    20,KE5CW,Tom,TX, ,0
+    """
+
+    private func scriptRosterHappyPath() {
+        fetcher.getResponses = [
+            ("sponsor.test", 200, Data(rosterPageHTML.utf8)),
+            ("SHEETID123/export?format=csv", 200, Data(rosterCSV.utf8)),
+        ]
+    }
+
+    func testRosterDownloadsConvertsAndInstalls() async throws {
+        scriptRosterHappyPath()
+        await client.refreshIfStale(party: try rosterParty(), now: now)
+
+        XCTAssertEqual(published.map(\.partyID), ["rp"])
+        XCTAssertEqual(published.map(\.records), [2])
+        guard case .ready(let id, let revision, let records) = client.status else {
+            return XCTFail("expected ready, got \(client.status)")
+        }
+        XCTAssertEqual(id, "rp")
+        XCTAssertEqual(records, 2)
+        XCTAssertTrue(revision.hasPrefix("roster "), revision)
+
+        // The installed file is the converted call-history shape, and it
+        // declares the token it was installed under.
+        let cached = try XCTUnwrap(store.loadCached(partyID: "rp"))
+        XCTAssertEqual(cached.parsed.entry(for: "W2LJ")?.locations, ["13", "NJ"])
+        XCTAssertTrue(
+            cached.parsed.tokens.contains(CallHistorySource.normalized("SKEETER ROSTER")))
+
+        // The scoreboard sheet was never touched.
+        XCTAssertFalse(fetcher.requests.contains { $0.contains("SCOREBOARD999") })
+    }
+
+    /// The sheet is live, so a fresh check within the throttle does nothing
+    /// and a forced one re-downloads — there is no unchanged-revision short
+    /// circuit to hide behind.
+    func testRosterHoldsToTheThrottleAndForceBypassesIt() async throws {
+        scriptRosterHappyPath()
+        let party = try rosterParty()
+        await client.refreshIfStale(party: party, now: now)
+        let firstRequestCount = fetcher.requests.count
+
+        await client.refreshIfStale(party: party, now: now.addingTimeInterval(60))
+        XCTAssertEqual(fetcher.requests.count, firstRequestCount,
+                       "within the day, the sponsor's site is left alone")
+
+        await client.refreshIfStale(
+            party: party, now: now.addingTimeInterval(60), force: true)
+        XCTAssertGreaterThan(fetcher.requests.count, firstRequestCount,
+                             "Refresh is the operator's override")
+    }
+
+    func testRosterPageWithoutALinkFailsAndKeepsTheCache() async throws {
+        scriptRosterHappyPath()
+        let party = try rosterParty()
+        await client.refreshIfStale(party: party, now: now)
+
+        fetcher.getResponses = [
+            ("sponsor.test", 200, Data("<html><p>redesigned</p></html>".utf8)),
+        ]
+        await client.refreshIfStale(
+            party: party, now: now.addingTimeInterval(60), force: true)
+
+        guard case .failed(let message) = client.status else {
+            return XCTFail("expected a failure, got \(client.status)")
+        }
+        XCTAssertTrue(message.contains("no longer links a roster"), message)
+        XCTAssertNotNil(store.loadCached(partyID: "rp"),
+                        "the cached roster stays in service")
+    }
+
+    /// Google answers a permissions problem with an HTML page at status 200 —
+    /// the lookalike must not install as an empty roster.
+    func testRosterSheetAnsweringHTMLFailsLoudly() async throws {
+        fetcher.getResponses = [
+            ("sponsor.test", 200, Data(rosterPageHTML.utf8)),
+            ("SHEETID123/export?format=csv", 200,
+             Data("<!DOCTYPE html><html>sign in</html>".utf8)),
+        ]
+        await client.refreshIfStale(party: try rosterParty(), now: now)
+
+        guard case .failed(let message) = client.status else {
+            return XCTFail("expected a failure, got \(client.status)")
+        }
+        XCTAssertTrue(message.contains("refused its CSV export"), message)
+        XCTAssertNil(store.loadCached(partyID: "rp"))
+    }
+
+    func testRosterSheetWithAForeignShapeFailsLoudly() async throws {
+        fetcher.getResponses = [
+            ("sponsor.test", 200, Data(rosterPageHTML.utf8)),
+            ("SHEETID123/export?format=csv", 200, Data("Call,Number\nW2LJ,13".utf8)),
+        ]
+        await client.refreshIfStale(party: try rosterParty(), now: now)
+
+        guard case .failed(let message) = client.status else {
+            return XCTFail("expected a failure, got \(client.status)")
+        }
+        XCTAssertTrue(message.contains("changed shape"), message)
+    }
 }

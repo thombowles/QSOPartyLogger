@@ -86,8 +86,8 @@ final class CallHistoryClient {
         onIndex?(party.id, cached.parsed)
     }
 
-    /// Consult the listing when it has not been consulted lately, and install
-    /// whatever newer revision it shows. `force` is the operator's Refresh
+    /// Consult the source when it has not been consulted lately, and install
+    /// whatever newer data it shows. `force` is the operator's Refresh
     /// button; the automatic path holds to the once-a-day throttle.
     func refreshIfStale(
         party: PartyDefinition, now: Date = Date(), force: Bool = false
@@ -100,6 +100,20 @@ final class CallHistoryClient {
             return
         }
 
+        switch source.kind {
+        case .n1mm:
+            await refreshFromListing(party: party, source: source, meta: meta, now: now)
+        case .w2ljRosterPage:
+            await refreshFromRosterPage(party: party, source: source, now: now)
+        }
+    }
+
+    private func refreshFromListing(
+        party: PartyDefinition,
+        source: CallHistorySource,
+        meta: CallHistoryStore.Meta?,
+        now: Date
+    ) async {
         status = .checking
         lastError = nil
         log("*** checking the listing for \(source.filePrefix)")
@@ -143,6 +157,109 @@ final class CallHistoryClient {
                  + "\(error.localizedDescription) The cached file, if any, "
                  + "stays in use.")
         }
+    }
+
+    /// The Skeeter Hunt arrangement: no N1MM file exists, so discovery starts
+    /// from the sponsor page that links each season's roster sheet, and the
+    /// CSV export is converted to the call-history text shape before the
+    /// ordinary verification gates run. The sheet is **live** — numbers issue
+    /// until the day before the event — so there is no unchanged-revision
+    /// short circuit; the once-a-day throttle alone paces the re-download.
+    private func refreshFromRosterPage(
+        party: PartyDefinition,
+        source: CallHistorySource,
+        now: Date
+    ) async {
+        guard let pageURLString = source.pageURL,
+              let pageURL = URL(string: pageURLString) else {
+            fail("This party's roster source names no page URL — "
+                 + "the definition is incomplete.")
+            return
+        }
+        status = .checking
+        lastError = nil
+        log("*** checking the sponsor page for the roster")
+
+        do {
+            let (pageData, pageResponse) = try await fetcher.get(pageURL)
+            guard pageResponse.statusCode == 200,
+                  let pageHTML = String(data: pageData, encoding: .utf8) else {
+                throw RefreshProblem(message:
+                    "The sponsor page answered \(pageResponse.statusCode). "
+                    + "The cached roster, if any, stays in use.")
+            }
+            guard let sheetURLString =
+                    SkeeterRosterParser.rosterSheetURL(inPageHTML: pageHTML),
+                  let sheetURL = URL(string: sheetURLString) else {
+                // Anchored to the page's own "roster" phrasing, so a
+                // redesigned page is not something to guess at — same stance
+                // as the listing parser.
+                throw RefreshProblem(message:
+                    "The sponsor page no longer links a roster this app can "
+                    + "find — not guessing at one. The cached roster, if any, "
+                    + "stays in use.")
+            }
+
+            status = .downloading
+            log("> downloading the roster sheet")
+            let (bytes, sheetResponse) = try await fetcher.get(sheetURL)
+            guard sheetResponse.statusCode == 200, !looksLikeHTML(bytes),
+                  let csv = String(data: bytes, encoding: .utf8) else {
+                // Google answers a permissions problem with an HTML page,
+                // status 200 — the same lookalike trap the N1MM site has.
+                throw RefreshProblem(message:
+                    "The roster sheet refused its CSV export. "
+                    + "The cached roster, if any, stays in use.")
+            }
+            guard let converted = SkeeterRosterParser.n1mmText(
+                fromCSV: csv, token: source.token ?? source.filePrefix) else {
+                throw RefreshProblem(message:
+                    "The roster sheet has changed shape — not reading it "
+                    + "until the app is updated. The cached roster, if any, "
+                    + "stays in use.")
+            }
+
+            let data = Data(converted.utf8)
+            guard let parsed = CallHistoryFile.parse(data: data),
+                  parsed.recordCount > 0,
+                  source.isDeclared(inCommentTokens: parsed.tokens) else {
+                throw RefreshProblem(message:
+                    "The converted roster came back empty — not installing it.")
+            }
+
+            let revision = "roster " + Self.dayStamp(now)
+            try store.save(
+                partyID: party.id,
+                data: data,
+                meta: CallHistoryStore.Meta(
+                    sourceFileName: revision,
+                    listedDate: Self.dayStamp(now),
+                    fetchedAt: now,
+                    lastCheckedAt: now
+                )
+            )
+            status = .ready(
+                partyID: party.id,
+                revision: revision,
+                records: parsed.recordCount
+            )
+            log("*** installed the roster — \(parsed.recordCount) stations")
+            onIndex?(party.id, parsed)
+        } catch let error as RefreshProblem {
+            fail(error.message)
+        } catch {
+            fail("Couldn't reach the sponsor's roster: "
+                 + "\(error.localizedDescription) The cached roster, if any, "
+                 + "stays in use.")
+        }
+    }
+
+    private static func dayStamp(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        f.timeZone = TimeZone(identifier: "UTC")
+        f.locale = Locale(identifier: "en_US_POSIX")
+        return f.string(from: date)
     }
 
     // MARK: The two fetches

@@ -17,6 +17,7 @@
 		03BBE5CC8E7D73FD68269F42 /* HubSpotParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC4FB2912638C4B5052ED72 /* HubSpotParser.swift */; };
 		04860FF18E630448799E4436 /* MichiganQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C1CC73171B49CEFB01A99E /* MichiganQSOPartyTests.swift */; };
 		0589789400D49E118C812D8E /* KeyMonitorGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F8DCDD9B83142A28657268 /* KeyMonitorGate.swift */; };
+		05D024CA40AEFFD979414EC2 /* SkeeterRosterParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2959051AC941DA30C8B6439 /* SkeeterRosterParserTests.swift */; };
 		05F3DC9C7B8ABD0AA2745193 /* listing-empty-2026-07-28.html in Resources */ = {isa = PBXBuildFile; fileRef = 2F34B598BE39EC5CEFDC4DA8 /* listing-empty-2026-07-28.html */; };
 		0602550883613668175FA66C /* DXCCTableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11006733B29859B820BF14AE /* DXCCTableTests.swift */; };
 		07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DA5A46F75BD3EFC70DC50D /* CabrilloExporter.swift */; };
@@ -62,6 +63,7 @@
 		2AAD513E3761DAD300741555 /* TCPTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522A7E3D7B2C6485763680DB /* TCPTransport.swift */; };
 		2B2A1A856A6A6B9837A2EFB1 /* ElecraftK3Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6991F8344C755AD580ADCF48 /* ElecraftK3Driver.swift */; };
 		2BE2738C1B1EF3016138FB64 /* ArchiveStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C999FF4972E859F8CFD19B12 /* ArchiveStore.swift */; };
+		2BEF9804CFD3BD390516C87B /* skeeter-roster-2026-08-04.csv in Resources */ = {isa = PBXBuildFile; fileRef = 44E2C5D70B522C855225BC72 /* skeeter-roster-2026-08-04.csv */; };
 		2CCA229FB32E1D2414047EEA /* HubSpotParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BC1600467005E882D39CF4 /* HubSpotParserTests.swift */; };
 		2D7E7342666EE5D877E66C2E /* OntarioQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9470B675F129A683C136E00 /* OntarioQSOPartyTests.swift */; };
 		2E5F7FF3FE17194DE5E5DC48 /* CombinedPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28E6F3167ACCDDAF4295CAF /* CombinedPartyTests.swift */; };
@@ -212,6 +214,7 @@
 		BEB6284CA706FC461D203DAE /* HubFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC05BC2077B42827CBC8A537 /* HubFrequency.swift */; };
 		BF4B93C891EBDA79CBD3E843 /* ChallengeStanding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B598E336484B5D8CC5B9A2F9 /* ChallengeStanding.swift */; };
 		C25E39578901DDEEB086BD35 /* MultiplierRoster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9EEF88A7F58AFB94F83B07 /* MultiplierRoster.swift */; };
+		C3CDE006A150B8867C4B7794 /* SkeeterRosterParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC7EEC941E41165B0FE43C9 /* SkeeterRosterParser.swift */; };
 		C46093573C4E0C33B0EE6086 /* QSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28174F39D351A29CC80B77F2 /* QSO.swift */; };
 		C4A0BBE3CA76C438A158B860 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4617D5E5CB3103CD4E042746 /* MainView.swift */; };
 		C58A052DB7DBAC19355917EA /* CallHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCF2F37A32D904FCCB58446 /* CallHistoryStoreTests.swift */; };
@@ -260,6 +263,7 @@
 		ED92C6E0F5A3EBEAAB9FEE33 /* RateColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6183074E6FEE712AC9AAA24B /* RateColumn.swift */; };
 		EEAC967D1FF111C0098BA700 /* WorkedStationSpotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD3096B56AD7C6DE79D6B9 /* WorkedStationSpotTests.swift */; };
 		EEFDEF1FDBA0BAC08E4F5BA7 /* TestBundleSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6F9800ED08704FB3E4DFA1 /* TestBundleSetup.swift */; };
+		EF7289D626F003206FF4AB4C /* w2lj-skeeter-page-2026-08-04.html in Resources */ = {isa = PBXBuildFile; fileRef = B03F51B338E67A5CA4B43766 /* w2lj-skeeter-page-2026-08-04.html */; };
 		EFB55589DABD4E2FB936B338 /* SpotCommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458F13A4AC7D10092F93F2D9 /* SpotCommandTests.swift */; };
 		EFF567B7FAA9F043F72398D2 /* ExchangeParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EE6994E490B94BF6B0B2F7 /* ExchangeParserTests.swift */; };
 		F058AFE87E0882FC2CD3F8B2 /* PartyNoticeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CD59D82EC2EF26B0FF95BF /* PartyNoticeTests.swift */; };
@@ -374,6 +378,7 @@
 		42866F267E48E55BA7B2A686 /* DXCCLabelClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCLabelClientTests.swift; sourceTree = "<group>"; };
 		433A191B9362FB73554ADEA5 /* RateMeterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateMeterTests.swift; sourceTree = "<group>"; };
 		43C62068D45C7462F9479130 /* DXCCLabelRefreshTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCLabelRefreshTests.swift; sourceTree = "<group>"; };
+		44E2C5D70B522C855225BC72 /* skeeter-roster-2026-08-04.csv */ = {isa = PBXFileReference; path = "skeeter-roster-2026-08-04.csv"; sourceTree = "<group>"; };
 		44F85963D8820FBCA6986965 /* MississippiQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MississippiQSOPartyTests.swift; sourceTree = "<group>"; };
 		458F13A4AC7D10092F93F2D9 /* SpotCommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCommandTests.swift; sourceTree = "<group>"; };
 		4617D5E5CB3103CD4E042746 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -463,6 +468,7 @@
 		9FAEBB7A441C9608FDD951FB /* WisconsinQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WisconsinQSOPartyTests.swift; sourceTree = "<group>"; };
 		A2215D1E38A85D6578624B1D /* SpottingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpottingTests.swift; sourceTree = "<group>"; };
 		A2914E1429C4152BCF4A61DC /* ClusterProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterProtocolTests.swift; sourceTree = "<group>"; };
+		A2959051AC941DA30C8B6439 /* SkeeterRosterParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeeterRosterParserTests.swift; sourceTree = "<group>"; };
 		A3AC73A860763A7F9B91E4F5 /* RadioInternalKeyer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioInternalKeyer.swift; sourceTree = "<group>"; };
 		A3EE6994E490B94BF6B0B2F7 /* ExchangeParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeParserTests.swift; sourceTree = "<group>"; };
 		A4627D54BA3531AC67C9B082 /* CallHistoryFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryFile.swift; sourceTree = "<group>"; };
@@ -476,6 +482,7 @@
 		AC31E16279BA2D431AEE0582 /* PartyNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyNotice.swift; sourceTree = "<group>"; };
 		AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabrilloExporterTests.swift; sourceTree = "<group>"; };
 		AFA8F0CE885ABA98BA247459 /* HubSpotLifetimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotLifetimeTests.swift; sourceTree = "<group>"; };
+		B03F51B338E67A5CA4B43766 /* w2lj-skeeter-page-2026-08-04.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "w2lj-skeeter-page-2026-08-04.html"; sourceTree = "<group>"; };
 		B2436011194157AC1F402566 /* EntryCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryCommand.swift; sourceTree = "<group>"; };
 		B27158AAEFAD7C21DD3D17B0 /* LogDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDocument.swift; sourceTree = "<group>"; };
 		B311ACDB55F4A18F8A7B3A0F /* CallHistoryClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryClientTests.swift; sourceTree = "<group>"; };
@@ -568,6 +575,7 @@
 		FD32257D3D8870AAFF61403B /* ExchangeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeParser.swift; sourceTree = "<group>"; };
 		FDD35AA6A29190DFD49C7D72 /* ColoradoQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoradoQSOPartyTests.swift; sourceTree = "<group>"; };
 		FF2C8D6694C9F0C035095796 /* FlexRadioDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexRadioDriver.swift; sourceTree = "<group>"; };
+		FFC7EEC941E41165B0FE43C9 /* SkeeterRosterParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeeterRosterParser.swift; sourceTree = "<group>"; };
 		FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennesseeQSOPartyTests.swift; sourceTree = "<group>"; };
 		FFF706F28E25C2D9ED40B6E0 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -673,6 +681,8 @@
 				1C3AC5AB9FAD96FFE2C6ADA3 /* listing-qsop_al-2026-07-28.html */,
 				1897E0B91EAB87E646FB5A8F /* NAQPCW-004.txt */,
 				C720BE964388DDAC66979B1B /* QSOP_AL-2026-002.txt */,
+				44E2C5D70B522C855225BC72 /* skeeter-roster-2026-08-04.csv */,
+				B03F51B338E67A5CA4B43766 /* w2lj-skeeter-page-2026-08-04.html */,
 			);
 			path = CallHistory;
 			sourceTree = "<group>";
@@ -789,6 +799,7 @@
 				9B143A6F4360839CB52EFA48 /* SectionMultiplierTests.swift */,
 				14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */,
 				B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */,
+				A2959051AC941DA30C8B6439 /* SkeeterRosterParserTests.swift */,
 				5B4D578B0A19E09B560A6584 /* SouthCarolinaQSOPartyTests.swift */,
 				1BE324A25B998F570B53C353 /* SouthDakotaQSOPartyTests.swift */,
 				458F13A4AC7D10092F93F2D9 /* SpotCommandTests.swift */,
@@ -1015,6 +1026,7 @@
 				A4627D54BA3531AC67C9B082 /* CallHistoryFile.swift */,
 				9392F2187275B71B5789F836 /* CallHistoryPageParser.swift */,
 				D4DADB486A8C86FA27396EB4 /* CallHistoryStore.swift */,
+				FFC7EEC941E41165B0FE43C9 /* SkeeterRosterParser.swift */,
 			);
 			path = CallHistory;
 			sourceTree = "<group>";
@@ -1177,6 +1189,8 @@
 				B54E33A3B66DFC8C6151A7C0 /* listing-qsop_al-2026-07-28.html in Resources */,
 				FAC8245A7DA9F69C112C6610 /* paqp-table-empty.html in Resources */,
 				52066C8053C3E506FB6DBB48 /* sdqp-table-2024-10-12.html in Resources */,
+				2BEF9804CFD3BD390516C87B /* skeeter-roster-2026-08-04.csv in Resources */,
+				EF7289D626F003206FF4AB4C /* w2lj-skeeter-page-2026-08-04.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1311,6 +1325,7 @@
 				A9FC2E13D5AAAFEDD440F60F /* SectionMultiplierTests.swift in Sources */,
 				00C7117A6FF2B28F0F627443 /* SerialExchangeTests.swift in Sources */,
 				8E0C9BB5C8132A2F521070E4 /* SeventhCallAreaQSOPartyTests.swift in Sources */,
+				05D024CA40AEFFD979414EC2 /* SkeeterRosterParserTests.swift in Sources */,
 				5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */,
 				593C9B4F548045F68D71789E /* SouthCarolinaQSOPartyTests.swift in Sources */,
 				850DACFDE512111523B875A3 /* SouthDakotaQSOPartyTests.swift in Sources */,
@@ -1438,6 +1453,7 @@
 				3D1801F37FFEC64F2E540F52 /* SerialPortEnumerator.swift in Sources */,
 				698B227926FB01BE3C96A295 /* SerialTransport.swift in Sources */,
 				AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */,
+				C3CDE006A150B8867C4B7794 /* SkeeterRosterParser.swift in Sources */,
 				AC51CD88CDF9CBFA21C5C25F /* Spot.swift in Sources */,
 				451EEEAEAD526B20F82A3045 /* SpotClient.swift in Sources */,
 				D4DBB738375F8F40611BC220 /* SpotCommand.swift in Sources */,
