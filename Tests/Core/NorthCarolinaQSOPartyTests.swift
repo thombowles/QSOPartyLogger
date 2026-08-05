@@ -12,9 +12,12 @@ import XCTest
 /// (`BonusRule.designatedCountySweep`). Which side of the multiplier each lands
 /// on is the sponsor's own emphasis, and the cases below pin both.
 ///
-/// One scoring rule is still not modelled — the self-activation multiplier,
-/// which affects in-state entrants only — and it is why this party remains
-/// `verified: partial`.
+/// **Every scoring rule of this party is now modelled.** The self-activation
+/// multiplier was the last one outstanding and landed 2026-08-04: every NC
+/// station counts the county it operates from, fixed stations included. The
+/// party remains `verified: partial` on a provenance question that costs no
+/// points — the Cabrillo CONTEST header is the WA7BNM registry's, since the
+/// sponsor's rules state none.
 final class NorthCarolinaQSOPartyTests: XCTestCase {
 
     var ncqp: PartyDefinition!
@@ -53,9 +56,14 @@ final class NorthCarolinaQSOPartyTests: XCTestCase {
         return log
     }
 
-    func inLog(_ qsos: [QSO], from county: String = "WAK") -> ContestLog {
+    func inLog(
+        _ qsos: [QSO],
+        from county: String = "WAK",
+        station: StationProfile.CategoryStation = .fixed
+    ) -> ContestLog {
         var log = ContestLog(partyID: "ncqp")
         log.myLocation = .inState(counties: [county])
+        log.station.categoryStation = station
         log.qsos = qsos
         return log
     }
@@ -325,6 +333,11 @@ final class NorthCarolinaQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.workedValues(.province).count, 13)
         XCTAssertEqual(s.workedValues(.dx), ["DX"], "'plus one DX' — all DX is one multiplier")
         XCTAssertEqual(s.multiplierCount, 164, "the sponsor's own stated maximum")
+        // …and WAK, the county this log is operating from, is among the 100 it
+        // worked. The county-activation multiplier is forfeit on a worked county
+        // precisely so that this stays 164 rather than becoming 165, which is
+        // how the arithmetic settles a rule the sponsor never qualified.
+        XCTAssertEqual(s.selfActivatedCounties, [])
     }
 
     /// "49 US States (**not NC**)" — stated outright in the negative, as MNQP
@@ -340,6 +353,71 @@ final class NorthCarolinaQSOPartyTests: XCTestCase {
         XCTAssertEqual(ncqp.stateAliases, [:])
         XCTAssertEqual(try ExchangeParser.parse("DC", party: ncqp, role: .inState).get().locations,
                        ["DC"])
+    }
+
+    // MARK: The county you operate from — every NC station, fixed included
+
+    /// "Note: **NC stations** may include the county from which operation takes
+    /// place in the Multiplier count regardless of whether any QSOs are logged
+    /// from that same county."
+    ///
+    /// **The broadest form of this rule in the catalogue.** Four other sponsors
+    /// give it to roving categories; NCQP says "NC stations", naming Mobile and
+    /// Portable only as the multi-county case — so a *fixed* NC station counts
+    /// the county it sits in, and NCQP is the only party where that is true.
+    func testEveryNCStationCountsTheCountyItOperatesFrom() throws {
+        let act = try XCTUnwrap(ncqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(Set(act.categories), Set(StationProfile.CategoryStation.allCases))
+
+        for category in StationProfile.CategoryStation.allCases {
+            let s = ScoreEngine.score(
+                log: inLog([qso(call: "K5A", my: "WAK", their: "TX")], station: category),
+                party: ncqp
+            )
+            XCTAssertEqual(s.selfActivatedCounties, ["WAK"], "\(category.rawValue)")
+            XCTAssertEqual(s.multiplierCount, 2, "TX worked, WAK sat in")
+        }
+    }
+
+    /// "…this provision is applied to **each county activated where at least one
+    /// QSO was completed**." A mobile counts every county it made a QSO from.
+    func testAMobileCountsEachCountyItActivated() throws {
+        let act = try XCTUnwrap(ncqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(act.minCount, 1)
+        XCTAssertEqual(act.countUnit, .qsos)
+        XCTAssertEqual(act.countScope, .once, "counted once, like everything else here")
+
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "K5A", my: "WAK", their: "TX"),
+            qso(call: "K5B", my: "MEC", their: "OK"),
+            qso(call: "K5C", my: "GRM", their: "VA"),
+        ], station: .mobile), party: ncqp)
+        XCTAssertEqual(s.selfActivatedCounties, ["WAK", "MEC", "GRM"])
+        XCTAssertEqual(s.multiplierCount, 6, "three states worked, three counties sat in")
+    }
+
+    /// **The 164 ceiling is what settles this**, since the rules attach no "if
+    /// not otherwise worked" clause the way TnQP and VAQP do: 100 counties + 50
+    /// state-class tokens + 13 provinces + 1 DX is exactly 164, so a county both
+    /// operated from and worked cannot make it 165.
+    func testACountyBothOperatedFromAndWorkedCountsOnce() throws {
+        let act = try XCTUnwrap(ncqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertTrue(act.notOtherwiseWorked, "165 is not an available total")
+
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "W4A", my: "WAK", their: "WAK"),
+        ], station: .mobile), party: ncqp)
+        XCTAssertEqual(s.workedValues(.county), ["WAK"])
+        XCTAssertEqual(s.selfActivatedCounties, [], "already earned by working it")
+        XCTAssertEqual(s.multiplierCount, 1)
+    }
+
+    /// Out-of-state entrants never reach the rule: it lives on the in-state side.
+    func testOutOfStateEntrantsAreUnaffected() {
+        XCTAssertNil(ncqp.multipliers.outState.activatedCountyMultiplier)
+        let s = ScoreEngine.score(log: outLog([qso(call: "W4A", their: "WAK")]), party: ncqp)
+        XCTAssertEqual(s.selfActivatedCounties, [])
+        XCTAssertEqual(s.multiplierCount, 1)
     }
 
     // MARK: County lines — two, logged as two
@@ -431,26 +509,33 @@ final class NorthCarolinaQSOPartyTests: XCTestCase {
         XCTAssertEqual(utc.component(.month, from: windows[0].start), 3)
     }
 
-    func testNotesRecordTheRemainingLimitationAndTheFT8Exclusion() throws {
+    func testNotesRecordNoLimitationsAndTheFT8Exclusion() throws {
         let notes = try XCTUnwrap(ncqp.notes)
         XCTAssertTrue(notes.contains("verified: partial"))
-        XCTAssertTrue(notes.contains("KNOWN LIMITATION 1"), "the self-activation multiplier")
-        XCTAssertFalse(notes.contains("KNOWN LIMITATION 2"),
-                       "the 10× and the sweep both ship — only one limitation is left")
+        // None left. The 10× and the sweep stopped being limitations on
+        // 2026-07-28, the county-activation multiplier on 2026-08-04, and each
+        // one's prose is now a plain statement of what the app does.
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION"),
+                       "every scoring rule of this party is expressed")
+        XCTAssertTrue(notes.contains("THE 'RAREST OF NC' SCORING IS APPLIED, BOTH HALVES OF IT"))
+        XCTAssertTrue(notes.contains("EVERY NC STATION COUNTS THE COUNTY IT OPERATES FROM"))
         XCTAssertTrue(notes.contains("KEEP FT8/FT4 OUT OF THIS LOG"),
                       "FT8/FT4 belong to the separate Weak Signal Showcase")
         XCTAssertTrue(notes.contains("ENCODED BY COLOUR"))
+        // What keeps it partial is now a provenance question, not a score.
         let questions = try XCTUnwrap(ncqp.openQuestions)
-        XCTAssertTrue(questions.contains("self-activation multiplier"))
+        XCTAssertTrue(questions.contains("CABRILLO CONTEST VALUE"))
     }
 
-    /// The gaps that closed, stated as a roster: exactly one `scoreAffecting`
-    /// caveat is left, and it is the in-state-only one.
-    func testOnlyTheSelfActivationCaveatRemains() {
+    /// The gaps that closed, stated as a roster: nothing `scoreAffecting` is
+    /// left, and the one caveat that remains costs the operator no points.
+    func testNoScoreAffectingCaveatRemains() {
         XCTAssertEqual(ncqp.caveats.count, 1)
-        XCTAssertEqual(ncqp.caveats.first?.kind, .scoreAffecting)
+        XCTAssertEqual(ncqp.caveats.first?.kind, .provenance)
+        XCTAssertTrue(ncqp.blockingCaveats.isEmpty,
+                      "the 10×, the sweep and the self-activation multiplier all score now")
         XCTAssertTrue(
-            ncqp.caveats.first?.summary.contains("self-activation multiplier") ?? false,
-            "the 10× and the sweep no longer cost the operator anything")
+            ncqp.caveats.first?.summary.contains("WA7BNM") ?? false,
+            "what is left is where the Cabrillo CONTEST header came from")
     }
 }

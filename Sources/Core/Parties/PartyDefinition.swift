@@ -382,13 +382,23 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         var granted: [GrantedMultiplier] { grantedRaw ?? [] }
         private let grantedRaw: [GrantedMultiplier]?
 
+        /// The multiplier this side gives an entrant for each home-state county
+        /// they **operate from**, as against each county they work. `nil`
+        /// everywhere it is not the sponsor's rule, which is every party
+        /// written before this field existed (constitution Article 4).
+        ///
+        /// Meaningful on the `inState` side only: a station operating from a
+        /// home-state county is by definition inside the party.
+        let activatedCountyMultiplier: ActivatedCountyMultiplier?
+
         init(
             classes: [MultClass],
             homeStateCountsViaCounty: Bool,
             countScope: CountScope,
             dxMultCap: Int? = nil,
             maxScoredMultipliers: Int? = nil,
-            granted: [GrantedMultiplier]? = nil
+            granted: [GrantedMultiplier]? = nil,
+            activatedCountyMultiplier: ActivatedCountyMultiplier? = nil
         ) {
             self.classes = classes
             self.homeStateCountsViaCounty = homeStateCountsViaCounty
@@ -396,13 +406,58 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
             self.dxMultCapRaw = dxMultCap
             self.maxScoredMultipliersRaw = maxScoredMultipliers
             self.grantedRaw = granted
+            self.activatedCountyMultiplier = activatedCountyMultiplier
         }
 
         private enum CodingKeys: String, CodingKey {
-            case classes, homeStateCountsViaCounty, countScope
+            case classes, homeStateCountsViaCounty, countScope, activatedCountyMultiplier
             case dxMultCapRaw = "dxMultCap"
             case maxScoredMultipliersRaw = "maxScoredMultipliers"
             case grantedRaw = "grantedMultipliers"
+        }
+    }
+
+    /// A multiplier a party gives an in-state entrant for each home-state county
+    /// they **operate from** — distinct from the per-county *bonus points* that
+    /// `BonusRule.activatedCountyCount` already models, because a multiplier
+    /// compounds against every QSO point in the log rather than being added once
+    /// at the end.
+    ///
+    /// Five sponsors have this rule and **no two of them agree**, so every field
+    /// is required: this is a new type, so requiring them breaks no existing
+    /// file, and a default would be one sponsor's rule silently applied to the
+    /// next. See
+    /// `docs/superpowers/specs/2026-07-28-activated-county-multipliers-design.md`.
+    struct ActivatedCountyMultiplier: Codable, Equatable, Sendable {
+        /// How many of `countUnit`, made from a county, before it counts.
+        /// SCQP and NCQP 1, TnQP and VAQP 10, MOQP 50.
+        let minCount: Int
+        /// What is counted toward `minCount`.
+        let countUnit: CountUnit
+        /// How often the granted multiplier counts. **Not** inherited from the
+        /// enclosing rule's `countScope`: TnQP counts worked multipliers per
+        /// band and grants this one once, so inheriting would over-credit.
+        let countScope: CountScope
+        /// The entrant station categories the sponsor names. NCQP names every
+        /// NC station including fixed, so this is not `isRovingCategory`.
+        let categories: [StationProfile.CategoryStation]
+        /// Whether working the county forfeits the activation multiplier.
+        /// TnQP — "if they do not earn a multiplier for that county otherwise";
+        /// VAQP — "if not otherwise worked". NCQP and MOQP say it by
+        /// arithmetic: their printed maxima (164 total, 115 counties) are
+        /// exactly their entity lists, so neither can double-count. SCQP alone
+        /// lists worked and activated counties as separate numbered
+        /// multipliers, states no ceiling, and is therefore additive.
+        let notOtherwiseWorked: Bool
+
+        enum CountUnit: String, Codable, Sendable {
+            /// Valid QSOs made from the county — four of the five sponsors.
+            /// MOQP: "50 or more valid contacts from a county".
+            case qsos
+            /// Distinct callsigns worked from the county. VAQP: "contact
+            /// 10 (ten) or more **different stations** while operating from a
+            /// county or independent city".
+            case stations
         }
     }
 

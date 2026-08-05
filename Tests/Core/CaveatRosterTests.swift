@@ -7,13 +7,28 @@ final class CaveatRosterTests: XCTestCase {
 
     private var parties: [PartyDefinition] { PartyCatalog.loadBundled() }
 
-    /// The 22 parties where this app will mis-score or mis-export, as against
-    /// the 39 that `verified: partial` used to warn about. A new entry here
-    /// means a real scoring gap was found; a departure means one was closed.
+    /// The parties where this app will mis-score or mis-export, as against the
+    /// 39 that `verified: partial` used to warn about. A new entry here means a
+    /// real scoring gap was found; a departure means one was closed.
+    ///
+    /// **`scqp` left 2026-08-04**, when `activatedCountyMultiplier` landed. Its
+    /// only `scoreAffecting` item was that SC mobile and expedition stations
+    /// undercounted the counties they activated; the app now counts them, and
+    /// what is left is one `ruleInference` about how 9.2.2's numbered list
+    /// reads, which correctly raises no warning.
+    ///
+    /// **`ncqp` left 2026-08-04 too**, and it is the only party to have shed
+    /// three `scoreAffecting` caveats. Two closed on 2026-07-28 — the "Rarest
+    /// of NC" 10× points as `countyPointFactor` and the five-county sweep as a
+    /// `designatedCountySweep` bonus — and the self-activation multiplier
+    /// closed with `activatedCountyMultiplier`. No scoring rule of that party
+    /// is now unexpressed. It stays `verified: partial`, on a `provenance`
+    /// item that correctly raises no warning: the Cabrillo CONTEST header is
+    /// the WA7BNM registry's, since the sponsor's rules state none.
     private static let badges: Set<String> = [
         "arqp", "deqp", "fqp", "idqp", "ilqp", "in7qpne", "kyqp", "laqp",
-        "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp",
-        "nmqp", "oqp", "qcqp", "scqp", "vaqp", "vtqp", "warun", "wiqp",
+        "moqp", "msqp", "naqpcw", "naqpssb", "ndqp", "neqp",
+        "nmqp", "oqp", "qcqp", "vaqp", "vtqp", "warun", "wiqp",
     ]
 
     func testBadgeRosterIsExactlyAsExpected() {

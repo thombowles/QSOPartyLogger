@@ -81,10 +81,13 @@ Entries are in contest-date order.
   multiplier reachable only through a county, which the sponsor states more
   plainly than any other party here. DC counts in its own right; US territories
   are DX. 46 counties with mixed 3/4 codes (`LEE` alone is three), and Calhoun is
-  `CHOU` — the same code Alabama uses for its own Calhoun. `verified: partial`:
-  the rules cap county-line operation nowhere, and SC mobile/expedition entrants
-  undercount, since their per-county-activated **multiplier** is modelled here
-  only as a bonus.
+  `CHOU` — the same code Alabama uses for its own Calhoun. **SC mobile, portable
+  and expedition stations count each county they activate as a multiplier**, once
+  per band per mode, exactly as 9.2.2 and 6.2.3 word it. `verified: partial`: the
+  rules cap county-line operation nowhere, and 9.2.2 lists worked and activated
+  counties as separate numbered multipliers with no exclusion clause and no
+  county ceiling — so a county both sat in and worked ships counting **twice**,
+  which is the one reading of the five parties with this rule that is additive.
 - **North Carolina QSO Party** (Mar 1, 2026) — ten hours, Sunday only. 100
   counties, and **the sponsor encodes each code as the dark-red letters of the
   county name**, not as its capitals: `CABarrus` is `CAB`, `DaViDson` is `DVD`.
@@ -100,10 +103,17 @@ Entries are in contest-date order.
   than a bonus outside it. Five of those ten pays a further 500 afterwards,
   once. Both sides earn the 10×, and both numbers are parsed out of the rules
   text by the generator, which asserts that 10× the ordinary points reproduces
-  the table the sponsor prints beside the factor. Still `verified: partial` for
-  one rule: an in-state entrant may count each county they operate *from*, and
-  this app has no self-activation multiplier. FT8/FT4 belong to a separate Weak
-  Signal Showcase and must be kept out of this log.
+  the table the sponsor prints beside the factor. **Every NC entrant also counts
+  the county it operates from as a multiplier**, fixed stations included — the
+  rule says "NC stations", naming mobiles and portables only as the multi-county
+  case, which makes this the one party in the catalogue where a fixed station
+  gains a multiplier that way. A county both sat in and worked counts once: 164
+  is the sponsor's own ceiling, so 165 is not available. That was the last of
+  its three scoring gaps, so **an NCQP score from this app is now a total rather
+  than a floor**, in state and out; it stays `verified: partial` on a question
+  that costs no points, the Cabrillo `CONTEST:` header coming from the WA7BNM
+  registry because the sponsor's rules state none. FT8/FT4 belong to a separate
+  Weak Signal Showcase and must be kept out of this log.
 - **Oklahoma QSO Party** (Mar 14–15, 2026) — 20 hours in two windows. 77
   counties, and **the sponsor names its own traps**: seven pairs it says "cause
   considerable confusion" (`GAR`/`GRV`, `GRA`/`GNT`, `HAR`/`HRP`, `MCL`/`MCU`,
@@ -148,9 +158,13 @@ Entries are in contest-date order.
   Fairfax *County*, so the letter is not a test. Exchange is a **QSO number and a
   location, with no signal report**. Multipliers once overall; Virginia itself
   explicitly excluded. County lines are permitted and pay for **one** entity —
-  neither of the usual shapes. `verified: partial`: contacts with Virginia
-  mobiles are worth 3 points and this app pays 1 or 2, and the 50-point bonus
-  stations are published only on the sponsor's web site.
+  neither of the usual shapes. Virginia mobiles, rovers and expeditions claim an
+  entity as a **multiplier** once they work **ten different stations** from it —
+  the only party here whose threshold counts stations rather than QSOs, so one
+  chaser worked on ten bands pays nothing — and that is on top of the separate
+  100-point bonus, which needs only one QSO. `verified: partial`: contacts with
+  Virginia mobiles are worth 3 points and this app pays 1 or 2, and the 50-point
+  bonus stations are published only on the sponsor's web site.
 - **Louisiana QSO Party** (Apr 4, 2026) — **the first bundled party whose home
   entities are parishes**, all 64 of them, with mixed 3/4-character codes. Nine
   are `St.` parishes and no two follow the same pattern — watch `SMT` St. Martin
@@ -178,7 +192,13 @@ Entries are in contest-date order.
   whose codes share all three letters in a different order. Ten bands.
   **Five bonus rules, of which only two fit**: `WØMA` and `KØGQ` at 100 each are
   modelled; a 40/80 m daytime +1-per-QSO bonus capped at 250 and a flat 100 for
-  submitting a Cabrillo log are not. `verified: partial`.
+  submitting a Cabrillo log are not. A roving Missouri entry claims each county
+  it makes **50 contacts** from as a multiplier — **the highest threshold of the
+  five parties with that rule**, five times Tennessee's and Virginia's ten.
+  `verified: partial`, and one of its open questions is that rule: it names
+  "mobile or portable", MOQP defines a third roving class it does not name, and
+  Expedition ships covered on the strength of the same rule paying "from a
+  county or *county lines*".
 - **New Mexico QSO Party** (Apr 11, 2026) — 12 hours, sharing Missouri's day,
   and **the first bundled party whose power multiplier fit a whole number**: QRP
   ×5, Low ×2, High ×1, where Vermont's and Wisconsin's are the same shape with a
@@ -354,8 +374,13 @@ Entries are in contest-date order.
 - **Tennessee QSO Party** (Sep 6, 2026) — 95 counties, flat 3 points in every
   mode, mults **per band** (all 95 on two bands = 190), two-county lines
   allowed, DC counts as Maryland, K4TCG pays 100 bonus **per QSO** and TN
-  mobiles 500 per county activated with 10+ QSOs. `verified: partial` — the
-  posted rules document is still the 2025 edition.
+  mobiles 500 per county activated with 10+ QSOs. Those same ten QSOs also earn
+  a **multiplier** for the county — and the sponsor says "**one** multiplier",
+  so unlike everything else here it is counted once rather than per band, which
+  is why the schema makes each party state that scope rather than inherit it.
+  Work somebody in the county on any band and the multiplier is forfeit; the
+  bonus still pays. `verified: partial` — the posted rules document is still the
+  2025 edition.
 - **Colorado QSO Party** (Sep 12, 2026) — verified against rules the sponsor
   itself dates "revised as of July 15, 2026". 64 counties with famously
   collision-prone codes (`MON` is Monte**zuma**, not Montrose), flat 2 points,

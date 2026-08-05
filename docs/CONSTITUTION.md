@@ -409,6 +409,9 @@ question under Article 3, not an invitation to infer.
 | Bonus station | `bonuses: [{"type": "workStation", …}]` with the right `scope` |
 | Per-N-counties mobile bonus | `mobileCountyCount` |
 | Bonus for counties *I* activate | `activatedCountyCount` |
+| **Multiplier** for counties *I* activate | `multipliers.inState.activatedCountyMultiplier` — every field required; no two sponsors agree on any of them |
+| Named counties pay N× QSO points | `countyPointFactor` (scales the points table, so it lands *inside* the multiplication) |
+| "Work five of these ten for 500" | `bonuses: [{"type": "designatedCountySweep", …}]` — a named set, unlike `sweepTiers` |
 | Tiered county sweep | `sweepTiers` (ascending; highest reached pays, non-stacking) |
 | Power / station-category score multiplier | `scoreMultipliers` |
 | Operating windows | `schedule` (UTC) |

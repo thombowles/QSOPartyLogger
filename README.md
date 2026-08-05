@@ -508,6 +508,33 @@ Only the first two interrupt you. Warnings and notes are drawn as separate
 headed groups — an orange ⚠︎ over the warnings, a grey ⓘ over the notes — so the
 icon says which is which without relying on colour.
 
+One field is worth calling out because **every part of it is required, on
+purpose**. Five sponsors give an in-state station a multiplier for each county
+it *operates from*, on top of the ones it works, and no two of them agree on
+any detail — so a default would be one sponsor's rule silently applied to the
+next:
+
+```jsonc
+"inState": {
+  "classes": ["county", "state", "province", "dx"],
+  "activatedCountyMultiplier": {
+    "minCount": 10,              // how many before the county counts
+    "countUnit": "stations",     // "qsos", or "stations" for distinct calls
+    "countScope": "once",        // this multiplier's scope, NOT the side's
+    "categories": ["MOBILE", "ROVER", "EXPEDITION"],
+    "notOtherwiseWorked": true   // does working the county forfeit it?
+  }
+}
+```
+
+VAQP counts ten *different stations* where MOQP counts fifty *QSOs*; TnQP grants
+it **once** while counting worked multipliers per band, so the scope cannot be
+inherited; NCQP gives it to **every** in-state entrant, fixed stations included,
+so it is not a roving-category rule; and SCQP alone is additive, counting a
+county both sat in and worked twice. This is a *multiplier*, distinct from the
+per-county `activatedCountyCount` **bonus** — it compounds against every QSO
+point in the log rather than being added once at the end.
+
 Adding a party to the bundled set is governed by
 [docs/CONSTITUTION.md](docs/CONSTITUTION.md). Read it first.
 
@@ -524,7 +551,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**1950 unit tests**, none of which need hardware or a network — no serial port,
+**1994 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history

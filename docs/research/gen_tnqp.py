@@ -70,6 +70,32 @@ tnqp = {
             # a state"), so no home-state-via-county credit.
             "homeStateCountsViaCounty": False,
             "countScope": "perBand",
+            # "Tennessee mobiles and rovers may claim one multiplier for any
+            # Tennessee county from which they complete at least 10 QSOs if they
+            # do not earn a multiplier for that county otherwise."
+            "activatedCountyMultiplier": {
+                "minCount": 10,
+                # "at least 10 QSOS" - VaQP's near-identical rule says "10 (ten)
+                # or more different STATIONS", which is a different number. Do
+                # not read one across to the other.
+                "countUnit": "qsos",
+                # "ONE multiplier" - THE REASON THIS FIELD CARRIES ITS OWN SCOPE
+                # RATHER THAN INHERITING THE SIDE'S. Everything else TnQP counts
+                # accumulates per band; this one does not, and inheriting
+                # "perBand" would pay a mobile once for every band it used from
+                # the county instead of once for the county.
+                "countScope": "once",
+                # "Tennessee MOBILES AND ROVERS". Portable is not a TnQP roving
+                # class at all: "All Tennessee portable operations operating
+                # from a single location compete in the Fixed categories."
+                "categories": ["MOBILE", "ROVER"],
+                # "IF THEY DO NOT EARN A MULTIPLIER FOR THAT COUNTY OTHERWISE",
+                # stated outright. Load-bearing here in a way it is not for the
+                # once-scoped parties: TnQP's worked county keys are scoped by
+                # band and this one is not, so the two would never have
+                # collided, and set semantics alone would have paid both.
+                "notOtherwiseWorked": True,
+            },
         },
         # "Multipliers accumulate on a per band basis. Multipliers are Tennessee
         # counties (95 max/band) ... all 95 on 40M and again on 20M = 190."
@@ -115,17 +141,23 @@ tnqp = {
         "DXCC. Out-of-state stations work only Tennessee stations. County lines allowed up "
         "to 2 counties at once (three- and four-county lines are forbidden). K4TCG pays 100 "
         "bonus points PER QSO, and TN mobiles/rovers 500 per county with 10+ QSOs; bonuses "
-        "are added after the multiplier. No power or category multiplier. All amateur "
+        "are added after the multiplier. "
+        "TN MOBILES AND ROVERS ALSO CLAIM A MULTIPLIER FOR EACH COUNTY THEY MAKE 10 QSOS "
+        "FROM: 'Tennessee mobiles and rovers may claim one multiplier for any Tennessee "
+        "county from which they complete at least 10 QSOs if they do not earn a multiplier "
+        "for that county otherwise.' The app now counts it, alongside the 500-point bonus "
+        "the same threshold pays. NOTE THE WORD 'ONE': this multiplier is counted ONCE for "
+        "the log, while every other multiplier in this party accumulates PER BAND - so a "
+        "mobile that works four bands from a county gets one activation multiplier, not "
+        "four. And 'if they do not earn a multiplier for that county otherwise' is honoured "
+        "on ANY band: work somebody in that county on any one band and the activation "
+        "multiplier is forfeit. No power or category multiplier. All amateur "
         "bands are valid except 60, 30, 17 and 12 m — 1.25 m included, shipped since "
         "2026-07-24 when the app gained the band; the sponsor's rule itself never "
         "changed. "
         "OPEN QUESTIONS (why this is partial): (1) the posted rules document is titled for "
         "2025 and no 2026-specific revision exists yet — re-check tnqp.org/rules/ in late "
-        "August 2026. (2) Not modeled: 'Tennessee mobiles and rovers may claim one "
-        "MULTIPLIER for any Tennessee county from which they complete at least 10 QSOs if "
-        "they do not earn a multiplier for that county otherwise' — the matching 500-point "
-        "BONUS is modeled, but this extra self-activation multiplier is not, so a TN "
-        "mobile/rover may see a slightly low multiplier count."
+        "August 2026."
     ),
 }
 

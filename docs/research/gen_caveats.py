@@ -124,11 +124,14 @@ KINDS = {
         (1, "cosmetic", "Entrants outside North America: contacts with other non-NA stations are credited here but removed by the sponsor. No effect on NA entrants."),
         (2, "cosmetic", "Log United Nations HQ as 4U1 - the checklist's '4U1/u' cannot be typed because '/' separates county lines."),
     ],
+    # The third scoreAffecting item — in-state rovers short the counties they
+    # made 50 contacts from — left 2026-08-04 when `activatedCountyMultiplier`
+    # landed, which also renumbered the open questions: the shipped set now
+    # covers Missouri Expedition, which rule 3 does not name.
     "moqp": [
         (0, "scoreAffecting", "The 40 and 80 m daytime bonus is not applied."),
         (1, "scoreAffecting", "The 100-point electronic-submission bonus is not applied."),
-        (2, "scoreAffecting", "In-state rovers are short the self-activation multiplier for each county they work 50+ QSOs from."),
-        (4, "ruleInference", "The county-line cap and the out-of-state restriction are both this app’s defaults, not the sponsor’s numbers."),
+        (2, "ruleInference", "An expedition is credited for the counties it activates, which rule 3 names only mobiles and portables for."),
     ],
     "msqp": [
         (0, "scoreAffecting", "Grid-square multipliers are not counted, and this is the biggest gap here."),
@@ -137,12 +140,17 @@ KINDS = {
         (3, "scoreAffecting", "Portable and mobile stations score differently, which is not modelled."),
         (5, "ruleInference", "County lines are unmentioned in the rules; a two-county entry is refused on the reading that silence is not permission."),
     ],
-    # The "Rarest of NC" 10× points and the 500-point sweep both ship now
-    # (countyPointFactor and a designatedCountySweep bonus), so the two
-    # scoreAffecting caveats they carried are gone. The self-activation
-    # multiplier is what is left, and it is why this party stays partial.
+    # NCQP carried three scoreAffecting caveats and now carries none. The
+    # "Rarest of NC" 10× points and the 500-point sweep shipped 2026-07-28
+    # (countyPointFactor and a designatedCountySweep bonus); the third, the
+    # self-activation multiplier, shipped 2026-08-04. Every scoring rule of
+    # this party is expressed, so it leaves the badge roster entirely.
+    #
+    # It stays `verified: partial` on a provenance item, which correctly
+    # raises no warning (Article 3): the Cabrillo CONTEST value is the WA7BNM
+    # registry's, not the committee's, whose rules omit the header.
     "ncqp": [
-        (0, "scoreAffecting", "In-state entrants are short the self-activation multiplier for each county they operate from."),
+        (0, "provenance", "The Cabrillo CONTEST header comes from the WA7BNM registry; the sponsor's rules never state one."),
     ],
     "ndqp": [
         (0, "scoreAffecting", "A North Dakota station cannot log a DX country the way the rules ask."),
@@ -192,9 +200,12 @@ KINDS = {
         (0, "scoreAffecting", "The mobile activation bonus can be over-credited when one station is worked on three bands."),
         (1, "ruleInference", "Whether 60 m is legal is ambiguous; seven bands ship without it."),
     ],
+    # The activation multiplier landed 2026-08-04, which removed the party's
+    # only scoreAffecting item and de-badged it. What is left is one item
+    # carrying two inferences: the county-line default, and the additive
+    # reading of 9.2.2's numbered list.
     "scqp": [
-        (0, "scoreAffecting", "SC mobile and expedition stations undercount their multipliers."),
-        (1, "ruleInference", "The rules cap no county-line count; this app’s default of four ships."),
+        (0, "ruleInference", "An activated county that was also worked counts twice, and the county-line cap is this app’s default of four."),
     ],
     "sdqp": [
         (0, "ruleInference", "Whether South Dakota counts itself, and whether outside stations may work only SD, are both inferred."),
@@ -208,10 +219,11 @@ KINDS = {
         (0, "provenance", "The rules document is titled 2025 and no 2026 revision exists yet."),
     ],
     "tqp": [],
+    # The third item — in-state rovers short the county they work ten stations
+    # from — left 2026-08-04, when `activatedCountyMultiplier` landed.
     "vaqp": [
         (0, "scoreAffecting", "Contacts with Virginia mobiles, expeditions and rovers are worth 3 points and are paid 1 or 2 here."),
         (1, "scoreAffecting", "The bonus stations are not shipped; confirm the list before submitting."),
-        (2, "scoreAffecting", "In-state rovers are short the self-activation multiplier for each county or city they work ten stations from."),
     ],
     # The power multiplier's caveat is gone as of 2026-07-28: x1.5 is applied,
     # so the score is no longer a floor. What replaces it is narrower and

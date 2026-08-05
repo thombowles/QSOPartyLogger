@@ -252,6 +252,112 @@ final class VirginiaQSOPartyTests: XCTestCase {
                        "one QSO from each of two entities")
     }
 
+    // MARK: The entity you work ten stations from — and it is stations, not QSOs
+
+    /// "Mobile, Rover, and Expedition stations that contact **10 (ten) or more
+    /// different stations** while operating from a county or independent city
+    /// may claim it as a multiplier, if not otherwise worked."
+    ///
+    /// **The only party of the five with this rule that counts stations.** The
+    /// case that separates the two readings: one chaser worked on ten bands is
+    /// ten QSOs and one station, and pays nothing.
+    func testTenDifferentStationsNotTenQSOs() throws {
+        let act = try XCTUnwrap(vaqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(act.minCount, 10)
+        XCTAssertEqual(act.countUnit, .stations, "\"10 (ten) or more different stations\"")
+
+        // Ten QSOs from FFX, all with the same station on ten different bands.
+        let oneChaser = vaqp.validBands.prefix(10).map { band in
+            qso(call: "K5SAME", band: band, mode: .cw, my: "FFX", their: "TX")
+        }
+        let s = ScoreEngine.score(log: inLog(Array(oneChaser), station: .rover), party: vaqp)
+        XCTAssertEqual(s.validQSOs, 10, "ten valid QSOs — a new band is not a dupe")
+        XCTAssertEqual(s.selfActivatedCounties, [], "but only one different station")
+
+        // Ten different stations on one band does qualify.
+        let tenChasers = (0..<10).map { i in
+            qso(call: "K5C\(i)", band: .m40, mode: .cw, my: "FFX", their: "TX")
+        }
+        XCTAssertEqual(
+            ScoreEngine.score(log: inLog(tenChasers, station: .rover), party: vaqp)
+                .selfActivatedCounties, ["FFX"]
+        )
+
+        // Nine falls short — the threshold is inclusive at ten and not below.
+        XCTAssertEqual(
+            ScoreEngine.score(log: inLog(Array(tenChasers.dropLast()), station: .rover), party: vaqp)
+                .selfActivatedCounties, []
+        )
+    }
+
+    /// "Mobile, Rover, and Expedition stations" — VAQP's station classes are
+    /// Fixed, Mobile, Expedition and Rover, with no Portable, so those three
+    /// are the whole of the roving side. A fixed Virginia station gains nothing.
+    func testOnlyMobilesRoversAndExpeditionsClaimIt() throws {
+        let act = try XCTUnwrap(vaqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(Set(act.categories), [.mobile, .rover, .expedition])
+
+        let tenChasers = (0..<10).map { i in
+            qso(call: "K5C\(i)", band: .m40, mode: .cw, my: "FFX", their: "TX")
+        }
+        for category in StationProfile.CategoryStation.allCases {
+            let s = ScoreEngine.score(log: inLog(tenChasers, station: category), party: vaqp)
+            XCTAssertEqual(
+                s.selfActivatedCounties,
+                [.mobile, .rover, .expedition].contains(category) ? ["FFX"] : [],
+                "\(category.rawValue)"
+            )
+        }
+    }
+
+    /// "…**if not otherwise worked**." The first of the five sponsors to state
+    /// the condition outright, and the reason it is a field.
+    func testAnEntityAlreadyWorkedIsNotClaimedAgain() throws {
+        let act = try XCTUnwrap(vaqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertTrue(act.notOtherwiseWorked)
+
+        // Ten different stations from FFX, one of them *in* FFX.
+        var rows = (0..<9).map { i in
+            qso(call: "K5C\(i)", band: .m40, mode: .cw, my: "FFX", their: "TX")
+        }
+        rows.append(qso(call: "W4FFX", band: .m40, mode: .cw, my: "FFX", their: "FFX"))
+        let s = ScoreEngine.score(log: inLog(rows, station: .rover), party: vaqp)
+        XCTAssertEqual(s.workedValues(.county), ["FFX"])
+        XCTAssertEqual(s.selfActivatedCounties, [], "FFX was otherwise worked")
+        XCTAssertEqual(s.multiplierCount, 2, "FFX worked, and TX")
+    }
+
+    /// The multiplier and the 100-point bonus are **separate rules with
+    /// different thresholds** — one valid QSO for the bonus, ten different
+    /// stations for the multiplier — and both apply to the same log.
+    func testTheMultiplierAndTheBonusAreIndependent() {
+        // One QSO from RIX: the bonus pays, the multiplier does not.
+        let thin = ScoreEngine.score(log: inLog([
+            qso(call: "K5A", my: "RIX", their: "TX"),
+        ], station: .rover), party: vaqp)
+        XCTAssertEqual(thin.bonusPoints, 100, "\"from which they log a valid QSO\"")
+        XCTAssertEqual(thin.selfActivatedCounties, [], "one station is not ten")
+
+        // Ten different stations from RIX: both pay.
+        let full = ScoreEngine.score(log: inLog((0..<10).map { i in
+            qso(call: "K5C\(i)", band: .m40, mode: .cw, my: "RIX", their: "TX")
+        }, station: .rover), party: vaqp)
+        XCTAssertEqual(full.bonusPoints, 100)
+        XCTAssertEqual(full.selfActivatedCounties, ["RIX"])
+        XCTAssertEqual(full.multiplierCount, 2, "TX worked, RIX activated")
+        XCTAssertEqual(full.qsoPoints, 20, "ten CW QSOs at 2")
+        XCTAssertEqual(full.total, 20 * 2 + 100, "multiplied, then the bonus added")
+    }
+
+    /// Out-of-state entrants never reach the rule.
+    func testOutOfStateEntrantsAreUnaffected() {
+        XCTAssertNil(vaqp.multipliers.outState.activatedCountyMultiplier)
+        XCTAssertEqual(
+            ScoreEngine.score(log: outLog([qso(call: "W4A", their: "FFX")]), party: vaqp)
+                .selfActivatedCounties, []
+        )
+    }
+
     /// **KNOWN LIMITATION 2, pinned.** "A QSO with each different VA QSO Party
     /// Bonus Station gives a one-time bonus of 50 points. **Bonus stations are
     /// listed on the VaQP Web Site**" — the rules name none, so none can ship.
@@ -323,12 +429,16 @@ final class VirginiaQSOPartyTests: XCTestCase {
         XCTAssertEqual(eastern.component(.hour, from: windows[1].end), 20)
     }
 
-    func testNotesRecordAllThreeLimitations() throws {
+    func testNotesRecordBothRemainingLimitations() throws {
         let notes = try XCTUnwrap(vaqp.notes)
         XCTAssertTrue(notes.contains("verified: partial"))
-        for n in 1...3 {
+        // Two, not three: the self-activation multiplier landed 2026-08-04.
+        for n in 1...2 {
             XCTAssertTrue(notes.contains("KNOWN LIMITATION \(n)"), "limitation \(n)")
         }
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION 3"))
+        XCTAssertTrue(notes.contains("TEN DIFFERENT STATIONS, NOT TEN QSOS"),
+                      "the unit is the trap this party sets for the next maintainer")
         XCTAssertTrue(notes.contains("FOUR NAMES APPEAR TWICE"))
         XCTAssertTrue(try XCTUnwrap(vaqp.openQuestions).contains("VaQP web site"))
     }

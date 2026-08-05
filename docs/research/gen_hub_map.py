@@ -4,6 +4,12 @@ live qsopartyhub.com pages.
 
 Source: http://qsopartyhub.com/{prefix}-spots.php  (fetched 2026-07-25)
 
+RUN THIS AFTER ANY PARTY GENERATOR THAT DOES NOT WRITE `hubSpots` ITSELF —
+gen_tnqp.py is the one, since it predates the hub map. A `gen_<party>.py`
+rewrites its JSON file whole, so it silently drops any block it does not know
+about, exactly as with gen_caveats.py and gen_callhistory.py.
+`HubSpotSourceTests.testExactlyThirtyNinePartiesAreServedByTheHub` catches it.
+
 Two things here are deliberate and load-bearing:
 
 1. **The table URL comes from the page's iframe, never from the party id.**

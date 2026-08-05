@@ -55,28 +55,34 @@ final class PartyNoticeTests: XCTestCase {
         }
     }
 
-    /// Missouri is the reported case: three orange lines, then one grey one.
-    /// The line that used to vanish is `rows[1]`, and it is orange.
+    /// Missouri is the reported case: orange lines, then a grey one. The line
+    /// that used to vanish is `rows[1]`, and it is orange.
+    ///
+    /// **It was three orange and one grey until 2026-08-04**, when rule 3's
+    /// county-activation multiplier landed: the third orange line went away and
+    /// the open question about which categories it covers became the party's
+    /// second advisory. Two and two now — still both groups, still the same
+    /// identity contract.
     func testMissouriDrawsEveryLineOnceInOrder() throws {
         let rows = PartyNotice(party: try party("moqp")).rows
 
-        XCTAssertEqual(rows.count, 6)
+        XCTAssertEqual(rows.count, 5)
         XCTAssertEqual(rows.map(\.tone), [
-            .warning, .warning, .warning, .warning, .informational, .informational,
+            .warning, .warning, .warning, .informational, .informational,
         ])
         XCTAssertEqual(rows.map(\.id), [
-            "warning.heading", "warning.0", "warning.1", "warning.2",
+            "warning.heading", "warning.0", "warning.1",
             "informational.heading", "informational.0",
         ])
-        XCTAssertEqual(rows[0].text, "3 things this app cannot score for you here.")
+        XCTAssertEqual(rows[0].text, "2 things this app cannot score for you here.")
         XCTAssertEqual(rows[1].text, "The 40 and 80 m daytime bonus is not applied.")
-        XCTAssertEqual(rows[4].text, "1 note on how this app handles this party.")
+        XCTAssertEqual(rows[3].text, "1 note on how this app handles this party.")
         XCTAssertTrue(
-            rows[5].text.hasPrefix("The county-line cap"),
-            "got: \(rows[5].text)"
+            rows[4].text.hasPrefix("An expedition is credited"),
+            "got: \(rows[4].text)"
         )
         // The advisory line is drawn once, not once per colliding slot.
-        XCTAssertEqual(rows.filter { $0.text == rows[5].text }.count, 1)
+        XCTAssertEqual(rows.filter { $0.text == rows[4].text }.count, 1)
     }
 
     /// Only headings carry an icon, and every group contributes exactly one.
@@ -94,13 +100,15 @@ final class PartyNoticeTests: XCTestCase {
         }
     }
 
-    /// 20 of 48 bundled parties carry both kinds, so the two-group case is not
+    /// 19 of 48 bundled parties carry both kinds, so the two-group case is not
     /// an edge case — it is what most warned-about parties look like. A change
     /// here means a party's caveats were reclassified (the NAQP pair arrived
-    /// carrying both kinds; MNQP left when its export blocker closed).
+    /// carrying both kinds; MNQP left when its export blocker closed; SCQP left
+    /// 2026-08-04 when the activation multiplier closed its only scoring gap,
+    /// leaving one advisory group).
     func testTheTwoGroupCaseIsCommon() {
         let mixed = parties.filter { PartyNotice(party: $0).groups.count == 2 }.map(\.id)
-        XCTAssertEqual(mixed.count, 20, "got: \(mixed)")
+        XCTAssertEqual(mixed.count, 19, "got: \(mixed)")
     }
 
     /// Delaware is the worked example: three things the app cannot score, two
@@ -203,17 +211,21 @@ final class PartyNoticeTests: XCTestCase {
 
     /// Singular and plural both read as English.
     ///
-    /// **Amended 2026-07-28**: North Carolina was the plural example at three,
-    /// and is down to one now that its "Rarest of NC" 10× points and its
-    /// five-county sweep both score. Ontario carries three of its own.
+    /// **Amended 2026-08-04**: North Carolina was the plural example at three,
+    /// briefly at one, and now raises no warning at all — the "Rarest of NC"
+    /// 10× points and the five-county sweep scored from 2026-07-28, and the
+    /// self-activation multiplier from 2026-08-04, which was the last of its
+    /// three. What it still carries is a `provenance` caveat, which is exactly
+    /// the case that must not warn. Salmon Run carries the singular instead,
+    /// and Ontario three of its own.
     func testHeadingsAgreeInNumber() throws {
         XCTAssertEqual(
             PartyNotice(party: try party("warun")).warning?.header,
             "1 thing this app cannot score for you here."
         )
-        XCTAssertEqual(
-            PartyNotice(party: try party("ncqp")).warning?.header,
-            "1 thing this app cannot score for you here."
+        XCTAssertNil(
+            PartyNotice(party: try party("ncqp")).warning,
+            "every scoring rule of NCQP is expressed; its one caveat is provenance"
         )
         XCTAssertEqual(
             PartyNotice(party: try party("oqp")).warning?.header,

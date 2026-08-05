@@ -248,6 +248,126 @@ final class TennesseeQSOPartyTests: XCTestCase {
         XCTAssertEqual(ScoreEngine.score(log: fixed, party: tnqp).bonusPoints, 0)
     }
 
+    // MARK: The same ten QSOs also earn a multiplier
+
+    /// "Tennessee mobiles and rovers may claim **one** multiplier for any
+    /// Tennessee county from which they complete at least 10 QSOs if they do not
+    /// earn a multiplier for that county otherwise."
+    ///
+    /// **The word "one" is what makes this party the reason the field carries
+    /// its own scope.** Every other multiplier here accumulates per band; this
+    /// one does not, so inheriting the side's `countScope` would pay a mobile
+    /// once for each band it used from the county instead of once for the county.
+    func testTheActivationMultiplierIsCountedOnceWhileEverythingElseIsPerBand() throws {
+        XCTAssertEqual(tnqp.multipliers.inState.countScope, .perBand)
+        let act = try XCTUnwrap(tnqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(act.countScope, .once, "\"may claim ONE multiplier\"")
+        XCTAssertEqual(act.minCount, 10)
+        XCTAssertEqual(act.countUnit, .qsos, "\"at least 10 QSOs\" — not VaQP's ten stations")
+
+        // Ten QSOs from DAVI, spread over four bands, all with out-of-state
+        // chasers. Under the side's perBand scope this would be four keys.
+        let bands: [Band] = [.m80, .m40, .m20, .m15]
+        let rows = (0..<10).map { i in
+            qso(call: "K5C\(i)", band: bands[i % 4], mode: .cw, my: "DAVI", their: "TX")
+        }
+        let s = ScoreEngine.score(log: inLog(rows, station: .mobile), party: tnqp)
+        XCTAssertEqual(s.validQSOs, 10)
+        XCTAssertEqual(s.selfActivatedCounties, ["DAVI"])
+        XCTAssertEqual(
+            s.multiplierKeys.filter { $0.activated }.count, 1,
+            "one multiplier for the county, not one per band operated from it"
+        )
+        XCTAssertEqual(s.multiplierCount, 5, "TX on each of four bands, plus DAVI once")
+    }
+
+    /// Nine QSOs is not ten — the same threshold the 500-point bonus uses, and
+    /// both fail together.
+    func testNineQSOsEarnsNeitherTheBonusNorTheMultiplier() {
+        let rows = (0..<9).map { i in
+            qso(call: "K5C\(i)", band: .m40, mode: .cw, my: "DAVI", their: "TX")
+        }
+        let s = ScoreEngine.score(log: inLog(rows, station: .mobile), party: tnqp)
+        XCTAssertEqual(s.selfActivatedCounties, [])
+        XCTAssertEqual(s.bonusPoints, 0)
+    }
+
+    /// "…**if they do not earn a multiplier for that county otherwise**." The
+    /// forfeit reaches across bands, which is the case set semantics alone could
+    /// not have handled: the worked key is scoped `40m` and the activation key
+    /// is scoped for the whole log, so the two never collide.
+    func testWorkingTheCountyOnAnyBandForfeitsTheActivationMultiplier() throws {
+        let act = try XCTUnwrap(tnqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertTrue(act.notOtherwiseWorked)
+
+        var rows = (0..<9).map { i in
+            qso(call: "K5C\(i)", band: .m20, mode: .cw, my: "DAVI", their: "TX")
+        }
+        // …and a tenth QSO, with somebody in DAVI, on a different band.
+        rows.append(qso(call: "W4DAVI", band: .m40, mode: .cw, my: "DAVI", their: "DAVI"))
+
+        let s = ScoreEngine.score(log: inLog(rows, station: .mobile), party: tnqp)
+        XCTAssertEqual(s.validQSOs, 10, "the threshold is met")
+        XCTAssertEqual(s.workedValues(.county), ["DAVI"])
+        XCTAssertEqual(s.selfActivatedCounties, [], "earned otherwise, on 40 m")
+        XCTAssertEqual(s.multiplierCount, 2, "TX on 20 m, DAVI on 40 m")
+        // The 500-point bonus is a separate rule with no such condition, and
+        // still pays.
+        XCTAssertEqual(s.bonusPoints, 500)
+    }
+
+    /// The NEW MULT badge must not promise what the forfeit takes away: the
+    /// first DAVI station worked trades the activation key for a worked one.
+    func testTheBadgeDoesNotPromiseTheForfeitedMultiplier() {
+        let rows = (0..<10).map { i in
+            qso(call: "K5C\(i)", band: .m20, mode: .cw, my: "DAVI", their: "TX")
+        }
+        let log = inLog(rows, station: .mobile)
+        XCTAssertEqual(ScoreEngine.score(log: log, party: tnqp).selfActivatedCounties, ["DAVI"])
+
+        XCTAssertFalse(
+            ScoreEngine.wouldAddMultiplier(
+                theirLocs: ["DAVI"], band: .m40, modeClass: .cw, log: log, party: tnqp
+            ),
+            "the activation multiplier is forfeit, so the total does not move"
+        )
+        XCTAssertTrue(
+            ScoreEngine.wouldAddMultiplier(
+                theirLocs: ["KNOX"], band: .m40, modeClass: .cw, log: log, party: tnqp
+            ),
+            "a county neither worked nor activated is still new"
+        )
+    }
+
+    /// "Tennessee **mobiles and rovers**" — and TnQP has no portable roving
+    /// class: "All Tennessee portable operations operating from a single
+    /// location compete in the Fixed categories."
+    func testOnlyMobilesAndRoversClaimIt() throws {
+        let act = try XCTUnwrap(tnqp.multipliers.inState.activatedCountyMultiplier)
+        XCTAssertEqual(Set(act.categories), [.mobile, .rover])
+
+        let rows = (0..<10).map { i in
+            qso(call: "K5C\(i)", band: .m40, mode: .cw, my: "DAVI", their: "TX")
+        }
+        for category in StationProfile.CategoryStation.allCases {
+            let s = ScoreEngine.score(log: inLog(rows, station: category), party: tnqp)
+            XCTAssertEqual(
+                s.selfActivatedCounties,
+                [.mobile, .rover].contains(category) ? ["DAVI"] : [],
+                "\(category.rawValue)"
+            )
+        }
+    }
+
+    /// Out-of-state entrants never reach the rule.
+    func testOutOfStateEntrantsAreUnaffected() {
+        XCTAssertNil(tnqp.multipliers.outState.activatedCountyMultiplier)
+        XCTAssertEqual(
+            ScoreEngine.score(log: outLog([qso(call: "W4A", their: "DAVI")]), party: tnqp)
+                .selfActivatedCounties, []
+        )
+    }
+
     /// Bonuses are added after the multiplier, never multiplied by it.
     func testBonusesAddedAfterMultipliers() {
         let s = ScoreEngine.score(log: outLog([
@@ -299,5 +419,10 @@ final class TennesseeQSOPartyTests: XCTestCase {
         XCTAssertTrue(notes.contains("verified: partial"))
         XCTAssertTrue(notes.contains("late August 2026"),
                       "notes must say when to re-check for a 2026 revision")
+        // The stale rules document is now the *only* open question: the
+        // self-activation multiplier landed 2026-08-04.
+        XCTAssertFalse(notes.contains("(2)"))
+        XCTAssertTrue(notes.contains("NOTE THE WORD 'ONE'"),
+                      "the scope is what separates this party from the other four")
     }
 }
