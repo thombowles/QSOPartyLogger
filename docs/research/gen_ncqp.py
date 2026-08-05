@@ -25,13 +25,27 @@ The cross-check: the RULES PDF prints ten codes in plain text, for the "Rarest o
 NC" counties - CAB GRM VAN MAC DAV CUR PAM ALL PER CAS - and all ten must agree
 with the colour reading. That is asserted below.
 
-WHAT DELIBERATELY DOES NOT SHIP, both verified and both unrepresentable - see
-ncqp_rules.md section 14 and the notes field:
-  * the "Rarest of NC" 10X QSO POINTS (phone 20 / CW 30 / digital 50), which the
-    sponsor stresses land BEFORE multiplication. PointsTable is keyed by mode
-    alone. This is the largest scoring gap in the repo.
-  * the 500-point sweep for working five of those ten. sweepTiers counts ANY
-    counties, not five of a named ten, so reusing it would pay nearly every log.
+THE RAREST-OF-NC SCORING NOW SHIPS, and both halves are PARSED OUT OF THE RULES
+TEXT rather than typed (Article 2) - the ten codes above, the 10X factor, the
+threshold of five and the 500 points all come from the sponsor's own sentences,
+so an edition that changes any of them fails this script instead of quietly
+scoring last year's rules:
+  * countyPointFactor pays the ten counties 10X, INSIDE the multiplication. The
+    sponsor prints the factor AND its worked-out table (phone 20 / CW 30 /
+    digital 50); the factor is what ships, and the printed table is asserted
+    against factor x the ordinary points, so the two cannot drift apart.
+  * a designatedCountySweep bonus pays 500 for working five of the ten, AFTER
+    multiplication. sweepTiers could not express it - it counts ANY counties,
+    not five of a named ten, so reusing it would have paid nearly every log.
+
+THE SELF-ACTIVATION MULTIPLIER NOW SHIPS TOO, as of 2026-08-04 - every NC
+station counts the county it operates from, fixed stations included, and a
+county both sat in and worked counts once. See ncqp_rules.md section 14.
+
+EVERY SCORING RULE OF THIS PARTY IS THEREFORE EXPRESSED. What keeps it partial
+is no longer a scoring gap at all: the Cabrillo CONTEST value comes from the
+WA7BNM registry rather than the committee, whose rules omit the header. See the
+notes field.
 
 Usage:  python3 gen_ncqp.py        (run from docs/research/)
 """
@@ -240,17 +254,57 @@ assert "Updated 10/13/2025" in rules, \
 # + 13 provinces + 1 DX = 164.
 assert 100 + (51 - 1) + 13 + 1 == 164, "the multiplier arithmetic no longer reconciles"
 
-# The two rules that deliberately do not ship. Assert they are still there, so a
-# future edition dropping or changing them fails loudly instead of leaving a
-# stale limitation in the notes.
-assert "will be scored 10X QSO points" in rules, \
-    "the Rarest of NC 10X rule changed - revisit KNOWN LIMITATION 1"
-assert "Phone - 20 points each" in rules and "CW - 30 points each" in rules \
-    and "Digital - 50 points each" in rules
+# --- The Rarest-of-NC scoring, PARSED rather than typed (Article 2). ---
+#
+# The sponsor prints its points twice: once under "Scoring / QSO Points" as the
+# ordinary rate, and again under "Bonus QSO Points" as the rare-county rate. Both
+# blocks match the same sentence shape, so each is read from its own section.
+WORDS = {"five": 5, "ten": 10}
+NUMBER = re.compile(r"(\w+) - (\d+) points each")
+
+base_block = rules.split("Scoring QSO Points")[1].split("Bonus QSO Points")[0]
+rare_block = rules.split("Bonus QSO Points")[1].split("Rarest of NC Counties")[0]
+
+POINTS = {m.group(1).lower(): int(m.group(2)) for m in NUMBER.finditer(base_block)}
+RARE_POINTS = {m.group(1).lower(): int(m.group(2)) for m in NUMBER.finditer(rare_block)}
+assert set(POINTS) == set(RARE_POINTS) == {"phone", "cw", "digital"}, \
+    f"the points blocks no longer name three modes: {sorted(POINTS)} / {sorted(RARE_POINTS)}"
+
+# "A QSO with someone in one of these counties will be scored 10X QSO points."
+FACTOR = int(re.search(r"will be scored (\d+)X QSO points", rules).group(1))
+
+# THE CROSS-CHECK THAT MAKES THE FACTOR SAFE TO SHIP: the sponsor states the
+# rule as a multiple AND prints its arithmetic. The multiple is what goes in the
+# JSON, so the printed table must be exactly what it produces - if a future
+# edition raises phone to 3 but leaves "Phone - 20 points each" behind, this
+# fails rather than silently paying 30.
+for mode, base in POINTS.items():
+    assert base * FACTOR == RARE_POINTS[mode], (
+        f"{mode}: the sponsor prints {RARE_POINTS[mode]} for a rare county but "
+        f"{base} x {FACTOR} = {base * FACTOR} - the two halves of the rule disagree"
+    )
 assert "These points are added to the rest of the regular QSO Points prior to MULT multiplication" \
-    in rules, "the pre-multiplication placement changed - revisit KNOWN LIMITATION 1"
-assert "five of the \"Rarest of NC\" counties, 500 additional bonus points" in rules, \
-    "the sweep bonus changed - revisit KNOWN LIMITATION 2"
+    in rules, "the 10X no longer lands BEFORE multiplication - countyPointFactor is wrong for it"
+
+# "Ten NC Counties designated below as 'Rarest of NC'."
+assert WORDS[re.search(r"(\w+) NC Counties designated below", rules).group(1).lower()] \
+    == len(RAREST), "the sponsor's own count of rare counties no longer matches the ten codes"
+
+# "If at least one QSO is made with a station in five of the 'Rarest of NC'
+# counties, 500 additional bonus points are added to the score after
+# multiplication." Once, at the threshold or past it - "This would constitute a
+# sweep", singular, and the certificate goes to "all participants achieving this
+# sweep".
+sweep = re.search(
+    r'in (\w+) of the "Rarest of NC" counties, (\d+) additional bonus points', rules)
+SWEEP_NEED, SWEEP_POINTS = WORDS[sweep.group(1).lower()], int(sweep.group(2))
+assert SWEEP_NEED <= len(RAREST), "the sweep needs more counties than the party designates"
+assert "added to the score after multiplication" in rules, \
+    "the sweep no longer lands AFTER multiplication - a BonusRule is wrong for it"
+
+# The ordinary rate this file ships, pinned to the sponsor's own block above.
+assert POINTS == {"phone": 2, "cw": 3, "digital": 5}, \
+    f"the ordinary QSO points changed: {POINTS} - re-read the rules before shipping"
 
 ncqp = {
     "schemaVersion": 1,
@@ -268,6 +322,13 @@ ncqp = {
     # outscores CW. FT8/FT4 are excluded from this contest entirely; they belong
     # to the separate Weak Signal Showcase. See notes.
     "points": {"phone": 2, "cw": 3, "digital": 5},
+    # "A QSO with someone in one of these counties will be scored 10X QSO points
+    # ... These points are added to the rest of the regular QSO Points PRIOR TO
+    # MULT multiplication." So this is a points rule, not a bonus: it lands
+    # inside the multiplication, where a BonusRule would land after it. Stated
+    # unconditionally, two paragraphs after the multiplier rules split by side,
+    # so BOTH in-state and out-of-state entrants earn it.
+    "countyPointFactor": {"counties": sorted(RAREST), "factor": FACTOR},
     "dupeScope": "bandMode",
     "multipliers": {
         # "100 North Carolina Counties, 49 US States (not NC) plus DC, 13 Canadian
@@ -319,9 +380,18 @@ ncqp = {
             "countScope": "once",
         },
     },
-    # The 500-point five-rare-county sweep is NOT expressible - sweepTiers counts
-    # any counties, not five of a named ten. See notes, KNOWN LIMITATION 2.
-    "bonuses": [],
+    # "If at least one QSO is made with a station in five of the 'Rarest of NC'
+    # counties, 500 additional bonus points are added to the score AFTER
+    # multiplication. This would constitute a sweep." Once - singular sweep,
+    # singular certificate - and "at least", so all ten still pays the one 500.
+    # sweepTiers cannot express it: it counts ANY counties, not five of a named
+    # ten, and would have paid nearly every log.
+    "bonuses": [{
+        "type": "designatedCountySweep",
+        "counties": sorted(RAREST),
+        "need": SWEEP_NEED,
+        "points": SWEEP_POINTS,
+    }],
     # 'Send call sign and state/province, or "DX"'; "Any location not listed above
     # is considered DX. This includes US Territories, Mexican provinces, and DXCC
     # countries" - and all of it is worth exactly one multiplier.
@@ -375,21 +445,21 @@ ncqp = {
         "nothing replaces it, so nothing is missing from the log. County lines pay two counties, "
         "logged as two separate lines, which is what this app writes; the sponsor delegates the "
         "definition of a county border to MARAC's county-hunter rules by reference. "
-        "KNOWN LIMITATION 1 - THE 'RAREST OF NC' 10X QSO POINTS ARE NOT APPLIED, AND THIS IS THE "
-        "LARGEST SCORING GAP IN THIS APP. A QSO with one of ten designated counties scores TEN "
-        "TIMES the normal points - phone 20, CW 30, digital 50 - and the sponsor stresses that "
-        "these are 'added to the rest of the regular QSO Points PRIOR TO MULT multiplication so "
-        "they have a significant positive effect on the final score'. This app pays points by "
-        "MODE only, with no way to pay more for a particular county, so every rare-county QSO is "
-        "scored at one tenth of its value BEFORE being multiplied. The ten counties are CAB "
-        "Cabarrus, GRM Graham, VAN Vance, MAC Macon, DAV Davie, CUR Currituck, PAM Pamlico, ALL "
-        "Alleghany, PER Person and CAS Caswell. TO CORRECT BY HAND: for each such QSO add nine "
-        "times its normal points (18 phone, 27 CW, 45 digital) to your QSO-point total, THEN "
-        "multiply. KNOWN LIMITATION 2 - THE 500-POINT SWEEP IS NOT APPLIED. Working at least one "
-        "station in five of those ten counties adds 500 points after multiplication. This app's "
-        "sweep rule counts any counties rather than membership of a named set, so using it would "
-        "pay almost every log; nothing ships instead. Add 500 yourself if you worked five of the "
-        "ten. "
+        "THE 'RAREST OF NC' SCORING IS APPLIED, BOTH HALVES OF IT. A QSO with one of ten "
+        "designated counties scores TEN TIMES the normal points - phone 20, CW 30, digital 50 - "
+        "and the sponsor stresses that these are 'added to the rest of the regular QSO Points "
+        "PRIOR TO MULT multiplication so they have a significant positive effect on the final "
+        "score', so this ships as a POINTS rule (countyPointFactor) rather than a bonus: the 10X "
+        "lands INSIDE the multiplication, where a bonus would land after it and pay a fraction of "
+        "what the sponsor intends. The ten counties are CAB Cabarrus, GRM Graham, VAN Vance, MAC "
+        "Macon, DAV Davie, CUR Currituck, PAM Pamlico, ALL Alleghany, PER Person and CAS Caswell. "
+        "BOTH SIDES EARN THE 10X: the rule is stated unconditionally, two paragraphs after the "
+        "multiplier rules split 'NC participants' from 'Non-NC participants', so an NC station "
+        "working Graham earns it exactly as a Texan does. Working at least one station in FIVE of "
+        "those ten adds 500 points AFTER multiplication, paid ONCE - 'This would constitute a "
+        "sweep' is singular, and 'at least' means all ten still pays the one 500. Both numbers "
+        "are parsed from the rules text by gen_ncqp.py, which also asserts that 10 x the ordinary "
+        "points reproduces the 20/30/50 table the sponsor prints alongside the factor. "
         "EVERY NC STATION COUNTS THE COUNTY IT OPERATES FROM. 'NC stations may include the county "
         "from which operation takes place in the Multiplier count regardless of whether any QSOs "
         "are logged from that same county. This includes Mobile and Portable stations where "
@@ -402,15 +472,19 @@ ncqp = {
         "printed '164 total possible' is exactly 100 counties + 50 state-class tokens + 13 "
         "provinces + 1 DX, so a ceiling of 165 is not available. OUT-OF-STATE ENTRANTS ARE "
         "UNAFFECTED. "
-        "Cabrillo CONTEST value NC-QSO-PARTY per the WA7BNM registry - the rules enumerate the "
-        "CATEGORY headers an entrant must set and omit CONTEST:. Logs are due 2026-03-15, "
-        "Cabrillo only, paper no longer accepted. "
-        "OPEN QUESTIONS (why this is partial): (1) and (2) are KNOWN LIMITATIONS 1 and 2 above - "
-        "both are fully verified rules that this app cannot express, and BOTH CHANGE THE FINAL "
-        "SCORE FOR EVERY ENTRANT, in state and out. Until they are built, an NCQP score from this "
-        "app is a floor, not a total, and the arithmetic to correct it is given above. Neither is "
-        "a rule in doubt; both are missing app features. Verify against the sponsor's own "
-        "scoring when results are posted at http://www.ncqsoparty.org."
+        "EVERY SCORING RULE OF THIS PARTY NOW SHIPS. The 10X, the sweep and the self-activation "
+        "multiplier were the three gaps this app carried here, and the last of them closed "
+        "2026-08-04; an NCQP score from this app is a total rather than a floor, in state and "
+        "out. "
+        "Logs are due 2026-03-15, Cabrillo only, paper no longer accepted. "
+        "OPEN QUESTION (why this is partial): (1) THE CABRILLO CONTEST VALUE IS NOT THE "
+        "SPONSOR'S. NC-QSO-PARTY comes from the WA7BNM contest registry - the rules enumerate the "
+        "CATEGORY headers an entrant must set and omit CONTEST: entirely, so the one header that "
+        "decides which contest the log is filed under traces to a third party rather than to the "
+        "committee. No rule of scoring is in doubt, and nothing here changes a score. Confirm the "
+        "header against the sponsor's own robot or a published sample log before submitting, and "
+        "verify the score against the sponsor's own when results are posted at "
+        "http://www.ncqsoparty.org."
     ),
 }
 
@@ -425,5 +499,8 @@ print(f"  points: phone 2, CW 3, digital 5 - the only party where digital beats 
 print(f"  multipliers: once overall; in-state 100+50+13+1 = 164 (sponsor's own total)")
 print(f"  bands: {len(BANDS)} - 80 m up, 160 m explicitly excluded")
 print(f"  schedule: 1 window, 10 h Sunday-only (1500Z -> 0100Z, 1-2 Mar 2026)")
+print(f"  Rarest of NC: {len(RAREST)} counties at {FACTOR}x QSO points, BEFORE multiplication")
+print(f"    parsed table: " + ", ".join(f"{m} {POINTS[m]}->{RARE_POINTS[m]}" for m in POINTS))
+print(f"    sweep: {SWEEP_NEED} of {len(RAREST)} pays {SWEEP_POINTS}, once, AFTER multiplication")
 print(f"  activation mults: every NC station, minCount 1, once, forfeited if worked")
-print(f"  NOT shipped: Rarest-of-NC 10x points, the 500-point sweep")
+print(f"  NOT shipped: nothing - every scoring rule of this party is expressed")

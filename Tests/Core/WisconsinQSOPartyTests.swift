@@ -36,18 +36,27 @@ final class WisconsinQSOPartyTests: XCTestCase {
         )
     }
 
-    func outLog(_ qsos: [QSO]) -> ContestLog {
+    /// Both helpers default to **high power**, whose factor is ×1, so that every
+    /// test about points, multipliers, bonuses or dupes measures what it is
+    /// about rather than the power multiplier.
+    func outLog(
+        _ qsos: [QSO],
+        power: StationProfile.CategoryPower = .high
+    ) -> ContestLog {
         var log = ContestLog(partyID: "wiqp")
         log.myLocation = .outOfState(location: "TX")
+        log.station.categoryPower = power
         log.qsos = qsos
         return log
     }
 
     func inLog(_ qsos: [QSO], from county: String = "MIL",
-               station: StationProfile.CategoryStation = .fixed) -> ContestLog {
+               station: StationProfile.CategoryStation = .fixed,
+               power: StationProfile.CategoryPower = .high) -> ContestLog {
         var log = ContestLog(partyID: "wiqp")
         log.myLocation = .inState(counties: [county])
         log.station.categoryStation = station
+        log.station.categoryPower = power
         log.qsos = qsos
         return log
     }
@@ -237,29 +246,75 @@ final class WisconsinQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.bonusPoints, 300, "three band/mode slots")
     }
 
-    /// **KNOWN LIMITATION 3, pinned.** The sponsor caps the W9FK bonus *below
+    /// **KNOWN LIMITATION 2, pinned.** The sponsor caps the W9FK bonus *below
     /// 50 MHz*; the engine counts 6 m and up too.
     func testKnownGapTheW9FKBonusIsNotBandLimited() throws {
         let s = ScoreEngine.score(log: outLog([
             qso(call: "W9FK", band: .m6, mode: .phone, their: "MIL"),
         ]), party: wiqp)
         XCTAssertEqual(s.bonusPoints, 100, "current behaviour — the sponsor pays 0 above 50 MHz")
-        XCTAssertTrue(try XCTUnwrap(wiqp.notes).contains("KNOWN LIMITATION 3"))
+        XCTAssertTrue(try XCTUnwrap(wiqp.notes).contains("KNOWN LIMITATION 2"))
     }
 
-    /// **KNOWN LIMITATION 1, pinned — and the second party to hit it.** WIQP's
-    /// power factors are QRP ×2, LOW ×1.5, high ×1: **identical to VTQP's**, and
-    /// `ScoreMultipliers` is `[String: Int]`. Two sponsors now want the field.
-    func testKnownGapPowerMultiplierIsNotAppliedBecauseItIsFractional() throws {
-        XCTAssertNil(wiqp.scoreMultipliers,
-                     "×1.5 cannot be represented; a wrong whole number is worse than none")
-        let vtqp = try XCTUnwrap(PartyCatalog.party(id: "vtqp"))
-        XCTAssertNil(vtqp.scoreMultipliers, "the same gap, the same three factors")
+    /// The POWER LEVEL table, verbatim: *"QRP — less than 5 watts — Power Mult =
+    /// 2 · Low — 5 to 100 watts — Power Mult = 1.5 · High — over 100 watts —
+    /// Power Mult = 1"*. **Identical factors to Vermont's**, on different
+    /// wattage boundaries — the second sponsor to want the same fraction, which
+    /// is what met this repo's two-user bar for building it.
+    func testThePowerMultiplierShipsIncludingItsHalf() throws {
+        let mults = try XCTUnwrap(wiqp.scoreMultipliers)
+        XCTAssertEqual(mults.factor(power: .qrp, station: .fixed), 2)
+        XCTAssertEqual(mults.factor(power: .high, station: .fixed), 1)
+        XCTAssertEqual(mults.factor(power: .low, station: .fixed),
+                       ScoreFactor(numerator: 3, denominator: 2), "×1.5, exactly")
 
-        let s = ScoreEngine.score(log: outLog([qso(their: "MIL")]), party: wiqp)
-        XCTAssertEqual(s.categoryFactor, 1)
-        XCTAssertEqual(s.total, s.qsoPoints * s.multiplierCount + s.bonusPoints)
-        XCTAssertTrue(try XCTUnwrap(wiqp.notes).contains("MULTIPLY THE FINAL SCORE YOURSELF"))
+        let vtqp = try XCTUnwrap(PartyCatalog.party(id: "vtqp"))
+        XCTAssertEqual(vtqp.scoreMultipliers, wiqp.scoreMultipliers,
+                       "two sponsors, one table — the same three numbers")
+    }
+
+    /// Applied, not merely stored. Four CW QSOs in four counties: 8 QSO points
+    /// × 4 multipliers = 32, and low power takes that to 48.
+    func testTheLowPowerHalfReachesTheScore() {
+        let rows = ["MIL", "DAN", "BRO", "CAL"].enumerated().map {
+            qso(call: "W9\($0.offset)", their: $0.element)
+        }
+        let high = ScoreEngine.score(log: outLog(rows, power: .high), party: wiqp)
+        XCTAssertEqual(high.qsoPoints, 8, "4 CW QSOs at 2 points")
+        XCTAssertEqual(high.multiplierCount, 4)
+        XCTAssertEqual(high.total, 32)
+
+        XCTAssertEqual(ScoreEngine.score(log: outLog(rows, power: .low), party: wiqp).total, 48)
+        XCTAssertEqual(ScoreEngine.score(log: outLog(rows, power: .qrp), party: wiqp).total, 64)
+    }
+
+    /// **The sponsor prints no rounding rule at all** — not in the rules, the
+    /// Multiplier List or the Cabrillo guide. Three phone QSOs in three counties
+    /// put a low-power entrant on 13.5, and this app rounds down, the direction
+    /// that cannot overstate a `CLAIMED-SCORE:`.
+    func testAHalfPointIsRoundedDown() {
+        let rows = ["MIL", "DAN", "BRO"].enumerated().map {
+            qso(call: "W9\($0.offset)", mode: .phone, their: $0.element)
+        }
+        let s = ScoreEngine.score(log: outLog(rows, power: .low), party: wiqp)
+        XCTAssertEqual(s.qsoPoints, 3)
+        XCTAssertEqual(s.multiplierCount, 3)
+        XCTAssertEqual(s.total, 13, "3 × 3 × 1.5 = 13.5 → 13, never 14")
+    }
+
+    /// The sponsor's SCORING section states the order outright, and it is what
+    /// the engine computes: *"Add CW, Phone and Digital points. Then multiply by
+    /// Power Level multiplier. Then multiply by your multiplier count under
+    /// MULTIPLIERS. **Finally, add your bonus points.**"* — so the W9FK bonus is
+    /// added after the power factor and is never scaled by it.
+    func testBonusPointsAreAddedAfterThePowerMultiplierAsTheSponsorSays() {
+        let rows = [qso(call: "W9FK", their: "MIL")]
+        let s = ScoreEngine.score(log: outLog(rows, power: .low), party: wiqp)
+
+        XCTAssertEqual(s.qsoPoints, 2)
+        XCTAssertEqual(s.multiplierCount, 1)
+        XCTAssertEqual(s.bonusPoints, 100)
+        XCTAssertEqual(s.total, 103, "⌊2 × 1 × 1.5⌋ = 3, + 100 unscaled — not (2 + 100) × 1.5")
     }
 
     // MARK: County lines forbidden, dupes, credit
@@ -360,12 +415,17 @@ final class WisconsinQSOPartyTests: XCTestCase {
                        "KSQP and TQP each have a shorter single session")
     }
 
-    func testNotesRecordAllThreeLimitations() throws {
+    /// Two, since 2026-07-28: the power multiplier was the third and is now
+    /// applied. Both survivors are bonus rules that over-credit a narrow case.
+    func testNotesRecordBothRemainingLimitations() throws {
         let notes = try XCTUnwrap(wiqp.notes)
         XCTAssertTrue(notes.contains("verified: partial"))
-        for n in 1...3 {
+        for n in 1...2 {
             XCTAssertTrue(notes.contains("KNOWN LIMITATION \(n)"), "limitation \(n)")
         }
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION 3"), "the power multiplier ships now")
+        XCTAssertFalse(notes.contains("MULTIPLY THE FINAL SCORE YOURSELF"),
+                       "the operator no longer does the power arithmetic by hand")
         XCTAssertTrue(notes.contains("READING THE SPONSOR'S CABRILLO GUIDE CHANGED A FIELD"))
     }
 }

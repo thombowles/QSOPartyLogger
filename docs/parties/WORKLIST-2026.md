@@ -331,58 +331,70 @@ its own commit (Article 4).
   *Still worth checking when Pennsylvania is built: if PAQP also exchanges a QSO
   number, it now just sets the flag.*
 
-- **NO POINTS-BY-COUNTY, and no named-subset sweep — NCQP needs both, and
-  together they are now the largest scoring gap in the repo.** Added 2026-07-26.
+- ~~**NO POINTS-BY-COUNTY, and no named-subset sweep — NCQP needs both, and
+  together they are now the largest scoring gap in the repo.**~~ Added
+  2026-07-26, **BUILT 2026-07-28.** Both ship, and the repo's largest scoring
+  gap is closed.
 
-  *(a) Points by county.* NCQP designates ten "Rarest of NC" counties and pays
-  **10× QSO points** for working them — phone 20, CW 30, digital 50 — and the
-  sponsor stresses the placement: *"These points are added to the rest of the
-  regular QSO Points **prior to MULT multiplication** so they have a significant
-  positive effect on the final score."* `PointsTable` is keyed by mode alone.
-  Sketch: an optional `bonusCountyPoints: {counties: [...], factor: Int}` (or an
-  explicit per-mode table) consulted by
-  `PartyDefinition.pointsTable(forTheirLoc:countyAbbrs:)` — **the hook already
-  exists**, since that method already takes the received location and already
-  chooses between two tables for `homeStationPoints`. This is the cheapest of the
-  outstanding gaps and the highest-value; build it first.
+  *(a) Points by county* → **`countyPointFactor: {counties: [...], factor: Int}`**,
+  consulted by `PartyDefinition.pointsTable(forTheirLoc:countyAbbrs:)` as
+  sketched — the hook was already there, so `ScoreEngine` needed no change for
+  the 10× at all: a scaled table flows through the existing `qsoPoints +=` and
+  lands inside the multiplication by construction. It scales whichever table
+  applied rather than replacing it, so it composes with `homeStationPoints`. The
+  factor ships, not the sponsor's worked-out 20/30/50 table, and `gen_ncqp.py`
+  asserts the one reproduces the other.
 
-  *(b) Named-subset sweep.* *"If at least one QSO is made with a station in five
-  of the 'Rarest of NC' counties, 500 additional bonus points are added to the
-  score after multiplication."* `BonusRule.sweepTiers` lands in the right place
-  but counts `workedValues(.county).count` — *any* counties — so reusing it would
-  pay nearly every log. Sketch: a `sweepOf(counties: [String], need: Int, points:
-  Int)` case; only the predicate is new.
+  *(b) Named-subset sweep* → **`BonusRule.designatedCountySweep(counties:need:points:)`**.
+  A new case rather than a flag on `sweepTiers`, because the two read different
+  things: tiers count `workedValues(.county)`, the multiplier tally, while the
+  sponsor's predicate is *"at least one QSO is made with a station in five of
+  the … counties"* — rows, not mults. Pays once at the threshold or past it.
 
-  **Both affect every entrant, in state and out** — unlike SCQP's activation
-  multiplier or VTQP's power factor, which each hit one class of operator. Until
-  they are built an NCQP score is a floor; `ncqp.json` gives the operator the
-  correcting arithmetic, and
-  `NorthCarolinaQSOPartyTests.testKnownGapRarestCountiesDoNotPayTenTimes` and
-  `…testKnownGapTheFiveRareCountySweepIsNotPaid` pin the current behaviour.
-- **FRACTIONAL SCORE MULTIPLIERS — SECOND USER FOUND 2026-07-26, so the repo's
-  two-user bar is met and this is now buildable.** WIQP's power factors are QRP
-  ×2, LOW ×1.5, high ×1 — **identical to VTQP's, down to the same three
-  numbers**. Two sponsors, one gap; when it lands, both parties gain the field. `ScoreMultipliers` is
-  `[String: Int]`, and VTQP's power multiplier is **QRP ×2, LOW POWER ×1.5, high
-  ×1** (rule 7(D)(1)). ×1.5 cannot be represented, and shipping ×1 for low power
-  would understate the most common power category by a third *while looking
-  right* — the exact failure the constitution's preamble names. So VTQP ships
-  with **no `scoreMultipliers` at all** and an operator-facing instruction to do
-  the arithmetic by hand (`vtqp.json` KNOWN LIMITATION 1, pinned by
-  `VermontQSOPartyTests.testKnownGapPowerMultiplierIsNotAppliedBecauseItIsFractional`).
-  **This is bigger than a schema change.** The `Int` runs all the way through:
-  `MultRule.factor(power:station:) -> Int`, `ScoreBreakdown.categoryFactor: Int`,
-  `ScoreEngine.total = qsoPoints * multiplierCount * categoryFactor + bonusPoints`,
-  `ScoreSidebar`'s `Text("\(score.categoryFactor)")` — and
-  **`ScoreSnapshot.categoryFactor: Int` is persisted to the iCloud contest
-  archive**, so widening it is a stored-history migration as well. Sketch: keep
-  the JSON key, accept either an integer or a decimal, carry the factor as a
-  rational (numerator/denominator) rather than a `Double` so the final score
-  stays exact and the sidebar can render "×1.5" without float formatting, and
-  decide the rounding rule explicitly — VTQP's sponsor does not state one, and
-  ×1.5 on an odd points×mults product lands on a half exactly half the time.
-  Its own commit, adding no party (Article 4), with every existing party's score
-  proved unchanged; then VTQP gains the field in a second commit.
+  Design:
+  [`2026-07-28-designated-county-scoring-design.md`](../superpowers/specs/2026-07-28-designated-county-scoring-design.md).
+  Engine first, party-free, then NCQP alone (Article 9). *That left NCQP
+  `verified: partial` on the self-activation multiplier below — which shipped
+  in turn on 2026-08-04, closing the last scoring gap of that party. NCQP stays
+  partial now only on a provenance item: the Cabrillo `CONTEST:` value is the
+  WA7BNM registry's, since the sponsor's rules state none.*
+
+  **The shape does not cover the other two points-table users.** Ontario wants
+  points by *callsign* and at a flat rate, Delaware by *band* and by the
+  entrant's own role — neither is county-keyed, so both still wait. What this
+  settles is that a points rule keyed on the received location has a home, and
+  the next one adds a sibling field rather than reopening the argument.
+- ~~**FRACTIONAL SCORE MULTIPLIERS.**~~ **Done 2026-07-28**, in three commits:
+  the engine, then VTQP, then WIQP. WIQP's power factors are QRP ×2, LOW ×1.5,
+  high ×1 —
+  **identical to VTQP's, down to the same three numbers** (VTQP rule 7(D)(1)) —
+  and `ScoreMultipliers` held `[String: Int]`, so ×1.5 could not be represented
+  and shipping ×1 for low power would have understated the most common power
+  category by a third *while looking right*, the exact failure the
+  constitution's preamble names. Both parties therefore shipped with **no
+  `scoreMultipliers` at all** and an operator-facing instruction to do the
+  arithmetic by hand.
+  **The `Int` ran all the way through**, which is why this was bigger than a
+  schema change: `factor(power:station:)`, `ScoreBreakdown.categoryFactor`,
+  `ScoreEngine.total`, `ScoreSidebar`'s `Text("\(score.categoryFactor)")` — and
+  `ScoreSnapshot.Figures.categoryFactor`, persisted to the iCloud contest
+  archive, so it was a stored-history migration too. Shipped as sketched:
+  [`ScoreFactor`](../../Sources/Core/Parties/ScoreFactor.swift) is an exact
+  rational (numerator/denominator, never a `Double`), a party file writes the
+  number the sponsor prints (`1.5`), the archive keeps its whole-number key and
+  adds `categoryFactorExact` beside it, and the sidebar renders "×1.5" without
+  float formatting. **The rounding rule: down, once, on the whole
+  `points × multipliers` product, before bonuses.** Neither sponsor states one
+  — VTQP's only rounding instruction anywhere is rule 7(B)(f)'s grid-square
+  count, *"dividing by 3, and rounding down"*, and WIQP's rules, multiplier list
+  and Cabrillo guide contain no rounding language at all — so down is the
+  sponsors' own idiom where either states one, and elsewhere the direction that
+  cannot overstate a claimed score. Party-free commit (Article 4), every
+  existing party's score proved unchanged by the full suite;
+  `ScoreFactorTests.testOnlyTheRosteredPartiesShipAFractionalFactor` is the
+  roster that makes a party gaining a fraction deliberate. **VTQP and WIQP each
+  gained the field in their own commit** (Article 9), and both parties' "score is
+  a floor" caveat is gone — the score is the sponsor's.
 - ~~**THE EXCHANGE CANNOT CARRY A NAME.**~~ **Done 2026-07-27.** The second and
   third users arrived at once — the **North American QSO Parties, CW and SSB**
   (NCJ; not State QSO Parties, deliberately absent from the Challenge's
@@ -605,5 +617,5 @@ Copied from Article 22 so it can be ticked off in place:
 - [ ] `Resources/Parties/<id>.json` with provenance + any `verified: partial` questions
 - [ ] per-party test file meeting the Article 18 floor
 - [ ] full suite green, command and output recorded
-- [ ] README: bundled-parties entry, test count, provenance
+- [ ] docs: README table row + test count, `PARTIES.md` entry, `PROVENANCE.md` sources
 - [ ] committed alone

@@ -60,15 +60,17 @@ struct LogTable: View {
             }
             .width(48)
 
+            // Whatever this party's exchange actually carries — a name, a QSO
+            // number, a report, or the location alone. See `ExchangeSummary`.
             TableColumn("Sent") { q in
-                Text("\(q.rstSent) \(q.myLoc)").monospaced()
+                Text(ExchangeSummary.sent(q, party: party)).monospaced()
             }
-            .width(min: 76, ideal: 90)
+            .width(min: 76, ideal: 100)
 
             TableColumn("Rcvd") { q in
-                Text("\(q.rstRcvd) \(q.theirLoc)").monospaced()
+                Text(ExchangeSummary.received(q, party: party)).monospaced()
             }
-            .width(min: 76, ideal: 90)
+            .width(min: 76, ideal: 100)
 
             TableColumn("Pts") { q in
                 Text(pointsText(q)).monospacedDigit()

@@ -265,10 +265,29 @@ forward silently.
 
 Rule 4: *"Logs not showing power output category will be listed as high power."*
 
-**`PartyDefinition.ScoreMultipliers` is `[String: Int]` and cannot hold 1.5.**
-This is the first fractional score multiplier in the repo — MDC, NJQP and PAQP
-are all integers. Not shipped; recorded as KNOWN LIMITATION 1 and as a deferred
-engine gap. See §14, which explains why it is not fixed in this commit.
+**Shipped in full on 2026-07-28.** This was the first fractional score
+multiplier in the repo — MDC, NJQP and PAQP are all integers — and while
+`ScoreMultipliers` was `[String: Int]` it could not be held at all, so this
+party shipped none rather than a wrong whole number. `ScoreFactor` now carries
+it as an exact rational and `scoreMultipliers` reads
+`{"power": {"QRP": 2, "LOW": 1.5, "HIGH": 1}}`.
+
+**Rounding: the sponsor states no rule, and this is the whole of the evidence.**
+`multiply your score by 1.5` on an odd points × multipliers product lands on a
+half, and rule 7(D) says nothing about what to do with it. Searching the `.doc`
+and the summary page for *round*, *nearest*, *fraction*, *decimal*, *integer*
+and *whole* returns exactly one hit each, and both are the same rule — 7(B)(f)
+on **multiplier** counts, not on the score:
+
+> "totaling up the number of grid squares worked, dividing by 3, and **rounding
+> down**." — rule 7(B)(f)
+
+> "43 grids / 3 = 14.33 which is **rounded down** to 14 multipliers." — the
+> summary page's worked example
+
+So down is the sponsor's own idiom for its own fractions, and is what this app
+applies to the final score: **once**, on the whole points × multipliers product,
+before bonuses. Recorded as an inference rather than a quoted rule.
 
 ## 9. County-line / multi-county rules
 
@@ -422,24 +441,23 @@ strongest form Article 2 allows without a machine-readable file.
 
 ## 14. Engine shapes to watch
 
-Six, and they are the reason this party ships `verified: partial`. **Five are
+Seven, and they are the reason this party ships `verified: partial`. **Four are
 rules that are fully verified but that the schema cannot express** — Article 3
 distinguishes these from unverified rules, and Article 17 explicitly allows
-shipping with a note ahead of the field. One is a genuine unknown.
+shipping with a note ahead of the field. One (item 1) is now built. One is a
+placement the sponsor never states, and one is a genuine unknown.
 
-1. **Fractional score multipliers — the big one.** `ScoreMultipliers` is
-   `[String: Int]`; VTQP's Low Power factor is **×1.5**. Shipping `{QRP: 2, LOW:
-   1, HIGH: 1}` would silently under-score every low-power entrant by 33 %, which
-   is exactly the "wrong number that looks right" the constitution's preamble is
-   about — so **no `scoreMultipliers` ships at all** and the operator sees the
-   limitation instead.
-   **Why not fix it here:** `factor(power:station:)` returns `Int`,
-   `ScoreBreakdown.categoryFactor` is `Int`, `ScoreEngine.total` is
-   `qsoPoints * multiplierCount * categoryFactor + bonusPoints`, `ScoreSidebar`
-   renders it, and **`ScoreSnapshot.categoryFactor: Int` is persisted to the
-   iCloud contest archive** — so widening it is a schema *and* a stored-history
-   migration. Article 4 puts that in its own party-free commit, and Article 9
-   keeps it out of this one. Recorded in the worklist's deferred engine gaps.
+1. ~~**Fractional score multipliers — the big one.**~~ **Done 2026-07-28.**
+   VTQP's Low Power factor is **×1.5**, and while `ScoreMultipliers` was
+   `[String: Int]` shipping `{QRP: 2, LOW: 1, HIGH: 1}` would have silently
+   under-scored every low-power entrant by 33 % — exactly the "wrong number that
+   looks right" the constitution's preamble is about — so **no `scoreMultipliers`
+   shipped at all** and the operator saw the limitation instead. The widening was
+   a schema *and* a stored-history migration (`factor(power:station:)`,
+   `ScoreBreakdown.categoryFactor`, `ScoreEngine.total`, `ScoreSidebar`, and
+   `ScoreSnapshot.Figures.categoryFactor` in the iCloud archive), so it landed in
+   its own party-free commit under Article 4, and this party gained the field in
+   the next one. See §8 for the rounding rule and its evidence.
 2. **`workStation` bonuses ignore the entrant's own location.** Rule 1A(F) gives
    the W1AW/1 bonus to out-of-Vermont stations only — *"Vermont stations will not
    get this bonus"* — and `bonusPoints` has no in/out-of-state condition. The
@@ -447,6 +465,17 @@ shipping with a note ahead of the field. One is a genuine unknown.
    in) it is exactly right; a Vermont entrant is over-credited 2 points per
    W1AW/1 QSO. A `scope`-adjacent `appliesTo: "outState"` would fix it. **One
    user so far**, so it waits for a second, per the repo's own bar.
+
+   **Where the bonus enters the formula is a second, separate question, and the
+   sponsor does not answer it.** Rule 1A(F) calls it *"an additional 2 point
+   bonus"*, which reads as QSO points and would therefore fall **inside**
+   `Total Points X Total Multipliers X Power Multiplier`. But the bonus lives in
+   section 1A rather than in section 7, and rule 7(D)'s formula names no bonus
+   term at all. This app adds bonuses last, scaled by neither the multipliers nor
+   the power factor — the same placement it uses for every party — so a
+   low-power station outside Vermont may be under-credited by half a point per
+   W1AW/1 QSO under the other reading. Recorded as a `ruleInference` caveat, not
+   as a gap: there is no sentence to be right or wrong about. Moot from 2027.
 3. **RTTY and WSJT-X are one `ModeClass` here and two modes for the sponsor.**
    The page: *"RTTY is considered a legacy mode and is not part of this digital
    group."* Multipliers count *once per mode*, and the two digital families do

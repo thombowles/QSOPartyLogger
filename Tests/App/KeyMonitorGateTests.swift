@@ -123,17 +123,14 @@ final class KeyMonitorGateTests: XCTestCase {
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 69, command: true), .adjustWPM(by: 2))
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 27, command: true), .adjustWPM(by: -2))
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 78, command: true), .adjustWPM(by: -2))
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 123, command: true), .previousSpot)
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 124, command: true), .nextSpot)
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 38, command: true), .jumpToCQFrequency)
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 11, command: true), .toggleBandMap)
     }
 
     /// Those same keys unmodified are ordinary typing and must reach the entry
-    /// field: '=' and '-' are characters, ←/→ move the caret, 'j' and 'b' are
-    /// letters in a callsign.
+    /// field: '=' and '-' are characters, 'j' and 'b' are letters in a callsign.
     func testCommandChordKeysAreInertWithoutCommand() {
-        for code: UInt16 in [24, 69, 27, 78, 123, 124, 38, 11] {
+        for code: UInt16 in [24, 69, 27, 78, 38, 11] {
             XCTAssertNil(
                 KeyMonitorGate.action(keyCode: code, command: false),
                 "keyCode \(code) must pass through without ⌘"
@@ -159,20 +156,25 @@ final class KeyMonitorGateTests: XCTestCase {
     // MARK: Vertical spot stepping
 
     /// The band map draws high frequency at the top, so ⌘↑ means "up the map",
-    /// which is the higher frequency — the same station ⌘→ lands on.
-    func testCommandUpAndDownStepSpotsLikeCommandRightAndLeft() {
+    /// which is the higher frequency.
+    func testCommandUpAndDownStepSpots() {
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 126, command: true), .nextSpot)
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 125, command: true), .previousSpot)
-        XCTAssertEqual(
-            KeyMonitorGate.action(keyCode: 126, command: true),
-            KeyMonitorGate.action(keyCode: 124, command: true),
-            "⌘↑ and ⌘→ are the same action"
-        )
-        XCTAssertEqual(
-            KeyMonitorGate.action(keyCode: 125, command: true),
+    }
+
+    /// Stepping spots is the vertical axis only. ⌘← / ⌘→ are macOS's own
+    /// beginning/end-of-line keys, and the entry field gets to keep them.
+    func testCommandLeftAndRightDoNotStepSpots() {
+        XCTAssertNil(
             KeyMonitorGate.action(keyCode: 123, command: true),
-            "⌘↓ and ⌘← are the same action"
+            "⌘← belongs to the text field, not the band map"
         )
+        XCTAssertNil(
+            KeyMonitorGate.action(keyCode: 124, command: true),
+            "⌘→ belongs to the text field, not the band map"
+        )
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 123, command: true, shift: true))
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 124, command: true, shift: true))
     }
 
     /// Without ⌘ the arrows belong to whatever has focus — a text field, the
@@ -212,5 +214,116 @@ final class KeyMonitorGateTests: XCTestCase {
             KeyMonitorGate.action(keyCode: 24, command: true, shift: true),
             .adjustWPM(by: 2)
         )
+    }
+
+    // MARK: Response — the whole decision for one key down
+
+    private let letterA: UInt16 = 0
+    private let f1: UInt16 = 122
+    private let f2: UInt16 = 120
+    private let escape: UInt16 = 53
+
+    private func response(
+        _ keyCode: UInt16,
+        command: Bool = false,
+        shift: Bool = false,
+        focus: KeyMonitorGate.Focus = .document,
+        repeatRunning: Bool = false
+    ) -> KeyMonitorGate.Response {
+        KeyMonitorGate.response(
+            keyCode: keyCode,
+            command: command,
+            shift: shift,
+            focus: focus,
+            repeatRunning: repeatRunning
+        )
+    }
+
+    /// The point of the whole feature: a repeating CQ is answered, you start
+    /// typing the call, and the CQ stops *mid-character* rather than talking
+    /// over him. The letter is not consumed — it still lands in the field.
+    func testAnyKeyDuringARepeatingCQHaltsTheMessageOnAir() {
+        XCTAssertEqual(
+            response(letterA, repeatRunning: true),
+            .init(stopsRepeat: true, abortsCW: true, action: nil, consumesEvent: false)
+        )
+    }
+
+    /// A key that has a job still does it — after the abort, so F2 replaces the
+    /// CQ on air instead of queueing behind it.
+    func testAFunctionKeyDuringARepeatingCQAbortsThenSendsItsOwnMessage() {
+        XCTAssertEqual(
+            response(f2, repeatRunning: true),
+            .init(
+                stopsRepeat: true,
+                abortsCW: true,
+                action: .sendMessage(index: 1),
+                consumesEvent: true
+            )
+        )
+    }
+
+    /// F1 during a repeating CQ is "start that CQ over", not "stack a second
+    /// one behind the first".
+    func testF1DuringARepeatingCQRestartsTheCQFromTheTop() {
+        XCTAssertEqual(
+            response(f1, repeatRunning: true),
+            .init(
+                stopsRepeat: true,
+                abortsCW: true,
+                action: .sendMessage(index: 0),
+                consumesEvent: true
+            )
+        )
+    }
+
+    /// The guard rail on the feature. With no repeat running, typing the next
+    /// call while your F2 exchange goes out must not cut the exchange off.
+    func testTypingDoesNotAbortCWWhenNoRepeatIsRunning() {
+        XCTAssertEqual(response(letterA), .init())
+    }
+
+    /// Esc has always aborted on its own, repeat or no repeat, and is consumed
+    /// so it never also does something to the focused control.
+    func testEscapeAbortsWithNoRepeatRunning() {
+        XCTAssertEqual(
+            response(escape),
+            .init(stopsRepeat: false, abortsCW: true, action: nil, consumesEvent: true)
+        )
+    }
+
+    /// Regression (Article 11): Esc aborts wherever it is pressed, but a sheet
+    /// keystroke is never consumed — otherwise Cancel never sees it.
+    func testEscapeOnOneOfOurSheetsAbortsButIsNeverConsumed() {
+        XCTAssertEqual(
+            response(escape, focus: .sheet),
+            .init(stopsRepeat: false, abortsCW: true, action: nil, consumesEvent: false)
+        )
+    }
+
+    /// Opening a sheet does not license the repeat to keep calling CQ.
+    func testASheetKeystrokeStillStopsARunningRepeat() {
+        XCTAssertEqual(
+            response(letterA, focus: .sheet, repeatRunning: true),
+            .init(stopsRepeat: true, abortsCW: true, action: nil, consumesEvent: false)
+        )
+    }
+
+    /// Regression: revising F2 in the Messages editor and pressing it must not
+    /// key the saved macro.
+    func testFunctionKeysNeverTransmitFromASheet() {
+        XCTAssertEqual(response(f2, focus: .sheet), .init())
+    }
+
+    /// Regression: with two logs open, typing in the other one used to stop
+    /// this one's CQ. It must not abort this one's CW either.
+    func testAKeystrokeInAnotherWindowLeavesOurRepeatAlone() {
+        XCTAssertEqual(response(letterA, focus: .elsewhere, repeatRunning: true), .init())
+    }
+
+    /// Even Esc, which aborts everywhere else, belongs to the window it was
+    /// pressed in.
+    func testEscapeInAnotherWindowIsNotOurs() {
+        XCTAssertEqual(response(escape, focus: .elsewhere, repeatRunning: true), .init())
     }
 }

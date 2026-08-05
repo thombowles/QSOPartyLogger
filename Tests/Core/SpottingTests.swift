@@ -216,7 +216,7 @@ final class SpottingTests: XCTestCase {
         ]
     }
 
-    /// Worked stations stay on the band map, greyed, but ⌘← / ⌘→ passes them —
+    /// Worked stations stay on the band map, greyed, but ⌘↓ / ⌘↑ passes them —
     /// there is nothing left to work there.
     func testNextSpotSkipsWorkedStations() {
         let worked: Set<String> = ["B1BB"]

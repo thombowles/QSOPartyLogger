@@ -16,9 +16,18 @@ final class CaveatRosterTests: XCTestCase {
     /// undercounted the counties they activated; the app now counts them, and
     /// what is left is one `ruleInference` about how 9.2.2's numbered list
     /// reads, which correctly raises no warning.
+    ///
+    /// **`ncqp` left 2026-08-04 too**, and it is the only party to have shed
+    /// three `scoreAffecting` caveats. Two closed on 2026-07-28 — the "Rarest
+    /// of NC" 10× points as `countyPointFactor` and the five-county sweep as a
+    /// `designatedCountySweep` bonus — and the self-activation multiplier
+    /// closed with `activatedCountyMultiplier`. No scoring rule of that party
+    /// is now unexpressed. It stays `verified: partial`, on a `provenance`
+    /// item that correctly raises no warning: the Cabrillo CONTEST header is
+    /// the WA7BNM registry's, since the sponsor's rules state none.
     private static let badges: Set<String> = [
         "arqp", "deqp", "fqp", "idqp", "ilqp", "in7qpne", "kyqp", "laqp",
-        "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp",
+        "moqp", "msqp", "naqpcw", "naqpssb", "ndqp", "neqp",
         "nmqp", "oqp", "qcqp", "vaqp", "vtqp", "warun", "wiqp",
     ]
 

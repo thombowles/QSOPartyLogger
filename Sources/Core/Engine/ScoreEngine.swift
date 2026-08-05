@@ -2,6 +2,13 @@ import Foundation
 
 /// Pure rules-driven scoring: fold the log against a party definition.
 /// Score = QSO points × multipliers × category factors + bonuses.
+///
+/// The category factor may be a fraction (VTQP and WIQP both pay ×1.5 for low
+/// power), so it is applied to the `QSO points × multipliers` product and
+/// resolved down to a whole number there — **before** bonuses, which the
+/// sponsors add afterwards and never scale. Wisconsin states the order
+/// outright: *"Then multiply by your multiplier count under MULTIPLIERS.
+/// Finally, add your bonus points."*
 enum ScoreEngine {
 
     /// One counted multiplier. `scope` is "" (once), a mode raw value
@@ -36,7 +43,7 @@ enum ScoreEngine {
         var qsoPoints = 0
         var multiplierKeys: Set<MultKey> = []
         var bonusPoints = 0
-        var categoryFactor = 1
+        var categoryFactor: ScoreFactor = .one
         var outOfScopeCount = 0
         var dupeRowIDs: Set<UUID> = []
         var invalidRowIDs: Set<UUID> = []
@@ -63,7 +70,7 @@ enum ScoreEngine {
         }
 
         var total: Int {
-            qsoPoints * multiplierCount * categoryFactor + bonusPoints
+            categoryFactor.applied(to: qsoPoints * multiplierCount) + bonusPoints
         }
 
         /// Unique values worked for a class, regardless of scope — for the
@@ -152,7 +159,7 @@ enum ScoreEngine {
         result.categoryFactor = party.scoreMultipliers?.factor(
             power: log.station.categoryPower,
             station: log.station.categoryStation
-        ) ?? 1
+        ) ?? .one
 
         result.bonusPoints = bonusPoints(
             rows: contestRows,
@@ -248,12 +255,7 @@ enum ScoreEngine {
     private static func scopeComponent(
         _ scope: PartyDefinition.CountScope, band: Band, modeClass: ModeClass
     ) -> String {
-        switch scope {
-        case .once: ""
-        case .perMode: modeClass.rawValue
-        case .perBand: band.rawValue
-        case .perBandMode: "\(band.rawValue)/\(modeClass.rawValue)"
-        }
+        scope.component(band: band, modeClass: modeClass)
     }
 
     private static func isHomeStateViaCounty(
@@ -365,9 +367,39 @@ enum ScoreEngine {
                 if let best = tiers.filter({ worked >= $0.count }).max(by: { $0.count < $1.count }) {
                     total += best.points
                 }
+
+            case .designatedCountySweep(let counties, let need, let points):
+                // "If at least one QSO is made with a station in five of the
+                // 'Rarest of NC' counties, 500 additional bonus points" — once,
+                // at the threshold or past it, however many of the ten are
+                // worked.
+                if designatedCounties(counties, workedIn: valid).count >= need {
+                    total += points
+                }
             }
         }
         return total
+    }
+
+    /// Which of a designated county list this log has valid-QSO credit for —
+    /// the predicate behind `.designatedCountySweep`, exposed so the sidebar's
+    /// progress readout is the same set the score pays on.
+    static func designatedCountiesWorked(
+        _ designated: [String], log: ContestLog, party: PartyDefinition
+    ) -> Set<String> {
+        let allowed = Set(party.allowedModeClasses)
+        let rows = inScopeRows(
+            log.qsos.sortedChronologically().filter { allowed.contains($0.modeClass) },
+            log: log,
+            party: party,
+            countyAbbrs: Set(party.counties.map(\.abbr))
+        )
+        return designatedCounties(designated, workedIn: rows)
+    }
+
+    private static func designatedCounties(_ designated: [String], workedIn rows: [QSO]) -> Set<String> {
+        Set(rows.map { $0.theirLoc.uppercased() })
+            .intersection(designated.map { $0.uppercased() })
     }
 
     private static func isRovingCategory(_ category: StationProfile.CategoryStation) -> Bool {

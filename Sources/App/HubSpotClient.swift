@@ -3,7 +3,7 @@ import Observation
 
 /// Polls the active party's page on qsopartyhub.com and hands the spots to the
 /// same store the cluster feeds, so the band map, filters, stacking and
-/// ⌘←/⌘→ all work on them without knowing where they came from.
+/// ⌘↑/⌘↓ all work on them without knowing where they came from.
 ///
 /// Deliberately quiet. The hub is a small volunteer-run board, and a failure
 /// there must never disturb the cluster feed or the entry path: errors land in

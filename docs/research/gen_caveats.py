@@ -140,13 +140,17 @@ KINDS = {
         (3, "scoreAffecting", "Portable and mobile stations score differently, which is not modelled."),
         (5, "ruleInference", "County lines are unmentioned in the rules; a two-county entry is refused on the reading that silence is not permission."),
     ],
-    # The third item — in-state entrants short the county they operate from —
-    # left 2026-08-04, when `activatedCountyMultiplier` landed and its prose
-    # stopped being a KNOWN LIMITATION. The party still badges on the two rules
-    # that genuinely cannot be expressed.
+    # NCQP carried three scoreAffecting caveats and now carries none. The
+    # "Rarest of NC" 10× points and the 500-point sweep shipped 2026-07-28
+    # (countyPointFactor and a designatedCountySweep bonus); the third, the
+    # self-activation multiplier, shipped 2026-08-04. Every scoring rule of
+    # this party is expressed, so it leaves the badge roster entirely.
+    #
+    # It stays `verified: partial` on a provenance item, which correctly
+    # raises no warning (Article 3): the Cabrillo CONTEST value is the WA7BNM
+    # registry's, not the committee's, whose rules omit the header.
     "ncqp": [
-        (0, "scoreAffecting", "Score is a floor: the “Rarest of NC” 10× QSO points are not applied, and this is the largest scoring gap in the app."),
-        (1, "scoreAffecting", "The 500-point rare-county sweep is not applied."),
+        (0, "provenance", "The Cabrillo CONTEST header comes from the WA7BNM registry; the sponsor's rules never state one."),
     ],
     "ndqp": [
         (0, "scoreAffecting", "A North Dakota station cannot log a DX country the way the rules ask."),
@@ -221,22 +225,26 @@ KINDS = {
         (0, "scoreAffecting", "Contacts with Virginia mobiles, expeditions and rovers are worth 3 points and are paid 1 or 2 here."),
         (1, "scoreAffecting", "The bonus stations are not shipped; confirm the list before submitting."),
     ],
+    # The power multiplier's caveat is gone as of 2026-07-28: x1.5 is applied,
+    # so the score is no longer a floor. What replaces it is narrower and
+    # inferred -- where the W1AW/1 bonus points enter the formula.
     "vtqp": [
-        (0, "scoreAffecting", "Score is a floor: the fractional power multiplier is not applied. Multiply by 2 for QRP or 1.5 for low power yourself."),
-        (1, "scoreAffecting", "The W1AW/1 bonus is credited to Vermont entrants, who the sponsor says get nothing."),
-        (2, "scoreAffecting", "RTTY and FT8 are one mode here and two for the sponsor."),
-        (3, "cosmetic", "30, 17 and 12 m ship as fully valid although the sponsor allows them for FT8/FT4 only."),
-        (4, "scoreAffecting", "Club-station and grid-square multipliers are missing entirely; add both by hand."),
+        (0, "scoreAffecting", "The W1AW/1 bonus is credited to Vermont entrants, who the sponsor says get nothing."),
+        (1, "scoreAffecting", "RTTY and FT8 are one mode here and two for the sponsor."),
+        (2, "cosmetic", "30, 17 and 12 m ship as fully valid although the sponsor allows them for FT8/FT4 only."),
+        (3, "scoreAffecting", "Club-station and grid-square multipliers are missing entirely; add both by hand."),
+        (4, "ruleInference", "The W1AW/1 bonus is added after the power multiplier; the sponsor never says where it belongs."),
         (5, "ruleInference", "Whether Vermont counts itself, and whether 60 m is legal, are both inferred."),
     ],
     "warun": [
         (0, "scoreAffecting", "A DXCC prefix that equals a state or province code is read as that state, which can leave the 10-DXCC allowance under-used."),
     ],
+    # The power multiplier's caveat is gone as of 2026-07-28: x1.5 is applied,
+    # so the score is no longer a floor. Only the two bonus rules remain.
     "wiqp": [
-        (0, "scoreAffecting", "Score is a floor: the fractional power multiplier is not applied. Multiply by 2 for QRP or 1.5 for low power yourself."),
-        (1, "scoreAffecting", "The 500-point county bonus is credited for your home county too; subtract it."),
-        (2, "scoreAffecting", "The W9FK bonus is credited above 50 MHz, where the sponsor pays nothing; subtract it."),
-        (4, "cosmetic", "33 cm and 23 cm are plausibly legal here and cannot be logged at all."),
+        (0, "scoreAffecting", "The 500-point county bonus is credited for your home county too; subtract it."),
+        (1, "scoreAffecting", "The W9FK bonus is credited above 50 MHz, where the sponsor pays nothing; subtract it."),
+        (2, "cosmetic", "33 cm and 23 cm are plausibly legal here and cannot be logged at all."),
     ],
 }
 

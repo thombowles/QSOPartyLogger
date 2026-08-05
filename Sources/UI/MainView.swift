@@ -55,7 +55,7 @@ struct MainView: View {
     /// Session-scoped on purpose: a claim that is still wrong earns one nag
     /// per sitting, and the Cabrillo export stands it back up regardless.
     @State private var spotWarningDismissed = false
-    /// Reference frequency for ⌘←/⌘→ when no live radio frequency exists.
+    /// Reference frequency for ⌘↑/⌘↓ when no live radio frequency exists.
     @State private var spotCursorKHz: Double?
     /// Run frequency captured when CQ is sent; ⌘J jumps back to it.
     @State private var cqFrequencyHz: Int?
@@ -165,7 +165,7 @@ struct MainView: View {
     }
 
     /// Spots on the current band after every filter — the band map and
-    /// ⌘←/⌘→ work from this same list so they can't disagree.
+    /// ⌘↑/⌘↓ work from this same list so they can't disagree.
     private var visibleSpotsOnBand: [Spot] {
         SpotFilter.filter(
             spotStore.spots(band: currentBand),
@@ -506,7 +506,7 @@ struct MainView: View {
                 )
                 .foregroundStyle(spotClient.status == .connected ? .green : .primary)
             }
-            .help("DX cluster connection for spots — click a spot to tune, ⌘← / ⌘→ / ⌘↑ / ⌘↓ to step")
+            .help("DX cluster connection for spots — click a spot to tune, ⌘↑ / ⌘↓ to step")
             .popover(isPresented: $showClusterPopover) {
                 clusterPopover
             }
@@ -635,7 +635,7 @@ struct MainView: View {
             if spotClient.status != .disconnected || !spotClient.console.isEmpty {
                 nodeConsole
             }
-            Text("Logs in with your callsign. Spots for the current band appear in the sidebar and band map — click to tune, ⌘← / ⌘→ / ⌘↑ / ⌘↓ to step through them.")
+            Text("Logs in with your callsign. Spots for the current band appear in the sidebar and band map — click to tune, ⌘↑ / ⌘↓ to step through them.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 250, alignment: .leading)
@@ -749,7 +749,7 @@ struct MainView: View {
             document.noteSpotsUsed()
         }
         // Hub spots land in the same store, so the band map, filters, stacking
-        // and ⌘←/⌘→ treat them exactly like any other spot — including the
+        // and ⌘↑/⌘↓ treat them exactly like any other spot — including the
         // assisted-category record.
         hubSpotClient.onSpots = { spots in
             for spot in spots { spotStore.add(spot) }
@@ -886,9 +886,14 @@ struct MainView: View {
     /// ten minutes later his frequency reads as empty. So the log feeds the
     /// map too — one spot per contact, only where nobody has spotted him
     /// already, and only when the radio gave us a frequency to put him on.
-    /// It arrives worked, so it draws struck-through and ⌘←/⌘→ steps over it.
+    /// It arrives worked, so it draws struck-through and ⌘↑/⌘↓ steps over it.
+    ///
+    /// Searching only. Running, the mode is passed in and `WorkedSpot` returns
+    /// nothing — see there for why a run frequency is the one that needs no
+    /// marking.
     private func addWorkedStationsToBandMap(_ rows: [QSO]) {
-        for spot in WorkedSpot.spots(for: rows, myCall: document.log.station.callsign) {
+        for spot in WorkedSpot.spots(for: rows, myCall: document.log.station.callsign,
+                                     mode: operatingMode.wrappedValue) {
             spotStore.addIfAbsent(spot)
         }
     }
@@ -961,7 +966,7 @@ struct MainView: View {
     /// Put the radio in the mode the band plan expects at a frequency.
     ///
     /// Called only from the paths where *the app* moved the frequency — a spot
-    /// click, a typed QSY, ⌘←/⌘→, ⌘J, a click on empty map. Frequency changes
+    /// click, a typed QSY, ⌘↑/⌘↓, ⌘J, a click on empty map. Frequency changes
     /// the operator makes on the VFO knob arrive through `radio.radioState` and
     /// deliberately never reach here: an automatic mode change mid-QSO, because
     /// you drifted across a sub-band edge, is the radio fighting you.
@@ -1157,7 +1162,7 @@ struct MainView: View {
         hubSpotClient.start(source: source, party: party)
     }
 
-    /// ⌘← / ⌘→ / ⌘↑ / ⌘↓. Worked stations stay on the band map, greyed, but
+    /// ⌘↑ / ⌘↓. Worked stations stay on the band map, greyed, but
     /// there is nothing left to work on them so the keys step over them.
     ///
     /// A spot reporting a county is judged on call+county, so a rover that has
@@ -1324,39 +1329,25 @@ struct MainView: View {
     private func installKeyMonitor() {
         guard keyMonitor == nil else { return }
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-            // The monitor is app-wide, so the first question is always whether
-            // this keystroke is even ours — see `KeyMonitorGate`.
-            let focus = KeyMonitorGate.focus(currentWindows())
-            guard focus != .elsewhere else { return event }
+            // The monitor is app-wide, and every rule — which window owns the
+            // keystroke, what it does, whether it is swallowed — lives in
+            // `KeyMonitorGate` where it can be tested. This closure reads the
+            // window state, asks, and dispatches, in that order: the loop stops
+            // and the transmitter comes down *before* the key's own action, so
+            // F2 during a repeating CQ replaces the CQ instead of stacking
+            // behind it.
+            let response = KeyMonitorGate.response(
+                keyCode: event.keyCode,
+                command: event.modifierFlags.contains(.command),
+                shift: event.modifierFlags.contains(.shift),
+                focus: KeyMonitorGate.focus(currentWindows()),
+                repeatRunning: repeatTask != nil
+            )
 
-            // Any keystroke cancels a running repeat-CQ loop (per Tom's spec:
-            // "typing anything cancels repeat"). Typing in *another* log's
-            // window no longer stops this one's CQ.
-            if repeatTask != nil {
-                stopRepeat()
-            }
-
-            guard
-                let action = KeyMonitorGate.action(
-                    keyCode: event.keyCode,
-                    command: event.modifierFlags.contains(.command),
-                    shift: event.modifierFlags.contains(.shift)
-                )
-            else { return event }
-
-            // A sheet owns the keyboard. Article 11 still holds — Esc aborts
-            // instantly wherever it is pressed — but the key is never consumed,
-            // so Esc also closes the sheet and F1–F8 cannot transmit a macro the
-            // operator is in the middle of editing.
-            if focus == .sheet {
-                if action == .abortCW {
-                    radio.abortCW(settings: settings)
-                }
-                return event
-            }
-
-            perform(action)
-            return nil
+            if response.stopsRepeat { stopRepeat() }
+            if response.abortsCW { radio.abortCW(settings: settings) }
+            if let action = response.action { perform(action) }
+            return response.consumesEvent ? nil : event
         }
     }
 
@@ -1376,13 +1367,16 @@ struct MainView: View {
         switch action {
         // ⌘= / ⌘+ and ⌘- (plus keypad variants): CW speed ±2 WPM.
         case .adjustWPM(let delta): adjustWPM(by: delta)
-        // ⌘←/⌘→ and ⌘↓/⌘↑: previous/next spot on the band. ⌘J: back to CQ.
+        // ⌘↓/⌘↑: previous/next spot on the band. ⌘J: back to CQ.
         case .previousSpot: jumpToSpot(.down)
         case .nextSpot: jumpToSpot(.up)
         case .jumpToCQFrequency: jumpToCQFrequency()
         case .toggleBandMap: toggleBandMap()
         case .sendMessage(let index): sendMessageAt(index)
         case .clearEntry: clearEntry()
+        // The gate hoists Esc into `Response.abortsCW` — which every key does
+        // during a repeat — so this never arrives here. It keeps the table
+        // exhaustive.
         case .abortCW: radio.abortCW(settings: settings)
         case .exportADIF: exportADIF()
         case .exportCabrillo: exportCabrillo()

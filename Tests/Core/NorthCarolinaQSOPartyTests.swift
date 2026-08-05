@@ -5,10 +5,19 @@ import XCTest
 /// 2026 rules ("Updated 10/13/2025") and its county abbreviation sheet, read
 /// verbatim 2026-07-26. See docs/research/ncqp_rules.md.
 ///
-/// **The party with the most unmodellable scoring in the repo.** Its "Rarest of
-/// NC" 10× QSO points and its five-county sweep both move every entrant's score
-/// and neither fits the schema; the three `testKnownGap…` cases below pin what
-/// the app does today so the gaps stay deliberate and visible.
+/// **The party that forced points-by-county into the schema.** Its "Rarest of
+/// NC" rules move every entrant's score, in state and out: ten designated
+/// counties pay 10× QSO points *before* multiplication (`countyPointFactor`),
+/// and five of those ten pay a further 500 *after* it
+/// (`BonusRule.designatedCountySweep`). Which side of the multiplier each lands
+/// on is the sponsor's own emphasis, and the cases below pin both.
+///
+/// **Every scoring rule of this party is now modelled.** The self-activation
+/// multiplier was the last one outstanding and landed 2026-08-04: every NC
+/// station counts the county it operates from, fixed stations included. The
+/// party remains `verified: partial` on a provenance question that costs no
+/// points — the Cabrillo CONTEST header is the WA7BNM registry's, since the
+/// sponsor's rules state none.
 final class NorthCarolinaQSOPartyTests: XCTestCase {
 
     var ncqp: PartyDefinition!
@@ -151,40 +160,130 @@ final class NorthCarolinaQSOPartyTests: XCTestCase {
         XCTAssertNil(ncqp.homeStationPoints, "points are by mode, not by who was worked")
     }
 
-    /// **KNOWN LIMITATION 1, pinned — the largest scoring gap in this app.** A QSO
-    /// with one of the ten "Rarest of NC" counties is worth 10× (phone 20, CW 30,
-    /// digital 50), *before* multiplication. `PointsTable` is keyed by mode alone,
-    /// so the app pays the ordinary rate. This test records what it actually does.
-    func testKnownGapRarestCountiesDoNotPayTenTimes() throws {
-        let rare = ScoreEngine.score(log: outLog([
-            qso(band: .m20, mode: .cw, their: "GRM"),
-        ]), party: ncqp)
-        XCTAssertEqual(rare.qsoPoints, 3, "current behaviour — the sponsor pays 30")
+    // MARK: The "Rarest of NC" — 10× before the multiplier, 500 after it
 
-        let ordinary = ScoreEngine.score(log: outLog([
-            qso(band: .m20, mode: .cw, their: "WAK"),
-        ]), party: ncqp)
-        XCTAssertEqual(rare.qsoPoints, ordinary.qsoPoints,
-                       "a rare county scores exactly like any other today")
-
-        let notes = try XCTUnwrap(ncqp.notes)
-        XCTAssertTrue(notes.contains("KNOWN LIMITATION 1"))
-        XCTAssertTrue(notes.contains("TO CORRECT BY HAND"),
-                      "the operator must be given the arithmetic")
+    /// The party file designates exactly the ten codes the rules PDF prints in
+    /// plain text, at the factor it states — and no eleventh.
+    func testTheDesignatedTenAreTheSponsorsTen() throws {
+        let factor = try XCTUnwrap(ncqp.countyPointFactor, "the Rarest of NC 10× must ship")
+        XCTAssertEqual(factor.factor, 10, "'will be scored 10X QSO points'")
+        XCTAssertEqual(Set(factor.counties), Set(Self.rarest))
+        XCTAssertEqual(factor.counties.count, 10, "'Ten NC Counties designated below'")
     }
 
-    /// **KNOWN LIMITATION 2, pinned.** Five of the ten rare counties pays 500
-    /// after multiplication. `sweepTiers` counts *any* counties, so it cannot be
-    /// reused; nothing ships instead.
-    func testKnownGapTheFiveRareCountySweepIsNotPaid() throws {
-        let rows = Self.rarest.prefix(5).enumerated().map { i, c in
-            qso(call: "W4R\(i)", their: c)
+    /// "A QSO with someone in one of these counties will be scored **10X QSO
+    /// points** as follows: Phone - 20 points each / CW – 30 points each /
+    /// Digital - 50 points each."
+    func testARareCountyPaysTenTimesTheModeRate() {
+        let abbrs = Set(ncqp.counties.map(\.abbr))
+        for (mode, rare, ordinary) in [
+            (ModeClass.phone, 20, 2), (.cw, 30, 3), (.digital, 50, 5),
+        ] {
+            XCTAssertEqual(
+                ncqp.pointsTable(forTheirLoc: "GRM", countyAbbrs: abbrs).points(for: mode),
+                rare, "\(mode) in Graham — the sponsor's printed rare-county table")
+            XCTAssertEqual(
+                ncqp.pointsTable(forTheirLoc: "WAK", countyAbbrs: abbrs).points(for: mode),
+                ordinary, "\(mode) in Wake — an ordinary county")
         }
-        let s = ScoreEngine.score(log: outLog(Array(rows)), party: ncqp)
-        XCTAssertEqual(s.validQSOs, 5)
-        XCTAssertEqual(s.bonusPoints, 0, "current behaviour — the sponsor pays 500")
-        XCTAssertEqual(ncqp.bonuses, [], "no sweep rule can express 'five of a named ten'")
-        XCTAssertTrue(try XCTUnwrap(ncqp.notes).contains("KNOWN LIMITATION 2"))
+    }
+
+    /// The county-code trap with a price on it, now that the price is real:
+    /// `DAV` Davie is one of the rare ten and `DVD` Davidson is not, so logging
+    /// the wrong one of the two costs 27 points on a single CW QSO before the
+    /// multiplier ever touches it.
+    func testDavieIsRareAndDavidsonIsNot() {
+        let abbrs = Set(ncqp.counties.map(\.abbr))
+        XCTAssertEqual(ncqp.pointsTable(forTheirLoc: "DAV", countyAbbrs: abbrs).cw, 30)
+        XCTAssertEqual(ncqp.pointsTable(forTheirLoc: "DVD", countyAbbrs: abbrs).cw, 3)
+        // …and the same one letter apart in the other confusable pairs.
+        XCTAssertEqual(ncqp.pointsTable(forTheirLoc: "GRM", countyAbbrs: abbrs).cw, 30)
+        XCTAssertEqual(ncqp.pointsTable(forTheirLoc: "GRA", countyAbbrs: abbrs).cw, 3)
+        XCTAssertEqual(ncqp.pointsTable(forTheirLoc: "PER", countyAbbrs: abbrs).cw, 30)
+        XCTAssertEqual(ncqp.pointsTable(forTheirLoc: "PEQ", countyAbbrs: abbrs).cw, 3)
+    }
+
+    /// **The placement the sponsor insists on**: "These points are added to the
+    /// rest of the regular QSO Points **prior to MULT multiplication** so they
+    /// have a significant positive effect on the final score."
+    ///
+    /// One rare and one ordinary county, both CW, two multipliers: 30 + 3 = 33
+    /// QSO points × 2 = 66. Paid as a bonus instead it would have been
+    /// 6 + 27 = 33 — half the score — so this number is what separates the two
+    /// readings.
+    func testTheTenTimesLandsBeforeTheMultiplication() {
+        let s = ScoreEngine.score(log: outLog([
+            qso(call: "W4G", band: .m20, mode: .cw, their: "GRM"),
+            qso(call: "W4W", band: .m20, mode: .cw, their: "WAK"),
+        ]), party: ncqp)
+        XCTAssertEqual(s.qsoPoints, 33, "30 for Graham, 3 for Wake")
+        XCTAssertEqual(s.multiplierCount, 2)
+        XCTAssertEqual(s.bonusPoints, 0, "two counties is short of the five-county sweep")
+        XCTAssertEqual(s.total, 66)
+    }
+
+    /// The 10× is stated unconditionally, two paragraphs after the multiplier
+    /// rules split "NC participants" from "Non-NC participants" — so an NC
+    /// station working Graham earns it exactly as an out-of-state entrant does.
+    func testAnInStateEntrantEarnsTheTenTimesToo() {
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "W4G", band: .m20, mode: .cw, my: "WAK", their: "GRM"),
+        ]), party: ncqp)
+        XCTAssertEqual(s.qsoPoints, 30)
+    }
+
+    /// "If at least one QSO is made with a station in **five** of the 'Rarest of
+    /// NC' counties, **500 additional bonus points** are added to the score
+    /// **after multiplication**. This would constitute a sweep."
+    func testFiveOfTheRareTenPaysFiveHundredOnce() throws {
+        XCTAssertEqual(
+            ncqp.bonuses,
+            [.designatedCountySweep(counties: Self.rarest.sorted(), need: 5, points: 500)],
+            "the sweep is over the named ten, not any five counties")
+
+        func bonus(_ counties: ArraySlice<String>) -> Int {
+            let rows = counties.enumerated().map { i, c in qso(call: "W4R\(i)", their: c) }
+            return ScoreEngine.score(log: outLog(Array(rows)), party: ncqp).bonusPoints
+        }
+        XCTAssertEqual(bonus(Self.rarest.prefix(4)), 0, "four is short of the sweep")
+        XCTAssertEqual(bonus(Self.rarest.prefix(5)), 500)
+        XCTAssertEqual(bonus(Self.rarest.prefix(10)), 500,
+                       "'at least' five — all ten still pays the one 500")
+    }
+
+    /// Five *ordinary* counties are not a sweep. This is the distinction
+    /// `sweepTiers` could not draw, and the reason it was not reused: it counts
+    /// any counties, so it would have paid nearly every log.
+    func testFiveOrdinaryCountiesAreNotASweep() {
+        let ordinary = ["WAK", "MEC", "GUI", "FOR", "DUR"]
+        for c in ordinary { XCTAssertFalse(Self.rarest.contains(c), "\(c) is not rare") }
+        let rows = ordinary.enumerated().map { i, c in qso(call: "W4O\(i)", their: c) }
+        let s = ScoreEngine.score(log: outLog(rows), party: ncqp)
+        XCTAssertEqual(s.multiplierCount, 5)
+        XCTAssertEqual(s.bonusPoints, 0)
+    }
+
+    /// Both rules together, end to end, in the sponsor's own order: "Multiply
+    /// the total (QSO points plus Bonus QSO Points) times the total multiplier
+    /// value. Add bonus points to score (as applicable) after the
+    /// multiplication."
+    ///
+    /// Five rare counties on phone (5 × 20 = 100) plus two ordinary ones
+    /// (2 × 2 = 4) is 104 QSO points over 7 multipliers — 728 — and the sweep
+    /// adds its 500 afterwards.
+    func testTheWholeFormulaEndToEnd() {
+        var rows = Self.rarest.prefix(5).enumerated().map { i, c in
+            qso(call: "W4R\(i)", mode: .phone, their: c)
+        }
+        rows += ["WAK", "MEC"].enumerated().map { i, c in
+            qso(call: "W4O\(i)", mode: .phone, their: c)
+        }
+        let s = ScoreEngine.score(log: outLog(rows), party: ncqp)
+        XCTAssertEqual(s.validQSOs, 7)
+        XCTAssertEqual(s.qsoPoints, 104)
+        XCTAssertEqual(s.multiplierCount, 7)
+        XCTAssertEqual(s.bonusPoints, 500)
+        XCTAssertEqual(s.total, 104 * 7 + 500)
     }
 
     // MARK: Multipliers — once overall, and the sponsor states the total
@@ -410,21 +509,33 @@ final class NorthCarolinaQSOPartyTests: XCTestCase {
         XCTAssertEqual(utc.component(.month, from: windows[0].start), 3)
     }
 
-    func testNotesRecordEveryLimitationAndTheFT8Exclusion() throws {
+    func testNotesRecordNoLimitationsAndTheFT8Exclusion() throws {
         let notes = try XCTUnwrap(ncqp.notes)
         XCTAssertTrue(notes.contains("verified: partial"))
-        // Two, not three: the county-activation multiplier stopped being a
-        // limitation on 2026-08-04 and its prose is now a plain statement of
-        // what the app does.
-        for n in 1...2 {
-            XCTAssertTrue(notes.contains("KNOWN LIMITATION \(n)"), "limitation \(n)")
-        }
-        XCTAssertFalse(notes.contains("KNOWN LIMITATION 3"))
+        // None left. The 10× and the sweep stopped being limitations on
+        // 2026-07-28, the county-activation multiplier on 2026-08-04, and each
+        // one's prose is now a plain statement of what the app does.
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION"),
+                       "every scoring rule of this party is expressed")
+        XCTAssertTrue(notes.contains("THE 'RAREST OF NC' SCORING IS APPLIED, BOTH HALVES OF IT"))
         XCTAssertTrue(notes.contains("EVERY NC STATION COUNTS THE COUNTY IT OPERATES FROM"))
         XCTAssertTrue(notes.contains("KEEP FT8/FT4 OUT OF THIS LOG"),
                       "FT8/FT4 belong to the separate Weak Signal Showcase")
         XCTAssertTrue(notes.contains("ENCODED BY COLOUR"))
+        // What keeps it partial is now a provenance question, not a score.
         let questions = try XCTUnwrap(ncqp.openQuestions)
-        XCTAssertTrue(questions.contains("BOTH CHANGE THE FINAL SCORE FOR EVERY ENTRANT"))
+        XCTAssertTrue(questions.contains("CABRILLO CONTEST VALUE"))
+    }
+
+    /// The gaps that closed, stated as a roster: nothing `scoreAffecting` is
+    /// left, and the one caveat that remains costs the operator no points.
+    func testNoScoreAffectingCaveatRemains() {
+        XCTAssertEqual(ncqp.caveats.count, 1)
+        XCTAssertEqual(ncqp.caveats.first?.kind, .provenance)
+        XCTAssertTrue(ncqp.blockingCaveats.isEmpty,
+                      "the 10×, the sweep and the self-activation multiplier all score now")
+        XCTAssertTrue(
+            ncqp.caveats.first?.summary.contains("WA7BNM") ?? false,
+            "what is left is where the Cabrillo CONTEST header came from")
     }
 }

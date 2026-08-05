@@ -210,16 +210,26 @@ final class PartyNoticeTests: XCTestCase {
     }
 
     /// Singular and plural both read as English.
+    ///
+    /// **Amended 2026-08-04**: North Carolina was the plural example at three,
+    /// briefly at one, and now raises no warning at all — the "Rarest of NC"
+    /// 10× points and the five-county sweep scored from 2026-07-28, and the
+    /// self-activation multiplier from 2026-08-04, which was the last of its
+    /// three. What it still carries is a `provenance` caveat, which is exactly
+    /// the case that must not warn. Salmon Run carries the singular instead,
+    /// and Ontario three of its own.
     func testHeadingsAgreeInNumber() throws {
         XCTAssertEqual(
             PartyNotice(party: try party("warun")).warning?.header,
             "1 thing this app cannot score for you here."
         )
-        // Was three until 2026-08-04, when the county-activation multiplier
-        // landed and left the "Rarest of NC" 10× points and the 500-point sweep.
+        XCTAssertNil(
+            PartyNotice(party: try party("ncqp")).warning,
+            "every scoring rule of NCQP is expressed; its one caveat is provenance"
+        )
         XCTAssertEqual(
-            PartyNotice(party: try party("ncqp")).warning?.header,
-            "2 things this app cannot score for you here."
+            PartyNotice(party: try party("oqp")).warning?.header,
+            "3 things this app cannot score for you here."
         )
         XCTAssertEqual(
             PartyNotice(party: try party("hqp")).informational?.header,
