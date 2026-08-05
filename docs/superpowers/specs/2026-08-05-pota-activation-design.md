@@ -58,9 +58,22 @@ export + a handful of universal UI seams.
   - Your own multi-park activation dedupes by park reference per line; P2P
     matching wants both logs' times within 15 minutes and exact callsigns.
 
+- **POTA park data API** (verified live 2026-08-05):
+  - `GET https://api.pota.app/program/parks/US` — unauthenticated JSON array,
+    **12,938 parks** (~2.7 MB), each entry
+    `{"reference": "US-0001", "name": "Acadia National Park",
+    "latitude": 44.31, "longitude": -68.2034, "grid": "FN54vh",
+    "locationDesc": "US-ME", "attempts": 636, "activations": 568,
+    "qsos": 18900}`. Every entry carried coordinates on the verification
+    date.
+  - `HEAD` on the same URL returns **403 MissingAuthenticationTokenException**
+    (API Gateway routes GET only) — so freshness cannot be checked the
+    SCP way (HEAD + `Last-Modified`); the client re-downloads on a weekly
+    throttle instead.
+
 These quotes are banked as `docs/research/pota/SOURCES.md` in the same commit
 as the schema, per the provenance rule. N1MM and other loggers were not
-consulted; the two sponsors here are the ADIF spec and POTA's own docs.
+consulted; the sponsors here are the ADIF spec and POTA's own docs and API.
 
 ---
 
@@ -155,21 +168,90 @@ Per record, grouped immediately before `station_callsign`:
 - Cabrillo is untouched. `ScoreEngine`, `DupeChecker`, `ExchangeParser` never
   read the new fields — a scoring-identity test pins that.
 
-## 5. Contest Setup
+## 5. Contest Setup — the park picker
+
+*(Revised 2026-08-05 on Tom's direction: a searchable picker with
+nearest-parks, not a bare text field; grid square filled from the Mac's
+location.)*
 
 New Form section **"POTA Activation"** after Category (universal — every
-party shows it):
+party shows it), built around a new `PotaParkPicker` view — its own file, so
+`SetupSheet` stays inside its type-checker budget and the park directory
+never leaks past that seam. The `countyPicker` interaction pattern, already
+accepted in this sheet:
 
-- One labelled row, the form-repair way: `LabeledContent("My park(s)")` with a
-  monospaced, uppercasing text field (~200 pt).
-- Caption: comma-separated refs, two-fer example, "leave empty unless
-  operating from a park", and that later contacts stamp the *new* value after
-  a mid-contest change.
-- Malformed list → the caption goes orange with `PotaRef`'s message and
-  **Save is gated** (empty always saves). Inline, never a modal.
+- **Selected parks** render as removable chips (reference, monospaced),
+  order preserved — this is the list that stamps into rows.
+- **One search field**, searching the cached directory by **name or
+  number**: every whitespace-separated term must match name, reference, or
+  `locationDesc` — so "lake tx" finds Texas lakes, "0088" finds US-0088,
+  "cedar hill" finds the park. Results are buttons that toggle selection,
+  capped at 30 rows.
+- **Query empty → the nearest parks** (12, with miles), measured from the
+  Core Location fix when the operator has used the locate button, else from
+  the typed grid square's center — so it works fully offline at the park.
+  No fix and no grid → the nearest list simply hides.
+- **Typed-reference escape hatch:** Return in the search field with a
+  string `PotaRef.normalize` accepts adds it directly — the keyboard-only
+  path, and the path for a park the directory does not carry (non-US
+  programs, brand-new parks, no directory downloaded yet). Nothing invalid
+  can enter the selection, so Save needs no park gate.
 - `LogDocument.updateStation` gains `myPotaRefs: [String]? = nil` following
   the `exchangeName` parameter pattern, captured in the same undo
   registration.
+
+## 5a. The park directory — download, cache, search
+
+Data source is POTA's own API (see Sources): `GET
+https://api.pota.app/program/parks/US`, 12,938 parks with names,
+references, and coordinates. Split on the `SCPClient`/`SCPStore` pattern:
+
+- **`PotaPark`** (Core) — `reference`, `name`, `latitude?`, `longitude?`,
+  `grid?`, `locationDesc?`; extra upstream keys ignored. Coordinates decode
+  optionally so an upstream null tomorrow degrades one park's sorting, not
+  the file.
+- **`PotaParkDirectory`** (Core, pure) — `parse(data:)`,
+  `search(_:limit:)` as above, `nearest(latitude:longitude:limit:)` by
+  haversine (sorting accuracy, not survey accuracy). No disk, no network.
+- **`PotaParkStore`** (Core) — `SCPStore`'s shape: bytes as served plus a
+  meta sidecar (`fetchedAt`, `lastCheckedAt`) under
+  `Application Support/QSOPartyLogger/POTA/`.
+- **`PotaParkClient`** (App, `@MainActor @Observable`) — `SCPClient`'s
+  posture: quiet by construction, cached copy published before any network,
+  errors inline in the status row, never a modal. One difference, forced by
+  the API: **no HEAD freshness check** (HEAD returns 403 there — Sources),
+  so `refreshIfStale` re-downloads after **7 days** (parks churn slowly; a
+  week-old list still locates you) or on the operator's Refresh.
+- **First download is explicit.** The status row offers "Download the park
+  list (≈3 MB)" when no cache exists — every party's Setup shows this
+  section, and a non-POTA operator should never pay the download silently.
+  With a cache: status text (park count, fetched date) + Refresh, the
+  `callHistoryRow` shape.
+- **Scope: the US program list.** Tom activates US parks; the typed-
+  reference path covers everything else. Adding programs later is a second
+  URL through the same store, keyed by program.
+
+## 5b. Grid square from the Mac's location
+
+- **`Maidenhead`** (Core, pure): `locator(latitude:longitude:)` → 6-char
+  grid (EM13LE form), `center(of:)` → coordinates for a 4- or 6-char grid.
+  Both directions tested against known anchors (W1AW → FN31PR).
+- **`LocationProviding`** (App seam): `isAuthorized`, `canRequest`,
+  `currentLocation() async -> (latitude, longitude)?`. Live
+  implementation `MacLocationProvider` wraps one-shot
+  `CLLocationManager.requestLocation()` with a timeout; tests script
+  positions and never touch Core Location (the keying-seam lesson).
+- **Setup behavior:** the grid square stays a free-text field, always.
+  Beside it, a **Locate** button fills it from the Mac's location (and
+  remembers the fix as the nearest-parks origin). On sheet open, if the
+  grid is empty **and authorization is already granted**, it fills
+  silently — the permission dialog only ever appears from the button press.
+  A failed fix sets an inline caption ("Couldn't get a location — type the
+  grid square instead") and the field remains free text, per direction.
+- **Sandbox:** the app is sandboxed, so this adds the
+  `com.apple.security.personal-information.location` entitlement and an
+  `NSLocationUsageDescription` string to `project.yml` (the pbxproj and
+  plists are generated — never edited by hand).
 
 ## 6. Entry bar — park-to-park capture (keyboard-first)
 
@@ -216,6 +298,10 @@ post-hoc in the editor for the personal record.
 | Area | File | What pins it |
 | --- | --- | --- |
 | Grammar | `Tests/Core/PotaRefTests.swift` (new) | spec examples accept/reject, list parse, dedupe, message text |
+| Grid math | `Tests/Core/MaidenheadTests.swift` (new) | W1AW → FN31PR and other anchors both directions, edge clamps, rejects |
+| Directory | `Tests/Core/PotaParkDirectoryTests.swift` (new) | parse of a real-entry fixture, name/number/state search, nearest ordering, haversine sanity |
+| Park cache | `Tests/Core/PotaParkStoreTests.swift` (new) | save/load round trip, meta sidecar, missing-sidecar posture |
+| Park client | `Tests/App/PotaParkClientTests.swift` (new) | scripted fetcher — download, publish-cached-first, 7-day throttle, forced refresh, failure keeps cache |
 | Schema | `Tests/Core/ModelTests.swift` | legacy JSON decodes to `[]`/`nil`; round-trip with parks |
 | Expander | `Tests/Core/CountyLineExpanderTests.swift` | parks ride every expanded row |
 | Export | `Tests/Core/AdifExporterTests.swift` | byte-identical without parks; activation triplet; three-fer ×3 records "rest unchanged"; 2×2 cross; county-line × parks; `<my_sig:4>POTA` byte counts |
@@ -238,9 +324,16 @@ wrong on screen).
    — or log anyway and flag?
 4. **`myPotaRefs` offered in bulk edit for every party** (default) — or
    somehow gated?
+5. **Directory scope: the US program only**, with typed references covering
+   the rest (default) — or download further programs?
+6. **Weekly re-download, explicit first download** (default) — or a
+   different staleness / auto-download posture?
 
 ## Out of scope
 
 POTA spot feeds and self-spotting; a hunter-mode bar field; per-park file
 splitting; archive schema changes; SOTA/WWFF references (the schema idiom
-would extend, but nothing is added until asked).
+would extend, but nothing is added until asked); non-US program downloads
+(typed references cover them); live per-keystroke queries against
+api.pota.app (the cached directory searches offline, which is what a park
+without cell coverage needs).
