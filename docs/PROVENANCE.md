@@ -30,7 +30,7 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   party's own rules before being offered.
 - Super check partial: `MASTER.SCP` from supercheckpartial.com (HTTPS,
   `Last-Modified` verified against the file's own `# Release` stamp;
-  observed 2026-08-04, release 2026.07.31, 50,020 calls). Downloaded and
+  observed 2026-08-04, release 2026.07.31, 50,021 calls). Downloaded and
   cached by the app itself — never bundled, never hand-fetched — and
   re-checked daily by HEAD. Server behavior and file shape banked in
   [`docs/research/scp_masterfile.md`](research/scp_masterfile.md).

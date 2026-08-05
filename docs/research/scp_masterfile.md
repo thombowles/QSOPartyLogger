@@ -26,8 +26,9 @@ Check Partial project's distribution site. Observed 2026-08-04.
     …
     ZZ7ZZ
 
-- 50,027 lines, CRLF-terminated; 50,020 calls after the directive and
-  comments.
+- 50,027 lines, CRLF-terminated; six of them the directive and comments,
+  so **50,021 calls** — counted by the parser's own rules over the file the
+  app downloaded (`2026-08-05`), with no duplicates dropped.
 - Calls are uppercase `[A-Z0-9/]`, three characters or longer.
 - The `!!Order,1,1` directive and `#` comments are the only non-call
   lines; `SCPDatabase.parse` drops anything that does not scan as a call,
