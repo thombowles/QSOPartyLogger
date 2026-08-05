@@ -86,4 +86,17 @@ final class SuperCheckFlowTests: XCTestCase {
         flow.stationChanged(to: "W5NK", context())
         XCTAssertEqual(flow.scpMatches.calls, ["W5NK"])
     }
+
+    /// The option, machine-level like its peers: on by default, off with
+    /// one toggle, persisted. A scratch suite — never the operator's real
+    /// preferences.
+    func testSuperCheckSettingDefaultsOnAndPersists() {
+        let suiteName = "scp-setting-\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        XCTAssertTrue(AppSettings(defaults: defaults).superCheckEnabled)
+        AppSettings(defaults: defaults).superCheckEnabled = false
+        XCTAssertFalse(AppSettings(defaults: defaults).superCheckEnabled)
+    }
 }

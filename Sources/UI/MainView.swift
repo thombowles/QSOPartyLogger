@@ -43,6 +43,7 @@ struct MainView: View {
     @State private var hubSpotClient = HubSpotClient()
     @State private var callHistoryClient = CallHistoryClient()
     @State private var dxccLabelClient = DXCCLabelClient()
+    @State private var scpClient = SCPClient()
     @State private var showSelfSpot = false
     @State private var selfSpotFields = HubSelfSpot.Fields(
         station: "", frequencyKHz: 0, county: nil, comment: "", poster: ""
@@ -118,7 +119,8 @@ struct MainView: View {
             .onAppear(perform: onAppear)
             .onDisappear(perform: onDisappear)
             .sheet(isPresented: $showSetup) {
-                SetupSheet(document: document, callHistory: callHistoryClient)
+                SetupSheet(document: document, callHistory: callHistoryClient,
+                           scp: scpClient)
             }
             .sheet(isPresented: $showMessagesEditor) {
                 MessagesEditor(document: document, settings: settings)
@@ -233,7 +235,11 @@ struct MainView: View {
         )
     }
 
-    private var leftPane: some View {
+    /// The pane's content, separate from its `onChange` wiring: one
+    /// expression holding both put the type-checker over its budget the day
+    /// the super check strip joined the stack (2026-08-04). Splitting at an
+    /// opaque seam bounds each half.
+    private var leftPaneContent: some View {
         VStack(spacing: 0) {
             RadioBar(
                 settings: settings,
@@ -262,6 +268,8 @@ struct MainView: View {
                 .onChange(of: entry.exchange) { revalidate() }
                 .onChange(of: entry.call) { flow.callChanged(operatingContext) }
 
+            superCheckStrip
+
             MessagesRow(
                 operatingMode: operatingMode,
                 messages: flow.activeMessages,
@@ -289,6 +297,25 @@ struct MainView: View {
 
             logTable
         }
+    }
+
+    /// Reserved height while the feature is live (option on and a database
+    /// loaded), so the strip filling and emptying under a 35 WPM exchange
+    /// never reflows the window. Absent entirely otherwise.
+    @ViewBuilder
+    private var superCheckStrip: some View {
+        if settings.superCheckEnabled, flow.scpDatabase != nil {
+            SuperCheckRow(matches: flow.scpMatches, typedCall: entry.callNormalized)
+                .padding(.horizontal, 14)
+        }
+    }
+
+    /// The pane with its band-map and spot wiring — the first half of an
+    /// `onChange` chain the type-checker cannot swallow whole (the same
+    /// budget split as `leftPaneContent`). Document and settings wiring is
+    /// the second half, in `leftPane`.
+    private var leftPaneSpotWired: some View {
+        leftPaneContent
         .frame(minWidth: 760)
         .background(WindowAccessor { window in
             hostWindow = window
@@ -317,6 +344,10 @@ struct MainView: View {
             spotStore.purge(now: Date())
         }
         .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
+    }
+
+    private var leftPane: some View {
+        leftPaneSpotWired
         // Declaring NON-ASSISTED takes effect at once — an open connection is
         // dropped and the network spots come off the map, because a claim
         // that only applies to future spots is not a claim.
@@ -350,9 +381,11 @@ struct MainView: View {
             bandMapModel?.canSpotToHub = canSpotToHub
             syncHubSpotClient()
             activateCallHistory()
+            activateSuperCheck()
             checkDXCCLabels()
         }
         .onChange(of: settings.callHistoryEnabled) { activateCallHistory() }
+        .onChange(of: settings.superCheckEnabled) { activateSuperCheck() }
     }
 
     private var logTable: some View {
@@ -764,7 +797,11 @@ struct MainView: View {
             guard let flow, flow.party?.id == partyID else { return }
             flow.callHistoryIndex = (partyID, parsed)
         }
+        scpClient.onDatabase = { [weak flow] database in
+            flow?.updateSCPDatabase(database)
+        }
         activateCallHistory()
+        activateSuperCheck()
         checkDXCCLabels()
         if settings.clusterAutoConnect,
            !settings.clusterHost.trimmingCharacters(in: .whitespaces).isEmpty,
@@ -815,6 +852,18 @@ struct MainView: View {
               let party, party.callHistory != nil else { return }
         callHistoryClient.publishCached(party: party)
         Task { await callHistoryClient.refreshIfStale(party: party) }
+    }
+
+    /// Serve the cached MASTER.SCP at once, then let the client consult
+    /// the server in the background — at appear, at contest load, and when
+    /// the toggle flips. Clearing first is what stops the strip
+    /// immediately when the option goes off. The client's daily throttle
+    /// is what makes the triggers free (see `checkDXCCLabels`).
+    private func activateSuperCheck() {
+        flow.updateSCPDatabase(nil)
+        guard settings.superCheckEnabled else { return }
+        scpClient.publishCached()
+        Task { await scpClient.refreshIfStale() }
     }
 
     /// Ask AD1C whether the DX multiplier labels have moved. Runs at launch

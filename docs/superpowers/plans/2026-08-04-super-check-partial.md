@@ -26,7 +26,7 @@ To run one suite: append `-only-testing:QSOPartyLoggerTests/<ClassName>`.
 - Create: `Sources/Core/CallHistory/SCPDatabase.swift`
 - Test: `Tests/Core/SCPDatabaseTests.swift`
 
-- [ ] **Step 1: Write the failing tests** — `Tests/Core/SCPDatabaseTests.swift`:
+- [x] **Step 1: Write the failing tests** — `Tests/Core/SCPDatabaseTests.swift`:
 
 ```swift
 import XCTest
@@ -139,12 +139,12 @@ final class SCPDatabaseTests: XCTestCase {
 }
 ```
 
-- [ ] **Step 2: Add the file, regenerate, run — verify FAIL**
+- [x] **Step 2: Add the file, regenerate, run — verify FAIL**
 
 Run: `xcodegen generate && xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' -only-testing:QSOPartyLoggerTests/SCPDatabaseTests`
 Expected: build failure — `SCPDatabase` does not exist. (TDD red for a new type is a compile failure; confirm the error names `SCPDatabase`.)
 
-- [ ] **Step 3: Implement** — `Sources/Core/CallHistory/SCPDatabase.swift`:
+- [x] **Step 3: Implement** — `Sources/Core/CallHistory/SCPDatabase.swift`:
 
 ```swift
 import Foundation
@@ -242,9 +242,9 @@ struct SCPDatabase: Equatable, Sendable {
 }
 ```
 
-- [ ] **Step 4: Run the suite again — verify PASS** (same command as Step 2). Expected: `Test Suite 'SCPDatabaseTests' passed`.
+- [x] **Step 4: Run the suite again — verify PASS** (same command as Step 2). Expected: `Test Suite 'SCPDatabaseTests' passed`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Sources/Core/CallHistory/SCPDatabase.swift Tests/Core/SCPDatabaseTests.swift QSOPartyLogger.xcodeproj/project.pbxproj
@@ -259,7 +259,7 @@ git commit -m "feat(scp): MASTER.SCP parser and tiered partial-call matcher"
 - Create: `Sources/Core/CallHistory/SCPStore.swift`
 - Test: `Tests/Core/SCPStoreTests.swift`
 
-- [ ] **Step 1: Write the failing tests** — `Tests/Core/SCPStoreTests.swift`:
+- [x] **Step 1: Write the failing tests** — `Tests/Core/SCPStoreTests.swift`:
 
 ```swift
 import XCTest
@@ -339,10 +339,10 @@ final class SCPStoreTests: XCTestCase {
 }
 ```
 
-- [ ] **Step 2: Regenerate, run, verify FAIL** (compile failure naming `SCPStore`):
+- [x] **Step 2: Regenerate, run, verify FAIL** (compile failure naming `SCPStore`):
 `xcodegen generate && xcodebuild test … -only-testing:QSOPartyLoggerTests/SCPStoreTests`
 
-- [ ] **Step 3: Implement** — `Sources/Core/CallHistory/SCPStore.swift`:
+- [x] **Step 3: Implement** — `Sources/Core/CallHistory/SCPStore.swift`:
 
 ```swift
 import Foundation
@@ -431,9 +431,9 @@ struct SCPStore: Sendable {
 }
 ```
 
-- [ ] **Step 4: Run the suite — verify PASS.**
+- [x] **Step 4: Run the suite — verify PASS.**
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Sources/Core/CallHistory/SCPStore.swift Tests/Core/SCPStoreTests.swift QSOPartyLogger.xcodeproj/project.pbxproj
@@ -448,7 +448,7 @@ git commit -m "feat(scp): on-disk MASTER.SCP cache with release sidecar"
 - Create: `Sources/App/SCPClient.swift`
 - Test: `Tests/App/SCPClientTests.swift`
 
-- [ ] **Step 1: Write the failing tests** — `Tests/App/SCPClientTests.swift`:
+- [x] **Step 1: Write the failing tests** — `Tests/App/SCPClientTests.swift`:
 
 ```swift
 import XCTest
@@ -714,9 +714,9 @@ final class SCPClientTests: XCTestCase {
 }
 ```
 
-- [ ] **Step 2: Regenerate, run, verify FAIL** (compile failure naming `SCPClient` / `SCPFetching`).
+- [x] **Step 2: Regenerate, run, verify FAIL** (compile failure naming `SCPClient` / `SCPFetching`).
 
-- [ ] **Step 3: Implement** — `Sources/App/SCPClient.swift`:
+- [x] **Step 3: Implement** — `Sources/App/SCPClient.swift`:
 
 ```swift
 import Foundation
@@ -946,9 +946,9 @@ struct LiveSCPFetcher: SCPFetching {
 }
 ```
 
-- [ ] **Step 4: Run the suite — verify PASS.**
+- [x] **Step 4: Run the suite — verify PASS.**
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Sources/App/SCPClient.swift Tests/App/SCPClientTests.swift QSOPartyLogger.xcodeproj/project.pbxproj
@@ -963,7 +963,7 @@ git commit -m "feat(scp): self-checking MASTER.SCP download client"
 - Modify: `Sources/App/EntryFlow.swift` (add properties + `updateSCPDatabase` + `refreshSCPMatches`; hook `revalidate` and `logContact`)
 - Test: `Tests/App/SuperCheckFlowTests.swift`
 
-- [ ] **Step 1: Write the failing tests** — `Tests/App/SuperCheckFlowTests.swift`:
+- [x] **Step 1: Write the failing tests** — `Tests/App/SuperCheckFlowTests.swift`:
 
 ```swift
 import XCTest
@@ -1062,10 +1062,10 @@ contact; the fixture mirrors `EntryFlowTests.cqpDocument`. If `CRA` is not a
 KSQP abbreviation the logging test fails with `.nothing` — check
 `Resources/Parties/ksqp.json` and use any real county code.)
 
-- [ ] **Step 2: Run, verify FAIL** (compile failure: `updateSCPDatabase` / `scpMatches` do not exist):
+- [x] **Step 2: Run, verify FAIL** (compile failure: `updateSCPDatabase` / `scpMatches` do not exist):
 `xcodegen generate && xcodebuild test … -only-testing:QSOPartyLoggerTests/SuperCheckFlowTests`
 
-- [ ] **Step 3: Implement in `EntryFlow.swift`** — add below the `callHistoryIndex` property:
+- [x] **Step 3: Implement in `EntryFlow.swift`** — add below the `callHistoryIndex` property:
 
 ```swift
     /// The super check partial database, when the option is on and a
@@ -1126,11 +1126,11 @@ and in `logContact(_:undoManager:)`, immediately after
         refreshSCPMatches()
 ```
 
-- [ ] **Step 4: Run the suite — verify PASS.** Also run
+- [x] **Step 4: Run the suite — verify PASS.** Also run
 `-only-testing:QSOPartyLoggerTests/EntryFlowTests` — the `revalidate` hook
 must not disturb the keying-path acceptance tests.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Sources/App/EntryFlow.swift Tests/App/SuperCheckFlowTests.swift QSOPartyLogger.xcodeproj/project.pbxproj
@@ -1148,7 +1148,7 @@ git commit -m "feat(scp): entry flow publishes matches for the typed fragment"
 - Modify: `Sources/UI/SetupSheet.swift` (client param + global row)
 - Test: `Tests/App/SuperCheckFlowTests.swift` (settings round-trip appended)
 
-- [ ] **Step 1: Failing test for the setting** — append to `SuperCheckFlowTests.swift`:
+- [x] **Step 1: Failing test for the setting** — append to `SuperCheckFlowTests.swift`:
 
 ```swift
     /// The option, machine-level like its peers: on by default, off with
@@ -1165,9 +1165,9 @@ git commit -m "feat(scp): entry flow publishes matches for the typed fragment"
     }
 ```
 
-- [ ] **Step 2: Run, verify FAIL** (no `superCheckEnabled` member).
+- [x] **Step 2: Run, verify FAIL** (no `superCheckEnabled` member).
 
-- [ ] **Step 3: Implement the setting** — `AppSettings.swift`, after
+- [x] **Step 3: Implement the setting** — `AppSettings.swift`, after
 `callHistoryEnabled`:
 
 ```swift
@@ -1186,7 +1186,7 @@ and in `init`, after the `callHistoryEnabled` line:
         superCheckEnabled = defaults.object(forKey: "superCheckEnabled") as? Bool ?? true
 ```
 
-- [ ] **Step 4: The strip** — create `Sources/UI/SuperCheckRow.swift`:
+- [x] **Step 4: The strip** — create `Sources/UI/SuperCheckRow.swift`:
 
 ```swift
 import SwiftUI
@@ -1259,7 +1259,7 @@ struct SuperCheckRow: View {
 }
 ```
 
-- [ ] **Step 5: Wire `MainView.swift`.** Four edits:
+- [x] **Step 5: Wire `MainView.swift`.** Four edits:
 
 (a) beside the other clients (`@State private var dxccLabelClient …`):
 
@@ -1324,7 +1324,7 @@ and pass the client to the sheet — the existing call becomes:
                            scp: scpClient)
 ```
 
-- [ ] **Step 6: The setup row** — `SetupSheet.swift`. Add the parameter
+- [x] **Step 6: The setup row** — `SetupSheet.swift`. Add the parameter
 below `callHistory`:
 
 ```swift
@@ -1394,7 +1394,7 @@ And beside `callHistoryRow` / `callHistoryStatus`:
     }
 ```
 
-- [ ] **Step 7: Regenerate, build, and run the full suite — verify PASS**
+- [x] **Step 7: Regenerate, build, and run the full suite — verify PASS**
 
 ```bash
 xcodegen generate
@@ -1405,7 +1405,7 @@ xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destin
 Expected: build succeeds; every suite passes. Note the total test count
 from the log for Task 6's README update.
 
-- [ ] **Step 8: Do not commit yet** — the operator-visible change ships
+- [x] **Step 8: Do not commit yet** — the operator-visible change ships
 with its docs (Task 6), per Article 6's spirit.
 
 ---
@@ -1417,7 +1417,7 @@ with its docs (Task 6), per Article 6's spirit.
 - Modify: `README.md` (new section after "Call history files"; test count)
 - Modify: `docs/PROVENANCE.md` (new bullet beside the call history entry)
 
-- [ ] **Step 1: Bank the research** — `docs/research/scp_masterfile.md`:
+- [x] **Step 1: Bank the research** — `docs/research/scp_masterfile.md`:
 
 ```markdown
 # MASTER.SCP — super check partial database
@@ -1467,7 +1467,7 @@ The file is deliberately not bundled (the call history precedent):
 so the season never starts on a committed copy that has aged.
 ```
 
-- [ ] **Step 2: README** — insert after the "Call history files" section
+- [x] **Step 2: README** — insert after the "Call history files" section
 (after the line `` Cached files live in `~/Library/Application Support/QSOPartyLogger/CallHistory/`. ``):
 
 ```markdown
@@ -1493,11 +1493,11 @@ from it validates, scores, or fills anything.
 The cached file lives in `~/Library/Application Support/QSOPartyLogger/SCP/`.
 ```
 
-- [ ] **Step 3: README test count** — update the `**2034 unit tests**`
+- [x] **Step 3: README test count** — update the `**2034 unit tests**`
 line with the count from Task 5 Step 7's output (2034 + the ~28 new tests;
 use the suite's own number, never arithmetic).
 
-- [ ] **Step 4: PROVENANCE.md** — insert directly after the call history
+- [x] **Step 4: PROVENANCE.md** — insert directly after the call history
 bullet (the one ending `…every value is re-parsed by the party's own rules
 before being offered.` and its trailing lines):
 
@@ -1512,14 +1512,14 @@ before being offered.` and its trailing lines):
   nothing from it reaches scoring, validation, or export.
 ```
 
-- [ ] **Step 5: Full suite one more time** (docs cannot break it, but the
+- [x] **Step 5: Full suite one more time** (docs cannot break it, but the
 commit claim is "suite green at this commit"):
 
 ```bash
 xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS'
 ```
 
-- [ ] **Step 6: Commit everything operator-visible together**
+- [x] **Step 6: Commit everything operator-visible together**
 
 ```bash
 git add Sources/App/AppSettings.swift Sources/UI/SuperCheckRow.swift \
@@ -1529,7 +1529,7 @@ git add Sources/App/AppSettings.swift Sources/UI/SuperCheckRow.swift \
 git commit -m "feat(scp): super check partial strip, option, and setup row"
 ```
 
-- [ ] **Step 7: Update the plan's checkboxes and the worklist docs if any
+- [x] **Step 7: Update the plan's checkboxes and the worklist docs if any
 claim drifted**, then `git log --oneline master..HEAD` to confirm the
 branch tells the story: spec → parser → store → client → flow → feature.
 ```

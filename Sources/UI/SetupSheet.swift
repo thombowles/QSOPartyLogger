@@ -7,6 +7,9 @@ struct SetupSheet: View {
     /// The download client, for the party section's call history row. `nil`
     /// in previews; the row simply hides.
     var callHistory: CallHistoryClient?
+    /// The MASTER.SCP client, for the super check partial row. `nil` in
+    /// previews; the row still renders, minus status and Refresh.
+    var scp: SCPClient? = nil
     @Environment(\.dismiss) private var dismiss
     @Environment(\.undoManager) private var undoManager
 
@@ -76,6 +79,7 @@ struct SetupSheet: View {
                     if let party {
                         callHistoryRow(party)
                     }
+                    superCheckRow
                 }
 
                 Section("Station") {
@@ -329,6 +333,56 @@ struct SetupSheet: View {
                 }
             }
         }
+    }
+
+    /// Super check partial: the toggle, what release is cached, and a
+    /// Refresh that overrides the once-a-day check. Global — one
+    /// MASTER.SCP serves every party — so unlike the call history row it
+    /// never hides with the party.
+    @ViewBuilder
+    private var superCheckRow: some View {
+        Toggle("Super check partial (known calls shown while you type)",
+               isOn: $settings.superCheckEnabled)
+            .font(.caption)
+        if settings.superCheckEnabled {
+            HStack(spacing: 8) {
+                let status = superCheckStatus
+                Text(status.text)
+                    .font(.caption)
+                    .foregroundStyle(status.isError
+                                     ? AnyShapeStyle(.orange)
+                                     : AnyShapeStyle(.secondary))
+                    .fixedSize(horizontal: false, vertical: true)
+                if let scp {
+                    Button("Refresh") {
+                        Task { await scp.refreshIfStale(force: true) }
+                    }
+                    .font(.caption)
+                }
+            }
+        }
+    }
+
+    private var superCheckStatus: (text: String, isError: Bool) {
+        guard let scp else { return ("", false) }
+        switch scp.status {
+        case .checking:
+            return ("Checking supercheckpartial.com…", false)
+        case .downloading:
+            return ("Downloading…", false)
+        case .ready(let records, let release):
+            return ("\(records) calls — release \(release)", false)
+        case .failed(let message):
+            return (message, true)
+        case .idle:
+            break
+        }
+        if let meta = scp.cachedMeta() {
+            return ("Cached release — fetched "
+                    + meta.fetchedAt.formatted(date: .abbreviated, time: .omitted),
+                    false)
+        }
+        return ("Downloads automatically — nothing to set up.", false)
     }
 
     private func callHistoryStatus(_ party: PartyDefinition) -> (text: String, isError: Bool) {
