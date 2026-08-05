@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 /// Running score, per-band QSO matrix, multiplier tracker, bonus status, and
@@ -16,6 +17,7 @@ struct ScoreSidebar: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
+                copyShortcut
                 totalsCard
                 if let party {
                     CombinedBreakdownSection(log: log, party: party, members: members)
@@ -159,6 +161,34 @@ struct ScoreSidebar: View {
         .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(.background, in: RoundedRectangle(cornerRadius: 8))
+        .contextMenu {
+            Button("Copy Score Summary") { copySummary() }
+        }
+    }
+
+    /// The keyboard half of the same action (⇧⌘C) — constitution rule 9.
+    ///
+    /// Zero-sized rather than a visible control in the SCORE heading row: that
+    /// grid's four columns and their cell anchors are load-bearing, and a
+    /// button dropped into it moves the rate column off the baselines the
+    /// figures share.
+    private var copyShortcut: some View {
+        Button("Copy Score Summary") { copySummary() }
+            .keyboardShortcut("c", modifiers: [.command, .shift])
+            .buttonStyle(.plain)
+            .frame(width: 0, height: 0)
+            .opacity(0)
+    }
+
+    /// The whole summary, not just the total: score components, the band matrix
+    /// and — for a combined entry — the per-sponsor counts, which is what N1MM's
+    /// "Copy all" means by all.
+    private func copySummary() {
+        let text = ScoreSummaryText.make(
+            log: log, party: party, score: score, members: members
+        )
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
     }
 
     /// One `Grid`, not two stacks side by side: the rate rows have to sit on

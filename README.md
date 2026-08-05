@@ -123,6 +123,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `⇧⌘R` | Restore the party's default CW messages (Messages editor) |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
 | `⇧⌘M` | Expand / collapse every multiplier list in the score sidebar |
+| `⇧⌘C` | Copy the score summary as text (also on the score card's right-click menu) |
 | `⌘A` | Select every row in the log (`⇧`-click for a range, `⌘`-click for scattered rows) |
 | `⌘.` | Dismiss the spots-already-used badge for this sitting |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY, change band, change mode |
@@ -210,6 +211,14 @@ before you log.
 Each party names its own multiplier class, so NAQP counts *NA entities*, BCQP
 *districts* and QCQP *regions* — nothing says "county" at a party that doesn't
 have any.
+
+**Copying the summary.** Right-click the score card — or press **⇧⌘C** — to put
+the whole summary on the clipboard as fixed-width text, shaped after N1MM's
+Score window: the band-by-mode matrix, the score components, the Skeeter/QRP/QRO
+split where a party has one, and each sponsor's own QSO count for a combined
+entry. That's the block a summary email or a 3830 post wants. Every figure comes
+from the same breakdown the sidebar draws, under the same labels, so the paste
+and the screen can't disagree.
 
 ### Rate
 
