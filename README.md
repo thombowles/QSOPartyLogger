@@ -285,9 +285,11 @@ an unproven link gets **Cancel**.
 
 **CW keys two ways**: direct DTR/RTS line keying with sub-millisecond software
 timing (8–50 WPM, optional PTT line with lead and tail), or the radio's internal
-keyer. F1–F8 messages support `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH}` and
-default to the active party's own exchange shape — a serial party sends
-`{SERIAL}` where the report would go, a name party sends `{NAME}`. The editor
+keyer. F1–F8 messages support `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH}
+{MEMBER}` and default to the active party's own exchange shape — a serial party
+sends `{SERIAL}` where the report would go, a name party sends `{NAME}`, and a
+QRP-sprint party trails the location with `{MEMBER}`, which keys `NR 13` for a
+member number and `5W` verbatim for a power. The editor
 warns you, with a one-key fix (⇧⌘R), when a message contradicts its party's
 exchange. Optional cut numbers (599 → 5NN, 40 → 4T). **Esc aborts instantly.**
 
@@ -572,7 +574,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2034 unit tests**, none of which need hardware or a network — no serial port,
+**2080 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history

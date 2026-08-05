@@ -23,6 +23,18 @@ struct ContestLog: Codable, Equatable, Sendable {
     /// Empty for every party that exchanges no name — and for documents
     /// written before the setting existed, which decode to empty.
     var exchangeName: String
+    /// The member-number-or-power element sent in every exchange, for parties
+    /// that carry one (Skeeter Hunt: your Skeeter number, or your output
+    /// power if you have none). Set in Contest Setup; stamped into each row's
+    /// `memberSent` at logging. Empty for every party without the element —
+    /// and for documents written before the setting existed.
+    var exchangeMember: String = ""
+    /// The self-declared entry class (`PartyDefinition.entryClasses`) this
+    /// log claims — the Skeeter Hunt's X1–X4. Stored as the class `id`; an
+    /// empty or stale id resolves to the party's first (lowest-factor) class,
+    /// so a log that never chose cannot claim a multiplier the operator did
+    /// not. Empty for every party without classes.
+    var entryClassID: String = ""
     /// Whether spotting-network information — cluster or hub — was ever
     /// delivered into this contest's session. Set once and never cleared:
     /// reception is access (NAQP rule 5A(ii)'s word), access is what the
@@ -73,7 +85,9 @@ struct ContestLog: Codable, Equatable, Sendable {
         messages: MessageSets = .standard,
         operatingMode: OperatingMode? = nil,
         setupCompleted: Bool = false,
-        exchangeName: String = ""
+        exchangeName: String = "",
+        exchangeMember: String = "",
+        entryClassID: String = ""
     ) {
         self.partyID = partyID
         self.station = station
@@ -83,11 +97,13 @@ struct ContestLog: Codable, Equatable, Sendable {
         self.operatingMode = operatingMode ?? Self.deriveOperatingMode(from: myLocation)
         self.setupCompleted = setupCompleted
         self.exchangeName = exchangeName
+        self.exchangeMember = exchangeMember
+        self.entryClassID = entryClassID
     }
 
     private enum CodingKeys: String, CodingKey {
         case schemaVersion, partyID, station, myLocation, qsos, messages, operatingMode, setupCompleted
-        case exchangeName, usedSpots
+        case exchangeName, exchangeMember, entryClassID, usedSpots
     }
 
     init(from decoder: Decoder) throws {
@@ -106,8 +122,11 @@ struct ContestLog: Codable, Equatable, Sendable {
         // Legacy docs in active use (callsign set) count as already set up.
         setupCompleted = try c.decodeIfPresent(Bool.self, forKey: .setupCompleted)
             ?? !station.callsign.isEmpty
-        // Documents written before name exchanges existed carry no name.
+        // Documents written before name exchanges existed carry no name —
+        // and likewise for the member element and the entry class.
         exchangeName = try c.decodeIfPresent(String.self, forKey: .exchangeName) ?? ""
+        exchangeMember = try c.decodeIfPresent(String.self, forKey: .exchangeMember) ?? ""
+        entryClassID = try c.decodeIfPresent(String.self, forKey: .entryClassID) ?? ""
         // Documents written before the fact was recorded used no spots —
         // which is how sponsors read logs that predate the header too.
         usedSpots = try c.decodeIfPresent(Bool.self, forKey: .usedSpots) ?? false

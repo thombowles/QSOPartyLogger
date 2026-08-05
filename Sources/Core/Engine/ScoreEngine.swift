@@ -43,6 +43,13 @@ enum ScoreEngine {
         var qsoPoints = 0
         var multiplierKeys: Set<MultKey> = []
         var bonusPoints = 0
+        /// Valid-QSO counts by the received member element's class — the
+        /// three lines the Skeeter Hunt's summary email asks for ("Skeeter
+        /// QSOs - 23 / Non-Skeeter QRP QSOs - 5 / Non-Skeeter QRO QSOs").
+        /// All zero for every party without `memberExchange`.
+        var memberQSOs = 0
+        var qrpQSOs = 0
+        var otherQSOs = 0
         var categoryFactor: ScoreFactor = .one
         var outOfScopeCount = 0
         var dupeRowIDs: Set<UUID> = []
@@ -125,9 +132,30 @@ enum ScoreEngine {
                 continue
             }
             result.validQSOs += 1
-            result.qsoPoints += party
-                .pointsTable(forTheirLoc: row.theirLoc, countyAbbrs: countyAbbrs)
-                .points(for: row.modeClass)
+            // A member-exchange party pays by what the worked station IS —
+            // the received element decides (Skeeter 3 / QRP 2 / QRO 1),
+            // regardless of mode. An unreadable or absent element falls back
+            // to the mode table rather than guessing.
+            if let member = party.memberExchange,
+               let value = row.memberRcvd.flatMap(MemberExchange.parse) {
+                switch value {
+                case .member:
+                    result.qsoPoints += member.memberPoints
+                    result.memberQSOs += 1
+                case .power(let watts):
+                    if watts <= member.qrpMaxWatts.limit(for: row.modeClass) {
+                        result.qsoPoints += member.qrpPoints
+                        result.qrpQSOs += 1
+                    } else {
+                        result.qsoPoints += member.otherPoints
+                        result.otherQSOs += 1
+                    }
+                }
+            } else {
+                result.qsoPoints += party
+                    .pointsTable(forTheirLoc: row.theirLoc, countyAbbrs: countyAbbrs)
+                    .points(for: row.modeClass)
+            }
 
             for contribution in multContributions(
                 theirLoc: row.theirLoc.uppercased(),
@@ -164,6 +192,12 @@ enum ScoreEngine {
             power: log.station.categoryPower,
             station: log.station.categoryStation
         ) ?? .one
+        // A self-declared entry class (Skeeter Hunt X1–X4) multiplies into
+        // the same factor — the sidebar row and the archive's exact pair
+        // follow without further plumbing. Absent classes leave `.one`.
+        if let entryClass = party.resolvedEntryClass(id: log.entryClassID) {
+            result.categoryFactor = result.categoryFactor * entryClass.factor
+        }
 
         result.bonusPoints = bonusPoints(
             rows: contestRows,
@@ -430,9 +464,49 @@ enum ScoreEngine {
                 if designatedCounties(counties, workedIn: valid).count >= need {
                     total += points
                 }
+
+            case .callAreaSum(let target, let points):
+                // Skeeter Hunt Blackjack: each DISTINCT worked callsign
+                // contributes its call-area digit once ("You can use any
+                // call sign worked ONCE"), 0 counts as 10, and the bonus
+                // pays once when any subset lands on the target exactly.
+                let values = Set(valid.map { $0.call.uppercased() })
+                    .compactMap(callAreaValue)
+                if subsetSumsExactly(values, target: target) {
+                    total += points
+                }
             }
         }
         return total
+    }
+
+    /// The call-area value of a callsign: its first decimal digit, with 0
+    /// worth 10 — "Each call area number is worth that many points with the
+    /// '0' area call signs being worth 10 points." A call with no digit
+    /// contributes nothing. The first digit is an inference for non-US call
+    /// shapes, recorded in the carrying party's notes.
+    static func callAreaValue(_ call: String) -> Int? {
+        guard let digit = call.first(where: \.isWholeNumber),
+              let value = digit.wholeNumberValue
+        else { return nil }
+        return value == 0 ? 10 : value
+    }
+
+    /// Whether some subset of `values` (each usable once) sums to exactly
+    /// `target`. Plain 0/1 subset-sum over a boolean table — values are
+    /// call-area digits, so both axes stay tiny.
+    static func subsetSumsExactly(_ values: [Int], target: Int) -> Bool {
+        guard target >= 0 else { return false }
+        var reachable = [Bool](repeating: false, count: target + 1)
+        reachable[0] = true
+        for value in values where value > 0 && value <= target {
+            for sum in stride(from: target, through: value, by: -1)
+            where reachable[sum - value] {
+                reachable[sum] = true
+            }
+            if reachable[target] { return true }
+        }
+        return reachable[target]
     }
 
     /// Which of a designated county list this log has valid-QSO credit for —
@@ -454,6 +528,26 @@ enum ScoreEngine {
     private static func designatedCounties(_ designated: [String], workedIn rows: [QSO]) -> Set<String> {
         Set(rows.map { $0.theirLoc.uppercased() })
             .intersection(designated.map { $0.uppercased() })
+    }
+
+    /// Whether the call-area blackjack target is met by this log's valid rows
+    /// — the predicate behind `.callAreaSum`, exposed so the sidebar's badge
+    /// is the same computation the score pays on (the
+    /// `designatedCountiesWorked` arrangement).
+    static func callAreaSumAchieved(
+        target: Int, log: ContestLog, party: PartyDefinition
+    ) -> Bool {
+        let allowed = Set(party.allowedModeClasses)
+        let rows = inScopeRows(
+            log.qsos.sortedChronologically().filter { allowed.contains($0.modeClass) },
+            log: log,
+            party: party,
+            countyAbbrs: Set(party.counties.map(\.abbr))
+        )
+        let firstIDs = DupeChecker.firstOccurrenceIDs(rows)
+        let values = Set(rows.filter { firstIDs.contains($0.id) }.map { $0.call.uppercased() })
+            .compactMap(callAreaValue)
+        return subsetSumsExactly(values, target: target)
     }
 
     private static func isRovingCategory(_ category: StationProfile.CategoryStation) -> Bool {

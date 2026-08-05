@@ -86,6 +86,12 @@ enum AdifExporter {
         // byte-identical; locations stay in stx_string/srx_string.
         r += field("my_name", (q.nameSent ?? "").uppercased())
         r += field("name", (q.nameRcvd ?? "").uppercased())
+        // The member-number-or-power element (Skeeter Hunt). ADIF 3.1.4 has
+        // no field for a club number, and stx_string/srx_string are already
+        // the locations, so it rides APP_ fields — written only where the
+        // row carries one, so every other party's ADIF is byte-identical.
+        r += field("app_qsopartylogger_member_sent", (q.memberSent ?? "").uppercased())
+        r += field("app_qsopartylogger_member_rcvd", (q.memberRcvd ?? "").uppercased())
         r += field("stx_string", q.myLoc.uppercased())
         r += field("srx_string", q.theirLoc.uppercased())
         r += field("contest_id", party.cabrilloContest)

@@ -19,10 +19,14 @@ struct SetupSheet: View {
     @State private var selectedCounties: [String] = []
     @State private var countySearch = ""
     @State private var exchangeName = ""
+    @State private var exchangeMember = ""
+    @State private var entryClassID = ""
 
     @FocusState private var focused: Field?
 
-    private enum Field: Hashable { case callsign, stateToken, countySearch, exchangeName }
+    private enum Field: Hashable {
+        case callsign, stateToken, countySearch, exchangeName, exchangeMember
+    }
 
     private var parties: [PartyDefinition] {
         PartyCatalog.allParties()
@@ -143,6 +147,17 @@ struct SetupSheet: View {
                             Text($0.rawValue).tag($0)
                         }
                     }
+                    // A party-declared class table (Skeeter Hunt X1–X4),
+                    // shown only where one exists. The factor multiplies the
+                    // whole score, so the label carries it.
+                    if let party, !party.entryClasses.isEmpty {
+                        Picker("Entry class", selection: $entryClassID) {
+                            ForEach(party.entryClasses, id: \.id) { entryClass in
+                                Text("\(entryClass.id) — \(entryClass.label)")
+                                    .tag(entryClass.id)
+                            }
+                        }
+                    }
                     TextField("Operators (multi-op)", text: $station.operators)
                         .textCase(.uppercase)
                         .font(.body.monospaced())
@@ -166,6 +181,22 @@ struct SetupSheet: View {
                                     .frame(width: 120)
                             }
                             Text("Sent in every exchange; the rules require one name for the whole contest.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        // The other contest-long sent element: a member's
+                        // number, or an output power for everyone else
+                        // (Skeeter Hunt: "NR 13" versus "5W").
+                        if let member = party.memberExchange {
+                            LabeledContent(member.term.sentenceCased) {
+                                TextField("", text: $exchangeMember.uppercasing)
+                                    .textFieldStyle(.roundedBorder)
+                                    .font(.body.monospaced())
+                                    .focused($focused, equals: .exchangeMember)
+                                    .frame(width: 120)
+                            }
+                            Text("Your \(member.term) — or your output power "
+                                 + "(5W, 500MW) if you don't have one.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -244,9 +275,12 @@ struct SetupSheet: View {
             }
         }
         // Landing on a name party seeds the name the moment the field
-        // appears, not only when the sheet opened on one.
+        // appears, not only when the sheet opened on one — and a class
+        // party's picker must hold one of *its* ids, not a stale one from
+        // whatever party the log was on before.
         .onChange(of: partyID) { _, _ in
             seedExchangeName()
+            entryClassID = party?.resolvedEntryClass(id: entryClassID)?.id ?? ""
         }
     }
 
@@ -416,6 +450,9 @@ struct SetupSheet: View {
     /// an entrant in Bermuda should not have to guess between VP9 and BDA.
     private func locationHint(_ party: PartyDefinition) -> String {
         guard !party.hasHomeRegion else { return "Two-letter state or province, or DX." }
+        // A no-home-region party may enumerate nothing at all (Skeeter Hunt:
+        // its multipliers are the standard tables) — no code list to hint at.
+        guard !party.counties.isEmpty else { return "Your state or province, or DX." }
         let examples = party.counties.prefix(3).map(\.abbr).joined(separator: ", ")
         return "Your state or province, DX, or one of this party's "
             + "\(party.counties.count) location codes (\(examples), …)."
@@ -465,6 +502,13 @@ struct SetupSheet: View {
            exchangeName.trimmingCharacters(in: .whitespaces).isEmpty {
             return false
         }
+        // A member party's sent element must be readable — a number or a
+        // power with its unit — because every exchange carries it and the
+        // other stations score by what they copy.
+        if party.memberExchange != nil,
+           MemberExchange.parse(exchangeMember) == nil {
+            return false
+        }
         if isInState && party.hasHomeRegion {
             return !selectedCounties.isEmpty
         }
@@ -496,6 +540,8 @@ struct SetupSheet: View {
             stateToken = station.stateProvince.uppercased()
         }
         exchangeName = document.log.exchangeName
+        exchangeMember = document.log.exchangeMember
+        entryClassID = party?.resolvedEntryClass(id: document.log.entryClassID)?.id ?? ""
         seedExchangeName()
     }
 
@@ -518,7 +564,8 @@ struct SetupSheet: View {
             : .outOfState(location: stateToken.trimmingCharacters(in: .whitespaces).uppercased())
         document.updateStation(
             station, location: location, partyID: partyID,
-            exchangeName: exchangeName, undoManager: undoManager
+            exchangeName: exchangeName, exchangeMember: exchangeMember,
+            entryClassID: entryClassID, undoManager: undoManager
         )
         dismiss()
     }

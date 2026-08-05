@@ -219,6 +219,40 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     /// identically (constitution Article 4).
     let homeStationPoints: PointsTable?
 
+    /// The member-number-or-power exchange element, for QRP sprints whose
+    /// third exchange token is a club number (members) or an output power
+    /// (everyone else), and whose QSO points are decided by it — the NJQRP
+    /// Skeeter Hunt pays 3/2/1 for member / QRP non-member / everyone else.
+    /// `nil` (every other bundled party) leaves the exchange and the points
+    /// table exactly as they were (constitution Article 4).
+    let memberExchange: MemberExchange?
+
+    /// Self-declared entry classes with exact score factors, where a sponsor's
+    /// class table is not a product of the Cabrillo power/station categories —
+    /// the Skeeter Hunt's X1–X4 (home/portable × commercial/homebrew) pays
+    /// 1/2/3/4, which no pair of per-axis factors can compose. The operator
+    /// picks one in Contest Setup (`ContestLog.entryClassID`); its factor
+    /// multiplies into the same `categoryFactor` the score, sidebar and
+    /// archive already carry. Empty for every party without such a table.
+    var entryClasses: [EntryClass] { entryClassesRaw ?? [] }
+    private let entryClassesRaw: [EntryClass]?
+
+    /// One self-declared entry class: an id the log stores ("X4"), a label the
+    /// setup sheet shows, and the exact factor the sponsor prints for it.
+    struct EntryClass: Codable, Equatable, Sendable {
+        let id: String
+        let label: String
+        let factor: ScoreFactor
+    }
+
+    /// The class a stored id resolves to: the match, or the **first** listed
+    /// class where the id is empty or stale — first because parties list their
+    /// classes lowest-factor first, and a log that never chose must not claim
+    /// a multiplier the operator did not. `nil` where the party has none.
+    func resolvedEntryClass(id: String) -> EntryClass? {
+        entryClasses.first { $0.id == id } ?? entryClasses.first
+    }
+
     /// Counties the sponsor designates as paying a **multiple** of the ordinary
     /// QSO points, applied *before* the multiplier product. NCQP's "Rarest of
     /// NC": "A QSO with someone in one of these counties will be scored 10X QSO
@@ -860,7 +894,13 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
                 throw PartyValidationError.duplicateAbbreviation(c.abbr)
             }
         }
-        guard !counties.isEmpty else { throw PartyValidationError.noCounties }
+        // A party with a home region enumerates that region, so an empty list
+        // is a data error. A party without one may genuinely enumerate nothing
+        // — the Skeeter Hunt's multipliers are all states, provinces and DXCC
+        // entities, tables the app already carries.
+        guard !counties.isEmpty || !hasHomeRegion else {
+            throw PartyValidationError.noCounties
+        }
         guard homeState.count == 2 else { throw PartyValidationError.badHomeState(homeState) }
         for s in homeStates where s.count != 2 {
             throw PartyValidationError.badHomeState(s)
@@ -881,8 +921,9 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case schemaVersion, id, name, cabrilloContest, homeState, countyAbbrLength
         case validBands, points, dupeScope, multipliers, bonuses, oneByOne
         case schedule, counties, notes, scoreMultipliers, homeStationPoints
-        case countyPointFactor
+        case countyPointFactor, memberExchange
         case hubSpots, callHistory
+        case entryClassesRaw = "entryClasses"
         case caveatsRaw = "caveats"
         case combinesRaw = "combines"
         case homeStatesRaw = "homeStates"
@@ -946,6 +987,12 @@ enum BonusRule: Codable, Equatable, Sendable {
     /// stays right for an entrant whose side does not count counties as
     /// multipliers.
     case designatedCountySweep(counties: [String], need: Int, points: Int)
+    /// Skeeter Hunt Blackjack: "Work enough call sign numbers to add up to
+    /// exactly 21 and you can earn a one time 1,000 Bonus Points!" Each
+    /// distinct worked callsign contributes its call-area digit **once** ("You
+    /// can use any call sign worked ONCE"), a 0 counts as 10, and the bonus
+    /// pays once when any subset reaches `target` exactly.
+    case callAreaSum(target: Int, points: Int)
 
     enum WorkStationScope: String, Codable, Sendable {
         case once       // KSQP KS0KS, MDC W3VPR
@@ -968,7 +1015,7 @@ enum BonusRule: Codable, Equatable, Sendable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case type, call, points, per, scope, minQSOs, tiers, counties, need
+        case type, call, points, per, scope, minQSOs, tiers, counties, need, target
     }
 
     init(from decoder: Decoder) throws {
@@ -997,6 +1044,11 @@ enum BonusRule: Codable, Equatable, Sendable {
             self = .designatedCountySweep(
                 counties: try c.decode([String].self, forKey: .counties),
                 need: try c.decode(Int.self, forKey: .need),
+                points: try c.decode(Int.self, forKey: .points)
+            )
+        case "callAreaSum":
+            self = .callAreaSum(
+                target: try c.decode(Int.self, forKey: .target),
                 points: try c.decode(Int.self, forKey: .points)
             )
         default:
@@ -1030,6 +1082,10 @@ enum BonusRule: Codable, Equatable, Sendable {
             try c.encode("designatedCountySweep", forKey: .type)
             try c.encode(counties, forKey: .counties)
             try c.encode(need, forKey: .need)
+            try c.encode(points, forKey: .points)
+        case .callAreaSum(let target, let points):
+            try c.encode("callAreaSum", forKey: .type)
+            try c.encode(target, forKey: .target)
             try c.encode(points, forKey: .points)
         }
     }

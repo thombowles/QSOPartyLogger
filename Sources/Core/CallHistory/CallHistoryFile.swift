@@ -68,6 +68,12 @@ enum CallHistoryFile {
     struct Candidate: Equatable, Sendable {
         let exchange: String?
         let name: String?
+        /// The member-number-or-power element, offered only in member parties
+        /// — the first location value that reads as a member number. The
+        /// location and member channels share `Entry.locations` and cannot
+        /// collide: a state token fails the digits test, a number fails the
+        /// party's location parse.
+        let member: String?
         let userText: String?
     }
 
@@ -85,8 +91,13 @@ enum CallHistoryFile {
             return false
         }
         let name = party.exchangeIncludesName ? entry.name : nil
-        guard exchange != nil || name != nil else { return nil }
-        return Candidate(exchange: exchange, name: name, userText: entry.userText)
+        let member = party.memberExchange == nil ? nil : entry.locations.first {
+            if case .member = MemberExchange.parse($0) { return true }
+            return false
+        }
+        guard exchange != nil || name != nil || member != nil else { return nil }
+        return Candidate(
+            exchange: exchange, name: name, member: member, userText: entry.userText)
     }
 
     // MARK: Parsing

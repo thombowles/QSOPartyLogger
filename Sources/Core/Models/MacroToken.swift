@@ -27,9 +27,16 @@ enum MacroToken: String, CaseIterable, Sendable {
     /// The exchange being sent — county, section, or whatever this party's
     /// rules ask for.
     case exchange = "{EXCH}"
+    /// The member-number-or-power element being sent, for parties whose
+    /// exchange carries one (Skeeter Hunt) — the log's contest-long value.
+    /// Self-shaping: a member number expands as `NR 13` (the on-air
+    /// convention in the sponsor's own sample QSO), a power as `5W` verbatim.
+    /// Last because it is sent last ("559 NJ NR 13"); never cut. Empty
+    /// elsewhere.
+    case member = "{MEMBER}"
 
     /// The macros as the messages editor lists them, in case order:
-    /// `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH}`. Derived from
+    /// `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH} {MEMBER}`. Derived from
     /// `allCases` so that list can never again be missing one.
     static var helpList: String {
         allCases.map(\.rawValue).joined(separator: " ")
