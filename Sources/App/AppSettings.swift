@@ -108,6 +108,14 @@ final class AppSettings {
         didSet { defaults.set(callHistoryEnabled, forKey: "callHistoryEnabled") }
     }
 
+    /// Super check partial: download MASTER.SCP automatically and show the
+    /// known contest calls matching what is typed in the call field. On by
+    /// default, like the hub and the call history file — the strip costs
+    /// nothing until a fragment is typed.
+    var superCheckEnabled: Bool {
+        didSet { defaults.set(superCheckEnabled, forKey: "superCheckEnabled") }
+    }
+
     /// Feeds to show on the band map; empty means every feed.
     var spotSources: Set<SpotSource> {
         didSet { defaults.set(spotSources.map(\.rawValue), forKey: "spotSources") }
@@ -274,6 +282,7 @@ final class AppSettings {
         prefillExchangeFromSpots =
             defaults.object(forKey: "prefillExchangeFromSpots") as? Bool ?? true
         callHistoryEnabled = defaults.object(forKey: "callHistoryEnabled") as? Bool ?? true
+        superCheckEnabled = defaults.object(forKey: "superCheckEnabled") as? Bool ?? true
         spotSources = Set((defaults.stringArray(forKey: "spotSources") ?? [])
             .compactMap(SpotSource.init(rawValue:)))
         collapsedMultSections = Set(defaults.stringArray(forKey: "collapsedMultSections") ?? [])

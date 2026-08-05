@@ -432,6 +432,27 @@ name parties.
 
 Cached files live in `~/Library/Application Support/QSOPartyLogger/CallHistory/`.
 
+## Super check partial
+
+The community's **MASTER.SCP** — ~50,000 calls distilled from submitted
+contest logs — feeds a quiet strip under the entry row: type three or more
+characters of a call and every known call containing that fragment appears,
+the exact call tinted green once it's complete. A busted copy shows itself
+as a call the database has never heard of. Purely for the eye — nothing
+from it validates, scores, or fills anything.
+
+- **Zero setup.** The file downloads itself on first launch and is
+  re-checked at launch and contest load, at most once a day, by a
+  Last-Modified HEAD — the ~360 KB body only moves when a new release is
+  actually out. There is nothing to download by hand, ever.
+- **An option.** One toggle in Contest Setup (with the cached release,
+  call count, and a Refresh button); off means no strip and no network.
+- **Verified before installed.** A download that comes back as an error
+  page, truncated, or implausibly small is discarded and the previous copy
+  stays in service.
+
+The cached file lives in `~/Library/Application Support/QSOPartyLogger/SCP/`.
+
 ## Your season
 
 - **Contest Dashboard (⌘⇧D)** — every contest you've logged, one year at a time
@@ -572,15 +593,16 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2034 unit tests**, none of which need hardware or a network — no serial port,
+**2072 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history
-parsing and its prefill priority chain, spot parsing and filtering and
-navigation, the spotting policy, the band map scale and column stacking, the
-band plan, typed QSY commands, what the radio keys at every step of the entry
-flow, keyer timing, the history archive and its two-Mac merge, season stats, the
-SQP Challenge formula, and the upcoming-contest engine.
+parsing and its prefill priority chain, super check partial parsing, matching
+and its download client, spot parsing and filtering and navigation, the
+spotting policy, the band map scale and column stacking, the band plan, typed
+QSY commands, what the radio keys at every step of the entry flow, keyer
+timing, the history archive and its two-Mac merge, season stats, the SQP
+Challenge formula, and the upcoming-contest engine.
 
 Two notes for anyone working in here:
 

@@ -28,6 +28,14 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   **Hint data only, never rule authority** (constitution Article 1): nothing
   from these files reaches scoring, and every value is re-parsed by the
   party's own rules before being offered.
+- Super check partial: `MASTER.SCP` from supercheckpartial.com (HTTPS,
+  `Last-Modified` verified against the file's own `# Release` stamp;
+  observed 2026-08-04, release 2026.07.31, 50,021 calls). Downloaded and
+  cached by the app itself — never bundled, never hand-fetched — and
+  re-checked daily by HEAD. Server behavior and file shape banked in
+  [`docs/research/scp_masterfile.md`](research/scp_masterfile.md).
+  **Hint data only, never rule authority** (constitution Article 1):
+  nothing from it reaches scoring, validation, or export.
 - NAQP CW + SSB: rules from NCJ's own "Rules: 2026 North American QSO Party
   (CW/SSB/RTTY)" (ncjweb.com, printed NCJ Oct/Nov 2025), the official paper
   log form whose Multiplier Check List is the country list, and the ARRL DXCC
