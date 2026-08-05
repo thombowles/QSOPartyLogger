@@ -29,11 +29,13 @@ never costs contacts.
 
 ## Supported parties
 
-All 48 below are bundled, each built from the sponsor's own rules with an
-official county list. **Every US state and regional QSO party running from
-2026-07-24 through 2026-12-31 is included**, and the season's earlier parties
-are in as well; three parties remain to be added, plus the Canadian Prairies,
-which is blocked because its districts are published only as images.
+All 49 below are bundled, each built from the sponsor's own rules — with the
+official county list wherever the party has one. **Every US state and regional
+QSO party running from 2026-07-24 through 2026-12-31 is included**, and the
+season's earlier parties are in as well; three parties remain to be added, plus
+the Canadian Prairies, which is blocked because its districts are published
+only as images. The NJQRP Skeeter Hunt, a four-hour QRP sprint, joins the two
+NAQPs as the catalogue's non-state contests.
 
 Dates are the UTC start of each running; "12 h each" means two separate
 runnings of that length.
@@ -71,6 +73,7 @@ runnings of that length.
 | Kentucky QSO Party | Jun 6 | 12 h | 120 counties |
 | Alabama QSO Party | Jul 25 | 12 h | 67 counties |
 | Maryland-DC QSO Party | Aug 8 | 14 h | 25 jurisdictions |
+| NJQRP Skeeter Hunt | Aug 16 | 4 h | S/P/Cs |
 | Hawaii QSO Party | Aug 22 | 36 h | 14 districts |
 | Ohio QSO Party | Aug 22 | 12 h | 88 counties |
 | Kansas QSO Party | Aug 29 | 18 h | 105 counties |
@@ -105,7 +108,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | Keys | Action |
 | --- | --- |
 | `Enter` | Log the QSO (or send the next ESM message, or run a typed QSY command) |
-| `Space` | Cycle Call → Exchange → Call, via QSO number and Name where the party uses them. Signal reports are stepped over |
+| `Space` | Cycle Call → Exchange → Call — via QSO number and Name ahead of the exchange, and the member number/power (Skeeter #) after it, where the party uses them. Signal reports are stepped over |
 | `Tab` | Walk every field, reports included — landing in one selects the S digit, so 599 → 579 is one keystroke |
 | `F12` | Wipe the entry fields and start over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
@@ -325,7 +328,7 @@ stays on screen when another app takes focus, so it can sit beside a panadapter.
   (toolbar antenna icon), optionally automatically when a contest opens. On top
   of that, the app polls [qsopartyhub.com](http://qsopartyhub.com) for the active
   party — and unlike a cluster spot, a hub spot carries the **county**, which is
-  the multiplier you're actually chasing. 39 of the 48 bundled parties have a hub
+  the multiplier you're actually chasing. 39 of the 49 bundled parties have a hub
   page. A spot seen on both feeds is one entry.
 - **Filters** (funnel button): North American stations only, North American
   spotters only, hide worked stations, hide RBN/skimmer spots, hub-only, per
@@ -429,8 +432,11 @@ name parties.
   exchange parser for your operating role first. Offers rank below your own log
   and above a spot's claim, grey out until you accept them, and the row says
   **log what you copy**. Nothing from these files ever reaches the score.
-- 45 of the 48 bundled parties have a file upstream; Arizona, Maryland-DC and
-  Vermont have none, and simply show no row in Contest Setup.
+- 46 of the 49 bundled parties have a source upstream — 45 on the N1MM
+  listing, and the NJQRP Skeeter Hunt from its sponsor's own roster page,
+  where each season's Skeeter-number sheet is discovered and converted to the
+  same shape. Arizona, Maryland-DC and Vermont have none, and simply show no
+  row in Contest Setup.
 
 Cached files live in `~/Library/Application Support/QSOPartyLogger/CallHistory/`.
 
@@ -574,7 +580,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2092 unit tests**, none of which need hardware or a network — no serial port,
+**2114 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history

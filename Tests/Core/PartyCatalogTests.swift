@@ -14,7 +14,7 @@ final class PartyCatalogTests: XCTestCase {
             Set(parties.map(\.id)),
             ["alqp", "arqp", "azqp", "bcqp", "coqp", "cqp", "deqp", "fqp", "gaqp", "hqp", "iaqp", "in7qpne", "idqp", "ilqp", "inqp", "ksqp", "kyqp", "mdc",
              "meqp", "miqp",
-             "laqp", "mnqp", "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp", "newenglandqp", "nhqp", "nmqp", "njqp", "nyqp", "ohqp", "okqp", "oqp", "paqp", "qcqp", "scqp", "sdqp", "sevenqp", "tnqp", "tqp", "vaqp", "vtqp",
+             "laqp", "mnqp", "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp", "newenglandqp", "nhqp", "nmqp", "njqp", "nyqp", "ohqp", "okqp", "oqp", "paqp", "qcqp", "scqp", "sdqp", "sevenqp", "skeeter", "tnqp", "tqp", "vaqp", "vtqp",
              "warun", "wiqp"]
         )
     }
@@ -39,9 +39,10 @@ final class PartyCatalogTests: XCTestCase {
     /// other, in the sponsor's own wording. NAQP joins it because it has no
     /// home state at all — rule 12 counts "a complete, correctly copied and
     /// logged two-way exchange between a North American station and any other
-    /// station", so everyone works everyone.
+    /// station", so everyone works everyone. The Skeeter Hunt is the same
+    /// shape: a QRP sprint with no home region, where every contact pays.
     func testOutOfStateCreditRestrictionPerParty() {
-        let unrestricted: Set<String> = ["meqp", "naqpcw", "naqpssb"]
+        let unrestricted: Set<String> = ["meqp", "naqpcw", "naqpssb", "skeeter"]
         for party in PartyCatalog.loadBundled() {
             XCTAssertEqual(
                 party.outStateWorksHomeStationsOnly,
@@ -75,6 +76,7 @@ final class PartyCatalogTests: XCTestCase {
             "azqp", "hqp", "iaqp", "ilqp", "meqp", "nhqp", "njqp", "nyqp", "paqp",
             "sdqp", "tnqp", "tqp", "vtqp", "mnqp", "bcqp", "scqp", "ncqp", "okqp", "idqp",
             "wiqp", "vaqp", "laqp", "msqp", "moqp", "nmqp", "gaqp", "ndqp", "miqp", "oqp", "qcqp", "neqp", "fqp", "sevenqp", "inqp", "deqp", "newenglandqp", "arqp", "kyqp", "in7qpne",
+            "skeeter",
         ]
         for party in PartyCatalog.loadBundled() {
             XCTAssertEqual(

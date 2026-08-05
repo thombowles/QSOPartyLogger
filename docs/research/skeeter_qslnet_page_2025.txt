@@ -1,0 +1,387 @@
+Official NJQRP Skeeter Hunt Webpage 
+
+Official
+NJQRP Skeeter Hunt Webpage 
+
+-
+
+Welcome
+to the official Webpage for the NJQRP Skeeter Hunt. 
+
+"QRP
+and the Great Outdoors ..... perfect together!
+
+Congratulations to the Tup Five Finishers in the 2025 NJQRP Skeeter Hunt
+
+First Place - AD0YM - Mike with 25,882 Points
+
+Second Place - NK9G - Rick with 24,968 Points
+
+Third Place - W4MPS - Marc with 24,880 Points
+
+Fourth Place - N5GW - Gene with 17,224 Points
+
+Fifth Place - K0KLB - Kevin with 16,606 Points
+
+The Final 2025 Skeeter Hunt Scoreboard is here 
+
+Join us on Facebook here. 
+
+The NJQRP Club is announcing the 14th
+Annual " Skeeter Hunt".  The objective is to get QRPers out of
+their shacks for the day; and into the fresh air and sunshine, to
+spread their wings and fill the airwaves with "Skeeters". 
+While
+commercial equipment can certainly utilized, bonus points will be
+awarded for those who personally home brewed their own or kit built
+their own  transciever or separate transmitter/receiver (equipment not built by the operator would not
+count as either home brewed or kit built - it would be considered
+commercial equipment).  The event is to be held on Sunday August 17th, 2025.  It will
+be a
+four hour sprint - from 17:00 UTC to 21:00 UTC (1:00 TO 5:00 PM EDT). 
+
+QRP stations who wish to be designated as "Skeeters" can get a Skeeter
+number by requesting one by sending an e-mail (including your name,
+call sign and the state or province) from which you will be operating, no sooner than 12:01 AM EDT on June 20th to
+[email protected]   
+You do not have to operate portable to be a Skeeter!   Please let
+me know if you intend to operate
+from a state other than your home state as listed on QRZ. Skeeter
+numbers will be issued from June 20th (the First Day of Summer) through
+the day before the event. Skeeter requests by e-mail only, please! I am very likely to miss requests submiited by social media. 
+
+Station
+Classes and Multipliers 
+
+X1 Home stations - commercial transceiver or separates
+
+X2 Home stations - home brewed or kit built transceiver or separates
+
+X3 Portable station - commercial transceiver or separates
+
+X4 Portable station - home brewed or kit built transceiver or separates
+
+Portable stations cannot use permanent antennas, i.e you can't work
+from your backyard, hook up to your dipole or tower and yagi and be
+considered a portable station. Also, portable stations cannot be
+connected to the local power grid - alternative energy sources must be
+used - solar, battery, wind, etc. Mobile stations (which are considered
+to be portable stations for this event) CAN use whatever permanent
+antennas may be mounted on their vehicles. 
+
+Multi-Op
+Stations: - Great
+idea!  Want to get together with some of your best buds to
+have a
+barbeque and hunt some Skeeters?  FB deal, OM!  When
+you send
+in your log, send the calls of everyone who participated under that
+call and or Skeeter number.  
+
+Suggested
+Call - Either CQ QRP
+or CQ BZZ
+
+Exchange 
+- 
+
+Skeeter Stations - RST,
+S/P/C , Skeeter number
+
+Non-Skeeter Stations - RST,
+S/P/C , Output power
+
+Note:
+For those of you new to contesting, "S/P/C" refers to your "State"
+(US), "Province" (Canada), or "Country" (DX). 
+
+Mode 
+� CW, SSB 
+
+Power 
+- 5W max CW, 10 Watts max
+SSB
+
+Scoring 
+-
+
+Working a Skeeter Station - 3 points
+
+Working a non-Skeeter, but QRP station - 2 points
+
+Working any other QRO station - 1 point
+
+NOTE: 
+Stations can be worked on different bands for QSO points, but S/P/C's
+only count once for multiplier credit. For example. if you work W2LJ on
+40, 20 and 15 Meters, that would count as three different Skeeter QSOs,
+but you can only count NJ once for S/P/C muliplier credit.
+
+BONUS
+POINTS!   -   This year we are going to play "Skeeter Hunt Blackjack". Work enough call sign numbers to add up to exactly 21 and you can earn 1,000 Bonus Points!
+
+Each call area number is worth that many points with the "0" area call
+signs being worth 10 points. So for example - if you work N0SS, W2LJ,
+WD8RIF and W1PID that equals 10 +2 + 8 + 1, which adds up to 21, and
+"Voila!" you've earned 1,000 Bonus Points. It doesn't matter how many
+call signs you need. If you work nine "2" stations and one "3" station
+- that works too. You just have to come up with a combination of
+callsigns that add up to exactly 21.
+
+You can use any call sign worked ONCE .  And to claim the bonus points, you MUST include the call signs worked when submitting your Log Summary. 
+
+Suggested
+frequencies: 
+The
+QRP "Watering Holes" 
+
+For
+CW 
+
+80 Meters ~ 3.560 MHz
+
+40 Meters ~ 7.040 and 7.030 MHz - also consider using from 7.114 to
+7.122 MHz for a "slower" speed CW area.  We want to have
+everyone
+involved!
+
+20 Meters ~ 14.060 MHz
+
+15 Meters ~ 21.060 MHz
+
+10 Meters ~ 28.060 MHz
+
+For
+SSB 
+
+80 Meters ~ 3.985 MHz
+
+40 Meters ~ 7.285 MHz
+
+20 Meters ~ 14.285 MHz
+
+15 Meters ~ 21.385 MHz
+
+10 Meters ~ 28.885 MHz, and for those Novices and Technicians wanting
+to try a little SSB QRP - try hanging around 28.385 MHz.
+
+These are suggested starting points, of course. Feel free to spread out
+and give your "Skeeter" wings a chance to do their thing.
+
+For those of you who are new to QRP contesting, or contesting in general, here's how a sample QSO might go:
+
+I call CQ
+
+CQ BZZ CQ BZZ DE W2LJ W2LJ K
+
+K2NBC hears me and comes bac to me:
+
+W2LJ DE K2NBC K2NBC BK
+
+I give him my half of the exchange:
+
+BK K2NBC TU UR 559 NJ NR 13 BK
+
+He copied me and gives me his hlf of the exchange:
+
+BK
+TU UR 559 NJ NR 5960 BK - if he had a Skeeter number.
+If he's not a Skeeter, he would send: BK TU UR 559 NJ 5W BK
+
+If I copied him, I would finish and go on to my next CQ:
+
+BK TU DE W2LJ QRZ BZZ DE W2LJ
+
+If I didn't copy , I would ask for fills or repeats - and that's all there is to it!
+
+Categories :
+
+CW Only and SSB Only, or Mixed Operating will be considered separate
+categories. Please indicate with your log summary which category you
+are participating as.
+
+Log summaries, can be sent to
+[email protected] 
+no later than 14 days after the event. 
+
+Photos and soapbox comments are to be loaded onto the Facebook page 
+
+Please
+note that when you send in your log summary, you will receive a
+confirming e-mail. If you do not receive a "Thank You" e-mail, your
+entry was not received - so please try again! 
+
+Please no ADIF, Cabrillo or N1MM files! Here's an example of a summary that can be used:
+
+Larry - W2LJ - NJ
+
+Skeeter #13 - All CW
+
+Single Op
+
+Skeeter QSOs - 23
+
+Non-Skeeter QRP QSOs - 5
+
+Non-Skeeter QRO QSOs - (if any)
+
+S/P/Cs - 18
+
+Station Class Multiplier X4
+
+Bonus - List of stations with call sign numbers adding up to exactly 21.
+
+Hope to hear and work all of you during this year's event. Special
+thanks to the NJQRP club for their sponsorship! 
+
+Here are the answers to a few questions asked so far:
+
+Question - "Why don't I get to keep my Skeeter Number from year to year?"
+
+Answer - It's all part of the
+fun! Lower Skeeter Numbers seem to be favored and in-demand. By
+applying for a new number each year, it allows everyone to
+have a shot at a low number.
+
+Question - "Is self spotting allowed?"
+
+Answer - Why not? This isn't a hard core "contester's contest", just a fun little QRP Sprint. Feel free to post to QRPSPOTS , but please mention "Skeeter Hiunt" in the comments.
+
+Question 
+- "I have a question
+that you or someone else may have the answer to. At one time, several
+years ago wasn't there a transmitter project that was called a
+'MOSquito'? It possibly was a transceiver. If I recall it was in one of
+the magazines, CQ, 73, or Ham Radio."
+
+Answer 
+- I think you're
+thinking of the Miss Mosquita - The DL QRP Project still has that kit
+available:
+
+http://www.qrpproject.de/UK/missmosquita.htm 
+
+Question 
+- "Do I have to be a
+resident of NJ to get a NJQRP number?"
+
+Answer - I'm assuming you mean a Skeeter number. Certainly
+not! 
+Anyone worldwide, who desires a Skeeter number can have one. 
+And
+as far as I know, NJQRP numbers are still given out when you join NJQRP
+- anyone can join that fine organization, also.  For the
+record,
+W2LJ's NJQRP number is 47.
+
+Question 
+- "Any thought about
+multiop or multi multi stations? A couple of us are thinking of a
+cookout and contest afternoon."
+
+Answer 
+- No, I hadn't, but it
+sounds like a cool idea to me!  Want to get a group together
+and
+have a cookout and get some radio in?  Sure!  All I
+ask is
+when you submit your log, to list the operators who participated.
+  Of course, this will be considered a separate operating
+class -
+but no problem with that.  I will make note of it when I
+update
+the rules.
+
+Question 
+- "You'll probably
+need to add some clarification on the "Kit" points. Some of the other
+"homebrew" contests are not counting modular kits like the K3 and KX3
+as homebrew anymore, does this contest?"
+
+Answer 
+- This might rankle a
+few purists. But as far as I am concerned, for the Skeeter Hunt, here's
+the definition of "kit built".
+The operator's hands were involved in more than 50% of the building of
+the kit. Solder need not necessarily be involved.
+If you built a K3 or KX3 with your own hands, it counts. If you
+finished a kit (half of it or more, I will let the entrant judge that
+for himself) that someone else started, it counts.
+If you're using a PFR3A or a KX1 or whatever and you didn't build it
+yourself? Consider it commercial equipment.
+The idea here is to have fun and not get too trapped in the details.
+The honor system will rule - there will be no checking.  If
+anyone
+homebrews a key or paddle for the Skeeter hunt, please send a photo
+with your entry!
+
+Question 
+- "I am assuming it is
+ok for skeeters to operate in the field for the event?"
+
+Answer 
+- That's the whole
+idea!  Get out with your gear, get on the air and then share
+your
+tale of adventure with the rest of us! 
+
+2012 Scoreboard click here . 
+
+2012
+Soapbox click here .
+
+2013 Scoreboard - click here . 
+
+2013 Soapbox - click here .
+
+2014 Scoreboard - click here .
+
+2014 Soapbox - click here . 
+
+2015 Scoreboard - click here .
+2015 Soapbox - click here .
+
+2016 Scoreboard - click here .
+2016 Soapbox - click here 
+
+2017 Scoreboard - click here .
+2017 Soapbox - click here .
+
+2018 Scoreboard - click here .
+
+2018 Soapbox Page 1 - click here .
+
+2018 Soapbox Page 2 - click here .
+
+2019 Scoreboard - click here .
+
+2019 Soapbox Page 1 - click here .
+
+2019 Soapbox Page 2 - click here .
+
+2019 Soapbox Page 3 - click here .
+
+2020 Scoreboard - click here .
+
+2020 Soapbox Page 1 - click here .
+
+2020 Soapbox Page 2 - click here .
+
+2020 Soapbox Page 3 - click here .
+
+2021 Scoreboard - click here .
+
+2021 Soapbox - Go to Facebook - click here 
+
+2022 Scoreboard - click here 
+
+2022 Soapbox - Go to Facebook - click here 
+
+2023 Scoreboard - click here 
+
+2024 Scoreboard - click here. 
+
+2025 Scoreboard - click here .
+
+T-shirts
+and other apparel are available this year from CafePress

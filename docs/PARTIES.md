@@ -358,6 +358,30 @@ Entries are in contest-date order.
   location with **no RST**, CW 3 / phone 1, mults once for the contest,
   Maryland never counts as a state, power × station-category final-score
   multipliers, W3VPR +50 and a tiered 250/500 jurisdiction sweep.
+- **NJQRP Skeeter Hunt** (Aug 16, 2026) — the catalogue's first **QRP
+  sprint** (four hours, 1700–2100Z) and, with the NAQPs, its third non-state
+  contest. No counties at all: multipliers are **S/P/Cs counted once** —
+  states, provinces, and DX countries individually — entirely from the app's
+  standard tables. Points come from **what the worked station is**, not the
+  mode: the received Skeeter-number-or-power element pays 3 (Skeeter), 2
+  (non-Skeeter QRP, ≤5 W CW / ≤10 W phone — the event's own power limits), or
+  1 (QRO), and the entry row requires a readable element before it will log.
+  A self-declared **X1–X4 station class** (home/portable ×
+  commercial/home-brew) multiplies the whole score, picked in Contest Setup.
+  **Skeeter Hunt Blackjack** pays 1,000 once when distinct worked calls'
+  areas (0 worth 10, each call once) sum to exactly 21 — credited
+  automatically, but list the calls in your summary yourself. The score
+  formula is nowhere printed; [`gen_skeeter.py`](research/gen_skeeter.py)
+  re-derives it from the sponsor's own 2025 scoreboard, exact on all 112
+  scored rows. The **Skeeter roster** (call → number, name, S/P/C)
+  auto-downloads from W2LJ's page — the sheet id changes yearly, so
+  discovery starts at the page — and prefills the exchange; nothing from it
+  scores. Submission is an **email summary only** ("Please no ADIF, Cabrillo
+  or N1MM files!"), so the Cabrillo header `SKEETER-HUNT` is the app's own
+  invention, and the sidebar keeps the summary's numbers (Skeeter/QRP/QRO
+  counts) on screen. `verified: partial`, 5 caveats, none warning — the one
+  real open question is whether a Mixed entry may work one station on both
+  modes of a band.
 - **Hawaii QSO Party** (Aug 22–24, 2026) — 14 island **districts** rather than
   counties (Honolulu County alone is HON/LHN/PRL/WHN), taken from the sponsor's
   official multiplier map; out-of-state mults count **per band** (ceiling 84),

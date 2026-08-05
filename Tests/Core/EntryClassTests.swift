@@ -82,12 +82,13 @@ final class EntryClassTests: XCTestCase {
         XCTAssertEqual(reopened.entryClassID, "X4")
     }
 
-    /// No bundled party declares classes yet — the capability lands
-    /// party-free, and each gain is its own commit (Article 9).
+    /// The bundled parties declaring classes, named so a party cannot gain
+    /// them incidentally — each gain is its own commit (Article 9). The
+    /// Skeeter Hunt's X1–X4 is the first.
     func testWhichPartiesDeclareEntryClasses() {
         let withClasses = PartyCatalog.loadBundled()
             .filter { !$0.entryClasses.isEmpty }.map(\.id)
-        XCTAssertEqual(withClasses, [])
+        XCTAssertEqual(withClasses, ["skeeter"])
     }
 
     // MARK: Scoring

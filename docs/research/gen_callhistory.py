@@ -60,6 +60,22 @@ NAQP = {"naqpcw": ("NAQPCW", "NAQPCW"), "naqpssb": ("NAQPSSB", "NAQPSSB")}
 # for these parties under any name (no QSOP_AZ, QSOP_MD/MDC, QSOP_VT).
 EXPECTED_UNMAPPED = {"azqp", "mdc", "vtqp"}
 
+# Parties whose prefill comes from a sponsor page, not the N1MM listing
+# (CallHistorySource.kind other than n1mm). The Skeeter Hunt has no N1MM
+# file under any name (same inventory sweep, re-checked 2026-08-04); its
+# roster is a Google Sheet whose id changes yearly, discovered at use time
+# from the blog page below. The app does the discovery and conversion; this
+# script only pins the exact block so a party-generator rerun cannot drop
+# or drift it.
+ROSTER_BLOCKS = {
+    "skeeter": {
+        "kind": "w2ljRosterPage",
+        "pageURL": "http://w2lj.blogspot.com/p/njqrp-skeeter-hunt.html",
+        "filePrefix": "SKEETER",
+        "token": "SKEETER ROSTER",
+    },
+}
+
 
 def bundled_parties():
     out = {}
@@ -70,8 +86,10 @@ def bundled_parties():
 
 
 def mapping_for(pid: str, party: dict):
-    """(filePrefix, token) for a party, or None when no file is expected."""
-    if pid in EXPECTED_UNMAPPED:
+    """(filePrefix, token) for a party's N1MM listing file, or None when no
+    such file is expected — including the roster-page parties, whose blocks
+    are pinned separately."""
+    if pid in EXPECTED_UNMAPPED or pid in ROSTER_BLOCKS:
         return None
     if pid in COMBINED_TOKENS:
         return (COMBINED_PREFIX, COMBINED_TOKENS[pid])
@@ -225,15 +243,29 @@ def patch():
     parties = bundled_parties()
 
     mapped = {p for p in parties if mapping_for(p, parties[p])}
-    unmapped = set(parties) - mapped
+    unmapped = set(parties) - mapped - set(ROSTER_BLOCKS)
     assert unmapped == EXPECTED_UNMAPPED, (
         f"unmapped drifted: {sorted(unmapped)}"
     )
-    assert len(mapped) == len(parties) - len(EXPECTED_UNMAPPED), (
-        f"expected {len(parties) - len(EXPECTED_UNMAPPED)} mapped, "
-        f"got {len(mapped)}"
+    assert len(mapped) == (
+        len(parties) - len(EXPECTED_UNMAPPED) - len(ROSTER_BLOCKS)
+    ), (
+        f"expected {len(parties) - len(EXPECTED_UNMAPPED) - len(ROSTER_BLOCKS)} "
+        f"mapped, got {len(mapped)}"
     )
     assert set(verify) == mapped, "verify file out of step with the catalog"
+
+    for pid in sorted(ROSTER_BLOCKS):
+        assert pid in parties, f"{pid} has a roster block but is not bundled"
+        block = ROSTER_BLOCKS[pid]
+        path = PARTIES / f"{pid}.json"
+        data = json.load(open(path))
+        if data.get("callHistory") != block:
+            data["callHistory"] = block
+            with open(path, "w") as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+                f.write("\n")
+            print(f"patched {pid}: {block}")
 
     for pid in sorted(mapped):
         prefix, token = mapping_for(pid, parties[pid])
@@ -258,6 +290,7 @@ def patch():
         print(f"patched {pid}: {block}")
 
     print(f"OK: {len(mapped)} parties mapped, "
+          f"{sorted(ROSTER_BLOCKS)} on sponsor rosters, "
           f"{sorted(EXPECTED_UNMAPPED)} verified file-less")
 
 

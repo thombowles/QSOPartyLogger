@@ -271,6 +271,7 @@
 		F068DB1B3C0A793714CC7745 /* OneByOneTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E7C41D9406F1E08708929F /* OneByOneTracker.swift */; };
 		F12378741285B339A876009B /* CountyLineExpander.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6B397C7B014ACA6232F8F /* CountyLineExpander.swift */; };
 		F163F72E6DB347B808CAE90A /* CallHistoryPageParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69FC9A0E6956A1F2C208BF1 /* CallHistoryPageParserTests.swift */; };
+		F238FDC861C993F998E5890A /* SkeeterHuntTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369C26C343E2C414BF592CC6 /* SkeeterHuntTests.swift */; };
 		F2BE6B5E0868F72361011DCF /* EditQSOSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F01ACCE3E8BBB30BB6AFFB0 /* EditQSOSheet.swift */; };
 		F4295C279970384A66D902F4 /* DXCCLabelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85566CF498A9A0F0AA517175 /* DXCCLabelStore.swift */; };
 		F677F314E1B5E77B231B323B /* SelfSpotSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF06BEF609DB286524A03268 /* SelfSpotSheet.swift */; };
@@ -366,6 +367,7 @@
 		35603FAC30DAAF7154DA76E3 /* RadioBarStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioBarStatusTests.swift; sourceTree = "<group>"; };
 		359DF0F30A9EF39FE37A2287 /* CallHistoryPrefillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryPrefillTests.swift; sourceTree = "<group>"; };
 		364B004532E156F89351C6BC /* SpottingPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpottingPolicy.swift; sourceTree = "<group>"; };
+		369C26C343E2C414BF592CC6 /* SkeeterHuntTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeeterHuntTests.swift; sourceTree = "<group>"; };
 		3B07E26A34F4A74B9165A344 /* EntryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryState.swift; sourceTree = "<group>"; };
 		3C9EEF88A7F58AFB94F83B07 /* MultiplierRoster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplierRoster.swift; sourceTree = "<group>"; };
 		3CAE6A6F0991A97405ABD310 /* DXCCLabelClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCLabelClient.swift; sourceTree = "<group>"; };
@@ -799,6 +801,7 @@
 				9B143A6F4360839CB52EFA48 /* SectionMultiplierTests.swift */,
 				14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */,
 				B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */,
+				369C26C343E2C414BF592CC6 /* SkeeterHuntTests.swift */,
 				A2959051AC941DA30C8B6439 /* SkeeterRosterParserTests.swift */,
 				5B4D578B0A19E09B560A6584 /* SouthCarolinaQSOPartyTests.swift */,
 				1BE324A25B998F570B53C353 /* SouthDakotaQSOPartyTests.swift */,
@@ -1325,6 +1328,7 @@
 				A9FC2E13D5AAAFEDD440F60F /* SectionMultiplierTests.swift in Sources */,
 				00C7117A6FF2B28F0F627443 /* SerialExchangeTests.swift in Sources */,
 				8E0C9BB5C8132A2F521070E4 /* SeventhCallAreaQSOPartyTests.swift in Sources */,
+				F238FDC861C993F998E5890A /* SkeeterHuntTests.swift in Sources */,
 				05D024CA40AEFFD979414EC2 /* SkeeterRosterParserTests.swift in Sources */,
 				5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */,
 				593C9B4F548045F68D71789E /* SouthCarolinaQSOPartyTests.swift in Sources */,

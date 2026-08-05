@@ -394,20 +394,29 @@ final class WisconsinQSOPartyTests: XCTestCase {
     /// first draft of this test got wrong. KSQP and TQP each have a six-hour
     /// Sunday session, shorter than WIQP's seven, but both run eighteen hours
     /// overall. Pinned so the claim in the README and the notes stays true.
-    func testItIsTheShortestTotalOperatingTimeOfAnyBundledParty() throws {
+    ///
+    /// Since the Skeeter Hunt landed, the claim is scoped to **state QSO
+    /// parties**: the four-hour QRP sprint is shorter than everything, holds
+    /// the overall superlative, and the notes say so.
+    func testItIsTheShortestTotalOperatingTimeOfAnyBundledStateParty() throws {
         func total(_ p: PartyDefinition) -> TimeInterval {
             (p.schedule ?? []).reduce(0) { $0 + $1.end.timeIntervalSince($1.start) }
         }
+        let sprint = try XCTUnwrap(PartyCatalog.party(id: "skeeter"))
+        XCTAssertEqual(total(sprint), 4 * 3600,
+                       "the sprint holds the overall superlative now")
+
         let mine = total(wiqp)
         XCTAssertEqual(mine, 7 * 3600)
-        for party in PartyCatalog.loadBundled() where party.id != "wiqp" {
+        for party in PartyCatalog.loadBundled()
+        where party.id != "wiqp" && party.id != "skeeter" {
             guard !(party.schedule ?? []).isEmpty else { continue }
             XCTAssertGreaterThan(total(party), mine,
                                  "\(party.id) runs no longer than WIQP overall")
         }
         // ...and the claim is specifically NOT about single windows.
         let shortestElsewhere = PartyCatalog.loadBundled()
-            .filter { $0.id != "wiqp" }
+            .filter { $0.id != "wiqp" && $0.id != "skeeter" }
             .flatMap { $0.schedule ?? [] }
             .map { $0.end.timeIntervalSince($0.start) }
             .min()

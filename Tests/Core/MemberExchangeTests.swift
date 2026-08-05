@@ -166,12 +166,13 @@ final class MemberExchangeTests: XCTestCase {
         XCTAssertEqual(member.qrpMaxWatts.limit(for: .phone), 10)
     }
 
-    /// No bundled party carries the element yet — the capability lands
-    /// party-free, and each flag flip is its own commit (Article 9).
+    /// The bundled parties whose exchange carries the element, named so a
+    /// party cannot gain one incidentally — each flip is its own commit
+    /// (Article 9). The Skeeter Hunt is the first.
     func testWhichPartiesCarryAMemberExchange() {
         let withMember = PartyCatalog.loadBundled()
             .filter { $0.memberExchange != nil }.map(\.id)
-        XCTAssertEqual(withMember, [],
+        XCTAssertEqual(withMember, ["skeeter"],
                        "a party gaining the element is a deliberate edit here")
     }
 

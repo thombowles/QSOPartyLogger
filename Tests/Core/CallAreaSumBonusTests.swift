@@ -131,8 +131,8 @@ final class CallAreaSumBonusTests: XCTestCase {
         XCTAssertEqual(decoded, [bonus])
     }
 
-    /// No bundled party carries the bonus yet — the capability lands
-    /// party-free (Article 9).
+    /// The bundled parties carrying the bonus, named so one cannot gain it
+    /// incidentally (Article 9). Skeeter Hunt Blackjack is the first.
     func testWhichPartiesCarryACallAreaSumBonus() {
         let carriers = PartyCatalog.loadBundled().filter { party in
             party.bonuses.contains {
@@ -140,6 +140,6 @@ final class CallAreaSumBonusTests: XCTestCase {
                 return false
             }
         }.map(\.id)
-        XCTAssertEqual(carriers, [])
+        XCTAssertEqual(carriers, ["skeeter"])
     }
 }
