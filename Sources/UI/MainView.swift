@@ -42,6 +42,7 @@ struct MainView: View {
     @State private var spotClient = SpotClient()
     @State private var hubSpotClient = HubSpotClient()
     @State private var callHistoryClient = CallHistoryClient()
+    @State private var dxccLabelClient = DXCCLabelClient()
     @State private var showSelfSpot = false
     @State private var selfSpotFields = HubSelfSpot.Fields(
         station: "", frequencyKHz: 0, county: nil, comment: "", poster: ""
@@ -349,6 +350,7 @@ struct MainView: View {
             bandMapModel?.canSpotToHub = canSpotToHub
             syncHubSpotClient()
             activateCallHistory()
+            checkDXCCLabels()
         }
         .onChange(of: settings.callHistoryEnabled) { activateCallHistory() }
     }
@@ -763,6 +765,7 @@ struct MainView: View {
             flow.callHistoryIndex = (partyID, parsed)
         }
         activateCallHistory()
+        checkDXCCLabels()
         if settings.clusterAutoConnect,
            !settings.clusterHost.trimmingCharacters(in: .whitespaces).isEmpty,
            !document.log.station.callsign.isEmpty,
@@ -812,6 +815,18 @@ struct MainView: View {
               let party, party.callHistory != nil else { return }
         callHistoryClient.publishCached(party: party)
         Task { await callHistoryClient.refreshIfStale(party: party) }
+    }
+
+    /// Ask AD1C whether the DX multiplier labels have moved. Runs at launch
+    /// and at every contest load; the client's own daily throttle is what
+    /// makes calling it that often free, so opening six logs in an afternoon
+    /// still makes at most one request.
+    ///
+    /// Detached and silent: this is a HEAD request comparing one date, it
+    /// cannot change a score, and nothing about it may reach the entry path.
+    /// A newer file takes effect at the next launch rather than mid-contest.
+    private func checkDXCCLabels() {
+        Task { await dxccLabelClient.refreshIfStale() }
     }
 
     /// Previous contests, read once and indexed by call — what a prefill falls

@@ -1150,7 +1150,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1872 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1889 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1359,11 +1359,20 @@ station profile, radio wiring and cluster history untouched.
   N1MM uses the same way — *"PA will be the the prefix shown in the multiplier
   window"*.
 
-  Its freshness is checkable rather than remembered —
-  `python3 docs/research/gen_dxcc.py --check` compares the committed copy
-  against the server and downloads nothing; `--fetch` takes a newer one and
-  restamps the `cty.dat.version` sidecar, which exists because the file
-  carries no version of its own.
+  **The app checks this for you** — at launch and at every contest load,
+  throttled to once a day, so six logs in an afternoon still make one small
+  request. It is a HEAD comparing one date; the ~350 KB body is fetched only
+  when that date has moved, and a newer file takes effect at the **next
+  launch** rather than mid-contest. Failure is silent and the labels in
+  service stay. **It can only move a label:** a new DXCC entity does not
+  arrive this way, because entities come from the ARRL list and still need a
+  generator run and a release — which is the point, since those are the
+  changes that move a score.
+
+  For the repo's own copy, `python3 docs/research/gen_dxcc.py --check`
+  compares and downloads nothing; `--fetch` takes a newer one and restamps
+  the `cty.dat.version` sidecar, which exists because the file carries no
+  version of its own.
 
   So `cty.dat` is a **second codified source, confined to that one field**
   (constitution Article 1, amended 2026-08-04). It only ever *chooses among*

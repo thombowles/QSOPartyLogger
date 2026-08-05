@@ -71,7 +71,16 @@ publishes, and neither of them a rule:
    only adds `=CALL` DXpedition entries this repo ignores. After taking one,
    re-run the generator with no flags — **its assertions are what decide
    whether anything load-bearing moved**, and they fail rather than let a
-   label change quietly. AD1C republishes every few days to weeks,
+   label change quietly.
+
+   **The app watches the same file, and may only relabel.** `DXCCLabelClient`
+   checks at launch and at contest load, throttled daily, and applies a newer
+   file's primary prefixes to the bundled entities at the next launch.
+   `DXCCLabelRefresh` enforces the same confinement the generator does — a
+   label must be one of that entity's own ARRL prefixes — and refuses a file
+   whose entity or WAE counts do not agree with the bundled table. **It cannot
+   add an entity, change a resolving prefix, or move a score.** A new DXCC
+   entity is a generator run and a release, not a download. AD1C republishes every few days to weeks,
    but almost always to add `=CALL` DXpedition entries this repo ignores; the
    one field consumed here moves only when DXCC gains or loses an entity. The
    generator's assertions are the real guard, so a release that touched

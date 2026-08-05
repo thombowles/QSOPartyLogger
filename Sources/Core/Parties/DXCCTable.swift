@@ -86,11 +86,35 @@ struct DXCCTable: Sendable {
         case source, fetched, entities, prefixes, mergedPrefixes, withoutPrefix
     }
 
-    static func load(bundle: Bundle = .main) -> DXCCTable? {
+    static func load(bundle: Bundle = .main, overlay: URL? = DXCCLabelStore.overlayURL) -> DXCCTable? {
         guard let url = bundle.url(
             forResource: "dxcc_entities", withExtension: "json", subdirectory: "DXCC"
-        ), let data = try? Data(contentsOf: url) else { return nil }
-        return try? JSONDecoder().decode(DXCCTable.self, from: data)
+        ), let data = try? Data(contentsOf: url),
+              let table = try? JSONDecoder().decode(DXCCTable.self, from: data)
+        else { return nil }
+        guard let overlay, let labels = DXCCLabelStore.loadLabels(at: overlay) else { return table }
+        return table.applyingLabels(labels)
+    }
+
+    /// A copy with some entities relabelled, from a `cty.dat` newer than the
+    /// bundled table's. Labels only: the entity list, its codes and every
+    /// prefix the engine resolves against are untouched, and a label that is
+    /// not one of that entity's own ARRL prefixes is ignored rather than
+    /// trusted — the same confinement `gen_dxcc.py` asserts.
+    ///
+    /// Applied at load, so a download during one session takes effect at the
+    /// next launch. That keeps `shared` an immutable `let` and means no
+    /// contest ever has its labels change underneath it mid-run.
+    func applyingLabels(_ labels: [String: String]) -> DXCCTable {
+        guard !labels.isEmpty else { return self }
+        let relabelled = entities.map { entity -> Entity in
+            guard let new = labels[entity.code], entity.prefixes.contains(new) else { return entity }
+            return Entity(code: entity.code, name: entity.name, continent: entity.continent,
+                          prefixes: entity.prefixes, primaryPrefix: new)
+        }
+        return DXCCTable(source: source, fetched: fetched, entities: relabelled,
+                         prefixes: prefixes, mergedPrefixes: mergedPrefixes,
+                         withoutPrefix: withoutPrefix)
     }
 
     /// The bundled table. Empty rather than nil when the resource is missing,
