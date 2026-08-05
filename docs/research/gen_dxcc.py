@@ -74,6 +74,7 @@ Run:  python3 docs/research/gen_dxcc.py
 import json
 import os
 import re
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR = os.path.join(HERE, "..", "..", "Resources", "DXCC")
@@ -187,6 +188,39 @@ def read(name):
     assert "\x0c" not in s.replace("\n\x0c", "\n"), "a form feed is not at a line start"
     return s.replace("\x0c", "")
 
+
+def fetch_cty():
+    """Re-fetch cty.dat and record the release date the file cannot supply.
+
+    Article 1 obliges a seasonal re-fetch, and the release date lives ONLY in
+    the server's Last-Modified header -- the file's own `=VERSION` alias is a
+    bare placeholder. A plain download therefore loses the single version
+    stamp there is, which is exactly the mistake this exists to prevent.
+
+    Run:  python3 docs/research/gen_dxcc.py --fetch
+    """
+    import urllib.request
+
+    url = "https://www.country-files.com/bigcty/cty.dat"
+    req = urllib.request.Request(
+        url, headers={"User-Agent": "QSOPartyLogger-research/1.0"}
+    )
+    with urllib.request.urlopen(req, timeout=60) as r:
+        body = r.read()
+        modified = r.headers.get("Last-Modified", "")
+    assert len(body) > 300_000, f"cty.dat is only {len(body)} bytes -- refusing to write"
+    path = os.path.join(HERE, CTY)
+    with open(path, "wb") as f:
+        f.write(body)
+    print(f"fetched {url}")
+    print(f"  {len(body)} bytes, Last-Modified: {modified or '(absent!)'}")
+    print("  RECORD THAT DATE: it is the only version stamp cty.dat has. Update")
+    print("  the release date in this file's header, the JSON's labelSource,")
+    print("  README.md and CONSTITUTION.md Article 1, then re-run without --fetch.")
+
+
+if "--fetch" in sys.argv:
+    fetch_cty()
 
 raw = read(SOURCE)
 

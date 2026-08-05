@@ -164,12 +164,12 @@ struct DXCCTable: Sendable {
 
     /// An entity together with the prefix that actually matched.
     ///
-    /// The prefix is what an operator recognises — `DL1ABC` matched on `DL` —
-    /// so it is what the multiplier list shows. It is deliberately *not* the
-    /// entity's identity: Germany's ARRL row is `DA`–`DR`, so `DL` and `DJ`
-    /// are one multiplier and only the entity code can say so. The ARRL list
-    /// publishes no primary prefix to use instead; that field belongs to
-    /// cty.dat, which is not authority here.
+    /// A prefix is what an operator recognises, but it is deliberately *not*
+    /// the entity's identity: Germany's ARRL row is `DA`–`DR`, so `DL` and
+    /// `DJ` are one multiplier and only the entity code can say so. The ARRL
+    /// list designates no primary among a row's prefixes, so `label` comes
+    /// from `Entity.primaryPrefix` — cty.dat's field, a codified Article 1
+    /// exception confined to display.
     struct Match: Equatable, Sendable {
         let entity: Entity
         /// The table key that matched — `M` for `M0DD`, `DJ` for `DJ2BB`.
