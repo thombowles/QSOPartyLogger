@@ -448,6 +448,36 @@ final class CallHistoryClientTests: XCTestCase {
         XCTAssertNil(store.loadCached(partyID: "rp"))
     }
 
+    /// A plain-HTTP page URL is upgraded before the request: ATS refuses
+    /// HTTP outright, so an un-upgraded URL fails with a policy message
+    /// naming no site — which is exactly what shipped on 2026-08-04.
+    func testAPlainHTTPPageURLIsUpgradedBeforeTheRequest() async throws {
+        XCTAssertEqual(CallHistoryClient.secured("http://example.test/x"),
+                       "https://example.test/x")
+        XCTAssertEqual(CallHistoryClient.secured("https://example.test/x"),
+                       "https://example.test/x", "already secure, untouched")
+
+        let json = """
+        {"schemaVersion":1,"id":"rp","name":"RP","cabrilloContest":"RP","homeState":"NA",
+        "countyAbbrLength":2,"validBands":["40m"],"points":{"phone":1,"cw":1,"digital":1},
+        "dupeScope":"bandMode","hasHomeRegion":false,
+        "multipliers":{"inState":{"classes":["state"],"homeStateCountsViaCounty":false,"countScope":"once"},
+        "outState":{"classes":["state"],"homeStateCountsViaCounty":false,"countScope":"once"}},
+        "bonuses":[],"counties":[],
+        "callHistory":{"kind":"w2ljRosterPage","pageURL":"http://sponsor.test/skeeter.html",
+        "filePrefix":"SKEETER","token":"SKEETER ROSTER"}}
+        """
+        scriptRosterHappyPath()
+        await client.refreshIfStale(
+            party: try PartyCatalog.decode(Data(json.utf8)), now: now)
+
+        XCTAssertEqual(published.map(\.records), [2])
+        XCTAssertTrue(
+            fetcher.requests.contains { $0.hasPrefix("GET https://sponsor.test") },
+            "\(fetcher.requests)")
+        XCTAssertFalse(fetcher.requests.contains { $0.contains("GET http://") })
+    }
+
     func testRosterSheetWithAForeignShapeFailsLoudly() async throws {
         fetcher.getResponses = [
             ("sponsor.test", 200, Data(rosterPageHTML.utf8)),

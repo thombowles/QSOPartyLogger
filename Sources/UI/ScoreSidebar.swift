@@ -112,7 +112,9 @@ struct ScoreSidebar: View {
         // the sidebar keeps it on screen. Appended after the fixed four so
         // the rate figures still line up against those.
         if let member = party?.memberExchange {
-            figures.append(Figure(label: member.shortTerm, value: "\(score.memberQSOs)"))
+            // "Skeeters", not "Skeeter #" — this row counts stations, and the
+            // short term beside a number reads as somebody's number.
+            figures.append(Figure(label: member.memberPlural, value: "\(score.memberQSOs)"))
             figures.append(
                 Figure(label: "QRP / QRO", value: "\(score.qrpQSOs) / \(score.otherQSOs)")
             )

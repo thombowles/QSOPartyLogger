@@ -365,7 +365,10 @@ Entries are in contest-date order.
   standard tables. Points come from **what the worked station is**, not the
   mode: the received Skeeter-number-or-power element pays 3 (Skeeter), 2
   (non-Skeeter QRP, ≤5 W CW / ≤10 W phone — the event's own power limits), or
-  1 (QRO), and the entry row requires a readable element before it will log.
+  1 (QRO). **Leave the field blank for a station that sends no power** — a
+  POTA activator answering the sprint — and it scores as the sponsor's "any
+  other QRO station"; only text the app cannot read is refused, since a
+  mis-keyed number would otherwise score as QRO in silence.
   A self-declared **X1–X4 station class** (home/portable ×
   commercial/home-brew) multiplies the whole score, picked in Contest Setup.
   **Skeeter Hunt Blackjack** pays 1,000 once when distinct worked calls'

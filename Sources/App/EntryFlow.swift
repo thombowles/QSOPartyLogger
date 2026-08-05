@@ -302,10 +302,10 @@ final class EntryFlow {
         // happen.
         guard !entry.missingName(party: party) else { return .nothing }
 
-        // Nor is a member party's without a readable number-or-power: the
-        // element decides the QSO's points, so an unreadable one would
-        // silently score the fallback rate.
-        guard !entry.missingMember(party: party) else { return .nothing }
+        // A member party's element may be blank — that is a QRO station —
+        // but it may not be unreadable: the element decides the QSO's
+        // points, so a mis-keyed number would score as QRO in silence.
+        guard !entry.invalidMember(party: party) else { return .nothing }
 
         let myLocs = document.log.myLocation.sentExchanges.filter { !$0.isEmpty }
         guard !myLocs.isEmpty else { return .needsSetup }

@@ -215,7 +215,8 @@ KINDS = {
         (0, "ruleInference", "A Mixed entry working one station on CW and SSB of the same band is credited twice — the sponsor names only bands."),
         (1, "cosmetic", "The Cabrillo CONTEST header is this app’s invention; the sponsor accepts email summaries only, and the sidebar carries every number the summary wants."),
         (2, "ruleInference", "“QRP station” is read as at most 5 W CW / 10 W phone, the event’s own power limits."),
-        (3, "ruleInference", "A callsign’s blackjack digit is its first digit (0 worth 10); list the qualifying calls in your summary email yourself."),
+        (3, "ruleInference", "A blank Skeeter-number field scores as a QRO station — the rate the rules allow for a station of unknown power."),
+        (4, "ruleInference", "A callsign’s blackjack digit is its first digit (0 worth 10); list the qualifying calls in your summary email yourself."),
         (None, "provenance", "Rules read from W2LJ’s blog page (2026-08-04); the qsl.net page still carried 2025. Re-check on the eve — the bonus gimmick can change yearly."),
     ],
     "tnqp": [

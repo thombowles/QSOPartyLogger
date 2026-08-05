@@ -70,7 +70,9 @@ EXPECTED_UNMAPPED = {"azqp", "mdc", "vtqp"}
 ROSTER_BLOCKS = {
     "skeeter": {
         "kind": "w2ljRosterPage",
-        "pageURL": "http://w2lj.blogspot.com/p/njqrp-skeeter-hunt.html",
+        # HTTPS, not the http:// the sponsor links: ATS refuses plain HTTP,
+        # so the http form fails before a request is ever made.
+        "pageURL": "https://w2lj.blogspot.com/p/njqrp-skeeter-hunt.html",
         "filePrefix": "SKEETER",
         "token": "SKEETER ROSTER",
     },

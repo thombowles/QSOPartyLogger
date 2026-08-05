@@ -37,6 +37,7 @@ final class MemberExchangeTests: XCTestCase {
     /// The Skeeter Hunt's own numbers, on a synthetic party.
     static let memberBlock = """
     ,"memberExchange":{"term":"Skeeter number","shortTerm":"Skeeter #",
+    "memberPlural":"Skeeters",
     "memberPoints":3,"qrpPoints":2,"otherPoints":1,
     "qrpMaxWatts":{"phone":10,"cw":5,"digital":5}}
     """
@@ -87,6 +88,15 @@ final class MemberExchangeTests: XCTestCase {
         XCTAssertEqual(MemberExchange.parse("100W"), .power(watts: 100))
     }
 
+    /// The two forms an operator actually types for a non-member's power,
+    /// lower case and with the space they land on between number and unit.
+    func testTypedPowerFormsAllRead() {
+        for (typed, watts) in [("5w", 5.0), ("5 w", 5.0), ("100w", 100.0),
+                               ("100 W", 100.0), (" 5W ", 5.0)] {
+            XCTAssertEqual(MemberExchange.parse(typed), .power(watts: watts), typed)
+        }
+    }
+
     func testUnreadableElementsParseToNil() {
         XCTAssertNil(MemberExchange.parse(""))
         XCTAssertNil(MemberExchange.parse("  "))
@@ -105,8 +115,17 @@ final class MemberExchangeTests: XCTestCase {
         XCTAssertEqual(member.points(forReceived: "5W", modeClass: .cw), 2)
         XCTAssertEqual(member.points(forReceived: "100W", modeClass: .cw), 1)
         XCTAssertEqual(member.points(forReceived: "500MW", modeClass: .phone), 2)
-        XCTAssertNil(member.points(forReceived: nil, modeClass: .cw))
-        XCTAssertNil(member.points(forReceived: "junk", modeClass: .cw))
+    }
+
+    /// A station that sends no element is a QRO station — the sponsor's own
+    /// third line, "Working any other QRO station - 1 point". Claiming the
+    /// QRP rate for an unknown power would overstate the score.
+    func testAnAbsentElementIsAQROStation() throws {
+        let member = try XCTUnwrap(memberParty().memberExchange)
+        XCTAssertEqual(member.workedClass(forReceived: nil, modeClass: .cw), .other)
+        XCTAssertEqual(member.workedClass(forReceived: "", modeClass: .cw), .other)
+        XCTAssertEqual(member.points(forReceived: nil, modeClass: .cw), 1)
+        XCTAssertEqual(member.points(forReceived: "junk", modeClass: .cw), 1)
     }
 
     /// The QRP ceiling is per mode class and inclusive: the event's own power
@@ -159,6 +178,7 @@ final class MemberExchangeTests: XCTestCase {
         let member = try XCTUnwrap(memberParty().memberExchange)
         XCTAssertEqual(member.term, "Skeeter number")
         XCTAssertEqual(member.shortTerm, "Skeeter #")
+        XCTAssertEqual(member.memberPlural, "Skeeters")
         XCTAssertEqual(member.memberPoints, 3)
         XCTAssertEqual(member.qrpPoints, 2)
         XCTAssertEqual(member.otherPoints, 1)
@@ -192,14 +212,15 @@ final class MemberExchangeTests: XCTestCase {
         XCTAssertEqual(score.otherQSOs, 1)
     }
 
-    /// A row with no element (an import, an edit that blanked it) falls back
-    /// to the mode table rather than guessing a class.
-    func testMissingElementFallsBackToTheModeTable() throws {
+    /// A row with no element is a QRO contact: one point, and counted in the
+    /// QRO tally, because that is a real station the summary email reports.
+    func testAMissingElementScoresAndCountsAsQRO() throws {
         let party = try memberParty()
         let score = ScoreEngine.score(
             log: log([qso(call: "W1AW", their: "CT")], party: party), party: party)
-        XCTAssertEqual(score.qsoPoints, 1, "the points table's CW rate")
-        XCTAssertEqual(score.memberQSOs + score.qrpQSOs + score.otherQSOs, 0)
+        XCTAssertEqual(score.qsoPoints, 1)
+        XCTAssertEqual(score.otherQSOs, 1, "a POTA station answering the sprint")
+        XCTAssertEqual(score.memberQSOs + score.qrpQSOs, 0)
     }
 
     /// A dupe's element earns nothing — the classification counters count
@@ -320,25 +341,28 @@ final class MemberExchangeTests: XCTestCase {
 
     // MARK: The entry row
 
-    /// A member party will not log a contact without a *readable* element —
-    /// stricter than the name gate, because the element decides the points
-    /// and an unreadable one would silently score the fallback rate.
-    func testMissingMemberGateRequiresAParseableValue() throws {
+    /// Blank logs — it is the QRO case, and a real contact. Only text the
+    /// party cannot read is refused, because a mis-keyed number would
+    /// silently score as QRO.
+    func testOnlyUnreadableTextBlocksLogging() throws {
         let entry = EntryState()
         let memberParty = try memberParty()
 
-        XCTAssertTrue(entry.missingMember(party: memberParty))
+        XCTAssertFalse(entry.invalidMember(party: memberParty),
+                       "blank is a QRO station, not a half-copied exchange")
+        entry.memberRcvd = "   "
+        XCTAssertFalse(entry.invalidMember(party: memberParty), "whitespace is blank")
         entry.memberRcvd = "junk"
-        XCTAssertTrue(entry.missingMember(party: memberParty), "unreadable is missing")
+        XCTAssertTrue(entry.invalidMember(party: memberParty))
         entry.memberRcvd = "13"
-        XCTAssertFalse(entry.missingMember(party: memberParty))
-        entry.memberRcvd = "5W"
-        XCTAssertFalse(entry.missingMember(party: memberParty))
+        XCTAssertFalse(entry.invalidMember(party: memberParty))
+        entry.memberRcvd = "100w"
+        XCTAssertFalse(entry.invalidMember(party: memberParty))
 
-        entry.memberRcvd = ""
-        XCTAssertFalse(entry.missingMember(party: try party()),
+        entry.memberRcvd = "junk"
+        XCTAssertFalse(entry.invalidMember(party: try party()),
                        "parties without the element never gate on it")
-        XCTAssertFalse(entry.missingMember(party: nil))
+        XCTAssertFalse(entry.invalidMember(party: nil))
     }
 
     func testPendingStashCarriesTheElement() {

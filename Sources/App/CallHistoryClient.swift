@@ -171,7 +171,7 @@ final class CallHistoryClient {
         now: Date
     ) async {
         guard let pageURLString = source.pageURL,
-              let pageURL = URL(string: pageURLString) else {
+              let pageURL = URL(string: Self.secured(pageURLString)) else {
             fail("This party's roster source names no page URL — "
                  + "the definition is incomplete.")
             return
@@ -252,6 +252,21 @@ final class CallHistoryClient {
                  + "\(error.localizedDescription) The cached roster, if any, "
                  + "stays in use.")
         }
+    }
+
+    /// An `http://` URL upgraded to `https://`.
+    ///
+    /// App Transport Security refuses plain HTTP outright, so a bundled or
+    /// user-supplied `http://` page URL is not "insecure but working" — it
+    /// cannot load at all, and the operator sees an ATS message naming a
+    /// policy rather than a site. Sponsors write their own links however
+    /// they like (W2LJ's page is linked as `http://` and served fine over
+    /// TLS), so the scheme is the app's business, not theirs. If the host
+    /// genuinely has no TLS the request fails on its own merits, which is a
+    /// better error than the one ATS produces.
+    static func secured(_ urlString: String) -> String {
+        guard urlString.lowercased().hasPrefix("http://") else { return urlString }
+        return "https://" + urlString.dropFirst("http://".count)
     }
 
     private static func dayStamp(_ date: Date) -> String {

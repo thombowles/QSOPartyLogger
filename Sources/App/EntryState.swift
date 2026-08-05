@@ -221,13 +221,17 @@ final class EntryState {
             && nameRcvd.trimmingCharacters(in: .whitespaces).isEmpty
     }
 
-    /// Whether this party requires a received member element the operator has
-    /// not validly copied yet. Stricter than the name gate — parseable, not
-    /// merely present — because the element decides the QSO's points, and
-    /// logging an unreadable one would silently score the fallback rate.
-    func missingMember(party: PartyDefinition?) -> Bool {
+    /// Whether the member element holds something the party cannot read.
+    ///
+    /// **Blank is not invalid**: a station that sends no number and no power
+    /// is a QRO station, which is a real contact worth a point, so an empty
+    /// field must log. Text that is neither a number nor a power *is* a
+    /// typo, and the element decides the QSO's points — so logging it would
+    /// silently score the contact as QRO on a mis-keyed "13".
+    func invalidMember(party: PartyDefinition?) -> Bool {
         guard party?.memberExchange != nil else { return false }
-        return MemberExchange.parse(memberRcvd) == nil
+        let typed = memberRcvd.trimmingCharacters(in: .whitespaces)
+        return !typed.isEmpty && MemberExchange.parse(typed) == nil
     }
 
     /// Re-validate the exchange and refresh dupe/new-mult hints.

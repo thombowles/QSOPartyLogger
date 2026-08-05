@@ -89,6 +89,11 @@ struct EntryBar: View {
                     // A number or a power with its unit — "13" or "5W".
                     field(member.shortTerm, text: $entry.memberTyped.uppercasing, width: 80,
                           focusTag: .memberRcvd, provisional: entry.memberIsAutoFilled)
+                        // The field is narrow and its label cannot say all
+                        // three cases, of which the blank one is the least
+                        // guessable.
+                        .help("\(member.term), or their power (5W, 100W). "
+                              + "Leave empty if they sent neither — that scores as QRO.")
                 }
                 statusBadge
                 Spacer()
@@ -160,7 +165,7 @@ struct EntryBar: View {
     private var canLog: Bool {
         if case .valid = entry.exchangeStatus, !entry.callNormalized.isEmpty {
             return !entry.missingName(party: party)
-                && !entry.missingMember(party: party)
+                && !entry.invalidMember(party: party)
         }
         return false
     }

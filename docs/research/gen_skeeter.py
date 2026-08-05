@@ -146,6 +146,16 @@ KL_QRP = (
     "max SSB') - because the scoring text never defines it. A received "
     "'10W' on phone pays 2 points; the same on CW pays 1."
 )
+KL_BLANK = (
+    "A BLANK SKEETER-NUMBER FIELD SCORES THE CONTACT AS A QRO STATION, one "
+    "point. Stations answer a sprint without being in it - a POTA activator "
+    "sending only a report and a state - and the rules' third scoring line "
+    "is 'Working any other QRO station - 1 point'. Claiming the 2-point QRP "
+    "rate for a station that never told you its power would overstate the "
+    "score, so an absent element takes the rate the rules allow for a "
+    "station of unknown power. Leave the field empty for those contacts; "
+    "type the power they send ('5W', '100W') whenever they send one."
+)
 KL_BLACKJACK = (
     "A CALLSIGN'S BLACKJACK DIGIT IS READ AS ITS FIRST DIGIT, with 0 worth "
     "10 - every example the sponsor gives satisfies this, but portable and "
@@ -170,9 +180,12 @@ NOTES = (
     "OUTPUT POWER ('For example - 559 NY 5W'), and the third element "
     "decides the points regardless of mode: 'Working a Skeeter Station - 3 "
     "points / Working a non-Skeeter, but QRP station - 2 points / Working "
-    "any other QRO station - 1 point'. In this app the element is required "
-    "- a contact will not log without a number or a power with its unit "
-    "(5W, 500MW, 2.5W), which is what keeps the 3/2/1 honest. MULTIPLIERS "
+    "any other QRO station - 1 point'. In this app the element takes a "
+    "number (a Skeeter), a power with its unit (5W, 100W, 500MW, 2.5W), or "
+    "nothing at all - blank being the QRO case, since a station that sends "
+    "no power is one whose power you do not know. Only unreadable text is "
+    "refused, because a mis-keyed number would score as QRO in silence. "
+    "MULTIPLIERS "
     "ARE S/P/CS COUNTED ONCE for the whole contest - 'S/P/C's only count "
     "once for multiplier credit', with the sponsor's own example (W2LJ on "
     "40, 20 and 15 is three QSOs and one NJ) - drawn from the app's "
@@ -208,11 +221,12 @@ NOTES = (
     f"OPEN QUESTION 1: {OPEN_Q_DUPES} "
     f"KNOWN LIMITATION 1: {KL_CABRILLO} "
     f"KNOWN LIMITATION 2: {KL_QRP} "
-    f"KNOWN LIMITATION 3: {KL_BLACKJACK}"
+    f"KNOWN LIMITATION 3: {KL_BLANK} "
+    f"KNOWN LIMITATION 4: {KL_BLACKJACK}"
 )
 
 assert "verified: partial" in NOTES
-for body in [OPEN_Q_DUPES, KL_CABRILLO, KL_QRP, KL_BLACKJACK]:
+for body in [OPEN_Q_DUPES, KL_CABRILLO, KL_QRP, KL_BLANK, KL_BLACKJACK]:
     assert body in NOTES
 
 # --- 5. The party ----------------------------------------------------------
@@ -254,6 +268,8 @@ party = {
     "memberExchange": {
         "term": "Skeeter number",
         "shortTerm": "Skeeter #",
+        # The score sidebar counts stations, not numbers.
+        "memberPlural": "Skeeters",
         "memberPoints": 3,
         "qrpPoints": 2,
         "otherPoints": 1,
@@ -276,7 +292,10 @@ party = {
     # this script (pipeline order).
     "callHistory": {
         "kind": "w2ljRosterPage",
-        "pageURL": "http://w2lj.blogspot.com/p/njqrp-skeeter-hunt.html",
+        # HTTPS: App Transport Security refuses plain HTTP outright, so the
+        # http:// form the sponsor links (and this file first shipped) could
+        # not load at all. Blogger serves the same page over TLS.
+        "pageURL": "https://w2lj.blogspot.com/p/njqrp-skeeter-hunt.html",
         "filePrefix": "SKEETER",
         "token": "SKEETER ROSTER",
     },

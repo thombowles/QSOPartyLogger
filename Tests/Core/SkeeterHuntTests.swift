@@ -89,6 +89,8 @@ final class SkeeterHuntTests: XCTestCase {
         let member = try XCTUnwrap(skeeter.memberExchange)
         XCTAssertEqual(member.term, "Skeeter number")
         XCTAssertEqual(member.shortTerm, "Skeeter #")
+        XCTAssertEqual(member.memberPlural, "Skeeters",
+                       "the sidebar counts stations, not numbers")
         XCTAssertEqual(member.memberPoints, 3)
         XCTAssertEqual(member.qrpPoints, 2)
         XCTAssertEqual(member.otherPoints, 1)
@@ -141,10 +143,10 @@ final class SkeeterHuntTests: XCTestCase {
         else { return XCTFail("garbage must not validate") }
     }
 
-    /// The party will not log a contact without a readable third element —
-    /// the element decides the points, so an unreadable one would silently
-    /// score the fallback rate.
-    func testLoggingRequiresTheReceivedElement() {
+    /// The element refuses only text the party cannot read — a mis-keyed
+    /// number would score as QRO in silence. A *blank* field logs, because
+    /// that is the QRO case (see the POTA test below).
+    func testUnreadableElementBlocksLoggingButABlankOneDoesNot() {
         let doc = LogDocument()
         doc.updateStation(
             StationProfile(callsign: "KE5CW"),
@@ -159,11 +161,10 @@ final class SkeeterHuntTests: XCTestCase {
 
         flow.entry.call = "W2LJ"
         flow.entry.exchangeTyped = "NJ"
-        XCTAssertEqual(flow.logContact(context, undoManager: nil), .nothing,
-                       "no received element, no contact")
         flow.entry.memberRcvd = "watts"
         XCTAssertEqual(flow.logContact(context, undoManager: nil), .nothing,
-                       "an unreadable element is no element")
+                       "an unreadable element is a typo, not an exchange")
+        XCTAssertTrue(doc.log.qsos.isEmpty)
 
         flow.entry.memberRcvd = "13"
         guard case .logged(let rows, _) = flow.logContact(context, undoManager: nil) else {
@@ -175,6 +176,34 @@ final class SkeeterHuntTests: XCTestCase {
         XCTAssertEqual(rows[0].theirLoc, "NJ")
     }
 
+    /// A POTA activator answering the sprint sends a report and a state and
+    /// nothing else. That contact logs with the element blank and scores as
+    /// the sponsor's "any other QRO station" — one point.
+    func testAStationThatSendsNoElementLogsAsQRO() {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(callsign: "KE5CW"),
+            location: .outOfState(location: "TX"),
+            partyID: "skeeter",
+            exchangeMember: "20",
+            undoManager: nil
+        )
+        let flow = EntryFlow(document: doc)
+        let context = EntryFlow.Context()
+
+        flow.entry.call = "K4POTA"
+        flow.entry.exchangeTyped = "GA"
+        guard case .logged(let rows, _) = flow.logContact(context, undoManager: nil) else {
+            return XCTFail("a blank element must not block a real contact")
+        }
+        XCTAssertNil(rows[0].memberRcvd)
+
+        let score = ScoreEngine.score(log: doc.log, party: skeeter)
+        XCTAssertEqual(score.qsoPoints, 1)
+        XCTAssertEqual(score.otherQSOs, 1)
+        XCTAssertEqual(score.multiplierCount, 1, "GA still counts")
+    }
+
     // MARK: Points — 3 / 2 / 1 from the received element
 
     func testPointsByWorkedStationClass() {
@@ -182,12 +211,13 @@ final class SkeeterHuntTests: XCTestCase {
             qso(call: "W2LJ", their: "NJ", memberRcvd: "13"),    // Skeeter: 3
             qso(call: "K1SW", their: "NH", memberRcvd: "5W"),    // QRP: 2
             qso(call: "W9XYZ", their: "IL", memberRcvd: "100W"), // QRO: 1
+            qso(call: "K4POTA", their: "GA", memberRcvd: nil),   // QRO: 1
         ]
         let score = ScoreEngine.score(log: log(rows), party: skeeter)
-        XCTAssertEqual(score.qsoPoints, 6)
+        XCTAssertEqual(score.qsoPoints, 7)
         XCTAssertEqual(score.memberQSOs, 1)
         XCTAssertEqual(score.qrpQSOs, 1)
-        XCTAssertEqual(score.otherQSOs, 1)
+        XCTAssertEqual(score.otherQSOs, 2, "a stated 100 W and an unstated power")
     }
 
     /// The QRP ceiling is the event's own power rule, per mode and
@@ -329,9 +359,20 @@ final class SkeeterHuntTests: XCTestCase {
     func testCallHistoryIsTheSponsorsRosterPage() throws {
         let source = try XCTUnwrap(skeeter.callHistory)
         XCTAssertEqual(source.kind, .w2ljRosterPage)
-        XCTAssertEqual(source.pageURL, "http://w2lj.blogspot.com/p/njqrp-skeeter-hunt.html")
+        // HTTPS, not the http:// the sponsor links: App Transport Security
+        // refuses plain HTTP outright, so the http form never loaded at all.
+        XCTAssertEqual(source.pageURL, "https://w2lj.blogspot.com/p/njqrp-skeeter-hunt.html")
         XCTAssertEqual(source.filePrefix, "SKEETER")
         XCTAssertEqual(source.token, "SKEETER ROSTER")
+    }
+
+    /// No bundled party may carry a plain-HTTP source URL — ATS blocks it,
+    /// and the operator sees a policy message instead of a roster.
+    func testNoBundledSourceURLIsPlainHTTP() {
+        for party in PartyCatalog.loadBundled() {
+            guard let pageURL = party.callHistory?.pageURL else { continue }
+            XCTAssertTrue(pageURL.hasPrefix("https://"), "\(party.id): \(pageURL)")
+        }
     }
 
     // MARK: Verification posture
@@ -340,11 +381,11 @@ final class SkeeterHuntTests: XCTestCase {
     /// score and the export are exact, and the open questions are
     /// inferences an operator can read before entering.
     func testCaveatsAreNamedAndNoneBadge() {
-        XCTAssertEqual(skeeter.caveats.count, 5)
+        XCTAssertEqual(skeeter.caveats.count, 6)
         XCTAssertTrue(skeeter.blockingCaveats.isEmpty,
                       "nothing here mis-scores or mis-exports")
-        XCTAssertEqual(skeeter.operatorAlerts.count, 4,
-                       "the four numbered items; the provenance caveat stands alone")
+        XCTAssertEqual(skeeter.operatorAlerts.count, 5,
+                       "the five numbered items; the provenance caveat stands alone")
     }
 
     // MARK: Not a Challenge contest

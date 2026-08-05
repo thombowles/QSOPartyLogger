@@ -134,22 +134,22 @@ enum ScoreEngine {
             result.validQSOs += 1
             // A member-exchange party pays by what the worked station IS —
             // the received element decides (Skeeter 3 / QRP 2 / QRO 1),
-            // regardless of mode. An unreadable or absent element falls back
-            // to the mode table rather than guessing.
-            if let member = party.memberExchange,
-               let value = row.memberRcvd.flatMap(MemberExchange.parse) {
-                switch value {
+            // regardless of mode. A blank element is a QRO station, not a
+            // gap: a POTA activator who sends only a report and a state is
+            // exactly the sponsor's "any other QRO station".
+            if let member = party.memberExchange {
+                switch member.workedClass(
+                    forReceived: row.memberRcvd, modeClass: row.modeClass
+                ) {
                 case .member:
                     result.qsoPoints += member.memberPoints
                     result.memberQSOs += 1
-                case .power(let watts):
-                    if watts <= member.qrpMaxWatts.limit(for: row.modeClass) {
-                        result.qsoPoints += member.qrpPoints
-                        result.qrpQSOs += 1
-                    } else {
-                        result.qsoPoints += member.otherPoints
-                        result.otherQSOs += 1
-                    }
+                case .qrp:
+                    result.qsoPoints += member.qrpPoints
+                    result.qrpQSOs += 1
+                case .other:
+                    result.qsoPoints += member.otherPoints
+                    result.otherQSOs += 1
                 }
             } else {
                 result.qsoPoints += party
