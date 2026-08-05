@@ -203,7 +203,7 @@ final class VermontQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.workedValues(.county), ["WNH"])
         XCTAssertEqual(s.workedValues(.state), ["TX"])
         XCTAssertEqual(s.workedValues(.province), ["ON"])
-        XCTAssertEqual(s.workedValues(.dx), ["Germany"])
+        XCTAssertEqual(s.workedValues(.dx), ["DL"])
         XCTAssertEqual(s.multiplierCount, 4)
     }
 

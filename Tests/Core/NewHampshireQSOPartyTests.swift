@@ -180,20 +180,43 @@ final class NewHampshireQSOPartyTests: XCTestCase {
         ]), party: nhqp)
         XCTAssertEqual(s.validQSOs, 3, "all three are valid QSOs worth points")
         XCTAssertEqual(s.qsoPoints, 6)
-        XCTAssertEqual(Set(s.workedValues(.dx)), ["Germany", "Japan", "England"],
+        XCTAssertEqual(Set(s.workedValues(.dx)), ["DL", "JA", "G"],
                        "resolved from the callsign, since the exchange carries no country")
         XCTAssertEqual(s.multiplierCount, 3)
     }
 
     /// Two stations in one entity are still one multiplier — the point of
     /// counting entities rather than contacts.
-    func testTwoStationsInOneEntityAreOneMultiplier() {
+    ///
+    /// The label is the PREFIX, because that is what an operator recognises,
+    /// but the identity is the ARRL entity code, because Germany spans DA–DR
+    /// and `DL` and `DJ` are the same country. The ARRL list publishes no
+    /// primary prefix to pick between them — its row simply begins at `DA` —
+    /// so the first prefix worked names the entity for the rest of the log.
+    func testTwoStationsInOneEntityAreOneMultiplierLabelledByPrefix() {
         let s = ScoreEngine.score(log: inLog([
             qso(call: "DL1A", my: "HIL", their: "DX"),
             qso(call: "DJ2B", band: .m40, my: "HIL", their: "DX"),
         ]), party: nhqp)
-        XCTAssertEqual(s.workedValues(.dx), ["Germany"])
+        XCTAssertEqual(s.workedValues(.dx), ["DL"], "the prefix, not \"Germany\"")
+        XCTAssertEqual(s.multiplierCount, 1, "DL and DJ are one country")
+    }
+
+    /// Worked the other way round, the same country is labelled `DJ` — the
+    /// label follows the log, the count does not.
+    func testTheLabelIsTheFirstPrefixWorkedForThatEntity() {
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "DJ2B", my: "HIL", their: "DX"),
+            qso(call: "DL1A", band: .m40, my: "HIL", their: "DX"),
+        ]), party: nhqp)
+        XCTAssertEqual(s.workedValues(.dx), ["DJ"])
         XCTAssertEqual(s.multiplierCount, 1)
+        // Both prefixes really are one ARRL entity, which is what makes the
+        // count right and the label a free choice.
+        XCTAssertEqual(DXCCTable.shared.match(callsign: "DL1A")?.entity.code,
+                       DXCCTable.shared.match(callsign: "DJ2B")?.entity.code)
+        XCTAssertEqual(DXCCTable.shared.match(callsign: "DL1A")?.prefix, "DL")
+        XCTAssertEqual(DXCCTable.shared.match(callsign: "DJ2B")?.prefix, "DJ")
     }
 
     /// And the cap now binds, which is what it was recorded for.

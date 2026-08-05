@@ -79,6 +79,8 @@ enum ScoreEngine {
         let wantedClasses = Set(rule.classes)
         result.multiplierCap = rule.maxScoredMultipliers
         var dxCount = 0
+        // ARRL entity code -> the prefix this log will show for it.
+        var dxLabelForEntity: [String: String] = [:]
 
         // Multipliers the party hands over without them being worked (PAQP's
         // EPA and WPA, which no station ever sends). Scoped once, since the
@@ -100,13 +102,31 @@ enum ScoreEngine {
                 .pointsTable(forTheirLoc: row.theirLoc, countyAbbrs: countyAbbrs)
                 .points(for: row.modeClass)
 
-            for (multClass, value) in multContributions(
+            for contribution in multContributions(
                 theirLoc: row.theirLoc.uppercased(),
                 call: row.call,
                 countyAbbrs: countyAbbrs,
                 party: party,
                 rule: rule
-            ) where wantedClasses.contains(multClass) || isHomeStateViaCounty(multClass, value, party, rule) {
+            ) {
+                let multClass = contribution.multClass
+                // A DX entity is identified by its ARRL entity code but LABELLED
+                // with the prefix that matched, because that is what an operator
+                // recognises: DL1ABC reads as DL, not as "Germany" and not as
+                // the ARRL row's first prefix, which is DA. Germany spans DA-DR,
+                // so DL and DJ must stay one multiplier -- the first prefix
+                // worked for an entity names it for the rest of the log, and the
+                // entity code is what decides they are the same.
+                var value = contribution.value
+                if let code = contribution.dxEntityCode {
+                    if let already = dxLabelForEntity[code] {
+                        value = already
+                    } else {
+                        dxLabelForEntity[code] = value
+                    }
+                }
+                guard wantedClasses.contains(multClass)
+                        || isHomeStateViaCounty(multClass, value, party, rule) else { continue }
                 if multClass == .dx, let cap = rule.dxMultCap,
                    dxCount >= cap,
                    !result.multiplierKeys.contains(where: { $0.multClass == .dx && $0.value == value }) {
@@ -177,6 +197,17 @@ enum ScoreEngine {
         rule.homeStateCountsViaCounty && multClass == .state && value == party.homeState
     }
 
+    /// One multiplier a received location contributes.
+    ///
+    /// `value` is what the operator sees. `dxEntityCode` is set only for a DX
+    /// entity, and is what actually decides sameness -- two prefixes of one
+    /// ARRL entity share a code and must count once, however they were typed.
+    struct Contribution {
+        let multClass: MultClass
+        let value: String
+        var dxEntityCode: String?
+    }
+
     /// Which multiplier(s) a received location contributes under the rule.
     private static func multContributions(
         theirLoc: String,
@@ -184,14 +215,15 @@ enum ScoreEngine {
         countyAbbrs: Set<String>,
         party: PartyDefinition,
         rule: PartyDefinition.MultRule
-    ) -> [(MultClass, String)] {
+    ) -> [Contribution] {
         if countyAbbrs.contains(theirLoc) {
-            var out: [(MultClass, String)] = [(.county, theirLoc)]
+            var out: [Contribution] = [Contribution(multClass: .county, value: theirLoc)]
             if rule.homeStateCountsViaCounty {
                 // The county's own state, which for every single-state party is
                 // the party's — and for a 7QP log is whichever of the seven the
                 // county lies in.
-                out.append((.state, party.state(forCounty: theirLoc)))
+                out.append(Contribution(multClass: .state,
+                                        value: party.state(forCounty: theirLoc)))
             }
             return out
         }
@@ -200,10 +232,10 @@ enum ScoreEngine {
         // "NTX" is a section and "TX" is not a token at all.
         if party.usesSections {
             if party.sections.contains(theirLoc) {
-                return [(.section, theirLoc)]
+                return [Contribution(multClass: .section, value: theirLoc)]
             }
             if theirLoc == MultClass.dxToken {
-                return [(.dx, MultClass.dxToken)]
+                return [Contribution(multClass: .dx, value: MultClass.dxToken)]
             }
             return []
         }
@@ -232,14 +264,14 @@ enum ScoreEngine {
 
         if !collidesWithDXCC {
             if let aliased = party.stateAliases[theirLoc] {
-                return [(.state, aliased)]
+                return [Contribution(multClass: .state, value: aliased)]
             }
             if MultClass.acceptedStateTokens.contains(theirLoc),
                !party.excludedStateTokens.contains(theirLoc) {
-                return [(.state, theirLoc)]
+                return [Contribution(multClass: .state, value: theirLoc)]
             }
             if party.provinces.contains(theirLoc) {
-                return [(.province, theirLoc)]
+                return [Contribution(multClass: .province, value: theirLoc)]
             }
         }
         if theirLoc == MultClass.dxToken {
@@ -247,17 +279,17 @@ enum ScoreEngine {
             // which is the whole reason NHQP's "up to 10 DXCC country" and
             // MEQP's uncapped entities could not be counted before.
             guard rule.dxCountsEntities,
-                  let entity = DXCCTable.shared.entity(forCallsign: call)
-            else { return [(.dx, MultClass.dxToken)] }
-            return [(.dx, entity.name)]
+                  let m = DXCCTable.shared.match(callsign: call)
+            else { return [Contribution(multClass: .dx, value: MultClass.dxToken)] }
+            return [Contribution(multClass: .dx, value: m.prefix, dxEntityCode: m.entity.code)]
         }
         if party.isDXPrefix(theirLoc) || collidesWithDXCC {
             // Here the exchange DOES carry the country, and the sponsor's own
             // received datum outranks a prefix match on the call.
             guard rule.dxCountsEntities,
-                  let entity = DXCCTable.shared.entity(forPrefix: theirLoc)
-            else { return [(.dx, theirLoc)] }
-            return [(.dx, entity.name)]
+                  let m = DXCCTable.shared.match(prefix: theirLoc)
+            else { return [Contribution(multClass: .dx, value: theirLoc)] }
+            return [Contribution(multClass: .dx, value: m.prefix, dxEntityCode: m.entity.code)]
         }
         return []
     }
@@ -364,14 +396,15 @@ enum ScoreEngine {
         let scope = scopeComponent(rule.countScope, band: band, modeClass: modeClass)
 
         for loc in theirLocs {
-            for (multClass, value) in multContributions(
+            for c in multContributions(
                 theirLoc: loc.uppercased(),
                 call: "",
                 countyAbbrs: countyAbbrs,
                 party: party,
                 rule: rule
-            ) where wantedClasses.contains(multClass) || isHomeStateViaCounty(multClass, value, party, rule) {
-                let key = MultKey(multClass: multClass, value: value, scope: scope)
+            ) where wantedClasses.contains(c.multClass)
+                    || isHomeStateViaCounty(c.multClass, c.value, party, rule) {
+                let key = MultKey(multClass: c.multClass, value: c.value, scope: scope)
                 if !current.contains(key) {
                     return true
                 }

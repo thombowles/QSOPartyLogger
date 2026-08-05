@@ -156,20 +156,46 @@ struct DXCCTable: Sendable {
         prefixes[token.uppercased()] != nil
     }
 
+    /// An entity together with the prefix that actually matched.
+    ///
+    /// The prefix is what an operator recognises — `DL1ABC` matched on `DL` —
+    /// so it is what the multiplier list shows. It is deliberately *not* the
+    /// entity's identity: Germany's ARRL row is `DA`–`DR`, so `DL` and `DJ`
+    /// are one multiplier and only the entity code can say so. The ARRL list
+    /// publishes no primary prefix to use instead; that field belongs to
+    /// cty.dat, which is not authority here.
+    struct Match: Equatable, Sendable {
+        let entity: Entity
+        /// The table key that matched — `DL`, `JA`, `G`, `EA6`.
+        let prefix: String
+    }
+
     /// The entity a worked station belongs to, by longest prefix match on its
     /// callsign — N1MM's model, and the only way to tell DX entities apart in
     /// a party whose exchange is the literal token "DX".
-    func entity(forCallsign call: String) -> Entity? {
+    func match(callsign call: String) -> Match? {
         let stem = Self.locationPart(of: call)
         guard !stem.isEmpty else { return nil }
         var length = min(longestPrefix, stem.count)
         while length > 0 {
             let candidate = String(stem.prefix(length))
-            if let code = prefixes[candidate] { return byCode[code] }
+            if let code = prefixes[candidate], let entity = byCode[code] {
+                return Match(entity: entity, prefix: candidate)
+            }
             length -= 1
         }
         return nil
     }
+
+    /// The entity a received prefix token names, with the token normalised to
+    /// the table's own casing.
+    func match(prefix token: String) -> Match? {
+        let key = token.uppercased()
+        guard let code = prefixes[key], let entity = byCode[code] else { return nil }
+        return Match(entity: entity, prefix: key)
+    }
+
+    func entity(forCallsign call: String) -> Entity? { match(callsign: call)?.entity }
 
     // MARK: Callsign shape
 

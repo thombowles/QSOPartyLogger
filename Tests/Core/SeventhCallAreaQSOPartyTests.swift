@@ -212,7 +212,7 @@ final class SeventhCallAreaQSOPartyTests: XCTestCase {
         let same = ScoreEngine.score(log: inLog((0..<12).map {
             qso(call: "DL\($0)AA", my: "AZYVP", their: "DX")
         }), party: qp)
-        XCTAssertEqual(same.workedValues(.dx), ["Germany"])
+        XCTAssertEqual(same.workedValues(.dx), ["DL"])
     }
 
     /// **KNOWN LIMITATION 1, pinned.** "WSJT modes do not support the 7QP

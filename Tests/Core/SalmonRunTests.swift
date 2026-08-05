@@ -204,7 +204,7 @@ final class SalmonRunTests: XCTestCase {
         XCTAssertEqual(dx.workedValues(.state), [], "none of these are US states")
         XCTAssertEqual(dx.workedValues(.province), [], "nor Canadian provinces")
         XCTAssertEqual(Set(dx.workedValues(.dx)),
-                       ["Netherlands", "Czech Republic", "Norway", "Belgium", "Germany"])
+                       ["PA", "OK", "LA", "ON", "DL"])
         XCTAssertEqual(dx.multiplierCount, 5, "five entities toward the ten allowed")
     }
 

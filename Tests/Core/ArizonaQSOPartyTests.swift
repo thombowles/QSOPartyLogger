@@ -197,7 +197,7 @@ final class ArizonaQSOPartyTests: XCTestCase {
         ]), party: azqp)
         XCTAssertEqual(s.workedValues(.state), ["TX"])
         XCTAssertEqual(s.workedValues(.province), ["ON"])
-        XCTAssertEqual(s.workedValues(.dx), ["Germany"])
+        XCTAssertEqual(s.workedValues(.dx), ["DL"])
         XCTAssertEqual(s.multiplierCount, 3)
     }
 
@@ -239,7 +239,7 @@ final class ArizonaQSOPartyTests: XCTestCase {
             qso(call: "JA1B", my: "MCP", their: "JA"),
             qso(call: "G4C", my: "MCP", their: "G"),
         ]), party: azqp)
-        XCTAssertEqual(s.workedValues(.dx), ["Germany", "Japan", "England"],
+        XCTAssertEqual(s.workedValues(.dx), ["DL", "JA", "G"],
                        "prefix style, so unlike NHQP/MEQP each entity counts")
         XCTAssertEqual(s.multiplierCount, 3)
     }
@@ -255,7 +255,7 @@ final class ArizonaQSOPartyTests: XCTestCase {
         ]), party: azqp)
         XCTAssertEqual(dx.workedValues(.state), [])
         XCTAssertEqual(dx.workedValues(.province), [])
-        XCTAssertEqual(Set(dx.workedValues(.dx)), ["Netherlands", "Belgium"])
+        XCTAssertEqual(Set(dx.workedValues(.dx)), ["PA", "ON"])
 
         let home = ScoreEngine.score(log: inLog([
             qso(call: "W3XYZ", my: "MCP", their: "PA"),

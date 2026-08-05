@@ -209,8 +209,8 @@ final class OntarioQSOPartyTests: XCTestCase {
             qso(call: "JA1BB", band: .m20, my: "TOR", their: "JA"),
         ]), party: oqp)
         XCTAssertEqual(s.multiplierCount, 2, "two entities, two multipliers")
-        XCTAssertEqual(Set(s.workedValues(.dx)), ["Germany", "Japan"],
-                       "named from the ARRL list, not left as bare prefixes")
+        XCTAssertEqual(Set(s.workedValues(.dx)), ["DL", "JA"],
+                       "labelled by the prefix worked, not by the entity name")
 
         // Two prefixes of one entity are one multiplier — the whole point of
         // counting entities rather than tokens.
@@ -218,7 +218,7 @@ final class OntarioQSOPartyTests: XCTestCase {
             qso(call: "DL1AA", band: .m20, my: "TOR", their: "DL"),
             qso(call: "DJ2BB", band: .m20, my: "TOR", their: "DJ"),
         ]), party: oqp)
-        XCTAssertEqual(sameEntity.workedValues(.dx), ["Germany"])
+        XCTAssertEqual(sameEntity.workedValues(.dx), ["DL"])
         XCTAssertEqual(sameEntity.multiplierCount, 1, "DL and DJ are both Germany")
 
         XCTAssertTrue(oqp.acceptsDXToken)

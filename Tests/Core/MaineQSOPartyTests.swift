@@ -367,7 +367,7 @@ final class MaineQSOPartyTests: XCTestCase {
             qso(call: "JA1B", my: "CUM", their: "DX"),
             qso(call: "G4C", my: "CUM", their: "DX"),
         ]), party: meqp)
-        XCTAssertEqual(Set(s.workedValues(.dx)), ["Germany", "Japan", "England"])
+        XCTAssertEqual(Set(s.workedValues(.dx)), ["DL", "JA", "G"])
         XCTAssertEqual(s.multiplierCount, 3)
     }
 }

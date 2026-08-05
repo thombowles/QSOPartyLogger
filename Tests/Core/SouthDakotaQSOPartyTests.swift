@@ -181,7 +181,7 @@ final class SouthDakotaQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.workedValues(.county), ["PENN"])
         XCTAssertEqual(s.workedValues(.state), ["TX"])
         XCTAssertEqual(s.workedValues(.province), ["ON"])
-        XCTAssertEqual(s.workedValues(.dx), ["Germany"])
+        XCTAssertEqual(s.workedValues(.dx), ["DL"])
         XCTAssertEqual(s.multiplierCount, 4)
     }
 
@@ -193,7 +193,7 @@ final class SouthDakotaQSOPartyTests: XCTestCase {
             qso(call: "JA1B", my: "MINN", their: "JA"),
             qso(call: "G4C", my: "MINN", their: "G"),
         ]), party: sdqp)
-        XCTAssertEqual(s.workedValues(.dx), ["Germany", "Japan", "England"])
+        XCTAssertEqual(s.workedValues(.dx), ["DL", "JA", "G"])
         XCTAssertNil(sdqp.multipliers.inState.dxMultCap, "no DX cap is stated")
     }
 

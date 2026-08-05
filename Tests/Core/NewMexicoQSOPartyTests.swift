@@ -207,7 +207,7 @@ final class NewMexicoQSOPartyTests: XCTestCase {
         let rows = (0..<10).map { qso(call: "DL\($0)AA", my: "BER", their: "DX") }
         let s = ScoreEngine.score(log: inLog(rows), party: nmqp)
         XCTAssertEqual(s.validQSOs, 10)
-        XCTAssertEqual(s.workedValues(.dx), ["Germany"])
+        XCTAssertEqual(s.workedValues(.dx), ["DL"])
     }
 
     // MARK: Bonuses — both fit

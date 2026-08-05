@@ -1150,7 +1150,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1869 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1870 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1347,6 +1347,15 @@ station profile, radio wiring and cluster history untouched.
   station", NCQP "only one 'DX' multiplier … representing all DX worked" — so
   the flag is opt-in per party, and a party whose rules nobody has re-read with
   this question in mind keeps scoring exactly as before.
+
+  **A DX multiplier is labelled by its prefix and identified by its entity.**
+  `DL1ABC` reads as `DL` in the multiplier list, because that is what an
+  operator recognises — but Germany's ARRL row is `DA`–`DR`, so `DL` and `DJ`
+  are one country and only the entity code can say so. The ARRL list publishes
+  no primary prefix to choose between them (its row simply begins at `DA`;
+  that field belongs to cty.dat, which is not authority here), so **the first
+  prefix worked names the entity for the rest of the log**. Work `DJ` first and
+  it reads `DJ`. The label follows the log; the count does not.
 
   **Resolution follows N1MM's split, which is prior art for behaviour and never
   for a rule:** the exchange field says which *location* was sent and the
