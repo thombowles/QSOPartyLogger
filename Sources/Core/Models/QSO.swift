@@ -34,6 +34,16 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
     /// went out.
     var nameSent: String?
     var nameRcvd: String?
+    /// Member-number-or-power elements sent and received, for parties whose
+    /// exchange carries one (Skeeter Hunt: "RST, S/P/C, Skeeter number" for
+    /// Skeeters, "RST, S/P/C, Output power" for everyone else). Strings,
+    /// because the element is a number for members and "5W" for the rest —
+    /// see `MemberExchange.parse`. `nil` everywhere else, so logs written
+    /// before member support decode unchanged. The sent value is the log's
+    /// single contest-long element, stamped per row so the record shows what
+    /// went out.
+    var memberSent: String?
+    var memberRcvd: String?
     /// My sent location for this row: county abbreviation (in-state) or state/province.
     var myLoc: String
     /// Their location for this row: county abbreviation, state, province, or "DX".
@@ -54,6 +64,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         serialRcvd: Int? = nil,
         nameSent: String? = nil,
         nameRcvd: String? = nil,
+        memberSent: String? = nil,
+        memberRcvd: String? = nil,
         myLoc: String,
         theirLoc: String
     ) {
@@ -71,6 +83,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         self.serialRcvd = serialRcvd
         self.nameSent = nameSent
         self.nameRcvd = nameRcvd
+        self.memberSent = memberSent
+        self.memberRcvd = memberRcvd
         self.myLoc = myLoc
         self.theirLoc = theirLoc
     }

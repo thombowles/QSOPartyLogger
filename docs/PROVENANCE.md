@@ -7,6 +7,25 @@ when, which generator turned it into data, and what each generator asserts.
 
 Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
 
+- skeeter (NJQRP Skeeter Hunt): rules from W2LJ's blog page
+  (w2lj.blogspot.com/p/njqrp-skeeter-hunt.html, the current 15th-Annual/2026
+  edition), fetched 2026-08-04 and banked as
+  [`skeeter_rules_2026.txt`](research/skeeter_rules_2026.txt); the qsl.net
+  "Official NJQRP Skeeter Hunt Webpage" still carried the 2025 edition the
+  same day ([`skeeter_qslnet_page_2025.txt`](research/skeeter_qslnet_page_2025.txt)),
+  every rule identical but the date. The **score formula is nowhere printed**
+  and its authority is the sponsor's own 2025 final scoreboard
+  ([`skeeter_scoreboard_2025.csv`](research/skeeter_scoreboard_2025.csv)):
+  [`gen_skeeter.py`](research/gen_skeeter.py) re-derives
+  (3·Skeeter + 2·QRP + 1·QRO) × S/P/Cs × class + bonus and asserts it exact
+  on all 112 scored rows, plus named rows including KE5CW's own. The 2026
+  roster sheet (banked as
+  [`skeeter_roster_2026.csv`](research/skeeter_roster_2026.csv), 187 numbers
+  at fetch) is **live and its document id changes each season**, so the app
+  discovers it from the blog page at use time. The WA7BNM registry has no
+  Cabrillo name and the sponsor accepts no log files — `SKEETER-HUNT` is
+  this app's own header. Research write-up:
+  [`skeeter_rules.md`](research/skeeter_rules.md).
 - Cabrillo V3 header values — the `CATEGORY-*` enumerations (including
   `CATEGORY-ASSISTED`), the `OPERATORS:` `@host` convention, and
   `GRID-LOCATOR:` — from the WWROF Cabrillo specification

@@ -107,6 +107,18 @@ struct ScoreSidebar: View {
             Figure(label: "Mults", value: "\(score.multiplierCount)"),
             Figure(label: "Bonus", value: "+\(score.bonusPoints)"),
         ]
+        // A member party's summary email wants the three-way split ("Skeeter
+        // QSOs - 23 / Non-Skeeter QRP QSOs - 5 / Non-Skeeter QRO QSOs"), so
+        // the sidebar keeps it on screen. Appended after the fixed four so
+        // the rate figures still line up against those.
+        if let member = party?.memberExchange {
+            // "Skeeters", not "Skeeter #" — this row counts stations, and the
+            // short term beside a number reads as somebody's number.
+            figures.append(Figure(label: member.memberPlural, value: "\(score.memberQSOs)"))
+            figures.append(
+                Figure(label: "QRP / QRO", value: "\(score.qrpQSOs) / \(score.otherQSOs)")
+            )
+        }
         if !score.categoryFactor.isOne {
             figures.append(Figure(label: "Category ×", value: score.categoryFactor.displayString))
         }
@@ -254,6 +266,18 @@ struct ScoreSidebar: View {
                             systemImage: worked >= need ? "checkmark.seal.fill" : "seal"
                         )
                         .foregroundStyle(worked >= need ? .green : .secondary)
+                    case .callAreaSum(let target, let points):
+                        // The engine's own predicate again — the badge flips
+                        // exactly when the score pays. The sponsor requires
+                        // listing the qualifying calls in the summary email;
+                        // picking them stays the operator's job.
+                        let achieved = ScoreEngine.callAreaSumAchieved(
+                            target: target, log: log, party: party)
+                        Label(
+                            "+\(points) when call areas sum to exactly \(target)",
+                            systemImage: achieved ? "checkmark.seal.fill" : "seal"
+                        )
+                        .foregroundStyle(achieved ? .green : .secondary)
                     }
                 }
                 .font(.callout)

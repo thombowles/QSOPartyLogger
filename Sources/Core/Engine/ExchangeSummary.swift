@@ -19,20 +19,24 @@ enum ExchangeSummary {
     /// What went out: the elements this party sends, then my location.
     static func sent(_ q: QSO, party: PartyDefinition?) -> String {
         text(rst: q.rstSent, serial: q.serialSent, name: q.nameSent,
-             location: q.myLoc, party: party)
+             member: q.memberSent, location: q.myLoc, party: party)
     }
 
     /// What was copied: the elements this party sends, then their location.
     static func received(_ q: QSO, party: PartyDefinition?) -> String {
         text(rst: q.rstRcvd, serial: q.serialRcvd, name: q.nameRcvd,
-             location: q.theirLoc, party: party)
+             member: q.memberRcvd, location: q.theirLoc, party: party)
     }
 
     private static func text(
-        rst: String, serial: Int?, name: String?, location: String,
-        party: PartyDefinition?
+        rst: String, serial: Int?, name: String?, member: String?,
+        location: String, party: PartyDefinition?
     ) -> String {
-        (elements(rst: rst, serial: serial, name: name, party: party) + [location])
+        // The member element trails the location — the sponsor's own order
+        // ("559 NJ NR 13"), and the entry row's.
+        let trailing = party?.memberExchange != nil ? [member ?? ""] : []
+        return (elements(rst: rst, serial: serial, name: name, party: party)
+                + [location] + trailing)
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
             .joined(separator: " ")

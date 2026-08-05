@@ -211,6 +211,7 @@ final class MessageDefaultsTests: XCTestCase {
     func testEveryBundledPartyIsAccountedForByShape() {
         for p in PartyCatalog.loadBundled() {
             let isReportShape = p.exchangeIncludesRST && !p.exchangeIncludesSerial
+                && p.memberExchange == nil
             XCTAssertEqual(isReportShape, Self.rstPartyIDs.contains(p.id),
                            "\(p.id) changed exchange shape, or is a new party missing from the roster")
             XCTAssertEqual(MessageSets.defaults(for: p) == .standard, isReportShape, p.id)

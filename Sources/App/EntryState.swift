@@ -87,6 +87,40 @@ final class EntryState {
         nameIsAutoFilled = false
     }
 
+    // MARK: Received member element ownership
+
+    /// The member-number-or-power element copied from the other station, for
+    /// parties whose exchange carries one (Skeeter Hunt). The *sent* element
+    /// is the log's contest-long setting, typed once in Contest Setup — the
+    /// name's arrangement exactly.
+    var memberRcvd = ""
+
+    /// Same ownership rule as the exchange and the name, for the same reason.
+    private(set) var memberIsAutoFilled = false
+
+    /// The received element as the operator edits it. Writing through here is
+    /// what marks the text as theirs; the view binds to this, never to
+    /// `memberRcvd` directly.
+    var memberTyped: String {
+        get { memberRcvd }
+        set {
+            memberRcvd = newValue
+            memberIsAutoFilled = false
+        }
+    }
+
+    func autoFillMember(_ text: String) {
+        memberRcvd = text
+        memberIsAutoFilled = true
+    }
+
+    /// Take back an element the app offered. Operator text is untouched.
+    func clearAutoFilledMember() {
+        guard memberIsAutoFilled else { return }
+        memberRcvd = ""
+        memberIsAutoFilled = false
+    }
+
     /// What the operator copied for a station and never logged. Hunting a
     /// station who can be heard but cannot hear you means copying his exchange
     /// with nothing to show for it; moving to the next spot must not carry that
@@ -95,11 +129,13 @@ final class EntryState {
         var exchange: String
         var serialRcvd: String
         var nameRcvd: String = ""
+        var memberRcvd: String = ""
 
         var isEmpty: Bool {
             exchange.trimmingCharacters(in: .whitespaces).isEmpty
                 && serialRcvd.trimmingCharacters(in: .whitespaces).isEmpty
                 && nameRcvd.trimmingCharacters(in: .whitespaces).isEmpty
+                && memberRcvd.trimmingCharacters(in: .whitespaces).isEmpty
         }
     }
 
@@ -110,8 +146,10 @@ final class EntryState {
         exchange = pending.exchange
         serialRcvd = pending.serialRcvd
         nameRcvd = pending.nameRcvd
+        memberRcvd = pending.memberRcvd
         exchangeIsAutoFilled = false
         nameIsAutoFilled = false
+        memberIsAutoFilled = false
     }
 
     /// Take back text the app put there. Text the operator typed is untouched.
@@ -181,6 +219,19 @@ final class EntryState {
     func missingName(party: PartyDefinition?) -> Bool {
         (party?.exchangeIncludesName ?? false)
             && nameRcvd.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    /// Whether the member element holds something the party cannot read.
+    ///
+    /// **Blank is not invalid**: a station that sends no number and no power
+    /// is a QRO station, which is a real contact worth a point, so an empty
+    /// field must log. Text that is neither a number nor a power *is* a
+    /// typo, and the element decides the QSO's points — so logging it would
+    /// silently score the contact as QRO on a mis-keyed "13".
+    func invalidMember(party: PartyDefinition?) -> Bool {
+        guard party?.memberExchange != nil else { return false }
+        let typed = memberRcvd.trimmingCharacters(in: .whitespaces)
+        return !typed.isEmpty && MemberExchange.parse(typed) == nil
     }
 
     /// Re-validate the exchange and refresh dupe/new-mult hints.
@@ -261,6 +312,8 @@ final class EntryState {
         serialRcvd = ""
         nameRcvd = ""
         nameIsAutoFilled = false
+        memberRcvd = ""
+        memberIsAutoFilled = false
         exchange = ""
         exchangeIsAutoFilled = false
         exchangeStatus = .idle

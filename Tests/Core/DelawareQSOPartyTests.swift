@@ -59,8 +59,14 @@ final class DelawareQSOPartyTests: XCTestCase {
         XCTAssertNil(deqp.county(for: "NEW"), "not a truncation")
         XCTAssertEqual(deqp.county(for: "nde")?.name, "New Castle", "case-insensitive")
 
-        let smallest = PartyCatalog.loadBundled().map(\.counties.count).min()
-        XCTAssertEqual(smallest, 3, "no bundled party has fewer")
+        // The Skeeter Hunt enumerates nothing at all (its multipliers are
+        // the standard tables), so the superlative is among the parties
+        // that enumerate.
+        let smallest = PartyCatalog.loadBundled()
+            .map(\.counties.count)
+            .filter { $0 > 0 }
+            .min()
+        XCTAssertEqual(smallest, 3, "no enumerating party has fewer")
     }
 
     // MARK: Shape

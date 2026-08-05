@@ -211,6 +211,14 @@ KINDS = {
         (0, "cosmetic", "The sponsor bars WSJT modes and this app cannot enforce it."),
         (1, "ruleInference", "No maximum for simultaneous counties is stated; the schema default of four ships."),
     ],
+    "skeeter": [
+        (0, "ruleInference", "A Mixed entry working one station on CW and SSB of the same band is credited twice — the sponsor names only bands."),
+        (1, "cosmetic", "The Cabrillo CONTEST header is this app’s invention; the sponsor accepts email summaries only, and the sidebar carries every number the summary wants."),
+        (2, "ruleInference", "“QRP station” is read as at most 5 W CW / 10 W phone, the event’s own power limits."),
+        (3, "ruleInference", "A blank Skeeter-number field scores as a QRO station — the rate the rules allow for a station of unknown power."),
+        (4, "ruleInference", "A callsign’s blackjack digit is its first digit (0 worth 10); list the qualifying calls in your summary email yourself."),
+        (None, "provenance", "Rules read from W2LJ’s blog page (2026-08-04); the qsl.net page still carried 2025. Re-check on the eve — the bonus gimmick can change yearly."),
+    ],
     "tnqp": [
         (0, "provenance", "The rules document is titled 2025 and no 2026 revision exists yet."),
     ],
@@ -250,7 +258,7 @@ VALID_KINDS = {"exportBlocking", "scoreAffecting", "ruleInference", "provenance"
 
 def main():
     files = sorted(f for f in os.listdir(PARTIES) if f.endswith(".json"))
-    assert len(files) == 48, f"expected 48 bundled parties, found {len(files)}"
+    assert len(files) == 49, f"expected 49 bundled parties, found {len(files)}"
 
     unclassified = []
     badge_count = 0

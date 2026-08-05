@@ -8,7 +8,7 @@ struct EntryBar: View {
     let onLog: () -> Void
 
     enum Field: Hashable {
-        case call, rstSent, rstRcvd, serialSent, serialRcvd, nameRcvd, exchange
+        case call, rstSent, rstRcvd, serialSent, serialRcvd, nameRcvd, exchange, memberRcvd
 
         /// Where Space moves next, cycling back to the call from the exchange.
         /// Call jumps straight to the exchange because the RSTs are pre-filled
@@ -20,8 +20,15 @@ struct EntryBar: View {
         /// type every contact, so where a party exchanges one, Call lands there
         /// first and it leads on to the exchange. A received name is the same
         /// kind of field, and it arrives before the location on the air
-        /// ("TOM TX"), so it sits between the two.
-        func next(includesRST: Bool, includesSerial: Bool = false, includesName: Bool = false) -> Field {
+        /// ("TOM TX"), so it sits between the two. The member element arrives
+        /// *after* the location ("559 NJ NR 13"), so its field trails the
+        /// exchange and the cycle closes from there.
+        func next(
+            includesRST: Bool,
+            includesSerial: Bool = false,
+            includesName: Bool = false,
+            includesMember: Bool = false
+        ) -> Field {
             switch self {
             case .call: includesSerial ? .serialRcvd : (includesName ? .nameRcvd : .exchange)
             case .rstSent: includesRST ? .rstRcvd : .exchange
@@ -29,7 +36,8 @@ struct EntryBar: View {
             case .serialSent: .serialRcvd
             case .serialRcvd: includesName ? .nameRcvd : .exchange
             case .nameRcvd: .exchange
-            case .exchange: .call
+            case .exchange: includesMember ? .memberRcvd : .call
+            case .memberRcvd: .call
             }
         }
     }
@@ -76,6 +84,17 @@ struct EntryBar: View {
                 .help(entry.exchangeIsUnconfirmed
                       ? "From a spot, not copied — confirm it before logging"
                       : "")
+                if let member = party?.memberExchange {
+                    // After the location, the way it is sent ("559 NJ NR 13").
+                    // A number or a power with its unit — "13" or "5W".
+                    field(member.shortTerm, text: $entry.memberTyped.uppercasing, width: 80,
+                          focusTag: .memberRcvd, provisional: entry.memberIsAutoFilled)
+                        // The field is narrow and its label cannot say all
+                        // three cases, of which the blank one is the least
+                        // guessable.
+                        .help("\(member.term), or their power (5W, 100W). "
+                              + "Leave empty if they sent neither — that scores as QRO.")
+                }
                 statusBadge
                 Spacer()
                 Button("Log", action: onLog)
@@ -146,6 +165,7 @@ struct EntryBar: View {
     private var canLog: Bool {
         if case .valid = entry.exchangeStatus, !entry.callNormalized.isEmpty {
             return !entry.missingName(party: party)
+                && !entry.invalidMember(party: party)
         }
         return false
     }
@@ -206,7 +226,8 @@ struct EntryBar: View {
                     focus = focusTag.next(
                         includesRST: party?.exchangeIncludesRST ?? true,
                         includesSerial: party?.exchangeIncludesSerial ?? false,
-                        includesName: party?.exchangeIncludesName ?? false
+                        includesName: party?.exchangeIncludesName ?? false,
+                        includesMember: party?.memberExchange != nil
                     )
                     return .handled
                 }

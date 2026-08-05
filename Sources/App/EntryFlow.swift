@@ -209,9 +209,25 @@ final class EntryFlow {
             exchange: document.log.myLocation.displayText,
             serial: entry.serialSent,
             name: document.log.exchangeName.uppercased(),
+            member: sentMemberMacroText,
             cutNumbers: context.keying.cutNumbers && context.modeClass == .cw,
             cutOne: context.keying.cutOne
         )
+    }
+
+    /// What `{MEMBER}` keys: the on-air form of the log's contest-long
+    /// element. A member number goes out as "NR 13" — the sponsor's own
+    /// sample QSO — and a power as "5W" verbatim, which is why the macro
+    /// shapes itself rather than the message template carrying a literal
+    /// "NR" that a non-member's power would inherit. Empty for every party
+    /// without the element.
+    private var sentMemberMacroText: String {
+        guard party?.memberExchange != nil else { return "" }
+        let raw = document.log.exchangeMember
+            .trimmingCharacters(in: .whitespaces).uppercased()
+        guard !raw.isEmpty else { return "" }
+        if case .member = MemberExchange.parse(raw) { return "NR \(raw)" }
+        return raw
     }
 
     /// The text F<index+1> would key right now, or "" when that slot is empty.
@@ -319,6 +335,11 @@ final class EntryFlow {
         // happen.
         guard !entry.missingName(party: party) else { return .nothing }
 
+        // A member party's element may be blank — that is a QRO station —
+        // but it may not be unreadable: the element decides the QSO's
+        // points, so a mis-keyed number would score as QRO in silence.
+        guard !entry.invalidMember(party: party) else { return .nothing }
+
         let myLocs = document.log.myLocation.sentExchanges.filter { !$0.isEmpty }
         guard !myLocs.isEmpty else { return .needsSetup }
 
@@ -339,6 +360,16 @@ final class EntryFlow {
             ? normalizedName(entry.nameRcvd)
             : nil
 
+        // One contact, one member element each way — the sent value is the
+        // log's contest-long setting, the received one what was just copied.
+        let hasMember = party.memberExchange != nil
+        let sentMember = hasMember
+            ? normalizedName(document.log.exchangeMember)
+            : nil
+        let rcvdMember = hasMember
+            ? normalizedName(entry.memberRcvd)
+            : nil
+
         let rows = CountyLineExpander.expand(
             entry: .init(
                 call: entry.callNormalized,
@@ -348,6 +379,8 @@ final class EntryFlow {
                 serialRcvd: serials.rcvd,
                 nameSent: sentName,
                 nameRcvd: rcvdName,
+                memberSent: sentMember,
+                memberRcvd: rcvdMember,
                 band: context.band,
                 modeClass: context.modeClass,
                 rawMode: context.rawMode,
@@ -397,6 +430,7 @@ final class EntryFlow {
         entry.exchangeTyped = ""
         entry.serialRcvd = ""
         entry.nameTyped = ""
+        entry.memberTyped = ""
         entry.call = call
         // Tied to the call it arrived with, so typing over a busted spot does
         // not carry the old station's county to the new one.
@@ -420,7 +454,8 @@ final class EntryFlow {
         let pending = EntryState.Pending(
             exchange: entry.exchangeIsAutoFilled ? "" : entry.exchange,
             serialRcvd: entry.serialRcvd,
-            nameRcvd: entry.nameIsAutoFilled ? "" : entry.nameRcvd
+            nameRcvd: entry.nameIsAutoFilled ? "" : entry.nameRcvd,
+            memberRcvd: entry.memberIsAutoFilled ? "" : entry.memberRcvd
         )
         guard !pending.isEmpty else { return }
         entry.pendingExchanges[outgoing] = pending
@@ -442,6 +477,7 @@ final class EntryFlow {
         guard !call.isEmpty else {
             entry.clearAutoFilledExchange()
             entry.clearAutoFilledName()
+            entry.clearAutoFilledMember()
             return
         }
 
@@ -497,6 +533,20 @@ final class EntryFlow {
                 entry.autoFillName(name)
             } else {
                 entry.clearAutoFilledName()
+            }
+        }
+
+        // And the member element likewise: this log's own copy first (a
+        // station's number does not change mid-contest), then the roster.
+        if party.memberExchange != nil,
+           entry.memberRcvd.isEmpty || entry.memberIsAutoFilled {
+            let logged = document.log.qsos.last {
+                $0.call.uppercased() == call
+            }?.memberRcvd
+            if let member = logged ?? history?.member {
+                entry.autoFillMember(member)
+            } else {
+                entry.clearAutoFilledMember()
             }
         }
     }

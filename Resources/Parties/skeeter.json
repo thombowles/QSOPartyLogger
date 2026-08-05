@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "id": "skeeter",
+  "name": "NJQRP Skeeter Hunt",
+  "cabrilloContest": "SKEETER-HUNT",
+  "homeState": "NA",
+  "countyAbbrLength": 2,
+  "validBands": [
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 1,
+    "cw": 1,
+    "digital": 1
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once",
+      "dxCountsEntities": true
+    },
+    "outState": {
+      "classes": [
+        "state",
+        "province",
+        "dx"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "once",
+      "dxCountsEntities": true
+    }
+  },
+  "bonuses": [
+    {
+      "type": "callAreaSum",
+      "target": 21,
+      "points": 1000
+    }
+  ],
+  "dxStyle": "prefix",
+  "acceptsDXToken": true,
+  "allowedModes": [
+    "phone",
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "hasHomeRegion": false,
+  "memberExchange": {
+    "term": "Skeeter number",
+    "shortTerm": "Skeeter #",
+    "memberPlural": "Skeeters",
+    "memberPoints": 3,
+    "qrpPoints": 2,
+    "otherPoints": 1,
+    "qrpMaxWatts": {
+      "phone": 10,
+      "cw": 5,
+      "digital": 5
+    }
+  },
+  "entryClasses": [
+    {
+      "id": "X1",
+      "label": "Home station, commercial equipment",
+      "factor": 1
+    },
+    {
+      "id": "X2",
+      "label": "Home station, home brewed or kit built",
+      "factor": 2
+    },
+    {
+      "id": "X3",
+      "label": "Portable station, commercial equipment",
+      "factor": 3
+    },
+    {
+      "id": "X4",
+      "label": "Portable station, home brewed or kit built",
+      "factor": 4
+    }
+  ],
+  "schedule": [
+    {
+      "start": "2026-08-16T17:00:00Z",
+      "end": "2026-08-16T21:00:00Z"
+    }
+  ],
+  "counties": [],
+  "notes": "Rules from the sponsor's own current page: W2LJ's 'NJQRP Skeeter Hunt' blog page (w2lj.blogspot.com/p/njqrp-skeeter-hunt.html), naming the 15th Annual event, read live and fetched 2026-08-04; the qsl.net 'Official NJQRP Skeeter Hunt Webpage' still carried the 2025 edition the same day, every rule identical except the date and the roster link. NOT A STATE QSO PARTY: a four-hour NJQRP club QRP sprint, absent from the Challenge calendar, added at KE5CW's request (he is Skeeter #20 this year and took High Score TX in 2025). ONE WINDOW (Article 19, target year only): 'The event is to be held on Sunday August 16th, 2026. It will be a four hour sprint - from 17:00 UTC to 21:00 UTC (1:00 TO 5:00 PM EDT).' EXCHANGE IS RST + S/P/C + SKEETER NUMBER OR OUTPUT POWER ('For example - 559 NY 5W'), and the third element decides the points regardless of mode: 'Working a Skeeter Station - 3 points / Working a non-Skeeter, but QRP station - 2 points / Working any other QRO station - 1 point'. In this app the element takes a number (a Skeeter), a power with its unit (5W, 100W, 500MW, 2.5W), or nothing at all - blank being the QRO case, since a station that sends no power is one whose power you do not know. Only unreadable text is refused, because a mis-keyed number would score as QRO in silence. MULTIPLIERS ARE S/P/CS COUNTED ONCE for the whole contest - 'S/P/C's only count once for multiplier credit', with the sponsor's own example (W2LJ on 40, 20 and 15 is three QSOs and one NJ) - drawn from the app's standard state and province tables plus DXCC entities counted individually (the C in S/P/C), WHICH IS WHY THIS PARTY ENUMERATES NO LIST OF ITS OWN. STATION CLASS X1-X4 MULTIPLIES THE WHOLE SCORE: X1 home/commercial, X2 home/home-brew-or-kit, X3 portable/commercial, X4 portable/home-brew-or-kit; mobiles count as portable, and a kit counts as home-brew when 'The operator's hands were involved in more than 50% of the building'. Pick yours in Contest Setup - unset, the app scores the lowest (X1). THE SCORE FORMULA IS NOWHERE PRINTED AND WAS VERIFIED AGAINST THE SPONSOR'S OWN 2025 FINAL SCOREBOARD: (3 x Skeeter + 2 x QRP + 1 x QRO) x S/P/Cs x class + bonus, exact on every one of 100+ scored rows including the top three and KE5CW's own - gen_skeeter.py re-derives it and refuses to build otherwise. SKEETER HUNT BLACKJACK (returning from 2025; the bonus gimmick can change yearly): 1,000 points once when distinct worked callsigns' call-area digits - '0' worth 10, 'any call sign worked ONCE' - sum to exactly 21. BANDS 80/40/20/15/10, taken from the rules' QRP 'Watering Holes' frequency lists, the only bands the sponsor names. MODES CW AND SSB ('Mode - CW, SSB'); power limits 5W CW / 10W SSB are entry conditions, not categories. CATEGORIES (CW Only / SSB Only / Mixed, and informal multi-op) are not modelled - submission is prose. THE ROSTER IS THE PREFILL SOURCE: a live Google Sheet linked from the blog page ('The entire 2026 Skeeter Hunt roster can be seen'), re-fetched through the call history machinery on the daily clock because numbers issue until the day before the event; its document id changes every season, so the app discovers it from the blog page rather than pinning a URL. Roster data is prefill only - the points come from what the station actually sends you, never from roster membership. verified: partial - the sponsor's prose leaves real questions open, each below with what it costs. OPEN QUESTION 1: MAY A MIXED ENTRY WORK THE SAME STATION ON BOTH MODES OF ONE BAND? The rules say only 'Stations can be worked on different bands for QSO points', naming bands alone, and the categories are mode-split so the case arises only for Mixed entries. This app counts band x mode, so a same-band CW and SSB pair with one station is credited as two QSOs; a stricter per-band reading would count one. Ask W2LJ (w2ljqrp@gmail.com) before claiming such a pair. KNOWN LIMITATION 1: THE CABRILLO CONTEST HEADER 'SKEETER-HUNT' IS THIS APP'S OWN INVENTION. The sponsor accepts no log files at all - 'Please no ADIF, Cabrillo or N1MM files!' - and the WA7BNM registry has no Skeeter Hunt entry (checked 2026-08-04), so the header has no recipient anywhere; the export exists for your own records. Submission is a plain-text summary email to w2ljqrp@gmail.com within 14 days, and the score sidebar keeps every number it wants on screen: Skeeter / QRP / QRO QSO counts, S/P/Cs, the class factor, and the bonus. KNOWN LIMITATION 2: 'QRP STATION' IS READ AS AT MOST 5 W ON CW AND 10 W ON PHONE, inclusive - the event's own power limits ('Power - 5W max CW, 10 Watts max SSB') - because the scoring text never defines it. A received '10W' on phone pays 2 points; the same on CW pays 1. KNOWN LIMITATION 3: A BLANK SKEETER-NUMBER FIELD SCORES THE CONTACT AS A QRO STATION, one point. Stations answer a sprint without being in it - a POTA activator sending only a report and a state - and the rules' third scoring line is 'Working any other QRO station - 1 point'. Claiming the 2-point QRP rate for a station that never told you its power would overstate the score, so an absent element takes the rate the rules allow for a station of unknown power. Leave the field empty for those contacts; type the power they send ('5W', '100W') whenever they send one. KNOWN LIMITATION 4: A CALLSIGN'S BLACKJACK DIGIT IS READ AS ITS FIRST DIGIT, with 0 worth 10 - every example the sponsor gives satisfies this, but portable and DX call shapes are not addressed by the rules. The 1,000 points are credited automatically the moment some set of distinct worked calls can hit exactly 21, but the sponsor requires listing the calls in the summary email - pick and list them yourself.",
+  "callHistory": {
+    "kind": "w2ljRosterPage",
+    "pageURL": "https://w2lj.blogspot.com/p/njqrp-skeeter-hunt.html",
+    "filePrefix": "SKEETER",
+    "token": "SKEETER ROSTER"
+  },
+  "caveats": [
+    {
+      "kind": "ruleInference",
+      "summary": "A Mixed entry working one station on CW and SSB of the same band is credited twice — the sponsor names only bands.",
+      "detail": "MAY A MIXED ENTRY WORK THE SAME STATION ON BOTH MODES OF ONE BAND? The rules say only 'Stations can be worked on different bands for QSO points', naming bands alone, and the categories are mode-split so the case arises only for Mixed entries. This app counts band x mode, so a same-band CW and SSB pair with one station is credited as two QSOs; a stricter per-band reading would count one. Ask W2LJ (w2ljqrp@gmail.com) before claiming such a pair."
+    },
+    {
+      "kind": "cosmetic",
+      "summary": "The Cabrillo CONTEST header is this app’s invention; the sponsor accepts email summaries only, and the sidebar carries every number the summary wants.",
+      "detail": "THE CABRILLO CONTEST HEADER 'SKEETER-HUNT' IS THIS APP'S OWN INVENTION. The sponsor accepts no log files at all - 'Please no ADIF, Cabrillo or N1MM files!' - and the WA7BNM registry has no Skeeter Hunt entry (checked 2026-08-04), so the header has no recipient anywhere; the export exists for your own records. Submission is a plain-text summary email to w2ljqrp@gmail.com within 14 days, and the score sidebar keeps every number it wants on screen: Skeeter / QRP / QRO QSO counts, S/P/Cs, the class factor, and the bonus."
+    },
+    {
+      "kind": "ruleInference",
+      "summary": "“QRP station” is read as at most 5 W CW / 10 W phone, the event’s own power limits.",
+      "detail": "'QRP STATION' IS READ AS AT MOST 5 W ON CW AND 10 W ON PHONE, inclusive - the event's own power limits ('Power - 5W max CW, 10 Watts max SSB') - because the scoring text never defines it. A received '10W' on phone pays 2 points; the same on CW pays 1."
+    },
+    {
+      "kind": "ruleInference",
+      "summary": "A blank Skeeter-number field scores as a QRO station — the rate the rules allow for a station of unknown power.",
+      "detail": "A BLANK SKEETER-NUMBER FIELD SCORES THE CONTACT AS A QRO STATION, one point. Stations answer a sprint without being in it - a POTA activator sending only a report and a state - and the rules' third scoring line is 'Working any other QRO station - 1 point'. Claiming the 2-point QRP rate for a station that never told you its power would overstate the score, so an absent element takes the rate the rules allow for a station of unknown power. Leave the field empty for those contacts; type the power they send ('5W', '100W') whenever they send one."
+    },
+    {
+      "kind": "ruleInference",
+      "summary": "A callsign’s blackjack digit is its first digit (0 worth 10); list the qualifying calls in your summary email yourself.",
+      "detail": "A CALLSIGN'S BLACKJACK DIGIT IS READ AS ITS FIRST DIGIT, with 0 worth 10 - every example the sponsor gives satisfies this, but portable and DX call shapes are not addressed by the rules. The 1,000 points are credited automatically the moment some set of distinct worked calls can hit exactly 21, but the sponsor requires listing the calls in the summary email - pick and list them yourself."
+    },
+    {
+      "kind": "provenance",
+      "summary": "Rules read from W2LJ’s blog page (2026-08-04); the qsl.net page still carried 2025. Re-check on the eve — the bonus gimmick can change yearly."
+    }
+  ]
+}

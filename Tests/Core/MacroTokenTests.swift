@@ -28,7 +28,10 @@ final class MacroTokenTests: XCTestCase {
     /// The list is the macros and nothing else — a stale token left behind
     /// after a rename would document a macro that no longer expands.
     func testHelpListIsExactlyTheCasesInOrder() {
-        XCTAssertEqual(MacroToken.helpList, "{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH}")
+        XCTAssertEqual(
+            MacroToken.helpList,
+            "{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH} {MEMBER}"
+        )
     }
 
     /// Interpolating a token yields the token, not the case name. Load-bearing
@@ -51,7 +54,7 @@ final class MacroTokenTests: XCTestCase {
             let keyed = AppSettings.expandMacros(
                 token.rawValue,
                 myCall: "KE5CW", call: "W6ABC", rst: "599", exchange: "SCLA",
-                serial: "12", name: "TOM"
+                serial: "12", name: "TOM", member: "NR 20"
             )
             XCTAssertFalse(
                 keyed.contains(token.rawValue),

@@ -220,17 +220,27 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         location: MyLocation,
         partyID: String,
         exchangeName: String? = nil,
+        exchangeMember: String? = nil,
+        entryClassID: String? = nil,
         undoManager: UndoManager?
     ) {
         let (oldStation, oldLoc, oldParty) = (log.station, log.myLocation, log.partyID)
         let oldMessages = log.messages
         let oldMode = log.operatingMode
         let oldExchangeName = log.exchangeName
+        let oldExchangeMember = log.exchangeMember
+        let oldEntryClassID = log.entryClassID
         log.station = station
         log.myLocation = location
         log.partyID = partyID
         if let exchangeName {
             log.exchangeName = exchangeName.trimmingCharacters(in: .whitespaces).uppercased()
+        }
+        if let exchangeMember {
+            log.exchangeMember = exchangeMember.trimmingCharacters(in: .whitespaces).uppercased()
+        }
+        if let entryClassID {
+            log.entryClassID = entryClassID.trimmingCharacters(in: .whitespaces)
         }
         log.setupCompleted = true
         // Macros the operator never edited follow the new party's exchange
@@ -252,7 +262,8 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
             MainActor.assumeIsolated {
                 doc.updateStation(
                     oldStation, location: oldLoc, partyID: oldParty,
-                    exchangeName: oldExchangeName, undoManager: undoManager
+                    exchangeName: oldExchangeName, exchangeMember: oldExchangeMember,
+                    entryClassID: oldEntryClassID, undoManager: undoManager
                 )
                 // Restore the macros and the mode exactly afterwards, whatever
                 // the nested call's own re-derivation decided: both are

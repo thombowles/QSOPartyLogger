@@ -63,13 +63,16 @@ struct MessageSets: Codable, Equatable, Sendable {
         let includesRST = party?.exchangeIncludesRST ?? true
         let includesSerial = party?.exchangeIncludesSerial ?? false
         let includesName = party?.exchangeIncludesName ?? false
-        // Report, then number, then name, then location — the order they are
-        // sent in ("BILL MOW", "TOM TX": the name leads the location).
+        let includesMember = party?.memberExchange != nil
+        // Report, then number, then name, then location, then the member
+        // element — the order they are sent in ("BILL MOW", "TOM TX": the
+        // name leads the location; "559 NJ NR 13": the member trails it).
         let exchange: [MacroToken?] = [
             includesRST ? .rst : nil,
             includesSerial ? .serial : nil,
             includesName ? .name : nil,
             .exchange,
+            includesMember ? .member : nil,
         ]
         let sent = exchange.compactMap { $0?.rawValue }.joined(separator: " ")
 

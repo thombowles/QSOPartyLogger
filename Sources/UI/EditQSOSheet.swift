@@ -17,6 +17,8 @@ struct EditQSOSheet: View {
     @State private var serialRcvd = ""
     @State private var nameSent = ""
     @State private var nameRcvd = ""
+    @State private var memberSent = ""
+    @State private var memberRcvd = ""
     @State private var theirLoc = ""
     @State private var myLoc = ""
     @State private var band: Band = .m20
@@ -82,6 +84,18 @@ struct EditQSOSheet: View {
                         }
                     }
                 }
+                // The member element decides the QSO's points (Skeeter 3 /
+                // QRP 2 / QRO 1), so a miscopied one moves the score — it
+                // must be correctable after the fact.
+                if let member = party?.memberExchange {
+                    GridRow {
+                        Text("\(member.shortTerm) sent / rcvd")
+                        HStack {
+                            TextField("", text: $memberSent.uppercasing).frame(width: 90)
+                            TextField("", text: $memberRcvd.uppercasing).frame(width: 90)
+                        }
+                    }
+                }
                 GridRow {
                     Text("My exchange")
                     TextField("", text: $myLoc.uppercasing)
@@ -120,6 +134,8 @@ struct EditQSOSheet: View {
             serialRcvd = original.serialRcvd.map(String.init) ?? ""
             nameSent = original.nameSent ?? ""
             nameRcvd = original.nameRcvd ?? ""
+            memberSent = original.memberSent ?? ""
+            memberRcvd = original.memberRcvd ?? ""
             theirLoc = original.theirLoc
             myLoc = original.myLoc
             band = original.band
@@ -153,6 +169,10 @@ struct EditQSOSheet: View {
         let rcvdName = nameRcvd.trimmingCharacters(in: .whitespaces).uppercased()
         updated.nameSent = sentName.isEmpty ? nil : sentName
         updated.nameRcvd = rcvdName.isEmpty ? nil : rcvdName
+        let sentMember = memberSent.trimmingCharacters(in: .whitespaces).uppercased()
+        let rcvdMember = memberRcvd.trimmingCharacters(in: .whitespaces).uppercased()
+        updated.memberSent = sentMember.isEmpty ? nil : sentMember
+        updated.memberRcvd = rcvdMember.isEmpty ? nil : rcvdMember
         updated.theirLoc = theirTrimmed
         updated.myLoc = myLoc.trimmingCharacters(in: .whitespaces).uppercased()
         updated.band = band

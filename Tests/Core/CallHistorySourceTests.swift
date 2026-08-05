@@ -18,8 +18,9 @@ final class CallHistorySourceTests: XCTestCase {
         XCTAssertEqual(source.token, "QSOPARTY AL")
     }
 
-    /// 45 of the 48 bundled parties have a file upstream. A party joining or
-    /// leaving this set changes what the app downloads, so it must be a
+    /// 46 of the 49 bundled parties have a source upstream — 45 on the N1MM
+    /// listing plus the Skeeter Hunt's sponsor roster page. A party joining
+    /// or leaving this set changes what the app downloads, so it must be a
     /// deliberate edit backed by a regenerated mapping — never incidental.
     func testExactlyThreePartiesHaveNoCallHistoryFile() {
         let without = PartyCatalog.loadBundled()
@@ -29,7 +30,21 @@ final class CallHistorySourceTests: XCTestCase {
         XCTAssertEqual(without, ["azqp", "mdc", "vtqp"],
                        "no QSOP_AZ, QSOP_MD/MDC or QSOP_VT file exists in the "
                        + "504-file inventory of 2026-07-28")
-        XCTAssertEqual(PartyCatalog.loadBundled().count - without.count, 45)
+        XCTAssertEqual(PartyCatalog.loadBundled().count - without.count, 46)
+    }
+
+    /// The one non-N1MM source: the Skeeter Hunt roster, discovered from the
+    /// sponsor page because its sheet id changes every season.
+    func testOnlyTheSkeeterHuntUsesARosterPage() {
+        let rosters = PartyCatalog.loadBundled()
+            .filter { $0.callHistory?.kind == .w2ljRosterPage }
+            .map(\.id)
+        XCTAssertEqual(rosters, ["skeeter"])
+        for party in PartyCatalog.loadBundled()
+        where party.callHistory?.kind == .n1mm {
+            XCTAssertNil(party.callHistory?.pageURL,
+                         "\(party.id): the N1MM kind carries no page URL")
+        }
     }
 
     /// One file serves the whole shared May weekend — the sponsors' own

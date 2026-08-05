@@ -91,10 +91,21 @@ enum CabrilloExporter {
             + when + " "
             + myCall.padded(to: 13) + " "
             + exchangeElement(name: q.nameSent, serial: q.serialSent, rst: q.rstSent).padded(to: 3) + " "
-            + q.myLoc.uppercased().padded(to: 6) + " "
+            + q.myLoc.uppercased().padded(to: 6)
+            + memberColumn(q.memberSent) + " "
             + q.call.uppercased().padded(to: 13) + " "
             + exchangeElement(name: q.nameRcvd, serial: q.serialRcvd, rst: q.rstRcvd).padded(to: 3) + " "
             + q.theirLoc.uppercased().padded(to: 6)
+            + memberColumn(q.memberRcvd)
+    }
+
+    /// The member-number-or-power column, trailing each side's location the
+    /// way the sponsor's exchange does ("559 NJ NR 13" → `... 559 NJ  13`).
+    /// Row-driven like `exchangeElement`, and empty rows append nothing at
+    /// all, so every existing party's lines stay byte-identical.
+    private static func memberColumn(_ member: String?) -> String {
+        guard let member, !member.isEmpty else { return "" }
+        return " " + member.uppercased().padded(to: 3)
     }
 
     /// The ex1 element: name → QSO number → signal report, driven by the

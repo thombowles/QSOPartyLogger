@@ -19,15 +19,50 @@ import Foundation
 /// `docs/research/n1mm_callhistory.md`.
 struct CallHistorySource: Codable, Equatable, Sendable {
 
+    /// Where a party's prefill data is discovered. The default — absent from
+    /// every JSON written before the field existed — is the N1MM community
+    /// listing. `w2ljRosterPage` is the Skeeter Hunt's arrangement: no N1MM
+    /// file exists (full inventory, 2026-08-04), and the roster is a Google
+    /// Sheet whose document id changes every season, so discovery starts
+    /// from the sponsor page that links it — the same stable-root role the
+    /// N1MM listing URL plays for everyone else.
+    enum Kind: String, Codable, Sendable {
+        case n1mm
+        case w2ljRosterPage
+    }
+
+    var kind: Kind { kindRaw ?? .n1mm }
+    private let kindRaw: Kind?
+
+    /// The sponsor page a roster kind discovers from. Bundled in the JSON
+    /// rather than hardcoded so a user file can override it mid-season
+    /// (Article 21). `nil` for the N1MM kind, whose listing URL is shared.
+    let pageURL: String?
+
     /// Filename stem the listing is searched for (`QSOP_AL`, `NAQPCW`,
     /// `QSOP_IN7QPNE_DE` for the five parties the shared May file serves).
+    /// A roster kind uses it only as the cache's self-description.
     let filePrefix: String
 
     /// Comment the file itself must carry (`QSOPARTY AL`, `NAQPCW`) before a
     /// download is installed — the files declare who they serve, and a
     /// download that does not declare this party is discarded. `nil` skips
-    /// the check (user-supplied definitions may not know the token).
+    /// the check (user-supplied definitions may not know the token). A
+    /// roster kind's converter writes the token into the file it builds, so
+    /// the same gate proves the conversion produced what it claims.
     let token: String?
+
+    init(filePrefix: String, token: String?, kind: Kind = .n1mm, pageURL: String? = nil) {
+        self.filePrefix = filePrefix
+        self.token = token
+        self.kindRaw = kind == .n1mm ? nil : kind
+        self.pageURL = pageURL
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case filePrefix, token, pageURL
+        case kindRaw = "kind"
+    }
 
     /// Whether `filename` is a revision of this party's file: the prefix
     /// followed by a separator, case-insensitively. The separator is what

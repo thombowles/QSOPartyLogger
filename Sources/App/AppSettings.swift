@@ -330,6 +330,7 @@ final class AppSettings {
         exchange: String,
         serial: String = "",
         name: String = "",
+        member: String = "",
         cutNumbers: Bool = false,
         cutOne: Bool = false
     ) -> String {
@@ -349,6 +350,11 @@ final class AppSettings {
             // MNQP). Never cut — it is not a number.
             case .name: name
             case .exchange: exchange
+            // The member-number-or-power element, already in its on-air form
+            // ("NR 13" or "5W" — the caller shapes it). Never cut: cutting
+            // would turn "NR 13" into "NR A3" for a value the other station
+            // has to log verbatim, and half the values are powers anyway.
+            case .member: member
             }
         }
         // Iterating the cases rather than chaining one `replacingOccurrences`
