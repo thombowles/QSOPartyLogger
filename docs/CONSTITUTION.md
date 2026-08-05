@@ -34,10 +34,34 @@ source, forum posts, LLM recall — are **never authority for a rule.** They are
 at most a hint that tells you which primary source to go read. Do not paraphrase
 a rule you have not seen in the sponsor's own words.
 
-One codified exception: **WA7BNM's Cabrillo name registry**
-(`contestcalendar.com/cabnames.php`) is authority for the `CONTEST:` header
-string when the sponsor publishes no value, because no other authority exists.
-Say so in the research doc when you rely on it.
+Two codified exceptions, both of the same shape — a value no other authority
+publishes, and neither of them a rule:
+
+1. **WA7BNM's Cabrillo name registry** (`contestcalendar.com/cabnames.php`) is
+   authority for the `CONTEST:` header string when the sponsor publishes no
+   value. Say so in the research doc when you rely on it.
+2. **AD1C's `cty.dat`** (`country-files.com/bigcty/cty.dat`) is authority for
+   **one field: the primary prefix a DXCC entity is displayed as.** The ARRL
+   DXCC List — which is authority for the entities themselves — publishes only
+   prefix *ranges*, so it designates no primary among them: its rows begin
+   `DA`, `7J`, `OU` and `AX` where an operator reads `DL`, `JA`, `OZ` and `VK`.
+   `cty.dat` is the only place that field exists, and N1MM's manual states the
+   same use of it ("PA will be the the prefix shown in the multiplier window").
+
+   **Scoped, and the scope is enforced by assertion.** `gen_dxcc.py` lets
+   `cty.dat` only *choose among* the prefixes the ARRL list already gives, and
+   asserts that every label is one of that entity's own ARRL prefixes. It never
+   contributes a prefix, an entity, a name or a count, and nothing it supplies
+   reaches scoring. Re-fetch it with the ARRL list each season.
+
+> **Amended 2026-08-04.** The original text carried the WA7BNM exception alone
+> and said secondary sources are "never authority for a rule". A DX multiplier
+> still has to be *shown* as something, and the sourced options were a country
+> name or one of the ARRL row's own oddities. Rather than invent a rule for
+> picking — the first version of this shipped "whichever prefix you worked
+> first", which made the label depend on log order — the field was taken from
+> the file that publishes it, and confined to display by an assertion. The
+> article was not wrong about rules; it had nothing to say about labels.
 
 ### Article 2 — Never hand-type data that exists in a file
 
