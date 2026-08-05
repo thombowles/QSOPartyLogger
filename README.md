@@ -1359,6 +1359,12 @@ station profile, radio wiring and cluster history untouched.
   N1MM uses the same way — *"PA will be the the prefix shown in the multiplier
   window"*.
 
+  Its freshness is checkable rather than remembered —
+  `python3 docs/research/gen_dxcc.py --check` compares the committed copy
+  against the server and downloads nothing; `--fetch` takes a newer one and
+  restamps the `cty.dat.version` sidecar, which exists because the file
+  carries no version of its own.
+
   So `cty.dat` is a **second codified source, confined to that one field**
   (constitution Article 1, amended 2026-08-04). It only ever *chooses among*
   the prefixes the ARRL list already gives, and `gen_dxcc.py` asserts every

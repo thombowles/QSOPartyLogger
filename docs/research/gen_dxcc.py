@@ -189,38 +189,97 @@ def read(name):
     return s.replace("\x0c", "")
 
 
-def fetch_cty():
-    """Re-fetch cty.dat and record the release date the file cannot supply.
+CTY = "cty.dat"
+CTY_URL = "https://www.country-files.com/bigcty/cty.dat"
+CTY_VERSION = "cty.dat.version"
 
-    Article 1 obliges a seasonal re-fetch, and the release date lives ONLY in
-    the server's Last-Modified header -- the file's own `=VERSION` alias is a
-    bare placeholder. A plain download therefore loses the single version
-    stamp there is, which is exactly the mistake this exists to prevent.
 
-    Run:  python3 docs/research/gen_dxcc.py --fetch
+def recorded_release():
+    """The Last-Modified of the cty.dat sitting in this directory.
+
+    Kept in a sidecar because the file cannot carry it: cty.dat's own
+    `=VERSION` alias is a bare placeholder with no date, so the server header
+    is the only stamp, and a hand-rolled download throws it away.
     """
+    text = read(CTY_VERSION)
+    m = re.search(r"(?mi)^last-modified:\s*(.+)$", text)
+    assert m, f"{CTY_VERSION} records no last-modified line"
+    return m.group(1).strip()
+
+
+def upstream_release():
+    """Ask the server what it is publishing now, without downloading it."""
     import urllib.request
 
-    url = "https://www.country-files.com/bigcty/cty.dat"
+    req = urllib.request.Request(CTY_URL, method="HEAD",
+                                 headers={"User-Agent": "QSOPartyLogger-research/1.0"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return r.headers.get("Last-Modified", "").strip(), r.headers.get("Content-Length")
+
+
+def _as_date(header):
+    from email.utils import parsedate_to_datetime
+    return parsedate_to_datetime(header)
+
+
+def check_cty(download):
+    """Compare the committed copy against upstream, and fetch when it is older.
+
+    Article 1 obliges a seasonal re-fetch. AD1C republishes every few days to
+    weeks, but almost always to add `=CALL` DXpedition entries this generator
+    ignores -- so the useful question is never "is there a new file" on its
+    own, it is "is there a new file AND does anything we depend on move".
+    Downloading answers the first; re-running this generator answers the
+    second, because its assertions fail on any change that matters.
+    """
+    have = recorded_release()
+    there, size = upstream_release()
+    print(f"committed: {have}")
+    print(f"upstream:  {there or '(no Last-Modified header!)'}")
+    if not there:
+        print("UNKNOWN: the server sent no Last-Modified, so freshness cannot be "
+              "judged. Fetch by hand and decide.")
+        return 2
+    if _as_date(there) <= _as_date(have):
+        print("current: nothing to do.")
+        return 0
+    print(f"NEWER UPSTREAM ({size} bytes).")
+    if not download:
+        print("Run with --fetch to take it.")
+        return 1
+    fetch_cty(there, size)
+    return 1
+
+
+def fetch_cty(modified=None, size=None):
+    """Download cty.dat and record the release date beside it."""
+    import urllib.request
+
     req = urllib.request.Request(
-        url, headers={"User-Agent": "QSOPartyLogger-research/1.0"}
+        CTY_URL, headers={"User-Agent": "QSOPartyLogger-research/1.0"}
     )
     with urllib.request.urlopen(req, timeout=60) as r:
         body = r.read()
-        modified = r.headers.get("Last-Modified", "")
+        modified = r.headers.get("Last-Modified", modified or "").strip()
     assert len(body) > 300_000, f"cty.dat is only {len(body)} bytes -- refusing to write"
-    path = os.path.join(HERE, CTY)
-    with open(path, "wb") as f:
+    assert modified, "no Last-Modified header -- refusing to write an unstamped file"
+    with open(os.path.join(HERE, CTY), "wb") as f:
         f.write(body)
-    print(f"fetched {url}")
-    print(f"  {len(body)} bytes, Last-Modified: {modified or '(absent!)'}")
-    print("  RECORD THAT DATE: it is the only version stamp cty.dat has. Update")
-    print("  the release date in this file's header, the JSON's labelSource,")
-    print("  README.md and CONSTITUTION.md Article 1, then re-run without --fetch.")
+    version = read(CTY_VERSION)
+    version = re.sub(r"(?mi)^last-modified:.*$", f"last-modified: {modified}", version)
+    version = re.sub(r"(?mi)^bytes:.*$", f"bytes: {len(body)}", version)
+    with open(os.path.join(HERE, CTY_VERSION), "w", encoding="utf-8") as f:
+        f.write(version)
+    print(f"fetched {CTY_URL}")
+    print(f"  {len(body)} bytes, Last-Modified: {modified}")
+    print("  UPDATE THE `fetched:` DATE in cty.dat.version by hand, then re-run")
+    print("  this generator with no flags. Its assertions decide whether anything")
+    print("  load-bearing moved; if they pass, only the provenance dates in")
+    print("  README.md and CONSTITUTION.md Article 1 need updating.")
 
 
-if "--fetch" in sys.argv:
-    fetch_cty()
+if "--check" in sys.argv or "--fetch" in sys.argv:
+    sys.exit(check_cty(download="--fetch" in sys.argv))
 
 raw = read(SOURCE)
 
@@ -356,10 +415,18 @@ for r in rows:
 #
 #   cty.dat   https://www.country-files.com/bigcty/cty.dat
 #             AD1C's country file: 340 DXCC records + 6 WAE-only entries.
-#             Released 2026-08-03, fetched 2026-08-04. THE RELEASE DATE COMES
-#             FROM THE SERVER'S Last-Modified HEADER: the file's own `=VERSION`
-#             alias, under Somalia, is a bare placeholder with no date in it,
-#             so there is nothing inside the file to cite.
+#             Released 2026-08-03, fetched 2026-08-04 -- recorded in the
+#             committed sidecar `cty.dat.version`, which is the machine-readable
+#             copy `--check` compares against. THE RELEASE DATE COMES FROM THE
+#             SERVER'S Last-Modified HEADER: the file's own `=VERSION` alias,
+#             under Somalia, is a bare placeholder with no date in it, so there
+#             is nothing inside the file to cite.
+#
+#             python3 docs/research/gen_dxcc.py --check   compare, download nothing
+#             python3 docs/research/gen_dxcc.py --fetch   ...and take it if newer
+#
+#             Exit codes are for scripting: 0 current, 1 newer upstream,
+#             2 upstream sent no Last-Modified so freshness is unknowable.
 #
 # CADENCE, AND WHY SEASONAL RE-FETCHING IS ENOUGH. AD1C republishes often --
 # days to weeks, usually ahead of a major contest or DXpedition -- but almost
@@ -371,7 +438,6 @@ for r in rows:
 # records must be skipped, and the labels an operator reads are pinned by
 # name -- so a release that touched anything this depends on fails the run
 # rather than moving a label quietly.
-CTY = "cty.dat"
 
 
 def cty_primary_prefixes():

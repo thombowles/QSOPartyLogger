@@ -54,12 +54,24 @@ publishes, and neither of them a rule:
    contributes a prefix, an entity, a name or a count, and nothing it supplies
    reaches scoring.
 
-   **Re-fetch it with the ARRL list each season** —
-   `python3 docs/research/gen_dxcc.py --fetch`, which captures the release
-   date from the server's `Last-Modified` and tells you where to record it.
-   Do not download it by hand: the file's own `=VERSION` alias carries no
-   date, so `Last-Modified` is the only version stamp there is, and a plain
-   download loses it. AD1C republishes every few days to weeks,
+   **Check it with the ARRL list each season, and take a newer one:**
+
+   ```bash
+   python3 docs/research/gen_dxcc.py --check   # compares, downloads nothing
+   python3 docs/research/gen_dxcc.py --fetch   # ...and takes it if newer
+   ```
+
+   The committed release date lives in the sidecar `docs/research/cty.dat.version`,
+   because the file's own `=VERSION` alias carries no date and the server's
+   `Last-Modified` is the only stamp there is. **Do not download it by hand** —
+   a plain `curl` throws that stamp away, which is how the first copy landed
+   here uncitable. Exit codes are 0 current, 1 newer upstream, 2 unknowable.
+
+   A newer file is not by itself a reason to do anything: nearly every release
+   only adds `=CALL` DXpedition entries this repo ignores. After taking one,
+   re-run the generator with no flags — **its assertions are what decide
+   whether anything load-bearing moved**, and they fail rather than let a
+   label change quietly. AD1C republishes every few days to weeks,
    but almost always to add `=CALL` DXpedition entries this repo ignores; the
    one field consumed here moves only when DXCC gains or loses an entity. The
    generator's assertions are the real guard, so a release that touched

@@ -1,0 +1,10 @@
+# Provenance for cty.dat, which carries no version of its own: its `=VERSION`
+# alias (under Somalia) is a bare placeholder with no date in it, so the
+# server's Last-Modified header is the only stamp there is.
+#
+# Written by: python3 docs/research/gen_dxcc.py --fetch
+# Checked by: python3 docs/research/gen_dxcc.py --check
+url: https://www.country-files.com/bigcty/cty.dat
+last-modified: Mon, 03 Aug 2026 00:11:31 GMT
+fetched: 2026-08-04
+bytes: 349485
