@@ -66,6 +66,38 @@ struct StationProfile: Codable, Equatable, Hashable, Sendable {
 }
 
 extension StationProfile {
+    /// Trims every text field and folds all but one to upper case.
+    ///
+    /// Contest Setup's fields fold as they are typed, so the row shows what
+    /// will actually be logged. This is the guarantee behind that display: a
+    /// profile loaded from a log written before the fields folded, or pasted in
+    /// whole, is normalised on save rather than reaching a Cabrillo header in
+    /// whatever case it happened to arrive in.
+    ///
+    /// **Email is trimmed but never folded.** It is the one header a sponsor
+    /// may machine-read back to the entrant, and RFC 5321 leaves the local part
+    /// case-sensitive even though most hosts ignore that — rewriting somebody's
+    /// address is not a normalisation the app has any business making.
+    func normalized() -> StationProfile {
+        var copy = self
+        copy.callsign = Self.folded(callsign)
+        copy.name = Self.folded(name)
+        copy.email = email.trimmingCharacters(in: .whitespaces)
+        copy.address = Self.folded(address)
+        copy.city = Self.folded(city)
+        copy.stateProvince = Self.folded(stateProvince)
+        copy.postalCode = Self.folded(postalCode)
+        copy.country = Self.folded(country)
+        copy.club = Self.folded(club)
+        copy.operators = Self.folded(operators)
+        copy.gridLocator = Self.folded(gridLocator)
+        return copy
+    }
+
+    private static func folded(_ value: String) -> String {
+        value.trimmingCharacters(in: .whitespaces).uppercased()
+    }
+
     /// Profiles are persisted in three places written across app versions —
     /// `.qplog` documents, the `lastStationProfile` preference, and the
     /// contest archive — so every field decodes with `decodeIfPresent` plus

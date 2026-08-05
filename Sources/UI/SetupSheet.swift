@@ -86,27 +86,53 @@ struct SetupSheet: View {
                     superCheckRow
                 }
 
+                // Every field here folds to caps as it is typed — the binding,
+                // not `.textCase(.uppercase)`, which restyles the drawn glyphs
+                // and leaves the stored string in whatever case was typed. It
+                // also styled the *label*, which is why this section used to
+                // shout CALLSIGN and GRID SQUARE at an operator whose other
+                // rows said Name and Email.
+                //
+                // Email is the exception: see `StationProfile.normalized()`.
                 Section("Station") {
-                    TextField("Callsign", text: $station.callsign)
-                        .textCase(.uppercase)
+                    TextField("Callsign", text: $station.callsign.uppercasing)
                         .font(.body.monospaced())
                         .focused($focused, equals: .callsign)
-                    TextField("Name", text: $station.name)
+                    TextField("Name", text: $station.name.uppercasing)
                     TextField("Email", text: $station.email)
-                    TextField("Address", text: $station.address)
-                    HStack {
-                        TextField("City", text: $station.city)
-                        TextField("State", text: $station.stateProvince).frame(width: 70)
-                        TextField("ZIP", text: $station.postalCode).frame(width: 90)
+                    TextField("Address", text: $station.address.uppercasing)
+                    // One label for the row, and widths on the controls alone.
+                    // A titled TextField in a grouped Form has its title pulled
+                    // into the leading label column, so `.frame(width: 70)`
+                    // sized "State" *and* its field together: the label wrapped
+                    // to two lines and the field collapsed to a sliver with
+                    // nothing on screen to aim at. Same repair as "State / DX"
+                    // below.
+                    LabeledContent("City / State / ZIP") {
+                        HStack(spacing: 6) {
+                            TextField("City", text: $station.city.uppercasing)
+                                .textFieldStyle(.roundedBorder)
+                                .frame(minWidth: 120)
+                            TextField("ST", text: $station.stateProvince.uppercasing)
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 52)
+                            TextField("ZIP", text: $station.postalCode.uppercasing)
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 84)
+                        }
                     }
-                    HStack {
-                        TextField("Country", text: $station.country)
-                        TextField("Grid square", text: $station.gridLocator)
-                            .textCase(.uppercase)
-                            .font(.body.monospaced())
-                            .frame(width: 110)
+                    LabeledContent("Country / grid") {
+                        HStack(spacing: 6) {
+                            TextField("Country", text: $station.country.uppercasing)
+                                .textFieldStyle(.roundedBorder)
+                                .frame(minWidth: 120)
+                            TextField("Grid", text: $station.gridLocator.uppercasing)
+                                .textFieldStyle(.roundedBorder)
+                                .font(.body.monospaced())
+                                .frame(width: 104)
+                        }
                     }
-                    TextField("Club (optional)", text: $station.club)
+                    TextField("Club (optional)", text: $station.club.uppercasing)
                 }
 
                 Section("Category") {
@@ -162,8 +188,7 @@ struct SetupSheet: View {
                             }
                         }
                     }
-                    TextField("Operators (multi-op)", text: $station.operators)
-                        .textCase(.uppercase)
+                    TextField("Operators (multi-op)", text: $station.operators.uppercasing)
                         .font(.body.monospaced())
                     Text("Space-separated calls; @ marks the host station. Blank = your callsign.")
                         .font(.caption)
@@ -230,12 +255,13 @@ struct SetupSheet: View {
                             // Province / DX" wrapped to three lines and left a
                             // borderless sliver with nothing on screen to aim
                             // at. Splitting them means the width applies to the
-                            // control alone, and .textCase stops leaking into
-                            // the label and shouting it in caps.
+                            // control alone, and the label keeps its own case.
+                            // The field folds through the binding, so the token
+                            // this log *stores* is upper case and not merely
+                            // drawn that way.
                             LabeledContent(party.hasHomeRegion ? "State / DX" : "My location") {
-                                TextField("", text: $stateToken)
+                                TextField("", text: $stateToken.uppercasing)
                                     .textFieldStyle(.roundedBorder)
-                                    .textCase(.uppercase)
                                     .focused($focused, equals: .stateToken)
                                     .frame(width: 120)
                             }
@@ -610,7 +636,11 @@ struct SetupSheet: View {
     }
 
     private func save() {
-        station.callsign = station.callsign.trimmingCharacters(in: .whitespaces).uppercased()
+        // Every field, not just the callsign. The bindings already fold what is
+        // typed here; this is what catches a profile carried in from an older
+        // log, where the fields were only styled upper case and stored whatever
+        // was typed.
+        station = station.normalized()
         // No home region, no in-state case: every entrant is a peer location,
         // and the token they typed is what the exports carry.
         let location: MyLocation = isInState && party?.hasHomeRegion != false

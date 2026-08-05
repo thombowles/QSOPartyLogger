@@ -509,7 +509,10 @@ The toolbar **Export** menu offers both formats:
   declaration: operator, assisted, power, station and transmitter categories, a
   multi-op `OPERATORS:` list, club, grid locator and address. Contest Setup
   collects all of it, so a Single Op **Assisted** or Multi-Two entry exports as
-  exactly that.
+  exactly that. Every field there folds to caps as you type — really folds, so
+  what the header carries is what the row showed — with one deliberate
+  exception: your email address keeps the case you typed it in, since that is
+  the one header a sponsor may write back to.
 - **ADIF 3.1.4** — `CNTY`/`MY_CNTY` with full county names,
   `STX_STRING`/`SRX_STRING`, and group ids in an `APP_` field.
 
