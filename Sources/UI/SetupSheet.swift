@@ -101,37 +101,29 @@ struct SetupSheet: View {
                     TextField("Name", text: $station.name.uppercasing)
                     TextField("Email", text: $station.email)
                     TextField("Address", text: $station.address.uppercasing)
-                    // One label for the row, and widths on the controls alone.
-                    // A titled TextField in a grouped Form has its title pulled
-                    // into the leading label column, so `.frame(width: 70)`
-                    // sized "State" *and* its field together: the label wrapped
-                    // to two lines and the field collapsed to a sliver with
-                    // nothing on screen to aim at. Same repair as "State / DX"
-                    // below.
-                    LabeledContent("City / State / ZIP") {
-                        HStack(spacing: 6) {
-                            TextField("City", text: $station.city.uppercasing)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(minWidth: 120)
-                            TextField("ST", text: $station.stateProvince.uppercasing)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(width: 52)
-                            TextField("ZIP", text: $station.postalCode.uppercasing)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(width: 84)
-                        }
-                    }
-                    LabeledContent("Country / grid") {
-                        HStack(spacing: 6) {
-                            TextField("Country", text: $station.country.uppercasing)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(minWidth: 120)
-                            TextField("Grid", text: $station.gridLocator.uppercasing)
-                                .textFieldStyle(.roundedBorder)
-                                .font(.body.monospaced())
-                                .frame(width: 104)
-                        }
-                    }
+                    // One field per row, each with its own label, exactly like
+                    // the five rows around them.
+                    //
+                    // These five used to share two rows. That packed three
+                    // fields into a space sized for one, so `.frame(width: 70)`
+                    // squeezed "State" into a two-line label beside a sliver of
+                    // a field. Grouping them under a single `LabeledContent`
+                    // fixed the squeeze and introduced a worse fault: a
+                    // TextField's title renders *after* its field there, so the
+                    // row read `[  ] City [ ] ST [  ] ZIP` and every label sat
+                    // between two fields, belonging to neither.
+                    //
+                    // A `prompt:` would put the hint inside the box, but it
+                    // disappears the moment the field is filled -- and "USA" in
+                    // an unlabelled box is the same question all over again. A
+                    // label that persists is the whole job here, and the Form's
+                    // own label column is where one goes.
+                    TextField("City", text: $station.city.uppercasing)
+                    TextField("State / province", text: $station.stateProvince.uppercasing)
+                    TextField("ZIP", text: $station.postalCode.uppercasing)
+                    TextField("Country", text: $station.country.uppercasing)
+                    TextField("Grid square", text: $station.gridLocator.uppercasing)
+                        .font(.body.monospaced())
                     TextField("Club (optional)", text: $station.club.uppercasing)
                 }
 

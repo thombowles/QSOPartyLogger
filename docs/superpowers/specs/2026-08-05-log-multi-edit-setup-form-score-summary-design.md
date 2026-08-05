@@ -130,10 +130,25 @@ Two separate causes, both already understood in this file's own comment at
 
 ### Layout
 
-City/State/ZIP becomes one `LabeledContent("City / State / ZIP")` holding three
-`.roundedBorder` fields, with widths on the controls alone; Country/Grid the
-same. The label leaves the Form's label column, so nothing wraps and every
-field has a visible target.
+City, State/province, ZIP, Country and Grid square each get their own Form row
+with their own label — exactly like the Callsign, Name, Email, Address and Club
+rows around them.
+
+Two earlier shapes were tried and rejected, both recorded in the source:
+
+- **Three fields sharing a row, each with its own title.** This is the shipped
+  bug: the title is hoisted into the leading label column, so `.frame(width:)`
+  sizes label *and* field together, wrapping "State" to two lines beside a
+  sliver.
+- **One `LabeledContent` per row holding bare fields.** Fixes the squeeze and
+  introduces a worse fault — a `TextField`'s title renders *after* its field
+  inside that closure, so the row reads `[  ] City [ ] ST [  ] ZIP` and every
+  label sits between two fields, belonging to neither. Confirmed on screen,
+  2026-08-05.
+
+A `prompt:` would put the hint inside the box, but it vanishes once the field is
+filled, and `USA` in an unlabelled box asks the same question again. A label
+that persists is the requirement; the Form's label column is where one goes.
 
 ### Case
 
