@@ -31,6 +31,7 @@
         "province",
         "dx"
       ],
+      "dxCountsEntities": true,
       "homeStateCountsViaCounty": false,
       "countScope": "perBand",
       "activatedCountyMultiplier": {

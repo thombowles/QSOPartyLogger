@@ -342,12 +342,32 @@ final class MaineQSOPartyTests: XCTestCase {
         XCTAssertEqual(utc.component(.day, from: windows[0].start), 26)
     }
 
-    func testNotesRecordTheDXCCLimitationAndTheOpenQuestion() throws {
+    func testNotesRecordTheDXCCFixAndTheOpenQuestion() throws {
         let notes = meqp.notes ?? ""
         XCTAssertTrue(notes.contains("verified: partial"))
-        XCTAssertTrue(notes.contains("KNOWN SCORING LIMITATION"),
-                      "DX collapses to one multiplier per band/mode — stated, not buried")
+        XCTAssertTrue(notes.contains("DXCC ENTITIES COUNT ONE BY ONE"),
+                      "the fix must be stated where the collapse used to be")
+        XCTAssertTrue(notes.contains("ARRL DXCC List"), "and its source named")
+        XCTAssertFalse(notes.contains("KNOWN SCORING LIMITATION"),
+                       "the limitation is closed — the warning must not outlive it")
         let questions = try XCTUnwrap(meqp.openQuestions)
         XCTAssertTrue(questions.contains("state multiplier"))
+    }
+
+    /// This was the largest single scoring gap in the catalogue: DXCC entities
+    /// are multipliers for **every** entrant here, uncapped, counted once per
+    /// band **and** per mode — and all of them used to collapse into one.
+    func testEachDXCCEntityCountsForBothRolesPerBandAndMode() {
+        XCTAssertTrue(meqp.multipliers.inState.dxCountsEntities)
+        XCTAssertTrue(meqp.multipliers.outState.dxCountsEntities)
+        XCTAssertNil(meqp.multipliers.inState.dxMultCap, "uncapped, per the rules")
+
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "DL1A", my: "CUM", their: "DX"),
+            qso(call: "JA1B", my: "CUM", their: "DX"),
+            qso(call: "G4C", my: "CUM", their: "DX"),
+        ]), party: meqp)
+        XCTAssertEqual(Set(s.workedValues(.dx)), ["DL", "JA", "G"])
+        XCTAssertEqual(s.multiplierCount, 3)
     }
 }

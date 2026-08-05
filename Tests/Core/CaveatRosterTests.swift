@@ -7,9 +7,14 @@ final class CaveatRosterTests: XCTestCase {
 
     private var parties: [PartyDefinition] { PartyCatalog.loadBundled() }
 
-    /// The parties where this app will mis-score or mis-export, as against the
-    /// 39 that `verified: partial` used to warn about. A new entry here means a
-    /// real scoring gap was found; a departure means one was closed.
+    /// The 18 parties where this app will mis-score or mis-export, as against
+    /// the 39 that `verified: partial` used to warn about. A new entry here
+    /// means a real scoring gap was found; a departure means one was closed.
+    ///
+    /// **Three left on 2026-08-01**, when the ARRL DXCC entity table landed:
+    /// `ndqp` (its DX country is loggable now), `nmqp` (DX entities count one
+    /// by one) and `warun` (a prefix equal to a state code is decided by the
+    /// callsign). All three were the same missing table.
     ///
     /// **`scqp` left 2026-08-04**, when `activatedCountyMultiplier` landed. Its
     /// only `scoreAffecting` item was that SC mobile and expedition stations
@@ -27,8 +32,8 @@ final class CaveatRosterTests: XCTestCase {
     /// the WA7BNM registry's, since the sponsor's rules state none.
     private static let badges: Set<String> = [
         "arqp", "deqp", "fqp", "idqp", "ilqp", "in7qpne", "kyqp", "laqp",
-        "moqp", "msqp", "naqpcw", "naqpssb", "ndqp", "neqp",
-        "nmqp", "oqp", "qcqp", "vaqp", "vtqp", "warun", "wiqp",
+        "moqp", "msqp", "naqpcw", "naqpssb", "neqp",
+        "oqp", "qcqp", "vaqp", "vtqp", "wiqp",
     ]
 
     func testBadgeRosterIsExactlyAsExpected() {
@@ -92,13 +97,19 @@ final class CaveatRosterTests: XCTestCase {
         }
     }
 
-    /// A fully verified party can still carry a caveat — the Salmon Run does,
-    /// and NAQP's Dominican-Republic shadow is the same prefix-collision
-    /// class — so the two statuses must stay independent.
+    /// A fully verified party can still carry a caveat — NAQP's
+    /// Dominican-Republic shadow is one — so the two statuses must stay
+    /// independent. The Salmon Run used to be the other example and left the
+    /// list on 2026-08-01: its prefix-collision caveat is fixed, not
+    /// reclassified, so it is now verified *and* caveat-free.
     func testVerifiedPartiesMayStillCarryCaveats() {
         let verifiedWithCaveats = parties
             .filter { !$0.isPartiallyVerified && !$0.caveats.isEmpty }
             .map(\.id)
-        XCTAssertEqual(verifiedWithCaveats, ["naqpcw", "naqpssb", "warun"])
+        XCTAssertEqual(verifiedWithCaveats, ["naqpcw", "naqpssb"])
+
+        let warun = parties.first { $0.id == "warun" }
+        XCTAssertFalse(warun?.isPartiallyVerified ?? true)
+        XCTAssertEqual(warun?.caveats.count, 0, "fixed outright, not downgraded")
     }
 }

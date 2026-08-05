@@ -234,8 +234,29 @@ home state reachable only through its counties is still listed, and OhQP shows
 bundled party through the scorer in both directions to keep the checklist and
 the score from ever disagreeing.
 
-DX is the one class with no checklist: under prefix style any plausible prefix
-is a multiplier, so worked prefixes are listed as text with no roster to chase.
+DX is the one class with no checklist — 340 entities is not a roster to chase —
+so worked entities are listed as text.
+
+### DX entities
+
+Where a sponsor counts DXCC entities one by one, they are counted one by one:
+22 of the 35 parties that count DX say so in their own words, and the other 13
+grant a single DX multiplier, which is also what their rules say. Entities come
+from the **ARRL DXCC List**, so `DL1ABC` and `DJ2XYZ` are one Germany, and the
+Maine, New Hampshire and Salmon Run allowances that used to collapse into one
+multiplier now count in full.
+
+The entity is read from the received prefix where the sponsor's exchange
+carries one, and from the **worked callsign** where the exchange is the bare
+word `DX` — the same split N1MM makes. A token that is both a state code and a
+prefix is decided by the callsign, so `PA0AAA` is the Netherlands and `W3XYZ`
+is Pennsylvania. Nothing is guessed from a token's shape any more: a mistyped
+county is an error again.
+
+Each entity is labelled with the prefix an operator would recognise, and the
+app checks that label list for you — once a day at most, at launch or contest
+load, taking effect at the next launch rather than mid-contest. It can only
+change a label, never a score.
 
 For the combined May weekend the sidebar breaks down **QSOs by party** —
 Indiana, 7QP, New England, Delaware — each with its own counties-worked count
@@ -551,7 +572,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**1994 unit tests**, none of which need hardware or a network — no serial port,
+**2034 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history

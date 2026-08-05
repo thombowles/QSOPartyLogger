@@ -51,21 +51,37 @@ final class ExchangeParserTests: XCTestCase {
         XCTAssertEqual(try parse("DX", meqp, role: .outOfState).get().locations, ["DX"])
     }
 
-    /// The DX-prefix guess is gated on DX actually being a multiplier for this
-    /// operator, in every party that uses prefixes.
-    func testDXPrefixGuessFollowsTheMultiplierClasses() throws {
-        for id in ["alqp", "azqp", "ilqp", "mdc", "sdqp", "tnqp", "warun"] {
-            let party = try XCTUnwrap(PartyCatalog.party(id: id))
-            XCTAssertEqual(
-                ExchangeParser.acceptsDXPrefix(party: party, role: .outOfState),
-                party.multipliers.outState.classes.contains(.dx),
-                "\(id) out of state"
-            )
-            XCTAssertEqual(
-                ExchangeParser.acceptsDXPrefix(party: party, role: .inState),
-                party.multipliers.inState.classes.contains(.dx),
-                "\(id) in state"
-            )
+    /// A DXCC prefix may be entered wherever the sponsor's DX stations send
+    /// one, for either role.
+    ///
+    /// This used to be gated on DX being a multiplier class for the operator,
+    /// because the prefix was guessed at by shape and the guess turned every
+    /// typo into a valid exchange — so it ran only where it bought something.
+    /// The table removed the reason: `SAF` now fails for everyone, and the
+    /// gate only stopped operators logging the country their sponsor asked
+    /// for. Discovered rather than listed, so a new prefix party is covered
+    /// the day it lands.
+    func testEveryPrefixPartyAcceptsRealPrefixesForBothRoles() throws {
+        let prefixParties = PartyCatalog.loadBundled().filter { $0.dxStyle == .prefix }
+        XCTAssertEqual(prefixParties.count, 16, "the catalogue's prefix parties")
+        for party in prefixParties {
+            for role in [ExchangeParser.Role.inState, .outOfState] {
+                XCTAssertTrue(
+                    ExchangeParser.acceptsDXPrefix(party: party, role: role),
+                    "\(party.id) \(role)"
+                )
+                XCTAssertTrue(party.isDXPrefix("DL"), party.id)
+                XCTAssertFalse(party.isDXPrefix("SAF"), "\(party.id): not in the ARRL list")
+                XCTAssertFalse(party.isDXPrefix("EM42"), "\(party.id): a grid square")
+            }
+        }
+    }
+
+    /// A token party never reads a prefix — its DX stations send "DX".
+    func testTokenPartiesNeverAcceptPrefixes() throws {
+        for party in PartyCatalog.loadBundled() where party.dxStyle == .token {
+            XCTAssertFalse(ExchangeParser.acceptsDXPrefix(party: party, role: .inState), party.id)
+            XCTAssertFalse(party.isDXPrefix("DL"), party.id)
         }
     }
 

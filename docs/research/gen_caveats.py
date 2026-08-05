@@ -153,8 +153,7 @@ KINDS = {
         (0, "provenance", "The Cabrillo CONTEST header comes from the WA7BNM registry; the sponsor's rules never state one."),
     ],
     "ndqp": [
-        (0, "scoreAffecting", "A North Dakota station cannot log a DX country the way the rules ask."),
-        (1, "cosmetic", "The “no FT8” rule cannot be enforced by this app."),
+        (0, "cosmetic", "The “no FT8” rule cannot be enforced by this app."),
     ],
     "neqp": [
         (0, "provenance", "The rules’ UTC figures and their local-time glosses are an hour apart; the sponsor’s UTC ships."),
@@ -173,8 +172,7 @@ KINDS = {
         (0, "ruleInference", "The sponsor’s table has no DC row, so DC cannot be logged at all here."),
     ],
     "nmqp": [
-        (0, "scoreAffecting", "DX collapses to one multiplier where the sponsor counts entities. Affects New Mexico entrants only."),
-        (1, "provenance", "The W1AW/5 bonus is 2026-only and must be removed when the 2027 rules are read."),
+        (0, "provenance", "The W1AW/5 bonus is 2026-only and must be removed when the 2027 rules are read."),
     ],
     "nyqp": [
         (0, "cosmetic", "The sponsor’s own sample log uses bands above 70 cm, which cannot be logged here."),
@@ -188,9 +186,8 @@ KINDS = {
     ],
     "oqp": [
         (0, "scoreAffecting", "The five 10-point club stations are not modelled."),
-        (1, "scoreAffecting", "The literal “DX” token cannot be logged."),
-        (2, "scoreAffecting", "The activation bonus can be over-credited, bounded at 300 points per multiplier area."),
-        (3, "ruleInference", "Whether 60 m is legal is ambiguous; eight bands ship without it."),
+        (1, "scoreAffecting", "The activation bonus can be over-credited, bounded at 300 points per multiplier area."),
+        (2, "ruleInference", "Whether 60 m is legal is ambiguous; eight bands ship without it."),
     ],
     "paqp": [
         (0, "cosmetic", "630 m, 2200 m and anything above 70 cm are legal here but cannot be logged."),
@@ -211,9 +208,8 @@ KINDS = {
         (0, "ruleInference", "Whether South Dakota counts itself, and whether outside stations may work only SD, are both inferred."),
     ],
     "sevenqp": [
-        (0, "cosmetic", "The 10-entity DXCC cap can never bind, because the exchange is the literal “DX” token."),
-        (1, "cosmetic", "The sponsor bars WSJT modes and this app cannot enforce it."),
-        (2, "ruleInference", "No maximum for simultaneous counties is stated; the schema default of four ships."),
+        (0, "cosmetic", "The sponsor bars WSJT modes and this app cannot enforce it."),
+        (1, "ruleInference", "No maximum for simultaneous counties is stated; the schema default of four ships."),
     ],
     "tnqp": [
         (0, "provenance", "The rules document is titled 2025 and no 2026 revision exists yet."),
@@ -236,9 +232,10 @@ KINDS = {
         (4, "ruleInference", "The W1AW/1 bonus is added after the power multiplier; the sponsor never says where it belongs."),
         (5, "ruleInference", "Whether Vermont counts itself, and whether 60 m is legal, are both inferred."),
     ],
-    "warun": [
-        (0, "scoreAffecting", "A DXCC prefix that equals a state or province code is read as that state, which can leave the 10-DXCC allowance under-used."),
-    ],
+    # The colliding-prefix caveat left 2026-08-01, when the DXCC entity table
+    # landed: a prefix that equals a state or province code is decided by the
+    # callsign now, so the 10-DXCC allowance is reachable in full.
+    "warun": [],
     # The power multiplier's caveat is gone as of 2026-07-28: x1.5 is applied,
     # so the score is no longer a floor. Only the two bonus rules remain.
     "wiqp": [

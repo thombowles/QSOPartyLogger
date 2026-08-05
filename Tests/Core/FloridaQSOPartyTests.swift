@@ -291,19 +291,23 @@ final class FloridaQSOPartyTests: XCTestCase {
     }
 
     /// **KNOWN LIMITATION 1, pinned.** The rules give maritime-mobile stations
-    /// their own exchange — "send ITU Region (1, 2 or 3)" — and make R1, R2 and
-    /// R3 multipliers for Florida entrants. `MultClass` has no region class, so
-    /// `MultClass` has no region class — and **they do not merely fail to
-    /// count**. Because `dxStyle` is `.prefix`, `R1` is a *plausible DXCC
-    /// prefix* — 1–5 alphanumerics containing a letter, matching no county,
-    /// state or province — so it parses and is credited as a **DX country**
-    /// instead. Same shape as the Mississippi grid-square finding: the QSO
-    /// scores and the exchange logs, only the class is wrong, and since both
-    /// count once per mode the total lands right by accident.
+    /// their own exchange — "send ITU Region (1, 2 or 3)" — and make R1, R2
+    /// and R3 multipliers for Florida entrants. `MultClass` has no region
+    /// class, so they are credited as DX: the wrong class and the right count.
+    ///
+    /// That used to happen *by accident* — `dxStyle` is `.prefix`, and the old
+    /// shape guess took `R1` for a plausible prefix because it was short and
+    /// matched nothing else. The ARRL table rejects it, which would have left
+    /// a Florida entrant unable to log the contact at all, so the three tokens
+    /// are declared in `dxTokenAliases` instead. Same score, same wrong class,
+    /// now deliberate.
     func testKnownGapMaritimeMobileRegionsAreCreditedAsDXCountries() throws {
+        XCTAssertEqual(fqp.dxTokenAliases, ["R1", "R2", "R3"])
+        XCTAssertFalse(DXCCTable.shared.isKnownPrefix("R1"),
+                       "R1 is an ITU region, not a DXCC prefix — the table is right to refuse it")
         XCTAssertEqual(
             try ExchangeParser.parse("R1", party: fqp, role: .inState).get().locations,
-            ["R1"], "it parses — as a phantom DXCC prefix")
+            ["R1"], "declared, so it still logs")
 
         let s = ScoreEngine.score(log: inLog([
             qso(call: "K4MM1", my: "POL", their: "R1"),

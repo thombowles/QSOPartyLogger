@@ -391,6 +391,23 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         /// home-state county is by definition inside the party.
         let activatedCountyMultiplier: ActivatedCountyMultiplier?
 
+        /// Whether this side counts **each DXCC entity separately**, rather
+        /// than treating all DX as one multiplier.
+        ///
+        /// Defaults to `false`, which is what every party did before the
+        /// entity table existed and what most sponsors mean: MEQP counts
+        /// "DXCC countries" one by one and uncapped, while PAQP's first DX
+        /// station is its only DX multiplier. Set it only where the sponsor's
+        /// own words count entities — the flag is the difference between
+        /// modelling a rule and inventing one.
+        ///
+        /// When set, `ScoreEngine` names the multiplier from the entity
+        /// rather than the bare token `DX`, resolving it from the received
+        /// prefix where the exchange carries one and from the worked callsign
+        /// where it does not.
+        var dxCountsEntities: Bool { dxCountsEntitiesRaw ?? false }
+        private let dxCountsEntitiesRaw: Bool?
+
         init(
             classes: [MultClass],
             homeStateCountsViaCounty: Bool,
@@ -398,7 +415,8 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
             dxMultCap: Int? = nil,
             maxScoredMultipliers: Int? = nil,
             granted: [GrantedMultiplier]? = nil,
-            activatedCountyMultiplier: ActivatedCountyMultiplier? = nil
+            activatedCountyMultiplier: ActivatedCountyMultiplier? = nil,
+            dxCountsEntities: Bool? = nil
         ) {
             self.classes = classes
             self.homeStateCountsViaCounty = homeStateCountsViaCounty
@@ -407,6 +425,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
             self.maxScoredMultipliersRaw = maxScoredMultipliers
             self.grantedRaw = granted
             self.activatedCountyMultiplier = activatedCountyMultiplier
+            self.dxCountsEntitiesRaw = dxCountsEntities
         }
 
         private enum CodingKeys: String, CodingKey {
@@ -414,6 +433,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
             case dxMultCapRaw = "dxMultCap"
             case maxScoredMultipliersRaw = "maxScoredMultipliers"
             case grantedRaw = "grantedMultipliers"
+            case dxCountsEntitiesRaw = "dxCountsEntities"
         }
     }
 
@@ -749,11 +769,40 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
                 .union(provinces)
             tokens.formUnion(stateAliases.keys)
         }
-        if dxStyle == .token {
+        if acceptsDXToken {
             tokens.insert(MultClass.dxToken)
         }
         return tokens
     }
+
+    /// Whether the literal token `DX` may be entered as a received location.
+    ///
+    /// Defaults to `dxStyle == .token`, which is what every party did before
+    /// this field existed. It is separate from `dxStyle` because the two
+    /// questions are separate, and one sponsor answers them differently from
+    /// the other: OQP's rules ask for a "province, state, or DXCC country or
+    /// abbreviation" **and** add that when an Ontario station logs one "the
+    /// abbreviation 'DX' is also acceptable" — a prefix party that admits the
+    /// token. AZQP asks for a prefix and means it, so it must not.
+    var acceptsDXToken: Bool { acceptsDXTokenRaw ?? (dxStyle == .token) }
+    private let acceptsDXTokenRaw: Bool?
+
+    /// Tokens this sponsor's exchange carries that this app credits as DX
+    /// although they are not DXCC prefixes. Empty for every party but one.
+    ///
+    /// FQP is that one: the rules give maritime-mobile stations their own
+    /// exchange — "send ITU Region (1, 2 or 3)" — and make R1, R2 and R3
+    /// multipliers for Florida entrants. `MultClass` has no region case, and
+    /// until the DXCC table arrived these rode in on the old shape guess,
+    /// which accepted `R1` as a *plausible* prefix and filed it under DX. The
+    /// count came out right and the class was wrong.
+    ///
+    /// An exact table would simply have rejected them, which would stop a
+    /// Florida entrant logging a legitimate contact at all. So the accident
+    /// becomes a declaration: same score, same wrong class, now written down
+    /// where the party's own notes can explain it.
+    var dxTokenAliases: Set<String> { Set(dxTokenAliasesRaw ?? []) }
+    private let dxTokenAliasesRaw: [String]?
 
     /// What an entrant may claim as their *own* location in setup. Normally
     /// the out-of-state set. A party with no home region has no "outside", so
@@ -770,25 +819,34 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
             : validOutStateTokens.union(counties.map(\.abbr))
     }
 
-    /// Could this token be a DX prefix under `.prefix` style? 1–5 chars,
-    /// letters/digits with at least one letter, and not a county or any
-    /// state/province/DX token — including excluded ones like the home state,
-    /// which must never sneak back in as a "DX prefix".
-    /// Known limitation: DXCC prefixes that collide with US state or Canadian
-    /// province codes (OH Finland, ON Belgium, PA Netherlands…) are read as
-    /// the state/province — same resolution sponsors' log checkers apply.
-    func isPlausibleDXPrefix(_ token: String) -> Bool {
+    /// Is this token a DXCC prefix the ARRL list actually carries, in a party
+    /// whose DX stations send one?
+    ///
+    /// This used to be a *shape* test — 1–5 alphanumerics that matched nothing
+    /// else — which meant every mistyped county validated as a DX entity, and
+    /// a Maidenhead grid square like `EM32` did too. It is now an exact lookup
+    /// in [`DXCCTable`](DXCCTable.swift), so `SAF` and `EM32` are errors again
+    /// and `DL` is Germany.
+    ///
+    /// **The party's own tables still win.** A great many state and province
+    /// codes are also real DXCC prefixes — `SD` is Sweden's, `TN` the Congo's,
+    /// `LA` Norway's, `OK` the Czech Republic's — so without this the home
+    /// state token every party deliberately excludes would walk back in as a
+    /// "DX prefix", and a South Dakota entrant could log `SD`.
+    ///
+    /// Where a token is genuinely both, `ScoreEngine` breaks the tie with the
+    /// worked callsign rather than here: that needs evidence this predicate
+    /// does not have.
+    func isDXPrefix(_ token: String) -> Bool {
         guard dxStyle == .prefix else { return false }
-        guard (1...5).contains(token.count) else { return false }
-        guard token.allSatisfy({ $0.isLetter || $0.isNumber }) else { return false }
-        guard token.contains(where: \.isLetter) else { return false }
+        let token = token.uppercased()
         guard countiesByAbbr[token] == nil else { return false }
         guard !MultClass.acceptedStateTokens.contains(token) else { return false }
         guard !MultClass.canadianProvinces.contains(token) else { return false }
         guard !provinces.contains(token) else { return false }
         guard !sections.contains(token) else { return false }
         guard token != MultClass.dxToken else { return false }
-        return true
+        return DXCCTable.shared.isKnownPrefix(token) || dxTokenAliases.contains(token)
     }
 
     /// Basic structural validation for user-supplied files.
@@ -833,6 +891,8 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         case countyTermRaw = "countyTerm"
         case countyTermPluralRaw = "countyTermPlural"
         case dxStyleRaw = "dxStyle"
+        case acceptsDXTokenRaw = "acceptsDXToken"
+        case dxTokenAliasesRaw = "dxTokenAliases"
         case allowedModeClassesRaw = "allowedModes"
         case maxSimultaneousCountiesRaw = "maxSimultaneousCounties"
         case stateAliasesRaw = "stateAliases"

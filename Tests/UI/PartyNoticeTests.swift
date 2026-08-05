@@ -100,15 +100,16 @@ final class PartyNoticeTests: XCTestCase {
         }
     }
 
-    /// 19 of 48 bundled parties carry both kinds, so the two-group case is not
+    /// 17 of 48 bundled parties carry both kinds, so the two-group case is not
     /// an edge case — it is what most warned-about parties look like. A change
     /// here means a party's caveats were reclassified (the NAQP pair arrived
-    /// carrying both kinds; MNQP left when its export blocker closed; SCQP left
-    /// 2026-08-04 when the activation multiplier closed its only scoring gap,
-    /// leaving one advisory group).
+    /// carrying both kinds; MNQP left when its export blocker closed; NDQP and
+    /// NMQP left when the DXCC entity table closed their scoring gaps; SCQP
+    /// left 2026-08-04 when the activation multiplier closed its only scoring
+    /// gap, leaving one advisory group).
     func testTheTwoGroupCaseIsCommon() {
         let mixed = parties.filter { PartyNotice(party: $0).groups.count == 2 }.map(\.id)
-        XCTAssertEqual(mixed.count, 19, "got: \(mixed)")
+        XCTAssertEqual(mixed.count, 17, "got: \(mixed)")
     }
 
     /// Delaware is the worked example: three things the app cannot score, two
@@ -216,11 +217,15 @@ final class PartyNoticeTests: XCTestCase {
     /// 10× points and the five-county sweep scored from 2026-07-28, and the
     /// self-activation multiplier from 2026-08-04, which was the last of its
     /// three. What it still carries is a `provenance` caveat, which is exactly
-    /// the case that must not warn. Salmon Run carries the singular instead,
-    /// and Ontario three of its own.
+    /// the case that must not warn.
+    ///
+    /// The singular example moved to Arkansas when the DXCC entity table left
+    /// the Salmon Run with no caveat at all, and Ontario is the plural at two:
+    /// the literal `DX` it could not log closed with the same table, leaving
+    /// the club-station points and the activation bonus.
     func testHeadingsAgreeInNumber() throws {
         XCTAssertEqual(
-            PartyNotice(party: try party("warun")).warning?.header,
+            PartyNotice(party: try party("arqp")).warning?.header,
             "1 thing this app cannot score for you here."
         )
         XCTAssertNil(
@@ -229,7 +234,7 @@ final class PartyNoticeTests: XCTestCase {
         )
         XCTAssertEqual(
             PartyNotice(party: try party("oqp")).warning?.header,
-            "3 things this app cannot score for you here."
+            "2 things this app cannot score for you here."
         )
         XCTAssertEqual(
             PartyNotice(party: try party("hqp")).informational?.header,

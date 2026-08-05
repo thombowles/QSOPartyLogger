@@ -228,20 +228,34 @@ final class NorthDakotaQSOPartyTests: XCTestCase {
     /// `prefix` would be inert *and* would drop the literal `DX` token, leaving
     /// no way to log the contact at all. `token` is strictly better; the score
     /// is unaffected either way.
-    func testKnownGapAnNDStationLogsDXRatherThanTheCountryPrefix() throws {
-        XCTAssertEqual(ndqp.dxStyle, .token)
-        XCTAssertEqual(try ExchangeParser.parse("DX", party: ndqp, role: .inState).get().locations,
-                       ["DX"], "the token the operator must actually enter")
+    func testAnNDStationCanLogTheCountryPrefixTheRulesAskFor() throws {
+        XCTAssertEqual(ndqp.dxStyle, .prefix)
+        XCTAssertTrue(ExchangeParser.acceptsDXPrefix(party: ndqp, role: .inState))
+        XCTAssertEqual(try ExchangeParser.parse("DL", party: ndqp, role: .inState).get().locations,
+                       ["DL"], "the country the rules ask for")
 
-        // The gate itself: prefix guessing is off because DX is not a multiplier.
-        XCTAssertFalse(ExchangeParser.acceptsDXPrefix(party: ndqp, role: .inState))
-        guard case .failure = ExchangeParser.parse("DL", party: ndqp, role: .inState) else {
-            return XCTFail("a bare prefix cannot be logged here — that is the limitation")
+        // And the literal token stays, for a country the operator did not catch.
+        XCTAssertTrue(ndqp.acceptsDXToken)
+        XCTAssertEqual(try ExchangeParser.parse("DX", party: ndqp, role: .inState).get().locations,
+                       ["DX"])
+
+        // A mistyped county is still an error — that gate was the reason the
+        // prefix form could not be offered before, and the ARRL list replaced it.
+        guard case .failure = ExchangeParser.parse("SAF", party: ndqp, role: .inState) else {
+            return XCTFail("a token the ARRL list does not carry must not validate")
         }
-        XCTAssertTrue(try XCTUnwrap(ndqp.notes).contains("KNOWN LIMITATION 1"))
+
+        // The score is unaffected either way: DX is never a multiplier here.
+        XCTAssertFalse(ndqp.multipliers.inState.classes.contains(.dx))
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "DL1AA", my: "CSS", their: "DL"),
+        ]), party: ndqp)
+        XCTAssertEqual(s.validQSOs, 1)
+        XCTAssertEqual(s.multiplierCount, 0, "logged faithfully, and worth no multiplier")
+        XCTAssertTrue(try XCTUnwrap(ndqp.notes).contains("CAN NOW LOG THE DX COUNTRY"))
     }
 
-    /// **KNOWN LIMITATION 2, pinned.** "Digital = (RTTY/PSK), **NO FT8**" cannot
+    /// **KNOWN LIMITATION 1, pinned.** "Digital = (RTTY/PSK), **NO FT8**" cannot
     /// be enforced: `digital` is one mode class and the party admits RTTY and
     /// PSK under it, so an FT8 row scores. **Illinois wants the same thing** —
     /// second user of that gap, which meets the repo's two-user bar.
@@ -251,7 +265,7 @@ final class NorthDakotaQSOPartyTests: XCTestCase {
         let s = ScoreEngine.score(log: outLog([ft8]), party: ndqp)
         XCTAssertEqual(s.validQSOs, 1, "the sponsor forbids it; the app cannot tell")
         XCTAssertEqual(s.qsoPoints, 1)
-        XCTAssertTrue(try XCTUnwrap(ndqp.notes).contains("KNOWN LIMITATION 2"))
+        XCTAssertTrue(try XCTUnwrap(ndqp.notes).contains("KNOWN LIMITATION 1"))
     }
 
     // MARK: County lines and credit
@@ -350,11 +364,12 @@ final class NorthDakotaQSOPartyTests: XCTestCase {
         XCTAssertEqual(gaqp.schedule?.first?.start, opening, "Georgia opens at the same minute")
     }
 
-    func testNotesRecordBothLimitationsAndTheSponsorsOwnErrors() throws {
+    func testNotesRecordTheRemainingLimitationAndTheSponsorsOwnErrors() throws {
         let notes = try XCTUnwrap(ndqp.notes)
         XCTAssertTrue(notes.contains("verified: partial"))
         XCTAssertTrue(notes.contains("KNOWN LIMITATION 1"))
-        XCTAssertTrue(notes.contains("KNOWN LIMITATION 2"))
+        XCTAssertFalse(notes.contains("KNOWN LIMITATION 2"),
+                       "the DX-country limitation closed, leaving only the FT8 one")
         XCTAssertTrue(notes.contains("THE CANADIAN LIST IS NOT THE STANDARD THIRTEEN"))
         XCTAssertTrue(notes.contains("SPONSOR ERRORS SHIPPED AS PRINTED"))
     }

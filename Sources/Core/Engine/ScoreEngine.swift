@@ -129,13 +129,17 @@ enum ScoreEngine {
                 .pointsTable(forTheirLoc: row.theirLoc, countyAbbrs: countyAbbrs)
                 .points(for: row.modeClass)
 
-            for (multClass, value) in multContributions(
+            for contribution in multContributions(
                 theirLoc: row.theirLoc.uppercased(),
                 call: row.call,
                 countyAbbrs: countyAbbrs,
                 party: party,
                 rule: rule
-            ) where wantedClasses.contains(multClass) || isHomeStateViaCounty(multClass, value, party, rule) {
+            ) {
+                let multClass = contribution.multClass
+                let value = contribution.value
+                guard wantedClasses.contains(multClass)
+                        || isHomeStateViaCounty(multClass, value, party, rule) else { continue }
                 if multClass == .dx, let cap = rule.dxMultCap,
                    dxCount >= cap,
                    !result.multiplierKeys.contains(where: { $0.multClass == .dx && $0.value == value }) {
@@ -265,6 +269,19 @@ enum ScoreEngine {
         rule.homeStateCountsViaCounty && multClass == .state && value == party.homeState
     }
 
+    /// One multiplier a received location contributes.
+    ///
+    /// `value` is what the operator sees. For a DX entity that is its primary
+    /// prefix, so `DL1AA` and `DJ2BB` both read `DL` and are one multiplier —
+    /// the label no longer depends on which you worked first. `dxEntityCode`
+    /// is carried anyway, because the primary prefix is a display choice and
+    /// the entity code is what actually decides sameness.
+    struct Contribution {
+        let multClass: MultClass
+        let value: String
+        var dxEntityCode: String?
+    }
+
     /// Which multiplier(s) a received location contributes under the rule.
     private static func multContributions(
         theirLoc: String,
@@ -272,14 +289,15 @@ enum ScoreEngine {
         countyAbbrs: Set<String>,
         party: PartyDefinition,
         rule: PartyDefinition.MultRule
-    ) -> [(MultClass, String)] {
+    ) -> [Contribution] {
         if countyAbbrs.contains(theirLoc) {
-            var out: [(MultClass, String)] = [(.county, theirLoc)]
+            var out: [Contribution] = [Contribution(multClass: .county, value: theirLoc)]
             if rule.homeStateCountsViaCounty {
                 // The county's own state, which for every single-state party is
                 // the party's — and for a 7QP log is whichever of the seven the
                 // county lies in.
-                out.append((.state, party.state(forCounty: theirLoc)))
+                out.append(Contribution(multClass: .state,
+                                        value: party.state(forCounty: theirLoc)))
             }
             return out
         }
@@ -288,28 +306,64 @@ enum ScoreEngine {
         // "NTX" is a section and "TX" is not a token at all.
         if party.usesSections {
             if party.sections.contains(theirLoc) {
-                return [(.section, theirLoc)]
+                return [Contribution(multClass: .section, value: theirLoc)]
             }
             if theirLoc == MultClass.dxToken {
-                return [(.dx, MultClass.dxToken)]
+                return [Contribution(multClass: .dx, value: MultClass.dxToken)]
             }
             return []
         }
-        if let aliased = party.stateAliases[theirLoc] {
-            return [(.state, aliased)]
-        }
-        if MultClass.acceptedStateTokens.contains(theirLoc),
-           !party.excludedStateTokens.contains(theirLoc) {
-            return [(.state, theirLoc)]
-        }
-        if party.provinces.contains(theirLoc) {
-            return [(.province, theirLoc)]
+        // A token that is BOTH a state or province code and a real DXCC
+        // prefix — PA is Pennsylvania and the Netherlands, ON is Ontario and
+        // Belgium — is decided by the worked callsign, and only when the call
+        // names the very same entity the token would. So PA0AAA sending "PA"
+        // is the Netherlands, while W3XYZ sending it is Pennsylvania, and a
+        // VE5 sending "SK" stays Saskatchewan even though SK is Sweden's.
+        //
+        // The two-channel split is N1MM's: the exchange field says which
+        // location was sent, the callsign says which entity sent it. Its
+        // manual is blunt about the exchange half — "There is a check on
+        // provinces and states, no check on countries."
+        //
+        // A US or Canadian callsign never triggers it, however well the token
+        // matches: the ARRL list's US row is "K, W, N, AA-AK", so Alberta's
+        // "AB" falls inside it, and a Canadian entrant would lose AB and SK to
+        // a country they are not in. Salmon Run's own rule says the same thing
+        // from the other side — "DXCC entities other than US and VE".
+        let collidesWithDXCC = rule.dxCountsEntities
+            && !DXCCTable.shared.isDomestic(callsign: call)
+            && DXCCTable.shared.entity(forPrefix: theirLoc) != nil
+            && DXCCTable.shared.entity(forCallsign: call)?.code
+                == DXCCTable.shared.entity(forPrefix: theirLoc)?.code
+
+        if !collidesWithDXCC {
+            if let aliased = party.stateAliases[theirLoc] {
+                return [Contribution(multClass: .state, value: aliased)]
+            }
+            if MultClass.acceptedStateTokens.contains(theirLoc),
+               !party.excludedStateTokens.contains(theirLoc) {
+                return [Contribution(multClass: .state, value: theirLoc)]
+            }
+            if party.provinces.contains(theirLoc) {
+                return [Contribution(multClass: .province, value: theirLoc)]
+            }
         }
         if theirLoc == MultClass.dxToken {
-            return [(.dx, MultClass.dxToken)]
+            // The exchange carries no country, so the callsign names it —
+            // which is the whole reason NHQP's "up to 10 DXCC country" and
+            // MEQP's uncapped entities could not be counted before.
+            guard rule.dxCountsEntities,
+                  let m = DXCCTable.shared.match(callsign: call)
+            else { return [Contribution(multClass: .dx, value: MultClass.dxToken)] }
+            return [Contribution(multClass: .dx, value: m.label, dxEntityCode: m.entity.code)]
         }
-        if party.isPlausibleDXPrefix(theirLoc) {
-            return [(.dx, theirLoc)]
+        if party.isDXPrefix(theirLoc) || collidesWithDXCC {
+            // Here the exchange DOES carry the country, and the sponsor's own
+            // received datum outranks a prefix match on the call.
+            guard rule.dxCountsEntities,
+                  let m = DXCCTable.shared.match(prefix: theirLoc)
+            else { return [Contribution(multClass: .dx, value: theirLoc)] }
+            return [Contribution(multClass: .dx, value: m.label, dxEntityCode: m.entity.code)]
         }
         return []
     }
@@ -446,23 +500,24 @@ enum ScoreEngine {
         let scope = scopeComponent(rule.countScope, band: band, modeClass: modeClass)
 
         for loc in theirLocs {
-            for (multClass, value) in multContributions(
+            for c in multContributions(
                 theirLoc: loc.uppercased(),
                 call: "",
                 countyAbbrs: countyAbbrs,
                 party: party,
                 rule: rule
-            ) where wantedClasses.contains(multClass) || isHomeStateViaCounty(multClass, value, party, rule) {
-                let key = MultKey(multClass: multClass, value: value, scope: scope)
+            ) where wantedClasses.contains(c.multClass)
+                    || isHomeStateViaCounty(c.multClass, c.value, party, rule) {
+                let key = MultKey(multClass: c.multClass, value: c.value, scope: scope)
                 if !current.contains(key) {
                     // A county the operator has already self-activated under a
                     // forfeiting rule trades one key for another rather than
                     // adding one, so the badge would send them chasing a
                     // multiplier that pays nothing — the same failure the cap
                     // guard above exists to prevent.
-                    if multClass == .county,
+                    if c.multClass == .county,
                        let act = rule.activatedCountyMultiplier, act.notOtherwiseWorked,
-                       !countyGains(value, addingScope: scope, to: current) {
+                       !countyGains(c.value, addingScope: scope, to: current) {
                         continue
                     }
                     return true

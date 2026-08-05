@@ -191,20 +191,31 @@ final class SeventhCallAreaQSOPartyTests: XCTestCase {
         XCTAssertEqual(qp.multipliers.inState.dxMultCap, 10)
     }
 
-    /// **KNOWN LIMITATION 1, pinned.** The cap can never bind: non-7th-area
-    /// stations send the literal `DX`, so every entity collapses to one
-    /// multiplier and the count never approaches ten. Same shape as New
-    /// Hampshire's.
-    func testKnownGapTheDXCCCapCanNeverBind() throws {
+    /// "Other DXCC entities (maximum of 10)" — a cap that could never bind
+    /// while non-7th-area stations sent the literal `DX` and every entity
+    /// collapsed into one. The entity comes from the worked callsign now, so
+    /// twelve entities offered pay the ten the sponsor allows.
+    func testTheDXCCCapBinds() throws {
         XCTAssertEqual(qp.dxStyle, .token)
-        let rows = (0..<12).map { qso(call: "DL\($0)AA", my: "AZYVP", their: "DX") }
-        let s = ScoreEngine.score(log: inLog(rows), party: qp)
+        XCTAssertTrue(qp.multipliers.inState.dxCountsEntities)
+        XCTAssertEqual(qp.multipliers.inState.dxMultCap, 10)
+
+        let calls = ["DL1A", "JA1B", "G4C", "F5D", "I2E", "EA3F",
+                     "SM4G", "OZ5H", "HB9I", "LZ6J", "YU7K", "SP8L"]
+        let s = ScoreEngine.score(log: inLog(calls.map {
+            qso(call: $0, my: "AZYVP", their: "DX")
+        }), party: qp)
         XCTAssertEqual(s.validQSOs, 12)
-        XCTAssertEqual(s.workedValues(.dx), ["DX"], "one, where the sponsor would pay up to ten")
-        XCTAssertTrue(try XCTUnwrap(qp.notes).contains("KNOWN LIMITATION 1"))
+        XCTAssertEqual(s.workedValues(.dx).count, 10, "ten of the twelve offered")
+
+        // Twelve contacts inside one entity are still one multiplier.
+        let same = ScoreEngine.score(log: inLog((0..<12).map {
+            qso(call: "DL\($0)AA", my: "AZYVP", their: "DX")
+        }), party: qp)
+        XCTAssertEqual(same.workedValues(.dx), ["DL"])
     }
 
-    /// **KNOWN LIMITATION 2, pinned.** "WSJT modes do not support the 7QP
+    /// **KNOWN LIMITATION 1, pinned.** "WSJT modes do not support the 7QP
     /// exchange, so are not allowed" — but RTTY and PSK *are* allowed, and both
     /// are `.digital`. Fourth user of that gap.
     func testKnownGapTheWSJTExclusionCannotBeEnforced() throws {
@@ -212,7 +223,7 @@ final class SeventhCallAreaQSOPartyTests: XCTestCase {
         ft8.rawMode = "FT8"
         XCTAssertEqual(ScoreEngine.score(log: outLog([ft8]), party: qp).qsoPoints, 4,
                        "it scores as digital, which this party does allow")
-        XCTAssertTrue(try XCTUnwrap(qp.notes).contains("KNOWN LIMITATION 2"))
+        XCTAssertTrue(try XCTUnwrap(qp.notes).contains("KNOWN LIMITATION 1"))
     }
 
     // MARK: Credit, county lines, schedule

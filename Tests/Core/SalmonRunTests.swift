@@ -183,27 +183,70 @@ final class SalmonRunTests: XCTestCase {
         XCTAssertEqual(s.workedValues(.dx).count, 10, "but only 10 count as multipliers")
     }
 
-    /// Salmon Run is the party where DX prefixes actually carry multiplier
-    /// weight, so it is also where `isPlausibleDXPrefix`'s documented collision
-    /// limitation bites: a real DXCC prefix that happens to equal a US state or
-    /// Canadian province code is read as that state/province. PA is the
-    /// Netherlands, OK is Slovakia, LA is Norway, ON is Belgium — all shadowed.
-    /// This test exists so the behaviour is deliberate and visible rather than a
-    /// surprise in someone's score.
-    func testDXPrefixesCollidingWithStateCodesAreReadAsStates() {
-        let s = ScoreEngine.score(log: inLog([
-            qso(call: "PA0AAA", my: "KING", their: "PA"),   // Netherlands → Pennsylvania
-            qso(call: "OK1BBB", my: "KING", their: "OK"),   // Slovakia    → Oklahoma
-            qso(call: "LA1CCC", my: "KING", their: "LA"),   // Norway      → Louisiana
-            qso(call: "ON4DDD", my: "KING", their: "ON"),   // Belgium     → Ontario
-            qso(call: "DL1EEE", my: "KING", their: "DL"),   // Germany, no collision
+    /// Salmon Run is where a token that is both a DXCC prefix and a US state
+    /// or Canadian province code matters most: PA is the Netherlands, OK the
+    /// Czech Republic, LA Norway, ON Belgium. Every one used to be read as the
+    /// state or province, which could leave the 10-DXCC allowance under-used.
+    ///
+    /// **The worked callsign decides now.** The exchange field says which
+    /// location was sent; the callsign says which entity sent it — N1MM's own
+    /// split, and the only evidence that separates these two logs.
+    func testTheCallsignDecidesAPrefixThatEqualsAStateCode() {
+        XCTAssertTrue(warun.multipliers.inState.dxCountsEntities)
+
+        let dx = ScoreEngine.score(log: inLog([
+            qso(call: "PA0AAA", my: "KING", their: "PA"),   // Netherlands
+            qso(call: "OK1BBB", my: "KING", their: "OK"),   // Czech Republic
+            qso(call: "LA1CCC", my: "KING", their: "LA"),   // Norway
+            qso(call: "ON4DDD", my: "KING", their: "ON"),   // Belgium
+            qso(call: "DL1EEE", my: "KING", their: "DL"),   // Germany, never ambiguous
         ]), party: warun)
-        XCTAssertEqual(s.workedValues(.state), ["PA", "OK", "LA"],
-                       "three DXCC prefixes shadowed by state codes")
-        XCTAssertEqual(s.workedValues(.province), ["ON"], "and one by a province code")
-        XCTAssertEqual(s.workedValues(.dx), ["DL"], "only the non-colliding prefix is DX")
-        XCTAssertFalse(warun.isPlausibleDXPrefix("PA"))
-        XCTAssertTrue(warun.isPlausibleDXPrefix("DL"))
+        XCTAssertEqual(dx.workedValues(.state), [], "none of these are US states")
+        XCTAssertEqual(dx.workedValues(.province), [], "nor Canadian provinces")
+        XCTAssertEqual(Set(dx.workedValues(.dx)),
+                       ["PA", "OK", "LA", "ON", "DL"])
+        XCTAssertEqual(dx.multiplierCount, 5, "five entities toward the ten allowed")
+    }
+
+    /// The same four tokens from US and Canadian stations, which is the far
+    /// commoner case and must not move.
+    func testTheSameTokensFromDomesticStationsStayStatesAndProvinces() {
+        let home = ScoreEngine.score(log: inLog([
+            qso(call: "W3XYZ", my: "KING", their: "PA"),
+            qso(call: "W5ABC", my: "KING", their: "OK"),
+            qso(call: "W5DEF", my: "KING", their: "LA"),
+            qso(call: "VE3GHI", my: "KING", their: "ON"),
+        ]), party: warun)
+        XCTAssertEqual(Set(home.workedValues(.state)), ["PA", "OK", "LA"])
+        XCTAssertEqual(home.workedValues(.province), ["ON"])
+        XCTAssertEqual(home.workedValues(.dx), [], "no DX here at all")
+    }
+
+    /// The tie only breaks when the callsign names the *same* entity the token
+    /// would. A Canadian sending `SK` stays Saskatchewan even though `SK` is
+    /// Sweden's, and Alberta's `AB` stays a province even though it falls
+    /// inside the ARRL list's US block `AA-AK`.
+    func testANearMissDoesNotFlipTheReading() {
+        XCTAssertEqual(DXCCTable.shared.entity(forPrefix: "SK")?.name, "Sweden")
+        XCTAssertEqual(DXCCTable.shared.entity(forPrefix: "AB")?.name,
+                       "United States of America")
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "VE5ABC", my: "KING", their: "SK"),
+            qso(call: "VE6DEF", my: "KING", their: "AB"),
+        ]), party: warun)
+        XCTAssertEqual(Set(s.workedValues(.province)), ["SK", "AB"])
+        XCTAssertEqual(s.workedValues(.dx), [])
+    }
+
+    /// And the parser is unmoved: the state table still wins there, because a
+    /// received `PA` is a location whichever entity sent it.
+    func testTheParserStillReadsCollidingTokensAsStates() throws {
+        XCTAssertFalse(warun.isDXPrefix("PA"), "the state table wins in the parser")
+        XCTAssertTrue(warun.isDXPrefix("DL"))
+        XCTAssertEqual(
+            try ExchangeParser.parse("PA", party: warun, role: .inState).get().locations,
+            ["PA"]
+        )
     }
 
     func testWashingtonIsNeverAStateMultiplier() {

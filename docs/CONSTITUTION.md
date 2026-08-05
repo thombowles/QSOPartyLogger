@@ -34,10 +34,66 @@ source, forum posts, LLM recall — are **never authority for a rule.** They are
 at most a hint that tells you which primary source to go read. Do not paraphrase
 a rule you have not seen in the sponsor's own words.
 
-One codified exception: **WA7BNM's Cabrillo name registry**
-(`contestcalendar.com/cabnames.php`) is authority for the `CONTEST:` header
-string when the sponsor publishes no value, because no other authority exists.
-Say so in the research doc when you rely on it.
+Two codified exceptions, both of the same shape — a value no other authority
+publishes, and neither of them a rule:
+
+1. **WA7BNM's Cabrillo name registry** (`contestcalendar.com/cabnames.php`) is
+   authority for the `CONTEST:` header string when the sponsor publishes no
+   value. Say so in the research doc when you rely on it.
+2. **AD1C's `cty.dat`** (`country-files.com/bigcty/cty.dat`) is authority for
+   **one field: the primary prefix a DXCC entity is displayed as.** The ARRL
+   DXCC List — which is authority for the entities themselves — publishes only
+   prefix *ranges*, so it designates no primary among them: its rows begin
+   `DA`, `7J`, `OU` and `AX` where an operator reads `DL`, `JA`, `OZ` and `VK`.
+   `cty.dat` is the only place that field exists, and N1MM's manual states the
+   same use of it ("PA will be the the prefix shown in the multiplier window").
+
+   **Scoped, and the scope is enforced by assertion.** `gen_dxcc.py` lets
+   `cty.dat` only *choose among* the prefixes the ARRL list already gives, and
+   asserts that every label is one of that entity's own ARRL prefixes. It never
+   contributes a prefix, an entity, a name or a count, and nothing it supplies
+   reaches scoring.
+
+   **Check it with the ARRL list each season, and take a newer one:**
+
+   ```bash
+   python3 docs/research/gen_dxcc.py --check   # compares, downloads nothing
+   python3 docs/research/gen_dxcc.py --fetch   # ...and takes it if newer
+   ```
+
+   The committed release date lives in the sidecar `docs/research/cty.dat.version`,
+   because the file's own `=VERSION` alias carries no date and the server's
+   `Last-Modified` is the only stamp there is. **Do not download it by hand** —
+   a plain `curl` throws that stamp away, which is how the first copy landed
+   here uncitable. Exit codes are 0 current, 1 newer upstream, 2 unknowable.
+
+   A newer file is not by itself a reason to do anything: nearly every release
+   only adds `=CALL` DXpedition entries this repo ignores. After taking one,
+   re-run the generator with no flags — **its assertions are what decide
+   whether anything load-bearing moved**, and they fail rather than let a
+   label change quietly.
+
+   **The app watches the same file, and may only relabel.** `DXCCLabelClient`
+   checks at launch and at contest load, throttled daily, and applies a newer
+   file's primary prefixes to the bundled entities at the next launch.
+   `DXCCLabelRefresh` enforces the same confinement the generator does — a
+   label must be one of that entity's own ARRL prefixes — and refuses a file
+   whose entity or WAE counts do not agree with the bundled table. **It cannot
+   add an entity, change a resolving prefix, or move a score.** A new DXCC
+   entity is a generator run and a release, not a download. AD1C republishes every few days to weeks,
+   but almost always to add `=CALL` DXpedition entries this repo ignores; the
+   one field consumed here moves only when DXCC gains or loses an entity. The
+   generator's assertions are the real guard, so a release that touched
+   anything load-bearing fails the run instead of moving a label quietly.
+
+> **Amended 2026-08-04.** The original text carried the WA7BNM exception alone
+> and said secondary sources are "never authority for a rule". A DX multiplier
+> still has to be *shown* as something, and the sourced options were a country
+> name or one of the ARRL row's own oddities. Rather than invent a rule for
+> picking — the first version of this shipped "whichever prefix you worked
+> first", which made the label depend on log order — the field was taken from
+> the file that publishes it, and confined to display by an assertion. The
+> article was not wrong about rules; it had nothing to say about labels.
 
 ### Article 2 — Never hand-type data that exists in a file
 

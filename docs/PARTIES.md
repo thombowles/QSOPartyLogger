@@ -249,11 +249,12 @@ Entries are in contest-date order.
   municipalities, so the list mixes counties, districts, regional
   municipalities, cities, towns and united counties. **`HAL` is the Town of
   Haldimand, not Halton** (`HTN`). Multipliers count **per band**, not per mode.
-  Three limitations are recorded rather than papered over: the five 10-point
+  Two limitations are recorded rather than papered over: the five 10-point
   club stations are *QSO* points that sit inside the multiplication and have no
-  schema shape, the literal `DX` cannot be logged because counting DXCC
-  entities individually requires prefix mode, and the activation bonus counts
-  three QSOs where the sponsor wants three different stations. `verified: partial`.
+  schema shape, and the activation bonus counts three QSOs where the sponsor
+  wants three different stations. **Both DX forms the sponsor names now work** —
+  each DXCC entity is its own multiplier, and the literal `DX` the rules call
+  "also acceptable" logs alongside the prefix. `verified: partial`.
 - **Quebec QSO Party** (Apr 19, 2026) — 11 hours in one window, overlapping
   Ontario's Sunday leg. **17 administrative regions**, where **`QUE` is the
   Capitale-Nationale around Quebec City, not the province** — which is not a
@@ -404,9 +405,10 @@ Entries are in contest-date order.
   multiplier scope runs **opposite** to most parties: out-of-state count NH
   counties **per band** (stated ceiling 50 = 10 × 5), while NH stations count one
   combined list **once**. Two operating windows totalling the rules' stated 22
-  hours. `verified: partial` — and note the rules allow NH stations "up to 10
-  DXCC country" while the exchange is the literal word "DX", so this app can only
-  credit DX once (see provenance below).
+  hours. `verified: partial`. The rules allow NH stations "up to 10 DXCC
+  country" while the exchange is the literal word "DX" — **the entity comes
+  from the worked callsign**, so the ten-entity allowance counts properly (see
+  provenance below).
 - **Texas QSO Party** (Sep 19–20, 2026) — rules verified against txqp.net
   2026 (bands: all except 60/30/17/12; Cabrillo name `TXQP` per WA7BNM;
   robot site not yet live).
@@ -415,7 +417,10 @@ Entries are in contest-date order.
   `CLAL`/`CLAR` and `KITS`/`KITT` stay distinct), phone 2 / CW 3, no digital,
   mults once each, W7DX pays 500 **per mode** capped at 1000, and two windows
   totalling the rules' stated 23 hours. The only party where the 10-DXCC cap
-  actually binds, because DX stations send their prefix rather than "DX".
+  actually binds, because DX stations send their prefix rather than "DX" — and
+  where a prefix that equals a state code (`PA`, `ON`, `OK`, `LA`) is **decided
+  by the worked callsign**, so `PA0AAA` is the Netherlands and `W3XYZ` is
+  Pennsylvania.
 - **Maine QSO Party** (Sep 26–27, 2026) — the party that breaks the most
   patterns. Points go by **who you worked, not how**: a Maine station is 2
   points and everyone else 1, CW and phone alike. Multipliers are the **same for

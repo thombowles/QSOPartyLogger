@@ -126,7 +126,7 @@ final class SectionMultiplierTests: XCTestCase {
     }
 
     /// Under prefix-style DX a section token must not be mistaken for a prefix.
-    func testSectionTokensAreNotPlausibleDXPrefixes() throws {
+    func testSectionTokensAreNotDXPrefixes() throws {
         let json = """
         {"schemaVersion":1,"id":"sp","name":"S","cabrilloContest":"S","homeState":"PA",
         "countyAbbrLength":3,"validBands":["40m"],"points":{"phone":1,"cw":2,"digital":2},
@@ -137,9 +137,13 @@ final class SectionMultiplierTests: XCTestCase {
         "counties":[{"abbr":"ADA","name":"Adams"}]}
         """
         let party = try PartyCatalog.decode(Data(json.utf8))
-        XCTAssertFalse(party.isPlausibleDXPrefix("EMA"), "EMA is a section, not Germany")
-        XCTAssertFalse(party.isPlausibleDXPrefix("NTX"))
-        XCTAssertTrue(party.isPlausibleDXPrefix("DL"))
+        XCTAssertFalse(party.isDXPrefix("EMA"), "EMA is a section, not Germany")
+        XCTAssertFalse(party.isDXPrefix("NTX"))
+        XCTAssertTrue(party.isDXPrefix("DL"))
+        // And the ARRL list is what decides, so a section-shaped token that is
+        // not in it fails for that reason rather than by luck of its length.
+        XCTAssertFalse(party.isDXPrefix("SCV"))
+        XCTAssertFalse(party.isDXPrefix("ZZZ"))
     }
 
     // MARK: Multipliers granted outright

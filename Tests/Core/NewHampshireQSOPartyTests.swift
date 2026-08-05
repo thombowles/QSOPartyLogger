@@ -162,11 +162,16 @@ final class NewHampshireQSOPartyTests: XCTestCase {
         XCTAssertFalse(nhqp.validOutStateTokens.contains("NH"))
     }
 
-    // MARK: The DXCC cap — recorded, but unreachable from this exchange
+    // MARK: The DXCC cap, which the entity table made reachable
 
-    func testDXCCCapIsRecordedButDXCollapsesToOneMultiplier() {
+    /// "Up to 10 DXCC country" used to be unenforceable: the exchange is
+    /// `RS(T) + "DX"`, so every DX station sent the same token and all of them
+    /// collapsed to one multiplier. The entity comes from the worked callsign
+    /// now, so three entities are three multipliers.
+    func testEachDXCCEntityIsItsOwnMultiplier() {
         XCTAssertEqual(nhqp.multipliers.inState.dxMultCap, 10,
                        "'up to 10 DXCC country' is recorded on the rule")
+        XCTAssertTrue(nhqp.multipliers.inState.dxCountsEntities)
 
         let s = ScoreEngine.score(log: inLog([
             qso(call: "DL1A", my: "HIL", their: "DX"),
@@ -175,11 +180,68 @@ final class NewHampshireQSOPartyTests: XCTestCase {
         ]), party: nhqp)
         XCTAssertEqual(s.validQSOs, 3, "all three are valid QSOs worth points")
         XCTAssertEqual(s.qsoPoints, 6)
-        XCTAssertEqual(
-            s.workedValues(.dx), ["DX"],
-            "every DX station sends the same literal token, so this app cannot "
-                + "distinguish DXCC entities — a known undercount, see notes"
-        )
+        XCTAssertEqual(Set(s.workedValues(.dx)), ["DL", "JA", "G"],
+                       "resolved from the callsign, since the exchange carries no country")
+        XCTAssertEqual(s.multiplierCount, 3)
+    }
+
+    /// Two stations in one entity are still one multiplier — the point of
+    /// counting entities rather than contacts.
+    ///
+    /// The label is the PREFIX, because that is what an operator recognises,
+    /// but the identity is the ARRL entity code, because Germany spans DA–DR
+    /// and `DL` and `DJ` are the same country. The ARRL list publishes no
+    /// primary prefix to pick between them — its row simply begins at `DA` —
+    /// so the first prefix worked names the entity for the rest of the log.
+    func testTwoStationsInOneEntityAreOneMultiplierLabelledByPrefix() {
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "DL1A", my: "HIL", their: "DX"),
+            qso(call: "DJ2B", band: .m40, my: "HIL", their: "DX"),
+        ]), party: nhqp)
+        XCTAssertEqual(s.workedValues(.dx), ["DL"], "the prefix, not \"Germany\"")
+        XCTAssertEqual(s.multiplierCount, 1, "DL and DJ are one country")
+    }
+
+    /// Worked the other way round it still reads `DL`. The label is the
+    /// entity's primary prefix, not whichever one happened to come first —
+    /// so two operators with the same countries see the same list.
+    func testTheLabelIsTheEntitysPrimaryPrefixWhicheverWasWorked() {
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "DJ2B", my: "HIL", their: "DX"),
+            qso(call: "DL1A", band: .m40, my: "HIL", their: "DX"),
+        ]), party: nhqp)
+        XCTAssertEqual(s.workedValues(.dx), ["DL"], "DJ worked first still reads DL")
+        XCTAssertEqual(s.multiplierCount, 1)
+
+        // The match keeps the key it actually hit; the label is the entity's.
+        let dj = DXCCTable.shared.match(callsign: "DJ2B")
+        let dl = DXCCTable.shared.match(callsign: "DL1A")
+        XCTAssertEqual(dj?.prefix, "DJ", "the key that matched")
+        XCTAssertEqual(dj?.label, "DL", "…and the label that is shown")
+        XCTAssertEqual(dl?.prefix, "DL")
+        XCTAssertEqual(dj?.entity.code, dl?.entity.code, "one ARRL entity either way")
+    }
+
+    /// And the cap now binds, which is what it was recorded for.
+    func testTheTenEntityCapBinds() {
+        let calls = ["DL1A", "JA1B", "G4C", "F5D", "I2E", "EA3F", "SM4G",
+                     "OZ5H", "HB9I", "LZ6J", "YU7K", "SP8L"]
+        let s = ScoreEngine.score(log: inLog(calls.map {
+            qso(call: $0, my: "HIL", their: "DX")
+        }), party: nhqp)
+        XCTAssertEqual(s.validQSOs, 12, "all twelve are worth points")
+        XCTAssertEqual(s.workedValues(.dx).count, 10, "but only ten count")
+        XCTAssertEqual(s.multiplierCount, 10)
+    }
+
+    /// A callsign the ARRL list cannot place still earns its contact a
+    /// multiplier — falling back to the bare token rather than losing it.
+    func testAnUnresolvableCallsignFallsBackToTheBareToken() {
+        let s = ScoreEngine.score(log: inLog([
+            qso(call: "QQ1ZZ", my: "HIL", their: "DX"),
+        ]), party: nhqp)
+        XCTAssertNil(DXCCTable.shared.entity(forCallsign: "QQ1ZZ"))
+        XCTAssertEqual(s.workedValues(.dx), ["DX"])
         XCTAssertEqual(s.multiplierCount, 1)
     }
 
@@ -239,11 +301,14 @@ final class NewHampshireQSOPartyTests: XCTestCase {
         XCTAssertEqual(total, 22 * 3600, "the rules state 'Total operating time 22 hours'")
     }
 
-    func testNotesRecordTheDXCCLimitationAndOpenQuestions() throws {
+    func testNotesRecordTheDXCCFixAndOpenQuestions() throws {
         let notes = nhqp.notes ?? ""
         XCTAssertTrue(notes.contains("verified: partial"))
-        XCTAssertTrue(notes.contains("KNOWN SCORING LIMITATION"),
-                      "the DXCC undercount must be stated, not buried")
+        XCTAssertTrue(notes.contains("THE 10-DXCC ALLOWANCE IS REAL AGAIN"),
+                      "the fix must be stated where the undercount used to be")
+        XCTAssertTrue(notes.contains("ARRL DXCC List"), "and its source named")
+        XCTAssertFalse(notes.contains("KNOWN SCORING LIMITATION"),
+                       "the limitation is closed — the warning must not outlive it")
         let questions = try XCTUnwrap(nhqp.openQuestions)
         XCTAssertTrue(questions.contains("only NH stations"))
     }

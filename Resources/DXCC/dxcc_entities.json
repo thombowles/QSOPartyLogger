@@ -1,0 +1,4327 @@
+{
+  "schemaVersion": 1,
+  "source": "ARRL DXCC List, Current Entities, January 2026 Edition",
+  "sourceURL": "http://www2.arrl.org/files/file/DXCC/DXCC_Current.pdf",
+  "fetched": "2026-07-27",
+  "generatedBy": "docs/research/gen_dxcc.py",
+  "labelSource": "cty.dat (AD1C), primary-prefix field only; released 2026-08-03, fetched 2026-08-04",
+  "entityCount": 340,
+  "entities": [
+    {
+      "code": "001",
+      "name": "Canada",
+      "continent": "NA",
+      "prefixes": [
+        "VA",
+        "VB",
+        "VC",
+        "VD",
+        "VE",
+        "VF",
+        "VG",
+        "VO",
+        "VY"
+      ],
+      "primaryPrefix": "VE"
+    },
+    {
+      "code": "003",
+      "name": "Afghanistan",
+      "continent": "AS",
+      "prefixes": [
+        "T6",
+        "YA"
+      ],
+      "primaryPrefix": "YA"
+    },
+    {
+      "code": "004",
+      "name": "Agalega & St. Brandon Is.",
+      "continent": "AF",
+      "prefixes": [
+        "3B6",
+        "3B7"
+      ],
+      "primaryPrefix": "3B6"
+    },
+    {
+      "code": "005",
+      "name": "Aland Is.",
+      "continent": "EU",
+      "prefixes": [
+        "OH0"
+      ],
+      "primaryPrefix": "OH0"
+    },
+    {
+      "code": "006",
+      "name": "Alaska",
+      "continent": "NA",
+      "prefixes": [
+        "AL",
+        "KL",
+        "NL",
+        "WL"
+      ],
+      "primaryPrefix": "KL"
+    },
+    {
+      "code": "007",
+      "name": "Albania",
+      "continent": "EU",
+      "prefixes": [
+        "ZA"
+      ],
+      "primaryPrefix": "ZA"
+    },
+    {
+      "code": "009",
+      "name": "American Samoa",
+      "continent": "OC",
+      "prefixes": [
+        "KH8"
+      ],
+      "primaryPrefix": "KH8"
+    },
+    {
+      "code": "010",
+      "name": "Amsterdam & St. Paul Is.",
+      "continent": "AF",
+      "prefixes": [
+        "FT/Z"
+      ],
+      "primaryPrefix": "FT/Z"
+    },
+    {
+      "code": "011",
+      "name": "Andaman & Nicobar Is.",
+      "continent": "AS",
+      "prefixes": [
+        "VU4"
+      ],
+      "primaryPrefix": "VU4"
+    },
+    {
+      "code": "012",
+      "name": "Anguilla",
+      "continent": "NA",
+      "prefixes": [
+        "VP2E"
+      ],
+      "primaryPrefix": "VP2E"
+    },
+    {
+      "code": "013",
+      "name": "Antarctica",
+      "continent": "AN",
+      "prefixes": [
+        "CE9/KC4"
+      ],
+      "primaryPrefix": "CE9/KC4"
+    },
+    {
+      "code": "014",
+      "name": "Armenia",
+      "continent": "AS",
+      "prefixes": [
+        "EK"
+      ],
+      "primaryPrefix": "EK"
+    },
+    {
+      "code": "015",
+      "name": "Asiatic Russia",
+      "continent": "AS",
+      "prefixes": [
+        "RA0",
+        "RA8",
+        "RA9",
+        "UA0",
+        "UA8",
+        "UA9",
+        "UB0",
+        "UB8",
+        "UB9",
+        "UC0",
+        "UC8",
+        "UC9",
+        "UD0",
+        "UD8",
+        "UD9",
+        "UE0",
+        "UE8",
+        "UE9",
+        "UF0",
+        "UF8",
+        "UF9",
+        "UG0",
+        "UG8",
+        "UG9",
+        "UH0",
+        "UH8",
+        "UH9",
+        "UI0",
+        "UI8",
+        "UI9"
+      ],
+      "primaryPrefix": "UA9"
+    },
+    {
+      "code": "016",
+      "name": "New Zealand Subantarctic Islands",
+      "continent": "OC",
+      "prefixes": [
+        "ZL9"
+      ],
+      "primaryPrefix": "ZL9"
+    },
+    {
+      "code": "017",
+      "name": "Aves I.",
+      "continent": "NA",
+      "prefixes": [
+        "YV0"
+      ],
+      "primaryPrefix": "YV0"
+    },
+    {
+      "code": "018",
+      "name": "Azerbaijan",
+      "continent": "AS",
+      "prefixes": [
+        "4J",
+        "4K"
+      ],
+      "primaryPrefix": "4J"
+    },
+    {
+      "code": "020",
+      "name": "Baker & Howland Is.",
+      "continent": "OC",
+      "prefixes": [
+        "KH1"
+      ],
+      "primaryPrefix": "KH1"
+    },
+    {
+      "code": "021",
+      "name": "Balearic Is.",
+      "continent": "EU",
+      "prefixes": [
+        "EA6",
+        "EB6",
+        "EC6",
+        "ED6",
+        "EE6",
+        "EF6",
+        "EG6",
+        "EH6"
+      ],
+      "primaryPrefix": "EA6"
+    },
+    {
+      "code": "022",
+      "name": "Palau",
+      "continent": "OC",
+      "prefixes": [
+        "T8"
+      ],
+      "primaryPrefix": "T8"
+    },
+    {
+      "code": "024",
+      "name": "Bouvet",
+      "continent": "AF",
+      "prefixes": [
+        "3Y"
+      ],
+      "primaryPrefix": "3Y"
+    },
+    {
+      "code": "027",
+      "name": "Belarus",
+      "continent": "EU",
+      "prefixes": [
+        "EU",
+        "EV",
+        "EW"
+      ],
+      "primaryPrefix": "EU"
+    },
+    {
+      "code": "029",
+      "name": "Canary Is.",
+      "continent": "AF",
+      "prefixes": [
+        "EA8",
+        "EB8",
+        "EC8",
+        "ED8",
+        "EE8",
+        "EF8",
+        "EG8",
+        "EH8"
+      ],
+      "primaryPrefix": "EA8"
+    },
+    {
+      "code": "031",
+      "name": "C. Kiribati",
+      "continent": "OC",
+      "prefixes": [
+        "T31"
+      ],
+      "primaryPrefix": "T31"
+    },
+    {
+      "code": "032",
+      "name": "Ceuta & Melilla",
+      "continent": "AF",
+      "prefixes": [
+        "EA9",
+        "EB9",
+        "EC9",
+        "ED9",
+        "EE9",
+        "EF9",
+        "EG9",
+        "EH9"
+      ],
+      "primaryPrefix": "EA9"
+    },
+    {
+      "code": "033",
+      "name": "Chagos Is.",
+      "continent": "AF",
+      "prefixes": [
+        "VQ9"
+      ],
+      "primaryPrefix": "VQ9"
+    },
+    {
+      "code": "034",
+      "name": "Chatham Is.",
+      "continent": "OC",
+      "prefixes": [
+        "ZL7"
+      ],
+      "primaryPrefix": "ZL7"
+    },
+    {
+      "code": "035",
+      "name": "Christmas I.",
+      "continent": "OC",
+      "prefixes": [
+        "VK9X"
+      ],
+      "primaryPrefix": "VK9X"
+    },
+    {
+      "code": "036",
+      "name": "Clipperton I.",
+      "continent": "NA",
+      "prefixes": [
+        "FO"
+      ],
+      "primaryPrefix": "FO"
+    },
+    {
+      "code": "037",
+      "name": "Cocos I.",
+      "continent": "NA",
+      "prefixes": [
+        "TI9"
+      ],
+      "primaryPrefix": "TI9"
+    },
+    {
+      "code": "038",
+      "name": "Cocos",
+      "continent": "OC",
+      "prefixes": [
+        "VK9C"
+      ],
+      "primaryPrefix": "VK9C"
+    },
+    {
+      "code": "040",
+      "name": "Crete",
+      "continent": "EU",
+      "prefixes": [
+        "J49",
+        "SV9"
+      ],
+      "primaryPrefix": "SV9"
+    },
+    {
+      "code": "041",
+      "name": "Crozet I.",
+      "continent": "AF",
+      "prefixes": [
+        "FT/W"
+      ],
+      "primaryPrefix": "FT/W"
+    },
+    {
+      "code": "043",
+      "name": "Desecheo I.",
+      "continent": "NA",
+      "prefixes": [
+        "KP5"
+      ],
+      "primaryPrefix": "KP5"
+    },
+    {
+      "code": "045",
+      "name": "Dodecanese",
+      "continent": "EU",
+      "prefixes": [
+        "J45",
+        "SV5"
+      ],
+      "primaryPrefix": "SV5"
+    },
+    {
+      "code": "046",
+      "name": "East Malaysia",
+      "continent": "OC",
+      "prefixes": [
+        "9M6",
+        "9M8"
+      ],
+      "primaryPrefix": "9M6"
+    },
+    {
+      "code": "047",
+      "name": "Easter I.",
+      "continent": "SA",
+      "prefixes": [
+        "CE0"
+      ],
+      "primaryPrefix": "CE0"
+    },
+    {
+      "code": "048",
+      "name": "E. Kiribati",
+      "continent": "OC",
+      "prefixes": [
+        "T32"
+      ],
+      "primaryPrefix": "T32"
+    },
+    {
+      "code": "049",
+      "name": "Equatorial Guinea",
+      "continent": "AF",
+      "prefixes": [
+        "3C"
+      ],
+      "primaryPrefix": "3C"
+    },
+    {
+      "code": "050",
+      "name": "Mexico",
+      "continent": "NA",
+      "prefixes": [
+        "XA",
+        "XB",
+        "XC",
+        "XD",
+        "XE",
+        "XF",
+        "XG",
+        "XH",
+        "XI"
+      ],
+      "primaryPrefix": "XE"
+    },
+    {
+      "code": "051",
+      "name": "Eritrea",
+      "continent": "AF",
+      "prefixes": [
+        "E3"
+      ],
+      "primaryPrefix": "E3"
+    },
+    {
+      "code": "052",
+      "name": "Estonia",
+      "continent": "EU",
+      "prefixes": [
+        "ES"
+      ],
+      "primaryPrefix": "ES"
+    },
+    {
+      "code": "053",
+      "name": "Ethiopia",
+      "continent": "AF",
+      "prefixes": [
+        "ET"
+      ],
+      "primaryPrefix": "ET"
+    },
+    {
+      "code": "054",
+      "name": "European Russia",
+      "continent": "EU",
+      "prefixes": [
+        "RA1",
+        "RA3",
+        "RA4",
+        "RA6",
+        "UA1",
+        "UA3",
+        "UA4",
+        "UA6",
+        "UB1",
+        "UB3",
+        "UB4",
+        "UB6",
+        "UC1",
+        "UC3",
+        "UC4",
+        "UC6",
+        "UD1",
+        "UD3",
+        "UD4",
+        "UD6",
+        "UE1",
+        "UE3",
+        "UE4",
+        "UE6",
+        "UF1",
+        "UF3",
+        "UF4",
+        "UF6",
+        "UG1",
+        "UG3",
+        "UG4",
+        "UG6",
+        "UH1",
+        "UH3",
+        "UH4",
+        "UH6",
+        "UI1",
+        "UI3",
+        "UI4",
+        "UI6"
+      ],
+      "primaryPrefix": "UA1"
+    },
+    {
+      "code": "056",
+      "name": "Fernando de Noronha",
+      "continent": "SA",
+      "prefixes": [
+        "PP0",
+        "PY0F"
+      ],
+      "primaryPrefix": "PY0F"
+    },
+    {
+      "code": "060",
+      "name": "Bahamas",
+      "continent": "NA",
+      "prefixes": [
+        "C6"
+      ],
+      "primaryPrefix": "C6"
+    },
+    {
+      "code": "061",
+      "name": "Franz Josef Land",
+      "continent": "EU",
+      "prefixes": [
+        "R1/F"
+      ],
+      "primaryPrefix": "R1/F"
+    },
+    {
+      "code": "062",
+      "name": "Barbados",
+      "continent": "NA",
+      "prefixes": [
+        "8P"
+      ],
+      "primaryPrefix": "8P"
+    },
+    {
+      "code": "063",
+      "name": "French Guiana",
+      "continent": "SA",
+      "prefixes": [
+        "FY"
+      ],
+      "primaryPrefix": "FY"
+    },
+    {
+      "code": "064",
+      "name": "Bermuda",
+      "continent": "NA",
+      "prefixes": [
+        "VP9"
+      ],
+      "primaryPrefix": "VP9"
+    },
+    {
+      "code": "065",
+      "name": "British Virgin Is.",
+      "continent": "NA",
+      "prefixes": [
+        "VP2V"
+      ],
+      "primaryPrefix": "VP2V"
+    },
+    {
+      "code": "066",
+      "name": "Belize",
+      "continent": "NA",
+      "prefixes": [
+        "V3"
+      ],
+      "primaryPrefix": "V3"
+    },
+    {
+      "code": "069",
+      "name": "Cayman Is.",
+      "continent": "NA",
+      "prefixes": [
+        "ZF"
+      ],
+      "primaryPrefix": "ZF"
+    },
+    {
+      "code": "070",
+      "name": "Cuba",
+      "continent": "NA",
+      "prefixes": [
+        "CL",
+        "CM",
+        "CO"
+      ],
+      "primaryPrefix": "CM"
+    },
+    {
+      "code": "071",
+      "name": "Galapagos Is.",
+      "continent": "SA",
+      "prefixes": [
+        "HC8",
+        "HD8"
+      ],
+      "primaryPrefix": "HC8"
+    },
+    {
+      "code": "072",
+      "name": "Dominican Republic",
+      "continent": "NA",
+      "prefixes": [
+        "HI"
+      ],
+      "primaryPrefix": "HI"
+    },
+    {
+      "code": "074",
+      "name": "El Salvador",
+      "continent": "NA",
+      "prefixes": [
+        "HU",
+        "YS"
+      ],
+      "primaryPrefix": "YS"
+    },
+    {
+      "code": "075",
+      "name": "Georgia",
+      "continent": "AS",
+      "prefixes": [
+        "4L"
+      ],
+      "primaryPrefix": "4L"
+    },
+    {
+      "code": "076",
+      "name": "Guatemala",
+      "continent": "NA",
+      "prefixes": [
+        "TD",
+        "TG"
+      ],
+      "primaryPrefix": "TG"
+    },
+    {
+      "code": "077",
+      "name": "Grenada",
+      "continent": "NA",
+      "prefixes": [
+        "J3"
+      ],
+      "primaryPrefix": "J3"
+    },
+    {
+      "code": "078",
+      "name": "Haiti",
+      "continent": "NA",
+      "prefixes": [
+        "HH"
+      ],
+      "primaryPrefix": "HH"
+    },
+    {
+      "code": "079",
+      "name": "Guadeloupe",
+      "continent": "NA",
+      "prefixes": [
+        "FG"
+      ],
+      "primaryPrefix": "FG"
+    },
+    {
+      "code": "080",
+      "name": "Honduras",
+      "continent": "NA",
+      "prefixes": [
+        "HQ",
+        "HR"
+      ],
+      "primaryPrefix": "HR"
+    },
+    {
+      "code": "082",
+      "name": "Jamaica",
+      "continent": "NA",
+      "prefixes": [
+        "6Y"
+      ],
+      "primaryPrefix": "6Y"
+    },
+    {
+      "code": "084",
+      "name": "Martinique",
+      "continent": "NA",
+      "prefixes": [
+        "FM"
+      ],
+      "primaryPrefix": "FM"
+    },
+    {
+      "code": "086",
+      "name": "Nicaragua",
+      "continent": "NA",
+      "prefixes": [
+        "H6",
+        "H7",
+        "HT",
+        "YN"
+      ],
+      "primaryPrefix": "YN"
+    },
+    {
+      "code": "088",
+      "name": "Panama",
+      "continent": "NA",
+      "prefixes": [
+        "HO",
+        "HP"
+      ],
+      "primaryPrefix": "HP"
+    },
+    {
+      "code": "089",
+      "name": "Turks & Caicos Is.",
+      "continent": "NA",
+      "prefixes": [
+        "VP5"
+      ],
+      "primaryPrefix": "VP5"
+    },
+    {
+      "code": "090",
+      "name": "Trinidad & Tobago",
+      "continent": "SA",
+      "prefixes": [
+        "9Y",
+        "9Z"
+      ],
+      "primaryPrefix": "9Y"
+    },
+    {
+      "code": "091",
+      "name": "Aruba",
+      "continent": "SA",
+      "prefixes": [
+        "P4"
+      ],
+      "primaryPrefix": "P4"
+    },
+    {
+      "code": "094",
+      "name": "Antigua & Barbuda",
+      "continent": "NA",
+      "prefixes": [
+        "V2"
+      ],
+      "primaryPrefix": "V2"
+    },
+    {
+      "code": "095",
+      "name": "Dominica",
+      "continent": "NA",
+      "prefixes": [
+        "J7"
+      ],
+      "primaryPrefix": "J7"
+    },
+    {
+      "code": "096",
+      "name": "Montserrat",
+      "continent": "NA",
+      "prefixes": [
+        "VP2M"
+      ],
+      "primaryPrefix": "VP2M"
+    },
+    {
+      "code": "097",
+      "name": "St. Lucia",
+      "continent": "NA",
+      "prefixes": [
+        "J6"
+      ],
+      "primaryPrefix": "J6"
+    },
+    {
+      "code": "098",
+      "name": "St. Vincent",
+      "continent": "NA",
+      "prefixes": [
+        "J8"
+      ],
+      "primaryPrefix": "J8"
+    },
+    {
+      "code": "099",
+      "name": "Glorioso Is.",
+      "continent": "AF",
+      "prefixes": [
+        "FT/G"
+      ],
+      "primaryPrefix": "FT/G"
+    },
+    {
+      "code": "100",
+      "name": "Argentina",
+      "continent": "SA",
+      "prefixes": [
+        "LO",
+        "LP",
+        "LQ",
+        "LR",
+        "LS",
+        "LT",
+        "LU",
+        "LV",
+        "LW"
+      ],
+      "primaryPrefix": "LU"
+    },
+    {
+      "code": "103",
+      "name": "Guam",
+      "continent": "OC",
+      "prefixes": [
+        "KH2"
+      ],
+      "primaryPrefix": "KH2"
+    },
+    {
+      "code": "104",
+      "name": "Bolivia",
+      "continent": "SA",
+      "prefixes": [
+        "CP"
+      ],
+      "primaryPrefix": "CP"
+    },
+    {
+      "code": "105",
+      "name": "Guantanamo Bay",
+      "continent": "NA",
+      "prefixes": [
+        "KG4"
+      ],
+      "primaryPrefix": "KG4"
+    },
+    {
+      "code": "106",
+      "name": "Guernsey",
+      "continent": "EU",
+      "prefixes": [
+        "GP",
+        "GU"
+      ],
+      "primaryPrefix": "GU"
+    },
+    {
+      "code": "107",
+      "name": "Guinea",
+      "continent": "AF",
+      "prefixes": [
+        "3X"
+      ],
+      "primaryPrefix": "3X"
+    },
+    {
+      "code": "108",
+      "name": "Brazil",
+      "continent": "SA",
+      "prefixes": [
+        "PP",
+        "PQ",
+        "PR",
+        "PS",
+        "PT",
+        "PU",
+        "PV",
+        "PW",
+        "PX",
+        "PY",
+        "ZV",
+        "ZW",
+        "ZX",
+        "ZY",
+        "ZZ"
+      ],
+      "primaryPrefix": "PY"
+    },
+    {
+      "code": "109",
+      "name": "Guinea-Bissau",
+      "continent": "AF",
+      "prefixes": [
+        "J5"
+      ],
+      "primaryPrefix": "J5"
+    },
+    {
+      "code": "110",
+      "name": "Hawaii",
+      "continent": "OC",
+      "prefixes": [
+        "KH6",
+        "KH7"
+      ],
+      "primaryPrefix": "KH6"
+    },
+    {
+      "code": "111",
+      "name": "Heard I.",
+      "continent": "AF",
+      "prefixes": [
+        "VK0"
+      ],
+      "primaryPrefix": "VK0"
+    },
+    {
+      "code": "112",
+      "name": "Chile",
+      "continent": "SA",
+      "prefixes": [
+        "CA",
+        "CB",
+        "CC",
+        "CD",
+        "CE"
+      ],
+      "primaryPrefix": "CE"
+    },
+    {
+      "code": "114",
+      "name": "Isle of Man",
+      "continent": "EU",
+      "prefixes": [
+        "GD",
+        "GT"
+      ],
+      "primaryPrefix": "GD"
+    },
+    {
+      "code": "116",
+      "name": "Colombia",
+      "continent": "SA",
+      "prefixes": [
+        "5J",
+        "5K",
+        "HJ",
+        "HK"
+      ],
+      "primaryPrefix": "HK"
+    },
+    {
+      "code": "117",
+      "name": "ITU HQ",
+      "continent": "EU",
+      "prefixes": [
+        "4U0ITU",
+        "4U1ITU",
+        "4U2ITU",
+        "4U3ITU",
+        "4U4ITU",
+        "4U5ITU",
+        "4U6ITU",
+        "4U7ITU",
+        "4U8ITU",
+        "4U9ITU",
+        "4U_ITU"
+      ],
+      "primaryPrefix": "4U1ITU"
+    },
+    {
+      "code": "118",
+      "name": "Jan Mayen",
+      "continent": "EU",
+      "prefixes": [
+        "JX"
+      ],
+      "primaryPrefix": "JX"
+    },
+    {
+      "code": "120",
+      "name": "Ecuador",
+      "continent": "SA",
+      "prefixes": [
+        "HC",
+        "HD"
+      ],
+      "primaryPrefix": "HC"
+    },
+    {
+      "code": "122",
+      "name": "Jersey",
+      "continent": "EU",
+      "prefixes": [
+        "GH",
+        "GJ"
+      ],
+      "primaryPrefix": "GJ"
+    },
+    {
+      "code": "123",
+      "name": "Johnston I.",
+      "continent": "OC",
+      "prefixes": [
+        "KH3"
+      ],
+      "primaryPrefix": "KH3"
+    },
+    {
+      "code": "124",
+      "name": "Juan de Nova, Europa",
+      "continent": "AF",
+      "prefixes": [
+        "E",
+        "FT/J"
+      ],
+      "primaryPrefix": "FT/J"
+    },
+    {
+      "code": "125",
+      "name": "Juan Fernandez Is.",
+      "continent": "SA",
+      "prefixes": [
+        "CE0"
+      ],
+      "primaryPrefix": "CE0"
+    },
+    {
+      "code": "126",
+      "name": "Kaliningrad",
+      "continent": "EU",
+      "prefixes": [
+        "RA2",
+        "UA2"
+      ],
+      "primaryPrefix": "UA2"
+    },
+    {
+      "code": "129",
+      "name": "Guyana",
+      "continent": "SA",
+      "prefixes": [
+        "8R"
+      ],
+      "primaryPrefix": "8R"
+    },
+    {
+      "code": "130",
+      "name": "Kazakhstan",
+      "continent": "AS",
+      "prefixes": [
+        "UN",
+        "UO",
+        "UP",
+        "UQ"
+      ],
+      "primaryPrefix": "UN"
+    },
+    {
+      "code": "131",
+      "name": "Kerguelen Is.",
+      "continent": "AF",
+      "prefixes": [
+        "FT/X"
+      ],
+      "primaryPrefix": "FT/X"
+    },
+    {
+      "code": "132",
+      "name": "Paraguay",
+      "continent": "SA",
+      "prefixes": [
+        "ZP"
+      ],
+      "primaryPrefix": "ZP"
+    },
+    {
+      "code": "133",
+      "name": "Kermadec Is.",
+      "continent": "OC",
+      "prefixes": [
+        "ZL8"
+      ],
+      "primaryPrefix": "ZL8"
+    },
+    {
+      "code": "135",
+      "name": "Kyrgyzstan",
+      "continent": "AS",
+      "prefixes": [
+        "EX"
+      ],
+      "primaryPrefix": "EX"
+    },
+    {
+      "code": "136",
+      "name": "Peru",
+      "continent": "SA",
+      "prefixes": [
+        "OA",
+        "OB",
+        "OC"
+      ],
+      "primaryPrefix": "OA"
+    },
+    {
+      "code": "137",
+      "name": "Republic of Korea",
+      "continent": "AS",
+      "prefixes": [
+        "6K",
+        "6L",
+        "6M",
+        "6N",
+        "HL"
+      ],
+      "primaryPrefix": "HL"
+    },
+    {
+      "code": "138",
+      "name": "Kure I.",
+      "continent": "OC",
+      "prefixes": [
+        "KH7K"
+      ],
+      "primaryPrefix": "KH7K"
+    },
+    {
+      "code": "140",
+      "name": "Suriname",
+      "continent": "SA",
+      "prefixes": [
+        "PZ"
+      ],
+      "primaryPrefix": "PZ"
+    },
+    {
+      "code": "141",
+      "name": "Falkland Is.",
+      "continent": "SA",
+      "prefixes": [
+        "VP8"
+      ],
+      "primaryPrefix": "VP8"
+    },
+    {
+      "code": "142",
+      "name": "Lakshadweep Is.",
+      "continent": "AS",
+      "prefixes": [
+        "VU7"
+      ],
+      "primaryPrefix": "VU7"
+    },
+    {
+      "code": "143",
+      "name": "Laos",
+      "continent": "AS",
+      "prefixes": [
+        "XW"
+      ],
+      "primaryPrefix": "XW"
+    },
+    {
+      "code": "144",
+      "name": "Uruguay",
+      "continent": "SA",
+      "prefixes": [
+        "CV",
+        "CW",
+        "CX"
+      ],
+      "primaryPrefix": "CX"
+    },
+    {
+      "code": "145",
+      "name": "Latvia",
+      "continent": "EU",
+      "prefixes": [
+        "YL"
+      ],
+      "primaryPrefix": "YL"
+    },
+    {
+      "code": "146",
+      "name": "Lithuania",
+      "continent": "EU",
+      "prefixes": [
+        "LY"
+      ],
+      "primaryPrefix": "LY"
+    },
+    {
+      "code": "147",
+      "name": "Lord Howe I.",
+      "continent": "OC",
+      "prefixes": [
+        "VK9L"
+      ],
+      "primaryPrefix": "VK9L"
+    },
+    {
+      "code": "148",
+      "name": "Venezuela",
+      "continent": "SA",
+      "prefixes": [
+        "4M",
+        "YV",
+        "YW",
+        "YX",
+        "YY"
+      ],
+      "primaryPrefix": "YV"
+    },
+    {
+      "code": "149",
+      "name": "Azores",
+      "continent": "EU",
+      "prefixes": [
+        "CU"
+      ],
+      "primaryPrefix": "CU"
+    },
+    {
+      "code": "150",
+      "name": "Australia",
+      "continent": "OC",
+      "prefixes": [
+        "AX",
+        "VK"
+      ],
+      "primaryPrefix": "VK"
+    },
+    {
+      "code": "152",
+      "name": "Macao",
+      "continent": "AS",
+      "prefixes": [
+        "XX9"
+      ],
+      "primaryPrefix": "XX9"
+    },
+    {
+      "code": "153",
+      "name": "Macquarie I.",
+      "continent": "OC",
+      "prefixes": [
+        "VK0"
+      ],
+      "primaryPrefix": "VK0"
+    },
+    {
+      "code": "157",
+      "name": "Nauru",
+      "continent": "OC",
+      "prefixes": [
+        "C2"
+      ],
+      "primaryPrefix": "C2"
+    },
+    {
+      "code": "158",
+      "name": "Vanuatu",
+      "continent": "OC",
+      "prefixes": [
+        "YJ"
+      ],
+      "primaryPrefix": "YJ"
+    },
+    {
+      "code": "159",
+      "name": "Maldives",
+      "continent": "AS/AF",
+      "prefixes": [
+        "8Q"
+      ],
+      "primaryPrefix": "8Q"
+    },
+    {
+      "code": "160",
+      "name": "Tonga",
+      "continent": "OC",
+      "prefixes": [
+        "A3"
+      ],
+      "primaryPrefix": "A3"
+    },
+    {
+      "code": "161",
+      "name": "Malpelo I.",
+      "continent": "SA",
+      "prefixes": [
+        "HK0"
+      ],
+      "primaryPrefix": "HK0"
+    },
+    {
+      "code": "162",
+      "name": "New Caledonia",
+      "continent": "OC",
+      "prefixes": [
+        "FK"
+      ],
+      "primaryPrefix": "FK"
+    },
+    {
+      "code": "163",
+      "name": "Papua New Guinea",
+      "continent": "OC",
+      "prefixes": [
+        "P2"
+      ],
+      "primaryPrefix": "P2"
+    },
+    {
+      "code": "165",
+      "name": "Mauritius",
+      "continent": "AF",
+      "prefixes": [
+        "3B8"
+      ],
+      "primaryPrefix": "3B8"
+    },
+    {
+      "code": "166",
+      "name": "Mariana Is.",
+      "continent": "OC",
+      "prefixes": [
+        "KH0"
+      ],
+      "primaryPrefix": "KH0"
+    },
+    {
+      "code": "167",
+      "name": "Market Reef",
+      "continent": "EU",
+      "prefixes": [
+        "OJ0"
+      ],
+      "primaryPrefix": "OJ0"
+    },
+    {
+      "code": "168",
+      "name": "Marshall Is.",
+      "continent": "OC",
+      "prefixes": [
+        "V7"
+      ],
+      "primaryPrefix": "V7"
+    },
+    {
+      "code": "169",
+      "name": "Mayotte",
+      "continent": "AF",
+      "prefixes": [
+        "FH"
+      ],
+      "primaryPrefix": "FH"
+    },
+    {
+      "code": "170",
+      "name": "New Zealand",
+      "continent": "OC",
+      "prefixes": [
+        "ZL",
+        "ZM"
+      ],
+      "primaryPrefix": "ZL"
+    },
+    {
+      "code": "171",
+      "name": "Mellish Reef",
+      "continent": "OC",
+      "prefixes": [
+        "VK9M"
+      ],
+      "primaryPrefix": "VK9M"
+    },
+    {
+      "code": "172",
+      "name": "Pitcairn I.",
+      "continent": "OC",
+      "prefixes": [
+        "VP6"
+      ],
+      "primaryPrefix": "VP6"
+    },
+    {
+      "code": "173",
+      "name": "Micronesia",
+      "continent": "OC",
+      "prefixes": [
+        "V6"
+      ],
+      "primaryPrefix": "V6"
+    },
+    {
+      "code": "174",
+      "name": "Midway I.",
+      "continent": "OC",
+      "prefixes": [
+        "KH4"
+      ],
+      "primaryPrefix": "KH4"
+    },
+    {
+      "code": "175",
+      "name": "French Polynesia",
+      "continent": "OC",
+      "prefixes": [
+        "FO"
+      ],
+      "primaryPrefix": "FO"
+    },
+    {
+      "code": "176",
+      "name": "Fiji",
+      "continent": "OC",
+      "prefixes": [
+        "3D2"
+      ],
+      "primaryPrefix": "3D2"
+    },
+    {
+      "code": "177",
+      "name": "Minami Torishima",
+      "continent": "OC",
+      "prefixes": [
+        "JD1"
+      ],
+      "primaryPrefix": "JD1"
+    },
+    {
+      "code": "179",
+      "name": "Moldova",
+      "continent": "EU",
+      "prefixes": [
+        "ER"
+      ],
+      "primaryPrefix": "ER"
+    },
+    {
+      "code": "180",
+      "name": "Mount Athos",
+      "continent": "EU",
+      "prefixes": [
+        "SV/A"
+      ],
+      "primaryPrefix": "SV/A"
+    },
+    {
+      "code": "181",
+      "name": "Mozambique",
+      "continent": "AF",
+      "prefixes": [
+        "C8",
+        "C9"
+      ],
+      "primaryPrefix": "C9"
+    },
+    {
+      "code": "182",
+      "name": "Navassa I.",
+      "continent": "NA",
+      "prefixes": [
+        "KP1"
+      ],
+      "primaryPrefix": "KP1"
+    },
+    {
+      "code": "185",
+      "name": "Solomon Is.",
+      "continent": "OC",
+      "prefixes": [
+        "H4"
+      ],
+      "primaryPrefix": "H4"
+    },
+    {
+      "code": "187",
+      "name": "Niger",
+      "continent": "AF",
+      "prefixes": [
+        "5U"
+      ],
+      "primaryPrefix": "5U"
+    },
+    {
+      "code": "188",
+      "name": "Niue",
+      "continent": "OC",
+      "prefixes": [
+        "E6"
+      ],
+      "primaryPrefix": "E6"
+    },
+    {
+      "code": "189",
+      "name": "Norfolk I.",
+      "continent": "OC",
+      "prefixes": [
+        "VK9N"
+      ],
+      "primaryPrefix": "VK9N"
+    },
+    {
+      "code": "190",
+      "name": "Samoa",
+      "continent": "OC",
+      "prefixes": [
+        "5W"
+      ],
+      "primaryPrefix": "5W"
+    },
+    {
+      "code": "191",
+      "name": "N. Cook Is.",
+      "continent": "OC",
+      "prefixes": [
+        "E5"
+      ],
+      "primaryPrefix": "E5"
+    },
+    {
+      "code": "192",
+      "name": "Ogasawara",
+      "continent": "AS",
+      "prefixes": [
+        "JD1"
+      ],
+      "primaryPrefix": "JD1"
+    },
+    {
+      "code": "195",
+      "name": "Annobon I.",
+      "continent": "AF",
+      "prefixes": [
+        "3C0"
+      ],
+      "primaryPrefix": "3C0"
+    },
+    {
+      "code": "197",
+      "name": "Palmyra & Jarvis Is.",
+      "continent": "OC",
+      "prefixes": [
+        "KH5"
+      ],
+      "primaryPrefix": "KH5"
+    },
+    {
+      "code": "199",
+      "name": "Peter 1 I.",
+      "continent": "AN",
+      "prefixes": [
+        "3Y"
+      ],
+      "primaryPrefix": "3Y"
+    },
+    {
+      "code": "201",
+      "name": "Prince Edward & Marion Is.",
+      "continent": "AF",
+      "prefixes": [
+        "ZS8"
+      ],
+      "primaryPrefix": "ZS8"
+    },
+    {
+      "code": "202",
+      "name": "Puerto Rico",
+      "continent": "NA",
+      "prefixes": [
+        "KP3",
+        "KP4"
+      ],
+      "primaryPrefix": "KP4"
+    },
+    {
+      "code": "203",
+      "name": "Andorra",
+      "continent": "EU",
+      "prefixes": [
+        "C3"
+      ],
+      "primaryPrefix": "C3"
+    },
+    {
+      "code": "204",
+      "name": "Revillagigedo",
+      "continent": "NA",
+      "prefixes": [
+        "XA4",
+        "XB4",
+        "XC4",
+        "XD4",
+        "XE4",
+        "XF4",
+        "XG4",
+        "XH4",
+        "XI4"
+      ],
+      "primaryPrefix": "XF4"
+    },
+    {
+      "code": "205",
+      "name": "Ascension I.",
+      "continent": "AF",
+      "prefixes": [
+        "ZD8"
+      ],
+      "primaryPrefix": "ZD8"
+    },
+    {
+      "code": "206",
+      "name": "Austria",
+      "continent": "EU",
+      "prefixes": [
+        "OE"
+      ],
+      "primaryPrefix": "OE"
+    },
+    {
+      "code": "207",
+      "name": "Rodrigues I.",
+      "continent": "AF",
+      "prefixes": [
+        "3B9"
+      ],
+      "primaryPrefix": "3B9"
+    },
+    {
+      "code": "209",
+      "name": "Belgium",
+      "continent": "EU",
+      "prefixes": [
+        "ON",
+        "OO",
+        "OP",
+        "OQ",
+        "OR",
+        "OS",
+        "OT"
+      ],
+      "primaryPrefix": "ON"
+    },
+    {
+      "code": "211",
+      "name": "Sable I.",
+      "continent": "NA",
+      "prefixes": [
+        "CY0"
+      ],
+      "primaryPrefix": "CY0"
+    },
+    {
+      "code": "212",
+      "name": "Bulgaria",
+      "continent": "EU",
+      "prefixes": [
+        "LZ"
+      ],
+      "primaryPrefix": "LZ"
+    },
+    {
+      "code": "213",
+      "name": "Saint Martin",
+      "continent": "NA",
+      "prefixes": [
+        "FS"
+      ],
+      "primaryPrefix": "FS"
+    },
+    {
+      "code": "214",
+      "name": "Corsica",
+      "continent": "EU",
+      "prefixes": [
+        "TK"
+      ],
+      "primaryPrefix": "TK"
+    },
+    {
+      "code": "215",
+      "name": "Cyprus",
+      "continent": "AS",
+      "prefixes": [
+        "5B",
+        "C4",
+        "P3"
+      ],
+      "primaryPrefix": "5B"
+    },
+    {
+      "code": "216",
+      "name": "San Andres & Providencia",
+      "continent": "NA",
+      "prefixes": [
+        "HK0"
+      ],
+      "primaryPrefix": "HK0"
+    },
+    {
+      "code": "217",
+      "name": "San Felix & San Ambrosio",
+      "continent": "SA",
+      "prefixes": [
+        "CE0"
+      ],
+      "primaryPrefix": "CE0"
+    },
+    {
+      "code": "219",
+      "name": "Sao Tome & Principe",
+      "continent": "AF",
+      "prefixes": [
+        "S9"
+      ],
+      "primaryPrefix": "S9"
+    },
+    {
+      "code": "221",
+      "name": "Denmark",
+      "continent": "EU",
+      "prefixes": [
+        "OU",
+        "OV",
+        "OW",
+        "OZ"
+      ],
+      "primaryPrefix": "OZ"
+    },
+    {
+      "code": "222",
+      "name": "Faroe Is.",
+      "continent": "EU",
+      "prefixes": [
+        "OY"
+      ],
+      "primaryPrefix": "OY"
+    },
+    {
+      "code": "223",
+      "name": "England",
+      "continent": "EU",
+      "prefixes": [
+        "G",
+        "GX",
+        "M"
+      ],
+      "primaryPrefix": "G"
+    },
+    {
+      "code": "224",
+      "name": "Finland",
+      "continent": "EU",
+      "prefixes": [
+        "OF",
+        "OG",
+        "OH",
+        "OI"
+      ],
+      "primaryPrefix": "OH"
+    },
+    {
+      "code": "225",
+      "name": "Sardinia",
+      "continent": "EU",
+      "prefixes": [
+        "IM0",
+        "IS0"
+      ],
+      "primaryPrefix": "IS0"
+    },
+    {
+      "code": "227",
+      "name": "France",
+      "continent": "EU",
+      "prefixes": [
+        "F"
+      ],
+      "primaryPrefix": "F"
+    },
+    {
+      "code": "230",
+      "name": "Germany",
+      "continent": "EU",
+      "prefixes": [
+        "DA",
+        "DB",
+        "DC",
+        "DD",
+        "DE",
+        "DF",
+        "DG",
+        "DH",
+        "DI",
+        "DJ",
+        "DK",
+        "DL",
+        "DM",
+        "DN",
+        "DO",
+        "DP",
+        "DQ",
+        "DR"
+      ],
+      "primaryPrefix": "DL"
+    },
+    {
+      "code": "232",
+      "name": "Somalia",
+      "continent": "AF",
+      "prefixes": [
+        "6O",
+        "T5"
+      ],
+      "primaryPrefix": "T5"
+    },
+    {
+      "code": "233",
+      "name": "Gibraltar",
+      "continent": "EU",
+      "prefixes": [
+        "ZB2"
+      ],
+      "primaryPrefix": "ZB2"
+    },
+    {
+      "code": "234",
+      "name": "S. Cook Is.",
+      "continent": "OC",
+      "prefixes": [
+        "E5"
+      ],
+      "primaryPrefix": "E5"
+    },
+    {
+      "code": "235",
+      "name": "South Georgia I.",
+      "continent": "SA",
+      "prefixes": [
+        "VP0"
+      ],
+      "primaryPrefix": "VP0"
+    },
+    {
+      "code": "236",
+      "name": "Greece",
+      "continent": "EU",
+      "prefixes": [
+        "J4",
+        "SV",
+        "SW",
+        "SX",
+        "SY",
+        "SZ"
+      ],
+      "primaryPrefix": "SV"
+    },
+    {
+      "code": "237",
+      "name": "Greenland",
+      "continent": "NA",
+      "prefixes": [
+        "OX"
+      ],
+      "primaryPrefix": "OX"
+    },
+    {
+      "code": "238",
+      "name": "South Orkney Is.",
+      "continent": "SA",
+      "prefixes": [
+        "VP0"
+      ],
+      "primaryPrefix": "VP0"
+    },
+    {
+      "code": "239",
+      "name": "Hungary",
+      "continent": "EU",
+      "prefixes": [
+        "HA",
+        "HG"
+      ],
+      "primaryPrefix": "HA"
+    },
+    {
+      "code": "240",
+      "name": "South Sandwich Is.",
+      "continent": "SA",
+      "prefixes": [
+        "VP0"
+      ],
+      "primaryPrefix": "VP0"
+    },
+    {
+      "code": "241",
+      "name": "South Shetland Is.",
+      "continent": "SA",
+      "prefixes": [
+        "VP0"
+      ],
+      "primaryPrefix": "VP0"
+    },
+    {
+      "code": "242",
+      "name": "Iceland",
+      "continent": "EU",
+      "prefixes": [
+        "TF"
+      ],
+      "primaryPrefix": "TF"
+    },
+    {
+      "code": "245",
+      "name": "Ireland",
+      "continent": "EU",
+      "prefixes": [
+        "EI",
+        "EJ"
+      ],
+      "primaryPrefix": "EI"
+    },
+    {
+      "code": "246",
+      "name": "Sov. Mil. Order of Malta",
+      "continent": "EU",
+      "prefixes": [
+        "1A"
+      ],
+      "primaryPrefix": "1A"
+    },
+    {
+      "code": "247",
+      "name": "Spratly Is.",
+      "continent": "AS",
+      "prefixes": [],
+      "primaryPrefix": null
+    },
+    {
+      "code": "248",
+      "name": "Italy",
+      "continent": "EU",
+      "prefixes": [
+        "I"
+      ],
+      "primaryPrefix": "I"
+    },
+    {
+      "code": "249",
+      "name": "St. Kitts & Nevis",
+      "continent": "NA",
+      "prefixes": [
+        "V4"
+      ],
+      "primaryPrefix": "V4"
+    },
+    {
+      "code": "250",
+      "name": "St. Helena",
+      "continent": "AF",
+      "prefixes": [
+        "ZD7"
+      ],
+      "primaryPrefix": "ZD7"
+    },
+    {
+      "code": "251",
+      "name": "Liechtenstein",
+      "continent": "EU",
+      "prefixes": [
+        "HB0"
+      ],
+      "primaryPrefix": "HB0"
+    },
+    {
+      "code": "252",
+      "name": "St. Paul I.",
+      "continent": "NA",
+      "prefixes": [
+        "CY9"
+      ],
+      "primaryPrefix": "CY9"
+    },
+    {
+      "code": "253",
+      "name": "St. Peter & St. Paul Rocks",
+      "continent": "SA",
+      "prefixes": [
+        "PP0",
+        "PY0S"
+      ],
+      "primaryPrefix": "PY0S"
+    },
+    {
+      "code": "254",
+      "name": "Luxembourg",
+      "continent": "EU",
+      "prefixes": [
+        "LX"
+      ],
+      "primaryPrefix": "LX"
+    },
+    {
+      "code": "256",
+      "name": "Madeira Is.",
+      "continent": "AF",
+      "prefixes": [
+        "CT3"
+      ],
+      "primaryPrefix": "CT3"
+    },
+    {
+      "code": "257",
+      "name": "Malta",
+      "continent": "EU",
+      "prefixes": [
+        "9H"
+      ],
+      "primaryPrefix": "9H"
+    },
+    {
+      "code": "259",
+      "name": "Svalbard",
+      "continent": "EU",
+      "prefixes": [
+        "JW"
+      ],
+      "primaryPrefix": "JW"
+    },
+    {
+      "code": "260",
+      "name": "Monaco",
+      "continent": "EU",
+      "prefixes": [
+        "3A"
+      ],
+      "primaryPrefix": "3A"
+    },
+    {
+      "code": "262",
+      "name": "Tajikistan",
+      "continent": "AS",
+      "prefixes": [
+        "EY"
+      ],
+      "primaryPrefix": "EY"
+    },
+    {
+      "code": "263",
+      "name": "Netherlands",
+      "continent": "EU",
+      "prefixes": [
+        "PA",
+        "PB",
+        "PC",
+        "PD",
+        "PE",
+        "PF",
+        "PG",
+        "PH",
+        "PI"
+      ],
+      "primaryPrefix": "PA"
+    },
+    {
+      "code": "265",
+      "name": "Northern Ireland",
+      "continent": "EU",
+      "prefixes": [
+        "GI",
+        "GN"
+      ],
+      "primaryPrefix": "GI"
+    },
+    {
+      "code": "266",
+      "name": "Norway",
+      "continent": "EU",
+      "prefixes": [
+        "LA",
+        "LB",
+        "LC",
+        "LD",
+        "LE",
+        "LF",
+        "LG",
+        "LH",
+        "LI",
+        "LJ",
+        "LK",
+        "LL",
+        "LM",
+        "LN"
+      ],
+      "primaryPrefix": "LA"
+    },
+    {
+      "code": "269",
+      "name": "Poland",
+      "continent": "EU",
+      "prefixes": [
+        "SN",
+        "SO",
+        "SP",
+        "SQ",
+        "SR"
+      ],
+      "primaryPrefix": "SP"
+    },
+    {
+      "code": "270",
+      "name": "Tokelau Is.",
+      "continent": "OC",
+      "prefixes": [
+        "ZK3"
+      ],
+      "primaryPrefix": "ZK3"
+    },
+    {
+      "code": "272",
+      "name": "Portugal",
+      "continent": "EU",
+      "prefixes": [
+        "CQ",
+        "CR",
+        "CS",
+        "CT",
+        "CU"
+      ],
+      "primaryPrefix": "CT"
+    },
+    {
+      "code": "273",
+      "name": "Trindade & Martim Vaz Is.",
+      "continent": "SA",
+      "prefixes": [
+        "PP0",
+        "PY0T"
+      ],
+      "primaryPrefix": "PY0T"
+    },
+    {
+      "code": "274",
+      "name": "Tristan da Cunha & Gough I.",
+      "continent": "AF",
+      "prefixes": [
+        "ZD9"
+      ],
+      "primaryPrefix": "ZD9"
+    },
+    {
+      "code": "275",
+      "name": "Romania",
+      "continent": "EU",
+      "prefixes": [
+        "YO",
+        "YP",
+        "YQ",
+        "YR"
+      ],
+      "primaryPrefix": "YO"
+    },
+    {
+      "code": "276",
+      "name": "Tromelin I.",
+      "continent": "AF",
+      "prefixes": [
+        "FT/T"
+      ],
+      "primaryPrefix": "FT/T"
+    },
+    {
+      "code": "277",
+      "name": "St. Pierre & Miquelon",
+      "continent": "NA",
+      "prefixes": [
+        "FP"
+      ],
+      "primaryPrefix": "FP"
+    },
+    {
+      "code": "278",
+      "name": "San Marino",
+      "continent": "EU",
+      "prefixes": [
+        "T7"
+      ],
+      "primaryPrefix": "T7"
+    },
+    {
+      "code": "279",
+      "name": "Scotland",
+      "continent": "EU",
+      "prefixes": [
+        "GM",
+        "GS"
+      ],
+      "primaryPrefix": "GM"
+    },
+    {
+      "code": "280",
+      "name": "Turkmenistan",
+      "continent": "AS",
+      "prefixes": [
+        "EZ"
+      ],
+      "primaryPrefix": "EZ"
+    },
+    {
+      "code": "281",
+      "name": "Spain",
+      "continent": "EU",
+      "prefixes": [
+        "EA",
+        "EB",
+        "EC",
+        "ED",
+        "EE",
+        "EF",
+        "EG",
+        "EH"
+      ],
+      "primaryPrefix": "EA"
+    },
+    {
+      "code": "282",
+      "name": "Tuvalu",
+      "continent": "OC",
+      "prefixes": [
+        "T2"
+      ],
+      "primaryPrefix": "T2"
+    },
+    {
+      "code": "283",
+      "name": "UK Sov. Base Areas on Cyprus",
+      "continent": "AS",
+      "prefixes": [
+        "ZC4"
+      ],
+      "primaryPrefix": "ZC4"
+    },
+    {
+      "code": "284",
+      "name": "Sweden",
+      "continent": "EU",
+      "prefixes": [
+        "7S",
+        "8S",
+        "SA",
+        "SB",
+        "SC",
+        "SD",
+        "SE",
+        "SF",
+        "SG",
+        "SH",
+        "SI",
+        "SJ",
+        "SK",
+        "SL",
+        "SM"
+      ],
+      "primaryPrefix": "SM"
+    },
+    {
+      "code": "285",
+      "name": "Virgin Is.",
+      "continent": "NA",
+      "prefixes": [
+        "KP2"
+      ],
+      "primaryPrefix": "KP2"
+    },
+    {
+      "code": "286",
+      "name": "Uganda",
+      "continent": "AF",
+      "prefixes": [
+        "5X"
+      ],
+      "primaryPrefix": "5X"
+    },
+    {
+      "code": "287",
+      "name": "Switzerland",
+      "continent": "EU",
+      "prefixes": [
+        "HB"
+      ],
+      "primaryPrefix": "HB"
+    },
+    {
+      "code": "288",
+      "name": "Ukraine",
+      "continent": "EU",
+      "prefixes": [
+        "EM",
+        "EN",
+        "EO",
+        "UR",
+        "US",
+        "UT",
+        "UU",
+        "UV",
+        "UW",
+        "UX",
+        "UY",
+        "UZ"
+      ],
+      "primaryPrefix": "UR"
+    },
+    {
+      "code": "289",
+      "name": "United Nations HQ",
+      "continent": "NA",
+      "prefixes": [
+        "4U0UN",
+        "4U1UN",
+        "4U2UN",
+        "4U3UN",
+        "4U4UN",
+        "4U5UN",
+        "4U6UN",
+        "4U7UN",
+        "4U8UN",
+        "4U9UN",
+        "4U_UN"
+      ],
+      "primaryPrefix": "4U1UN"
+    },
+    {
+      "code": "291",
+      "name": "United States of America",
+      "continent": "NA",
+      "prefixes": [
+        "AA",
+        "AB",
+        "AC",
+        "AD",
+        "AE",
+        "AF",
+        "AG",
+        "AH",
+        "AI",
+        "AJ",
+        "AK",
+        "K",
+        "N",
+        "W"
+      ],
+      "primaryPrefix": "K"
+    },
+    {
+      "code": "292",
+      "name": "Uzbekistan",
+      "continent": "AS",
+      "prefixes": [
+        "UJ",
+        "UK",
+        "UL",
+        "UM"
+      ],
+      "primaryPrefix": "UK"
+    },
+    {
+      "code": "293",
+      "name": "Viet Nam",
+      "continent": "AS",
+      "prefixes": [
+        "3W",
+        "XV"
+      ],
+      "primaryPrefix": "3W"
+    },
+    {
+      "code": "294",
+      "name": "Wales",
+      "continent": "EU",
+      "prefixes": [
+        "GC",
+        "GW"
+      ],
+      "primaryPrefix": "GW"
+    },
+    {
+      "code": "295",
+      "name": "Vatican",
+      "continent": "EU",
+      "prefixes": [
+        "HV"
+      ],
+      "primaryPrefix": "HV"
+    },
+    {
+      "code": "296",
+      "name": "Serbia",
+      "continent": "EU",
+      "prefixes": [
+        "YT",
+        "YU"
+      ],
+      "primaryPrefix": "YU"
+    },
+    {
+      "code": "297",
+      "name": "Wake I.",
+      "continent": "OC",
+      "prefixes": [
+        "KH9"
+      ],
+      "primaryPrefix": "KH9"
+    },
+    {
+      "code": "298",
+      "name": "Wallis & Futuna Is.",
+      "continent": "OC",
+      "prefixes": [
+        "FW"
+      ],
+      "primaryPrefix": "FW"
+    },
+    {
+      "code": "299",
+      "name": "West Malaysia",
+      "continent": "AS",
+      "prefixes": [
+        "9M2",
+        "9M4"
+      ],
+      "primaryPrefix": "9M2"
+    },
+    {
+      "code": "301",
+      "name": "W. Kiribati",
+      "continent": "OC",
+      "prefixes": [
+        "T30"
+      ],
+      "primaryPrefix": "T30"
+    },
+    {
+      "code": "302",
+      "name": "Western Sahara",
+      "continent": "AF",
+      "prefixes": [
+        "S01"
+      ],
+      "primaryPrefix": "S01"
+    },
+    {
+      "code": "303",
+      "name": "Willis I.",
+      "continent": "OC",
+      "prefixes": [
+        "VK9W"
+      ],
+      "primaryPrefix": "VK9W"
+    },
+    {
+      "code": "304",
+      "name": "Bahrain",
+      "continent": "AS",
+      "prefixes": [
+        "A9"
+      ],
+      "primaryPrefix": "A9"
+    },
+    {
+      "code": "305",
+      "name": "Bangladesh",
+      "continent": "AS",
+      "prefixes": [
+        "S2"
+      ],
+      "primaryPrefix": "S2"
+    },
+    {
+      "code": "306",
+      "name": "Bhutan",
+      "continent": "AS",
+      "prefixes": [
+        "A5"
+      ],
+      "primaryPrefix": "A5"
+    },
+    {
+      "code": "308",
+      "name": "Costa Rica",
+      "continent": "NA",
+      "prefixes": [
+        "TE",
+        "TI"
+      ],
+      "primaryPrefix": "TI"
+    },
+    {
+      "code": "309",
+      "name": "Myanmar",
+      "continent": "AS",
+      "prefixes": [
+        "XY",
+        "XZ"
+      ],
+      "primaryPrefix": "XZ"
+    },
+    {
+      "code": "312",
+      "name": "Cambodia",
+      "continent": "AS",
+      "prefixes": [
+        "XU"
+      ],
+      "primaryPrefix": "XU"
+    },
+    {
+      "code": "315",
+      "name": "Sri Lanka",
+      "continent": "AS",
+      "prefixes": [
+        "4P",
+        "4Q",
+        "4R",
+        "4S"
+      ],
+      "primaryPrefix": "4S"
+    },
+    {
+      "code": "318",
+      "name": "China",
+      "continent": "AS",
+      "prefixes": [
+        "B"
+      ],
+      "primaryPrefix": "B"
+    },
+    {
+      "code": "321",
+      "name": "Hong Kong",
+      "continent": "AS",
+      "prefixes": [
+        "VR"
+      ],
+      "primaryPrefix": "VR"
+    },
+    {
+      "code": "324",
+      "name": "India",
+      "continent": "AS",
+      "prefixes": [
+        "VU"
+      ],
+      "primaryPrefix": "VU"
+    },
+    {
+      "code": "327",
+      "name": "Indonesia",
+      "continent": "OC",
+      "prefixes": [
+        "YB",
+        "YC",
+        "YD",
+        "YE",
+        "YF",
+        "YG",
+        "YH"
+      ],
+      "primaryPrefix": "YB"
+    },
+    {
+      "code": "330",
+      "name": "Iran",
+      "continent": "AS",
+      "prefixes": [
+        "EP",
+        "EQ"
+      ],
+      "primaryPrefix": "EP"
+    },
+    {
+      "code": "333",
+      "name": "Iraq",
+      "continent": "AS",
+      "prefixes": [
+        "YI"
+      ],
+      "primaryPrefix": "YI"
+    },
+    {
+      "code": "336",
+      "name": "Israel",
+      "continent": "AS",
+      "prefixes": [
+        "4X",
+        "4Z"
+      ],
+      "primaryPrefix": "4X"
+    },
+    {
+      "code": "339",
+      "name": "Japan",
+      "continent": "AS",
+      "prefixes": [
+        "7J",
+        "7K",
+        "7L",
+        "7M",
+        "7N",
+        "JA",
+        "JB",
+        "JC",
+        "JD",
+        "JE",
+        "JF",
+        "JG",
+        "JH",
+        "JI",
+        "JJ",
+        "JK",
+        "JL",
+        "JM",
+        "JN",
+        "JO",
+        "JP",
+        "JQ",
+        "JR",
+        "JS"
+      ],
+      "primaryPrefix": "JA"
+    },
+    {
+      "code": "342",
+      "name": "Jordan",
+      "continent": "AS",
+      "prefixes": [
+        "JY"
+      ],
+      "primaryPrefix": "JY"
+    },
+    {
+      "code": "344",
+      "name": "DPR of Korea",
+      "continent": "AS",
+      "prefixes": [
+        "P5"
+      ],
+      "primaryPrefix": "P5"
+    },
+    {
+      "code": "345",
+      "name": "Brunei Darussalam",
+      "continent": "OC",
+      "prefixes": [
+        "V8"
+      ],
+      "primaryPrefix": "V8"
+    },
+    {
+      "code": "348",
+      "name": "Kuwait",
+      "continent": "AS",
+      "prefixes": [
+        "9K"
+      ],
+      "primaryPrefix": "9K"
+    },
+    {
+      "code": "354",
+      "name": "Lebanon",
+      "continent": "AS",
+      "prefixes": [
+        "OD"
+      ],
+      "primaryPrefix": "OD"
+    },
+    {
+      "code": "363",
+      "name": "Mongolia",
+      "continent": "AS",
+      "prefixes": [
+        "JT",
+        "JU",
+        "JV"
+      ],
+      "primaryPrefix": "JT"
+    },
+    {
+      "code": "369",
+      "name": "Nepal",
+      "continent": "AS",
+      "prefixes": [
+        "9N"
+      ],
+      "primaryPrefix": "9N"
+    },
+    {
+      "code": "370",
+      "name": "Oman",
+      "continent": "AS",
+      "prefixes": [
+        "A4"
+      ],
+      "primaryPrefix": "A4"
+    },
+    {
+      "code": "372",
+      "name": "Pakistan",
+      "continent": "AS",
+      "prefixes": [
+        "AP",
+        "AQ",
+        "AR",
+        "AS"
+      ],
+      "primaryPrefix": "AP"
+    },
+    {
+      "code": "375",
+      "name": "Philippines",
+      "continent": "OC",
+      "prefixes": [
+        "4D",
+        "4E",
+        "4F",
+        "4G",
+        "4H",
+        "4I",
+        "DU",
+        "DV",
+        "DW",
+        "DX",
+        "DY",
+        "DZ"
+      ],
+      "primaryPrefix": "DU"
+    },
+    {
+      "code": "376",
+      "name": "Qatar",
+      "continent": "AS",
+      "prefixes": [
+        "A7"
+      ],
+      "primaryPrefix": "A7"
+    },
+    {
+      "code": "378",
+      "name": "Saudi Arabia",
+      "continent": "AS",
+      "prefixes": [
+        "HZ"
+      ],
+      "primaryPrefix": "HZ"
+    },
+    {
+      "code": "379",
+      "name": "Seychelles",
+      "continent": "AF",
+      "prefixes": [
+        "S7"
+      ],
+      "primaryPrefix": "S7"
+    },
+    {
+      "code": "381",
+      "name": "Singapore",
+      "continent": "AS",
+      "prefixes": [
+        "9V"
+      ],
+      "primaryPrefix": "9V"
+    },
+    {
+      "code": "382",
+      "name": "Djibouti",
+      "continent": "AF",
+      "prefixes": [
+        "J2"
+      ],
+      "primaryPrefix": "J2"
+    },
+    {
+      "code": "384",
+      "name": "Syria",
+      "continent": "AS",
+      "prefixes": [
+        "YK"
+      ],
+      "primaryPrefix": "YK"
+    },
+    {
+      "code": "386",
+      "name": "Taiwan",
+      "continent": "AS",
+      "prefixes": [
+        "BU",
+        "BV",
+        "BW",
+        "BX"
+      ],
+      "primaryPrefix": "BV"
+    },
+    {
+      "code": "387",
+      "name": "Thailand",
+      "continent": "AS",
+      "prefixes": [
+        "E2",
+        "HS"
+      ],
+      "primaryPrefix": "HS"
+    },
+    {
+      "code": "390",
+      "name": "Turkey",
+      "continent": "EU/AS",
+      "prefixes": [
+        "TA",
+        "TB",
+        "TC"
+      ],
+      "primaryPrefix": "TA"
+    },
+    {
+      "code": "391",
+      "name": "United Arab Emirates",
+      "continent": "AS",
+      "prefixes": [
+        "A6"
+      ],
+      "primaryPrefix": "A6"
+    },
+    {
+      "code": "400",
+      "name": "Algeria",
+      "continent": "AF",
+      "prefixes": [
+        "7R",
+        "7T",
+        "7U",
+        "7V",
+        "7W",
+        "7X",
+        "7Y"
+      ],
+      "primaryPrefix": "7X"
+    },
+    {
+      "code": "401",
+      "name": "Angola",
+      "continent": "AF",
+      "prefixes": [
+        "D2",
+        "D3"
+      ],
+      "primaryPrefix": "D2"
+    },
+    {
+      "code": "402",
+      "name": "Botswana",
+      "continent": "AF",
+      "prefixes": [
+        "8O",
+        "A2"
+      ],
+      "primaryPrefix": "A2"
+    },
+    {
+      "code": "404",
+      "name": "Burundi",
+      "continent": "AF",
+      "prefixes": [
+        "9U"
+      ],
+      "primaryPrefix": "9U"
+    },
+    {
+      "code": "406",
+      "name": "Cameroon",
+      "continent": "AF",
+      "prefixes": [
+        "TJ"
+      ],
+      "primaryPrefix": "TJ"
+    },
+    {
+      "code": "408",
+      "name": "Central Africa",
+      "continent": "AF",
+      "prefixes": [
+        "TL"
+      ],
+      "primaryPrefix": "TL"
+    },
+    {
+      "code": "409",
+      "name": "Cabo Verde",
+      "continent": "AF",
+      "prefixes": [
+        "D4"
+      ],
+      "primaryPrefix": "D4"
+    },
+    {
+      "code": "410",
+      "name": "Chad",
+      "continent": "AF",
+      "prefixes": [
+        "TT"
+      ],
+      "primaryPrefix": "TT"
+    },
+    {
+      "code": "411",
+      "name": "Comoros",
+      "continent": "AF",
+      "prefixes": [
+        "D6"
+      ],
+      "primaryPrefix": "D6"
+    },
+    {
+      "code": "412",
+      "name": "Congo",
+      "continent": "AF",
+      "prefixes": [
+        "TN"
+      ],
+      "primaryPrefix": "TN"
+    },
+    {
+      "code": "414",
+      "name": "Dem. Rep. of Congo",
+      "continent": "AF",
+      "prefixes": [
+        "9O",
+        "9P",
+        "9Q",
+        "9R",
+        "9S",
+        "9T"
+      ],
+      "primaryPrefix": "9Q"
+    },
+    {
+      "code": "416",
+      "name": "Benin",
+      "continent": "AF",
+      "prefixes": [
+        "TY"
+      ],
+      "primaryPrefix": "TY"
+    },
+    {
+      "code": "420",
+      "name": "Gabon",
+      "continent": "AF",
+      "prefixes": [
+        "TR"
+      ],
+      "primaryPrefix": "TR"
+    },
+    {
+      "code": "422",
+      "name": "Gambia",
+      "continent": "AF",
+      "prefixes": [
+        "C5"
+      ],
+      "primaryPrefix": "C5"
+    },
+    {
+      "code": "424",
+      "name": "Ghana",
+      "continent": "AF",
+      "prefixes": [
+        "9G"
+      ],
+      "primaryPrefix": "9G"
+    },
+    {
+      "code": "428",
+      "name": "Cote d'Ivoire",
+      "continent": "AF",
+      "prefixes": [
+        "TU"
+      ],
+      "primaryPrefix": "TU"
+    },
+    {
+      "code": "430",
+      "name": "Kenya",
+      "continent": "AF",
+      "prefixes": [
+        "5Y",
+        "5Z"
+      ],
+      "primaryPrefix": "5Z"
+    },
+    {
+      "code": "432",
+      "name": "Lesotho",
+      "continent": "AF",
+      "prefixes": [
+        "7P"
+      ],
+      "primaryPrefix": "7P"
+    },
+    {
+      "code": "434",
+      "name": "Liberia",
+      "continent": "AF",
+      "prefixes": [
+        "EL"
+      ],
+      "primaryPrefix": "EL"
+    },
+    {
+      "code": "436",
+      "name": "Libya",
+      "continent": "AF",
+      "prefixes": [
+        "5A"
+      ],
+      "primaryPrefix": "5A"
+    },
+    {
+      "code": "438",
+      "name": "Madagascar",
+      "continent": "AF",
+      "prefixes": [
+        "5R"
+      ],
+      "primaryPrefix": "5R"
+    },
+    {
+      "code": "440",
+      "name": "Malawi",
+      "continent": "AF",
+      "prefixes": [
+        "7Q"
+      ],
+      "primaryPrefix": "7Q"
+    },
+    {
+      "code": "442",
+      "name": "Mali",
+      "continent": "AF",
+      "prefixes": [
+        "TZ"
+      ],
+      "primaryPrefix": "TZ"
+    },
+    {
+      "code": "444",
+      "name": "Mauritania",
+      "continent": "AF",
+      "prefixes": [
+        "5T"
+      ],
+      "primaryPrefix": "5T"
+    },
+    {
+      "code": "446",
+      "name": "Morocco",
+      "continent": "AF",
+      "prefixes": [
+        "CN"
+      ],
+      "primaryPrefix": "CN"
+    },
+    {
+      "code": "450",
+      "name": "Nigeria",
+      "continent": "AF",
+      "prefixes": [
+        "5N"
+      ],
+      "primaryPrefix": "5N"
+    },
+    {
+      "code": "452",
+      "name": "Zimbabwe",
+      "continent": "AF",
+      "prefixes": [
+        "Z2"
+      ],
+      "primaryPrefix": "Z2"
+    },
+    {
+      "code": "453",
+      "name": "Reunion I.",
+      "continent": "AF",
+      "prefixes": [
+        "FR"
+      ],
+      "primaryPrefix": "FR"
+    },
+    {
+      "code": "454",
+      "name": "Rwanda",
+      "continent": "AF",
+      "prefixes": [
+        "9X"
+      ],
+      "primaryPrefix": "9X"
+    },
+    {
+      "code": "456",
+      "name": "Senegal",
+      "continent": "AF",
+      "prefixes": [
+        "6V",
+        "6W"
+      ],
+      "primaryPrefix": "6W"
+    },
+    {
+      "code": "458",
+      "name": "Sierra Leone",
+      "continent": "AF",
+      "prefixes": [
+        "9L"
+      ],
+      "primaryPrefix": "9L"
+    },
+    {
+      "code": "460",
+      "name": "Rotuma I.",
+      "continent": "OC",
+      "prefixes": [
+        "3D2"
+      ],
+      "primaryPrefix": "3D2"
+    },
+    {
+      "code": "462",
+      "name": "South Africa",
+      "continent": "AF",
+      "prefixes": [
+        "ZR",
+        "ZS",
+        "ZT",
+        "ZU"
+      ],
+      "primaryPrefix": "ZS"
+    },
+    {
+      "code": "464",
+      "name": "Namibia",
+      "continent": "AF",
+      "prefixes": [
+        "V5"
+      ],
+      "primaryPrefix": "V5"
+    },
+    {
+      "code": "466",
+      "name": "Sudan",
+      "continent": "AF",
+      "prefixes": [
+        "ST"
+      ],
+      "primaryPrefix": "ST"
+    },
+    {
+      "code": "468",
+      "name": "Kingdom of Eswatini",
+      "continent": "AF",
+      "prefixes": [
+        "3DA"
+      ],
+      "primaryPrefix": "3DA"
+    },
+    {
+      "code": "470",
+      "name": "Tanzania",
+      "continent": "AF",
+      "prefixes": [
+        "5H",
+        "5I"
+      ],
+      "primaryPrefix": "5H"
+    },
+    {
+      "code": "474",
+      "name": "Tunisia",
+      "continent": "AF",
+      "prefixes": [
+        "3V"
+      ],
+      "primaryPrefix": "3V"
+    },
+    {
+      "code": "478",
+      "name": "Egypt",
+      "continent": "AF",
+      "prefixes": [
+        "SU"
+      ],
+      "primaryPrefix": "SU"
+    },
+    {
+      "code": "480",
+      "name": "Burkina Faso",
+      "continent": "AF",
+      "prefixes": [
+        "XT"
+      ],
+      "primaryPrefix": "XT"
+    },
+    {
+      "code": "482",
+      "name": "Zambia",
+      "continent": "AF",
+      "prefixes": [
+        "9I",
+        "9J"
+      ],
+      "primaryPrefix": "9J"
+    },
+    {
+      "code": "483",
+      "name": "Togo",
+      "continent": "AF",
+      "prefixes": [
+        "5V"
+      ],
+      "primaryPrefix": "5V"
+    },
+    {
+      "code": "489",
+      "name": "Conway Reef",
+      "continent": "OC",
+      "prefixes": [
+        "3D2"
+      ],
+      "primaryPrefix": "3D2"
+    },
+    {
+      "code": "490",
+      "name": "Banaba I.",
+      "continent": "OC",
+      "prefixes": [
+        "T33"
+      ],
+      "primaryPrefix": "T33"
+    },
+    {
+      "code": "492",
+      "name": "Yemen",
+      "continent": "AS",
+      "prefixes": [
+        "7O"
+      ],
+      "primaryPrefix": "7O"
+    },
+    {
+      "code": "497",
+      "name": "Croatia",
+      "continent": "EU",
+      "prefixes": [
+        "9A"
+      ],
+      "primaryPrefix": "9A"
+    },
+    {
+      "code": "499",
+      "name": "Slovenia",
+      "continent": "EU",
+      "prefixes": [
+        "S5"
+      ],
+      "primaryPrefix": "S5"
+    },
+    {
+      "code": "501",
+      "name": "Bosnia-Herzegovina",
+      "continent": "EU",
+      "prefixes": [
+        "E7"
+      ],
+      "primaryPrefix": "E7"
+    },
+    {
+      "code": "502",
+      "name": "North Macedonia",
+      "continent": "EU",
+      "prefixes": [
+        "Z3"
+      ],
+      "primaryPrefix": "Z3"
+    },
+    {
+      "code": "503",
+      "name": "Czech Republic",
+      "continent": "EU",
+      "prefixes": [
+        "OK",
+        "OL"
+      ],
+      "primaryPrefix": "OK"
+    },
+    {
+      "code": "504",
+      "name": "Slovak Republic",
+      "continent": "EU",
+      "prefixes": [
+        "OM"
+      ],
+      "primaryPrefix": "OM"
+    },
+    {
+      "code": "505",
+      "name": "Pratas I.",
+      "continent": "AS",
+      "prefixes": [
+        "BV9P"
+      ],
+      "primaryPrefix": "BV9P"
+    },
+    {
+      "code": "506",
+      "name": "Scarborough Reef",
+      "continent": "AS",
+      "prefixes": [
+        "BS7"
+      ],
+      "primaryPrefix": "BS7"
+    },
+    {
+      "code": "507",
+      "name": "Temotu Province",
+      "continent": "OC",
+      "prefixes": [
+        "H40"
+      ],
+      "primaryPrefix": "H40"
+    },
+    {
+      "code": "508",
+      "name": "Austral I.",
+      "continent": "OC",
+      "prefixes": [
+        "FO"
+      ],
+      "primaryPrefix": "FO"
+    },
+    {
+      "code": "509",
+      "name": "Marquesas Is.",
+      "continent": "OC",
+      "prefixes": [
+        "FO"
+      ],
+      "primaryPrefix": "FO"
+    },
+    {
+      "code": "510",
+      "name": "Palestine",
+      "continent": "AS",
+      "prefixes": [
+        "E4"
+      ],
+      "primaryPrefix": "E4"
+    },
+    {
+      "code": "511",
+      "name": "Timor - Leste",
+      "continent": "OC",
+      "prefixes": [
+        "4W"
+      ],
+      "primaryPrefix": "4W"
+    },
+    {
+      "code": "512",
+      "name": "Chesterfield Is.",
+      "continent": "OC",
+      "prefixes": [
+        "FK"
+      ],
+      "primaryPrefix": "FK"
+    },
+    {
+      "code": "513",
+      "name": "Ducie I.",
+      "continent": "OC",
+      "prefixes": [
+        "VP6"
+      ],
+      "primaryPrefix": "VP6"
+    },
+    {
+      "code": "514",
+      "name": "Montenegro",
+      "continent": "EU",
+      "prefixes": [
+        "4O"
+      ],
+      "primaryPrefix": "4O"
+    },
+    {
+      "code": "515",
+      "name": "Swains I.",
+      "continent": "OC",
+      "prefixes": [
+        "KH8"
+      ],
+      "primaryPrefix": "KH8"
+    },
+    {
+      "code": "516",
+      "name": "Saint Barthelemy",
+      "continent": "NA",
+      "prefixes": [
+        "FJ"
+      ],
+      "primaryPrefix": "FJ"
+    },
+    {
+      "code": "517",
+      "name": "Curacao",
+      "continent": "SA",
+      "prefixes": [
+        "PJ2"
+      ],
+      "primaryPrefix": "PJ2"
+    },
+    {
+      "code": "518",
+      "name": "Sint Maarten",
+      "continent": "NA",
+      "prefixes": [
+        "PJ7"
+      ],
+      "primaryPrefix": "PJ7"
+    },
+    {
+      "code": "519",
+      "name": "Saba & St. Eustatius",
+      "continent": "NA",
+      "prefixes": [
+        "PJ5",
+        "PJ6"
+      ],
+      "primaryPrefix": "PJ5"
+    },
+    {
+      "code": "520",
+      "name": "Bonaire",
+      "continent": "SA",
+      "prefixes": [
+        "PJ4"
+      ],
+      "primaryPrefix": "PJ4"
+    },
+    {
+      "code": "521",
+      "name": "South Sudan",
+      "continent": "AF",
+      "prefixes": [
+        "Z8"
+      ],
+      "primaryPrefix": "Z8"
+    },
+    {
+      "code": "522",
+      "name": "Republic of Kosovo",
+      "continent": "EU",
+      "prefixes": [
+        "Z6"
+      ],
+      "primaryPrefix": "Z6"
+    }
+  ],
+  "prefixes": {
+    "1A": "246",
+    "3A": "260",
+    "3B6": "004",
+    "3B7": "004",
+    "3B8": "165",
+    "3B9": "207",
+    "3C": "049",
+    "3C0": "195",
+    "3D2": "176",
+    "3DA": "468",
+    "3V": "474",
+    "3W": "293",
+    "3X": "107",
+    "3Y": "024",
+    "4D": "375",
+    "4E": "375",
+    "4F": "375",
+    "4G": "375",
+    "4H": "375",
+    "4I": "375",
+    "4J": "018",
+    "4K": "018",
+    "4L": "075",
+    "4M": "148",
+    "4O": "514",
+    "4P": "315",
+    "4Q": "315",
+    "4R": "315",
+    "4S": "315",
+    "4U0ITU": "117",
+    "4U0UN": "289",
+    "4U1ITU": "117",
+    "4U1UN": "289",
+    "4U2ITU": "117",
+    "4U2UN": "289",
+    "4U3ITU": "117",
+    "4U3UN": "289",
+    "4U4ITU": "117",
+    "4U4UN": "289",
+    "4U5ITU": "117",
+    "4U5UN": "289",
+    "4U6ITU": "117",
+    "4U6UN": "289",
+    "4U7ITU": "117",
+    "4U7UN": "289",
+    "4U8ITU": "117",
+    "4U8UN": "289",
+    "4U9ITU": "117",
+    "4U9UN": "289",
+    "4U_ITU": "117",
+    "4U_UN": "289",
+    "4W": "511",
+    "4X": "336",
+    "4Z": "336",
+    "5A": "436",
+    "5B": "215",
+    "5H": "470",
+    "5I": "470",
+    "5J": "116",
+    "5K": "116",
+    "5N": "450",
+    "5R": "438",
+    "5T": "444",
+    "5U": "187",
+    "5V": "483",
+    "5W": "190",
+    "5X": "286",
+    "5Y": "430",
+    "5Z": "430",
+    "6K": "137",
+    "6L": "137",
+    "6M": "137",
+    "6N": "137",
+    "6O": "232",
+    "6V": "456",
+    "6W": "456",
+    "6Y": "082",
+    "7J": "339",
+    "7K": "339",
+    "7L": "339",
+    "7M": "339",
+    "7N": "339",
+    "7O": "492",
+    "7P": "432",
+    "7Q": "440",
+    "7R": "400",
+    "7S": "284",
+    "7T": "400",
+    "7U": "400",
+    "7V": "400",
+    "7W": "400",
+    "7X": "400",
+    "7Y": "400",
+    "8O": "402",
+    "8P": "062",
+    "8Q": "159",
+    "8R": "129",
+    "8S": "284",
+    "9A": "497",
+    "9G": "424",
+    "9H": "257",
+    "9I": "482",
+    "9J": "482",
+    "9K": "348",
+    "9L": "458",
+    "9M2": "299",
+    "9M4": "299",
+    "9M6": "046",
+    "9M8": "046",
+    "9N": "369",
+    "9O": "414",
+    "9P": "414",
+    "9Q": "414",
+    "9R": "414",
+    "9S": "414",
+    "9T": "414",
+    "9U": "404",
+    "9V": "381",
+    "9X": "454",
+    "9Y": "090",
+    "9Z": "090",
+    "A2": "402",
+    "A3": "160",
+    "A4": "370",
+    "A5": "306",
+    "A6": "391",
+    "A7": "376",
+    "A9": "304",
+    "AA": "291",
+    "AB": "291",
+    "AC": "291",
+    "AD": "291",
+    "AE": "291",
+    "AF": "291",
+    "AG": "291",
+    "AH": "291",
+    "AI": "291",
+    "AJ": "291",
+    "AK": "291",
+    "AL": "006",
+    "AP": "372",
+    "AQ": "372",
+    "AR": "372",
+    "AS": "372",
+    "AX": "150",
+    "B": "318",
+    "BS7": "506",
+    "BU": "386",
+    "BV": "386",
+    "BV9P": "505",
+    "BW": "386",
+    "BX": "386",
+    "C2": "157",
+    "C3": "203",
+    "C4": "215",
+    "C5": "422",
+    "C6": "060",
+    "C8": "181",
+    "C9": "181",
+    "CA": "112",
+    "CB": "112",
+    "CC": "112",
+    "CD": "112",
+    "CE": "112",
+    "CE0": "047",
+    "CE9/KC4": "013",
+    "CL": "070",
+    "CM": "070",
+    "CN": "446",
+    "CO": "070",
+    "CP": "104",
+    "CQ": "272",
+    "CR": "272",
+    "CS": "272",
+    "CT": "272",
+    "CT3": "256",
+    "CU": "149",
+    "CV": "144",
+    "CW": "144",
+    "CX": "144",
+    "CY0": "211",
+    "CY9": "252",
+    "D2": "401",
+    "D3": "401",
+    "D4": "409",
+    "D6": "411",
+    "DA": "230",
+    "DB": "230",
+    "DC": "230",
+    "DD": "230",
+    "DE": "230",
+    "DF": "230",
+    "DG": "230",
+    "DH": "230",
+    "DI": "230",
+    "DJ": "230",
+    "DK": "230",
+    "DL": "230",
+    "DM": "230",
+    "DN": "230",
+    "DO": "230",
+    "DP": "230",
+    "DQ": "230",
+    "DR": "230",
+    "DU": "375",
+    "DV": "375",
+    "DW": "375",
+    "DX": "375",
+    "DY": "375",
+    "DZ": "375",
+    "E": "124",
+    "E2": "387",
+    "E3": "051",
+    "E4": "510",
+    "E5": "234",
+    "E6": "188",
+    "E7": "501",
+    "EA": "281",
+    "EA6": "021",
+    "EA8": "029",
+    "EA9": "032",
+    "EB": "281",
+    "EB6": "021",
+    "EB8": "029",
+    "EB9": "032",
+    "EC": "281",
+    "EC6": "021",
+    "EC8": "029",
+    "EC9": "032",
+    "ED": "281",
+    "ED6": "021",
+    "ED8": "029",
+    "ED9": "032",
+    "EE": "281",
+    "EE6": "021",
+    "EE8": "029",
+    "EE9": "032",
+    "EF": "281",
+    "EF6": "021",
+    "EF8": "029",
+    "EF9": "032",
+    "EG": "281",
+    "EG6": "021",
+    "EG8": "029",
+    "EG9": "032",
+    "EH": "281",
+    "EH6": "021",
+    "EH8": "029",
+    "EH9": "032",
+    "EI": "245",
+    "EJ": "245",
+    "EK": "014",
+    "EL": "434",
+    "EM": "288",
+    "EN": "288",
+    "EO": "288",
+    "EP": "330",
+    "EQ": "330",
+    "ER": "179",
+    "ES": "052",
+    "ET": "053",
+    "EU": "027",
+    "EV": "027",
+    "EW": "027",
+    "EX": "135",
+    "EY": "262",
+    "EZ": "280",
+    "F": "227",
+    "FG": "079",
+    "FH": "169",
+    "FJ": "516",
+    "FK": "162",
+    "FM": "084",
+    "FO": "175",
+    "FP": "277",
+    "FR": "453",
+    "FS": "213",
+    "FT/G": "099",
+    "FT/J": "124",
+    "FT/T": "276",
+    "FT/W": "041",
+    "FT/X": "131",
+    "FT/Z": "010",
+    "FW": "298",
+    "FY": "063",
+    "G": "223",
+    "GC": "294",
+    "GD": "114",
+    "GH": "122",
+    "GI": "265",
+    "GJ": "122",
+    "GM": "279",
+    "GN": "265",
+    "GP": "106",
+    "GS": "279",
+    "GT": "114",
+    "GU": "106",
+    "GW": "294",
+    "GX": "223",
+    "H4": "185",
+    "H40": "507",
+    "H6": "086",
+    "H7": "086",
+    "HA": "239",
+    "HB": "287",
+    "HB0": "251",
+    "HC": "120",
+    "HC8": "071",
+    "HD": "120",
+    "HD8": "071",
+    "HG": "239",
+    "HH": "078",
+    "HI": "072",
+    "HJ": "116",
+    "HK": "116",
+    "HK0": "216",
+    "HL": "137",
+    "HO": "088",
+    "HP": "088",
+    "HQ": "080",
+    "HR": "080",
+    "HS": "387",
+    "HT": "086",
+    "HU": "074",
+    "HV": "295",
+    "HZ": "378",
+    "I": "248",
+    "IM0": "225",
+    "IS0": "225",
+    "J2": "382",
+    "J3": "077",
+    "J4": "236",
+    "J45": "045",
+    "J49": "040",
+    "J5": "109",
+    "J6": "097",
+    "J7": "095",
+    "J8": "098",
+    "JA": "339",
+    "JB": "339",
+    "JC": "339",
+    "JD": "339",
+    "JD1": "192",
+    "JE": "339",
+    "JF": "339",
+    "JG": "339",
+    "JH": "339",
+    "JI": "339",
+    "JJ": "339",
+    "JK": "339",
+    "JL": "339",
+    "JM": "339",
+    "JN": "339",
+    "JO": "339",
+    "JP": "339",
+    "JQ": "339",
+    "JR": "339",
+    "JS": "339",
+    "JT": "363",
+    "JU": "363",
+    "JV": "363",
+    "JW": "259",
+    "JX": "118",
+    "JY": "342",
+    "K": "291",
+    "KG4": "105",
+    "KH0": "166",
+    "KH1": "020",
+    "KH2": "103",
+    "KH3": "123",
+    "KH4": "174",
+    "KH5": "197",
+    "KH6": "110",
+    "KH7": "110",
+    "KH7K": "138",
+    "KH8": "009",
+    "KH9": "297",
+    "KL": "006",
+    "KP1": "182",
+    "KP2": "285",
+    "KP3": "202",
+    "KP4": "202",
+    "KP5": "043",
+    "LA": "266",
+    "LB": "266",
+    "LC": "266",
+    "LD": "266",
+    "LE": "266",
+    "LF": "266",
+    "LG": "266",
+    "LH": "266",
+    "LI": "266",
+    "LJ": "266",
+    "LK": "266",
+    "LL": "266",
+    "LM": "266",
+    "LN": "266",
+    "LO": "100",
+    "LP": "100",
+    "LQ": "100",
+    "LR": "100",
+    "LS": "100",
+    "LT": "100",
+    "LU": "100",
+    "LV": "100",
+    "LW": "100",
+    "LX": "254",
+    "LY": "146",
+    "LZ": "212",
+    "M": "223",
+    "N": "291",
+    "NL": "006",
+    "OA": "136",
+    "OB": "136",
+    "OC": "136",
+    "OD": "354",
+    "OE": "206",
+    "OF": "224",
+    "OG": "224",
+    "OH": "224",
+    "OH0": "005",
+    "OI": "224",
+    "OJ0": "167",
+    "OK": "503",
+    "OL": "503",
+    "OM": "504",
+    "ON": "209",
+    "OO": "209",
+    "OP": "209",
+    "OQ": "209",
+    "OR": "209",
+    "OS": "209",
+    "OT": "209",
+    "OU": "221",
+    "OV": "221",
+    "OW": "221",
+    "OX": "237",
+    "OY": "222",
+    "OZ": "221",
+    "P2": "163",
+    "P3": "215",
+    "P4": "091",
+    "P5": "344",
+    "PA": "263",
+    "PB": "263",
+    "PC": "263",
+    "PD": "263",
+    "PE": "263",
+    "PF": "263",
+    "PG": "263",
+    "PH": "263",
+    "PI": "263",
+    "PJ2": "517",
+    "PJ4": "520",
+    "PJ5": "519",
+    "PJ6": "519",
+    "PJ7": "518",
+    "PP": "108",
+    "PP0": "056",
+    "PQ": "108",
+    "PR": "108",
+    "PS": "108",
+    "PT": "108",
+    "PU": "108",
+    "PV": "108",
+    "PW": "108",
+    "PX": "108",
+    "PY": "108",
+    "PY0F": "056",
+    "PY0S": "253",
+    "PY0T": "273",
+    "PZ": "140",
+    "R1/F": "061",
+    "RA0": "015",
+    "RA1": "054",
+    "RA2": "126",
+    "RA3": "054",
+    "RA4": "054",
+    "RA6": "054",
+    "RA8": "015",
+    "RA9": "015",
+    "S01": "302",
+    "S2": "305",
+    "S5": "499",
+    "S7": "379",
+    "S9": "219",
+    "SA": "284",
+    "SB": "284",
+    "SC": "284",
+    "SD": "284",
+    "SE": "284",
+    "SF": "284",
+    "SG": "284",
+    "SH": "284",
+    "SI": "284",
+    "SJ": "284",
+    "SK": "284",
+    "SL": "284",
+    "SM": "284",
+    "SN": "269",
+    "SO": "269",
+    "SP": "269",
+    "SQ": "269",
+    "SR": "269",
+    "ST": "466",
+    "SU": "478",
+    "SV": "236",
+    "SV/A": "180",
+    "SV5": "045",
+    "SV9": "040",
+    "SW": "236",
+    "SX": "236",
+    "SY": "236",
+    "SZ": "236",
+    "T2": "282",
+    "T30": "301",
+    "T31": "031",
+    "T32": "048",
+    "T33": "490",
+    "T5": "232",
+    "T6": "003",
+    "T7": "278",
+    "T8": "022",
+    "TA": "390",
+    "TB": "390",
+    "TC": "390",
+    "TD": "076",
+    "TE": "308",
+    "TF": "242",
+    "TG": "076",
+    "TI": "308",
+    "TI9": "037",
+    "TJ": "406",
+    "TK": "214",
+    "TL": "408",
+    "TN": "412",
+    "TR": "420",
+    "TT": "410",
+    "TU": "428",
+    "TY": "416",
+    "TZ": "442",
+    "UA0": "015",
+    "UA1": "054",
+    "UA2": "126",
+    "UA3": "054",
+    "UA4": "054",
+    "UA6": "054",
+    "UA8": "015",
+    "UA9": "015",
+    "UB0": "015",
+    "UB1": "054",
+    "UB3": "054",
+    "UB4": "054",
+    "UB6": "054",
+    "UB8": "015",
+    "UB9": "015",
+    "UC0": "015",
+    "UC1": "054",
+    "UC3": "054",
+    "UC4": "054",
+    "UC6": "054",
+    "UC8": "015",
+    "UC9": "015",
+    "UD0": "015",
+    "UD1": "054",
+    "UD3": "054",
+    "UD4": "054",
+    "UD6": "054",
+    "UD8": "015",
+    "UD9": "015",
+    "UE0": "015",
+    "UE1": "054",
+    "UE3": "054",
+    "UE4": "054",
+    "UE6": "054",
+    "UE8": "015",
+    "UE9": "015",
+    "UF0": "015",
+    "UF1": "054",
+    "UF3": "054",
+    "UF4": "054",
+    "UF6": "054",
+    "UF8": "015",
+    "UF9": "015",
+    "UG0": "015",
+    "UG1": "054",
+    "UG3": "054",
+    "UG4": "054",
+    "UG6": "054",
+    "UG8": "015",
+    "UG9": "015",
+    "UH0": "015",
+    "UH1": "054",
+    "UH3": "054",
+    "UH4": "054",
+    "UH6": "054",
+    "UH8": "015",
+    "UH9": "015",
+    "UI0": "015",
+    "UI1": "054",
+    "UI3": "054",
+    "UI4": "054",
+    "UI6": "054",
+    "UI8": "015",
+    "UI9": "015",
+    "UJ": "292",
+    "UK": "292",
+    "UL": "292",
+    "UM": "292",
+    "UN": "130",
+    "UO": "130",
+    "UP": "130",
+    "UQ": "130",
+    "UR": "288",
+    "US": "288",
+    "UT": "288",
+    "UU": "288",
+    "UV": "288",
+    "UW": "288",
+    "UX": "288",
+    "UY": "288",
+    "UZ": "288",
+    "V2": "094",
+    "V3": "066",
+    "V4": "249",
+    "V5": "464",
+    "V6": "173",
+    "V7": "168",
+    "V8": "345",
+    "VA": "001",
+    "VB": "001",
+    "VC": "001",
+    "VD": "001",
+    "VE": "001",
+    "VF": "001",
+    "VG": "001",
+    "VK": "150",
+    "VK0": "153",
+    "VK9C": "038",
+    "VK9L": "147",
+    "VK9M": "171",
+    "VK9N": "189",
+    "VK9W": "303",
+    "VK9X": "035",
+    "VO": "001",
+    "VP0": "235",
+    "VP2E": "012",
+    "VP2M": "096",
+    "VP2V": "065",
+    "VP5": "089",
+    "VP6": "172",
+    "VP8": "141",
+    "VP9": "064",
+    "VQ9": "033",
+    "VR": "321",
+    "VU": "324",
+    "VU4": "011",
+    "VU7": "142",
+    "VY": "001",
+    "W": "291",
+    "WL": "006",
+    "XA": "050",
+    "XA4": "204",
+    "XB": "050",
+    "XB4": "204",
+    "XC": "050",
+    "XC4": "204",
+    "XD": "050",
+    "XD4": "204",
+    "XE": "050",
+    "XE4": "204",
+    "XF": "050",
+    "XF4": "204",
+    "XG": "050",
+    "XG4": "204",
+    "XH": "050",
+    "XH4": "204",
+    "XI": "050",
+    "XI4": "204",
+    "XT": "480",
+    "XU": "312",
+    "XV": "293",
+    "XW": "143",
+    "XX9": "152",
+    "XY": "309",
+    "XZ": "309",
+    "YA": "003",
+    "YB": "327",
+    "YC": "327",
+    "YD": "327",
+    "YE": "327",
+    "YF": "327",
+    "YG": "327",
+    "YH": "327",
+    "YI": "333",
+    "YJ": "158",
+    "YK": "384",
+    "YL": "145",
+    "YN": "086",
+    "YO": "275",
+    "YP": "275",
+    "YQ": "275",
+    "YR": "275",
+    "YS": "074",
+    "YT": "296",
+    "YU": "296",
+    "YV": "148",
+    "YV0": "017",
+    "YW": "148",
+    "YX": "148",
+    "YY": "148",
+    "Z2": "452",
+    "Z3": "502",
+    "Z6": "522",
+    "Z8": "521",
+    "ZA": "007",
+    "ZB2": "233",
+    "ZC4": "283",
+    "ZD7": "250",
+    "ZD8": "205",
+    "ZD9": "274",
+    "ZF": "069",
+    "ZK3": "270",
+    "ZL": "170",
+    "ZL7": "034",
+    "ZL8": "133",
+    "ZL9": "016",
+    "ZM": "170",
+    "ZP": "132",
+    "ZR": "462",
+    "ZS": "462",
+    "ZS8": "201",
+    "ZT": "462",
+    "ZU": "462",
+    "ZV": "108",
+    "ZW": "108",
+    "ZX": "108",
+    "ZY": "108",
+    "ZZ": "108"
+  },
+  "mergedPrefixes": {
+    "3D2": {
+      "entity": "Fiji",
+      "alsoClaimedBy": [
+        "Conway Reef",
+        "Rotuma I."
+      ]
+    },
+    "3Y": {
+      "entity": "Bouvet",
+      "alsoClaimedBy": [
+        "Peter 1 I."
+      ]
+    },
+    "CE0": {
+      "entity": "Easter I.",
+      "alsoClaimedBy": [
+        "Juan Fernandez Is.",
+        "San Felix & San Ambrosio"
+      ]
+    },
+    "CU": {
+      "entity": "Azores",
+      "alsoClaimedBy": [
+        "Portugal"
+      ]
+    },
+    "E5": {
+      "entity": "S. Cook Is.",
+      "alsoClaimedBy": [
+        "N. Cook Is."
+      ]
+    },
+    "FK": {
+      "entity": "New Caledonia",
+      "alsoClaimedBy": [
+        "Chesterfield Is."
+      ]
+    },
+    "FO": {
+      "entity": "French Polynesia",
+      "alsoClaimedBy": [
+        "Austral I.",
+        "Clipperton I.",
+        "Marquesas Is."
+      ]
+    },
+    "HK0": {
+      "entity": "San Andres & Providencia",
+      "alsoClaimedBy": [
+        "Malpelo I."
+      ]
+    },
+    "JD1": {
+      "entity": "Ogasawara",
+      "alsoClaimedBy": [
+        "Minami Torishima"
+      ]
+    },
+    "KH8": {
+      "entity": "American Samoa",
+      "alsoClaimedBy": [
+        "Swains I."
+      ]
+    },
+    "PP0": {
+      "entity": "Fernando de Noronha",
+      "alsoClaimedBy": [
+        "St. Peter & St. Paul Rocks",
+        "Trindade & Martim Vaz Is."
+      ]
+    },
+    "VK0": {
+      "entity": "Macquarie I.",
+      "alsoClaimedBy": [
+        "Heard I."
+      ]
+    },
+    "VP0": {
+      "entity": "South Georgia I.",
+      "alsoClaimedBy": [
+        "South Orkney Is.",
+        "South Sandwich Is.",
+        "South Shetland Is."
+      ]
+    },
+    "VP6": {
+      "entity": "Pitcairn I.",
+      "alsoClaimedBy": [
+        "Ducie I."
+      ]
+    }
+  },
+  "withoutPrefix": {
+    "247": "Spratly Is."
+  }
+}

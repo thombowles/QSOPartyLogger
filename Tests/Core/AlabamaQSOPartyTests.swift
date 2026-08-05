@@ -38,15 +38,20 @@ final class AlabamaQSOPartyTests: XCTestCase {
         )
     }
 
-    /// The gap this does not close: an Alabama station counts DX prefixes as
-    /// multipliers, so for them the guess still runs and still accepts
-    /// anything. Only a real DXCC prefix table can fix that, and this test
-    /// records the state of affairs rather than endorsing it.
-    func testInStateEntrantStillGetsTheLooseDXGuess() throws {
+    /// The other half, which used to be the gap: an Alabama station counts DX
+    /// prefixes as multipliers, so the old shape guess still ran for *them*
+    /// and still accepted anything — `SAF` included. `DXCCTable` checks the
+    /// ARRL list, so a mistyped county is an error for both roles now, and a
+    /// real prefix still logs.
+    func testInStateEntrantGetsNoLooseDXGuessEither() throws {
         XCTAssertTrue(alqp.multipliers.inState.classes.contains(.dx))
+        guard case .failure = ExchangeParser.parse("SAF", party: alqp, role: .inState) else {
+            return XCTFail("SAF is not a DXCC prefix and must not validate in state")
+        }
         XCTAssertEqual(
-            try ExchangeParser.parse("SAF", party: alqp, role: .inState).get().locations,
-            ["SAF"]
+            try ExchangeParser.parse("DL", party: alqp, role: .inState).get().locations,
+            ["DL"],
+            "a real prefix is still the point of prefix mode"
         )
     }
 
@@ -148,7 +153,8 @@ final class AlabamaQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.workedValues(.county), ["SHEL"])
         XCTAssertEqual(s.workedValues(.state), ["AL", "TX", "MD"], "AL via county; DC credited as MD")
         XCTAssertEqual(s.workedValues(.province), ["ON"])
-        XCTAssertEqual(s.workedValues(.dx), ["DL", "G"], "each DXCC prefix is its own mult")
+        XCTAssertEqual(s.workedValues(.dx), ["DL", "G"],
+                       "each DXCC entity is its own mult, labelled by its prefix")
         XCTAssertEqual(s.multiplierCount, 7)
     }
 

@@ -65,17 +65,21 @@ enum ExchangeParser {
         role == .inState || !party.outStateWorksHomeStationsOnly
     }
 
-    /// Whether a token that matches nothing may be guessed at as a DXCC prefix.
+    /// Whether a DXCC prefix may be entered as the received location.
     ///
-    /// The guess exists so DX entities can be counted as multipliers, and it is
-    /// necessarily loose — a prefix really can be almost any short string, and
-    /// there is no DXCC table here to check it against. Loose is tolerable only
-    /// where it buys something: if DX is not a multiplier class for this
-    /// operator, the guess buys nothing and costs everything, silently turning
-    /// every mistyped county into a valid exchange.
+    /// True for every party whose DX stations send a prefix. It used to be
+    /// gated on DX being a multiplier class for this operator's role, because
+    /// the prefix was *guessed* at by shape and the guess turned every
+    /// mistyped county into a valid exchange — so it was allowed only where it
+    /// bought something.
+    ///
+    /// [`DXCCTable`](../Parties/DXCCTable.swift) removed the reason for the
+    /// gate: a token is now checked against the ARRL list, so `SAF` and `EM32`
+    /// fail for everyone and the gate protects nobody. Dropping it is what
+    /// lets a station log the country its sponsor asked for even where that
+    /// country earns no multiplier — North Dakota's rules want exactly that.
     static func acceptsDXPrefix(party: PartyDefinition, role: Role) -> Bool {
-        let rule = role == .inState ? party.multipliers.inState : party.multipliers.outState
-        return rule.classes.contains(.dx)
+        party.dxStyle == .prefix
     }
 
     static func parse(
@@ -110,12 +114,12 @@ enum ExchangeParser {
             return .success(ParsedExchange(locations: [tokens[0]], isInStateCounties: false))
         }
 
-        // DX prefix (ALQP/TQP/TnQP/WA/MDC style): single unknown token that
-        // plausibly is a DXCC prefix — but only where DX is a multiplier for
-        // this operator, or every typo becomes a valid exchange.
+        // DX prefix (ALQP/TnQP/Salmon Run/MDC style): a single token the ARRL
+        // list carries as a prefix. Checked against the real list, so a
+        // mistyped county is an error rather than a phantom entity.
         if tokens.count == 1,
            acceptsDXPrefix(party: party, role: role),
-           party.isPlausibleDXPrefix(tokens[0]) {
+           party.isDXPrefix(tokens[0]) {
             return .success(ParsedExchange(locations: [tokens[0]], isInStateCounties: false))
         }
 

@@ -264,16 +264,19 @@ NOTES = (
     "nothing ships for these five and their QSOs score the ordinary 2 points. Second user "
     "of the points-table gap North Carolina opened: NCQP wants points by county, Ontario "
     "wants points by callsign, and both want pointsTable to consult more than the mode. "
-    "KNOWN LIMITATION 2 - THE LITERAL 'DX' CANNOT BE LOGGED. The sponsor counts DXCC "
-    "countries individually and asks for 'province, state, or DXCC country or "
-    "abbreviation', but adds that when an Ontario station logs it 'the abbreviation \"DX\" "
-    "is also acceptable'. dxStyle 'token' would accept DX while collapsing every entity "
-    "into one multiplier per band AND leaving an Ontario station unable to log DL at all; "
-    "'prefix' counts entities individually and accepts DL, but isPlausibleDXPrefix rejects "
-    "the literal DX by design. PREFIX SHIPS, because it gets the scoring right and accepts "
-    "the primary form; the rare secondary form is the casualty. This is the exact mirror "
-    "of North Dakota, where the same two settings traded places and token won. KNOWN "
-    "LIMITATION 3 - the activation bonus requires 'three contacts with three different "
+    "BOTH DX FORMS THE SPONSOR NAMES NOW WORK, which they did not before 2026-08-01. The "
+    "rules ask for 'province, state, or DXCC country or abbreviation' and add that when an "
+    "Ontario station logs it 'the abbreviation \"DX\" is also acceptable' - two forms, and "
+    "the schema used to force a choice between them. dxStyle 'token' would have accepted "
+    "DX while collapsing every entity into one multiplier per band; 'prefix' counted "
+    "entities individually but rejected the literal DX, and prefix shipped because it got "
+    "the scoring right. The DXCC entity table (Resources/DXCC, ARRL DXCC List January 2026 "
+    "edition) closed the gap from both ends: prefixes are checked against the real list "
+    "rather than guessed at by shape, dxCountsEntities names each entity as its own "
+    "multiplier, and acceptsDXToken admits the sponsor's secondary form alongside. A "
+    "contact logged as the literal DX still counts as one multiplier per band, since that "
+    "token carries no country - so log the prefix where you have it. KNOWN "
+    "LIMITATION 2 - the activation bonus requires 'three contacts with three different "
     "stations' and activatedCountyCount counts three QSOs, which three bands' worth of one "
     "station would satisfy; the overpayment is bounded at 300 points per multiplier area. "
     "The Cabrillo CONTEST header is the one thing not from the sponsor - the rules ask for "
@@ -304,6 +307,10 @@ party = {
             "classes": ["county", "state", "province", "dx"],
             "homeStateCountsViaCounty": False,
             "countScope": "perBand",
+            # "DXCC countries" counted one by one, which is what the sponsor's
+            # own multiplier sentence says and what the entity table now makes
+            # possible.
+            "dxCountsEntities": True,
         },
         "outState": {
             "classes": ["county"],
@@ -315,6 +322,9 @@ party = {
         {"type": "activatedCountyCount", "minQSOs": 3, "points": 300},
     ],
     "dxStyle": "prefix",
+    # 'the abbreviation "DX" is also acceptable' - the sponsor's own words, so
+    # the token logs alongside the prefix form it prefers.
+    "acceptsDXToken": True,
     "allowedModes": ["phone", "cw"],
     "maxSimultaneousCounties": 1,
     "provinces": [p for p in APP_PROVINCES if p != "ON"],
