@@ -4,7 +4,7 @@
   "sourceURL": "http://www2.arrl.org/files/file/DXCC/DXCC_Current.pdf",
   "fetched": "2026-07-27",
   "generatedBy": "docs/research/gen_dxcc.py",
-  "labelSource": "cty.dat (AD1C), primary-prefix field only, fetched 2026-08-04",
+  "labelSource": "cty.dat (AD1C), primary-prefix field only; released 2026-08-03, fetched 2026-08-04",
   "entityCount": 340,
   "entities": [
     {

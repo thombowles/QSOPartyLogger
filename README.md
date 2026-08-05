@@ -1354,7 +1354,8 @@ station profile, radio wiring and cluster history untouched.
   the entity code can say so. The ARRL list designates no primary among a
   row's prefixes; its rows begin `DA`, `7J`, `OU` and `AX` where an operator
   reads `DL`, `JA`, `OZ` and `VK`. That field exists only in **AD1C's
-  `cty.dat`** (`country-files.com/bigcty/cty.dat`, fetched 2026-08-04), which
+  `cty.dat`** (`country-files.com/bigcty/cty.dat`, released 2026-08-03, fetched
+  2026-08-04), which
   N1MM uses the same way — *"PA will be the the prefix shown in the multiplier
   window"*.
 

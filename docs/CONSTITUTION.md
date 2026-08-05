@@ -52,7 +52,15 @@ publishes, and neither of them a rule:
    `cty.dat` only *choose among* the prefixes the ARRL list already gives, and
    asserts that every label is one of that entity's own ARRL prefixes. It never
    contributes a prefix, an entity, a name or a count, and nothing it supplies
-   reaches scoring. Re-fetch it with the ARRL list each season.
+   reaches scoring.
+
+   **Re-fetch it with the ARRL list each season, and record the release date**
+   — which comes from the server's `Last-Modified`, because the file's own
+   `=VERSION` alias carries no date. AD1C republishes every few days to weeks,
+   but almost always to add `=CALL` DXpedition entries this repo ignores; the
+   one field consumed here moves only when DXCC gains or loses an entity. The
+   generator's assertions are the real guard, so a release that touched
+   anything load-bearing fails the run instead of moving a label quietly.
 
 > **Amended 2026-08-04.** The original text carried the WA7BNM exception alone
 > and said secondary sources are "never authority for a rule". A DX multiplier

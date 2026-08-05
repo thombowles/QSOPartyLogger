@@ -320,8 +320,23 @@ for r in rows:
 # Same shape as the constitution's WA7BNM exception -- a value no other
 # authority publishes -- and Article 1 is amended to record it.
 #
-#   cty.dat   https://www.country-files.com/bigcty/cty.dat   fetched 2026-08-04
+#   cty.dat   https://www.country-files.com/bigcty/cty.dat
 #             AD1C's country file: 340 DXCC records + 6 WAE-only entries.
+#             Released 2026-08-03, fetched 2026-08-04. THE RELEASE DATE COMES
+#             FROM THE SERVER'S Last-Modified HEADER: the file's own `=VERSION`
+#             alias, under Somalia, is a bare placeholder with no date in it,
+#             so there is nothing inside the file to cite.
+#
+# CADENCE, AND WHY SEASONAL RE-FETCHING IS ENOUGH. AD1C republishes often --
+# days to weeks, usually ahead of a major contest or DXpedition -- but almost
+# every release is new `=CALL` exact-callsign entries for a DXpedition, which
+# this generator ignores entirely. The slice consumed here is one field per
+# entity, and it moves only when DXCC adds or removes an entity or a country's
+# primary prefix changes: a few times a decade. The assertions below are what
+# actually guard it -- the primary count must equal ARRL's 340, six WAE-only
+# records must be skipped, and the labels an operator reads are pinned by
+# name -- so a release that touched anything this depends on fails the run
+# rather than moving a label quietly.
 CTY = "cty.dat"
 
 
@@ -617,7 +632,7 @@ payload = {
     "sourceURL": "http://www2.arrl.org/files/file/DXCC/DXCC_Current.pdf",
     "fetched": "2026-07-27",
     "generatedBy": "docs/research/gen_dxcc.py",
-    "labelSource": "cty.dat (AD1C), primary-prefix field only, fetched 2026-08-04",
+    "labelSource": "cty.dat (AD1C), primary-prefix field only; released 2026-08-03, fetched 2026-08-04",
     "entityCount": len(entities),
     "entities": entities,
     "prefixes": dict(sorted(table.items())),
