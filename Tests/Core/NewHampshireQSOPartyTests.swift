@@ -202,21 +202,24 @@ final class NewHampshireQSOPartyTests: XCTestCase {
         XCTAssertEqual(s.multiplierCount, 1, "DL and DJ are one country")
     }
 
-    /// Worked the other way round, the same country is labelled `DJ` — the
-    /// label follows the log, the count does not.
-    func testTheLabelIsTheFirstPrefixWorkedForThatEntity() {
+    /// Worked the other way round it still reads `DL`. The label is the
+    /// entity's primary prefix, not whichever one happened to come first —
+    /// so two operators with the same countries see the same list.
+    func testTheLabelIsTheEntitysPrimaryPrefixWhicheverWasWorked() {
         let s = ScoreEngine.score(log: inLog([
             qso(call: "DJ2B", my: "HIL", their: "DX"),
             qso(call: "DL1A", band: .m40, my: "HIL", their: "DX"),
         ]), party: nhqp)
-        XCTAssertEqual(s.workedValues(.dx), ["DJ"])
+        XCTAssertEqual(s.workedValues(.dx), ["DL"], "DJ worked first still reads DL")
         XCTAssertEqual(s.multiplierCount, 1)
-        // Both prefixes really are one ARRL entity, which is what makes the
-        // count right and the label a free choice.
-        XCTAssertEqual(DXCCTable.shared.match(callsign: "DL1A")?.entity.code,
-                       DXCCTable.shared.match(callsign: "DJ2B")?.entity.code)
-        XCTAssertEqual(DXCCTable.shared.match(callsign: "DL1A")?.prefix, "DL")
-        XCTAssertEqual(DXCCTable.shared.match(callsign: "DJ2B")?.prefix, "DJ")
+
+        // The match keeps the key it actually hit; the label is the entity's.
+        let dj = DXCCTable.shared.match(callsign: "DJ2B")
+        let dl = DXCCTable.shared.match(callsign: "DL1A")
+        XCTAssertEqual(dj?.prefix, "DJ", "the key that matched")
+        XCTAssertEqual(dj?.label, "DL", "…and the label that is shown")
+        XCTAssertEqual(dl?.prefix, "DL")
+        XCTAssertEqual(dj?.entity.code, dl?.entity.code, "one ARRL entity either way")
     }
 
     /// And the cap now binds, which is what it was recorded for.

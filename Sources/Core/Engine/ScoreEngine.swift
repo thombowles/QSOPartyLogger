@@ -79,8 +79,6 @@ enum ScoreEngine {
         let wantedClasses = Set(rule.classes)
         result.multiplierCap = rule.maxScoredMultipliers
         var dxCount = 0
-        // ARRL entity code -> the prefix this log will show for it.
-        var dxLabelForEntity: [String: String] = [:]
 
         // Multipliers the party hands over without them being worked (PAQP's
         // EPA and WPA, which no station ever sends). Scoped once, since the
@@ -110,21 +108,7 @@ enum ScoreEngine {
                 rule: rule
             ) {
                 let multClass = contribution.multClass
-                // A DX entity is identified by its ARRL entity code but LABELLED
-                // with the prefix that matched, because that is what an operator
-                // recognises: DL1ABC reads as DL, not as "Germany" and not as
-                // the ARRL row's first prefix, which is DA. Germany spans DA-DR,
-                // so DL and DJ must stay one multiplier -- the first prefix
-                // worked for an entity names it for the rest of the log, and the
-                // entity code is what decides they are the same.
-                var value = contribution.value
-                if let code = contribution.dxEntityCode {
-                    if let already = dxLabelForEntity[code] {
-                        value = already
-                    } else {
-                        dxLabelForEntity[code] = value
-                    }
-                }
+                let value = contribution.value
                 guard wantedClasses.contains(multClass)
                         || isHomeStateViaCounty(multClass, value, party, rule) else { continue }
                 if multClass == .dx, let cap = rule.dxMultCap,
@@ -199,9 +183,11 @@ enum ScoreEngine {
 
     /// One multiplier a received location contributes.
     ///
-    /// `value` is what the operator sees. `dxEntityCode` is set only for a DX
-    /// entity, and is what actually decides sameness -- two prefixes of one
-    /// ARRL entity share a code and must count once, however they were typed.
+    /// `value` is what the operator sees. For a DX entity that is its primary
+    /// prefix, so `DL1AA` and `DJ2BB` both read `DL` and are one multiplier —
+    /// the label no longer depends on which you worked first. `dxEntityCode`
+    /// is carried anyway, because the primary prefix is a display choice and
+    /// the entity code is what actually decides sameness.
     struct Contribution {
         let multClass: MultClass
         let value: String
@@ -281,7 +267,7 @@ enum ScoreEngine {
             guard rule.dxCountsEntities,
                   let m = DXCCTable.shared.match(callsign: call)
             else { return [Contribution(multClass: .dx, value: MultClass.dxToken)] }
-            return [Contribution(multClass: .dx, value: m.prefix, dxEntityCode: m.entity.code)]
+            return [Contribution(multClass: .dx, value: m.label, dxEntityCode: m.entity.code)]
         }
         if party.isDXPrefix(theirLoc) || collidesWithDXCC {
             // Here the exchange DOES carry the country, and the sponsor's own
@@ -289,7 +275,7 @@ enum ScoreEngine {
             guard rule.dxCountsEntities,
                   let m = DXCCTable.shared.match(prefix: theirLoc)
             else { return [Contribution(multClass: .dx, value: theirLoc)] }
-            return [Contribution(multClass: .dx, value: m.prefix, dxEntityCode: m.entity.code)]
+            return [Contribution(multClass: .dx, value: m.label, dxEntityCode: m.entity.code)]
         }
         return []
     }

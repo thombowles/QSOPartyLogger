@@ -298,6 +298,79 @@ for r in rows:
     assert r["name"], f"empty name for {r['code']}"
 
 
+# ------------------------------------------------------- the display label
+# WHY A SECOND SOURCE, AND HOW FAR IT REACHES.
+#
+# A DX multiplier has to be shown as something, and an operator reads
+# prefixes: DL, not "Germany". But a prefix does not identify an entity --
+# Germany's ARRL row is DA-DR, so DL and DJ are one country -- and the ARRL
+# list designates no primary among them. Its row simply begins at DA, which
+# would put DA, 7J, OU and AX on screen for Germany, Japan, Denmark and
+# Australia. That field exists only in cty.dat, the last column of each
+# record, and N1MM's manual states the consequence outright: for
+# "Netherlands: 14: 27: EU: 52.40: -4.90: -1.0: PA:", "PA will be the the
+# prefix shown in the multiplier window".
+#
+# So cty.dat is read for ONE THING: to CHOOSE AMONG the prefixes the ARRL
+# list already gives us. It never contributes a prefix of its own. The label
+# is asserted below to be one of that entity's own ARRL keys, so every label
+# resolves back through this table to the entity it names, and no scoring
+# input comes from anywhere but ARRL.
+#
+# Same shape as the constitution's WA7BNM exception -- a value no other
+# authority publishes -- and Article 1 is amended to record it.
+#
+#   cty.dat   https://www.country-files.com/bigcty/cty.dat   fetched 2026-08-04
+#             AD1C's country file: 340 DXCC records + 6 WAE-only entries.
+CTY = "cty.dat"
+
+
+def cty_primary_prefixes():
+    """The primary prefix cty.dat designates for each DXCC entity.
+
+    WAE-only records -- Shetland, African Italy, Vienna Intl Ctr and three
+    more -- mark their primary with a leading '*' and are not DXCC entities.
+    """
+    out, waes = set(), 0
+    for block in read(CTY).split(";"):
+        block = block.strip()
+        if not block:
+            continue
+        fields = [f.strip() for f in block.partition("\n")[0].split(":")]
+        if len(fields) < 8:
+            continue
+        if fields[7].startswith("*"):
+            waes += 1
+            continue
+        out.add(fields[7].upper())
+    assert waes == 6, f"expected 6 WAE-only records, saw {waes}"
+    assert len(out) == EXPECTED_ENTITIES, (
+        f"cty.dat designates {len(out)} primaries, ARRL lists {EXPECTED_ENTITIES}"
+    )
+    return out
+
+
+def label_for(prefixes, cty):
+    """This entity's display prefix: its own ARRL key closest to cty.dat's
+    designated primary, preferring an exact match.
+
+    The fallback matters where cty.dat is more specific than the ARRL block
+    (Easter I. is CE0Y against ARRL's CE0) or shaped differently (Ogasawara
+    is JD/o against JD1). Longest shared head finds the ARRL key the primary
+    was pointing at; ties go to the shorter key.
+    """
+    for p in prefixes:
+        if p in cty:
+            return p
+    best, score = None, -1
+    for p in prefixes:
+        for c in cty:
+            n = len(os.path.commonprefix([p, c]))
+            if n > score or (n == score and best is not None and len(p) < len(best)):
+                best, score = p, n
+    return best if score > 0 else prefixes[0]
+
+
 # ----------------------------------------------------------------- prefixes
 def strip_footnote(token):
     """Drop a trailing footnote number, but only when the NOTES section says
@@ -419,6 +492,59 @@ table = {}
 for p, v in claims.items():
     table[p] = AMBIGUOUS[p][0] if p in AMBIGUOUS else v[0]["code"]
 
+# --------------------------------------------------------------- the label
+CTY_PRIMARIES = cty_primary_prefixes()
+# Entities that lose a shared ARRL block, so no prefix resolves to them.
+SHARED_LOSERS = {
+    r["code"] for p, (winner, _) in AMBIGUOUS.items()
+    for r in claims[p] if r["code"] != winner
+}
+for r in rows:
+    r["primaryPrefix"] = label_for(r["prefixes"], CTY_PRIMARIES) if r["prefixes"] else None
+
+# THE PROPERTY THAT MAKES THE SECOND SOURCE SAFE: a label is always one of
+# this entity's own ARRL prefixes, so it resolves back through this table to
+# the entity it names. cty.dat chooses; it never contributes.
+for r in rows:
+    if r["primaryPrefix"] is None:
+        assert r["code"] in NO_PREFIX, f"{r['name']} has prefixes but no label"
+        continue
+    assert r["primaryPrefix"] in r["prefixes"], (
+        f"{r['name']}: label {r['primaryPrefix']} is not one of its ARRL prefixes"
+    )
+    if table[r["primaryPrefix"]] != r["code"]:
+        # The only way a label can resolve elsewhere is a block the ARRL list
+        # itself shares -- Conway Reef's 3D2 goes to Fiji. Nothing resolves to
+        # such an entity, which mergedPrefixes already records.
+        assert r["primaryPrefix"] in AMBIGUOUS, (
+            f"{r['name']}: label {r['primaryPrefix']} resolves to entity "
+            f"{table[r['primaryPrefix']]} and is not a shared block"
+        )
+        assert r["code"] in SHARED_LOSERS, r["name"]
+        continue
+
+labelled = sum(1 for r in rows if r["primaryPrefix"])
+assert labelled == EXPECTED_ENTITIES - len(NO_PREFIX), labelled
+exact = sum(1 for r in rows if r["primaryPrefix"] in CTY_PRIMARIES)
+assert exact >= 310, f"only {exact} labels are cty.dat primaries outright"
+
+# The ones an operator actually reads, and the four the ARRL row alone would
+# have got wrong (DA, 7J, OU, AX).
+by_name = {r["name"]: r["primaryPrefix"] for r in rows}
+for name, want in [
+    ("Germany", "DL"), ("Japan", "JA"), ("Denmark", "OZ"), ("Australia", "VK"),
+    ("England", "G"), ("Netherlands", "PA"), ("Belgium", "ON"), ("Norway", "LA"),
+    ("Czech Republic", "OK"), ("Sweden", "SM"), ("Finland", "OH"), ("Italy", "I"),
+    ("France", "F"), ("Spain", "EA"), ("Poland", "SP"), ("Guam", "KH2"),
+    ("Puerto Rico", "KP4"), ("Hawaii", "KH6"), ("Alaska", "KL"),
+    ("United States of America", "K"), ("Canada", "VE"), ("Mexico", "XE"),
+    # Chosen, not copied: cty.dat is more specific or differently shaped here.
+    ("Easter I.", "CE0"), ("Ogasawara", "JD1"), ("S. Cook Is.", "E5"),
+    ("Sardinia", "IS0"), ("United Nations HQ", "4U1UN"), ("China", "B"),
+]:
+    assert by_name[name] == want, f"{name}: label is {by_name[name]}, expected {want}"
+assert by_name["Spratly Is."] is None
+
 # -------------------------------------------------------------- spot checks
 # Chosen from the irregular rows: ranges, glued footnotes, state-code
 # collisions, and the entities the six affected parties actually care about.
@@ -477,6 +603,8 @@ entities = sorted(
             "name": r["name"],
             "continent": r["cont"],
             "prefixes": r["prefixes"],
+            # What the multiplier list shows. See "the display label" above.
+            "primaryPrefix": r["primaryPrefix"],
         }
         for r in rows
     ),
@@ -489,6 +617,7 @@ payload = {
     "sourceURL": "http://www2.arrl.org/files/file/DXCC/DXCC_Current.pdf",
     "fetched": "2026-07-27",
     "generatedBy": "docs/research/gen_dxcc.py",
+    "labelSource": "cty.dat (AD1C), primary-prefix field only, fetched 2026-08-04",
     "entityCount": len(entities),
     "entities": entities,
     "prefixes": dict(sorted(table.items())),
@@ -510,3 +639,4 @@ print(f"wrote {path}")
 print(f"  {len(entities)} entities (ARRL states {EXPECTED_ENTITIES})")
 print(f"  {len(table)} prefix keys")
 print(f"  {len(AMBIGUOUS)} shared blocks designated, {len(NO_PREFIX)} entity without a prefix")
+print(f"  {labelled} display labels, {exact} of them cty.dat primaries outright")

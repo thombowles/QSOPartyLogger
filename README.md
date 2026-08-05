@@ -1150,7 +1150,7 @@ size in `Resources/Assets.xcassets` (each size is drawn at its own
 resolution, so 16pt stays crisp).
 
 Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-(`brew install xcodegen`). 1870 unit tests cover the scoring engine, county
+(`brew install xcodegen`). 1872 unit tests cover the scoring engine, county
 data, exporters, K3 and FlexRadio protocols and the radio registry's
 app-facing defaults, the radio connection lifecycle (phases, inline errors,
 silent-radio validation — driven over `/dev/null` as a stone-deaf serial
@@ -1349,13 +1349,23 @@ station profile, radio wiring and cluster history untouched.
   this question in mind keeps scoring exactly as before.
 
   **A DX multiplier is labelled by its prefix and identified by its entity.**
-  `DL1ABC` reads as `DL` in the multiplier list, because that is what an
-  operator recognises — but Germany's ARRL row is `DA`–`DR`, so `DL` and `DJ`
-  are one country and only the entity code can say so. The ARRL list publishes
-  no primary prefix to choose between them (its row simply begins at `DA`;
-  that field belongs to cty.dat, which is not authority here), so **the first
-  prefix worked names the entity for the rest of the log**. Work `DJ` first and
-  it reads `DJ`. The label follows the log; the count does not.
+  `DL1ABC` reads as `DL`, because that is what an operator recognises — but
+  Germany's ARRL row is `DA`–`DR`, so `DL` and `DJ` are one country and only
+  the entity code can say so. The ARRL list designates no primary among a
+  row's prefixes; its rows begin `DA`, `7J`, `OU` and `AX` where an operator
+  reads `DL`, `JA`, `OZ` and `VK`. That field exists only in **AD1C's
+  `cty.dat`** (`country-files.com/bigcty/cty.dat`, fetched 2026-08-04), which
+  N1MM uses the same way — *"PA will be the the prefix shown in the multiplier
+  window"*.
+
+  So `cty.dat` is a **second codified source, confined to that one field**
+  (constitution Article 1, amended 2026-08-04). It only ever *chooses among*
+  the prefixes the ARRL list already gives, and `gen_dxcc.py` asserts every
+  label is one of that entity's own ARRL prefixes — so each label resolves
+  back through the table to the entity it names, and nothing `cty.dat`
+  supplies reaches scoring. 313 of the 339 labels are its primary outright;
+  the rest are the ARRL key its primary pointed at, where `cty.dat` is more
+  specific (`CE0Y` → `CE0`) or shaped differently (`JD/o` → `JD1`).
 
   **Resolution follows N1MM's split, which is prior art for behaviour and never
   for a rule:** the exchange field says which *location* was sent and the

@@ -50,6 +50,12 @@ struct DXCCTable: Sendable {
         /// ARRL continent column ("EU", "NA", "AS/AF").
         let continent: String
         let prefixes: [String]
+        /// What the multiplier list shows — `DL` for Germany, `OZ` for
+        /// Denmark. Always one of `prefixes`: cty.dat's primary-prefix field
+        /// only *chooses* among the prefixes the ARRL list gives, it never
+        /// contributes one. nil only where the ARRL list gives no prefix at
+        /// all, which is Spratly Is. alone and unreachable anyway.
+        let primaryPrefix: String?
 
         var id: String { code }
     }
@@ -166,8 +172,13 @@ struct DXCCTable: Sendable {
     /// cty.dat, which is not authority here.
     struct Match: Equatable, Sendable {
         let entity: Entity
-        /// The table key that matched — `DL`, `JA`, `G`, `EA6`.
+        /// The table key that matched — `M` for `M0DD`, `DJ` for `DJ2BB`.
         let prefix: String
+
+        /// What to show for this contact: the entity's primary prefix, so
+        /// `DL1AA` and `DJ2BB` both read `DL`. Falls back to the key that
+        /// matched if the ARRL list gave the entity no prefixes.
+        var label: String { entity.primaryPrefix ?? prefix }
     }
 
     /// The entity a worked station belongs to, by longest prefix match on its

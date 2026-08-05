@@ -158,6 +158,48 @@ final class DXCCTableTests: XCTestCase {
         XCTAssertEqual(table.entity(forPrefix: "FS")?.name, "Saint Martin")
     }
 
+    /// The multiplier label is the entity's primary prefix, taken from
+    /// cty.dat's primary-prefix field — the only place that datum exists.
+    /// The four below are exactly what the ARRL row alone would get wrong:
+    /// its rows begin `DA`, `7J`, `OU` and `AX`.
+    func testTheDisplayLabelIsTheEntitysPrimaryPrefix() {
+        for (prefix, label) in [
+            ("DL", "DL"), ("DA", "DL"), ("DJ", "DL"),      // ARRL row starts DA
+            ("JA", "JA"), ("7J", "JA"),                     // ...starts 7J
+            ("OZ", "OZ"), ("OU", "OZ"),                     // ...starts OU
+            ("VK", "VK"), ("AX", "VK"),                     // ...starts AX
+            ("G", "G"), ("M", "G"), ("GX", "G"),
+            ("PA", "PA"), ("PB", "PA"),
+            ("ON", "ON"), ("OK", "OK"), ("LA", "LA"), ("SM", "SM"), ("OH", "OH"),
+            ("KH2", "KH2"), ("KP4", "KP4"), ("KH6", "KH6"),
+        ] {
+            XCTAssertEqual(table.entity(forPrefix: prefix)?.primaryPrefix, label, prefix)
+        }
+    }
+
+    /// The property that makes a second source safe: a label is always one of
+    /// that entity's own ARRL prefixes, so it resolves back through the table
+    /// to the entity it names. cty.dat chooses; it never contributes.
+    func testEveryLabelIsOneOfThatEntitysOwnARRLPrefixes() {
+        var labelled = 0
+        for entity in table.entities {
+            guard let label = entity.primaryPrefix else {
+                XCTAssertTrue(entity.prefixes.isEmpty, entity.name)
+                continue
+            }
+            labelled += 1
+            XCTAssertTrue(entity.prefixes.contains(label),
+                          "\(entity.name): label \(label) is not one of its ARRL prefixes")
+            // Resolves back to itself, unless it lost a block the ARRL list
+            // itself shares — those are named in mergedPrefixes.
+            let resolved = table.entity(forPrefix: label)?.code
+            if resolved != entity.code {
+                XCTAssertNotNil(table.mergedPrefixes[label], "\(entity.name) / \(label)")
+            }
+        }
+        XCTAssertEqual(labelled, 339, "340 entities less Spratly, which has no prefix")
+    }
+
     /// Spratly's prefix cell is empty in the ARRL PDF's own text layer. The
     /// entity ships without one rather than with a remembered value.
     func testSpratlyShipsWithoutAPrefix() {
@@ -165,6 +207,7 @@ final class DXCCTableTests: XCTestCase {
         XCTAssertNil(table.entity(forPrefix: "1S"))
         XCTAssertNotNil(table.entities.first { $0.code == "247" })
         XCTAssertEqual(table.entities.first { $0.code == "247" }?.prefixes, [])
+        XCTAssertNil(table.entities.first { $0.code == "247" }?.primaryPrefix)
     }
 
     // MARK: Agreement with the other reader of the same file
