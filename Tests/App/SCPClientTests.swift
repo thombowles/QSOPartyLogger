@@ -166,6 +166,64 @@ final class SCPClientTests: XCTestCase {
         XCTAssertNotNil(store.loadCached(), "the cached file stays in service")
     }
 
+    /// A transport failure must say what is still true, the way
+    /// `CallHistoryClient` does — never a bare system string.
+    ///
+    /// Measured need, not a hypothetical: on 2026-08-05 supercheckpartial.com's
+    /// CDN was timing out about half its requests (HEAD and GET alike, ~7 s
+    /// when it answered at all), and the Refresh button reported the whole of
+    /// it as "The request timed out." — which reads as a broken feature while
+    /// a complete database sits cached and the strip works perfectly.
+    func testATransportFailureNamesTheHostAndWhatStaysInService() async throws {
+        try installedMeta()
+        let fetcher = Fetcher(lastModified: nil)
+        fetcher.headError = URLError(.timedOut)
+        let client = SCPClient(store: store, fetcher: fetcher)
+        await client.refresh(now: Date(timeIntervalSince1970: 1_785_090_000))
+
+        let message = try XCTUnwrap(client.lastError)
+        XCTAssertNotEqual(
+            message, URLError(.timedOut).localizedDescription,
+            "the bare system string is exactly what the operator saw on 2026-08-05"
+        )
+        XCTAssertTrue(message.contains("supercheckpartial.com"),
+                      "name what could not be reached — got: \(message)")
+        XCTAssertTrue(message.contains("stay in use"),
+                      "say the cached calls survive — got: \(message)")
+        XCTAssertTrue(message.contains("\(SCPDatabase.minimumRecords + 100)"),
+                      "say how many are still in service — got: \(message)")
+    }
+
+    /// With nothing cached there is no reassurance to offer, and the message
+    /// must not pretend otherwise.
+    func testATransportFailureWithNoCacheSaysTheStripStaysEmpty() async {
+        let fetcher = Fetcher(lastModified: nil)
+        fetcher.getError = URLError(.notConnectedToInternet)
+        let client = SCPClient(store: store, fetcher: fetcher)
+        await client.refresh(now: Date(timeIntervalSince1970: 1_785_000_000))
+
+        let message = client.lastError ?? ""
+        XCTAssertTrue(message.contains("supercheckpartial.com"), message)
+        XCTAssertFalse(message.contains("stay in use"),
+                       "nothing is cached, so nothing stays in use — got: \(message)")
+    }
+
+    /// Our own refusals already explain themselves and must not be
+    /// double-wrapped into "Couldn't reach … The server answered with a page".
+    func testOurOwnRefusalsAreNotWrappedAsUnreachable() async throws {
+        try installedMeta()
+        let fetcher = Fetcher(
+            lastModified: "Sat, 01 Aug 2026 00:00:00 GMT",
+            body: Data("<!DOCTYPE html><html><body>denied".utf8)
+        )
+        let client = SCPClient(store: store, fetcher: fetcher)
+        await client.refresh(now: Date(timeIntervalSince1970: 1_785_090_000))
+        let message = client.lastError ?? ""
+        XCTAssertFalse(message.contains("Couldn't reach"),
+                       "the server was reached — got: \(message)")
+        XCTAssertTrue(message.contains("page instead of the file"), message)
+    }
+
     /// With a cache, a missing Last-Modified means freshness cannot be
     /// judged — downloading blind would be the worse error.
     func testAMissingHeaderWithACacheIsAQuietFailureNotABlindDownload() async throws {

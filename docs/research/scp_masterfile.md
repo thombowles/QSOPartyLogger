@@ -34,6 +34,34 @@ Check Partial project's distribution site. Observed 2026-08-04.
   lines; `SCPDatabase.parse` drops anything that does not scan as a call,
   so neither needs a special case.
 
+## Reliability, measured 2026-08-05
+
+The host is **not dependable**, and the client's failure posture is sized to
+that rather than to a hypothetical. Measured directly against the real
+network (no proxy), four HEAD requests in a row alternated cleanly:
+
+    HEAD  timeout at 25 s
+    HEAD  200 in 7.08 s
+    HEAD  timeout at 25 s
+    HEAD  200 in 7.07 s
+    GET   200 in 32.25 s   (359,507 B — about 11 KB/s)
+
+GET fails as often as HEAD, so it is neither method-specific nor ours: the
+same URLSession HEAD against country-files.com answered in **0.15 s** the
+same minute. Responses carry `cdn-cache: STALE`, so BunnyCDN is serving an
+aged copy while trying to revalidate against an origin that is not
+answering.
+
+Consequences the code already takes:
+
+- **No retry.** Hammering a struggling volunteer origin is the wrong
+  instinct, and a Refresh that retried would just make the operator wait
+  through two timeouts instead of one.
+- **A failed check is not a broken feature**, and the message says so —
+  naming the host and the number of cached calls still in service.
+- **The throttle clock is not advanced on failure**, so a bad afternoon
+  does not cost a day's worth of checking; the next launch tries again.
+
 ## Standing
 
 **Hint data, never authority** (constitution Article 1): the file is a

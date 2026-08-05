@@ -139,12 +139,39 @@ final class SCPClient {
                 + "\(database.recordCount) calls")
             publish(database)
         } catch {
-            let message = (error as? LocalizedError)?.errorDescription
-                ?? error.localizedDescription
+            let message = describe(error)
             lastError = message
             log("*** \(message)")
             status = .failed(message)
         }
+    }
+
+    /// What the operator reads in Contest Setup.
+    ///
+    /// Our own refusals already say what stays in service. A transport error
+    /// does not: `URLError` is itself a `LocalizedError`, so it arrives as a
+    /// bare system string, and a Refresh that answers only "The request timed
+    /// out." reads as a broken feature — while a complete database sits
+    /// cached and the strip goes on working.
+    ///
+    /// Not hypothetical. On 2026-08-05 supercheckpartial.com's CDN was
+    /// failing about half of all requests to it (HEAD and GET alike, ~7 s
+    /// when it answered at all, `cdn-cache: STALE` against an origin that
+    /// was not responding), and that bare string was the whole of what the
+    /// button had to show for it. `CallHistoryClient` already wraps its
+    /// unknown errors this way; this had not.
+    private func describe(_ error: Error) -> String {
+        if let refusal = error as? Failure {
+            return refusal.errorDescription ?? "\(refusal)"
+        }
+        let reached = "Couldn't reach supercheckpartial.com: \(error.localizedDescription)"
+        guard let held = store.loadCached()?.database.recordCount else {
+            // Nothing cached, so there is no reassurance to offer and the
+            // message must not invent one.
+            return reached + " Nothing is downloaded yet, so the strip stays "
+                + "empty until a check succeeds."
+        }
+        return reached + " The \(held) calls already downloaded stay in use."
     }
 
     enum Failure: LocalizedError {
