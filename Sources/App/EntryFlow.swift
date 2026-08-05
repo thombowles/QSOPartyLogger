@@ -61,6 +61,39 @@ final class EntryFlow {
     /// in flight. A mismatched tag is simply not consulted.
     var callHistoryIndex: (partyID: String, parsed: CallHistoryFile.Parsed)?
 
+    /// The super check partial database, when the option is on and a
+    /// MASTER.SCP is cached or downloaded. Nil (option off, nothing
+    /// downloaded yet) empties the strip immediately.
+    private(set) var scpDatabase: SCPDatabase?
+
+    /// What the strip under the entry bar shows for the fragment in the
+    /// call field right now. Recomputed once per call-field change — the
+    /// view only reads it.
+    private(set) var scpMatches: SCPDatabase.Matches = .none
+
+    /// The most calls the strip offers; past this it says "+N more".
+    static let scpDisplayCap = 24
+
+    /// The fragment `scpMatches` was computed for — the memo that lets the
+    /// refresh ride `revalidate` (which also runs on exchange keystrokes)
+    /// without rescanning 50k calls for a fragment that has not moved.
+    @ObservationIgnored private var scpFragment: String?
+
+    func updateSCPDatabase(_ database: SCPDatabase?) {
+        scpDatabase = database
+        scpFragment = nil
+        refreshSCPMatches()
+    }
+
+    private func refreshSCPMatches() {
+        let fragment = entry.callNormalized
+        guard fragment != scpFragment else { return }
+        scpFragment = fragment
+        let fresh = scpDatabase?.matches(for: fragment, limit: Self.scpDisplayCap)
+            ?? .none
+        if fresh != scpMatches { scpMatches = fresh }
+    }
+
     /// Everything that changes between one Return and the next and is owned by
     /// the view — the radio's band and mode, where the cursor is, whether the
     /// radio is connected at all.
@@ -328,6 +361,8 @@ final class EntryFlow {
         // He is in the log now; there is nothing pending about him.
         entry.pendingExchanges.removeValue(forKey: entry.callNormalized)
         entry.clearForNextContact(modeClass: context.modeClass)
+        // The call just left the field; no strip may outlive it.
+        refreshSCPMatches()
         return .logged(rows: rows, text: "")
     }
 
@@ -340,6 +375,7 @@ final class EntryFlow {
             band: context.band,
             modeClass: context.modeClass
         )
+        refreshSCPMatches()
     }
 
     /// The call field changed by typing. Refresh what the app is offering for

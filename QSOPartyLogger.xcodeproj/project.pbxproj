@@ -158,6 +158,7 @@
 		8169A7673BCD6E9B2A60EE78 /* EntryFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242014141B06D7E0F2526D86 /* EntryFlow.swift */; };
 		820C4377EA5B9A172E10F6F3 /* WorkedBeforeTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41280766B8E0202F2FCDAE83 /* WorkedBeforeTable.swift */; };
 		821AC67E517BE893BEAAFB77 /* OperatingFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797C5CEFFBDB939E217C6D60 /* OperatingFeatureTests.swift */; };
+		8254AB72055CCFA9DAE27961 /* SuperCheckFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA8FAE342F109F10019D3BA4 /* SuperCheckFlowTests.swift */; };
 		836DAC67C202D2DADA37D2CA /* NAQPCW-004.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1897E0B91EAB87E646FB5A8F /* NAQPCW-004.txt */; };
 		83FA7452B5CF0039189A7995 /* BandMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311E0EE90DBA33F96AC71E69 /* BandMapTests.swift */; };
 		850DACFDE512111523B875A3 /* SouthDakotaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE324A25B998F570B53C353 /* SouthDakotaQSOPartyTests.swift */; };
@@ -539,6 +540,7 @@
 		E70A4C058DB0BE3BF9AA15BC /* Parties */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Parties; path = Resources/Parties; sourceTree = SOURCE_ROOT; };
 		E77F88B8469172A628005C61 /* ArizonaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArizonaQSOPartyTests.swift; sourceTree = "<group>"; };
 		E9F8E0DD4DFDC0CB0DF3FEF1 /* CallHistoryFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryFileTests.swift; sourceTree = "<group>"; };
+		EA8FAE342F109F10019D3BA4 /* SuperCheckFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperCheckFlowTests.swift; sourceTree = "<group>"; };
 		EBD1F2D81475C7AC090117A5 /* SalmonRunTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalmonRunTests.swift; sourceTree = "<group>"; };
 		EC05BC2077B42827CBC8A537 /* HubFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubFrequency.swift; sourceTree = "<group>"; };
 		ED18DA5065D11D03393147E1 /* IdahoQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdahoQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -970,6 +972,7 @@
 				D96F76D3F0F364CAA514E629 /* RadioControllerConnectionTests.swift */,
 				5F8A0D8EDD44C17364359A07 /* SCPClientTests.swift */,
 				6A83B90871BA86343AB446AA /* SpotLabelSizePreferenceTests.swift */,
+				EA8FAE342F109F10019D3BA4 /* SuperCheckFlowTests.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -1324,6 +1327,7 @@
 				B99DE9236CC16993B455BC8E /* SpottingPolicyTests.swift in Sources */,
 				A632469108D3943D5C878CD7 /* SpottingTests.swift in Sources */,
 				B6FBE02A952C1AE6A69D169F /* StationMemoryTests.swift in Sources */,
+				8254AB72055CCFA9DAE27961 /* SuperCheckFlowTests.swift in Sources */,
 				0F87B0740AE33C79FF082253 /* TennesseeQSOPartyTests.swift in Sources */,
 				EEFDEF1FDBA0BAC08E4F5BA7 /* TestBundleSetup.swift in Sources */,
 				57D6E95483FBA88DE48DE602 /* UpcomingContestsTests.swift in Sources */,
