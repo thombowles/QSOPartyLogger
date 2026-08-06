@@ -340,6 +340,17 @@ final class EntryFlow {
         // points, so a mis-keyed number would score as QRO in silence.
         guard !entry.invalidMember(party: party) else { return .nothing }
 
+        // One contact, one park set each way. An unparseable park-to-park
+        // reference is refused like an unreadable member element — it is
+        // what earns the credit at POTA.
+        guard case .success(let theirParks) = PotaRef.parseList(entry.theirParkTyped) else {
+            return .nothing
+        }
+        // Mine is the log's current Contest Setup value, stamped per row so
+        // the record shows where the contact was actually made from — a
+        // mid-contest park change affects later rows only.
+        let myParks = document.log.myPotaRefs
+
         let myLocs = document.log.myLocation.sentExchanges.filter { !$0.isEmpty }
         guard !myLocs.isEmpty else { return .needsSetup }
 
@@ -381,6 +392,8 @@ final class EntryFlow {
                 nameRcvd: rcvdName,
                 memberSent: sentMember,
                 memberRcvd: rcvdMember,
+                myPotaRefs: myParks.isEmpty ? nil : myParks,
+                theirPotaRefs: theirParks.isEmpty ? nil : theirParks,
                 band: context.band,
                 modeClass: context.modeClass,
                 rawMode: context.rawMode,

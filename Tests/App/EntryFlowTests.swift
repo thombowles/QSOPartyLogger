@@ -558,4 +558,62 @@ final class EntryFlowTests: XCTestCase {
         flow.stationChanged(to: "W0BH", context())
         XCTAssertTrue(flow.entry.pendingExchanges.isEmpty)
     }
+
+    // MARK: POTA
+
+    func testActivationStampsMyParksOnEveryLoggedRow() throws {
+        let doc = cqpDocument(mode: .searchPounce)
+        doc.log.myPotaRefs = ["US-3315", "US-4571"]
+        let flow = EntryFlow(document: doc)
+        readyToLog(flow)
+        let outcome = flow.returnPressed(context(), undoManager: nil)
+        guard case .logged(let rows, _) = outcome else {
+            return XCTFail("expected the contact to be logged, got \(outcome)")
+        }
+        XCTAssertEqual(rows.map(\.myPotaRefs), [["US-3315", "US-4571"]])
+        XCTAssertNil(rows[0].theirPotaRefs)
+    }
+
+    func testNoActivationStampsNil() throws {
+        let flow = EntryFlow(document: cqpDocument(mode: .searchPounce))
+        readyToLog(flow)
+        let outcome = flow.returnPressed(context(), undoManager: nil)
+        guard case .logged(let rows, _) = outcome else {
+            return XCTFail("expected the contact to be logged, got \(outcome)")
+        }
+        XCTAssertNil(rows[0].myPotaRefs)
+    }
+
+    func testTheirParkIsParsedNormalizedAndCleared() throws {
+        let doc = cqpDocument(mode: .searchPounce)
+        doc.log.myPotaRefs = ["US-3315"]
+        let flow = EntryFlow(document: doc)
+        readyToLog(flow)
+        flow.entry.theirParkTyped = "us-0088, us-0119"
+        let outcome = flow.returnPressed(context(), undoManager: nil)
+        guard case .logged(let rows, _) = outcome else {
+            return XCTFail("expected the contact to be logged, got \(outcome)")
+        }
+        XCTAssertEqual(rows[0].theirPotaRefs, ["US-0088", "US-0119"])
+        XCTAssertEqual(flow.entry.theirParkTyped, "", "cleared for the next contact")
+    }
+
+    /// An unparseable park refuses to log, exactly as an unreadable member
+    /// element does — the reference decides P2P credit, and a mis-keyed one
+    /// must not be logged in silence. Nothing is keyed either: ESM's
+    /// `logAndSend` passes a non-`logged` outcome straight through, so no
+    /// report goes out for a contact that did not happen.
+    func testMalformedTheirParkRefusesToLog() throws {
+        let doc = cqpDocument(mode: .searchPounce)
+        doc.log.myPotaRefs = ["US-3315"]
+        let flow = EntryFlow(document: doc)
+        readyToLog(flow)
+        flow.entry.theirParkTyped = "USA-331"
+        let outcome = flow.returnPressed(context(), undoManager: nil)
+        guard case .nothing = outcome else {
+            return XCTFail("must not log a garbled park reference, got \(outcome)")
+        }
+        XCTAssertTrue(doc.log.qsos.isEmpty)
+        XCTAssertTrue(flow.entry.invalidTheirPark())
+    }
 }

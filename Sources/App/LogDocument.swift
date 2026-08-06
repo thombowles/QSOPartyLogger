@@ -247,6 +247,7 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         exchangeName: String? = nil,
         exchangeMember: String? = nil,
         entryClassID: String? = nil,
+        myPotaRefs: [String]? = nil,
         undoManager: UndoManager?
     ) {
         let (oldStation, oldLoc, oldParty) = (log.station, log.myLocation, log.partyID)
@@ -255,6 +256,7 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         let oldExchangeName = log.exchangeName
         let oldExchangeMember = log.exchangeMember
         let oldEntryClassID = log.entryClassID
+        let oldMyPotaRefs = log.myPotaRefs
         log.station = station
         log.myLocation = location
         log.partyID = partyID
@@ -266,6 +268,11 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         }
         if let entryClassID {
             log.entryClassID = entryClassID.trimmingCharacters(in: .whitespaces)
+        }
+        // Already grammar-checked by whatever offered them: the picker only
+        // ever adds references `PotaRef` accepted.
+        if let myPotaRefs {
+            log.myPotaRefs = myPotaRefs
         }
         log.setupCompleted = true
         // Macros the operator never edited follow the new party's exchange
@@ -288,7 +295,8 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
                 doc.updateStation(
                     oldStation, location: oldLoc, partyID: oldParty,
                     exchangeName: oldExchangeName, exchangeMember: oldExchangeMember,
-                    entryClassID: oldEntryClassID, undoManager: undoManager
+                    entryClassID: oldEntryClassID, myPotaRefs: oldMyPotaRefs,
+                    undoManager: undoManager
                 )
                 // Restore the macros and the mode exactly afterwards, whatever
                 // the nested call's own re-derivation decided: both are
