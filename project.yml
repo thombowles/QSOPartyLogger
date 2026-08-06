@@ -50,6 +50,8 @@ targets:
         LSMinimumSystemVersion: "15.0"
         NSHumanReadableCopyright: "© 2026 Tom Bowles, KE5CW"
         NSLocalNetworkUsageDescription: "QSO Party Logger connects to your FlexRadio and DX cluster spotting nodes on your local network."
+        NSLocationUsageDescription: "Your location fills in your Maidenhead grid square and finds the POTA parks nearest you."
+        NSLocationWhenInUseUsageDescription: "Your location fills in your Maidenhead grid square and finds the POTA parks nearest you."
         # qsopartyhub.com serves a self-signed certificate on 443, so the spot
         # tables are reachable over HTTP only. Scoped to that one host — never
         # NSAllowsArbitraryLoads. See docs/research/qsopartyhub.md.
@@ -92,6 +94,9 @@ targets:
       properties:
         com.apple.security.app-sandbox: true
         com.apple.security.network.client: true
+        # Fills the grid square and sorts the POTA park picker by distance.
+        # Asked for only when the operator presses Locate.
+        com.apple.security.personal-information.location: true
         com.apple.security.device.serial: true
         com.apple.security.device.usb: true
         com.apple.security.files.user-selected.read-write: true
