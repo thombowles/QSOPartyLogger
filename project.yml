@@ -12,6 +12,16 @@ settings:
     CODE_SIGN_IDENTITY: "-"
     DEVELOPMENT_TEAM: ""
     ENABLE_HARDENED_RUNTIME: NO
+    # NOTE: signing stays ad-hoc, deliberately, and it has one visible cost:
+    # macOS binds a location grant to the app's code identity, and an ad-hoc
+    # signature has none that survives a rebuild. So Contest Setup's Locate
+    # button asks for permission again after every `xcodebuild` — the grant
+    # is not lost, it no longer matches. Signing Debug with the Apple
+    # Development identity (Manual or Automatic, team 3BCPP4AH2D) fixes that
+    # and was tried on 2026-08-06: both spellings left the test runner
+    # hanging before it could connect to the host app, so the suite is worth
+    # more than the convenience. Revisit only with a provisioning profile
+    # that the test host can actually launch under.
 targets:
   QSOPartyLogger:
     type: application

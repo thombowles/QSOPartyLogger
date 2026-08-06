@@ -99,6 +99,53 @@ enum GridLocate {
     }
 }
 
+/// A debug-build trail of what Core Location actually did, in the app's own
+/// Application Support folder (`location-trace.log`).
+///
+/// It exists because a permission problem is invisible from the outside: the
+/// system's own records are SIP-protected, this process writes nothing to
+/// the unified log, and "it didn't work" covers a denial, a dismissed
+/// prompt, a stale TCC record and a Mac that cannot place itself. Debug
+/// only — a shipped build leaves no such file.
+enum LocationTrace {
+    #if DEBUG
+    private static let file: URL? = {
+        guard let support = FileManager.default.urls(
+            for: .applicationSupportDirectory, in: .userDomainMask).first else { return nil }
+        let folder = support.appendingPathComponent("QSOPartyLogger", isDirectory: true)
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        return folder.appendingPathComponent("location-trace.log")
+    }()
+
+    static func log(_ line: String) {
+        guard let file else { return }
+        let stamp = Date().formatted(date: .omitted, time: .standard)
+        let entry = "\(stamp)  \(line)\n"
+        guard let data = entry.data(using: .utf8) else { return }
+        if let handle = try? FileHandle(forWritingTo: file) {
+            defer { try? handle.close() }
+            _ = try? handle.seekToEnd()
+            try? handle.write(contentsOf: data)
+        } else {
+            try? data.write(to: file)
+        }
+    }
+    #else
+    static func log(_ line: String) {}
+    #endif
+}
+
+/// Core Location's status codes in words, for the trace.
+private func statusName(_ status: CLAuthorizationStatus) -> String {
+    switch status {
+    case .notDetermined: "notDetermined"
+    case .restricted: "restricted"
+    case .denied: "denied"
+    case .authorizedAlways: "authorizedAlways"
+    @unknown default: "other(\(status.rawValue))"
+    }
+}
+
 /// The live Core Location wrapper.
 ///
 /// **Authorization is awaited, never assumed.** `requestWhenInUseAuthorization`
@@ -123,7 +170,10 @@ final class MacLocationProvider: NSObject, LocationProviding, CLLocationManagerD
 
     /// A fix over Wi-Fi positioning normally lands in a second or two.
     private static let fixTimeout = Duration.seconds(15)
-    private static let authTimeout = Duration.seconds(60)
+    /// Long enough to read a permission dialog, short enough that a prompt
+    /// which never appears — a stale TCC record for a re-signed dev build
+    /// does that — reports instead of hanging under a spinner.
+    private static let authTimeout = Duration.seconds(20)
 
     override init() {
         super.init()
@@ -148,8 +198,12 @@ final class MacLocationProvider: NSObject, LocationProviding, CLLocationManagerD
         resumeFix(with: .failure(.timedOut))
 
         var status = manager.authorizationStatus
+        LocationTrace.log("ask #\(ask): status at entry = \(statusName(status)), "
+                          + "servicesEnabled(class) not queried")
         if status == .notDetermined {
+            LocationTrace.log("ask #\(ask): prompting for when-in-use authorization")
             status = await requestAuthorization(ask: ask)
+            LocationTrace.log("ask #\(ask): status after prompt = \(statusName(status))")
         }
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
@@ -157,16 +211,26 @@ final class MacLocationProvider: NSObject, LocationProviding, CLLocationManagerD
         case .notDetermined:
             // The prompt never resolved — treat as "not granted" rather than
             // firing a request that is documented to fail.
+            LocationTrace.log("ask #\(ask): prompt never resolved → timedOut")
             return .failure(.timedOut)
         default:
+            LocationTrace.log("ask #\(ask): not authorized → denied")
             return .failure(.denied)
         }
 
-        return await withCheckedContinuation { continuation in
+        LocationTrace.log("ask #\(ask): authorized, calling requestLocation()")
+        let result = await withCheckedContinuation { continuation in
             fixContinuation = continuation
             manager.requestLocation()
             armTimeout(ask: ask, after: Self.fixTimeout, failure: .timedOut)
         }
+        switch result {
+        case .success(let fix):
+            LocationTrace.log("ask #\(ask): fix \(fix.latitude), \(fix.longitude)")
+        case .failure(let failure):
+            LocationTrace.log("ask #\(ask): failed \(failure)")
+        }
+        return result
     }
 
     /// Prompt, then wait for the delegate to say what the operator chose.
@@ -209,6 +273,9 @@ final class MacLocationProvider: NSObject, LocationProviding, CLLocationManagerD
 
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         let status = manager.authorizationStatus
+        Task { @MainActor in
+            LocationTrace.log("delegate: authorization → \(statusName(status))")
+        }
         Task { @MainActor [weak self] in
             // Fires once when the delegate is first set, too — harmless,
             // because nothing is waiting then.
@@ -233,7 +300,10 @@ final class MacLocationProvider: NSObject, LocationProviding, CLLocationManagerD
     nonisolated func locationManager(_ manager: CLLocationManager,
                                      didFailWithError error: Error) {
         let failure = LocationFailure.from(error)
+        let nsError = error as NSError
+        let described = "\(nsError.domain) code \(nsError.code): \(nsError.localizedDescription)"
         Task { @MainActor [weak self] in
+            LocationTrace.log("delegate: didFailWithError \(described) → \(failure)")
             self?.resumeFix(with: .failure(failure))
         }
     }

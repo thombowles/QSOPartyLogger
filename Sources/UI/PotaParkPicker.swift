@@ -80,6 +80,13 @@ struct PotaParkPicker: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 5)
         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 6))
+        // The whole well is the target, not just the glyphs in it. A
+        // TextField only claims the width of its own text, so clicking the
+        // padding, the magnifier, or the empty space to the right of a short
+        // query did nothing at all — which is most of what looks like a
+        // search box.
+        .contentShape(Rectangle())
+        .onTapGesture { searchFocused = true }
         .help("Search by park name or number — US-3315, \"cedar hill\", or "
               + "\"lake tx\". ↑↓ to choose, Return to add, Esc to clear.")
     }
