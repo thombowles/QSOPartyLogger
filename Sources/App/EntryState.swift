@@ -98,6 +98,11 @@ final class EntryState {
     /// Same ownership rule as the exchange and the name, for the same reason.
     private(set) var memberIsAutoFilled = false
 
+    /// Park-to-park: the other station's POTA reference(s) as typed, comma
+    /// separated. Empty for the overwhelming majority of contest contacts —
+    /// the field only exists at all while this log is an activation.
+    var theirParkTyped = ""
+
     /// The received element as the operator edits it. Writing through here is
     /// what marks the text as theirs; the view binds to this, never to
     /// `memberRcvd` directly.
@@ -234,6 +239,15 @@ final class EntryState {
         return !typed.isEmpty && MemberExchange.parse(typed) == nil
     }
 
+    /// An unparseable park-to-park reference blocks logging the way an
+    /// unreadable member element does: the reference is what earns the P2P
+    /// credit at POTA, so a mis-keyed one must not go into the log in
+    /// silence. Empty is always fine — most contacts are not park to park.
+    func invalidTheirPark() -> Bool {
+        if case .failure = PotaRef.parseList(theirParkTyped) { return true }
+        return false
+    }
+
     /// Re-validate the exchange and refresh dupe/new-mult hints.
     func revalidate(
         party: PartyDefinition?,
@@ -314,6 +328,7 @@ final class EntryState {
         nameIsAutoFilled = false
         memberRcvd = ""
         memberIsAutoFilled = false
+        theirParkTyped = ""
         exchange = ""
         exchangeIsAutoFilled = false
         exchangeStatus = .idle

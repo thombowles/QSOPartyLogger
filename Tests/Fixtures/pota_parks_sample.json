@@ -1,0 +1,8 @@
+[
+  {"reference": "US-0001", "name": "Acadia National Park", "latitude": 44.31, "longitude": -68.2034, "grid": "FN54vh", "locationDesc": "US-ME", "attempts": 636, "activations": 568, "qsos": 18900},
+  {"reference": "US-2996", "name": "Cedar Hill State Park", "latitude": 32.6195, "longitude": -96.9837, "grid": "EM12mo", "locationDesc": "US-TX", "attempts": 2997, "activations": 2917, "qsos": 181771},
+  {"reference": "US-3031", "name": "Lake Tawakoni State Park", "latitude": 32.8482, "longitude": -95.995, "grid": "EM22au", "locationDesc": "US-TX", "attempts": 655, "activations": 634, "qsos": 35533},
+  {"reference": "US-3051", "name": "Ray Roberts Lake State Park", "latitude": 33.3688, "longitude": -97.0094, "grid": "EM13li", "locationDesc": "US-TX", "attempts": 2027, "activations": 1914, "qsos": 99281},
+  {"reference": "US-4423", "name": "Spring Creek Forest State Preserve", "latitude": 32.9642, "longitude": -96.6572, "grid": "EM12qx", "locationDesc": "US-TX", "attempts": 1985, "activations": 1905, "qsos": 90108},
+  {"reference": "US-6605", "name": "Tawakoni Wildlife Management Area", "latitude": 33.0055, "longitude": -95.9912, "grid": "EM23aa", "locationDesc": "US-TX", "attempts": 169, "activations": 167, "qsos": 10399}
+]

@@ -10,6 +10,14 @@ struct SetupSheet: View {
     /// The MASTER.SCP client, for the super check partial row. `nil` in
     /// previews; the row still renders, minus status and Refresh.
     var scp: SCPClient? = nil
+    /// The park directory client, for the POTA section's picker. `nil` in
+    /// previews; the picker still takes typed references.
+    var parks: PotaParkClient? = nil
+    /// One-shot location for the grid square and the nearest-parks sort.
+    /// `nil` in previews; the Locate button simply hides. Named
+    /// `locationProvider` because `save()` already has a `location` local of
+    /// an entirely different type.
+    var locationProvider: (any LocationProviding)? = nil
     @Environment(\.dismiss) private var dismiss
     @Environment(\.undoManager) private var undoManager
 
@@ -24,6 +32,10 @@ struct SetupSheet: View {
     @State private var exchangeName = ""
     @State private var exchangeMember = ""
     @State private var entryClassID = ""
+    @State private var selectedParks: [String] = []
+    @State private var locating = false
+    @State private var locationNote: String?
+    @State private var locatedFix: (latitude: Double, longitude: Double)?
 
     @FocusState private var focused: Field?
 
@@ -122,8 +134,35 @@ struct SetupSheet: View {
                     TextField("State / province", text: $station.stateProvince.uppercasing)
                     TextField("ZIP", text: $station.postalCode.uppercasing)
                     TextField("Country", text: $station.country.uppercasing)
-                    TextField("Grid square", text: $station.gridLocator.uppercasing)
-                        .font(.body.monospaced())
+                    // Free text, always — a Mac with no usable fix must still
+                    // be able to say where it is. Locate only fills it in.
+                    LabeledContent("Grid square") {
+                        HStack(spacing: 6) {
+                            TextField("", text: $station.gridLocator.uppercasing)
+                                .textFieldStyle(.roundedBorder)
+                                .font(.body.monospaced())
+                                .frame(width: 100)
+                            if locationProvider != nil {
+                                Button {
+                                    Task { await locate() }
+                                } label: {
+                                    if locating {
+                                        ProgressView().controlSize(.small)
+                                    } else {
+                                        Label("Locate", systemImage: "location.fill")
+                                    }
+                                }
+                                .disabled(locating)
+                                .help("Fill the grid square from this Mac's location")
+                            }
+                        }
+                    }
+                    if let locationNote {
+                        Text(locationNote)
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                     TextField("Club (optional)", text: $station.club.uppercasing)
                 }
 
@@ -185,6 +224,22 @@ struct SetupSheet: View {
                     Text("Space-separated calls; @ marks the host station. Blank = your callsign.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                }
+
+                // Universal and party-agnostic: POTA rides any contest. The
+                // selection is the *current* activation; each contact is
+                // stamped as it is logged, so a mid-contest park change (or
+                // a rove) affects later rows only.
+                Section("POTA Activation") {
+                    Text("Operating from a park? Pick it and every contact is stamped "
+                         + "for the POTA upload. Leave empty otherwise.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    PotaParkPicker(selected: $selectedParks,
+                                   origin: parkOrigin,
+                                   originLabel: parkOriginLabel,
+                                   client: parks)
                 }
 
                 Section("My Location") {
@@ -284,6 +339,10 @@ struct SetupSheet: View {
         .onAppear {
             load()
             focused = initialFocus
+            // After load(), never as a `.task` alongside it: the auto-fill
+            // reads the grid square load() just populated, and racing it
+            // would fill a field that was never empty.
+            Task { await autoFillGrid() }
         }
         // Flipping to "Outside" reveals an empty field that Save is gated on;
         // flipping to "Inside" reveals a county list nobody can filter without
@@ -304,6 +363,50 @@ struct SetupSheet: View {
             seedExchangeName()
             entryClassID = party?.resolvedEntryClass(id: entryClassID)?.id ?? ""
         }
+    }
+
+    /// Where the park picker measures "nearest" from. The Locate button's
+    /// fix wins; the typed grid square is the offline answer; neither means
+    /// no nearest list at all.
+    private var parkOrigin: (latitude: Double, longitude: Double)? {
+        locatedFix ?? Maidenhead.center(of: station.gridLocator)
+    }
+
+    private var parkOriginLabel: String {
+        if locatedFix != nil { return "your location" }
+        let grid = station.gridLocator.trimmingCharacters(in: .whitespaces).uppercased()
+        return grid.isEmpty ? "" : "grid \(grid)"
+    }
+
+    /// The Locate button. A failure leaves the field exactly as it was —
+    /// free text the operator can fill in themselves.
+    private func locate() async {
+        guard let locationProvider else { return }
+        locating = true
+        defer { locating = false }
+        guard let fix = await locationProvider.currentLocation(),
+              let grid = Maidenhead.locator(latitude: fix.latitude,
+                                            longitude: fix.longitude) else {
+            locationNote = "Couldn't get a location — type the grid square instead."
+            return
+        }
+        station.gridLocator = grid
+        locatedFix = fix
+        locationNote = nil
+    }
+
+    /// Silent only when nothing will be asked of the operator: the
+    /// permission dialog is reserved for the Locate button. An already-typed
+    /// grid is never overwritten.
+    private func autoFillGrid() async {
+        guard let locationProvider, locationProvider.isAuthorized,
+              station.gridLocator.trimmingCharacters(in: .whitespaces).isEmpty,
+              let fix = await locationProvider.currentLocation(),
+              let grid = Maidenhead.locator(latitude: fix.latitude,
+                                            longitude: fix.longitude)
+        else { return }
+        station.gridLocator = grid
+        locatedFix = fix
     }
 
     /// Callsign first when it is missing — nothing can be saved without it.
@@ -614,6 +717,7 @@ struct SetupSheet: View {
         exchangeName = document.log.exchangeName
         exchangeMember = document.log.exchangeMember
         entryClassID = party?.resolvedEntryClass(id: document.log.entryClassID)?.id ?? ""
+        selectedParks = document.log.myPotaRefs
         seedExchangeName()
     }
 
@@ -641,7 +745,8 @@ struct SetupSheet: View {
         document.updateStation(
             station, location: location, partyID: partyID,
             exchangeName: exchangeName, exchangeMember: exchangeMember,
-            entryClassID: entryClassID, undoManager: undoManager
+            entryClassID: entryClassID, myPotaRefs: selectedParks,
+            undoManager: undoManager
         )
         dismiss()
     }

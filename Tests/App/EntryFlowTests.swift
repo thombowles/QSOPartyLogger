@@ -558,4 +558,92 @@ final class EntryFlowTests: XCTestCase {
         flow.stationChanged(to: "W0BH", context())
         XCTAssertTrue(flow.entry.pendingExchanges.isEmpty)
     }
+
+    // MARK: POTA
+
+    func testActivationStampsMyParksOnEveryLoggedRow() throws {
+        let doc = cqpDocument(mode: .searchPounce)
+        doc.log.myPotaRefs = ["US-3315", "US-4571"]
+        let flow = EntryFlow(document: doc)
+        readyToLog(flow)
+        let outcome = flow.returnPressed(context(), undoManager: nil)
+        guard case .logged(let rows, _) = outcome else {
+            return XCTFail("expected the contact to be logged, got \(outcome)")
+        }
+        XCTAssertEqual(rows.map(\.myPotaRefs), [["US-3315", "US-4571"]])
+        XCTAssertNil(rows[0].theirPotaRefs)
+    }
+
+    func testNoActivationStampsNil() throws {
+        let flow = EntryFlow(document: cqpDocument(mode: .searchPounce))
+        readyToLog(flow)
+        let outcome = flow.returnPressed(context(), undoManager: nil)
+        guard case .logged(let rows, _) = outcome else {
+            return XCTFail("expected the contact to be logged, got \(outcome)")
+        }
+        XCTAssertNil(rows[0].myPotaRefs)
+    }
+
+    func testTheirParkIsParsedNormalizedAndCleared() throws {
+        let doc = cqpDocument(mode: .searchPounce)
+        doc.log.myPotaRefs = ["US-3315"]
+        let flow = EntryFlow(document: doc)
+        readyToLog(flow)
+        flow.entry.theirParkTyped = "us-0088, us-0119"
+        let outcome = flow.returnPressed(context(), undoManager: nil)
+        guard case .logged(let rows, _) = outcome else {
+            return XCTFail("expected the contact to be logged, got \(outcome)")
+        }
+        XCTAssertEqual(rows[0].theirPotaRefs, ["US-0088", "US-0119"])
+        XCTAssertEqual(flow.entry.theirParkTyped, "", "cleared for the next contact")
+    }
+
+    /// An unparseable park refuses to log, exactly as an unreadable member
+    /// element does — the reference decides P2P credit, and a mis-keyed one
+    /// must not be logged in silence. Nothing is keyed either: ESM's
+    /// `logAndSend` passes a non-`logged` outcome straight through, so no
+    /// report goes out for a contact that did not happen.
+    func testMalformedTheirParkRefusesToLog() throws {
+        let doc = cqpDocument(mode: .searchPounce)
+        doc.log.myPotaRefs = ["US-3315"]
+        let flow = EntryFlow(document: doc)
+        readyToLog(flow)
+        flow.entry.theirParkTyped = "USA-331"
+        let outcome = flow.returnPressed(context(), undoManager: nil)
+        guard case .nothing = outcome else {
+            return XCTFail("must not log a garbled park reference, got \(outcome)")
+        }
+        XCTAssertTrue(doc.log.qsos.isEmpty)
+        XCTAssertTrue(flow.entry.invalidTheirPark())
+    }
+
+    /// Working the same activator again on another band: the park he gave
+    /// an hour ago comes back offered, so it is not re-typed every time.
+    func testSecondBandP2PContactPrefillsTheirPark() throws {
+        let doc = cqpDocument(mode: .searchPounce)
+        doc.log.myPotaRefs = ["US-3315"]
+        let flow = EntryFlow(document: doc)
+        readyToLog(flow)
+        flow.entry.theirParkTyped = "US-0088"
+        guard case .logged = flow.returnPressed(context(), undoManager: nil) else {
+            return XCTFail("should log")
+        }
+        XCTAssertEqual(flow.entry.theirParkTyped, "", "precondition: cleared after logging")
+
+        flow.entry.call = "W6ABC"
+        flow.callChanged(context())
+        XCTAssertEqual(flow.entry.theirParkTyped, "US-0088")
+    }
+
+    /// A park is a same-day fact about where someone is sitting, so it is
+    /// only ever offered from this log — never from the archive of past
+    /// contests the exchange prefill draws on.
+    func testAParkIsNeverOfferedForAStationThisLogHasNotWorked() {
+        let doc = cqpDocument(mode: .searchPounce)
+        doc.log.myPotaRefs = ["US-3315"]
+        let flow = EntryFlow(document: doc)
+        flow.entry.call = "K6XYZ"
+        flow.callChanged(context())
+        XCTAssertEqual(flow.entry.theirParkTyped, "")
+    }
 }

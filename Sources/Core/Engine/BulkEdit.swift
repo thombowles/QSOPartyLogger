@@ -20,6 +20,7 @@ enum BulkEdit {
         case myLoc
         case nameSent
         case memberSent
+        case myPotaRefs
 
         var id: String { rawValue }
     }
@@ -53,6 +54,12 @@ enum BulkEdit {
         var fields: [Field] = [.band, .mode, .myLoc]
         if party?.exchangeIncludesName == true { fields.append(.nameSent) }
         if party?.memberExchange != nil { fields.append(.memberSent) }
+        // Party-independent, unlike the two above: POTA rides any contest.
+        // My parks are a station-side fact in exactly the rover's sense —
+        // wrong across a stretch of rows, and right to fix in one action.
+        // Their parks stay per-row, a received fact, per this type's own
+        // line.
+        fields.append(.myPotaRefs)
         return fields
     }
 
@@ -66,6 +73,7 @@ enum BulkEdit {
         case .nameSent: "Name sent"
         case .memberSent:
             party?.memberExchange.map { "\($0.shortTerm) sent" } ?? "Member element sent"
+        case .myPotaRefs: "My POTA park(s)"
         }
     }
 
@@ -179,6 +187,21 @@ enum BulkEdit {
                 row.memberSent = element
                 return row
             })
+
+        case (.myPotaRefs, .text(let raw)):
+            switch PotaRef.parseList(raw) {
+            case .failure(let failure):
+                return .failure(Failure(message: failure.message))
+            case .success(let refs):
+                // Empty clears, where an empty name is refused: a stretch of
+                // the log worked from home is a legitimate state, and the
+                // operator needs a way to say so.
+                return .success(rows.map { row in
+                    var row = row
+                    row.myPotaRefs = refs.isEmpty ? nil : refs
+                    return row
+                })
+            }
 
         // A field and a value of another shape cannot be produced by the sheet,
         // which builds both from the same selection.

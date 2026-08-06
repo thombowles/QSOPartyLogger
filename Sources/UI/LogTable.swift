@@ -110,6 +110,15 @@ struct LogTable: View {
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(.green)
                     }
+                    // Park-to-park rows, findable at a glance after the
+                    // contest without spending a column on a field most
+                    // logs never carry.
+                    if let parks = q.theirPotaRefs {
+                        Label("P2P \(parks.joined(separator: ","))", systemImage: "tree")
+                            .font(.caption2)
+                            .foregroundStyle(.teal)
+                            .help("Park-to-park — their POTA reference(s)")
+                    }
                 }
             }
             .width(min: 70, ideal: 90)

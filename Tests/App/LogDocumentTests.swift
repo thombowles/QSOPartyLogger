@@ -439,4 +439,20 @@ final class LogDocumentTests: XCTestCase {
         XCTAssertEqual(doc.log.qsos.count, 1)
         XCTAssertFalse(doc.log.qsos.contains { $0.id == stale.id })
     }
+
+    @MainActor
+    func testUpdateStationPersistsAndUndoesMyParks() {
+        let doc = LogDocument()
+        let undo = UndoManager()
+        doc.updateStation(
+            StationProfile(callsign: "KE5CW"),
+            location: .outOfState(location: "TX"),
+            partyID: "ksqp",
+            myPotaRefs: ["US-3315"],
+            undoManager: undo
+        )
+        XCTAssertEqual(doc.log.myPotaRefs, ["US-3315"])
+        undo.undo()
+        XCTAssertEqual(doc.log.myPotaRefs, [])
+    }
 }

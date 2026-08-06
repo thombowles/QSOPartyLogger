@@ -265,4 +265,52 @@ final class ModelTests: XCTestCase {
         log.usedSpots = false
         XCTAssertFalse(log.spotsContradictNonAssistedClaim)
     }
+
+    // MARK: POTA parks
+
+    func testLogsWrittenBeforePotaSupportDecodeUnchanged() throws {
+        var log = ContestLog(partyID: "ksqp")
+        log.station.callsign = "KE5CW"
+        log.qsos = [QSO(call: "W0BH", band: .m20, modeClass: .cw, rawMode: "CW",
+                        rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: "MRN")]
+        // A pre-POTA .qplog is today's encoding minus the new keys.
+        let data = try log.encoded()
+        var json = try XCTUnwrap(
+            try JSONSerialization.jsonObject(with: data) as? [String: Any])
+        json.removeValue(forKey: "myPotaRefs")
+        var qsos = try XCTUnwrap(json["qsos"] as? [[String: Any]])
+        qsos[0].removeValue(forKey: "myPotaRefs")
+        qsos[0].removeValue(forKey: "theirPotaRefs")
+        json["qsos"] = qsos
+        let legacy = try JSONSerialization.data(withJSONObject: json)
+
+        let decoded = try ContestLog.decode(from: legacy)
+        XCTAssertEqual(decoded.myPotaRefs, [])
+        XCTAssertNil(decoded.qsos[0].myPotaRefs)
+        XCTAssertNil(decoded.qsos[0].theirPotaRefs)
+    }
+
+    func testParksRoundTripThroughTheDocumentEncoding() throws {
+        var log = ContestLog(partyID: "ksqp")
+        log.station.callsign = "KE5CW"
+        log.myPotaRefs = ["US-3315", "US-4571"]
+        log.qsos = [QSO(call: "W0BH", band: .m20, modeClass: .cw, rawMode: "CW",
+                        rstSent: "599", rstRcvd: "599",
+                        myPotaRefs: ["US-3315", "US-4571"],
+                        theirPotaRefs: ["US-0088"],
+                        myLoc: "TX", theirLoc: "MRN")]
+        let decoded = try ContestLog.decode(from: log.encoded())
+        XCTAssertEqual(decoded.myPotaRefs, ["US-3315", "US-4571"])
+        XCTAssertEqual(decoded.qsos[0].myPotaRefs, ["US-3315", "US-4571"])
+        XCTAssertEqual(decoded.qsos[0].theirPotaRefs, ["US-0088"])
+    }
+
+    func testEmptyParkArraysNormalizeToNilOnConstruction() {
+        let q = QSO(call: "W0BH", band: .m20, modeClass: .cw, rawMode: "CW",
+                    rstSent: "599", rstRcvd: "599",
+                    myPotaRefs: [], theirPotaRefs: [],
+                    myLoc: "TX", theirLoc: "MRN")
+        XCTAssertNil(q.myPotaRefs)
+        XCTAssertNil(q.theirPotaRefs)
+    }
 }

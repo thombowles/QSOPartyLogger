@@ -340,6 +340,17 @@ final class EntryFlow {
         // points, so a mis-keyed number would score as QRO in silence.
         guard !entry.invalidMember(party: party) else { return .nothing }
 
+        // One contact, one park set each way. An unparseable park-to-park
+        // reference is refused like an unreadable member element — it is
+        // what earns the credit at POTA.
+        guard case .success(let theirParks) = PotaRef.parseList(entry.theirParkTyped) else {
+            return .nothing
+        }
+        // Mine is the log's current Contest Setup value, stamped per row so
+        // the record shows where the contact was actually made from — a
+        // mid-contest park change affects later rows only.
+        let myParks = document.log.myPotaRefs
+
         let myLocs = document.log.myLocation.sentExchanges.filter { !$0.isEmpty }
         guard !myLocs.isEmpty else { return .needsSetup }
 
@@ -381,6 +392,8 @@ final class EntryFlow {
                 nameRcvd: rcvdName,
                 memberSent: sentMember,
                 memberRcvd: rcvdMember,
+                myPotaRefs: myParks.isEmpty ? nil : myParks,
+                theirPotaRefs: theirParks.isEmpty ? nil : theirParks,
                 band: context.band,
                 modeClass: context.modeClass,
                 rawMode: context.rawMode,
@@ -548,6 +561,21 @@ final class EntryFlow {
             } else {
                 entry.clearAutoFilledMember()
             }
+        }
+
+        // The park an activator gave earlier comes back offered on the next
+        // band. **This log only** — never the call history file or the
+        // archive the exchange chain above draws on: a park is where someone
+        // is sitting today, and last season's is worse than nothing. Typed
+        // text is never overwritten, and nothing is taken back either: the
+        // field may hold a half-typed park for the contact being entered
+        // right now, and `clearForNextContact` is what resets it between
+        // contacts.
+        if entry.theirParkTyped.isEmpty,
+           let previous = document.log.qsos.last(where: {
+               $0.call.uppercased() == call && $0.theirPotaRefs != nil
+           }) {
+            entry.theirParkTyped = (previous.theirPotaRefs ?? []).joined(separator: ",")
         }
     }
 

@@ -644,6 +644,16 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   difference is normalised. *Retrieval note:* the spot hub serves Florida as
   `flqp`, not `fqp` — the third party after California and Ontario where the hub
   prefix is not the party id.
+- POTA support — the ADIF 3.1.4 `POTA_REF`/`MY_POTA_REF` fields and the
+  POTARef grammar (adif.org/314/ADIF_314.htm), POTA's own ADIF and
+  park-to-park references (docs.pota.app), and the park list served by
+  `api.pota.app/program/parks/US` (12,938 parks; `HEAD` answers 403, which
+  is why the client re-downloads weekly rather than probing freshness). All
+  verified 2026-08-05 and banked verbatim in
+  [`research/pota/SOURCES.md`](research/pota/SOURCES.md). The export
+  duplicates a record per park pair because POTA's park-to-park page
+  requires it for n-fer credit, not because ADIF asks for it — ADIF's own
+  field is a comma list.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows
