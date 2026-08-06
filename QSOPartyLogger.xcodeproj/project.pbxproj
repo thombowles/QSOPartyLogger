@@ -32,6 +32,7 @@
 		0B9D330021B44D8F26900857 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C918A35B84A46D9369272 /* AppSettings.swift */; };
 		0BDF37DDAEF9B4C38487684E /* DashboardChallengeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325FD0771FF575D22B87A0E4 /* DashboardChallengeSection.swift */; };
 		0C98121EB0A1EFAF11C23781 /* CaliforniaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC2AC0C0FD0301DA7FF0B /* CaliforniaQSOPartyTests.swift */; };
+		0CADC8EC50D70CAF8BADCD01 /* PotaPickerBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22504435770919C0C1FCA961 /* PotaPickerBehavior.swift */; };
 		0D2F571A94C690BB239E696A /* SpotLabelSizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A9F5FF0C8233FC92821648 /* SpotLabelSizeTests.swift */; };
 		0DEA3D34B4EF4162D9FC21D9 /* SpotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65578A775A74FB103913C439 /* SpotStore.swift */; };
 		0E122728DD4F2CC234B5E788 /* BandPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1075185DDB395E700E24AA /* BandPlan.swift */; };
@@ -116,6 +117,7 @@
 		51CCF86780EC05B9994EBB7A /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53E1CCA809156CAFA061676 /* FlowLayout.swift */; };
 		52066C8053C3E506FB6DBB48 /* sdqp-table-2024-10-12.html in Resources */ = {isa = PBXBuildFile; fileRef = B768FEBEB75AB19F20D486E6 /* sdqp-table-2024-10-12.html */; };
 		5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF66C01612DA91290CFA1B6 /* SmokeTests.swift */; };
+		52EE1853788BA4165EC60E40 /* PotaPickerBehaviorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56505B17DC3D52012E600A1F /* PotaPickerBehaviorTests.swift */; };
 		52FDB9188C666E49EBE3DDBE /* MessagesDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9C0022577607844914FAD2 /* MessagesDraft.swift */; };
 		53FEBDB98064D255C6C453A1 /* SuperCheckRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53DAC21939D66AA0682998CD /* SuperCheckRow.swift */; };
 		545DEA6ED14085E9058FA5CB /* MaineQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464472573FD7960DD5AC5B7B /* MaineQSOPartyTests.swift */; };
@@ -179,6 +181,7 @@
 		87DEFAA494644FF89C542876 /* SCPStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E178815CECB3CA7EA9B358A7 /* SCPStore.swift */; };
 		87DFF3866AB92FA4A0F51166 /* DupeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A13A0105A3055F65F9C60 /* DupeChecker.swift */; };
 		8805F55FE16A204228464EEB /* PotaRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F212545ED1201EF8D3F739F /* PotaRef.swift */; };
+		88BB23141B05C2F92271D789 /* GridLocateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C7056708ECE6573BF5FF3 /* GridLocateTests.swift */; };
 		8B798A3A385449902326AB88 /* QuebecQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7194268CC1DFB2953FFDE8 /* QuebecQSOPartyTests.swift */; };
 		8E0C9BB5C8132A2F521070E4 /* SeventhCallAreaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */; };
 		91DA1EA18F0FDE9613ED6B68 /* RadioRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F435A4BFCDEA86D0D8F785C4 /* RadioRegistry.swift */; };
@@ -368,6 +371,7 @@
 		1DB947FA06E0482D6F99A796 /* DesignatedCountyScoringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignatedCountyScoringTests.swift; sourceTree = "<group>"; };
 		1EEDB395B8108B260AD62BD1 /* UppercasingBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UppercasingBinding.swift; sourceTree = "<group>"; };
 		203C517DD5F8DB942A927E90 /* NebraskaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NebraskaQSOPartyTests.swift; sourceTree = "<group>"; };
+		22504435770919C0C1FCA961 /* PotaPickerBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaPickerBehavior.swift; sourceTree = "<group>"; };
 		242014141B06D7E0F2526D86 /* EntryFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryFlow.swift; sourceTree = "<group>"; };
 		245471C16B083B398057F4A0 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 		24CD59D82EC2EF26B0FF95BF /* PartyNoticeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyNoticeTests.swift; sourceTree = "<group>"; };
@@ -429,11 +433,13 @@
 		4DFBB554A5050EEC235AC9E7 /* DashboardExportRowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardExportRowTests.swift; sourceTree = "<group>"; };
 		4E0D658A0E17CBDA57B4F747 /* EntryClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryClassTests.swift; sourceTree = "<group>"; };
 		4E346D3641AA9C7153747275 /* NewJerseyQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewJerseyQSOPartyTests.swift; sourceTree = "<group>"; };
+		4F6C7056708ECE6573BF5FF3 /* GridLocateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridLocateTests.swift; sourceTree = "<group>"; };
 		4FFB1E6038FE703DDB36B5F0 /* WorkedBeforeTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedBeforeTableTests.swift; sourceTree = "<group>"; };
 		51C881733E52B4CD62D43604 /* SpottingPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpottingPolicyTests.swift; sourceTree = "<group>"; };
 		522A7E3D7B2C6485763680DB /* TCPTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPTransport.swift; sourceTree = "<group>"; };
 		52C79995543D0CB2BED77E11 /* HubSpotSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotSource.swift; sourceTree = "<group>"; };
 		53DAC21939D66AA0682998CD /* SuperCheckRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperCheckRow.swift; sourceTree = "<group>"; };
+		56505B17DC3D52012E600A1F /* PotaPickerBehaviorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaPickerBehaviorTests.swift; sourceTree = "<group>"; };
 		57263564A0C38ADE1B3E1897 /* CloudMirrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudMirrorTests.swift; sourceTree = "<group>"; };
 		5779472576EDDB16AD912D7C /* QSOPartyLoggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QSOPartyLoggerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5892A4EA032BA925FA66EA70 /* MarylandDCQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarylandDCQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -707,6 +713,7 @@
 			children = (
 				4DFBB554A5050EEC235AC9E7 /* DashboardExportRowTests.swift */,
 				24CD59D82EC2EF26B0FF95BF /* PartyNoticeTests.swift */,
+				56505B17DC3D52012E600A1F /* PotaPickerBehaviorTests.swift */,
 				35603FAC30DAAF7154DA76E3 /* RadioBarStatusTests.swift */,
 				DC11ED4933513B0D723E776E /* RateColumnTests.swift */,
 				51C881733E52B4CD62D43604 /* SpottingPolicyTests.swift */,
@@ -937,6 +944,7 @@
 				D6D2158467D3A61358A399D7 /* MessagesRow.swift */,
 				AC31E16279BA2D431AEE0582 /* PartyNotice.swift */,
 				EFC407B6F7601B9C0FD01DD1 /* PotaParkPicker.swift */,
+				22504435770919C0C1FCA961 /* PotaPickerBehavior.swift */,
 				771A2A2E70C2A91608F19549 /* RadioBar.swift */,
 				6183074E6FEE712AC9AAA24B /* RateColumn.swift */,
 				AA812496670164897C4A0447 /* ScoreSidebar.swift */,
@@ -1060,6 +1068,7 @@
 				5F27BD78F3C7802DAFEB05AE /* DashboardModelExportTests.swift */,
 				42866F267E48E55BA7B2A686 /* DXCCLabelClientTests.swift */,
 				944ACFBCB11B916DDD2F8933 /* EntryFlowTests.swift */,
+				4F6C7056708ECE6573BF5FF3 /* GridLocateTests.swift */,
 				A8888FFE8F08254615766C16 /* KeyerBackendLabelTests.swift */,
 				58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */,
 				D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */,
@@ -1350,6 +1359,7 @@
 				60A60A674801918D78F66985 /* FlexRadioDriverTests.swift in Sources */,
 				55C2812AC8EA3E198F773BA7 /* FloridaQSOPartyTests.swift in Sources */,
 				EA68D3C9DCC810F20F865121 /* GeorgiaQSOPartyTests.swift in Sources */,
+				88BB23141B05C2F92271D789 /* GridLocateTests.swift in Sources */,
 				2FB28E2BB6D45DB0A743B1FB /* HawaiiQSOPartyTests.swift in Sources */,
 				71A53F1DD6528F6C6485C0ED /* HubPollPolicyTests.swift in Sources */,
 				AE3930DE09489C6F2B7CC827 /* HubSelfSpotTests.swift in Sources */,
@@ -1411,6 +1421,7 @@
 				935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */,
 				C538ACCF93B5DCFFFE15C1B3 /* PotaParkDirectoryTests.swift in Sources */,
 				ED6D904A680FE4DA2B03DA38 /* PotaParkStoreTests.swift in Sources */,
+				52EE1853788BA4165EC60E40 /* PotaPickerBehaviorTests.swift in Sources */,
 				0422C3FFC563470A6E880A7A /* PotaRefTests.swift in Sources */,
 				C9AAE61B0FC8097BED39445C /* PreferenceIsolationTests.swift in Sources */,
 				8B798A3A385449902326AB88 /* QuebecQSOPartyTests.swift in Sources */,
@@ -1550,6 +1561,7 @@
 				1F03EEA369072913AD9AACE8 /* PotaParkDirectory.swift in Sources */,
 				05706123FF00EC217D54C97F /* PotaParkPicker.swift in Sources */,
 				7B696E39CC9AA9AAB8B6DB59 /* PotaParkStore.swift in Sources */,
+				0CADC8EC50D70CAF8BADCD01 /* PotaPickerBehavior.swift in Sources */,
 				8805F55FE16A204228464EEB /* PotaRef.swift in Sources */,
 				492DCEFD090AA36FE6ECDBCC /* Preferences.swift in Sources */,
 				C46093573C4E0C33B0EE6086 /* QSO.swift in Sources */,

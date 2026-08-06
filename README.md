@@ -113,7 +113,8 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `Tab` to **P2P park(s)** | During a POTA activation, the other station's park reference(s). Deliberately outside the `Space` cycle — most contacts aren't park-to-park — so `Space` from it returns to the call |
 | `F12` | Wipe the entry fields and start over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
-| `Esc` | Abort CW, stop repeat-CQ, close an open sheet |
+| `Esc` | Abort CW, stop repeat-CQ, close an open sheet — or, in the park picker's search box, clear it and close the results |
+| `↑` / `↓` | In the park picker: move through the results; `Return` adds the highlighted park |
 | Any key | While repeat-CQ is running: stop it and abort the CQ on the air, then do the key's own job |
 | `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
 | `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
@@ -541,10 +542,12 @@ only the contacts made after it.
 - **Find the park by name or number.** The picker searches a cached copy of
   POTA's own US program list — 12,938 parks — and every word has to match, so
   "lake tx" narrows to Texas lakes and "3051" goes straight to Ray Roberts.
-  With the search box empty it lists the **parks nearest you**, in miles, from
-  either the Mac's location or your grid square. Typing a full reference and
-  pressing Return adds it outright, which is also how you enter a park from
-  another program or one too new to be in the list.
+  Click into the empty search box and it offers the **parks nearest you**, in
+  miles, from either the Mac's location or your grid square. `↑`/`↓` move
+  through the results and `Return` adds the highlighted one; `Esc` clears the
+  box and closes the list without touching the mouse or the sheet. Typing a
+  full reference and pressing Return adds it outright, which is also how you
+  enter a park from another program or one too new to be in the list.
 - **It works with no signal.** The list is downloaded once — on an explicit
   button, never silently, since it is about 3 MB and most operators are not
   activating — then searched entirely offline and refreshed weekly. POTA's API
@@ -670,7 +673,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2238 unit tests**, none of which need hardware or a network — no serial port,
+**2254 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history

@@ -35,7 +35,7 @@ struct SetupSheet: View {
     @State private var selectedParks: [String] = []
     @State private var locating = false
     @State private var locationNote: String?
-    @State private var locatedFix: (latitude: Double, longitude: Double)?
+    @State private var locatedFix: LocationFix?
 
     @FocusState private var focused: Field?
 
@@ -369,7 +369,8 @@ struct SetupSheet: View {
     /// fix wins; the typed grid square is the offline answer; neither means
     /// no nearest list at all.
     private var parkOrigin: (latitude: Double, longitude: Double)? {
-        locatedFix ?? Maidenhead.center(of: station.gridLocator)
+        if let locatedFix { return (locatedFix.latitude, locatedFix.longitude) }
+        return Maidenhead.center(of: station.gridLocator)
     }
 
     private var parkOriginLabel: String {
@@ -379,31 +380,36 @@ struct SetupSheet: View {
     }
 
     /// The Locate button. A failure leaves the field exactly as it was —
-    /// free text the operator can fill in themselves.
+    /// free text the operator can fill in themselves — and says which
+    /// failure it was, since a denied permission and a Mac that cannot place
+    /// itself need different things done about them.
     private func locate() async {
         guard let locationProvider else { return }
         locating = true
-        defer { locating = false }
-        guard let fix = await locationProvider.currentLocation(),
-              let grid = Maidenhead.locator(latitude: fix.latitude,
-                                            longitude: fix.longitude) else {
-            locationNote = "Couldn't get a location — type the grid square instead."
-            return
-        }
-        station.gridLocator = grid
-        locatedFix = fix
+        // The old note goes now, not when the next attempt succeeds: a stale
+        // failure sitting under the button through a fresh press reads as
+        // this press having failed too.
         locationNote = nil
+        defer { locating = false }
+        switch await GridLocate.run(locationProvider) {
+        case .filled(let grid, let fix):
+            station.gridLocator = grid
+            locatedFix = fix
+        case .failed(let message):
+            locationNote = message
+        }
     }
 
     /// Silent only when nothing will be asked of the operator: the
     /// permission dialog is reserved for the Locate button. An already-typed
-    /// grid is never overwritten.
+    /// grid is never overwritten, and a silent failure stays silent — the
+    /// operator did not ask for this one, so it must not put a complaint on
+    /// screen.
     private func autoFillGrid() async {
         guard let locationProvider, locationProvider.isAuthorized,
-              station.gridLocator.trimmingCharacters(in: .whitespaces).isEmpty,
-              let fix = await locationProvider.currentLocation(),
-              let grid = Maidenhead.locator(latitude: fix.latitude,
-                                            longitude: fix.longitude)
+              station.gridLocator.trimmingCharacters(in: .whitespaces).isEmpty
+        else { return }
+        guard case .filled(let grid, let fix) = await GridLocate.run(locationProvider)
         else { return }
         station.gridLocator = grid
         locatedFix = fix
