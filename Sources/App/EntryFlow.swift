@@ -562,6 +562,21 @@ final class EntryFlow {
                 entry.clearAutoFilledMember()
             }
         }
+
+        // The park an activator gave earlier comes back offered on the next
+        // band. **This log only** — never the call history file or the
+        // archive the exchange chain above draws on: a park is where someone
+        // is sitting today, and last season's is worse than nothing. Typed
+        // text is never overwritten, and nothing is taken back either: the
+        // field may hold a half-typed park for the contact being entered
+        // right now, and `clearForNextContact` is what resets it between
+        // contacts.
+        if entry.theirParkTyped.isEmpty,
+           let previous = document.log.qsos.last(where: {
+               $0.call.uppercased() == call && $0.theirPotaRefs != nil
+           }) {
+            entry.theirParkTyped = (previous.theirPotaRefs ?? []).joined(separator: ",")
+        }
     }
 
     private func callHistoryCandidate(
