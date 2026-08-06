@@ -46,7 +46,7 @@ struct BulkEditSheet: View {
         switch field {
         case .band: .band(band)
         case .mode: .mode(rawMode)
-        case .myLoc, .nameSent, .memberSent: .text(text)
+        case .myLoc, .nameSent, .memberSent, .myPotaRefs: .text(text)
         }
     }
 
@@ -128,7 +128,7 @@ struct BulkEditSheet: View {
                 ForEach(RadioBar.rawModes(for: party), id: \.self) { Text($0).tag($0) }
             }
             .frame(width: 100)
-        case .myLoc, .nameSent, .memberSent:
+        case .myLoc, .nameSent, .memberSent, .myPotaRefs:
             TextField("", text: $text.uppercasing)
                 .font(.body.monospaced())
                 .frame(width: 140)
@@ -167,6 +167,7 @@ struct BulkEditSheet: View {
         case .myLoc: return first.myLoc
         case .nameSent: return first.nameSent ?? ""
         case .memberSent: return first.memberSent ?? ""
+        case .myPotaRefs: return (first.myPotaRefs ?? []).joined(separator: ",")
         case .band, .mode: return text
         }
     }

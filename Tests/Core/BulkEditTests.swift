@@ -36,18 +36,22 @@ final class BulkEditTests: XCTestCase {
 
     // MARK: Which fields a party offers
 
+    /// POTA parks trail every list: the feature rides any contest, so unlike
+    /// the sent elements it is not conditioned on the party's exchange.
     func testEveryPartyOffersBandModeAndMyLocation() {
-        XCTAssertEqual(BulkEdit.fields(for: ksqp), [.band, .mode, .myLoc])
+        XCTAssertEqual(BulkEdit.fields(for: ksqp), [.band, .mode, .myLoc, .myPotaRefs])
     }
 
     /// The sent elements appear only where the exchange carries them, so a
     /// KSQP operator is never offered a "Name sent" the rules have no room for.
     func testNamePartyAlsoOffersTheSentName() {
-        XCTAssertEqual(BulkEdit.fields(for: naqpCW), [.band, .mode, .myLoc, .nameSent])
+        XCTAssertEqual(BulkEdit.fields(for: naqpCW),
+                       [.band, .mode, .myLoc, .nameSent, .myPotaRefs])
     }
 
     func testMemberPartyAlsoOffersItsOwnElement() {
-        XCTAssertEqual(BulkEdit.fields(for: skeeter), [.band, .mode, .myLoc, .memberSent])
+        XCTAssertEqual(BulkEdit.fields(for: skeeter),
+                       [.band, .mode, .myLoc, .memberSent, .myPotaRefs])
         XCTAssertEqual(
             BulkEdit.label(.memberSent, party: skeeter),
             "\(skeeter.memberExchange!.shortTerm) sent"
@@ -222,5 +226,41 @@ final class BulkEditTests: XCTestCase {
             XCTAssertFalse(failure.message.isEmpty, "a refusal must say why",
                            file: file, line: line)
         }
+    }
+
+    // MARK: POTA
+
+    func testMyParksIsOfferedForEveryParty() {
+        XCTAssertTrue(BulkEdit.fields(for: nil).contains(.myPotaRefs))
+        XCTAssertEqual(BulkEdit.label(.myPotaRefs, party: nil), "My POTA park(s)")
+    }
+
+    func testApplyMyParksNormalizesAcrossRows() throws {
+        let rows = [qso(call: "W0BH"), qso(call: "K5XYZ", band: .m20)]
+        let changed = try BulkEdit.apply(
+            .text("us-3315, us-4571"), field: .myPotaRefs, to: rows,
+            party: nil, isInState: false).get()
+        XCTAssertEqual(changed.map(\.myPotaRefs),
+                       [["US-3315", "US-4571"], ["US-3315", "US-4571"]])
+    }
+
+    /// Unlike a sent name, an empty park list is a legitimate state — the
+    /// stretch of the log worked from home clears to nil, not to [].
+    func testApplyEmptyMyParksClearsToNil() throws {
+        var row = qso()
+        row.myPotaRefs = ["US-3315"]
+        let changed = try BulkEdit.apply(
+            .text("  "), field: .myPotaRefs, to: [row],
+            party: nil, isInState: false).get()
+        XCTAssertNil(changed[0].myPotaRefs)
+    }
+
+    func testApplyMalformedMyParksRefusesTheWholeChange() {
+        guard case .failure(let failure) = BulkEdit.apply(
+            .text("USA-331"), field: .myPotaRefs, to: [qso()],
+            party: nil, isInState: false) else {
+            return XCTFail("expected refusal")
+        }
+        XCTAssertTrue(failure.message.contains("USA-331"), failure.message)
     }
 }
