@@ -35,6 +35,13 @@ struct ContestLog: Codable, Equatable, Sendable {
     /// so a log that never chose cannot claim a multiplier the operator did
     /// not. Empty for every party without classes.
     var entryClassID: String = ""
+    /// POTA park reference(s) this contest is being operated from — the
+    /// *current* Contest Setup value, normalized park references. Stamped
+    /// into each row's `myPotaRefs` at logging (the `exchangeName` idiom),
+    /// so a mid-contest park change affects later rows only. Empty for
+    /// every log that is not an activation — and for documents written
+    /// before the setting existed.
+    var myPotaRefs: [String] = []
     /// Whether spotting-network information — cluster or hub — was ever
     /// delivered into this contest's session. Set once and never cleared:
     /// reception is access (NAQP rule 5A(ii)'s word), access is what the
@@ -87,7 +94,8 @@ struct ContestLog: Codable, Equatable, Sendable {
         setupCompleted: Bool = false,
         exchangeName: String = "",
         exchangeMember: String = "",
-        entryClassID: String = ""
+        entryClassID: String = "",
+        myPotaRefs: [String] = []
     ) {
         self.partyID = partyID
         self.station = station
@@ -99,11 +107,12 @@ struct ContestLog: Codable, Equatable, Sendable {
         self.exchangeName = exchangeName
         self.exchangeMember = exchangeMember
         self.entryClassID = entryClassID
+        self.myPotaRefs = myPotaRefs
     }
 
     private enum CodingKeys: String, CodingKey {
         case schemaVersion, partyID, station, myLocation, qsos, messages, operatingMode, setupCompleted
-        case exchangeName, exchangeMember, entryClassID, usedSpots
+        case exchangeName, exchangeMember, entryClassID, usedSpots, myPotaRefs
     }
 
     init(from decoder: Decoder) throws {
@@ -130,6 +139,8 @@ struct ContestLog: Codable, Equatable, Sendable {
         // Documents written before the fact was recorded used no spots —
         // which is how sponsors read logs that predate the header too.
         usedSpots = try c.decodeIfPresent(Bool.self, forKey: .usedSpots) ?? false
+        // Documents written before POTA support carry no parks.
+        myPotaRefs = try c.decodeIfPresent([String].self, forKey: .myPotaRefs) ?? []
     }
 
     static func decode(from data: Data) throws -> ContestLog {

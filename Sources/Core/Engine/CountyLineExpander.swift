@@ -23,6 +23,9 @@ enum CountyLineExpander {
         /// One contact, one member element each way, for the same reason.
         var memberSent: String? = nil
         var memberRcvd: String? = nil
+        /// One contact, one park set each way, for the same reason.
+        var myPotaRefs: [String]? = nil
+        var theirPotaRefs: [String]? = nil
         var band: Band
         var modeClass: ModeClass
         var rawMode: String
@@ -50,6 +53,8 @@ enum CountyLineExpander {
                     nameRcvd: entry.nameRcvd,
                     memberSent: entry.memberSent,
                     memberRcvd: entry.memberRcvd,
+                    myPotaRefs: entry.myPotaRefs,
+                    theirPotaRefs: entry.theirPotaRefs,
                     myLoc: mine,
                     theirLoc: theirs
                 )

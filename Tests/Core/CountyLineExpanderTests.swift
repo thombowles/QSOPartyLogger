@@ -100,4 +100,20 @@ final class CountyLineExpanderTests: XCTestCase {
             XCTAssertEqual(row.rstSent, "599")
         }
     }
+
+    func testParksRideEveryExpandedRow() {
+        let rows = CountyLineExpander.expand(
+            entry: .init(call: "W0BH", rstSent: "599", rstRcvd: "599",
+                         myPotaRefs: ["US-3315", "US-4571"],
+                         theirPotaRefs: ["US-0088"],
+                         band: .m20, modeClass: .cw, rawMode: "CW",
+                         freqKHz: nil, timestampUTC: Date()),
+            myLocs: ["CHA", "MOR"], theirLocs: ["TX"])
+        XCTAssertEqual(rows.count, 2)
+        for row in rows {
+            XCTAssertEqual(row.myPotaRefs, ["US-3315", "US-4571"],
+                           "one contact, one park set — every row carries it")
+            XCTAssertEqual(row.theirPotaRefs, ["US-0088"])
+        }
+    }
 }

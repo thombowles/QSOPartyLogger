@@ -44,6 +44,14 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
     /// went out.
     var memberSent: String?
     var memberRcvd: String?
+    /// POTA park references each way, for contests run from a park. Mine are
+    /// stamped at logging from Contest Setup's current value
+    /// (`ContestLog.myPotaRefs`); theirs is what a park-to-park station
+    /// gave. `nil` — never an empty array — when a side has no parks, so
+    /// logs written before POTA support decode unchanged and export
+    /// byte-identically.
+    var myPotaRefs: [String]?
+    var theirPotaRefs: [String]?
     /// My sent location for this row: county abbreviation (in-state) or state/province.
     var myLoc: String
     /// Their location for this row: county abbreviation, state, province, or "DX".
@@ -66,6 +74,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         nameRcvd: String? = nil,
         memberSent: String? = nil,
         memberRcvd: String? = nil,
+        myPotaRefs: [String]? = nil,
+        theirPotaRefs: [String]? = nil,
         myLoc: String,
         theirLoc: String
     ) {
@@ -85,6 +95,10 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         self.nameRcvd = nameRcvd
         self.memberSent = memberSent
         self.memberRcvd = memberRcvd
+        // Empty is stored as absent, so "no parks" has exactly one
+        // representation and an ADIF export cannot iterate an empty list.
+        self.myPotaRefs = (myPotaRefs?.isEmpty ?? true) ? nil : myPotaRefs
+        self.theirPotaRefs = (theirPotaRefs?.isEmpty ?? true) ? nil : theirPotaRefs
         self.myLoc = myLoc
         self.theirLoc = theirLoc
     }
