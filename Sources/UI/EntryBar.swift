@@ -5,10 +5,16 @@ import SwiftUI
 struct EntryBar: View {
     @Bindable var entry: EntryState
     let party: PartyDefinition?
+    /// Whether this log is a POTA activation (Contest Setup has parks). The
+    /// park-to-park field exists only then — P2P credit does not exist for a
+    /// home station, and the bar stays exactly as it is for every non-POTA
+    /// contest.
+    let showsP2P: Bool
     let onLog: () -> Void
 
     enum Field: Hashable {
         case call, rstSent, rstRcvd, serialSent, serialRcvd, nameRcvd, exchange, memberRcvd
+        case theirPark
 
         /// Where Space moves next, cycling back to the call from the exchange.
         /// Call jumps straight to the exchange because the RSTs are pre-filled
@@ -38,6 +44,11 @@ struct EntryBar: View {
             case .nameRcvd: .exchange
             case .exchange: includesMember ? .memberRcvd : .call
             case .memberRcvd: .call
+            // Nothing routes *to* the park field: Space never lands there,
+            // because most contest contacts are not park to park and the
+            // fast path must not grow a stop. Tab reaches it in layout
+            // order, and Space from it closes the cycle back to the call.
+            case .theirPark: .call
             }
         }
     }
@@ -95,6 +106,13 @@ struct EntryBar: View {
                         .help("\(member.term), or their power (5W, 100W). "
                               + "Leave empty if they sent neither — that scores as QRO.")
                 }
+                if showsP2P {
+                    field("P2P park(s)", text: $entry.theirParkTyped.uppercasing,
+                          width: 110, focusTag: .theirPark)
+                        .help("The other station's POTA reference(s) when they are "
+                              + "in a park too — US-3315, comma-separated for an "
+                              + "n-fer. Leave empty otherwise.")
+                }
                 statusBadge
                 Spacer()
                 Button("Log", action: onLog)
@@ -123,6 +141,16 @@ struct EntryBar: View {
                       systemImage: "text.book.closed")
                     .font(.callout)
                     .foregroundStyle(.secondary)
+            }
+            // Its own line rather than another branch of the chain above:
+            // a garbled park and a garbled exchange are separate mistakes,
+            // and the operator should see whichever ones they have made.
+            if entry.invalidTheirPark() {
+                Label("P2P park doesn't parse — they look like US-3315; "
+                      + "comma-separate an n-fer",
+                      systemImage: "xmark.circle.fill")
+                    .font(.callout)
+                    .foregroundStyle(.red)
             }
         }
         .onChange(of: focus) { _, landed in
@@ -166,6 +194,7 @@ struct EntryBar: View {
         if case .valid = entry.exchangeStatus, !entry.callNormalized.isEmpty {
             return !entry.missingName(party: party)
                 && !entry.invalidMember(party: party)
+                && !entry.invalidTheirPark()
         }
         return false
     }

@@ -17,6 +17,7 @@
 		03BBE5CC8E7D73FD68269F42 /* HubSpotParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC4FB2912638C4B5052ED72 /* HubSpotParser.swift */; };
 		0422C3FFC563470A6E880A7A /* PotaRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6494352FEF3C42EC27F6120C /* PotaRefTests.swift */; };
 		04860FF18E630448799E4436 /* MichiganQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C1CC73171B49CEFB01A99E /* MichiganQSOPartyTests.swift */; };
+		05706123FF00EC217D54C97F /* PotaParkPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC407B6F7601B9C0FD01DD1 /* PotaParkPicker.swift */; };
 		0589789400D49E118C812D8E /* KeyMonitorGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F8DCDD9B83142A28657268 /* KeyMonitorGate.swift */; };
 		05D024CA40AEFFD979414EC2 /* SkeeterRosterParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2959051AC941DA30C8B6439 /* SkeeterRosterParserTests.swift */; };
 		05F3DC9C7B8ABD0AA2745193 /* listing-empty-2026-07-28.html in Resources */ = {isa = PBXBuildFile; fileRef = 2F34B598BE39EC5CEFDC4DA8 /* listing-empty-2026-07-28.html */; };
@@ -607,6 +608,7 @@
 		EF27EC7CAEAE6E71B85FD5E9 /* BandMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMap.swift; sourceTree = "<group>"; };
 		EF6989E84D7AABBEB0B1451F /* MorseCodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCodeTests.swift; sourceTree = "<group>"; };
 		EF7194268CC1DFB2953FFDE8 /* QuebecQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuebecQSOPartyTests.swift; sourceTree = "<group>"; };
+		EFC407B6F7601B9C0FD01DD1 /* PotaParkPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkPicker.swift; sourceTree = "<group>"; };
 		F1B2185C4DCD353FBC522D1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F208CF00E5CDC47B602583B8 /* AlabamaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlabamaQSOPartyTests.swift; sourceTree = "<group>"; };
 		F28E6F3167ACCDDAF4295CAF /* CombinedPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedPartyTests.swift; sourceTree = "<group>"; };
@@ -934,6 +936,7 @@
 				01C6419D10E7C381AE554C1B /* MessagesEditor.swift */,
 				D6D2158467D3A61358A399D7 /* MessagesRow.swift */,
 				AC31E16279BA2D431AEE0582 /* PartyNotice.swift */,
+				EFC407B6F7601B9C0FD01DD1 /* PotaParkPicker.swift */,
 				771A2A2E70C2A91608F19549 /* RadioBar.swift */,
 				6183074E6FEE712AC9AAA24B /* RateColumn.swift */,
 				AA812496670164897C4A0447 /* ScoreSidebar.swift */,
@@ -1545,6 +1548,7 @@
 				EADC3E655DA027365F53814C /* PotaPark.swift in Sources */,
 				1A8FD3F2B88A84E0BEA99DF1 /* PotaParkClient.swift in Sources */,
 				1F03EEA369072913AD9AACE8 /* PotaParkDirectory.swift in Sources */,
+				05706123FF00EC217D54C97F /* PotaParkPicker.swift in Sources */,
 				7B696E39CC9AA9AAB8B6DB59 /* PotaParkStore.swift in Sources */,
 				8805F55FE16A204228464EEB /* PotaRef.swift in Sources */,
 				492DCEFD090AA36FE6ECDBCC /* Preferences.swift in Sources */,

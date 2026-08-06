@@ -45,6 +45,8 @@ struct MainView: View {
     @State private var callHistoryClient = CallHistoryClient()
     @State private var dxccLabelClient = DXCCLabelClient()
     @State private var scpClient = SCPClient()
+    @State private var potaParkClient = PotaParkClient()
+    @State private var locationProvider = MacLocationProvider()
     @State private var showSelfSpot = false
     @State private var selfSpotFields = HubSelfSpot.Fields(
         station: "", frequencyKHz: 0, county: nil, comment: "", poster: ""
@@ -121,7 +123,8 @@ struct MainView: View {
             .onDisappear(perform: onDisappear)
             .sheet(isPresented: $showSetup) {
                 SetupSheet(document: document, callHistory: callHistoryClient,
-                           scp: scpClient)
+                           scp: scpClient, parks: potaParkClient,
+                           locationProvider: locationProvider)
             }
             .sheet(isPresented: $showMessagesEditor) {
                 MessagesEditor(document: document, settings: settings)
@@ -278,7 +281,8 @@ struct MainView: View {
                 .onChange(of: document.log.qsos) { autoSaveAfterChange() }
             Divider()
 
-            EntryBar(entry: entry, party: party, onLog: returnPressed, focus: $focusedField)
+            EntryBar(entry: entry, party: party, showsP2P: !document.log.myPotaRefs.isEmpty,
+                     onLog: returnPressed, focus: $focusedField)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .onChange(of: entry.exchange) { revalidate() }

@@ -110,6 +110,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `Enter` | Log the QSO (or send the next ESM message, or run a typed QSY command) |
 | `Space` | Cycle Call → Exchange → Call — via QSO number and Name ahead of the exchange, and the member number/power (Skeeter #) after it, where the party uses them. Signal reports are stepped over |
 | `Tab` | Walk every field, reports included — landing in one selects the S digit, so 599 → 579 is one keystroke |
+| `Tab` to **P2P park(s)** | During a POTA activation, the other station's park reference(s). Deliberately outside the `Space` cycle — most contacts aren't park-to-park — so `Space` from it returns to the call |
 | `F12` | Wipe the entry fields and start over |
 | `F1`–`F8` | Send CW message (Run or S&P set) |
 | `Esc` | Abort CW, stop repeat-CQ, close an open sheet |
@@ -523,11 +524,54 @@ The toolbar **Export** menu offers both formats:
   exception: your email address keeps the case you typed it in, since that is
   the one header a sponsor may write back to.
 - **ADIF 3.1.4** — `CNTY`/`MY_CNTY` with full county names,
-  `STX_STRING`/`SRX_STRING`, and group ids in an `APP_` field.
+  `STX_STRING`/`SRX_STRING`, group ids in an `APP_` field, and the POTA
+  fields below when the log is an activation.
 
 Suggested filenames follow the log ("2026-08-29 KSQP KE5CW.adi"), and the app
 declares the ADIF file type so the save panel keeps `.adi` instead of appending
 `.txt`.
+
+## POTA activations on any contest
+
+Any contest log doubles as a POTA activation log. Contest Setup has a **POTA
+Activation** section on every party — set your park(s) there and each contact
+is stamped with them as it is logged, so a mid-contest move (or a rove) marks
+only the contacts made after it.
+
+- **Find the park by name or number.** The picker searches a cached copy of
+  POTA's own US program list — 12,938 parks — and every word has to match, so
+  "lake tx" narrows to Texas lakes and "3051" goes straight to Ray Roberts.
+  With the search box empty it lists the **parks nearest you**, in miles, from
+  either the Mac's location or your grid square. Typing a full reference and
+  pressing Return adds it outright, which is also how you enter a park from
+  another program or one too new to be in the list.
+- **It works with no signal.** The list is downloaded once — on an explicit
+  button, never silently, since it is about 3 MB and most operators are not
+  activating — then searched entirely offline and refreshed weekly. POTA's API
+  refuses `HEAD` requests, so there is no cheap way to ask "has this changed?";
+  a weekly re-download is the honest substitute. A failed refresh keeps the
+  copy you have and says so.
+- **Your grid square fills itself.** **Locate** beside the grid field asks
+  macOS where the Mac is and converts it to a 6-character locator. It fills
+  silently on opening Setup only when permission has already been granted —
+  the permission dialog only ever appears from that button — and the field
+  stays plain text, so no fix just means you type it yourself.
+- **Park-to-park.** While a log is an activation, the entry bar grows a **P2P
+  park(s)** field for the other station's park. A reference that doesn't parse
+  refuses to log, the way an unreadable Skeeter number does — it is what earns
+  the credit. Rows carrying one are tagged `P2P` in the log's Flags column, and
+  both sides' parks stay editable afterwards (per row in the editor, or across
+  a selection with **My POTA park(s)** in the bulk editor).
+- **The export is what POTA credits.** Each row becomes one ADIF record per
+  (my park × their park) pair, carrying `MY_SIG`/`MY_SIG_INFO`,
+  `SIG`/`SIG_INFO`, and ADIF 3.1.4's `MY_POTA_REF`/`POTA_REF`. That duplication
+  is POTA's own instruction for n-fers — work a three-fer and the QSO is listed
+  three times, one park each — so activation, park-to-park, and n-fer credit
+  all survive the upload. A log with no parks exports byte-for-byte as before.
+
+The cached park list lives in `~/Library/Application Support/QSOPartyLogger/POTA/`.
+Field definitions and upload rules are banked in
+[`docs/research/pota/SOURCES.md`](docs/research/pota/SOURCES.md).
 
 ## Adding a party without writing code
 

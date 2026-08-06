@@ -23,6 +23,8 @@ struct EditQSOSheet: View {
     @State private var myLoc = ""
     @State private var band: Band = .m20
     @State private var rawMode = "CW"
+    @State private var myParks = ""
+    @State private var theirParks = ""
     @State private var validationMessage: String?
 
     var body: some View {
@@ -108,6 +110,22 @@ struct EditQSOSheet: View {
                         .font(.body.monospaced())
                         .frame(width: 100)
                 }
+                // Always shown, unlike the exchange elements above: tagging a
+                // park after the fact is legitimate even for a log that was
+                // never an activation — a hunter's own record of where the
+                // other station was.
+                GridRow {
+                    Text("My park(s)")
+                    TextField("", text: $myParks.uppercasing)
+                        .font(.body.monospaced())
+                        .frame(width: 160)
+                }
+                GridRow {
+                    Text("Their park(s)")
+                    TextField("", text: $theirParks.uppercasing)
+                        .font(.body.monospaced())
+                        .frame(width: 160)
+                }
             }
 
             if let message = validationMessage {
@@ -140,6 +158,8 @@ struct EditQSOSheet: View {
             myLoc = original.myLoc
             band = original.band
             rawMode = original.rawMode
+            myParks = (original.myPotaRefs ?? []).joined(separator: ",")
+            theirParks = (original.theirPotaRefs ?? []).joined(separator: ",")
         }
     }
 
@@ -158,6 +178,24 @@ struct EditQSOSheet: View {
             case .success:
                 break
             }
+        }
+        // Both park lists before anything is written, so a rejected one
+        // leaves the row untouched rather than half-changed.
+        let parsedMine: [String]
+        switch PotaRef.parseList(myParks) {
+        case .failure(let failure):
+            validationMessage = failure.message
+            return
+        case .success(let refs):
+            parsedMine = refs
+        }
+        let parsedTheirs: [String]
+        switch PotaRef.parseList(theirParks) {
+        case .failure(let failure):
+            validationMessage = failure.message
+            return
+        case .success(let refs):
+            parsedTheirs = refs
         }
         var updated = original
         updated.call = call.trimmingCharacters(in: .whitespaces).uppercased()
@@ -178,6 +216,8 @@ struct EditQSOSheet: View {
         updated.band = band
         updated.rawMode = rawMode
         updated.modeClass = ModeClass.classify(rawMode: rawMode)
+        updated.myPotaRefs = parsedMine.isEmpty ? nil : parsedMine
+        updated.theirPotaRefs = parsedTheirs.isEmpty ? nil : parsedTheirs
         onSave(updated)
         dismiss()
     }
