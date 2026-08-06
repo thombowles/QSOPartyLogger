@@ -194,4 +194,30 @@ final class ScoreEngineTests: XCTestCase {
         XCTAssertFalse(ScoreEngine.wouldAddMultiplier(theirLocs: ["MRN"], band: .m20, modeClass: .cw, log: log, party: ksqp))
         XCTAssertTrue(ScoreEngine.wouldAddMultiplier(theirLocs: ["MRN", "CHS"], band: .m20, modeClass: .cw, log: log, party: ksqp))
     }
+
+    // MARK: POTA
+
+    /// POTA is orthogonal to every party: stamping parks moves nothing in
+    /// the score.
+    func testPotaParksDoNotChangeTheScore() throws {
+        let party = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        var log = ContestLog(partyID: "ksqp")
+        log.station.callsign = "KE5CW"
+        log.myLocation = .outOfState(location: "TX")
+        let abbrs = party.counties.prefix(2).map(\.abbr)
+        log.qsos = abbrs.map { county in
+            QSO(call: "W0BH", band: .m20, modeClass: .cw, rawMode: "CW",
+                rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: county)
+        }
+        let bare = ScoreEngine.score(log: log, party: party)
+
+        log.myPotaRefs = ["US-3315"]
+        for i in log.qsos.indices {
+            log.qsos[i].myPotaRefs = ["US-3315"]
+            log.qsos[i].theirPotaRefs = ["US-0088"]
+        }
+        let parked = ScoreEngine.score(log: log, party: party)
+        XCTAssertEqual(parked.total, bare.total)
+        XCTAssertEqual(parked.dupeRowIDs, bare.dupeRowIDs)
+    }
 }

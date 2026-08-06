@@ -114,11 +114,43 @@ enum AdifExporter {
             r += field("my_state", myState)
         }
 
-        r += field("station_callsign", myCall)
-        r += field("operator", myCall)
-        r += field("app_qsopartylogger_groupid", q.groupID.uuidString)
-        r += "<eor>\n"
-        return r
+        // POTA: one emitted record per (my park × their park) pair. POTA's
+        // park-to-park reference is explicit — "list the same QSO three
+        // times in the ADIF log file, each with one of the three park
+        // references in SIG_INFO, with the rest unchanged" — and its
+        // uploader reads a single park per record from MY_SIG_INFO /
+        // SIG_INFO, deduping by park reference. The ADIF 3.1.4 list form
+        // (POTARefList) would be valid spec but lose n-fer credit, so each
+        // record carries the singular MY_POTA_REF / POTA_REF that matches
+        // its SIG fields instead (docs/research/pota/SOURCES.md). A row
+        // with no parks takes each loop once and emits zero new fields —
+        // byte-identical to every log before POTA support.
+        let myParks: [String?] = (q.myPotaRefs?.isEmpty ?? true)
+            ? [nil] : q.myPotaRefs!.map(Optional.some)
+        let theirParks: [String?] = (q.theirPotaRefs?.isEmpty ?? true)
+            ? [nil] : q.theirPotaRefs!.map(Optional.some)
+        var records = ""
+        for myPark in myParks {
+            for theirPark in theirParks {
+                var rec = r
+                if let myPark {
+                    rec += field("my_sig", "POTA")
+                    rec += field("my_sig_info", myPark)
+                    rec += field("my_pota_ref", myPark)
+                }
+                if let theirPark {
+                    rec += field("sig", "POTA")
+                    rec += field("sig_info", theirPark)
+                    rec += field("pota_ref", theirPark)
+                }
+                rec += field("station_callsign", myCall)
+                rec += field("operator", myCall)
+                rec += field("app_qsopartylogger_groupid", q.groupID.uuidString)
+                rec += "<eor>\n"
+                records += rec
+            }
+        }
+        return records
     }
 
     static func adifMode(_ rawMode: String) -> String {
