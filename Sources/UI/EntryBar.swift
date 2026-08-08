@@ -58,7 +58,7 @@ struct EntryBar: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 10) {
-                field("Call", text: $entry.call.uppercasing, width: 140, focusTag: .call)
+                field("Call", text: $entry.call, width: 140, focusTag: .call)
                 if party?.exchangeIncludesRST ?? true {
                     field("RST S", text: $entry.rstSent, width: 60, focusTag: .rstSent)
                     field("RST R", text: $entry.rstRcvd, width: 60, focusTag: .rstRcvd)
@@ -68,12 +68,12 @@ struct EntryBar: View {
                     field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
                 }
                 if party?.exchangeIncludesName ?? false {
-                    field("Name", text: $entry.nameTyped.uppercasing, width: 100,
+                    field("Name", text: $entry.nameTyped, width: 100,
                           focusTag: .nameRcvd, provisional: entry.nameIsAutoFilled)
                 }
                 field(
                     exchangeLabel,
-                    text: $entry.exchangeTyped.uppercasing,
+                    text: $entry.exchangeTyped,
                     width: 170,
                     focusTag: .exchange,
                     provisional: entry.exchangeIsAutoFilled
@@ -98,7 +98,7 @@ struct EntryBar: View {
                 if let member = party?.memberExchange {
                     // After the location, the way it is sent ("559 NJ NR 13").
                     // A number or a power with its unit — "13" or "5W".
-                    field(member.shortTerm, text: $entry.memberTyped.uppercasing, width: 80,
+                    field(member.shortTerm, text: $entry.memberTyped, width: 80,
                           focusTag: .memberRcvd, provisional: entry.memberIsAutoFilled)
                         // The field is narrow and its label cannot say all
                         // three cases, of which the blank one is the least
@@ -107,7 +107,7 @@ struct EntryBar: View {
                               + "Leave empty if they sent neither — that scores as QRO.")
                 }
                 if showsP2P {
-                    field("P2P park(s)", text: $entry.theirParkTyped.uppercasing,
+                    field("P2P park(s)", text: $entry.theirParkTyped,
                           width: 110, focusTag: .theirPark)
                         .help("The other station's POTA reference(s) when they are "
                               + "in a park too — US-3315, comma-separated for an "
@@ -229,6 +229,10 @@ struct EntryBar: View {
 
     /// `provisional` greys the text: the app put it there from what it knows
     /// about the station, and the first keystroke makes it the operator's.
+    ///
+    /// Every field in the row is built to hold upper case, including the two
+    /// that never need it: a report and a QSO number are digits, which fold to
+    /// themselves, so the reports cost nothing and the row stays one shape.
     private func field(
         _ label: String,
         text: Binding<String>,
@@ -240,7 +244,7 @@ struct EntryBar: View {
             Text(label)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
-            TextField("", text: text)
+            uppercasingTextField("", text: text)
                 .textFieldStyle(.roundedBorder)
                 .font(.system(.body, design: .monospaced))
                 .foregroundStyle(provisional ? AnyShapeStyle(.secondary) : AnyShapeStyle(.primary))

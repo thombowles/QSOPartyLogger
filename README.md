@@ -673,7 +673,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2254 unit tests**, none of which need hardware or a network — no serial port,
+**2262 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history
@@ -684,7 +684,7 @@ QSY commands, what the radio keys at every step of the entry flow, keyer
 timing, the history archive and its two-Mac merge, season stats, the SQP
 Challenge formula, and the upcoming-contest engine.
 
-Two notes for anyone working in here:
+Three notes for anyone working in here:
 
 - What goes on the air is decided by
   [`EntryFlow`](Sources/App/EntryFlow.swift), not by the view, so tests can drive
@@ -694,6 +694,13 @@ Two notes for anyone working in here:
   through `Preferences.store`, which the test setup points at a throwaway suite.
   A full run leaves your station profile, radio wiring and cluster history
   untouched.
+- A field that holds upper case is built with `uppercasingTextField`
+  ([`Sources/UI/Uppercasing.swift`](Sources/UI/Uppercasing.swift)) and never with
+  a `TextField` over a folding binding. Folding the value alone leaves AppKit's
+  field editor holding what was typed while the model holds what will be logged,
+  and the next redraw resolves that by replacing the editor's text — which puts
+  the caret at the end of the field, mid-word. The pieces are private to that
+  file so the two halves cannot be separated again.
 
 ## Adding a radio
 

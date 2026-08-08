@@ -107,12 +107,12 @@ struct SetupSheet: View {
                 //
                 // Email is the exception: see `StationProfile.normalized()`.
                 Section("Station") {
-                    TextField("Callsign", text: $station.callsign.uppercasing)
+                    uppercasingTextField("Callsign", text: $station.callsign)
                         .font(.body.monospaced())
                         .focused($focused, equals: .callsign)
-                    TextField("Name", text: $station.name.uppercasing)
+                    uppercasingTextField("Name", text: $station.name)
                     TextField("Email", text: $station.email)
-                    TextField("Address", text: $station.address.uppercasing)
+                    uppercasingTextField("Address", text: $station.address)
                     // One field per row, each with its own label, exactly like
                     // the five rows around them.
                     //
@@ -130,15 +130,15 @@ struct SetupSheet: View {
                     // an unlabelled box is the same question all over again. A
                     // label that persists is the whole job here, and the Form's
                     // own label column is where one goes.
-                    TextField("City", text: $station.city.uppercasing)
-                    TextField("State / province", text: $station.stateProvince.uppercasing)
-                    TextField("ZIP", text: $station.postalCode.uppercasing)
-                    TextField("Country", text: $station.country.uppercasing)
+                    uppercasingTextField("City", text: $station.city)
+                    uppercasingTextField("State / province", text: $station.stateProvince)
+                    uppercasingTextField("ZIP", text: $station.postalCode)
+                    uppercasingTextField("Country", text: $station.country)
                     // Free text, always — a Mac with no usable fix must still
                     // be able to say where it is. Locate only fills it in.
                     LabeledContent("Grid square") {
                         HStack(spacing: 6) {
-                            TextField("", text: $station.gridLocator.uppercasing)
+                            uppercasingTextField("", text: $station.gridLocator)
                                 .textFieldStyle(.roundedBorder)
                                 .font(.body.monospaced())
                                 .frame(width: 100)
@@ -163,7 +163,7 @@ struct SetupSheet: View {
                             .foregroundStyle(.orange)
                             .fixedSize(horizontal: false, vertical: true)
                     }
-                    TextField("Club (optional)", text: $station.club.uppercasing)
+                    uppercasingTextField("Club (optional)", text: $station.club)
                 }
 
                 Section("Category") {
@@ -219,7 +219,7 @@ struct SetupSheet: View {
                             }
                         }
                     }
-                    TextField("Operators (multi-op)", text: $station.operators.uppercasing)
+                    uppercasingTextField("Operators (multi-op)", text: $station.operators)
                         .font(.body.monospaced())
                     Text("Space-separated calls; @ marks the host station. Blank = your callsign.")
                         .font(.caption)
@@ -250,7 +250,7 @@ struct SetupSheet: View {
                         // rule — so it is set here, not per contact.
                         if party.exchangeIncludesName {
                             LabeledContent("Exchange name") {
-                                TextField("", text: $exchangeName.uppercasing)
+                                uppercasingTextField("", text: $exchangeName)
                                     .textFieldStyle(.roundedBorder)
                                     .font(.body.monospaced())
                                     .focused($focused, equals: .exchangeName)
@@ -265,7 +265,7 @@ struct SetupSheet: View {
                         // (Skeeter Hunt: "NR 13" versus "5W").
                         if let member = party.memberExchange {
                             LabeledContent(member.term.sentenceCased) {
-                                TextField("", text: $exchangeMember.uppercasing)
+                                uppercasingTextField("", text: $exchangeMember)
                                     .textFieldStyle(.roundedBorder)
                                     .font(.body.monospaced())
                                     .focused($focused, equals: .exchangeMember)
@@ -307,7 +307,7 @@ struct SetupSheet: View {
                             // this log *stores* is upper case and not merely
                             // drawn that way.
                             LabeledContent(party.hasHomeRegion ? "State / DX" : "My location") {
-                                TextField("", text: $stateToken.uppercasing)
+                                uppercasingTextField("", text: $stateToken)
                                     .textFieldStyle(.roundedBorder)
                                     .focused($focused, equals: .stateToken)
                                     .frame(width: 120)

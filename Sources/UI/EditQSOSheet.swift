@@ -35,7 +35,7 @@ struct EditQSOSheet: View {
             Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 8) {
                 GridRow {
                     Text("Call")
-                    TextField("", text: $call.uppercasing)
+                    uppercasingTextField("", text: $call)
                         .font(.body.monospaced())
                         .frame(width: 140)
                 }
@@ -81,8 +81,8 @@ struct EditQSOSheet: View {
                     GridRow {
                         Text("Name sent / rcvd")
                         HStack {
-                            TextField("", text: $nameSent.uppercasing).frame(width: 90)
-                            TextField("", text: $nameRcvd.uppercasing).frame(width: 90)
+                            uppercasingTextField("", text: $nameSent).frame(width: 90)
+                            uppercasingTextField("", text: $nameRcvd).frame(width: 90)
                         }
                     }
                 }
@@ -93,20 +93,20 @@ struct EditQSOSheet: View {
                     GridRow {
                         Text("\(member.shortTerm) sent / rcvd")
                         HStack {
-                            TextField("", text: $memberSent.uppercasing).frame(width: 90)
-                            TextField("", text: $memberRcvd.uppercasing).frame(width: 90)
+                            uppercasingTextField("", text: $memberSent).frame(width: 90)
+                            uppercasingTextField("", text: $memberRcvd).frame(width: 90)
                         }
                     }
                 }
                 GridRow {
                     Text("My exchange")
-                    TextField("", text: $myLoc.uppercasing)
+                    uppercasingTextField("", text: $myLoc)
                         .font(.body.monospaced())
                         .frame(width: 100)
                 }
                 GridRow {
                     Text("Their exchange")
-                    TextField("", text: $theirLoc.uppercasing)
+                    uppercasingTextField("", text: $theirLoc)
                         .font(.body.monospaced())
                         .frame(width: 100)
                 }
@@ -116,13 +116,13 @@ struct EditQSOSheet: View {
                 // other station was.
                 GridRow {
                     Text("My park(s)")
-                    TextField("", text: $myParks.uppercasing)
+                    uppercasingTextField("", text: $myParks)
                         .font(.body.monospaced())
                         .frame(width: 160)
                 }
                 GridRow {
                     Text("Their park(s)")
-                    TextField("", text: $theirParks.uppercasing)
+                    uppercasingTextField("", text: $theirParks)
                         .font(.body.monospaced())
                         .frame(width: 160)
                 }

@@ -129,7 +129,7 @@ struct BulkEditSheet: View {
             }
             .frame(width: 100)
         case .myLoc, .nameSent, .memberSent, .myPotaRefs:
-            TextField("", text: $text.uppercasing)
+            uppercasingTextField("", text: $text)
                 .font(.body.monospaced())
                 .frame(width: 140)
         }
