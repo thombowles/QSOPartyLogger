@@ -30,6 +30,44 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   baud list, and the statement that baud "is irrelevant to the USB Virtual COM
   Port". Nothing here traces to hamlib, N1MM, or a forum post.
 
+- Elecraft K3S / K3 / KX3 / KX2 CAT: the **Programmer's Reference, Rev. G5,
+  Feb. 20, 2019** (ftp.elecraft.com/KX2/Manuals Downloads/K3S&K3&KX3&KX2 Pgmrs
+  Ref, G5.pdf, `Last-Modified` Mon 08 Sep 2025 21:52:03 GMT, fetched
+  2026-08-09), banked verbatim as
+  [`k3_programmers_reference_g5.txt`](research/k3_programmers_reference_g5.txt).
+  G5 is what elecraft.com's Programmer's Reference Manuals page currently
+  links; the archived **Rev. F2, July 24, 2015** that `ElecraftK3Driver` also
+  cites is unchanged for every command the driver speaks. `IF`, `FA`, `MD`,
+  `KS` and `AI` come from it. Two facts here decide behaviour elsewhere:
+  `KS`'s field is "008-050 (8-50 WPM)", which is exactly the app's clamp; and
+  the `KY` entry is the authority for CW speed being changeable mid-message —
+  "If * is a W (for "wait"), processing of any following host commands will be
+  delayed until the current message has been sent. This is useful when a KY
+  command is followed by other commands that may have side-effects, e.g., KS
+  (keyer speed)." The blank form the driver used therefore let a following
+  `KS` land on a message already sending, and `KYW` is documented as the way
+  to *opt out* of that. The app no longer sends `KY` to a K3 at all
+  ([Article 11](CONSTITUTION.md)), but that sentence is why the constitution
+  forbids any future driver adopting a deferred-side-effect form.
+
+- FlexRadio 6000/8000 CAT: the **SmartSDR TCP/IP API** wiki in FlexRadio's own
+  GitHub organisation (github.com/flexradio/smartsdr-api-docs), which
+  flexradio.com/api points to, fetched 2026-08-09 as raw markdown and banked as
+  [`flex_smartsdr_tcpip_api_cw.txt`](research/flex_smartsdr_tcpip_api_cw.txt) —
+  the `TCPIP-cw` and `TCPIP-cwx` pages whole, because the wiki carries no
+  revision number or date to cite instead. The keyer speed command is
+  `cw wpm <speed>`, printed identically on both pages; every *other* verb on
+  the cwx page is `cwx ...`, and WPM alone is not, which is how the driver came
+  to emit a `cwx wpm` that no radio ever answered. **Explicitly partial
+  ([Article 3](CONSTITUTION.md)):** the `cwx ... wpm=<n>` status format that
+  `FlexRadioDriver.parseCWXSpeed` reads appears on neither page, nor on the
+  wiki's `SmartSDR-Status-Responses` page, which does not mention `cwx` at all.
+  That parser predates this entry and is still unverified against an official
+  source — front-panel speed sync from a Flex is the one radio capability in
+  this app resting on nothing banked. A second gap the same file documents and
+  the driver does not yet honour: `cwx send` specifies spaces be replaced with
+  `0x7F`, and `cmdSendCW` sends them literally.
+
 - skeeter (NJQRP Skeeter Hunt): rules from W2LJ's blog page
   (w2lj.blogspot.com/p/njqrp-skeeter-hunt.html, the current 15th-Annual/2026
   edition), fetched 2026-08-04 and banked as
