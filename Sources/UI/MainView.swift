@@ -44,6 +44,7 @@ struct MainView: View {
     @State private var hubSpotClient = HubSpotClient()
     @State private var callHistoryClient = CallHistoryClient()
     @State private var dxccLabelClient = DXCCLabelClient()
+    @State private var spaceWeatherClient = SpaceWeatherClient()
     @State private var scpClient = SCPClient()
     @State private var potaParkClient = PotaParkClient()
     @State private var locationProvider = MacLocationProvider()
@@ -181,20 +182,63 @@ struct MainView: View {
             leftPane
                 .layoutPriority(1)
             ScoreSidebar(
-                log: document.log, party: party, score: score, members: flow.combinedMembers
+                log: document.log, party: party, score: score, members: flow.combinedMembers,
+                advisorInput: advisorInput, onTune: tune
             )
         }
+    }
+
+    /// Everything the Advisor reads, in one expression.
+    ///
+    /// A closure rather than a value because a rate reading and a trailing
+    /// window are both functions of the instant they are taken at, and because
+    /// building one on every body pass would cost a fold of the log for
+    /// nothing — the section asks for it on its own thirty-second tick.
+    private var advisorInput: (Date) -> Advisor.Input {
+        { now in
+            Advisor.Input.make(
+                goal: settings.advisorGoal,
+                log: document.log,
+                party: party,
+                score: score,
+                reading: RateMeter.reading(timestamps: scoredTimestamps, now: now),
+                currentBand: currentBand,
+                currentModeClass: currentModeClass,
+                spotsOnBand: visibleSpots(on:),
+                spaceWeather: spaceWeatherClient.reading,
+                followsBandPlan: settings.followBandPlan,
+                mutedKinds: settings.advisorMutedKinds,
+                now: now
+            )
+        }
+    }
+
+    /// Timestamps of the rows the score counts — the same exclusion
+    /// `ScoreSidebar` makes before handing them to `RateMeter`, so the
+    /// advisor's "12/hr last 10" is the figure in the rate column beside it.
+    private var scoredTimestamps: [Date] {
+        let excluded = score.dupeRowIDs
+            .union(score.invalidRowIDs)
+            .union(score.outOfScopeRowIDs)
+        return document.log.qsos.filter { !excluded.contains($0.id) }.map(\.timestampUTC)
     }
 
     /// Spots on the current band after every filter — the band map and
     /// ⌘↑/⌘↓ work from this same list so they can't disagree.
     private var visibleSpotsOnBand: [Spot] {
+        visibleSpots(on: currentBand)
+    }
+
+    /// The same list for any band, which is what the advisor needs to compare
+    /// one against another. Each band is filtered against **its own** worked
+    /// stations, because a call worked on 20 m is still workable on 40.
+    private func visibleSpots(on band: Band) -> [Spot] {
         SpotFilter.filter(
-            spotStore.spots(band: currentBand),
+            spotStore.spots(band: band),
             options: settings.spotFilterOptions(
-                workedCalls: workedCallsOnCurrentBandMode,
+                workedCalls: workedCalls(on: band),
                 allowedModes: party?.allowedModeClasses ?? [],
-                workedCallCounties: workedCallCountiesOnCurrentBandMode
+                workedCallCounties: workedCallCounties(on: band)
             )
         )
     }
@@ -234,9 +278,13 @@ struct MainView: View {
 
     /// Calls already in the log on the current band+mode — grays their spots.
     private var workedCallsOnCurrentBandMode: Set<String> {
+        workedCalls(on: currentBand)
+    }
+
+    private func workedCalls(on band: Band) -> Set<String> {
         Set(
             document.log.qsos
-                .filter { $0.band == currentBand && $0.modeClass == currentModeClass }
+                .filter { $0.band == band && $0.modeClass == currentModeClass }
                 .map { $0.call.uppercased() }
         )
     }
@@ -247,9 +295,13 @@ struct MainView: View {
     /// this the band map would keep hiding a rover through every county it
     /// drives into, which is exactly where the multipliers are.
     private var workedCallCountiesOnCurrentBandMode: Set<String> {
+        workedCallCounties(on: currentBand)
+    }
+
+    private func workedCallCounties(on band: Band) -> Set<String> {
         Set(
             document.log.qsos
-                .filter { $0.band == currentBand && $0.modeClass == currentModeClass }
+                .filter { $0.band == band && $0.modeClass == currentModeClass }
                 .map { "\($0.call.uppercased())|\($0.theirLoc.uppercased())" }
         )
     }
@@ -824,6 +876,7 @@ struct MainView: View {
         activateCallHistory()
         activateSuperCheck()
         checkDXCCLabels()
+        checkSpaceWeather()
         if settings.clusterAutoConnect,
            !settings.clusterHost.trimmingCharacters(in: .whitespaces).isEmpty,
            !document.log.station.callsign.isEmpty,
@@ -897,6 +950,15 @@ struct MainView: View {
     /// A newer file takes effect at the next launch rather than mid-contest.
     private func checkDXCCLabels() {
         Task { await dxccLabelClient.refreshIfStale() }
+    }
+
+    /// Ask SWPC what the sun is doing. Hourly at most, cached to disk, and
+    /// quiet in every failure mode: with no reading the advisor's propagation
+    /// weights are identity and it runs on geometry alone, exactly as it would
+    /// with no network at all.
+    private func checkSpaceWeather() {
+        guard settings.advisorEnabled else { return }
+        Task { await spaceWeatherClient.refreshIfStale() }
     }
 
     /// Previous contests, read once and indexed by call — what a prefill falls

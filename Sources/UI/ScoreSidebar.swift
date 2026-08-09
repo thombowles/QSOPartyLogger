@@ -10,6 +10,11 @@ struct ScoreSidebar: View {
     /// The definitions of whatever `party` combines — empty for every ordinary
     /// party. Drives the per-contest QSO breakdown and the county grouping.
     var members: [PartyDefinition] = []
+    /// Built with the evaluation's own `now` — see `AdvisorSection`. `nil`
+    /// leaves the advisor out entirely, which is what the dashboard's
+    /// read-only uses of this sidebar want.
+    var advisorInput: ((Date) -> Advisor.Input)?
+    var onTune: (Spot) -> Void = { _ in }
 
     /// Which multiplier lists the operator has collapsed, remembered per party.
     @State private var settings = AppSettings.shared
@@ -18,6 +23,9 @@ struct ScoreSidebar: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 copyShortcut
+                if let advisorInput {
+                    AdvisorSection(input: advisorInput, onTune: onTune)
+                }
                 totalsCard
                 if let party {
                     CombinedBreakdownSection(log: log, party: party, members: members)

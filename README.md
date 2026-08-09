@@ -126,6 +126,8 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
 | `⇧⌘M` | Expand / collapse every multiplier list in the score sidebar |
 | `⇧⌘C` | Copy the score summary as text (also on the score card's right-click menu) |
+| `⇧⌘A` | Collapse / expand the Advisor |
+| `⌥⌘A` | Toggle what the Advisor optimises: Score ↔ QSOs |
 | `⌘A` | Select every row in the log (`⇧`-click for a range, `⌘`-click for scattered rows) |
 | `⌘.` | Dismiss the spots-already-used badge for this sitting |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY, change band, change mode |
@@ -239,6 +241,49 @@ only a clock-based window can fall to zero. Anything the log cannot yet support
 reads `—` rather than a confident number — two contacts ten seconds apart are
 not 120/hr. Dupes and out-of-scope contacts are excluded, so rate and the QSO
 count beside it always agree.
+
+### The Advisor
+
+The app measures nearly everything a contest decision needs — four rate
+windows, the exact worked-multiplier set, spots with counties on them, every
+bonus rule and operating window. The Advisor, at the top of the score sidebar,
+is the part that *reads* them back to you.
+
+**It states facts, never orders.** The line on screen is a true sentence about
+your own data — "Run fading: 18/hr last 10, down from 46 the past hour" — and
+whatever usually pays lives in the tooltip. It is silent whenever it has
+nothing true to say, which is most of a contest, and it never logs, never keys
+and never moves the radio.
+
+| | |
+| --- | --- |
+| **Run health** | Your run has halved against its own trailing hour, and held there for three minutes. Fires at 0.5×, clears at 0.75×, so it cannot flap |
+| **Move calls** | Where the next hour is, and in which posture: every band and both Run and S&P, ranked by workable spots, needed multipliers, your own measured rate there, and — for a run — how the sky is likely treating that band. A working run is never interrupted |
+| **Needed multipliers** | Unworked counties on the air right now, each a chip that tunes the radio and drops the call in the entry bar, exactly as a band-map click does |
+| **Bonus stations** | The party's own bonus call while it is still earnable, naming what remains — "W7DX worked on CW — Phone bonus open" — with its frequency when somebody has spotted it |
+| **Operating windows** | The last two hours of a window counting down, the next one's opening time between them, and silence after the last one closes |
+
+**Score, or QSOs** (**⌥⌘A**, shown in the header). Score prices a new
+multiplier heavily, because it multiplies everything. QSOs prices every valid
+contact the same, which is what the State QSO Party Challenge pays — there a
+needed county is worth exactly one QSO. One census, two yardsticks: the same
+band map can recommend the
+multiplier-rich band under Score and the busy one under QSOs. The setting is
+global, because a Challenge season is a season rather than a log.
+
+**The sky, honestly.** Sunrise, sunset and the gray line come from your grid
+square and NOAA's own solar equations, checked against the US Naval
+Observatory. Solar flux and the planetary K index come from NOAA SWPC, at most
+once an hour, cached so a contest that opens offline still starts with what was
+last true. All of it is *tendency, not measurement*: a spot you can see always
+outranks it, the wording always says "usually", and the observation time is
+always named. No grid, no network, or a reading over six hours old, and the
+Advisor simply runs on what it can see.
+
+A **NON-ASSISTED** entry never receives a spot at all, so every spot-derived
+line is silent for it by construction — what remains is your own log and the
+terminator, which are nobody's assistance. Right-click the header to silence
+any single kind, or the Advisor entirely; **⇧⌘A** collapses it.
 
 ### The multiplier checklist
 
@@ -696,7 +741,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2296 unit tests**, none of which need hardware or a network — no serial port,
+**2410 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3, QMX and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history
@@ -705,7 +750,9 @@ and its download client, spot parsing and filtering and navigation, the
 spotting policy, the band map scale and column stacking, the band plan, typed
 QSY commands, what the radio keys at every step of the entry flow, keyer
 timing, the history archive and its two-Mac merge, season stats, the SQP
-Challenge formula, and the upcoming-contest engine.
+Challenge formula, the upcoming-contest engine, and the Advisor — solar
+geometry pinned against the US Naval Observatory, the SWPC parsers against
+payloads captured from the live products, and every advisory's own wording.
 
 Three notes for anyone working in here:
 
