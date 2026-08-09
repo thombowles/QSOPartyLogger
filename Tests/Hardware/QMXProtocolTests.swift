@@ -133,14 +133,6 @@ final class QMXProtocolTests: XCTestCase {
         XCTAssertNil(QRPLabsQMXDriver.parseKS("KY0;"), "KY is not a speed report")
     }
 
-    func testParseKY() {
-        XCTAssertEqual(QRPLabsQMXDriver.parseKY("KY0;"), .sending)
-        XCTAssertEqual(QRPLabsQMXDriver.parseKY("KY1;"), .sendingNearlyFull)
-        XCTAssertEqual(QRPLabsQMXDriver.parseKY("KY2;"), .idle)
-        XCTAssertNil(QRPLabsQMXDriver.parseKY("KY;"))
-        XCTAssertNil(QRPLabsQMXDriver.parseKY("?;"), "the overflow error is not a buffer state")
-    }
-
     // MARK: Command builders
 
     func testCommandBuilders() {
@@ -185,45 +177,6 @@ final class QMXProtocolTests: XCTestCase {
         }
     }
 
-    // MARK: KY chunking
-
-    func testKYChunkingRespectsTheBufferLimit() {
-        let text = "CQ CQ CQ TEST DE KE5CW KE5CW KE5CW PSE K"
-        let cmds = QRPLabsQMXDriver.cmdKeyerText(text)
-        XCTAssertGreaterThan(cmds.count, 1, "40 characters does not fit one 20-character chunk")
-        for cmd in cmds {
-            XCTAssertTrue(cmd.hasPrefix("KY "))
-            XCTAssertTrue(cmd.hasSuffix(";"))
-            XCTAssertLessThanOrEqual(cmd.dropFirst(3).dropLast(1).count, QRPLabsQMXDriver.keyerChunkLimit)
-        }
-    }
-
-    /// KY appends characters to one circular buffer rather than queueing whole
-    /// messages, so the chunks must concatenate back to the original text with
-    /// nothing added and nothing — least of all a word space — dropped.
-    func testKYChunksConcatenateBackToTheOriginalText() {
-        for text in [
-            "CQ CQ CQ TEST DE KE5CW KE5CW KE5CW PSE K",
-            "TU 73",
-            "KE5CW 599 TX TRAVIS TRAVIS",
-            "W1AW/4 DE KE5CW BK",
-        ] {
-            let payloads = QRPLabsQMXDriver.cmdKeyerText(text).map { String($0.dropFirst(3).dropLast(1)) }
-            XCTAssertEqual(payloads.joined(), text, "round trip failed for '\(text)'")
-        }
-    }
-
-    func testKYSplitsAWordTooLongToFit() {
-        let text = "KE5CW/PORTABLE/MOBILE/ROVER"  // 27 characters, no space to cut on
-        let payloads = QRPLabsQMXDriver.cmdKeyerText(text).map { String($0.dropFirst(3).dropLast(1)) }
-        XCTAssertEqual(payloads.joined(), text)
-        XCTAssertEqual(payloads.first?.count, QRPLabsQMXDriver.keyerChunkLimit)
-    }
-
-    func testShortKYSingleChunk() {
-        XCTAssertEqual(QRPLabsQMXDriver.cmdKeyerText("TU 73"), ["KY TU 73;"])
-    }
-
     // MARK: Driver behaviour over a mock transport
 
     func testDriverStartSendsSetupAndPolls() {
@@ -245,17 +198,14 @@ final class QMXProtocolTests: XCTestCase {
     /// A carriage return switches the QMX's serial port into terminal mode and
     /// it stops answering CAT — so nothing this driver can emit may contain one.
     func testNoCommandContainsACarriageReturn() {
-        var emitted = [
+        let emitted = [
             QRPLabsQMXDriver.cmdPollIF,
             QRPLabsQMXDriver.cmdPollKS,
-            QRPLabsQMXDriver.cmdPollKY,
             QRPLabsQMXDriver.cmdAutoInfoOff,
-            QRPLabsQMXDriver.cmdAbortSending,
             QRPLabsQMXDriver.cmdSetFrequency(hz: 14_042_000),
             QRPLabsQMXDriver.cmdSetKeyerSpeed(wpm: 28),
             QRPLabsQMXDriver.cmdSetMode(rawMode: "CW", frequencyHz: 14_042_000) ?? "",
         ]
-        emitted += QRPLabsQMXDriver.cmdKeyerText("CQ TEST DE KE5CW KE5CW K")
 
         for command in emitted {
             XCTAssertFalse(command.contains("\r"), "carriage return in '\(command)'")
@@ -273,9 +223,6 @@ final class QMXProtocolTests: XCTestCase {
         driver.setFrequency(hz: 7_030_000)
         driver.setMode(rawMode: "CW")
         driver.setKeyerSpeed(wpm: 28)
-        driver.sendInternalKeyerText("CQ TEST DE KE5CW KE5CW K")
-        driver.stopInternalKeyer()
-        mock.inject("KY0;")
         Thread.sleep(forTimeInterval: 0.05)
         XCTAssertFalse(mock.allWritten.contains("\r"))
         XCTAssertFalse(mock.allWritten.contains("\n"))
@@ -377,112 +324,33 @@ final class QMXProtocolTests: XCTestCase {
         driver.stop()
     }
 
-    // MARK: KY flow control
+    // MARK: The keyer this driver does not use
 
-    /// The buffer is 80 characters and an overflowing message "will simply be
-    /// ignored" — silently. So only the first chunk goes out unprompted; the
-    /// rest wait for the radio to answer `KY;` with room to spare.
-    func testKeyerTextSendsOneChunkThenWaitsForTheRadio() {
+    /// A QMX keys from DTR, so it is keyed directly and only directly
+    /// (Article 11) — the driver has no internal-keyer path at all. Asserted
+    /// on the wire rather than by reading the source: nothing the driver does
+    /// in a full session may put a `KY` on the port.
+    func testDriverNeverSendsKY() {
         let mock = MockSerialTransport()
         let driver = QRPLabsQMXDriver()
         driver.start(transport: mock)
-
-        let text = "CQ CQ CQ TEST DE KE5CW KE5CW KE5CW PSE K"
-        let chunks = QRPLabsQMXDriver.cmdKeyerText(text)
-        XCTAssertGreaterThanOrEqual(chunks.count, 3, "the fixture needs at least three chunks")
-
-        driver.sendInternalKeyerText(text)
-        XCTAssertTrue(mock.allWritten.contains(chunks[0]))
-        XCTAssertFalse(mock.allWritten.contains(chunks[1]), "chunk 2 must wait for a KY answer")
-
-        // "not more than 75% full" — room for another 20 characters.
-        mock.inject("KY0;")
-        Thread.sleep(forTimeInterval: 0.05)
-        XCTAssertTrue(mock.allWritten.contains(chunks[1]))
-        XCTAssertFalse(mock.allWritten.contains(chunks[2]))
-
-        // "more than 75% full" — hold, even though more is queued.
-        mock.inject("KY1;")
-        Thread.sleep(forTimeInterval: 0.05)
-        XCTAssertFalse(mock.allWritten.contains(chunks[2]), "KY1 means the buffer is too full")
-
-        mock.inject("KY0;")
-        Thread.sleep(forTimeInterval: 0.05)
-        XCTAssertTrue(mock.allWritten.contains(chunks[2]))
+        driver.setFrequency(hz: 7_030_000)
+        driver.setMode(rawMode: "CW")
+        driver.setKeyerSpeed(wpm: 28)
+        // Two poll cycles, so the poll loop gets its chance to ask as well.
+        Thread.sleep(forTimeInterval: 1.2)
         driver.stop()
+
+        XCTAssertFalse(mock.allWritten.contains("KY"), "wrote: \(mock.allWritten)")
     }
 
-    /// KY; only earns its place on the wire while a message is still going out.
-    func testKYIsPolledOnlyWhileAMessageIsQueued() {
-        let mock = MockSerialTransport()
-        let driver = QRPLabsQMXDriver()
-        driver.start(transport: mock)
-        Thread.sleep(forTimeInterval: 0.4)
-        XCTAssertTrue(mock.allWritten.contains("IF;"))
-        XCTAssertFalse(mock.allWritten.contains("KY;"), "nothing queued — no reason to ask")
-
-        driver.sendInternalKeyerText("CQ CQ CQ TEST DE KE5CW KE5CW KE5CW PSE K")
-        let asked = expectation(description: "KY polled")
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.7) {
-            if mock.allWritten.contains("KY;") { asked.fulfill() }
-        }
-        wait(for: [asked], timeout: 2.0)
-        driver.stop()
-    }
-
-    /// Abort is immediate and takes the queue with it: RX; goes out now, and no
-    /// later KY answer can resurrect the rest of the message.
-    func testStopInternalKeyerDropsTheQueueAndReceives() {
-        let mock = MockSerialTransport()
-        let driver = QRPLabsQMXDriver()
-        driver.start(transport: mock)
-
-        let text = "CQ CQ CQ TEST DE KE5CW KE5CW KE5CW PSE K"
-        let chunks = QRPLabsQMXDriver.cmdKeyerText(text)
-        driver.sendInternalKeyerText(text)
-        driver.stopInternalKeyer()
-        XCTAssertTrue(mock.allWritten.contains("RX;"))
-
-        mock.inject("KY0;")
-        mock.inject("KY2;")
-        Thread.sleep(forTimeInterval: 0.05)
-        XCTAssertFalse(mock.allWritten.contains(chunks[1]), "aborted text must not resume")
-        driver.stop()
-    }
-
-    /// A queue left over from one contest file must not drain into the next
-    /// connection.
-    func testStopClearsAPendingKeyerQueue() {
-        let mock = MockSerialTransport()
-        let driver = QRPLabsQMXDriver()
-        driver.start(transport: mock)
-        let chunks = QRPLabsQMXDriver.cmdKeyerText("CQ CQ CQ TEST DE KE5CW KE5CW KE5CW PSE K")
-        driver.sendInternalKeyerText("CQ CQ CQ TEST DE KE5CW KE5CW KE5CW PSE K")
-        driver.stop()
-
-        let second = MockSerialTransport()
-        driver.start(transport: second)
-        second.inject("KY0;")
-        Thread.sleep(forTimeInterval: 0.05)
-        XCTAssertFalse(second.allWritten.contains(chunks[1]))
-        driver.stop()
-    }
-
-    /// The internal keyer is the fallback path; it still has to work, and it
-    /// reaches the radio only through the two protocol members (Article 11).
-    func testRadioInternalKeyerDrivesTheQMX() {
-        let mock = MockSerialTransport()
-        let driver = QRPLabsQMXDriver()
-        driver.start(transport: mock)
-
-        let keyer = RadioInternalKeyer(driver: driver, wpm: 24)
-        keyer.wpm = 30
-        XCTAssertTrue(mock.allWritten.contains("KS030;"))
-        keyer.send("TU 73")
-        XCTAssertTrue(mock.allWritten.contains("KY TU 73;"))
-        keyer.abort()
-        XCTAssertTrue(mock.allWritten.contains("RX;"))
-        driver.stop()
+    /// The type system carries the same rule: a driver only declares
+    /// `InternalKeyerDriver` when the radio has no key lines to use instead.
+    func testDriverIsNotAnInternalKeyerDriver() {
+        XCTAssertFalse(
+            QRPLabsQMXDriver() is any InternalKeyerDriver,
+            "a QMX is keyed from DTR — it must not offer an internal-keyer path"
+        )
     }
 
     /// Commands issued after `stop()` go nowhere rather than to a dead port.
@@ -494,8 +362,7 @@ final class QMXProtocolTests: XCTestCase {
         let before = mock.allWritten
         driver.setFrequency(hz: 7_030_000)
         driver.setMode(rawMode: "CW")
-        driver.sendInternalKeyerText("TU")
-        driver.stopInternalKeyer()
+        driver.setKeyerSpeed(wpm: 28)
         XCTAssertEqual(mock.allWritten, before)
     }
 
@@ -510,14 +377,9 @@ final class QMXProtocolTests: XCTestCase {
     }
 
     /// A QMX keys from the DTR line of its own USB port ("Key from USB DTR" in
-    /// the CW menu), so direct keying is offered and is the default path.
+    /// the CW menu), so direct keying is how it is keyed — and, per Article 11,
+    /// the only way it is keyed.
     func testQMXOffersDirectKeying() {
         XCTAssertEqual(RadioRegistry.descriptor(id: "qrplabs-qmx")?.supportsDirectKeying, true)
-    }
-
-    /// Article 11: the keyer picker's label names the command, never the maker.
-    func testKeyerLabelIsRadioNeutral() {
-        let label = try? XCTUnwrap(RadioRegistry.descriptor(id: "qrplabs-qmx")?.keyerLabel)
-        XCTAssertEqual(label, "Radio keyer (KY)")
     }
 }

@@ -25,10 +25,15 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   the code cites in
   [`qmx_operation_1_04_004_excerpts.txt`](research/qmx_operation_1_04_004_excerpts.txt)
   — "Key from USB DTR" (why `supportsDirectKeying` is true), "PTT from DTR"
-  (why the README tells you to leave the PTT line off), "KY TS480: NO" (which
-  of the manual's two incompatible `KY` forms the driver speaks), the AUX-jack
-  baud list, and the statement that baud "is irrelevant to the USB Virtual COM
-  Port". Nothing here traces to hamlib, N1MM, or a forum post.
+  (why the README tells you to leave the PTT line off), the AUX-jack baud list,
+  and the statement that baud "is irrelevant to the USB Virtual COM Port".
+  Nothing here traces to hamlib, N1MM, or a forum post. The same manual is why
+  the driver sends no `KY` at all: "Keying via the DTR signal works in
+  straight-key mode independently of the main keyer", so a QMX has key lines
+  and is keyed directly and only directly ([Article 11](CONSTITUTION.md)). It
+  is also why the README's setup note is emphatic — the CW menu's
+  "Key from USB DTR" lists "None (default)", so an out-of-the-box QMX will not
+  key until the operator changes it.
 
 - Elecraft K3S / K3 / KX3 / KX2 CAT: the **Programmer's Reference, Rev. G5,
   Feb. 20, 2019** (ftp.elecraft.com/KX2/Manuals Downloads/K3S&K3&KX3&KX2 Pgmrs

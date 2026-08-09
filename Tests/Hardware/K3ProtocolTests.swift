@@ -119,22 +119,34 @@ final class K3ProtocolTests: XCTestCase {
         XCTAssertNil(ElecraftK3Driver.cmdSetMode(rawMode: "???", frequencyHz: 14_000_000))
     }
 
-    func testKYChunkingRespects24CharLimit() {
-        let text = "CQ CQ CQ TEST DE KE5CW KE5CW KE5CW PSE K"
-        let cmds = ElecraftK3Driver.cmdKeyerText(text)
-        for cmd in cmds {
-            XCTAssertTrue(cmd.hasPrefix("KY "))
-            XCTAssertTrue(cmd.hasSuffix(";"))
-            let payload = cmd.dropFirst(3).dropLast(1)
-            XCTAssertLessThanOrEqual(payload.count, 24)
-        }
-        // Chunks reassemble to the original text (word boundaries preserved).
-        let joined = cmds.map { String($0.dropFirst(3).dropLast(1)) }.joined(separator: " ")
-        XCTAssertEqual(joined, text)
+    /// A K3 has key lines, so it is keyed directly and only directly
+    /// (Article 11) and this driver has no internal-keyer path. Asserted on
+    /// the wire: nothing it does in a full session may put a `KY` on the port.
+    ///
+    /// This matters more on a K3 than elsewhere. Programmer's Reference rev G5
+    /// documents `KYW` as delaying "any following host commands … until the
+    /// current message has been sent … e.g., KS (keyer speed)" — exactly the
+    /// deferred speed change the constitution forbids. Not sending `KY` at all
+    /// is what puts that trap out of reach.
+    func testDriverNeverSendsKY() {
+        let mock = MockSerialTransport()
+        let driver = ElecraftK3Driver()
+        driver.start(transport: mock)
+        driver.setFrequency(hz: 14_042_000)
+        driver.setMode(rawMode: "CW")
+        driver.setKeyerSpeed(wpm: 28)
+        // Two poll cycles, so the poll loop gets its chance to ask as well.
+        Thread.sleep(forTimeInterval: 1.2)
+        driver.stop()
+
+        XCTAssertFalse(mock.allWritten.contains("KY"), "wrote: \(mock.allWritten)")
     }
 
-    func testShortKYSingleChunk() {
-        XCTAssertEqual(ElecraftK3Driver.cmdKeyerText("TU 73"), ["KY TU 73;"])
+    func testDriverIsNotAnInternalKeyerDriver() {
+        XCTAssertFalse(
+            ElecraftK3Driver() is any InternalKeyerDriver,
+            "a K3 is keyed from its key line — it must not offer an internal-keyer path"
+        )
     }
 
     func testDriverStartSendsSetupAndPolls() {

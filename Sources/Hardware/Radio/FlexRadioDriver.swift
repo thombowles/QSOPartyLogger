@@ -10,7 +10,7 @@ import Foundation
 ///   ← `R<seq>|<code>|<message>`     response (0 = OK)
 ///   ← `S<handle>|<status text>`     subscribed status update
 ///   ← `V…` / `H…` / `M…`            version / handle / message on connect
-final class FlexRadioDriver: RadioDriver, @unchecked Sendable {
+final class FlexRadioDriver: InternalKeyerDriver, @unchecked Sendable {
 
     static let defaultPort: UInt16 = 4992
 

@@ -16,8 +16,22 @@ protocol RadioDriver: AnyObject {
     /// ADIF-style mode ("CW", "SSB", "USB", "RTTY"…). Drivers resolve "SSB"
     /// to the conventional sideband for the current frequency.
     func setMode(rawMode: String)
+    /// Sets the *radio's own* keyer speed. Every radio implements it: even one
+    /// the app keys directly needs its paddles and front-panel display to show
+    /// the same number the app does (Article 11).
     func setKeyerSpeed(wpm: Int)
-    /// Send text through the radio's internal keyer, if it has one.
+}
+
+/// A radio with no control lines to key from, which therefore sends CW through
+/// its own keyer — Flex CWX today.
+///
+/// This is deliberately *not* part of `RadioDriver`. A radio that exposes key
+/// lines is keyed directly and only directly (Article 11), so on those drivers
+/// these methods would have no caller and no meaning, and Article 13 forbids
+/// stubbing a protocol member you do not honour. Conforming is the driver's
+/// declaration that this radio has no other way to send.
+protocol InternalKeyerDriver: RadioDriver {
+    /// Send text through the radio's own keyer.
     func sendInternalKeyerText(_ text: String)
     func stopInternalKeyer()
 }

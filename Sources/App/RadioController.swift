@@ -180,8 +180,10 @@ final class RadioController {
         }
         newDriver.start(transport: newTransport)
 
-        // Direct DTR/RTS keying only exists on serial radios; network radios
-        // always key through the radio's internal keyer.
+        // A radio with key lines is keyed directly and only directly; one
+        // without them keys through its own keyer (Article 11). Exactly one of
+        // these two is built, and `RadioRegistryTests` proves no descriptor
+        // can be registered that would build both or neither.
         if descriptor.supportsDirectKeying {
             let keyer = CWKeyer(transport: newTransport, config: settings.keyerLineConfig, wpm: settings.wpm)
             keyer.onSending = { [weak self] text in
@@ -203,7 +205,9 @@ final class RadioController {
 
         transport = newTransport
         driver = newDriver
-        internalKeyer = RadioInternalKeyer(driver: newDriver, wpm: settings.wpm)
+        internalKeyer = (newDriver as? any InternalKeyerDriver).map {
+            RadioInternalKeyer(driver: $0, wpm: settings.wpm)
+        }
         connectedDescriptor = descriptor
         isConnected = true
 
@@ -312,13 +316,11 @@ final class RadioController {
         KeyerTiming.totalDurationMs(text: text, wpm: settings.wpm) / 1000.0
     }
 
+    /// The one way this radio sends CW. There is no preference to consult:
+    /// `connect` built whichever of the two the radio can use, and never both
+    /// (Article 11).
     private func activeSender(_ settings: AppSettings) -> (any CWSender)? {
-        switch settings.keyerBackend {
-        // A radio with no control lines has no direct keyer, so it falls back
-        // to its own keyer — `supportsDirectKeying` decided that at connect.
-        case .direct: directKeyer ?? internalKeyer
-        case .radioInternal: internalKeyer
-        }
+        directKeyer ?? internalKeyer
     }
 
     // MARK: Frequency / mode control (spots, typed QSY commands)

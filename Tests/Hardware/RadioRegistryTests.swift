@@ -72,6 +72,30 @@ final class RadioRegistryTests: XCTestCase {
         }
     }
 
+    /// Article 11's structural invariant: **every radio has exactly one way to
+    /// send CW.** A radio with key lines is keyed directly and only directly;
+    /// one without them keys through its own keyer and must say so by
+    /// conforming to `InternalKeyerDriver`.
+    ///
+    /// Both failure modes are real and neither is loud on its own. A driver
+    /// that offers both paths reintroduces the keyer preference this article
+    /// withdrew; one that offers neither builds no sender at all, and the
+    /// symptom is a radio that connects, polls, displays its frequency, and
+    /// silently transmits nothing when you press F1.
+    func testEveryRadioHasExactlyOneWayToSendCW() {
+        for descriptor in RadioRegistry.all {
+            let keysItself = descriptor.makeDriver() is any InternalKeyerDriver
+            XCTAssertNotEqual(
+                descriptor.supportsDirectKeying, keysItself,
+                descriptor.supportsDirectKeying
+                    ? "\(descriptor.id) is keyed directly, so its driver must not also be an "
+                        + "InternalKeyerDriver"
+                    : "\(descriptor.id) has no key lines, so its driver must be an "
+                        + "InternalKeyerDriver or the radio cannot send at all"
+            )
+        }
+    }
+
     /// `descriptor(id:)` is a lookup by id; two radios sharing one would make
     /// it silently return whichever was listed first.
     func testRadioIDsAreUnique() {
