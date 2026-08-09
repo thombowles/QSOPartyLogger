@@ -7,6 +7,29 @@ when, which generator turned it into data, and what each generator asserts.
 
 Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
 
+- QRP Labs QMX+ / QMX CAT: the **QMX CAT programming manual, firmware
+  1_04_004** (qrp-labs.com/images/qmx/manuals/cat_1_04_004.pdf,
+  `Last-Modified` Thu 23 Jul 2026 19:53:36 GMT, fetched 2026-08-09), banked
+  verbatim as [`qmx_cat_1_04_004.txt`](research/qmx_cat_1_04_004.txt) because
+  qrp-labs.com stamps the firmware revision into the URL and replaces it each
+  release. Its own revision history dates this one "1_04_004 23-Jul-2026"
+  while every page footer still reads 1_04_003; the title page and the history
+  agree, so 1_04_004 is what `QRPLabsQMXDriver` cites. `IF`, `FA`, `MD`, `KY`,
+  `AI`, `RX` and the 80-character `KY` buffer arithmetic all come from it.
+  Two values it does *not* print come from named sources it names itself:
+  `KS`'s three-digit field width from the **Kenwood TS-480 PC control
+  reference** (kenwood.com/i/products/info/amateur/ts_480/pdf/ts_480_pc.pdf,
+  `KSP1P1P1;`, 010–060 WPM), which the CAT manual links and declares itself a
+  subset of; and the keying, port and baud behaviour from the **QMX operating
+  manual, firmware 1_04_004** (same fetch date), banked as the five passages
+  the code cites in
+  [`qmx_operation_1_04_004_excerpts.txt`](research/qmx_operation_1_04_004_excerpts.txt)
+  — "Key from USB DTR" (why `supportsDirectKeying` is true), "PTT from DTR"
+  (why the README tells you to leave the PTT line off), "KY TS480: NO" (which
+  of the manual's two incompatible `KY` forms the driver speaks), the AUX-jack
+  baud list, and the statement that baud "is irrelevant to the USB Virtual COM
+  Port". Nothing here traces to hamlib, N1MM, or a forum post.
+
 - skeeter (NJQRP Skeeter Hunt): rules from W2LJ's blog page
   (w2lj.blogspot.com/p/njqrp-skeeter-hunt.html, the current 15th-Annual/2026
   edition), fetched 2026-08-04 and banked as

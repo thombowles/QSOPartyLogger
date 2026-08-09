@@ -16,8 +16,8 @@ Requires macOS 15 or later. SwiftUI, Swift 6. Built for KE5CW.
 
 1. **New log** → Contest Setup opens. Pick your party, enter your callsign, and
    say where you are operating from.
-2. Optional: pick your radio in the radio bar (Elecraft K3 family on serial,
-   FlexRadio 6000/8000 over the network) and hit **Connect**.
+2. Optional: pick your radio in the radio bar (Elecraft K3 family or QRP Labs
+   QMX on serial, FlexRadio 6000/8000 over the network) and hit **Connect**.
 3. Optional: click the toolbar antenna to connect a DX cluster, and ⌘B for the
    band map.
 4. Type a call, press **Space**, type the exchange, press **Return**. That's a
@@ -298,6 +298,11 @@ county grid groups by contest and then by state.
 **Elecraft K3 / K3S / KX3 / KX2** over serial at 4800–38400 baud, with live
 frequency, mode and TX polling, and the band stamped onto each QSO.
 
+**QRP Labs QMX+ / QMX** over its USB serial port — the whole series, since they
+share one CAT manual. Same live frequency, mode and TX polling. The rig has no
+FM and its `MD8` is not a mode but SWR Tune, so nothing you can type into the
+mode field will key it into a tune-up.
+
 **FlexRadio 6000 / 8000** over TCP/IP (SmartSDR API, port 4992). Push-based
 slice status — no polling — with CW through the radio's CWX keyer and
 bidirectional WPM sync.
@@ -329,6 +334,24 @@ exchange. Optional cut numbers (599 → 5NN, 40 → 4T). **Esc aborts instantly.
    at open, so the rig never keys on connect.
 
 No extra interface needed — the same single-cable setup N1MM uses.
+
+### Wiring a QMX for direct keying
+
+1. Connect the QMX's USB port to the Mac. It appears as a serial port with no
+   "QMX" in its name — plug it in and take the newcomer in the list.
+2. On the radio, set **CW → Key from USB DTR** to `USB 1` (it ships `None`).
+   The port keys as a straight key, independently of the radio's own keyer, so
+   the internal keyer can stay in iambic mode for the paddles.
+3. Leave **PTT** off in the radio bar. The QMX maps PTT to DTR as well, not to
+   RTS, so a PTT line would fight the key line on the same wire.
+4. In the app: pick the port, **Connect**. Baud is whatever you like — it is a
+   USB virtual port and the rate never reaches the radio. Both control lines
+   are deasserted at open, so the rig never keys on connect.
+
+The radio's own keyer is the fallback here, as everywhere, and it works: text
+goes out in chunks paced against the QMX's report of its own 80-character send
+buffer, because a message that overflows that buffer is discarded silently
+rather than truncated. Esc still aborts, and drops anything not yet handed over.
 
 ### Connecting a Flex
 
@@ -673,9 +696,9 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2262 unit tests**, none of which need hardware or a network — no serial port,
+**2296 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
-K3 and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
+K3, QMX and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), cluster login and telnet handling, call history
 parsing and its prefill priority chain, super check partial parsing, matching
 and its download client, spot parsing and filtering and navigation, the
@@ -708,9 +731,10 @@ Implement `RadioDriver` — see `Sources/Hardware/Radio/ElecraftK3Driver.swift`
 for serial polling and `FlexRadioDriver.swift` for push-based TCP — and append a
 `RadioDescriptor` to `RadioRegistry.all`. Its `connection` field decides whether
 the radio bar shows a serial port picker or host/port fields. Kenwood-style
-ASCII radios can reuse most of the K3 driver's parsing; network radios get
-`TCPTransport` for free. [docs/CONSTITUTION.md](docs/CONSTITUTION.md) governs
-this too.
+ASCII radios share the `IF` field layout — `QRPLabsQMXDriver.swift` is that
+case worked through, including what a radio's own manual leaves unsaid; network
+radios get `TCPTransport` for free.
+[docs/CONSTITUTION.md](docs/CONSTITUTION.md) governs this too.
 
 ## More documentation
 

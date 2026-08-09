@@ -1,0 +1,728 @@
+QMX CAT programming manual, firmware 1_04_004 — full text
+https://www.qrp-labs.com/images/qmx/manuals/cat_1_04_004.pdf
+Last-Modified: Thu, 23 Jul 2026 19:53:36 GMT; fetched 2026-08-09
+Extracted verbatim with `pdftotext -layout`; 17 pages, PDF author Hans Summers.
+Banked because qrp-labs.com stamps the firmware revision into the URL and
+replaces it each release — this is the revision QRPLabsQMXDriver.swift was
+written against. Note the title page and the revision history say 1_04_004
+while every page footer still reads 1_04_003.
+
+========================================================================
+
+                                                                              QMX
+QMX: QRP Labs Multimode Xcvr (transceiver)
+                 CAT programming manual, firmware 1.04_004
+
+              For ALL QMX-series transceivers
+
+Introduction
+CAT (Computer Aided Transceiver) is a standard serial interface which allows computer control of
+your radio transceiver. Many software applications such as WSJT-X, JS8Call etc use CAT to
+switch the transceiver between Transmit and Receive, or to change band, etc.
+QMX transceivers inherited functionality from the earlier QCX- and QDX-series transceivers.
+Originally the CAT commands were based loosely on the Kenwood TS-480 transceiver, which is
+well supported in all software, and well documented (see
+https://www.kenwood.com/i/products/info/amateur/ts_480/pdf/ts_480_pc.pdf) – also similar to TS-
+440. Subsequently QRP Labs transceivers now have their own entry in the hamlib library
+transceiver dropdown. Additional QRP Labs specific commands were added.
+CAT commands never contain a carriage return or linefeed character. They are alwasys
+terminated by a semicolon. Multiple commands may be strung together. QMX interprets an
+incoming carriage return character as a trigger to switch the serial port to terminal mode. In this
+way the serial ports can be used either for CAT or for terminal access.
+QMX provides up to three Virtual COM Serial ports (for CAT or terminal) as well as the possibility
+to use the PTT and AUX (QMX+ only) ports as UART serial ports.
+
+
+
+Cat command set
+QMX implements a subset of the Kenwood TS-480/TS-440 CAT command set which is an old
+standard, but contains all the necessary commands for WSJT-X and other software to be able to
+control QMX, and is old enough that it is widely supported by most software packages.
+QMX provides a standard set of two-character CAT commands, which are similar to the Kenwood
+ones, and which act on the transceiver, such as changing the VFO frequency or switching to
+Transmit. Most of these commands have a temporary effect only on the transceiver, the values are
+not permanently stored in EEPROM.
+QMX also provides an extended set of CAT commands, primarily for legacy reasons (QDX
+compatibility), called Q0, Q1, Q2 and so on until QB. These commands allow a host program to
+set and get various configuration parameters of QMX. Parameters set by the Q commands are not
+saved in EEPROM, they are valid for the current operating session only.
+Finally, the ML and MM commands provide access to a powerful menu management function
+which allows host application “discovery” of the QMX menu tree, as well as read/write of any
+parameters in the QMX configuration menu. These are described in a subsequent section.
+
+                        QMX CAT programming manual; firmware 1_04_003                       1
+The following lists the commands and responses in alphabetical order:
+
+
+
+AG: Get/Set AF Gain (volume)
+Set: AG0n Sets the audio gain to n. The actual setting is in steps of 0.25 dB. So for example
+     command AG091; will set the volume to 22.75dB. The parameter range is 000-799. Of course
+     maximum gain would make no sense, it would be far too high gain.
+Get: Returns the audio gain in steps of 0.25 dB. For example AG; or AG0; (actual Kenwood TS-480
+     command) returns AG0091 for 22.75dB.
+
+AI: Get/Set Auto Info mode
+This command has absolutely nothing to do with Artificial Intelligence. The Kenwood TS480
+command protocol already made use of the abbreviation AI decades before Artificial Intelligence
+became a commonplace household term.
+Set:   Sets the AI mode, as follows (for example AI1; sets mode 1):
+       0: Auto info is OFF.
+       1: Old mode AI format is ON. An IF; reply is automatically issued to the CAT host whenever
+       any of the parameters that it contains are changed. An IF; reply is also issued every 1.5
+       seconds, when no parameters are changed.
+       2: Extended mode AI format is ON. An IF; reply is automatically issued to the CAT host
+       whenever any of the parameters that it contains are changed.
+       3: Both formats are ON.
+       If all that seems confusing, it’s probably because it actually IS confusing. If you read the
+       Kenwood TS480 CAT specification, you will also find it just as confusing. If you know a better
+       way to interpret the specification, or if you have an actual Kenwood TS480 and the means to
+       verify what happens; and if you care, please write to QRP Labs.
+Get: Gets the AI mode.
+
+BD: Set band to one down
+Set: Moves down one band. Command BD; is equivalent to double clicking the Volume knob and
+     rotating anticlockwise one click to move down bands.
+
+BN: Get/Set band number
+Set: Sets the band number, as per the Band Configuration table column heading setting. For
+     example in a 80-20m QMX (80/60/40/30/20), BN2; sets the band of the QMX to 40m. If an non-
+     configured band is requested, or a band number outside range, an error will be returned.
+Get: Gets the band number, as per the Band Configuration table column heading setting. For
+     example in a 160-6m QMX+ which is on the 160m band, BN0; returns 0.
+
+BU: Set band to one up
+Set: Moves up one band. Command BU; is equivalent to double clicking the Volume knob and
+     rotating clockwise one click to move up bands.
+
+C2: Get/Set Signal Generator frequency
+Set: Sets the Si5351A Clk2 output frequency (the signal generator).
+
+
+
+                        QMX CAT programming manual; firmware 1_04_003                       2
+Get: Gets the frequency of Si5351A Clk2 (the signal generator)
+
+FA: Get/Set VFO A
+Set:   Sets VFO A value. Example: FA7030000; sets VFO A to 7.030MHz
+Get:   Returns the VFO A contents as an 11-digit number. Example: “FA;” returns “FA00007030000;”
+
+FB: Get/Set VFO B
+Set:   Sets VFO B value. Example: FB7016000; sets VFO B to 7.016MHz
+Get:   Returns the VFO B contents as an 11-digit number. Example: “FB;” returns “FA00007016000;”
+
+FR: Get/Set Receive VFO Mode
+Set:   Set VFO Mode: 0, 1, 2 correspond to VFO A, VFO B or Split respectively. This is the case for
+       both the FR and FT commands (which are nominally Receive and Transmit VFOs) because in
+       the QMX the VFO mode use does not correspond exactly to TS-480.
+Get:   Get Receive VFO Mode: 0 means VFO A is used for receive (could be due to VFO mode
+       being VFO A, or VFO Mode being Split); 1 means VFO B is being used for receive (must be
+       VFO Mode B).
+
+FT: Get/Set Transmit VFO Mode
+Set:   Set VFO Mode: 0, 1, 2 correspond to VFO A, VFO B or Split respectively. This is the case for
+       both the FR and FT commands (which are nominally Receive and Transmit VFOs) because in
+       the QMX the VFO mode use does not correspond exactly to TS-480.
+Get:   Get Transmit VFO Mode: 0 means VFO A is used for transmit (must be VFO Mode A); 1
+       means VFO B is being used for transmit (could be due to VFO mode being VFO B, or VFO
+       Mode being Split)
+
+FW: Get filter bandwidth
+Get:   Returns 3200 in Digi mode, and 0300 for CW mode (300Hz CW bandwdith).
+
+GP: Get GPS coordinates and date/time
+Get:   Returns GPS coordinates as latitude and longitude to 6 decimal places (latitude south and
+       longitude east are negative signed), with date and time. Result format is:
+       GP+DD.DDDDDD+DDD.DDDDDD+YYYYMMDDHHMMSS;
+       (Latitude as decimal degrees to 6 decimal places, longitude as decimal degrees to 6 decimal
+       places, then Date as YYYYMMDD format and time as HHMMSS).
+The GP; command is used by DL2MAN’s Winlink application (android and Chrome-based web
+browsers) to insert GPS position into emails: see https://dl2man.de/ARDOP/
+
+ID: Get radio ID
+Get:   Always returns 020 (Kenwood TS-480)
+
+
+
+
+                       QMX CAT programming manual; firmware 1_04_003                      3
+IF: Get transceiver information (TS-480 format).
+Get:   Returns a composite information string containing the state of the transceiver, as follows
+       (excluding command ID and ; terminator character):
+       •   11-digit operating frequency (VFO A or B, according to the VFO mode setting and transmit/
+           receive state
+       •   5 spaces
+       •   5-digit RIT frequency, as +/-9999Hz e.g. RIT up 200Hz returns “+0200” in this field
+       •   RIT status: 0 = RIT OFF, 1 = RIT ON
+       •   XIT status: always 0 because QMX has no XIT
+       •   Memory channel bank number: always 0
+       •   Memory channel number: always 00
+       •   Transceiver status: 0 = RX, 1 = TX
+       •   Operating mode: returns mode character (see MD command for details)
+       •   Receive VFO: 0 = VFO A, 1 = VFO B
+       •   Scan status: always 0
+       •   Split: 0 = Simplex operation (VFO mode A or VFO mode B), 1 = Split
+       •   Tone: always 0
+       •   Tone number: always 0
+       •   Space character
+
+KD: Get/Set Key state
+Set:   Sets the Key state: KD1; keys down (transmit), KD0; keys up
+Get:   Gets the current Key state: 1 means key-down (transmit), 0 means key-up
+
+KS: Get/Set Keyer speed
+Set:   Sets the Keyer speed to the specified number of words per minute
+Get:   Gets the current Keyer speed setting (in words per minute)
+
+KY: Get/Set message for immediate sending when Kenwood TS480 compatibility mode is OFF
+Set:   Initiates a CW message transmission at the current keying speed. The format of the command
+       is KY followed by a space, followed by the message to be sent, followed by a semicolon
+       termination character. For example command
+       KY HELLO;
+       will initiate CW transmission of the text “HELLO”.
+Get:   Returns:
+       KY0; if message sending is in progress and the transmit text buffer is not more than 75% full
+       KY1; if message sending is in progress and the transmit text buffer is more than 75% full
+       KY2; if no message is being sent, therefore the transmit text buffer is emtpy
+       ?; if the attempted message would overflow the transmit buffer; in this case it is canceled
+Note: The KY transmit text buffer is 80 characters long. It is a circular buffer. It is acceptable to send
+      new messages with KY before the message sending is complete, they are simply appended to
+      the transmit buffer. You may not send a message that would overflow the buffer, if attempted
+      the message will simply be ignored and error code ?; returned.
+Note: Kenwood TS480 compatibility mode for the KY command is a setting in the System
+      configuration menu.
+
+
+
+
+                         QMX CAT programming manual; firmware 1_04_003                         4
+KY: Get/Set message for immediate sending when Kenwood TS480 compatibility mode is ON
+Set:    Initiates a CW message transmission at the current keying speed. The format of the command
+        is KY followed by a space, followed by the message to be sent, followed by a semicolon
+        termination character. For example command
+        KY HELLO                                     ;
+        will initiate CW transmission of the text “HELLO”. Note that in Kenwood TS480 compatibility
+        mode the messaged is a fixed 24-character length. A ‘ ‘ (space) character must be used for the
+        unused characters. If all characters of the message are spaces, the transceiver stops sending
+        the message.
+        The following special ASCII characters can be used to transmit CW prosigns:
+        [ is sent as prosign BT, _ is AR, < is AS, # is HH, > is SK, is = KN, \ is BK, % is SN.
+Get:    The KY; command returns:
+        KY0; if the character buffer is available (for using the KY command to add more characters)
+        KY1; if the character buffer is not available (insufficient remaining buffer space)
+Note: Users are referred to the KY command description on page 12 of the Kenwood TS480 CAT
+      specification document:
+      https://www.kenwood.com/i/products/info/amateur/ts_480/pdf/ts_480_pc.pdf
+Note: Kenwood TS480 compatibility mode for the KY command is a setting in the System
+      configuration menu.
+
+LC: Get LCD contents
+Get:    Command LC; returns 32 characters containing the entire contents of the 1602 LCD screen.
+        Note that any customized pixel mapped characters such as the S-meter, Power-meter,
+        Battery icon are converted to spaces. The values of these parameters are available from
+        other CAT commands. The exception is the VFO indicators A and B which are included in the
+        LC; response as ASCII ‘A’ and ‘B’ characters.
+
+MD: Get/Set operating mode
+Set:    Set to 1 (LSB), 2 (USB), 3 (CW), 5 (AM), 6 (FSK), 7 (CWR), 8 (SWR) or 9 (FSR/FSK Reverse)
+        Note that 8 activates SWR Tune mode.
+Get:    Returns operating mode according to the above list.
+
+0.00%
+
+MM: Get/Set/Query menu item: see Menu Manager section below
+
+MU: Reload configuration parameters
+Set:    Issuing the MU; command forces the QMX configuration parameters to be reloaded; it can be
+        useful after one or more MM Set commands have been issued to update configuration
+        parameters, and you want to activate the new settings.
+
+OM: Get the radio’s model number
+Get:    Returns the radio’s model number. For QMX this is QC so the result is simply OMQC;
+
+PC: Get power output
+Get:    Returns power output in tenths of a watt. For example, if command PC; returned PC45; then
+        this would mean the output power is currently measured as 4.5 W.
+
+
+                        QMX CAT programming manual; firmware 1_04_003                       5
+PL: Get/Set MS5351M Synth PLL parameters
+Set:   Set MS5351M PLL parameters. This is an advanced setting for experimenting to see if
+       birdies are due to - and can be reduced by - PLL configuration. It only affects the Receiver
+       PLL. Set command format:
+
+       PLDivider|Multiplier|Numerator|Denominator;
+
+       where:
+
+       Divider: An even integer divider between 6 and 126, for the division from the MS5351M
+       internal PLL frequency down to the synthesized output frequency.
+       Multiplier: Integer in the range 15-90, for the multiplication of the 25 MHz TCXO reference up
+       to the internal PLL frequency.
+       Numerator: The numerator of the fractional part of the multiplier, range 0 to 1,048,575.
+       Denominator: The denominator part of the multiplier, range 0 to 1,048,575 and must be larger
+       than denominator.
+
+       The generated frequency is 25 MHz * (Multiplier + Numerator / Denominator) / Divider
+
+       Note that the generated frequency differs from the “operating frequency” depending on mode;
+       there is a 12kHz offset due to the 12kHz Intermediate Frequency superhet, and potentially a
+       further 700 Hz offset in CW mode.
+
+       The command is only allowed following sanity check of all parameters – which includes
+       checking they are all within range, and that the generated frequency must be within 500 Hz of
+       the original synthesized frequency for the current operating frequency of the radio.
+
+       If any parameters are invalid, or the generated frequency deviates from the original by more
+       than 500Hz, the command returns an error ?; otherwise, the command returns nothing. Use
+       the PL; command below if you are unsure and wish to verify the settings took effect.
+
+       The settings are only valid until the next action to alter the tuning of the radio (via CAT
+       command or turning the Tune knob), or change RX to TX and back.
+
+       Example:
+
+       PL20|22|274|625;
+
+       sets the generated frequency to 28,048,000 Hz.
+Get:   Get MS5351M PLL parameters for Receive LO synthesis. Command result format is
+
+       PLFrequency|Divider|Multiplier|Numerator|Denominator;
+
+       where:
+
+       Frequency: the synthesized frequency. Remember that this is NOT the same as the receiver
+       operating frequency, there is an offset for the 12 kHz intermediate frequency, and potentially a
+       further 700 Hz offset in CW mode.
+       Divider: An even integer divider between 6 and 126, for the division from the MS5351M
+       internal PLL frequency down to the synthesized output frequency.
+       Multiplier: Integer in the range 15-90, for the multiplication of the 25 MHz TCXO reference up
+       to the internal PLL frequency.
+
+                         QMX CAT programming manual; firmware 1_04_003                          6
+       Numerator: The numerator of the fractional part of the multiplier, range 0 to 1,048,575.
+       Denominator: The denominator part of the multiplier, range 0 to 1,048,575.
+
+       Example when the radio is set to 28,060,000 in DiGi mode, PL; returns:
+
+       PL28048000|20|22|210981|481252;
+       The actual generated frequency is 25 MHz * (Multiplier + Numerator / Denominator) / Divider
+       In this case: 28,048,000.32 Hz.
+
+
+PS: Get/Set Power supply shutdown
+Set:   The only valid command is PS0; which switches off QMX completely
+Get:   PS; always returns PS1; to indicate that QMX is powered up. When QMX is powered down, it
+       cannot respond to CAT command queries so there is no other possible response to the PS;
+       command
+
+Q0: Get/Set TCXO reference frequency
+Set:   Set TCXO reference frequency. Only values between 24999000 and 25001000 are allowed.
+       The setting is for the current operating session only and is not written to EEPROM.
+Get:   Get TCXO reference frequency.
+
+Q1: Get/Set Sideband
+Set:   Set sideband; 1 sets Lower Sideband (LSB), any other value sets Upper Sideband (USB). The
+       setting is for the current operating session only and is not written to EEPROM.
+Get:   Get sideband; 0 = USB, 1 = LSB
+
+Q2: Get/Set VFO A frequency – same as FA
+Set:   Set default operating frequency.
+Get:   Get default operating frequency.
+
+Q3: Get/Set VOX Enable
+Set:   Set VOX enable: 1 enables VOX, 0 disables VOX. The setting is for the current operating
+       session only and is not written to EEPROM.
+Get:   Get VOX enable; 1 = Enabled, 0 = Disabled
+
+Q4: Get/Set TX Rise Threshold
+Set:   Set TX Rise Threshold, which should be a percentage number between 0 and 99 (see
+       description elsewhere in this manual). The default setting of 80 is normally appropriate. The
+       setting is for the current operating session only and is not written to EEPROM.
+Get:   Get TX Rise Threshold value
+
+Q5: Get/Set TX Fall Threshold
+Set:   Set TX Fall Threshold, which should be a percentage number between 0 and 99 (see
+       description elsewhere in this manual). The default setting of 60 is normally appropriate. The
+
+
+
+                        QMX CAT programming manual; firmware 1_04_003                        7
+       setting is for the current operating session only and is not written to EEPROM.
+Get:   Get TX Fall Threshold value
+
+Q6: Get/Set Cycle Min parameter
+Set:   Set Cycle Min parameter (see description elsewhere in this manual). The setting is for the
+       current operating session only and is not written to EEPROM.
+Get:   Get Cycle Min parameter value
+
+Q7: Get/Set Sample Min parameter
+Set:   Set Sample Min parameter (see description elsewhere in this manual). The setting is for the
+       current operating session only and is not written to EEPROM.
+Get:   Get Sample Min parameter value
+
+Q8: Get/Set Discard parameter
+Set:   Set Discard parameter (see description elsewhere in this manual). The setting is for the
+       current operating session only and is not written to EEPROM.
+Get:   Get Discard parameter value
+
+Q9: Get/Set IQ Mode
+Set:   Set IQ Mode: 1 enables IQ Mode, 0 disables IQ Mode. In IQ Mode, the raw I & Q samples
+       from the ADC are streamed directly to the USB Sound card. The setting is for the current
+       operating session only and is not written to EEPROM.
+Get:   Get IQ Mode; 1 = Enabled, 0 = Disabled
+
+QA: Get/Set Japanese Band Limits mode
+Set:   Set Japanese Band Limits mode: 1 enables Japanese band limits, 0 disables Japanese band
+       limits. In Japanese Band Limits mode, QMX cannot transmit outside the allowed Japanese
+       band limits. The setting is for the current operating session only and is not written to EEPROM.
+Get:   Get Japanese Band Limits mode; 1 = Enabled, 0 = Disabled
+
+QB: Get/Set CAT timeout enable mode
+Set:   Set CAT timeout enable. 1 enables CAT timeout, 0 disables CAT timeout. When enabled, if in
+       transmit mode, if there is no CAT command for a specified timeout, QMX automatically returns
+       to receive mode.
+Get:   Get CAT timeout enable mode; 1 = Enabled, 0 = Disabled
+
+QC: Get/Set CAT timeout
+Set:   Set CAT timeout. Specifies the CAT timeout in seconds.
+Get:   Get CAT timeout. Returns the CAT timeout in seconds
+
+QJ: Get/Set TX shift threshold
+Set:   Set TX shift threshold (see explanation in Configuration screen description section of this
+       manual)
+
+
+
+                        QMX CAT programming manual; firmware 1_04_003                        8
+Get:   Get TX shift threshold
+
+RC: Clear RIT mode
+Set:   RC; clears RIT mode, setting RIT to zero
+
+RD: Set negative RIT offset amount (absolute setting of RIT, not a change to current value)
+Set:   If System Config menu setting “CAT RU and RD” is Absolute, sets negative (down) RIT; for
+       example “RD200;” sets the RIT to -200 Hz.
+       If System Config menu setting “CAT RU and RD” is Relative, moves the current RIT value
+       down by the specified amount; for example “RD010;” moves RIT down by 10 Hz.
+
+RG: Get/Set RF Gain
+Set: RGn Sets the RF gain to n. The actual gain setting is the supplied gain in dB. So for example
+     command RG63; will set the gain to 63dB, in the currently active band. Note that the RF gain
+     can also be set in the Terminal Band Configuration application.
+Get: Returns the RF gain in dB. For example RG; returns RG063 for 63dB.
+
+RR: Get/Set RIT Rate
+Set:   Sets the RIT Rate (RIT offset frequency step per click of the Tune knob). Valid values are:
+       4: 1 kHz
+       5: 500 Hz
+       6: 100 Hz
+       7: 10 Hz
+       8: 1 Hz
+       For example: RR6; sets the tune rate to 100 Hz and the cursor moves under the 100 Hz digit.
+       Trying to set values not in this list, returns an error.
+Get:   Returns the RIT Rate, from one of the above values. For example if the current tune rate is 10
+       Hz, command “RR;” will return “RR7;” indicating 10 Hz tune rate (according to the above list).
+
+RT: Get RIT status
+Get:   Returns RIT status: 0 = RIT off, 1 = RIT on
+Set:   Sets RIT mode: 0 = OFF, 1 = ON
+
+RU: Set positive RIT offset amount (absolute setting of RIT, not a change to current value)
+Set:   If System Config menu setting “CAT RU and RD” is Absolute, sets positive (up) RIT; for
+       example “RU150;” sets the RIT to +150 Hz.
+       If System Config menu setting “CAT RU and RD” is Relative, moves the current RIT value up
+       by the specified amount; for example “RU005;” moves RIT up by 5 Hz.
+
+RX: Set the radio into Receive mode immediately
+Set:   Command RX; immediately puts the radio into receive mode. It is equivalent to TQ0;
+
+SA: Get the AGC meter value
+Get:   The AGC gain attenuation setting is returned, in dB.
+
+SM: Get the S-meter value
+
+
+                        QMX CAT programming manual; firmware 1_04_003                       9
+Get:   Returns the S-meter value in dB.
+
+SP: Get/Set Split mode
+Set:   Sets Split mode: 0 = OFF, 1 = ON. For example “SP1;” switches QMX to split mode
+Get:   Returns the Split state: 0 = OFF, 1 = ON.
+
+SR: Get/Set SWR Protection lock status
+Set:   Resets the SWR protection state. For example if SWR protection is active, command SR0;
+       resets the SWR protection so transmission is enabled again. Note that the number 0 is not
+       important here; SR followed by ANY number is sufficient to reset the SWR protection.
+Get:   Returns the SWR protection state: 0 = OFF, 1 = ON. For example an answer of SR1; indicates
+       that transmission is locked by the SWR mode having been triggered by a high SWR event.
+
+SS: Get/Set SSB transmission source
+Set:   Sets the SSB transmission source. 0 = USB (audio samples from host PC); 1 = Internal 700 +
+       1900 Hz two-tone test generator; 2 = External microphone.
+Get:   Returns the SSB transmission source, 0 1 or 2 as per the above definition.
+
+SW: Get the SWR-meter value
+Get:   Returns the SWR-meter value in hundredths. For example if the CAT command SW; returns
+       SW121; this indicates that the SWR is 1.21:1. If called while the radio is in Receive mode, the
+       command simply returns SW;
+
+TA: Transmit audio
+Set:   In Digi mode, sets the transmitted audio tone frequency, which may be specified to a decimal
+       fraction of a Hz. The actual transmission RF frequency is the USB Dial frequency plus the
+       specified audio frequency. For example TA1502.34; would set the audio tone to 1502.34 Hz.
+       The correct sequence of operations by the CAT host should be:
+       • FAnnn; command to set the USB “dial frequency” as required.
+       • TX; command to switch the radio into Transmit mode.
+       • TAnnn; command, multiple times, to set all the audio tones you want. The first TA
+         command does key-down with a nice Blackmann-Harris shaped RF envelope.
+       • TA0; command, any number less than 10 Hz causes a key-up, with a nice Blackmann
+         Harris shaped RF envelope.
+       • Wait a few milliseconds, say 5ms, for the RF envelope shaping to finish.
+       • RX; command to switch the radio back to Receive mode.
+       If you did not do TA0; and wait and then RX; but instead you just sent command RX; to go
+       instantly back to Receive mode, that would also terminate the transmission but with a hard
+       switch off, not a well shaped envelope-decay.
+
+TB: Command to retrieve decoded text from the QMX’s CW decoder text buffer
+Get:   Returns the contents of the decoded CW buffer to the CAT host, and empties the buffer, so
+       decoding CW will fill it up again. The format of the response is TBtnns; where
+       TB    two-character result code, the same as the command “TB”
+       t     indicates whether message sending is in progress via the KY command, and how many
+             characters remain to be sent. If more than 9 characters remain to be sent, then this
+
+
+                        QMX CAT programming manual; firmware 1_04_003                        10
+              parameter is 9. If this character is 0 then the QMX is in receive mode.
+       nn     the number of decoded characters being returned
+       s      the string of nn decoded characters
+       ;      CAT response terminator.
+Note that the decoded CW buffer is a special 40-character buffer, where incoming decoded CW is
+stored for sending to CAT. This buffer is NOT a circular buffer. When it fills up, it simply discards any
+new incoming characters. The host application wishing to use this feature, should therefore ensure
+that it reads the buffer sufficiently often that it does not fill up.
+
+TM: Get/Set Real time clock time
+Set:   Sets the real time clock. Format is Tmhhmmss; for example to set the real time clock to
+       13:55:32, send CAT command “TM135532;”
+Get:   Returns the real time clock value. For example command “TM;” will return “TM135532;” if the
+       real time clock value is 13:55:32.
+
+TR: Get/Set Tune Rate
+Set:   Sets the Tune Rate (frequency step per click of the Tune knob). Valid values are:
+       0: 10 MHz
+       1: 1 MHz
+       2: 100 kHz
+       3: 10 kHz
+       4: 1 kHz
+       5: 500 Hz
+       6: 100 Hz
+       7: 10 Hz
+       For example: TR4; sets the tune rate to 1 kHz and the cursor moves under the 1 kHz digit.
+       Attempting to set the Tune Rate to a value not in this list returns an error.
+Get:   Returns the Tune Rate, from one of the above values. For example if the current tune rate is
+       100 Hz, command “TR;” will return “TR6;” indicating 100 Hz tune rate (according to the above
+       list).
+
+TQ: Get/Set transmit state
+Set:   Sets transmit state: 0 = RX, 1 = TX. For example “TQ1;” switches QMX to transmit mode
+Get:   Returns the transmit state: 0 = RX, 1 = TX.
+
+TX: Set the radio into Transmit mode immediately
+Set:   Command TX; immediately puts the radio into transmit mode. It is equivalent to TQ1;
+
+UI: Get unique ID number
+Get:   Returns the unique 96-bit unique ID number, which is unique to the specific STM32F446
+       processor chip in your QMX, as a 24-character hexadecimal number. For example, on one test
+       unit UI; returned: UI393731390651333152005000;
+
+VN: Returns firmware version
+Get:   Returns the firmware version. For example, VN; command returns VN1_00_021QMX; (the
+       same as the firmware file name, without the dot)
+
+
+                         QMX CAT programming manual; firmware 1_04_003                         11
+Menu manager commands MM and ML
+MM and ML commands provide a powerful means for a CAT host to query the QMX configuration
+menu structure in its entirety (menu discovery), or to Get or Set any value in the configuration
+menu. The function of the command is determined by the command syntax. In summary:
+   •   Get:          Mmpath;
+   •   Set:          MMpath=value;
+   •   Query:        Mmpath?;
+path specifies the full path to the menu item, through the menu structure. Menu names are
+delimited by the | character. For example:
+Audio|AGC settings|Threshold S
+is the path to the Audio sub-menu, then to the AGC settings sub-sub-menu, then the Threshold S-
+points value.
+Note that paths are case insensitive, so equivalently in this case one may write:
+AUDIO|AGC SETTINGS|THRESHOLD S
+One can also use index numbers, starting from zero. So the above path is also equivalent to:
+0|0|1
+since the “Audio” menu is the first of the top-level menu items (index 0), “AGC settings” is the first
+sub-sub-menu of the “Audio” menu (index 0) and “Threshold S” is the second item in the “AGC
+settings” sub-sub menu (index 1).
+It is probably preferable to use the longer real names of the menu items, as it will probably be less
+likely that menu items will change their name in future firmware releases, than change their
+position in their menu pages.
+
+
+
+Menu item Get
+The Get form of the MM command is simply the path followed by the semicolon. For example:
+MMAUDIO|AGC SETTINGS|THRESHOLD S;
+may return for example:
+MM4;
+indicating that the AGC threshold is set to signal level S-4.
+Note that if the Get command format is issued for a menu item which is a sub-menu or application
+type, the result will simply be an standard error return “?;”.
+The Band config. screen is a particular case, because it is a table of values:
+
+
+
+
+                        QMX CAT programming manual; firmware 1_04_003                       12
+When accessing a grid parameter configuration page such as for example the Band Configuration
+screen, which has 16 columns of data (band configurations), the path must be appended with an
+array subscript, such as [2] (for the 3rd column of the grid). For example, on a QMX+, if you wanted
+to retrieve the RF gain setting of the 40m band, which is in the 4 th column (array subscript 3, since
+they start at zero), then the CAT command would be:
+MMBand config.|RF gain (db)[3];
+The result (in a default factory reset configuration) would be:
+MM54;
+
+
+
+Menu item Set
+The Set form of the MM command is the path, followed by = then the value, and finally the
+terminating semicolon. For example, to set the AGC settings sub-menu AGC threshold S-meter
+value to S-5, you could use the following command:
+MMAUDIO|AGC SETTINGS|THRESHOLD S=5;
+Setting the value of a sub-menu or application type is not possible.
+As with the Get form of the MM command, on grid pages such as the Band Configuration screen,
+you append the path with an array suffix. So to set the 40m band RF gain to 63 dB:
+MMBand config.|RF gain (db)[3]=63;
+Note that whilst the regular two-letter CAT commands only affect the radio’s current operating
+session, they are not stored in the EEPROM configuration memory, Menu Manager MM Set
+commands ARE stored in the configuration memory.
+
+
+                        QMX CAT programming manual; firmware 1_04_003                      13
+Whether or not an MM Set command’s new parameter settings affects the radio immediately, is
+controlled by the “MM Effect” configuration parameter, which is in the CAT config sub-menu of the
+System config menu. When set to “Immediate”, every time an MM Set command is run, the QMX
+automatically reloads the configuration parameters and puts the new value into effect immediately.
+When set to “On demand”, the configuration parameters are not reloaded until the operator enters/
+exits the menu on the user interface, or until the CAT Host issues the MU; command.
+
+
+
+Menu discovery
+In discovery mode, the MM command returns information about the specified menu item. For
+example command:
+MM0?;
+queries the first menu item on the top level menu. The result is:
+MM0|0|Audio;
+The explanation of the command result is as follows:
+MM           the CAT command echoed back.
+0            the data type of the menu (see below); 0 means it’s a sub-menu item.
+0            For list menu items, this is the list type applied to the menu item.
+             For numeric and string menu items, this is the character length of value field.
+Audio        The name of the menu item.
+;            Terminating character, indicating the end of the CAT command result.
+The possible data types are:
+0            Sub-menu
+1            Application or action menu item
+2            String, with field length indicated by the next parameter (see above)
+3            Number, with field length indicated by the next parameter (see above)
+4            Byte, a number in the range 0 to 255
+5            List of defined values, with a list type indicated by the next parameter (see above)
+6            Info, a dummy menu item type solely for displaying information to the user
+7            Mask, a collection of up to 8 named boolean parameters
+When the data type is a List, you may query the available values in the list using the ML
+command.
+For example, this MM discovery mode command queries the first menu item (index 0) in the CW
+keyer sub-menu of the CW menu:
+MMCW|CW Keyer|0?
+returns:
+MM5|3|Keyer mode;
+indicating that this is a menu item named “Keyer mode”, of type List (5, see above), and that the
+list type is 3. Now we may find out the value of the current setting using:
+MMCW|CW Keyer|Keyer mode;
+which returns for example:
+MMIAMBIC A;
+
+                        QMX CAT programming manual; firmware 1_04_003                       14
+But if we are curious what other values the list contains, we can use the ML command to find out:
+ML3;
+resulting in a | delimited specification of the list values:
+MLStraight|IAMBIC A|IAMBIC B|Ultimatic;
+
+
+
+Several further points are worthy of note
+Consider the menu discovery command:
+MM12?;
+which queries the 13th (index 12) item on the top level configuration menu. The result is:
+MM0|0|Band config.[16];
+This is the Band Configuration screen, and is mentioned here to demonstrate how a grid page
+menu is identified in menu discovery. The menu item type is zero (sub-menu), the name is “Band
+config.” and the subcript [16] in square brackets, here indicates that the table has 16 columns.
+We may then proceed if we wish, to discover the rows in the Band Configuration screen. For
+example to query the information about the first row (index 0) of the table:
+MMBand config.|0?;
+returns
+MM3|4|Band name (m);
+Which means the row is named “Band name (m)”, it has a type 3 (number) and it is 4 characters
+long. This means it can hold band numbers even down to 2200 (2200m LF band, 136 kHz). But of
+course 6 (6m, 50MHz band) is also possible, one character is less than four so it is allowed.
+Now to demonstrate the “mask” menu page type, consider the |Choose filters” sub-menu of the
+“CW” sub-menu. In the terminal, the menu looks like this:
+
+
+
+
+                          QMX CAT programming manual; firmware 1_04_003                      15
+There are 8 possible filter widths, each may be enabled or disabled. Internally in QMX these are
+stored in a single byte for the whole sub-menu, with one bit per row of configuration.
+“Choose filters” is the 11th item in the CW menu so:
+MMCW|10?;
+returns
+MM0|0|Choose filters;
+which just means, as usual, Choose filters looks like an ordinary menu. Now I make look inside
+that menu:
+MMCW|Choose filters|0?;
+returns
+MM7|6|50;
+which means the menu item row is named “50”, its type (7) is Mask, and 6 is the type of List
+parameter which each row consists of. In this case, type 6 is DISABLED/ENABLED. In the case of
+Mask menus, the List type can only have TWO entries, in other words it’s a boolean represented
+by a single bit in the mask. So NO/YES, DISABLED/ENABLED, OFF/ON etc.
+Get and Set operations are the same as previously. However, an important EXCEPTION to the
+rule exists; previously it was stated that a path can contain menu item names OR numeric
+indexes. Indeed, the path can even contain a mixture of names and numbers. However, if the
+name itself is numeric (as in this case, the names are 50, 100, 150, 200 etc.), then you can ONLY
+specify the path in numeric form. This is because as the name is a number, the system will try to
+interpret it as a numeric path (index in the menu item list). Therefore:
+MMCW|Choose filters|50;
+does not work, it returns the usual error result:
+?;
+You would have to use:
+MMCW|Choose filters|0;
+where the 0 in the final part of the path, is the index into the list of menu items; in this case the first
+menu item (as indexing starts at zero). So the result is:
+MMENABLED;
+indicating the 50 Hz filters are ENABLED.
+
+
+
+Document Revision History
+1_02_006 30-Oct-2025         First version, for firmware 1_02_006
+1_03_000 06-Feb-2026         Added PL; command for firmware 1_03_000
+1_04_001 12-Jun-2026         Added new CAT commands and features for 1_04_001 (MD, MU, TR,
+                             RR, PS, AI commands)
+1_04_003 18-Jul-2026         Firmware 1_04_003: Added commands BD, BN, BU, UI
+1_04_004 23-Jul-2026         Firmware 1_04_004: Added commands GP and SR
+
+                         QMX CAT programming manual; firmware 1_04_003                          16
+QMX CAT programming manual; firmware 1_04_003   17
+

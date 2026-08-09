@@ -1,0 +1,83 @@
+QMX operating manual, firmware 1_04_004 — load-bearing excerpts
+https://www.qrp-labs.com/images/qmx/manuals/operation_1_04_004.pdf
+Last-Modified: Thu, 23 Jul 2026 19:53:36 GMT; fetched 2026-08-09
+Extracted with `pdftotext -layout`. Line numbers are into the full extraction.
+The full text is 5445 lines and is not banked; these are the five passages
+QRPLabsQMXDriver.swift and RadioRegistry.swift cite.
+
+========================================================================
+[1] CW menu — Key from USB DTR (lines 1112-1127)
+========================================================================
+
+  Key from USB DTR
+  USB 1
+
+QMX in CW mode can be keyed by the DTR signal of one of the Virtual COM Serial ports. Several
+PC programs such as N1MM and fldigi have the capability to key CW using DTR signaling.
+The setting may be one of: None (default), USB 1, USB 2 or USB 3. One of the USB settings will
+connect the CW keyer to the DTR signal of that Virtual COM serial port. Note that when specifying
+USB 2 or USB 3, you must have enabled these Virtual COM serial ports in the System config /
+GPS & Ser. Ports menu, “USB serial ports” must be set to two (to use USB 2) or 3 (to use USB 3).
+Note also that THREE ports has been found to work well on Linux systems but Windows 11 will
+only work with two.
+Keying via the DTR signal works in straight-key mode independently of the main keyer. Therefore
+the QMX keyer can be in Iambic paddle mode, but the DTR signal will key separately as a straight
+key, which is how N1MM etc. output their DTR keying signal.
+
+========================================================================
+[2] USB Audio menu — PTT from DTR (lines 1979-1994)
+========================================================================
+  PTT from DTR
+  None
+In some cases it may be required to active the SSB PTT signal from the DTR signal of one of the
+Virtual COM Serial ports.
+The setting may be one of: None (default), USB 1, USB 2 or USB 3. One of the USB settings will
+connect the CW keyer to the DTR signal of that Virtual COM serial port. Note that when specifying
+USB 2 or USB 3, you must have enabled these Virtual COM serial ports in the System config /
+GPS & Ser. Ports menu, “USB serial ports” must be set to two (to use USB 2) or 3 (to use USB 3).
+
+
+                           QMX operating manual; firmware 1_04_004                          47
+Note also that THREE ports has been found to work well on Linux systems but Windows 11 will
+only work with two.
+Activating PTT via the DTR signal has the same effect as pressing the actual PTT key (of the
+paddle port on the QMX left side or QMX+ front panel).
+This is the last setting on the USB Audio submenu.
+
+========================================================================
+[3] System / CAT config — KY TS480 (lines 2999-3006)
+========================================================================
+
+  KY TS480
+  NO
+When set to YES, switches on Kenwood TS480 CAT specification compatibility mode for the KY
+command, which is suitable for some software packages acting as CAT host.
+When set to NO, uses the earlier QRP Labs KY command mode which is more similar to the
+Elecraft CAT specification, in order to ensure compatibility with QRP Works SideKar product
+range.
+
+========================================================================
+[4] AUX jack as serial port 1, and its baud list (lines 3140-3152)
+========================================================================
+Enabling this parameter changes the behaviour of the 3.5mm AUX jack. This jack becomes an
+additional serial port, known as serial port 1. The 3.5mm jack “Tip” is the TX signal, and “Ring” is
+the RX signal (see diagram in Connections section of this manual).
+
+
+
+  Serial 1 baud
+  9600
+Sets the baud rate for Serial port 1 (if enabled). Available values are 75, 110, 150, 300, 600, 1200,
+2400, 4800, 9600, 14400, 19200, 38400, 56000, 115200.
+
+========================================================================
+[5] WSJT-X setup — baud is irrelevant over the USB Virtual COM port (lines 3987-3993)
+========================================================================
+       plug in QMX, start WSJT-X and again look in Settings -> Radio, and now you should see a
+       newcomer in the list of available ports. The newcomer is QMX!
+   •   Note that none of the Serial Port Parameters need to be changed, leave them all at their
+       defaults. Even the baud rate 9600 is unimportant because it is irrelevant to the USB Virtual
+       COM Port which is a virtual port over USB, not a real physical serial port.
+   •   Change the Poll Interval to 10 seconds, the default will be rather chatty with QMX which
+       probably is not a problem, but anyway I feel more comfortable with the less frequent polling.
+

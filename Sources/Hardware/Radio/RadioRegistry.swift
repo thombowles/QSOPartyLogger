@@ -46,6 +46,16 @@ enum RadioRegistry {
             makeDriver: { ElecraftK3Driver() }
         ),
         RadioDescriptor(
+            id: "qrplabs-qmx",
+            displayName: "QRP Labs QMX+ / QMX",
+            connection: .serial,
+            defaultBaud: 9600,
+            baudRates: QRPLabsQMXDriver.baudRates,
+            supportsDirectKeying: true,
+            keyerLabel: "Radio keyer (KY)",
+            makeDriver: { QRPLabsQMXDriver() }
+        ),
+        RadioDescriptor(
             id: "flex-6000",
             displayName: "FlexRadio 6000/8000 (TCP)",
             connection: .network(defaultPort: FlexRadioDriver.defaultPort),
