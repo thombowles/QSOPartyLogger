@@ -72,9 +72,16 @@ final class FlexRadioDriverTests: XCTestCase {
         XCTAssertEqual(FlexRadioDriver.cmdTune(sliceIndex: 0, hz: 14_042_000), "slice tune 0 14.042000")
         XCTAssertEqual(FlexRadioDriver.cmdTune(sliceIndex: 1, hz: 7_040_500), "slice tune 1 7.040500")
         XCTAssertEqual(FlexRadioDriver.cmdSetMode(sliceIndex: 0, flexMode: "CW"), "slice set 0 mode=CW")
-        XCTAssertEqual(FlexRadioDriver.cmdKeyerSpeed(wpm: 28), "cwx wpm 28")
-        XCTAssertEqual(FlexRadioDriver.cmdKeyerSpeed(wpm: 99), "cwx wpm 50", "clamped")
-        XCTAssertEqual(FlexRadioDriver.cmdKeyerSpeed(wpm: 1), "cwx wpm 8", "clamped")
+        // `cw wpm`, not `cwx wpm` — the API's own example is "C19|cw wpm 25",
+        // printed identically on the cw and cwx pages. The x is the trap: it
+        // is on every other CWX verb and not on this one.
+        XCTAssertEqual(FlexRadioDriver.cmdKeyerSpeed(wpm: 28), "cw wpm 28")
+        XCTAssertEqual(FlexRadioDriver.cmdKeyerSpeed(wpm: 99), "cw wpm 50", "clamped")
+        XCTAssertEqual(FlexRadioDriver.cmdKeyerSpeed(wpm: 1), "cw wpm 8", "clamped")
+        XCTAssertFalse(
+            FlexRadioDriver.cmdKeyerSpeed(wpm: 28).hasPrefix("cwx"),
+            "cwx wpm is not a command any Flex answers"
+        )
         XCTAssertEqual(FlexRadioDriver.cmdSendCW("TU 73"), "cwx send \"TU 73\"")
         XCTAssertEqual(
             FlexRadioDriver.cmdSendCW("SAY \"HI\""), "cwx send \"SAY HI\"",
@@ -141,6 +148,42 @@ final class FlexRadioDriverTests: XCTestCase {
         wait(for: [tx], timeout: 2)
         XCTAssertEqual(states.last?.isTransmitting, true)
         XCTAssertEqual(states.last?.frequencyKHz, 14042, "TX flag merges into existing slice state")
+        driver.stop()
+    }
+
+    /// A Flex has no key lines, so its own keyer is the only path (Article 11)
+    /// — which makes `cw wpm` the *whole* mechanism for changing speed here.
+    /// Asserted on the wire, since the builder being right does not prove the
+    /// driver calls it.
+    func testDriverEmitsTheKeyerSpeedCommandOnTheWire() {
+        let mock = MockSerialTransport()
+        let driver = FlexRadioDriver()
+        driver.start(transport: mock)
+        driver.setKeyerSpeed(wpm: 28)
+        XCTAssertTrue(mock.allWritten.contains("cw wpm 28"), "wrote: \(mock.allWritten)")
+        XCTAssertFalse(mock.allWritten.contains("cwx wpm"))
+        driver.stop()
+    }
+
+    /// Speed has to reach a message already sending, so the setter forwards
+    /// straight to the radio rather than waiting for the next `send`.
+    func testInternalKeyerForwardsSpeedImmediately() {
+        let mock = MockSerialTransport()
+        let driver = FlexRadioDriver()
+        driver.start(transport: mock)
+
+        let keyer = RadioInternalKeyer(driver: driver, wpm: 24)
+        keyer.send("CQ TEST DE KE5CW K")
+        let beforeSpeedChange = mock.allWritten
+        keyer.wpm = 30
+
+        XCTAssertTrue(mock.allWritten.contains("cw wpm 30"))
+        XCTAssertFalse(
+            beforeSpeedChange.contains("cw wpm 30"),
+            "the speed went out on the change, not queued behind the message"
+        )
+        keyer.abort()
+        XCTAssertTrue(mock.allWritten.contains("cwx clear"))
         driver.stop()
     }
 
