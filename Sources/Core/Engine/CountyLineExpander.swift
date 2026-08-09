@@ -31,6 +31,10 @@ enum CountyLineExpander {
         var rawMode: String
         var freqKHz: Int?
         var timestampUTC: Date
+        /// One contact, one posture — a county-line contact is still one
+        /// contact, made either running or searching, however many rows it
+        /// expands into.
+        var posture: OperatingMode? = nil
     }
 
     static func expand(entry: QSOEntry, myLocs: [String], theirLocs: [String]) -> [QSO] {
@@ -56,7 +60,8 @@ enum CountyLineExpander {
                     myPotaRefs: entry.myPotaRefs,
                     theirPotaRefs: entry.theirPotaRefs,
                     myLoc: mine,
-                    theirLoc: theirs
+                    theirLoc: theirs,
+                    posture: entry.posture
                 )
             }
         }
