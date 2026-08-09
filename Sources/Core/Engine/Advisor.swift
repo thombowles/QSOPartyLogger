@@ -50,6 +50,14 @@ enum Advisor {
     static let sustain: TimeInterval = 3 * 60
     /// How near a window's end the countdown starts.
     static let windowWarn: TimeInterval = 2 * 3600
+    /// How near the next window's opening is worth saying anything about.
+    ///
+    /// This advisory is about a **two-day party's overnight gap**, which is
+    /// thirteen to twenty hours in every bundled schedule — not about the
+    /// calendar. Without a bound, opening next month's party in August reads
+    /// "Next window opens 1400Z (in 487 h 15 m)", which is not advice; the
+    /// Contest Dashboard's upcoming list is where a season belongs.
+    static let windowNextWithin: TimeInterval = 24 * 3600
     /// How much better a candidate must be than where you are before moving is
     /// worth the lost minutes.
     static let bandMargin = 2.0
@@ -826,6 +834,7 @@ enum Advisor {
 
         guard let next = schedule.first(where: { $0.start > now }) else { return [] }
         let until = next.start.timeIntervalSince(now)
+        guard until <= windowNextWithin else { return [] }
         return [Advisory(
             id: "scheduleEdge|opening|\(Int(next.start.timeIntervalSince1970))",
             kind: .scheduleEdge,

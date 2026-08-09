@@ -572,6 +572,26 @@ final class AdvisorTests: XCTestCase {
         XCTAssertEqual(advisory.headline, "Next window opens 1300Z (in 10 h 20 m).")
     }
 
+    /// The between-windows line is about a two-day party's **overnight gap**,
+    /// not about the calendar. Opening next month's party in August must not
+    /// announce "in 487 h 15 m" — that is not advice, and the dashboard's
+    /// upcoming list is where a season belongs.
+    func testAPartyStillWeeksAwaySaysNothingAboutItsWindows() throws {
+        let party = try self.party(schedule: schedule([
+            ("2026-08-29T14:00:00Z", "2026-08-30T02:00:00Z"),
+        ]))
+        XCTAssertTrue(Advisor.evaluate(try input(party: party), state: .init(), now: now)
+            .advisories.isEmpty)
+
+        // A day out it starts speaking, so the bound is a horizon rather than
+        // a silence.
+        let advisory = try XCTUnwrap(
+            Advisor.evaluate(try input(party: party), state: .init(),
+                             now: Self.utc("2026-08-28 20:00:00"))
+                .advisories.first { $0.kind == .scheduleEdge })
+        XCTAssertEqual(advisory.headline, "Next window opens 1400Z (in 18 h).")
+    }
+
     /// After the last window the advisor as a whole goes silent. Everything
     /// else it could say is about a contest that is over.
     func testAfterTheLastWindowEveryKindIsSilent() throws {
