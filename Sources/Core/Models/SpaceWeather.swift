@@ -174,11 +174,9 @@ struct SpaceWeather: Codable, Equatable, Sendable {
         String(format: "%.1f", kp)
     }
 
+    /// Deferred to `UTCTime` so the observation stamp here and the window
+    /// times in the advisor's schedule copy are the same clock.
     static func zulu(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(identifier: "UTC")
-        formatter.dateFormat = "HHmm'Z'"
-        return formatter.string(from: date)
+        UTCTime.zulu(date)
     }
 }

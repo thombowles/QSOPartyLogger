@@ -129,14 +129,30 @@ enum SolarGeometry {
     static func secondsToNearestCrossing(
         latitude: Double, longitude: Double, date: Date
     ) -> TimeInterval? {
-        var nearest: TimeInterval?
+        nearestCrossing(latitude: latitude, longitude: longitude, date: date)
+            .map { $0.date.timeIntervalSince(date) }
+    }
+
+    /// The nearest sunrise or sunset, and **which of the two it is** — the
+    /// half the copy needs, since "sunset was 0120Z" and "sunrise was 1147Z"
+    /// point at opposite ends of the band stack.
+    ///
+    /// Searched across yesterday, today and tomorrow, because a crossing
+    /// minutes away can easily belong to the neighbouring UTC day: EM13's
+    /// sunset lands after midnight UTC all summer.
+    static func nearestCrossing(
+        latitude: Double, longitude: Double, date: Date
+    ) -> (isSunrise: Bool, date: Date)? {
+        var nearest: (isSunrise: Bool, date: Date)?
         for dayOffset in -1...1 {
             let probe = date.addingTimeInterval(Double(dayOffset) * 86400)
             guard let times = sunriseSunset(latitude: latitude, longitude: longitude, date: probe)
             else { continue }
-            for crossing in [times.sunrise, times.sunset] {
-                let gap = crossing.timeIntervalSince(date)
-                if nearest.map({ abs(gap) < abs($0) }) ?? true { nearest = gap }
+            for candidate in [(true, times.sunrise), (false, times.sunset)] {
+                let gap = abs(candidate.1.timeIntervalSince(date))
+                if nearest.map({ gap < abs($0.date.timeIntervalSince(date)) }) ?? true {
+                    nearest = (isSunrise: candidate.0, date: candidate.1)
+                }
             }
         }
         return nearest
