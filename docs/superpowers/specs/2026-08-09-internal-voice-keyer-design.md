@@ -41,10 +41,21 @@ radio's voice memories, or nothing**. F-keys, ESM, Esc and repeat CQ behave
 exactly as they do on CW. An unassigned key advances and logs but transmits
 nothing.
 
-**The F-key caption is the memory it fires** — `M1` … `M8`, or `—` when
-unassigned. Not an editable nickname: a nickname can say "CQ" while the memory
-holds last year's exchange, and the app has no way to hear the difference. The
-caption states the one thing the app actually knows.
+**Every memory carries a name, and the F-key caption shows both** — `M1 CQ`,
+`M4 AGN?`, or a bare `M6` when that memory has not been named, or `—` when the
+key is unassigned. Eight memories is more than anyone remembers by number, so
+the name is what makes the row readable at 0200Z.
+
+**The name belongs to the memory, not to the F-key.** One name per memory,
+shared by the Run and S&P mappings and by every key that points at it. Naming
+per F-key position would mean sixteen names for eight recordings, free to
+disagree — Run F2 reading "Exch" and S&P F2 reading "TU" for the same audio.
+
+**The number always leads.** A name is the operator's note to themselves about
+what they recorded; nothing in the protocol reports what a memory actually
+holds, so a name can go stale when a recording is replaced. Showing `M4 AGN?`
+rather than `AGN?` means the caption is never *only* a claim the app cannot
+check.
 
 **Eight positions, and up to eight memories.** `ESM.againIndex` is 4 (F5), so
 the position count follows CW's eight and stays independent of how many memories
@@ -70,6 +81,14 @@ each keystroke's switch code. Two primary sources from the same manufacturer,
 combined; not an inference.
 
 ### Defaults
+
+Memory names:
+
+| M1 | M2 | M3 | M4 | M5–M8 |
+| --- | --- | --- | --- | --- |
+| CQ | Exch | TU | AGN? | *(unnamed)* |
+
+F-key mappings, which show as `M1 CQ`, `M2 Exch` and so on:
 
 | | F1 | F2 | F3 | F4 | F5 | F6–F8 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -206,15 +225,28 @@ current bank, so the state is visible rather than surprising.
 
 ```swift
 /// F1–F8 → the radio's voice memory number, or nil for an unassigned key.
-/// A number rather than a struct with a nickname: the caption is derived from
-/// the number, because a nickname can claim "CQ" while the memory holds last
-/// year's exchange and the app cannot hear the difference.
 var phoneRun: [Int?]
 var phoneSearchPounce: [Int?]
 func voiceMemories(for mode: OperatingMode) -> [Int?]
+
+/// What is recorded in each of the radio's voice memories, M1 first. The
+/// operator's own note — nothing in the protocol reports a memory's contents.
+/// Indexed by memory rather than by F-key so that eight recordings have eight
+/// names: naming per key would give Run F2 and S&P F2 separate names for the
+/// same audio, free to disagree.
+var voiceMemoryNames: [String]
+
+/// "M4 AGN?", or "M6" when unnamed. The number always leads, because the name
+/// can go stale when a recording is replaced and the number cannot.
+func voiceMemoryCaption(_ memory: Int) -> String
 ```
 
-Additive per Article 4: an explicit `init(from:)` decodes both with
+These live on `MessageSets`, per document, alongside the CW macros rather than
+in `AppSettings`. The recording itself is contest-specific — the memory holding
+"59 Travis" this weekend holds "59 Bell" the next — so its name travels with the
+log that describes it, exactly as the CW exchange macro does.
+
+Additive per Article 4: an explicit `init(from:)` decodes all three with
 `decodeIfPresent ?? default`, so every log written before today decodes with its
 `run` and `searchPounce` untouched and the phone defaults filled in.
 `encode(to:)` stays synthesized.
@@ -225,10 +257,10 @@ inspected, and reporting `missingSerial` for a CQP phone key would be a warning
 the operator cannot act on. `exchangeMismatch(with:)` keeps reading `run` and
 `searchPounce` only.
 
-`MessagesDraft` gains `phoneRun`/`phoneSearchPounce` and a
-`subscript(mode:index:) -> Int?`. `restoreDefaults(for:)` restores the phone sets
-too — from constants, not from `defaults(for: party)`, since the party's exchange
-shape cannot change what is on a recording.
+`MessagesDraft` gains `phoneRun`/`phoneSearchPounce`, `voiceMemoryNames`, and a
+`subscript(mode:index:) -> Int?`. `restoreDefaults(for:)` restores the phone
+mappings and the names too — from constants, not from `defaults(for: party)`,
+since the party's exchange shape cannot change what is on a recording.
 
 ### `EntryFlow`
 
@@ -237,10 +269,12 @@ Nested beside `Context` and `Outcome`, since it is part of what Return decided.
 
 ```swift
 /// What a message slot puts on the air. CW carries expanded text; a voice
-/// message carries a memory number, because a recording has no text.
+/// message carries a memory number, because a recording has no text — plus the
+/// caption to show while it plays, composed here so the TX badge and the
+/// messages row cannot word the same memory two ways.
 enum Transmission: Equatable {
     case cw(String)
-    case voice(memory: Int)
+    case voice(memory: Int, caption: String)
     /// An empty CW slot, an unassigned phone key, or one pointing at a memory
     /// this radio does not have.
     case silent
@@ -286,8 +320,8 @@ private var voiceDriver: (any VoiceMessageCapable)?
 callbacks; a driver that does not conform leaves `voiceStatus` at `.unsupported`,
 which is the honest default.
 
-`playVoiceMessage(memory:)` sets `nowSending` to `"M\(memory)"` and starts **no
-timer** — `onVoicePlaybackChange` clears it for real. A private
+`playVoiceMessage(memory:caption:)` sets `nowSending` to the caption and starts
+**no timer** — `onVoicePlaybackChange` clears it for real. A private
 `nowSendingIsVoice` flag keeps the two paths from clearing each other's badge.
 
 `abortCW(settings:)` becomes `abortTransmission(settings:)`, aborting the CW
@@ -305,7 +339,7 @@ keys instead, so it never has to know which mode it is drawing:
 
 ```swift
 /// One F-key as the row draws it: the caption under "F3" — expanded CW text, or
-/// "M4" — and whether the key can currently do anything.
+/// "M4 AGN?" — and whether the key can currently do anything.
 struct MessageKey: Equatable {
     var caption: String
     var isActive: Bool
@@ -313,10 +347,20 @@ struct MessageKey: Equatable {
 ```
 
 `MessagesEditor` gains a CW/Phone picker above the existing Run/S&P one. The
-phone side is eight rows of one labelled picker each — None, or M1…M8 — with
-memories beyond the connected radio's count shown as unavailable rather than
-hidden, so a mapping built for the K3 is still legible while a KX is plugged in.
-Below them the inline voice status, worded without naming a manufacturer
+phone side has **two sections**, because the two things being edited answer
+different questions:
+
+1. **Voice memories** — one row per memory, `M1` … `M8`, each with a single text
+   field naming what is recorded there. Not repeated per operating style; this
+   is what is in the radio. Memories beyond the connected radio's count are
+   shown disabled rather than hidden, so a set built for the K3 stays legible
+   while a KX is plugged in.
+2. **F-keys** — F1…F8 for the selected operating style, each a single picker
+   offering None or `M1 CQ`, `M2 Exch`, … so the choice reads as the recording
+   rather than as a number.
+
+One labelled control per row throughout, per the standing rule about Form rows.
+Below both, the inline voice status, worded without naming a manufacturer
 (Article 10):
 
 - `.unsupported` → "The connected radio has no voice memories."
@@ -357,9 +401,13 @@ That last one is the test that matters most — it is the difference between a
 missed transmission and the wrong audio on the air.
 
 `MessageSetsTests`: a log encoded before this change decodes with `run` and
-`searchPounce` byte-identical and the phone defaults present; `exchangeMismatch`
-against a CQP-shaped party returns nil for phone content that would trip
-`missingSerial` if it were read.
+`searchPounce` byte-identical and the phone mappings *and memory names* present;
+names survive a round-trip; `voiceMemoryCaption` renders `M4 AGN?` for a named
+memory, a bare `M6` for an unnamed one, and trims a name that is only
+whitespace; renaming a memory changes every F-key pointing at it in both
+operating styles, in one assertion — that is the property the per-memory
+indexing exists for; `exchangeMismatch` against a CQP-shaped party returns nil
+for phone content that would trip `missingSerial` if it were read.
 
 `EntryFlowTests`: phone with `voiceMemoryCount` 0 → ESM does not drive Return;
 8 → the same indexes CW returns; an unassigned key and a key pointing past the
@@ -397,9 +445,12 @@ where an F-key gained a phone behaviour, and the test count.
   into bank 2 will find the front panel's M1–M4 addressing bank 2 afterwards.
   The status line shows the current bank; the app does not restore it, because
   no source says what a bank change during playback does.
-- **An empty memory is indistinguishable from a recorded one.** Nothing in the
-  protocol reports whether a memory holds audio, so a key mapped to a memory the
-  operator never recorded simply produces silence. README caveat.
+- **The app cannot hear the memories.** Nothing in the protocol reports whether
+  a memory holds audio, or what it says. So a key mapped to a never-recorded
+  memory simply produces silence, and a name can go stale when a recording is
+  replaced from the front panel. Both are why the caption always leads with the
+  memory number: `M4 AGN?` degrades to a still-true `M4`, where a bare `AGN?`
+  would just be wrong. README caveat.
 - **A programmable function switch shadows a memory.** The Owner's Manual notes
   an M1–M4 assigned as a programmable function switch is unavailable for message
   play, and the app cannot detect it. README caveat.
