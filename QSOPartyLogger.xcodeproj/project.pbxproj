@@ -39,6 +39,7 @@
 		0E19768900F9E623A792FE9A /* NoCountyPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D31512FA359BD9954ADF23 /* NoCountyPartyTests.swift */; };
 		0EDE7ED8045380184EDE1D4F /* WorkedBeforeTableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB1E6038FE703DDB36B5F0 /* WorkedBeforeTableTests.swift */; };
 		0F87B0740AE33C79FF082253 /* TennesseeQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */; };
+		122FB6190515703980A91D42 /* SpaceWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E3B88134A7EDA380CC2C2 /* SpaceWeather.swift */; };
 		12C6DC13CA936881DB5F134C /* ScoreSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA812496670164897C4A0447 /* ScoreSidebar.swift */; };
 		151F7624A914409CC5E9DAA5 /* MessageSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B4B1D3D7E785B3640D0399 /* MessageSets.swift */; };
 		15C3B40327ABFE9DB29B1309 /* HubSelfSpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909A650EB49961812900CFD5 /* HubSelfSpot.swift */; };
@@ -72,6 +73,7 @@
 		2BEF9804CFD3BD390516C87B /* skeeter-roster-2026-08-04.csv in Resources */ = {isa = PBXBuildFile; fileRef = 44E2C5D70B522C855225BC72 /* skeeter-roster-2026-08-04.csv */; };
 		2CCA229FB32E1D2414047EEA /* HubSpotParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BC1600467005E882D39CF4 /* HubSpotParserTests.swift */; };
 		2D7E7342666EE5D877E66C2E /* OntarioQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9470B675F129A683C136E00 /* OntarioQSOPartyTests.swift */; };
+		2DCEA978445DEC87C9962CF0 /* SpaceWeatherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948FA6065D5E16C881FCE1EE /* SpaceWeatherTests.swift */; };
 		2E5F7FF3FE17194DE5E5DC48 /* CombinedPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28E6F3167ACCDDAF4295CAF /* CombinedPartyTests.swift */; };
 		2E637491E59BD85BC0F975E9 /* CountyGroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBFCB0433B452F01266FC7AC /* CountyGroupingTests.swift */; };
 		2FADB97332AC9D40282F9897 /* RadioBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771A2A2E70C2A91608F19549 /* RadioBar.swift */; };
@@ -86,6 +88,7 @@
 		36D1463B5DC69485948798D3 /* LogDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */; };
 		39531F3450A50C5765C48B87 /* ClusterProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2914E1429C4152BCF4A61DC /* ClusterProtocolTests.swift */; };
 		3A857866492731ADB2E7B655 /* RateMeterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433A191B9362FB73554ADEA5 /* RateMeterTests.swift */; };
+		3B85ED64E0AABE02A6BD20C5 /* swpc_f107_cm_flux_2026-08-09.json in Resources */ = {isa = PBXBuildFile; fileRef = 26120DE41ED0E944E1F984FA /* swpc_f107_cm_flux_2026-08-09.json */; };
 		3BE9C47F0CF9E0AC8134E7FD /* DupeCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4CFCAA1F93033279C3D7CF /* DupeCheckerTests.swift */; };
 		3CB5FBA489EFFACEE3A57BB1 /* RadioControllerConnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96F76D3F0F364CAA514E629 /* RadioControllerConnectionTests.swift */; };
 		3D1801F37FFEC64F2E540F52 /* SerialPortEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D026EFBE941E3104530AE /* SerialPortEnumerator.swift */; };
@@ -172,6 +175,7 @@
 		7BE97A35880D3C0C58FBF1FC /* CaveatRosterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CBF19C2B05E02E5B784A9 /* CaveatRosterTests.swift */; };
 		7C1E04CC6A3B21CD6BDBCF0C /* SpottingPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364B004532E156F89351C6BC /* SpottingPolicy.swift */; };
 		7C432C2A33658F48ADF44099 /* IowaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273A1C77EBE557460270764F /* IowaQSOPartyTests.swift */; };
+		7D3248C77339AC6A6805DDC1 /* SpaceWeatherClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4965CF427FF28FE0F8D27B4E /* SpaceWeatherClientTests.swift */; };
 		7E095A753F6C058F8D0F402E /* BritishColumbiaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42368D9706B3F36B3537C216 /* BritishColumbiaQSOPartyTests.swift */; };
 		8169A7673BCD6E9B2A60EE78 /* EntryFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242014141B06D7E0F2526D86 /* EntryFlow.swift */; };
 		820C4377EA5B9A172E10F6F3 /* WorkedBeforeTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41280766B8E0202F2FCDAE83 /* WorkedBeforeTable.swift */; };
@@ -232,6 +236,7 @@
 		B6FBE02A952C1AE6A69D169F /* StationMemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8199BE77C57911CB47B7B016 /* StationMemoryTests.swift */; };
 		B99DE9236CC16993B455BC8E /* SpottingPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C881733E52B4CD62D43604 /* SpottingPolicyTests.swift */; };
 		BA29F9177B9172AD408E813B /* OneByOneTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */; };
+		BB37CFF1FA39DE72C1AF9A0F /* swpc_planetary_k_index_2026-08-09.json in Resources */ = {isa = PBXBuildFile; fileRef = 7DC4C4A853BB7179CD85AC18 /* swpc_planetary_k_index_2026-08-09.json */; };
 		BBB53615A635E239E38E29E1 /* ContestArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C1B661CE889D39EFE333E /* ContestArchive.swift */; };
 		BC4A23B103FF85F464A09796 /* VirginiaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6D999640AF4FF7CB86AF56 /* VirginiaQSOPartyTests.swift */; };
 		BC984B0894398DED6243482C /* CloudMirror.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C89D2926CF6C8F0A3DEC77 /* CloudMirror.swift */; };
@@ -282,6 +287,7 @@
 		E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52BEC7154012161AF51ED0 /* CWSender.swift */; };
 		E64FE26D4B39A995603DC746 /* ActivatedCountyMultiplierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E51C701CCCCEE5527FA99E /* ActivatedCountyMultiplierTests.swift */; };
 		E6A1CF88C19C7DADF81B78DE /* PartyCaveatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DA0DF56D3346FEB3B3B11C /* PartyCaveatTests.swift */; };
+		E6C26CEDD95C7E3EB0F85B6E /* SpaceWeatherClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC96D1A4EDCC926D5935AA7 /* SpaceWeatherClient.swift */; };
 		E796127A2382C49ADF81525C /* StationProfileNormalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E49449BB9A7AE6DB367D27 /* StationProfileNormalizationTests.swift */; };
 		E846862056468AB1BD3D5FD4 /* Maidenhead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B7B2632E809D2D53F4D08 /* Maidenhead.swift */; };
 		E8FAF2B6ECB072BB3D618F5F /* CallHistoryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CE1E1946B617E9A436FD8A /* CallHistoryClient.swift */; };
@@ -382,6 +388,7 @@
 		250F1FBFEB632D5492568FE7 /* NorthAmericanQSOPartyCWTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorthAmericanQSOPartyCWTests.swift; sourceTree = "<group>"; };
 		2559BE76C4D55ED692590BD6 /* MultClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultClass.swift; sourceTree = "<group>"; };
 		256735340D033423D4396DBA /* BandMapLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapLayoutTests.swift; sourceTree = "<group>"; };
+		26120DE41ED0E944E1F984FA /* swpc_f107_cm_flux_2026-08-09.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "swpc_f107_cm_flux_2026-08-09.json"; sourceTree = "<group>"; };
 		273A1C77EBE557460270764F /* IowaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IowaQSOPartyTests.swift; sourceTree = "<group>"; };
 		28174F39D351A29CC80B77F2 /* QSO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSO.swift; sourceTree = "<group>"; };
 		28981F0AB9338C01CB01D910 /* VermontQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VermontQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -429,10 +436,12 @@
 		4617D5E5CB3103CD4E042746 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		464472573FD7960DD5AC5B7B /* MaineQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaineQSOPartyTests.swift; sourceTree = "<group>"; };
 		468D38B74FF2D7C5B9DBDFF9 /* alqp-table-2026-07-25-busy.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "alqp-table-2026-07-25-busy.html"; sourceTree = "<group>"; };
+		469E3B88134A7EDA380CC2C2 /* SpaceWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWeather.swift; sourceTree = "<group>"; };
 		478647587A295E345278D2A5 /* StationProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationProfile.swift; sourceTree = "<group>"; };
 		4863BAC6A4DFB9BD99769399 /* ArchivedLogExportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedLogExportTests.swift; sourceTree = "<group>"; };
 		48CB91F21E07017D2A0967CF /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		48E3BF99C529E7F7490BE0B6 /* GeorgiaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeorgiaQSOPartyTests.swift; sourceTree = "<group>"; };
+		4965CF427FF28FE0F8D27B4E /* SpaceWeatherClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWeatherClientTests.swift; sourceTree = "<group>"; };
 		4A13C34B4765F4AE9FB37456 /* PotaParkClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkClientTests.swift; sourceTree = "<group>"; };
 		4DFBB554A5050EEC235AC9E7 /* DashboardExportRowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardExportRowTests.swift; sourceTree = "<group>"; };
 		4E0D658A0E17CBDA57B4F747 /* EntryClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryClassTests.swift; sourceTree = "<group>"; };
@@ -497,6 +506,7 @@
 		7A13480F81C3AAAF48E260E3 /* MissouriQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissouriQSOPartyTests.swift; sourceTree = "<group>"; };
 		7CC43C19DF629A758F1B4641 /* ContestLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestLog.swift; sourceTree = "<group>"; };
 		7DC23CBE9D9FF78C2719ABE0 /* MacroToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroToken.swift; sourceTree = "<group>"; };
+		7DC4C4A853BB7179CD85AC18 /* swpc_planetary_k_index_2026-08-09.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "swpc_planetary_k_index_2026-08-09.json"; sourceTree = "<group>"; };
 		7E1D19BC072C08DBE666952A /* SpotCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCommand.swift; sourceTree = "<group>"; };
 		7E2F19912CD8C3334A165D73 /* MultiplierTermTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplierTermTests.swift; sourceTree = "<group>"; };
 		7E8ACE1B4AD7A5B0F30AF0BF /* PotaParkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkClient.swift; sourceTree = "<group>"; };
@@ -519,6 +529,7 @@
 		9392F2187275B71B5789F836 /* CallHistoryPageParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryPageParser.swift; sourceTree = "<group>"; };
 		944ACFBCB11B916DDD2F8933 /* EntryFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryFlowTests.swift; sourceTree = "<group>"; };
 		946CE99241815D626D18A649 /* ScoreSummaryText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreSummaryText.swift; sourceTree = "<group>"; };
+		948FA6065D5E16C881FCE1EE /* SpaceWeatherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWeatherTests.swift; sourceTree = "<group>"; };
 		95D6B397C7B014ACA6232F8F /* CountyLineExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountyLineExpander.swift; sourceTree = "<group>"; };
 		96C1CC73171B49CEFB01A99E /* MichiganQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MichiganQSOPartyTests.swift; sourceTree = "<group>"; };
 		9A39D1408949FD95B50D1EFC /* CallHistorySourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistorySourceTests.swift; sourceTree = "<group>"; };
@@ -566,6 +577,7 @@
 		BA6909D9B091012C2EC02AD3 /* NorthAmericanQSOPartySSBTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorthAmericanQSOPartySSBTests.swift; sourceTree = "<group>"; };
 		BA6F9800ED08704FB3E4DFA1 /* TestBundleSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestBundleSetup.swift; sourceTree = "<group>"; };
 		BA7BD3A749CC81C285D0CA38 /* CatalogConsistencyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogConsistencyTests.swift; sourceTree = "<group>"; };
+		BAC96D1A4EDCC926D5935AA7 /* SpaceWeatherClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWeatherClient.swift; sourceTree = "<group>"; };
 		BBCF2F37A32D904FCCB58446 /* CallHistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryStoreTests.swift; sourceTree = "<group>"; };
 		BE87C8AFF4402D21D499C37A /* SerialTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialTransport.swift; sourceTree = "<group>"; };
 		BEFD29B68C87E0D24267605B /* BonusScopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusScopeTests.swift; sourceTree = "<group>"; };
@@ -747,6 +759,7 @@
 				9F212545ED1201EF8D3F739F /* PotaRef.swift */,
 				28174F39D351A29CC80B77F2 /* QSO.swift */,
 				D828CCCA6AC98404000B6406 /* SolarGeometry.swift */,
+				469E3B88134A7EDA380CC2C2 /* SpaceWeather.swift */,
 				478647587A295E345278D2A5 /* StationProfile.swift */,
 			);
 			path = Models;
@@ -891,6 +904,7 @@
 				AD7B9510D707A5A3BC7B61F8 /* SolarGeometryTests.swift */,
 				5B4D578B0A19E09B560A6584 /* SouthCarolinaQSOPartyTests.swift */,
 				1BE324A25B998F570B53C353 /* SouthDakotaQSOPartyTests.swift */,
+				948FA6065D5E16C881FCE1EE /* SpaceWeatherTests.swift */,
 				458F13A4AC7D10092F93F2D9 /* SpotCommandTests.swift */,
 				17C9CCE3682DD1DBEC9CD5F3 /* SpotExchangePrefillTests.swift */,
 				04053E0272A2391F55417D60 /* SpotFilterTests.swift */,
@@ -1061,12 +1075,22 @@
 			path = Spotting;
 			sourceTree = "<group>";
 		};
+		B80897121036BFD9F76B7920 /* SpaceWeather */ = {
+			isa = PBXGroup;
+			children = (
+				26120DE41ED0E944E1F984FA /* swpc_f107_cm_flux_2026-08-09.json */,
+				7DC4C4A853BB7179CD85AC18 /* swpc_planetary_k_index_2026-08-09.json */,
+			);
+			path = SpaceWeather;
+			sourceTree = "<group>";
+		};
 		C9EB80BA0D069CB1DBA5582B /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
 				3369698E7590F081AF65EB4D /* pota_parks_sample.json */,
 				4559E550B5DB4264FEC709A5 /* CallHistory */,
 				851542C481A1BB4B3E681069 /* HubSpots */,
+				B80897121036BFD9F76B7920 /* SpaceWeather */,
 			);
 			path = Fixtures;
 			sourceTree = "<group>";
@@ -1091,6 +1115,7 @@
 				2FF4DB3C69EF4EB9FFF24B24 /* PreferenceIsolationTests.swift */,
 				D96F76D3F0F364CAA514E629 /* RadioControllerConnectionTests.swift */,
 				5F8A0D8EDD44C17364359A07 /* SCPClientTests.swift */,
+				4965CF427FF28FE0F8D27B4E /* SpaceWeatherClientTests.swift */,
 				6A83B90871BA86343AB446AA /* SpotLabelSizePreferenceTests.swift */,
 				EA8FAE342F109F10019D3BA4 /* SuperCheckFlowTests.swift */,
 			);
@@ -1178,6 +1203,7 @@
 				29C2D0EBC8E5FC6F24E96A7A /* QSOPartyLoggerApp.swift */,
 				91AE54A60C33CC8614CCB97C /* RadioController.swift */,
 				5FA34D87EC7908A404F08591 /* SCPClient.swift */,
+				BAC96D1A4EDCC926D5935AA7 /* SpaceWeatherClient.swift */,
 				AB030727FF0C38B6B3944150 /* SpotClient.swift */,
 			);
 			path = App;
@@ -1310,6 +1336,8 @@
 				A1A60A0CFC217C5D31753DEE /* pota_parks_sample.json in Resources */,
 				52066C8053C3E506FB6DBB48 /* sdqp-table-2024-10-12.html in Resources */,
 				2BEF9804CFD3BD390516C87B /* skeeter-roster-2026-08-04.csv in Resources */,
+				3B85ED64E0AABE02A6BD20C5 /* swpc_f107_cm_flux_2026-08-09.json in Resources */,
+				BB37CFF1FA39DE72C1AF9A0F /* swpc_planetary_k_index_2026-08-09.json in Resources */,
 				EF7289D626F003206FF4AB4C /* w2lj-skeeter-page-2026-08-04.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1464,6 +1492,8 @@
 				68A357B0FC6E4E8AC3AC8F13 /* SolarGeometryTests.swift in Sources */,
 				593C9B4F548045F68D71789E /* SouthCarolinaQSOPartyTests.swift in Sources */,
 				850DACFDE512111523B875A3 /* SouthDakotaQSOPartyTests.swift in Sources */,
+				7D3248C77339AC6A6805DDC1 /* SpaceWeatherClientTests.swift in Sources */,
+				2DCEA978445DEC87C9962CF0 /* SpaceWeatherTests.swift in Sources */,
 				EFB55589DABD4E2FB936B338 /* SpotCommandTests.swift in Sources */,
 				D67843C425FEB57DE8F76C0E /* SpotExchangePrefillTests.swift in Sources */,
 				D92268C1083B39CB08B32393 /* SpotFilterTests.swift in Sources */,
@@ -1609,6 +1639,8 @@
 				AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */,
 				C3CDE006A150B8867C4B7794 /* SkeeterRosterParser.swift in Sources */,
 				94CC96D5AAA83B99FB0896CB /* SolarGeometry.swift in Sources */,
+				122FB6190515703980A91D42 /* SpaceWeather.swift in Sources */,
+				E6C26CEDD95C7E3EB0F85B6E /* SpaceWeatherClient.swift in Sources */,
 				AC51CD88CDF9CBFA21C5C25F /* Spot.swift in Sources */,
 				451EEEAEAD526B20F82A3045 /* SpotClient.swift in Sources */,
 				D4DBB738375F8F40611BC220 /* SpotCommand.swift in Sources */,
