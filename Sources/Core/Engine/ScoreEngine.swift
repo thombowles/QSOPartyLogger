@@ -290,7 +290,10 @@ enum ScoreEngine {
         scopeComponent(scope, band: row.band, modeClass: row.modeClass)
     }
 
-    private static func scopeComponent(
+    /// Internal rather than private so `NeededMult` can ask the same question
+    /// the scorer answers. Two implementations of "what does *worked on 20 m*
+    /// mean" is a scoring bug factory.
+    static func scopeComponent(
         _ scope: PartyDefinition.CountScope, band: Band, modeClass: ModeClass
     ) -> String {
         scope.component(band: band, modeClass: modeClass)
@@ -624,7 +627,11 @@ enum ScoreEngine {
     /// Would working `county` at `scope` raise this log's multiplier total?
     /// Only asked where the entrant's rule forfeits the activation multiplier on
     /// a worked county — everywhere else a key that is absent is a gain.
-    private static func countyGains(
+    ///
+    /// Internal for the same reason as `scopeComponent`: the NEW MULT badge,
+    /// the advisor's needed-mult chips and the score itself must agree about
+    /// which counties still pay.
+    static func countyGains(
         _ county: String, addingScope scope: String, to current: Set<MultKey>
     ) -> Bool {
         let keys = current.filter { $0.multClass == .county && $0.value == county }
