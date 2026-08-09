@@ -79,8 +79,8 @@ final class EntryFlowTests: XCTestCase {
 
         let outcome = flow.returnPressed(context(), undoManager: nil)
 
-        guard case .logged(let rows, let keyed) = outcome else {
-            return XCTFail("expected the contact to be logged, got \(outcome)")
+        guard case .logged(let rows, .cw(let keyed)) = outcome else {
+            return XCTFail("expected the contact to be logged with CW, got \(outcome)")
         }
         XCTAssertEqual(rows.count, 1)
         XCTAssertEqual(rows[0].serialSent, 1, "the number written to the log")
@@ -106,8 +106,8 @@ final class EntryFlowTests: XCTestCase {
         readyToLog(flow, call: "K6XYZ", their: "ALAM")
         let outcome = flow.returnPressed(context(), undoManager: nil)
 
-        guard case .logged(let rows, let keyed) = outcome else {
-            return XCTFail("expected the contact to be logged, got \(outcome)")
+        guard case .logged(let rows, .cw(let keyed)) = outcome else {
+            return XCTFail("expected the contact to be logged with CW, got \(outcome)")
         }
         XCTAssertEqual(rows[0].serialSent, 2)
         XCTAssertEqual(keyed, "2 TX", "pre-fix: \"3 TX\"")
@@ -227,8 +227,8 @@ final class EntryFlowTests: XCTestCase {
         flow.entry.serialSent = "17"
 
         let outcome = flow.returnPressed(context(), undoManager: nil)
-        guard case .logged(let rows, let keyed) = outcome else {
-            return XCTFail("expected the contact to be logged, got \(outcome)")
+        guard case .logged(let rows, .cw(let keyed)) = outcome else {
+            return XCTFail("expected the contact to be logged with CW, got \(outcome)")
         }
         XCTAssertEqual(rows[0].serialSent, 17)
         XCTAssertEqual(keyed, "17 TX")
@@ -260,11 +260,11 @@ final class EntryFlowTests: XCTestCase {
             readyToLog(flow)
             let outcome = flow.returnPressed(ctx, undoManager: nil)
 
-            guard case .logged(let rows, let keyed) = outcome else {
+            guard case .logged(let rows, let transmission) = outcome else {
                 return XCTFail("expected a plain log, got \(outcome)")
             }
             XCTAssertEqual(rows.count, 1, "the contact is still logged")
-            XCTAssertEqual(keyed, "", "but nothing is keyed")
+            XCTAssertEqual(transmission, .silent, "but nothing is keyed")
         }
     }
 
@@ -275,7 +275,7 @@ final class EntryFlowTests: XCTestCase {
         readyToLog(flow)
 
         let outcome = flow.returnPressed(context(cursor: .call), undoManager: nil)
-        XCTAssertEqual(outcome, .send(index: 0, text: "KE5CW"))
+        XCTAssertEqual(outcome, .send(index: 0, transmission: .cw("KE5CW")))
         XCTAssertTrue(flow.document.log.qsos.isEmpty, "nothing was logged")
     }
 
@@ -286,7 +286,7 @@ final class EntryFlowTests: XCTestCase {
         readyToLog(flow, their: "ZZZZ")
 
         let outcome = flow.returnPressed(context(cursor: .exchange), undoManager: nil)
-        XCTAssertEqual(outcome, .send(index: ESM.againIndex, text: "AGN?"))
+        XCTAssertEqual(outcome, .send(index: ESM.againIndex, transmission: .cw("AGN?")))
         XCTAssertTrue(flow.document.log.qsos.isEmpty)
     }
 
@@ -360,8 +360,8 @@ final class EntryFlowTests: XCTestCase {
         flow.revalidate(context())
 
         let outcome = flow.returnPressed(context(), undoManager: nil)
-        guard case .logged(let rows, let keyed) = outcome else {
-            return XCTFail("expected the contact to be logged, got \(outcome)")
+        guard case .logged(let rows, .cw(let keyed)) = outcome else {
+            return XCTFail("expected the contact to be logged with CW, got \(outcome)")
         }
         XCTAssertEqual(rows.count, 2)
         XCTAssertEqual(Set(rows.compactMap(\.serialSent)), [1],
@@ -645,5 +645,100 @@ final class EntryFlowTests: XCTestCase {
         flow.entry.call = "K6XYZ"
         flow.callChanged(context())
         XCTAssertEqual(flow.entry.theirParkTyped, "")
+    }
+
+    // MARK: Voice
+
+    private func phoneContext(memories: Int, cursor: ESM.Cursor = .call) -> EntryFlow.Context {
+        var keying = KeyingSettings()
+        keying.esmEnabled = true
+        return EntryFlow.Context(
+            modeClass: .phone,
+            rawMode: "SSB",
+            radioConnected: true,
+            cursor: cursor,
+            keying: keying,
+            voiceMemoryCount: memories
+        )
+    }
+
+    /// A radio with no memories leaves Return a plain log key, exactly as a
+    /// disconnected radio does.
+    func testESMDoesNotDriveReturnOnPhoneWithoutMemories() {
+        let flow = EntryFlow(document: LogDocument())
+        XCTAssertFalse(flow.esmDrivesReturn(phoneContext(memories: 0)))
+    }
+
+    func testESMDrivesReturnOnPhoneWithMemories() {
+        let flow = EntryFlow(document: LogDocument())
+        XCTAssertTrue(flow.esmDrivesReturn(phoneContext(memories: 8)))
+    }
+
+    /// Digital never drives ESM in either mode class.
+    func testESMNeverDrivesReturnOnDigital() {
+        var keying = KeyingSettings()
+        keying.esmEnabled = true
+        let context = EntryFlow.Context(
+            modeClass: .digital, rawMode: "RTTY", radioConnected: true,
+            cursor: .call, keying: keying, voiceMemoryCount: 8
+        )
+        XCTAssertFalse(EntryFlow(document: LogDocument()).esmDrivesReturn(context))
+    }
+
+    /// The same F-key indexes as CW — ESM.swift is untouched by this feature.
+    ///
+    /// A fresh `LogDocument()` derives Search & Pounce (its default location is
+    /// out-of-state), so Run is set explicitly — the mapping under test here is
+    /// `phoneRun`, not `phoneSearchPounce`.
+    func testPhoneTransmissionUsesTheMappedMemoryAndItsCaption() {
+        let document = LogDocument()
+        document.log.operatingMode = .run
+        let flow = EntryFlow(document: document)
+        // Run default: F1 → M1, named "CQ".
+        XCTAssertEqual(
+            flow.transmission(at: 0, context: phoneContext(memories: 8)),
+            .voice(memory: 1, caption: "M1 CQ")
+        )
+    }
+
+    func testUnassignedPhoneKeyIsSilent() {
+        let document = LogDocument()
+        document.log.operatingMode = .run
+        let flow = EntryFlow(document: document)
+        // Run default: F4 is unassigned.
+        XCTAssertEqual(flow.transmission(at: 3, context: phoneContext(memories: 8)), .silent)
+    }
+
+    /// A mapping built for an 8-memory radio must not fire memory 5 at a radio
+    /// that has two. Silence, not a clamp onto a neighbouring recording.
+    func testPhoneKeyBeyondTheRadiosMemoryCountIsSilent() {
+        let document = LogDocument()
+        document.log.operatingMode = .run
+        var sets = document.log.messages
+        sets.phoneRun = [5, nil, nil, nil, nil, nil, nil, nil]
+        document.updateMessages(sets, undoManager: nil)
+
+        let flow = EntryFlow(document: document)
+        XCTAssertEqual(flow.transmission(at: 0, context: phoneContext(memories: 2)), .silent)
+        XCTAssertEqual(
+            flow.transmission(at: 0, context: phoneContext(memories: 8)),
+            .voice(memory: 5, caption: "M5")
+        )
+    }
+
+    func testCWTransmissionStillCarriesExpandedText() {
+        let document = LogDocument()
+        let flow = EntryFlow(document: document)
+        flow.entry.call = "W6ABC"
+        var keying = KeyingSettings()
+        keying.esmEnabled = true
+        let context = EntryFlow.Context(
+            modeClass: .cw, rawMode: "CW", radioConnected: true,
+            cursor: .call, keying: keying
+        )
+        guard case .cw(let text) = flow.transmission(at: 0, context: context) else {
+            return XCTFail("expected CW")
+        }
+        XCTAssertFalse(text.isEmpty)
     }
 }

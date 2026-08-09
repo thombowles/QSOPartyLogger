@@ -7,9 +7,9 @@ struct MainView: View {
 
     @State private var settings = AppSettings.shared
     @State private var radio = RadioController()
-    /// Everything the radio keys goes through here. This view builds the
-    /// context, calls the flow, and hands the returned text to the radio — it
-    /// never decides what that text is.
+    /// Everything the radio puts on the air goes through here. This view builds
+    /// the context, calls the flow, and hands the returned transmission to the
+    /// radio — it never decides what that transmission is.
     @State private var flow: EntryFlow
     @FocusState private var focusedField: EntryBar.Field?
 
@@ -944,8 +944,8 @@ struct MainView: View {
 
     /// Return key. The flow decides what happens and what goes on the air; this
     /// only carries the decision out to the radio, the focus ring and the setup
-    /// sheet. Nothing here may re-expand a message — expansion order is exactly
-    /// what the flow exists to pin down.
+    /// sheet. Nothing here may re-resolve a message — resolution order is
+    /// exactly what the flow exists to pin down.
     private func returnPressed() {
         apply(flow.returnPressed(operatingContext, undoManager: undoManager))
     }
@@ -954,15 +954,37 @@ struct MainView: View {
         switch outcome {
         case .qsy(let command):
             execute(command)
-        case .send(let index, let text):
-            keyed(text, fromMessageAt: index)
-        case .logged(let rows, let text):
+        case .send(let index, let transmission):
+            keyed(transmission, fromMessageAt: index)
+        case .logged(let rows, let transmission):
             addWorkedStationsToBandMap(rows)
             focusedField = .call
-            if !text.isEmpty { radio.sendCW(text, settings: settings) }
+            transmit(transmission)
         case .needsSetup:
             showSetup = true
         case .nothing:
+            break
+        }
+    }
+
+    private func keyed(_ transmission: EntryFlow.Transmission, fromMessageAt index: Int) {
+        // F1 in Run mode is the CQ — remember where we're running from.
+        if operatingMode.wrappedValue == .run, index == 0 {
+            captureCQFrequency()
+        }
+        transmit(transmission)
+    }
+
+    /// The one place a resolved transmission reaches the radio. Nothing here
+    /// may re-resolve a message — resolution order is exactly what the flow
+    /// exists to pin down.
+    private func transmit(_ transmission: EntryFlow.Transmission) {
+        switch transmission {
+        case .cw(let text):
+            radio.sendCW(text, settings: settings)
+        case .voice(let memory, let caption):
+            radio.playVoiceMessage(memory: memory, caption: caption)
+        case .silent:
             break
         }
     }
@@ -981,14 +1003,6 @@ struct MainView: View {
                                      mode: operatingMode.wrappedValue) {
             spotStore.addIfAbsent(spot)
         }
-    }
-
-    private func keyed(_ text: String, fromMessageAt index: Int) {
-        // F1 in Run mode is the CQ — remember where we're running from.
-        if operatingMode.wrappedValue == .run, index == 0 {
-            captureCQFrequency()
-        }
-        radio.sendCW(text, settings: settings)
     }
 
     /// Only the call and exchange fields change what Return does; the signal
@@ -1013,10 +1027,9 @@ struct MainView: View {
     }
 
     private func sendMessageAt(_ index: Int) {
-        let context = operatingContext
-        let message = flow.expandedMessage(at: index, context: context)
-        guard !message.isEmpty else { return }
-        keyed(message, fromMessageAt: index)
+        let transmission = flow.transmission(at: index, context: operatingContext)
+        guard transmission != .silent else { return }
+        keyed(transmission, fromMessageAt: index)
     }
 
     // MARK: Typed QSY commands + spot tuning

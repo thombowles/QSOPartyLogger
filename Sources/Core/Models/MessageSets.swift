@@ -7,12 +7,29 @@ private extension String {
     func mentions(_ macro: MacroToken) -> Bool { contains(macro.rawValue) }
 }
 
-/// F1–F8 CW message sets, one per operating style. Stored per document so
-/// each contest (window) carries its own macros — running two parties at
-/// once means two logs with independent messages.
+/// F1–F8 message sets, one per operating style: CW text to key, and on phone
+/// which of the radio's recorded voice memories each key plays. Stored per
+/// document so each contest (window) carries its own macros — running two
+/// parties at once means two logs with independent messages.
 struct MessageSets: Codable, Equatable, Sendable {
     var run: [String]
     var searchPounce: [String]
+
+    /// F1–F8 → the radio's voice memory number, or nil for an unassigned key.
+    ///
+    /// Defaulted in the declaration so the memberwise initialiser keeps its
+    /// two-argument form: `MessageSets(run:searchPounce:)` is called from
+    /// `defaults(for:)`, `.standard` and `MessagesDraft.edited`.
+    var phoneRun: [Int?] = MessageSets.defaultPhoneRun
+    var phoneSearchPounce: [Int?] = MessageSets.defaultPhoneSearchPounce
+
+    /// What is recorded in each of the radio's voice memories, M1 first.
+    ///
+    /// The operator's own note: nothing in the protocol reports a memory's
+    /// contents. Indexed by memory rather than by F-key, so eight recordings
+    /// have eight names — naming per key would give Run F2 and S&P F2 separate
+    /// names for the same audio, free to disagree.
+    var voiceMemoryNames: [String] = MessageSets.defaultVoiceMemoryNames
 
     static let defaultRun = [
         "CQ TEST {MYCALL}",
@@ -51,6 +68,23 @@ struct MessageSets: Codable, Equatable, Sendable {
     /// `{EXCH}`, or every log written before the rename stops being
     /// recognised as untouched.
     static let standard = MessageSets(run: defaultRun, searchPounce: defaultSearchPounce)
+
+    /// Phone defaults stay inside memories 1–4, so the default mapping never
+    /// triggers a bank change on a radio whose memories are banked. Memories
+    /// 5–8 exist for an operator who wants them, not to be spent by a default.
+    static let defaultPhoneRun: [Int?] = [1, 2, 3, nil, 4, nil, nil, nil]
+
+    /// S&P F1 — "send my call" — is deliberately unassigned: a callsign is
+    /// faster spoken than recorded, and Return with nothing mapped advances and
+    /// logs without transmitting, exactly as an empty CW slot does.
+    static let defaultPhoneSearchPounce: [Int?] = [nil, 2, 3, nil, 4, nil, nil, nil]
+
+    static let defaultVoiceMemoryNames = ["CQ", "Exch", "TU", "AGN?", "", "", "", ""]
+
+    /// The number of voice memories the app will ever offer. The *radio's* count
+    /// is discovered at connect and is usually smaller; this is only how many
+    /// rows the editor draws.
+    static let voiceMemorySlots = 8
 
     /// The default macros for a party's exchange shape. Derived rather than
     /// fixed because three bundled parties send no signal report: CQP and PAQP
@@ -207,11 +241,59 @@ struct MessageSets: Codable, Equatable, Sendable {
         case .searchPounce: searchPounce
         }
     }
+
+    func voiceMemories(for mode: OperatingMode) -> [Int?] {
+        switch mode {
+        case .run: phoneRun
+        case .searchPounce: phoneSearchPounce
+        }
+    }
+
+    /// "M4 AGN?", or a bare "M6" when that memory has no name.
+    ///
+    /// The number always leads. A name can go stale when a recording is
+    /// replaced from the front panel, and nothing in the protocol reports what
+    /// a memory holds — so the caption degrades to a still-true "M6" rather
+    /// than to a claim the app cannot check.
+    func voiceMemoryCaption(_ memory: Int) -> String {
+        let name = voiceMemoryNames.indices.contains(memory - 1)
+            ? voiceMemoryNames[memory - 1].trimmingCharacters(in: .whitespaces)
+            : ""
+        return name.isEmpty ? "M\(memory)" : "M\(memory) \(name)"
+    }
 }
 
 /// Run (calling CQ) vs Search & Pounce operating style.
 enum OperatingMode: String, Codable, CaseIterable, Sendable {
     case run = "Run"
     case searchPounce = "S&P"
+}
+
+/// Additive decoding, Article 4. The phone fields arrived on 2026-08-09; a log
+/// written before that carries neither, and must decode with its CW macros
+/// untouched and the phone defaults filled in.
+///
+/// `init(from:)` lives in an extension on purpose: an initialiser declared in
+/// the struct body would suppress the memberwise `MessageSets(run:searchPounce:)`
+/// that `defaults(for:)` and `.standard` are built from. `encode(to:)` stays
+/// synthesised from `CodingKeys`.
+extension MessageSets {
+    enum CodingKeys: String, CodingKey {
+        case run, searchPounce, phoneRun, phoneSearchPounce, voiceMemoryNames
+    }
+
+    init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            run: try c.decode([String].self, forKey: .run),
+            searchPounce: try c.decode([String].self, forKey: .searchPounce)
+        )
+        phoneRun = try c.decodeIfPresent([Int?].self, forKey: .phoneRun)
+            ?? Self.defaultPhoneRun
+        phoneSearchPounce = try c.decodeIfPresent([Int?].self, forKey: .phoneSearchPounce)
+            ?? Self.defaultPhoneSearchPounce
+        voiceMemoryNames = try c.decodeIfPresent([String].self, forKey: .voiceMemoryNames)
+            ?? Self.defaultVoiceMemoryNames
+    }
 }
 

@@ -340,6 +340,10 @@ final class RadioController {
         }
     }
 
+    /// Play one of the radio's recorded voice memories. Wired to a driver in
+    /// the commit that adds the K3's voice keyer; inert until then.
+    func playVoiceMessage(memory: Int, caption: String) {}
+
     func abortCW(settings: AppSettings) {
         activeSender(settings)?.abort()
         sendingClearTask?.cancel()
