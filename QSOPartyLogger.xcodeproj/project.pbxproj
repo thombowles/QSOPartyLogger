@@ -150,6 +150,7 @@
 		6615F01A1746C284C34DD7C4 /* SCPStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A7D51B8CF8AFE96129EA2F /* SCPStoreTests.swift */; };
 		67A80A778F35F15BE390F382 /* BulkEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64840D9ACF7A45698878A84 /* BulkEditSheet.swift */; };
 		688F883E10245C3D0543C4F7 /* NewHampshireQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3451A53ECE9C61AD37E8E16C /* NewHampshireQSOPartyTests.swift */; };
+		68A357B0FC6E4E8AC3AC8F13 /* SolarGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7B9510D707A5A3BC7B61F8 /* SolarGeometryTests.swift */; };
 		698B227926FB01BE3C96A295 /* SerialTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87C8AFF4402D21D499C37A /* SerialTransport.swift */; };
 		69C27FF9CA35A238F328CAD7 /* SpotParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731055DFF68E6AF98B5FD807 /* SpotParser.swift */; };
 		6A3CA6D517471AE74A517ECA /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245471C16B083B398057F4A0 /* ModelTests.swift */; };
@@ -190,6 +191,7 @@
 		91DA1EA18F0FDE9613ED6B68 /* RadioRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F435A4BFCDEA86D0D8F785C4 /* RadioRegistry.swift */; };
 		92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009080AA1C81D0A7D94FA410 /* ModeClass.swift */; };
 		935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A13C34B4765F4AE9FB37456 /* PotaParkClientTests.swift */; };
+		94CC96D5AAA83B99FB0896CB /* SolarGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828CCCA6AC98404000B6406 /* SolarGeometry.swift */; };
 		962C83188C384DA2D6A8362D /* SCPDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5620BAC49FB9D14CC47186 /* SCPDatabase.swift */; };
 		9A1D1AAD285B8D3F63E205C6 /* SCPDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA412B8BE898C741ABE51422 /* SCPDatabaseTests.swift */; };
 		9B4A72F7E86D2137C804DF43 /* RadioDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF00103007CE54AA22F0DCF9 /* RadioDriver.swift */; };
@@ -543,6 +545,7 @@
 		AA812496670164897C4A0447 /* ScoreSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreSidebar.swift; sourceTree = "<group>"; };
 		AB030727FF0C38B6B3944150 /* SpotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotClient.swift; sourceTree = "<group>"; };
 		AC31E16279BA2D431AEE0582 /* PartyNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyNotice.swift; sourceTree = "<group>"; };
+		AD7B9510D707A5A3BC7B61F8 /* SolarGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarGeometryTests.swift; sourceTree = "<group>"; };
 		AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabrilloExporterTests.swift; sourceTree = "<group>"; };
 		AFA8F0CE885ABA98BA247459 /* HubSpotLifetimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotLifetimeTests.swift; sourceTree = "<group>"; };
 		B03F51B338E67A5CA4B43766 /* w2lj-skeeter-page-2026-08-04.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "w2lj-skeeter-page-2026-08-04.html"; sourceTree = "<group>"; };
@@ -590,6 +593,7 @@
 		D4DADB486A8C86FA27396EB4 /* CallHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryStore.swift; sourceTree = "<group>"; };
 		D590A3128E841A331486E328 /* HubSpotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotClient.swift; sourceTree = "<group>"; };
 		D6D2158467D3A61358A399D7 /* MessagesRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesRow.swift; sourceTree = "<group>"; };
+		D828CCCA6AC98404000B6406 /* SolarGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarGeometry.swift; sourceTree = "<group>"; };
 		D9470B675F129A683C136E00 /* OntarioQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OntarioQSOPartyTests.swift; sourceTree = "<group>"; };
 		D96F76D3F0F364CAA514E629 /* RadioControllerConnectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioControllerConnectionTests.swift; sourceTree = "<group>"; };
 		D9CC975E303DB2512FF84C86 /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
@@ -742,6 +746,7 @@
 				FC2368B3BCDC5B105D90A366 /* MyLocation.swift */,
 				9F212545ED1201EF8D3F739F /* PotaRef.swift */,
 				28174F39D351A29CC80B77F2 /* QSO.swift */,
+				D828CCCA6AC98404000B6406 /* SolarGeometry.swift */,
 				478647587A295E345278D2A5 /* StationProfile.swift */,
 			);
 			path = Models;
@@ -883,6 +888,7 @@
 				B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */,
 				369C26C343E2C414BF592CC6 /* SkeeterHuntTests.swift */,
 				A2959051AC941DA30C8B6439 /* SkeeterRosterParserTests.swift */,
+				AD7B9510D707A5A3BC7B61F8 /* SolarGeometryTests.swift */,
 				5B4D578B0A19E09B560A6584 /* SouthCarolinaQSOPartyTests.swift */,
 				1BE324A25B998F570B53C353 /* SouthDakotaQSOPartyTests.swift */,
 				458F13A4AC7D10092F93F2D9 /* SpotCommandTests.swift */,
@@ -1455,6 +1461,7 @@
 				F238FDC861C993F998E5890A /* SkeeterHuntTests.swift in Sources */,
 				05D024CA40AEFFD979414EC2 /* SkeeterRosterParserTests.swift in Sources */,
 				5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */,
+				68A357B0FC6E4E8AC3AC8F13 /* SolarGeometryTests.swift in Sources */,
 				593C9B4F548045F68D71789E /* SouthCarolinaQSOPartyTests.swift in Sources */,
 				850DACFDE512111523B875A3 /* SouthDakotaQSOPartyTests.swift in Sources */,
 				EFB55589DABD4E2FB936B338 /* SpotCommandTests.swift in Sources */,
@@ -1601,6 +1608,7 @@
 				698B227926FB01BE3C96A295 /* SerialTransport.swift in Sources */,
 				AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */,
 				C3CDE006A150B8867C4B7794 /* SkeeterRosterParser.swift in Sources */,
+				94CC96D5AAA83B99FB0896CB /* SolarGeometry.swift in Sources */,
 				AC51CD88CDF9CBFA21C5C25F /* Spot.swift in Sources */,
 				451EEEAEAD526B20F82A3045 /* SpotClient.swift in Sources */,
 				D4DBB738375F8F40611BC220 /* SpotCommand.swift in Sources */,
