@@ -13,6 +13,9 @@ final class CWKeyer: CWSender, @unchecked Sendable {
     private var queue: [String] = []
     private var aborted = false
     private var running = true
+    /// True while a message is actually on the air, as distinct from waiting
+    /// in `queue`. Guarded by `wake`, like the queue itself.
+    private var transmitting = false
     private var thread: Thread?
 
     private weak var transport: (any SerialTransport)?
@@ -26,6 +29,11 @@ final class CWKeyer: CWSender, @unchecked Sendable {
 
     /// Called with each chunk as it starts sending (for UI display).
     var onSending: (@Sendable (String) -> Void)?
+
+    /// Called once the queue has drained — the message is off the air. Lets
+    /// the UI clear "sending" on real completion rather than on an estimate
+    /// that a mid-message speed change would invalidate.
+    var onFinished: (@Sendable () -> Void)?
 
     init(transport: any SerialTransport, config: KeyerLineConfig, wpm: Int = 20) {
         self.transport = transport
@@ -76,10 +84,13 @@ final class CWKeyer: CWSender, @unchecked Sendable {
         keyUp()
     }
 
+    /// Nothing on the air and nothing waiting to go. Note this covers the
+    /// message *being sent*, not just the queue behind it — a caller asking
+    /// "are we done?" means the key, not the backlog.
     var isIdle: Bool {
         wake.lock()
         defer { wake.unlock() }
-        return queue.isEmpty
+        return queue.isEmpty && !transmitting
     }
 
     // MARK: Thread body
@@ -95,16 +106,27 @@ final class CWKeyer: CWSender, @unchecked Sendable {
                 return
             }
             aborted = false
+            transmitting = true
             let text = queue.removeFirst()
             wake.unlock()
 
             transmit(text)
+
+            wake.lock()
+            transmitting = false
+            // A message split into chunks finishes once, not once per chunk.
+            let drained = queue.isEmpty
+            wake.unlock()
+
+            if drained {
+                onFinished?()
+            }
         }
     }
 
     private func transmit(_ text: String) {
-        let (currentConfig, speed) = lock.withLock { (config, _wpm) }
-        let events = KeyerTiming.schedule(text: text, wpm: speed)
+        let currentConfig = lock.withLock { config }
+        let events = KeyerTiming.schedule(text: text)
         guard !events.isEmpty else { return }
 
         onSending?(text)
@@ -118,8 +140,7 @@ final class CWKeyer: CWSender, @unchecked Sendable {
         for event in events {
             if isAborted() { break }
             transport?.set(line: currentConfig.keyLine, active: event.keyDown)
-            deadline += UInt64(event.durationMs * 1_000_000)
-            sleepUntil(uptimeNanos: deadline)
+            play(event, until: &deadline)
         }
         transport?.set(line: currentConfig.keyLine, active: false)
 
@@ -128,6 +149,30 @@ final class CWKeyer: CWSender, @unchecked Sendable {
                 preciseSleep(ms: Double(currentConfig.pttTailMs))
             }
             transport?.set(line: ptt, active: false)
+        }
+    }
+
+    /// Hold one element, reading the speed as late as possible so `⌘=` lands
+    /// part-way through a message rather than at the end of it.
+    ///
+    /// A key-down element is held at the speed it began at: re-reading inside
+    /// a dit or dah would put half of one speed and half of another on the
+    /// air, and a malformed element is worse than a few milliseconds of lag.
+    /// Key-up gaps have no such shape to spoil, so they re-read every dit —
+    /// which is what keeps the worst case down to one dah rather than the
+    /// seven dits of a word gap.
+    ///
+    /// `deadline` accumulates absolutely across the whole message, so slicing
+    /// a gap into dits introduces no drift.
+    private func play(_ event: KeyerTiming.KeyEvent, until deadline: inout UInt64) {
+        let slice = event.keyDown ? event.dits : 1
+        var remaining = event.dits
+        while remaining > 1e-9 {
+            if isAborted() { return }
+            let step = min(remaining, slice)
+            deadline += UInt64(step * KeyerTiming.ditMs(wpm: wpm) * 1_000_000)
+            sleepUntil(uptimeNanos: deadline)
+            remaining -= step
         }
     }
 

@@ -355,6 +355,30 @@ Therefore:
   message.
 - Keyer speed syncs **both ways**: `setKeyerSpeed(wpm:)` out, and
   `onKeyerSpeedChange` in when the operator turns the front-panel knob.
+- **Speed is a live parameter, not a per-message constant.** `⌘=` during a
+  transmission changes *that* transmission. A keyer that reads the speed once,
+  at the top of a message, is broken however accurate its timing is.
+  Concretely:
+  - Schedules are denominated in **dit units, never milliseconds**
+    (`KeyerTiming.KeyEvent.dits`). A schedule that cannot name a speed cannot
+    bind a stale one; speed is applied at playback, one element at a time.
+  - A key-down element in flight finishes at the speed it began at — half of
+    one speed and half of another is a malformed element on the air, and worse
+    than a few milliseconds of lag. Key-up gaps re-read every dit, which caps
+    the lag at one dah rather than the seven dits of a word gap.
+  - `setKeyerSpeed(wpm:)` goes out the moment the operator asks, never queued
+    behind the message in flight — and a driver must not adopt a protocol form
+    that *defers* side-effects. Elecraft's `KYW` ("wait") is the trap this
+    names: rev G5 documents it as delaying "any following host commands …
+    until the current message has been sent … e.g., KS (keyer speed)", which
+    is precisely the behaviour this article forbids.
+  - Nothing may infer that a message has ended from a duration computed when
+    it began. Once speed can change mid-message that arithmetic is wrong, so
+    the direct keyer reports real completion (`CWKeyer.onFinished`).
+  - The test floor is a **timed** one: drive the keyer through a transport that
+    timestamps every line transition, change speed part-way, and assert both
+    that later elements really did change length and that no single element
+    was sent at two speeds (`CWKeyerTests`).
 
 ### Article 12 — Protocol provenance
 

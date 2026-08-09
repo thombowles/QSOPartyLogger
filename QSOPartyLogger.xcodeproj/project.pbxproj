@@ -308,6 +308,7 @@
 		F2BE6B5E0868F72361011DCF /* EditQSOSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F01ACCE3E8BBB30BB6AFFB0 /* EditQSOSheet.swift */; };
 		F4295C279970384A66D902F4 /* DXCCLabelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85566CF498A9A0F0AA517175 /* DXCCLabelStore.swift */; };
 		F677F314E1B5E77B231B323B /* SelfSpotSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF06BEF609DB286524A03268 /* SelfSpotSheet.swift */; };
+		F8230055988666CE68A087CF /* CWKeyerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E1360204AB093D08447987 /* CWKeyerTests.swift */; };
 		FA255DF473A40C79961107EF /* HubSpotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D590A3128E841A331486E328 /* HubSpotClient.swift */; };
 		FAB198B74CB4E5D2C52222BB /* MaidenheadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369E1591F09C47EEADB9A4D7 /* MaidenheadTests.swift */; };
 		FAC8245A7DA9F69C112C6610 /* paqp-table-empty.html in Resources */ = {isa = PBXBuildFile; fileRef = 6E86BE307CD4BC40C6036C06 /* paqp-table-empty.html */; };
@@ -584,6 +585,7 @@
 		CDFB83A71484799D6871283B /* DXCC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DXCC; path = Resources/DXCC; sourceTree = SOURCE_ROOT; };
 		CF06BEF609DB286524A03268 /* SelfSpotSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSpotSheet.swift; sourceTree = "<group>"; };
 		CF6D999640AF4FF7CB86AF56 /* VirginiaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirginiaQSOPartyTests.swift; sourceTree = "<group>"; };
+		D1E1360204AB093D08447987 /* CWKeyerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CWKeyerTests.swift; sourceTree = "<group>"; };
 		D2052FF6C863AA0209875C20 /* DelawareQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelawareQSOPartyTests.swift; sourceTree = "<group>"; };
 		D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDocumentTests.swift; sourceTree = "<group>"; };
 		D4C4C03006937E6B0629C681 /* QRPLabsQMXDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRPLabsQMXDriver.swift; sourceTree = "<group>"; };
@@ -1022,6 +1024,7 @@
 		9F1E741029BBA508965DE0AD /* Hardware */ = {
 			isa = PBXGroup;
 			children = (
+				D1E1360204AB093D08447987 /* CWKeyerTests.swift */,
 				E544AF9D2BD44EEFEC54BDF6 /* FlexRadioDriverTests.swift */,
 				E53DC8597A1A918FA7CB32D4 /* K3ProtocolTests.swift */,
 				C2DD03F2A0464D759CD172A8 /* KeyerTimingTests.swift */,
@@ -1330,6 +1333,7 @@
 				2116FEE0D5157A280241DAE1 /* BonusScopeTests.swift in Sources */,
 				7E095A753F6C058F8D0F402E /* BritishColumbiaQSOPartyTests.swift in Sources */,
 				B56E15627B99B1F7E3CBFEF8 /* BulkEditTests.swift in Sources */,
+				F8230055988666CE68A087CF /* CWKeyerTests.swift in Sources */,
 				74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */,
 				0C98121EB0A1EFAF11C23781 /* CaliforniaQSOPartyTests.swift in Sources */,
 				AFABF3686AB980194F459E40 /* CallAreaSumBonusTests.swift in Sources */,

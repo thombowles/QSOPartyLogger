@@ -116,7 +116,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `Esc` | Abort CW, stop repeat-CQ, close an open sheet — or, in the park picker's search box, clear it and close the results |
 | `↑` / `↓` | In the park picker: move through the results; `Return` adds the highlighted park |
 | Any key | While repeat-CQ is running: stop it and abort the CQ on the air, then do the key's own job |
-| `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
+| `⌘=` / `⌘-` | CW speed ±2 WPM — takes effect mid-message (syncs to the radio) |
 | `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
 | `⌘R` | Toggle Run / Search & Pounce |
 | `⌘J` | Jump back to your CQ run frequency |

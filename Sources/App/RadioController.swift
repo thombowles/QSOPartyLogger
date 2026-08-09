@@ -189,6 +189,15 @@ final class RadioController {
                     self?.nowSending = text
                 }
             }
+            keyer.onFinished = { [weak self] in
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    // A send that began while this hop was in flight owns the
+                    // badge now — only the genuinely idle keyer clears it.
+                    guard self.directKeyer?.isIdle == true else { return }
+                    self.nowSending = nil
+                }
+            }
             directKeyer = keyer
         }
 
@@ -328,10 +337,16 @@ final class RadioController {
         sender.wpm = settings.wpm
         sender.send(text)
 
-        // Show "sending" (and hold the TX badge) for the estimated on-air
-        // time — works identically for direct keying and the radio's keyer.
         nowSending = text
         sendingClearTask?.cancel()
+        sendingClearTask = nil
+
+        // The direct keyer reports real completion, and must: once speed can
+        // change part-way through a message, no duration computed at send time
+        // is still true when the message ends. The radio's own keyer offers no
+        // completion signal, so there the estimate is the best there is.
+        guard sender !== directKeyer else { return }
+
         let duration = estimatedSendDuration(text, settings: settings) + 0.2
         sendingClearTask = Task { [weak self] in
             try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
@@ -347,9 +362,24 @@ final class RadioController {
         nowSending = nil
     }
 
+    /// Push a speed change out immediately — it has to reach a message already
+    /// on the air, not wait for the next one (Article 11).
+    ///
+    /// Both senders are told, whichever is active, and exactly one of them
+    /// carries the change to the radio — so no radio is sent the same speed
+    /// twice and none is left unsent.
     func syncWPM(_ wpm: Int, settings: AppSettings) {
         directKeyer?.wpm = wpm
-        driver?.setKeyerSpeed(wpm: wpm)
+        if let internalKeyer {
+            // Its setter forwards to the driver: a radio keying from its own
+            // keyer has to hear this while the message is still going out.
+            internalKeyer.wpm = wpm
+        } else {
+            // Nothing keys from the radio's keyer here, but its speed still
+            // drives the paddles and the front-panel display — keep them in
+            // step so the operator sees one number, not two.
+            driver?.setKeyerSpeed(wpm: wpm)
+        }
     }
 
     func updateKeyerConfig(settings: AppSettings) {
