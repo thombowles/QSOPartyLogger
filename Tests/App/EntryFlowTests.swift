@@ -709,6 +709,21 @@ final class EntryFlowTests: XCTestCase {
         XCTAssertEqual(flow.transmission(at: 3, context: phoneContext(memories: 8)), .silent)
     }
 
+    /// The behaviour the S&P phone default relies on: Return on an unassigned
+    /// key does nothing — it does not log, and it does not transmit. The call
+    /// field never logs, so there is nothing else for it to do while the
+    /// operator says their own callsign.
+    func testReturnOnAnUnassignedPhoneKeyDoesNothing() {
+        let document = LogDocument()          // derives S&P for an out-of-state log
+        let flow = EntryFlow(document: document)
+        flow.entry.call = "W6ABC"
+
+        let outcome = flow.returnPressed(phoneContext(memories: 8), undoManager: nil)
+
+        XCTAssertEqual(outcome, .nothing)
+        XCTAssertTrue(document.log.qsos.isEmpty, "the call field must never log")
+    }
+
     /// A mapping built for an 8-memory radio must not fire memory 5 at a radio
     /// that has two. Silence, not a clamp onto a neighbouring recording.
     func testPhoneKeyBeyondTheRadiosMemoryCountIsSilent() {

@@ -183,6 +183,24 @@ playback, and the radio asserts PTT itself.
 1. **M1–M4 are mode-dependent.** In CW they play CW text memories. Playback must
    be gated on the radio actually reporting a voice mode, or an F-key would key
    a CW memory instead.
+
+   **Known limitation, accepted 2026-08-09.** The gate is UI-side, not the
+   driver's, and it is stale-tolerant: `EntryFlow.transmission` routes on
+   `context.modeClass`, sourced from `radio.radioState?.rawMode`, which the 0.5 s
+   poll can serve up to that much stale. `ElecraftK3Driver.playVoiceMessage`
+   itself taps `SWT21/31/35/39;` (or the KX MSG sequence) on request with no
+   mode check of its own — so a front-panel mode change from phone to CW,
+   followed by an F-key press, both inside one poll interval, could key a CW
+   text memory instead of the voice memory the operator meant. Accepted rather
+   than closed: it takes both a mode change *and* a keypress inside that
+   sub-0.5 s window, and the consequence is an unexpected CW transmission, not
+   a wrong voice recording on the air — the same wrong-audio-is-worse-than-
+   silence asymmetry item 2's bank confirmation leans on, just not extended
+   here. This is that same poll staleness the bank path explicitly refuses to
+   trust, applied inconsistently: the bank path holds a tap until `IC` confirms
+   it, this gate does not. Closing it the same way would cost a mode
+   confirmation round trip before every play — on the hot path every F-key
+   press already walks.
 2. **Never play the wrong memory.** Reaching K3 memories 5–8 means changing bank
    first, and `IC;` is polled at 0.5 s, so the cached bank may be stale. The
    sequence must *confirm* the bank before tapping, and **abandon the play rather

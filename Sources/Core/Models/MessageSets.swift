@@ -75,8 +75,9 @@ struct MessageSets: Codable, Equatable, Sendable {
     static let defaultPhoneRun: [Int?] = [1, 2, 3, nil, 4, nil, nil, nil]
 
     /// S&P F1 — "send my call" — is deliberately unassigned: a callsign is
-    /// faster spoken than recorded, and Return with nothing mapped advances and
-    /// logs without transmitting, exactly as an empty CW slot does.
+    /// faster spoken than recorded. Return in the call field then does nothing
+    /// at all while the operator speaks, which is what an empty CW slot does
+    /// too — the call field never logs, so there is nothing else for it to do.
     static let defaultPhoneSearchPounce: [Int?] = [nil, 2, 3, nil, 4, nil, nil, nil]
 
     static let defaultVoiceMemoryNames = ["CQ", "Exch", "TU", "AGN?", "", "", "", ""]

@@ -297,8 +297,8 @@ county grid groups by contest and then by state.
 
 **Elecraft K3 / K3S / KX3 / KX2** over serial at 4800–38400 baud, with live
 frequency, mode and TX polling, and the band stamped onto each QSO. The app asks
-which of the four answered and what options are fitted, so it knows how many
-voice memories the rig actually has before it offers you any.
+which model answered and what options are fitted, so it knows how many voice
+memories the rig actually has before it offers you any.
 
 **QRP Labs QMX+ / QMX** over its USB serial port — the whole series, since they
 share one CAT manual. Same live frequency, mode and TX polling. The rig has no
@@ -329,20 +329,21 @@ exchange. Optional cut numbers (599 → 5NN, 40 → 4T). **Esc aborts instantly.
 
 **Phone keys from the radio's own voice memories** — never audio streamed from
 the Mac. The app asks the radio what it has and reports the answer: 8 memories
-on a K3 with the KDVR3 recorder fitted, 2 on a KX3 or KX2, and an inline note
-when the recorder is absent rather than a dead key. On phone the F-keys map to
-memories you choose, ESM steps through them exactly as it does on CW, `Esc`
-aborts playback, and Repeat CQ times itself off the radio's own end-of-message
-report rather than a guess. The radio asserts PTT itself during playback, so no
-VOX and no second interface.
+on a K3 with the KDVR3 recorder fitted, 2 on a KX3 or KX2. Without the recorder
+the F-keys simply go inert — captioned `—` and disabled on the main window —
+and the messages editor explains why. On phone the F-keys map to memories you
+choose, ESM steps through them exactly as it does on CW, `Esc` aborts playback,
+and Repeat CQ times itself off the radio's own end-of-message report rather
+than a guess. No VOX and no second interface are needed on the K3, which
+asserts PTT itself during playback.
 
 Record the memories from the radio's front panel — the app only plays them.
-Three things it cannot see, and so cannot warn you about: whether a memory holds
-a recording at all (an empty one is simply silent), whether you have re-recorded
-one since naming it here, and whether an M1–M4 button has been reassigned as a
-programmable function switch, which makes that memory unavailable for playback.
-Reaching memories 5–8 changes the radio's message bank and leaves it there, so
-the front panel's own buttons address that bank afterwards; the messages editor
+Three things it cannot see, and so cannot warn you about: whether a memory
+holds a recording at all, whether you have re-recorded one since naming it
+here, and whether an M1–M4 button has been reassigned as a programmable
+function switch, which makes that memory unavailable for playback. Reaching
+memories 5–8 changes the radio's message bank and leaves it there, so the
+front panel's own buttons address that bank afterwards; the messages editor
 shows which bank the radio is in.
 
 ### Wiring a K3 for direct keying
@@ -716,7 +717,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2379 unit tests**, none of which need hardware or a network — no serial port,
+**2381 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3, QMX and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), the voice-memory bank sequence and its refusal to

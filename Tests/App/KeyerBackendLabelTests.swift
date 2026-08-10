@@ -118,6 +118,26 @@ final class KeyerBackendLabelTests: XCTestCase {
         }
     }
 
+    /// Article 10 forbids model-specific *constants* in displayed text, not
+    /// only model names — and the project's grep matches names, so a number
+    /// slips straight past it. This is the half that catches a layout claim.
+    func testVoiceStatusTextClaimsNoMemoryLayout() {
+        let texts = [
+            MessagesEditor.voiceStatusText(.unsupported, bank: nil),
+            MessagesEditor.voiceStatusText(.notInstalled, bank: nil),
+            MessagesEditor.voiceStatusText(.available(count: 2), bank: nil),
+            MessagesEditor.voiceStatusText(.available(count: 8), bank: 1),
+            MessagesEditor.voiceStatusText(.available(count: 8), bank: 2),
+        ]
+        for text in texts {
+            XCTAssertNil(
+                text.range(of: #"M\d"#, options: .regularExpression),
+                "voice status '\(text)' names a memory label — that is one model's "
+                    + "layout in the app layer (Article 10)"
+            )
+        }
+    }
+
     /// One memory is a memory, not "1 memories".
     func testVoiceStatusTextPluralises() {
         XCTAssertTrue(MessagesEditor.voiceStatusText(.available(count: 1), bank: nil)

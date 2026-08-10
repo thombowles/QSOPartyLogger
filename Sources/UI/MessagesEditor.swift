@@ -54,8 +54,8 @@ struct MessagesEditor: View {
     nonisolated static func voiceStatusText(_ status: VoiceKeyerStatus, bank: Int?) -> String {
         switch status {
         case .unsupported:
-            return "The connected radio has no voice memories. These keys will do "
-                + "nothing until a radio that has them is connected."
+            return "No radio with voice memories is connected. These keys will do "
+                + "nothing until one is."
         case .notInstalled:
             return "This radio's voice recorder option isn't installed, so it has no "
                 + "memories to play."
@@ -65,8 +65,12 @@ struct MessagesEditor: View {
             if let bank {
                 // The app leaves the bank where the last play put it, so the
                 // radio's own M-buttons may not address what their labels say.
-                text += " The radio is currently in bank \(bank), so its front-panel "
-                    + "buttons play memories \(bank == 1 ? "M1–M4" : "M5–M8")."
+                //
+                // Which memories that bank holds is the radio's business, not
+                // ours: naming them here would hard-code one model's layout in
+                // the app layer (Article 10).
+                text += " The radio is currently in bank \(bank); its front-panel "
+                    + "message buttons play that bank."
             }
             return text
         }
@@ -143,7 +147,7 @@ struct MessagesEditor: View {
                                     // `draft.edited.…`: the latter rebuilds the
                                     // whole MessageSets once per row per memory,
                                     // 64 times a render.
-                                    Text(draft.voiceMemoryCaption(memory)).tag(Int?.some(memory))
+                                    Text(voiceMemoryPickerCaption(memory)).tag(Int?.some(memory))
                                 }
                             }
                             .labelsHidden()
@@ -235,5 +239,18 @@ struct MessagesEditor: View {
             get: { draft[voice: editMode, index] },
             set: { draft[voice: editMode, index] = $0 }
         )
+    }
+
+    /// The F-key picker's label for one memory option — the recorded name,
+    /// marked when this radio does not go that high. Never hides the option:
+    /// a mapping built for an 8-memory radio must stay visible and intact
+    /// while a smaller one (or none) is plugged in, matching the memory-name
+    /// fields above, which stay editable rather than disappearing. With no
+    /// radio connected (`memoryCount == 0`) every option is offered unmarked,
+    /// since there is nothing yet to say it doesn't fit.
+    private func voiceMemoryPickerCaption(_ memory: Int) -> String {
+        let caption = draft.voiceMemoryCaption(memory)
+        guard voiceStatus.memoryCount > 0, memory > voiceStatus.memoryCount else { return caption }
+        return "\(caption) — not on this radio"
     }
 }

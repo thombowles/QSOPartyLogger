@@ -1387,10 +1387,18 @@ struct MainView: View {
         }
     }
 
-    /// Wait for the radio to start, then finish, playing. Bounded at both ends:
-    /// `IC` is polled every 0.5 s, so a short message can begin and end between
-    /// polls — in which case fall through to the interval rather than stall the
-    /// repeat forever.
+    /// Wait for the radio to start, then finish, playing. Only the *start* half
+    /// is bounded — 2 s, since `IC` is polled every 0.5 s and a short message
+    /// can begin and end between polls, in which case this falls through to
+    /// the repeat interval rather than wait for a start it already missed.
+    ///
+    /// The *finish* half has no deadline: it holds for as long as
+    /// `radio.isVoicePlaying` keeps reading true, so a link that dies without
+    /// the transport noticing would stall it. Accepted rather than closed
+    /// because Esc, a disconnect, or a mode change all cancel the repeat task
+    /// this runs under regardless of what the radio is reporting, and every
+    /// iteration awaits 100 ms, so the wait sits at a light 10 Hz poll rather
+    /// than busy-looping while it lasts.
     private func waitForVoicePlaybackToFinish() async {
         let startDeadline = Date().addingTimeInterval(2)
         while !radio.isVoicePlaying, Date() < startDeadline, !Task.isCancelled {

@@ -260,8 +260,10 @@ final class EntryFlow {
         return expandMacros(set[index], context: context)
     }
 
-    /// What F<index+1> would put on the air right now. `expandedMessage` stays
-    /// for the CW preview and its existing tests; this is what actually keys.
+    /// What F<index+1> would put on the air right now. `expandedMessage`
+    /// survives for its own tests and as this method's CW arm — the CW
+    /// preview itself now goes through `transmission`/`messageKeys` like
+    /// everything else that keys.
     func transmission(at index: Int, context: Context) -> Transmission {
         if context.modeClass == .phone {
             guard context.voiceMemoryCount > 0 else { return .silent }
