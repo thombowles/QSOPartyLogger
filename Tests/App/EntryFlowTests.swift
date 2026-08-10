@@ -756,4 +756,36 @@ final class EntryFlowTests: XCTestCase {
         }
         XCTAssertFalse(text.isEmpty)
     }
+
+    // MARK: Posture
+
+    /// Every logged row is stamped from the log's own Run/S&P flag — the same
+    /// one that picks the message set and decides what ⇧⌘S means. Without
+    /// this the advisor's own-rate strands would have nothing to read, and
+    /// their silence would look exactly like a quiet band.
+    func testLoggedRowsAreStampedWithTheOperatingPosture() {
+        for posture in OperatingMode.allCases {
+            let flow = EntryFlow(document: cqpDocument(mode: posture))
+            readyToLog(flow)
+            guard case .logged(let rows, _) = flow.returnPressed(context(), undoManager: nil)
+            else { return XCTFail("expected the contact to be logged") }
+            XCTAssertEqual(rows.map(\.posture), [posture])
+        }
+    }
+
+    /// Toggling mid-contest stamps the contacts on either side of it
+    /// differently — which is the whole point of recording it per row rather
+    /// than once per log.
+    func testTogglingPostureMidContestSplitsTheLog() {
+        let doc = cqpDocument(mode: .run)
+        let flow = EntryFlow(document: doc)
+        readyToLog(flow, call: "W6ABC", their: "SCLA")
+        _ = flow.returnPressed(context(), undoManager: nil)
+
+        doc.log.operatingMode = .searchPounce
+        readyToLog(flow, call: "K6XYZ", their: "ALAM")
+        _ = flow.returnPressed(context(), undoManager: nil)
+
+        XCTAssertEqual(doc.log.qsos.map(\.posture), [.run, .searchPounce])
+    }
 }

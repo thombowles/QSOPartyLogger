@@ -56,6 +56,18 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
     var myLoc: String
     /// Their location for this row: county abbreviation, state, province, or "DX".
     var theirLoc: String
+    /// Whether this contact was made running or searching, stamped at logging
+    /// from the same Run/S&P flag that already picks the message set and
+    /// decides what ⇧⌘S means.
+    ///
+    /// **Nothing scores on it, and no export carries it.** It exists so the
+    /// advisor can answer "what has running on 40 m actually paid you tonight"
+    /// from the operator's own log rather than from a rule of thumb — see
+    /// `Advisor`. `nil` on every row logged before this field existed, and on
+    /// rows imported from anywhere else; those simply contribute nothing to
+    /// that strand, which is the same evidence-or-silence law the rate column
+    /// obeys.
+    var posture: OperatingMode?
 
     init(
         id: UUID = UUID(),
@@ -77,7 +89,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         myPotaRefs: [String]? = nil,
         theirPotaRefs: [String]? = nil,
         myLoc: String,
-        theirLoc: String
+        theirLoc: String,
+        posture: OperatingMode? = nil
     ) {
         self.id = id
         self.groupID = groupID
@@ -101,5 +114,6 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         self.theirPotaRefs = (theirPotaRefs?.isEmpty ?? true) ? nil : theirPotaRefs
         self.myLoc = myLoc
         self.theirLoc = theirLoc
+        self.posture = posture
     }
 }

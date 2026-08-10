@@ -443,7 +443,12 @@ final class EntryFlow {
                 modeClass: context.modeClass,
                 rawMode: context.rawMode,
                 freqKHz: context.freqKHz,
-                timestampUTC: Date()
+                timestampUTC: Date(),
+                // The same flag that picks the message set and decides what
+                // ⇧⌘S means. Nothing scores on it and no export carries it —
+                // it is what lets the advisor say what running on this band
+                // has actually paid tonight.
+                posture: document.log.operatingMode
             ),
             myLocs: myLocs,
             theirLocs: theirLocs

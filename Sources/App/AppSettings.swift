@@ -220,6 +220,35 @@ final class AppSettings {
         didSet { defaults.set(Array(collapsedMultSections), forKey: "collapsedMultSections") }
     }
 
+    /// Show the Advisor section in the score sidebar. On by default: it is
+    /// silent until it has something true to say, so an operator who never
+    /// wants it never sees it either way.
+    var advisorEnabled: Bool {
+        didSet { defaults.set(advisorEnabled, forKey: "advisorEnabled") }
+    }
+
+    /// Advisor section collapsed to its header (⇧⌘A).
+    var advisorCollapsed: Bool {
+        didSet { defaults.set(advisorCollapsed, forKey: "advisorCollapsed") }
+    }
+
+    /// Advisory kinds the operator never wants to hear from, by raw value.
+    var advisorMutedKinds: Set<Advisor.Advisory.Kind> {
+        didSet {
+            defaults.set(advisorMutedKinds.map(\.rawValue).sorted(), forKey: "advisorMutedKinds")
+        }
+    }
+
+    /// What the advisor is optimising for (⌥⌘A).
+    ///
+    /// Global rather than per-log on purpose: a State QSO Party Challenge
+    /// season is a season, not a log, and an operator chasing it is chasing it
+    /// every weekend. Per-log would mean a `ContestLog` field — revisit only
+    /// if the global setting proves wrong in practice.
+    var advisorGoal: Advisor.Goal {
+        didSet { defaults.set(advisorGoal.rawValue, forKey: "advisorGoal") }
+    }
+
     var lastStationProfile: StationProfile? {
         didSet {
             if let profile = lastStationProfile,
@@ -262,6 +291,16 @@ final class AppSettings {
         spotSources = Set((defaults.stringArray(forKey: "spotSources") ?? [])
             .compactMap(SpotSource.init(rawValue:)))
         collapsedMultSections = Set(defaults.stringArray(forKey: "collapsedMultSections") ?? [])
+        advisorEnabled = defaults.object(forKey: "advisorEnabled") as? Bool ?? true
+        advisorCollapsed = defaults.object(forKey: "advisorCollapsed") as? Bool ?? false
+        advisorMutedKinds = Set(
+            (defaults.stringArray(forKey: "advisorMutedKinds") ?? [])
+                .compactMap(Advisor.Advisory.Kind.init(rawValue:))
+        )
+        // An unreadable token falls back to Score rather than to nothing: a
+        // hand-edited preference file must never leave the advisor with no
+        // yardstick, since every weighting reads one.
+        advisorGoal = Advisor.Goal(rawValue: defaults.string(forKey: "advisorGoal") ?? "") ?? .score
         followBandPlan = defaults.object(forKey: "followBandPlan") as? Bool ?? true
         spotModes = Set((defaults.stringArray(forKey: "spotModes") ?? []).compactMap(ModeClass.init(rawValue:)))
         spotBands = Set((defaults.stringArray(forKey: "spotBands") ?? []).compactMap(Band.init(rawValue:)))
