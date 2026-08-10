@@ -10,7 +10,7 @@ import Foundation
 ///   ← `R<seq>|<code>|<message>`     response (0 = OK)
 ///   ← `S<handle>|<status text>`     subscribed status update
 ///   ← `V…` / `H…` / `M…`            version / handle / message on connect
-final class FlexRadioDriver: RadioDriver, @unchecked Sendable {
+final class FlexRadioDriver: InternalKeyerDriver, @unchecked Sendable {
 
     static let defaultPort: UInt16 = 4992
 
@@ -147,8 +147,14 @@ final class FlexRadioDriver: RadioDriver, @unchecked Sendable {
         "slice set \(sliceIndex) mode=\(flexMode)"
     }
 
+    /// `cw wpm`, **not** `cwx wpm`. Every other verb the CWX page documents is
+    /// `cwx <verb>`; WPM alone is not, and it is printed the same way on the
+    /// `cw` page — see `docs/research/flex_smartsdr_tcpip_api_cw.txt`. The
+    /// radio answers an unknown command with an error rather than a complaint
+    /// the app would notice, so the `cwx wpm` this used to send simply meant
+    /// speed never changed at all.
     static func cmdKeyerSpeed(wpm: Int) -> String {
-        "cwx wpm \(min(50, max(8, wpm)))"
+        "cw wpm \(min(50, max(8, wpm)))"
     }
 
     /// CWX rejects embedded quotes — strip rather than escape.

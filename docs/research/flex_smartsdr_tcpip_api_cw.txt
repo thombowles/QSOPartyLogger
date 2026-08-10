@@ -1,0 +1,651 @@
+FlexRadio SmartSDR TCP/IP API — the `cw` and `cwx` command pages, full text
+https://github.com/flexradio/smartsdr-api-docs/wiki/TCPIP-cw
+https://github.com/flexradio/smartsdr-api-docs/wiki/TCPIP-cwx
+Fetched 2026-08-09 from the wiki's raw markdown
+(raw.githubusercontent.com/wiki/flexradio/smartsdr-api-docs/<page>.md).
+FlexRadio's own GitHub organisation; the API docs it points to from
+flexradio.com/api. The wiki carries no revision number or date of its own,
+which is why both pages are banked whole rather than by excerpt.
+
+Load-bearing for this app: the keyer speed command is `cw wpm <speed>`, given
+identically on BOTH pages — note that every other verb on the cwx page is
+`cwx ...` and WPM alone is not, which is how FlexRadioDriver came to emit the
+non-existent `cwx wpm`.
+
+KNOWN GAP (Article 3): the `cwx ... wpm=<n>` *status* format that
+FlexRadioDriver.parseCWXSpeed reads appears in neither page, nor in the wiki's
+SmartSDR-Status-Responses page, which does not mention cwx at all. That parser
+predates this file and remains unverified against an official source.
+
+========================================================================
+[1] TCPIP-cw.md
+========================================================================
+### AUTO_SPACE
+
+Turns on the CW auto spacing algorithm in iambic mode. When enabled, the
+keyer will automatically space characters.
+
+    C[D]<seq_number>|cw auto_space <state>
+
+    <state>    =  representation of either on or off (see below)
+
+Example:
+
+    C19|cw auto_space on
+
+See [Boolean State](Boolean-State "wikilink") for different text
+representations for a state
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### BREAK_IN
+
+Turns on the CW break in mode (or disables it)
+
+    C[D]<seq_number>|cw break_in <state>
+
+    <state>    =  representation of either on or off (see below)
+
+Example:
+
+    C19|cw break_in on
+
+See [Boolean State](Boolean-State "wikilink") for different text
+representations for a state
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### BREAK_IN_DELAY
+
+Sets the CW break in delay in milliseconds. Break_In must be enabled for
+this to have an effect
+
+    C[D]<seq_number>|cw break_in_delay <delay>
+
+    <delay>    =  break in delay in milliseconds
+
+Example:
+
+    C19|cw break_in_delay 10
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### CWL_ENABLE
+
+When in the CW mode, tuning is in the upper sideband (USB) mode by
+default, but cwl_enable provides a way to change the CW mode to lower
+sideband. This command will affect all slice receivers in the CW mode.
+
+    C[D]<seq_number>|cw cwl_enable <state>
+
+    <state>    =  representation of either on or off (see below)
+
+Example:
+
+    C19|cw cwl_enable on
+
+See [Boolean State](Boolean-State "wikilink") for different text
+representations for a state
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### IAMBIC
+
+Turns on the CW Iambic paddle mode. When this mode is off, the CW inputs
+are interpreted as straight key.
+
+    C[D]<seq_number>|cw iambic <state>
+
+    <state>    =  representation of either on or off (see below)
+
+Example:
+
+    C19|cw iambic on
+
+See [Boolean State](Boolean-State "wikilink") for different text
+representations for a state
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### MODE
+
+Set the keyer iambic mode (only applies when the keyer is enabled)
+
+    C[D]<seq_number>|cw mode <mode>
+
+    <mode>       = Number referring to the mode (0 = Mode A, 1 = Mode B, 2 = Mode B Strict)
+
+Example:
+
+    C21|cw mode 1
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+### PITCH
+
+Set the pitch of the CW sidetone
+
+    C[D]<seq_number>|cw pitch <freq>
+
+    <freq>       = frequency in Hertz of the CW sidetone
+
+Example:
+
+    C21|cw pitch 600
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+### SIDETONE
+
+Turns on the CW sidetone. When sidetone is on, a tone representing the
+on-air CW that is being sent will be emitted from the local speaker when
+transmitting CW.
+
+    C[D]<seq_number>|cw sidetone <state>
+
+    <state>    =  representation of either on or off (see below)
+
+Example:
+
+    C19|cw sidetone on
+
+See [Boolean State](Boolean-State "wikilink") for different text
+representations for a state
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### SWAP
+
+When enabled, swap will reverse or swap the position of the dot and dash
+inputs. This can be used to accomodate for an improperly wired keyer,
+etc.
+
+    C[D]<seq_number>|cw swap <state>
+
+    <state>    =  representation of either on or off (see below)
+
+Example:
+
+    C19|cw swap on
+
+See [Boolean State](Boolean-State "wikilink") for different text
+representations for a state
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### TONE
+
+Make adjustments to the amplitude and frequency of the two tones in the
+CW engine. By setting the one of the tones to 0, CW or FSK behavior can
+be selected. All parameters must be present
+
+    C[D]<seq_number>|cw tone <tone1_frequency> <tone1_amp> <tone2_freq> <tone2_amp> <ramp_speed>
+
+    <tone1_freq>    =  frequency in Hz for the first tone (100-6000 Hz)
+    <tone1_amp>     =  amplitude of the tone in dBFS
+    <tone2_freq>    =  frequency in Hz for the second tone (100-6000 Hz)
+    <tone2_amp>     =  amplitude of the tone in dBFS
+    <ramp_speed>     =  must be less than 1024 (8 = 5.33ms, 16 = 2.66ms)
+
+Example:
+
+    C19|cw tone 600 -2.0 0 0 8
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### WEIGHT
+
+Set the weight of the CW keyer to a specific value. The calculations
+that determine the length of a dot, space and dash are:
+
+space = 1200ms / wpm dot = space \* weight / 50 dash = space \* weight /
+50 + space \* 2
+
+    C[D]<seq_number>|cw weight <weight>
+
+    <weight>    =  a number between 0-100 setting the relative weight; default is 50
+
+Example:
+
+    C19|cw weight 50
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### WPM
+
+Set the speed of the CW keyer to a specific words-per-minute (WPM)
+value. If a value below 5 is sent, 5 will be used. If a value above 100
+is sent, 100 will be used.
+
+    C[D]<seq_number>|cw wpm <speed>
+
+    <speed>    =  a number between 5-100 setting the speed in words-per-minute
+
+Example:
+
+    C19|cw wpm 25
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### PTT
+
+Will transition radio between PTT and MOX or key on/off.
+      
+       C[D]<seq number>|cw ptt [1|0|on|off] time=<timestamp> index=<index>
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+========================================================================
+[2] TCPIP-cwx.md
+========================================================================
+### SEND
+
+Queues up text in the CWX buffer to be sent out as dots and dashes.
+
+    C[D]<seq_number>|cwx send "<message>" <block>
+
+    <message>    =  the string to be sent (replace spaces with hex 0x7f)
+    <block>      =  (optional) a number to help sync the reply with the original string
+
+Example:
+
+    C19|cwx send "CQ TEST" 42  (*spaces shown in message here would be replaced by 0x7f)
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | starting radio index for message, block |
+|--------------|---------|-----------------------------------------|
+| 00000000     |         | OK                                      |
+| 5000002C     |         | Incorrect number of parameters          |
+| 31000004     |         | Nothing to send                         |
+
+Responses
+
+Response Example:
+
+    R19|0|170,42|
+
+### CLEAR
+
+Clear the current CWX buffer
+
+    C[D]<seq_number>|cwx clear
+
+Example:
+
+    C19|cwx clear
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | starting radio index for message, block |
+|--------------|---------|-----------------------------------------|
+| 00000000     |         | OK                                      |
+| 5000002C     |         | Incorrect number of parameters          |
+| 500000C2     |         | Transmit not allowed due to other client transmitting|
+
+Responses
+
+Response Example:
+
+    R19|0|
+
+### DELAY
+
+Set the CWX hang time delay in ms
+
+    C[D]<seq_number>|cwx delay <ms>
+
+    <ms>    =  The amount of time to delay in ms
+
+Example:
+
+    C19|cwx erase 3 170
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | erased start index, erased stop index (inclusive) |
+|--------------|---------|---------------------------------------------------|
+| 00000000     |         | OK                                                |
+| 5000002C     |         | Incorrect number of parameters                    |
+
+Responses
+
+Response Example:
+
+    R19|0|
+
+### WPM
+
+Set the speed of the CW keyer to a specific words-per-minute (WPM)
+value. If a value below 5 is sent, 5 will be used. If a value above 100
+is sent, 100 will be used.
+
+    C[D]<seq_number>|cw wpm <speed>
+
+    <speed>    =  a number between 5-100 setting the speed in words-per-minute
+
+Example:
+
+    C19|cw wpm 25
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### ERASE
+
+Erases characters from the CWX buffer
+
+    C[D]<seq_number>|cwx erase <num_chars> <index>
+
+    <num_chars>    =  The number of characters to erase
+    <index>        =  (optional) The index at which to begin erasing.  If this is not provided, the end of the buffer is assumed.
+
+Example:
+
+    C19|cwx erase 3 170
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | erased start index, erased stop index (inclusive) |
+|--------------|---------|---------------------------------------------------|
+| 00000000     |         | OK                                                |
+| 5000002C     |         | Incorrect number of parameters                    |
+| 10000003     |         | Nothing to erase                                  |
+
+Responses
+
+Response Example:
+
+    R19|0|170,172|
+
+### INSERT
+
+Inserts text into the CWX buffer at a specific index to be sent out as
+dots and dashes.
+
+    C[D]<seq_number>|cwx insert <index> "<message>" <block>
+
+    <index>      =  the index at which to insert the message
+    <message>    =  the string to be sent (replace spaces with hex 0x7f)
+    <block>      =  (optional) a number to help sync the reply with the original string
+
+Example:
+
+    C19|cwx insert 170 "CQ " 43  (*spaces shown in the message here would be replaced by 0x7f)
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | starting radio index for inserted message, block |
+|--------------|---------|--------------------------------------------------|
+| 00000000     |         | OK                                               |
+| 5000002C     |         | Incorrect number of parameters                   |
+| 50000090     |         | Index invalid                                    |
+| 50000091     |         | Insert failed                                    |
+
+Responses
+
+Response Example:
+
+    R19|0|170,43|
+
+### MACRO_SAVE
+
+Save CWX macro buffers
+
+    C[D]<seq_number>|cwx macro save <macro#> "text message"
+
+    <macro#>    =  The number of the macro to be saved
+
+Example:
+
+    C19|cwx save 1 "The quick brown fox jumps over a lazy dog"
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | erased start index, erased stop index (inclusive) |
+|--------------|---------|---------------------------------------------------|
+| 00000000     |         | OK                                                |
+| 5000002C     |         | Incorrect number of parameters                    |
+| 5000007A     |         | Incorrect macro number                            |
+
+Responses
+
+Response Example:
+
+    R19|0|1|
+
+### MACRO_SEND
+
+Send CWX macro buffers
+
+    C[D]<seq_number>|cwx macro send <macro#> [<block>]
+
+    <macro#>    =  The number of the macro to be sent
+    <block>     = Optional. Can be set to send only certain bits of the message
+
+Example:
+
+    C19|cwx send 1 [20,40]
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | erased start index, erased stop index (inclusive) |
+|--------------|---------|---------------------------------------------------|
+| 00000000     |         | OK                                                |
+| 5000002C     |         | Incorrect number of parameters                    |
+| 5000007A     |         | Incorrect macro number                            |
+
+Responses
+
+Response Example:
+
+    R19|0|1|20,40|
+
+### QSK_ENABLED
+
+Set flag that determines if QSK is allow in CWX
+
+    C[D]<seq_number>|cwx qsk_enabled 0|1
+
+Example:
+
+    C19|cwx qsk_enabled 1
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | erased start index, erased stop index (inclusive) |
+|--------------|---------|---------------------------------------------------|
+| 00000000     |         | OK                                                |
+| 5000002C     |         | Incorrect number of parameters                    |
+
+Responses
+
+Response Example:
+
+    R19|0|
+
+### TEST
+
+Tests sequence or string commands.
+
+    C[D]<seq_number>|cwx test sequence [.][-]...
+
+    C[D]<seq_number>|cwx test string <string>
+
+Example:
+
+    C60|cwx test sequence -... ..- - - .... --- .-.. .
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | starting radio index for message, block           |
+|--------------|---------|---------------------------------------------------|
+| 00000000     |         | OK                                                |
+| 5000002C     |         | Incorrect number of parameters                    |
+
+### DUMP
+
+Displays parameters of CWX
+
+    C[D]<seq_number>|cwx dump
+
+Example:
+
+    C61|cwx dump
+
+| Hex Response | Message | starting radio index for message, block           |
+|--------------|---------|---------------------------------------------------|
+| 00000000     |         | OK                                                |
+| 5000002C     |         | Incorrect number of parameters                    |

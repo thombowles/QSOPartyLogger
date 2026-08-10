@@ -23,14 +23,11 @@ import Foundation
 ///   and 8 "activates SWR Tune mode", so no app mode may resolve to it — and an
 ///   `IF` that reports 8 is not an operating mode to stamp on a QSO either.
 ///   There is no 4: a QMX has no FM.
-/// - **`KY` appends to an 80-character circular buffer**, and a message that
-///   would overflow it "will simply be ignored and error code ?; returned" —
-///   silently, mid-word, which in a contest is a mangled call. Text is chunked
-///   and paced against the radio's own `KY;` buffer status instead of blasted.
-/// - **Keyer text is the fallback path** (Article 11). A QMX keys from DTR on
-///   its own USB port — operating manual, CW menu, "Key from USB DTR" — so
-///   `supportsDirectKeying` is true and this driver's `KY` handling is what an
-///   operator gets only if they choose it.
+/// - **This driver never sends `KY`.** A QMX keys from DTR on its own USB port
+///   — operating manual, CW menu, "Key from USB DTR" — and a radio with key
+///   lines is keyed directly and only directly (Article 11). `KS` remains,
+///   because the radio's own keyer speed still drives the paddles and the
+///   front-panel display.
 final class QRPLabsQMXDriver: RadioDriver, @unchecked Sendable {
 
     /// The CAT link is a USB Virtual COM port, where the rate is decoration:
@@ -41,18 +38,10 @@ final class QRPLabsQMXDriver: RadioDriver, @unchecked Sendable {
     /// list (the "Serial 1 baud" menu), defaulting to that menu's own default.
     static let baudRates = [4800, 9600, 19200, 38400, 115200]
 
-    /// Per-`KY` payload ceiling, in characters. `KY0;` promises the 80-byte
-    /// buffer is "not more than 75% full" — at most 60 used, so at least 20
-    /// free — and the buffer only drains between the radio's answer and our
-    /// write, never grows, since this driver is its only writer. 20 is
-    /// therefore the largest chunk that can never be the one that overflows.
-    static let keyerChunkLimit = 20
-
     private let lock = NSLock()
     private var transport: (any SerialTransport)?
     private var pollTimer: (any DispatchSourceTimer)?
     private var rxBuffer = ""
-    private var pendingKeyerChunks: [String] = []
     private let pollQueue = DispatchQueue(label: "org.b5n.QSOPartyLogger.qmxpoll", qos: .userInitiated)
 
     var onStateChange: (@Sendable (RadioState) -> Void)?
@@ -67,7 +56,6 @@ final class QRPLabsQMXDriver: RadioDriver, @unchecked Sendable {
     func start(transport: any SerialTransport) {
         lock.lock()
         self.transport = transport
-        pendingKeyerChunks = []
         lock.unlock()
 
         transport.onReceive = { [weak self] data in
@@ -101,17 +89,12 @@ final class QRPLabsQMXDriver: RadioDriver, @unchecked Sendable {
         lastState = nil
         lastWPM = nil
         rxBuffer = ""
-        pendingKeyerChunks = []
         lock.unlock()
     }
 
     private func poll() {
-        // IF = freq/mode/TX; KS = keyer speed (bidirectional speed sync). KY
-        // asks the radio how much room is left in its send buffer, and is only
-        // worth asking while there is more of a message waiting to go in.
-        let hasQueue = lock.withLock { !pendingKeyerChunks.isEmpty }
-        let commands = Self.cmdPollIF + Self.cmdPollKS + (hasQueue ? Self.cmdPollKY : "")
-        currentTransport()?.write(commands)
+        // IF = freq/mode/TX; KS = keyer speed (bidirectional speed sync).
+        currentTransport()?.write(Self.cmdPollIF + Self.cmdPollKS)
     }
 
     private func currentTransport() -> (any SerialTransport)? {
@@ -122,16 +105,7 @@ final class QRPLabsQMXDriver: RadioDriver, @unchecked Sendable {
 
     static let cmdPollIF = "IF;"
     static let cmdPollKS = "KS;"
-    static let cmdPollKY = "KY;"
     static let cmdAutoInfoOff = "AI0;"
-
-    /// `RX;` "immediately puts the radio into receive mode", which is the only
-    /// documented way to cut a `KY` message short outside TS-480 compatibility
-    /// mode. What the manual does *not* say is whether it also empties the send
-    /// buffer, so abort additionally drops everything this driver has queued —
-    /// which caps the worst case at one un-cancellable chunk rather than a
-    /// whole message.
-    static let cmdAbortSending = "RX;"
 
     static func cmdSetFrequency(hz: Int) -> String {
         String(format: "FA%011d;", max(0, hz))
@@ -162,34 +136,6 @@ final class QRPLabsQMXDriver: RadioDriver, @unchecked Sendable {
         return digit.map { "MD\($0);" }
     }
 
-    /// Split text into `KY` commands of at most `keyerChunkLimit` characters.
-    ///
-    /// The cut falls *after* a space, not on it, so the chunks concatenate back
-    /// to the original text exactly. That is the whole point: with TS-480 KY
-    /// compatibility off — the QMX default, "KY TS480: NO" — each `KY` appends
-    /// raw characters to one circular buffer rather than queueing a message, so
-    /// a dropped delimiter sends `KE5CWKE5CW` rather than two calls.
-    static func cmdKeyerText(_ text: String) -> [String] {
-        var chunks: [String] = []
-        var remaining = Substring(text)
-        while !remaining.isEmpty {
-            if remaining.count <= keyerChunkLimit {
-                chunks.append(String(remaining))
-                break
-            }
-            let window = remaining.prefix(keyerChunkLimit)
-            if let space = window.lastIndex(of: " ") {
-                let cut = window.index(after: space)
-                chunks.append(String(remaining[..<cut]))
-                remaining = remaining[cut...]
-            } else {
-                chunks.append(String(window))
-                remaining = remaining.dropFirst(keyerChunkLimit)
-            }
-        }
-        return chunks.map { "KY \($0);" }
-    }
-
     func setFrequency(hz: Int) {
         // FA is VFO A. IF reports whichever VFO is in use, so a radio left on
         // VFO B reads back the frequency it is really on rather than this one.
@@ -202,35 +148,14 @@ final class QRPLabsQMXDriver: RadioDriver, @unchecked Sendable {
         currentTransport()?.write(cmd)
     }
 
+    /// Sets the radio's own keyer speed — the paddles and the front-panel
+    /// display, not the app's keying, which is done on the DTR line. Sent the
+    /// moment the operator asks so the two never disagree (Article 11).
     func setKeyerSpeed(wpm: Int) {
         currentTransport()?.write(Self.cmdSetKeyerSpeed(wpm: wpm))
     }
 
-    /// First chunk goes now; the rest wait for the radio to say it has room.
-    func sendInternalKeyerText(_ text: String) {
-        guard let transport = currentTransport() else { return }
-        let chunks = Self.cmdKeyerText(text)
-        guard let first = chunks.first else { return }
-        lock.withLock { pendingKeyerChunks = Array(chunks.dropFirst()) }
-        transport.write(first)
-    }
-
-    func stopInternalKeyer() {
-        lock.withLock { pendingKeyerChunks.removeAll() }
-        currentTransport()?.write(Self.cmdAbortSending)
-    }
-
     // MARK: Response parsing (pure — unit tested)
-
-    /// State of the `KY` send buffer, as the `KY;` query reports it.
-    enum KeyerBufferStatus: Character, Sendable {
-        /// Sending, buffer no more than 75% full — room for another chunk.
-        case sending = "0"
-        /// Sending, buffer more than 75% full — hold.
-        case sendingNearlyFull = "1"
-        /// Nothing being sent; the buffer is empty.
-        case idle = "2"
-    }
 
     /// `IF[f]*****+yyyyrx*00tmvspbd ;` — the TS-480 layout, field by field from
     /// the CAT manual's own list: 11-digit frequency [2..12], five spaces
@@ -279,12 +204,6 @@ final class QRPLabsQMXDriver: RadioDriver, @unchecked Sendable {
         return Int(digits)
     }
 
-    /// `KYn;` → send-buffer state.
-    static func parseKY(_ response: String) -> KeyerBufferStatus? {
-        guard response.hasPrefix("KY"), response.count >= 3 else { return nil }
-        return KeyerBufferStatus(rawValue: Array(response)[2])
-    }
-
     // MARK: RX plumbing
 
     private func ingest(_ data: Data) {
@@ -324,22 +243,7 @@ final class QRPLabsQMXDriver: RadioDriver, @unchecked Sendable {
             if changed {
                 onKeyerSpeedChange?(wpm)
             }
-            return
         }
-        if let status = Self.parseKY(response) {
-            releaseNextKeyerChunk(status: status)
-        }
-    }
-
-    /// Hand the radio the next chunk, but only on its own word that there is
-    /// room. `KY1;` (over 75% full) means wait for the next poll.
-    private func releaseNextKeyerChunk(status: KeyerBufferStatus) {
-        guard status != .sendingNearlyFull else { return }
-        let next: String? = lock.withLock {
-            pendingKeyerChunks.isEmpty ? nil : pendingKeyerChunks.removeFirst()
-        }
-        guard let next else { return }
-        currentTransport()?.write(next)
     }
 }
 

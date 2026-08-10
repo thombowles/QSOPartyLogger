@@ -173,34 +173,10 @@ final class AppSettings {
         didSet { defaults.set(wpm, forKey: "wpm") }
     }
 
-    enum KeyerBackend: String, Codable, CaseIterable {
-        // The raw values are the persisted `keyerBackend` tokens in
-        // UserDefaults, frozen verbatim from when they doubled as labels.
-        // They are storage, never display: changing one silently resets an
-        // existing operator's keyer choice to `.direct` on next launch.
-        // Labels come from `displayName(for:)`.
-        case direct = "Direct DTR/RTS"
-        case radioInternal = "K3 internal (KY)"
-
-        /// Shown when the internal keyer's owner isn't known yet — no radio
-        /// connected, so nothing can name its command.
-        static let neutralRadioKeyerLabel = "Radio keyer"
-
-        /// Label for the keyer picker. The internal-keyer case takes its name
-        /// from the connected radio's descriptor, so the setting never claims
-        /// one manufacturer's command while another radio is sending
-        /// (Article 11).
-        func displayName(for descriptor: RadioDescriptor?) -> String {
-            switch self {
-            case .direct: "Direct DTR/RTS"
-            case .radioInternal: descriptor?.keyerLabel ?? Self.neutralRadioKeyerLabel
-            }
-        }
-    }
-
-    var keyerBackend: KeyerBackend {
-        didSet { defaults.set(keyerBackend.rawValue, forKey: "keyerBackend") }
-    }
+    // There is no keyer-backend preference. Every radio has exactly one way to
+    // send CW — its key lines if it has them, its own keyer if it does not
+    // (Article 11) — so there was never a second option to pick. The stored
+    // `keyerBackend` token is left in UserDefaults, unread and harmless.
 
     var keyerLineConfig: KeyerLineConfig {
         didSet {
@@ -295,7 +271,6 @@ final class AppSettings {
         spotLabelSize = SpotLabelSize(rawValue: defaults.string(forKey: "spotLabelSize") ?? "")
             ?? .small
         wpm = defaults.object(forKey: "wpm") as? Int ?? 22
-        keyerBackend = KeyerBackend(rawValue: defaults.string(forKey: "keyerBackend") ?? "") ?? .direct
         keyerLineConfig = (defaults.data(forKey: "keyerLineConfig")
             .flatMap { try? JSONDecoder().decode(KeyerLineConfig.self, from: $0) })
             ?? KeyerLineConfig()

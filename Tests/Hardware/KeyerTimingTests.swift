@@ -9,38 +9,45 @@ final class KeyerTimingTests: XCTestCase {
         XCTAssertEqual(KeyerTiming.ditMs(wpm: 12), 100, accuracy: 0.001)
     }
 
+    /// Schedules are in dit units and take no speed at all — the property that
+    /// lets a message change speed while it is being sent.
     func testLetterEIsOneDit() {
-        let schedule = KeyerTiming.schedule(text: "E", wpm: 20)
-        XCTAssertEqual(schedule, [.init(keyDown: true, durationMs: 60)])
+        XCTAssertEqual(KeyerTiming.schedule(text: "E"), [.init(keyDown: true, dits: 1)])
     }
 
     func testLetterNTiming() {
-        // N = dah, gap, dit at 20 WPM: 180 down, 60 up, 60 down.
+        // N = dah, gap, dit: 3 dits down, 1 up, 1 down.
         XCTAssertEqual(
-            KeyerTiming.schedule(text: "N", wpm: 20),
+            KeyerTiming.schedule(text: "N"),
             [
-                .init(keyDown: true, durationMs: 180),
-                .init(keyDown: false, durationMs: 60),
-                .init(keyDown: true, durationMs: 60),
+                .init(keyDown: true, dits: 3),
+                .init(keyDown: false, dits: 1),
+                .init(keyDown: true, dits: 1),
             ]
         )
     }
 
     func testInterCharacterGapIsThreeDits() {
-        let schedule = KeyerTiming.schedule(text: "EE", wpm: 20)
         XCTAssertEqual(
-            schedule,
+            KeyerTiming.schedule(text: "EE"),
             [
-                .init(keyDown: true, durationMs: 60),
-                .init(keyDown: false, durationMs: 180),
-                .init(keyDown: true, durationMs: 60),
+                .init(keyDown: true, dits: 1),
+                .init(keyDown: false, dits: 3),
+                .init(keyDown: true, dits: 1),
             ]
         )
     }
 
     func testWordGapIsSevenDits() {
-        let schedule = KeyerTiming.schedule(text: "E E", wpm: 20)
-        XCTAssertEqual(schedule[1], .init(keyDown: false, durationMs: 420))
+        XCTAssertEqual(KeyerTiming.schedule(text: "E E")[1], .init(keyDown: false, dits: 7))
+    }
+
+    /// The dit-unit schedule still renders to the millisecond timings the
+    /// keyer used to bake in — 20 WPM is 60 ms a dit, so N is 180/60/60.
+    func testScheduleRendersToMillisecondsAtASpeed() {
+        let n = KeyerTiming.schedule(text: "N")
+        XCTAssertEqual(KeyerTiming.durationMs(n, wpm: 20), 300, accuracy: 0.001)
+        XCTAssertEqual(n.map { $0.dits * KeyerTiming.ditMs(wpm: 20) }, [180, 60, 60])
     }
 
     func testParisIsExactlyThreeSecondsAt20WPM() {
@@ -50,9 +57,20 @@ final class KeyerTimingTests: XCTestCase {
         XCTAssertEqual(sending + 7 * 60, 3000, accuracy: 0.001)
     }
 
+    /// The same schedule at twice the speed is exactly half as long — there is
+    /// no speed baked into it to disagree with.
+    func testOneScheduleRendersAtAnySpeed() {
+        let events = KeyerTiming.schedule(text: "CQ TEST DE KE5CW K")
+        XCTAssertEqual(
+            KeyerTiming.durationMs(events, wpm: 40) * 2,
+            KeyerTiming.durationMs(events, wpm: 20),
+            accuracy: 0.001
+        )
+    }
+
     func testAlternatingDownUp() {
         // Schedules must strictly alternate: no two key-downs without an up between.
-        let schedule = KeyerTiming.schedule(text: "CQ TEST DE KE5CW K", wpm: 28)
+        let schedule = KeyerTiming.schedule(text: "CQ TEST DE KE5CW K")
         for (a, b) in zip(schedule, schedule.dropFirst()) {
             XCTAssertNotEqual(a.keyDown, b.keyDown, "events must alternate")
         }

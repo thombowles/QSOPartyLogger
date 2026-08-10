@@ -2,7 +2,15 @@ import Foundation
 
 /// Elecraft K3/K3S/KX3/KX2 CAT driver. ASCII commands terminated with ';' at
 /// 38400-8N1 (default). Response formats verified against the Elecraft
-/// Programmer's Reference revisions F2 and G5 (identical for these commands).
+/// **Programmer's Reference revisions F2 and G5** (identical for these
+/// commands), banked as `docs/research/k3_programmers_reference_g5.txt`.
+///
+/// The K3 has a perfectly good keyer of its own, and this driver deliberately
+/// does not use it: a K3 exposes key lines, so the app keys it directly and
+/// only directly (Article 11), which is what makes Esc abort mid-character and
+/// makes CW speed changeable mid-message without depending on firmware. `KS`
+/// remains, because the radio's own keyer speed still drives the paddles and
+/// the front-panel display.
 final class ElecraftK3Driver: RadioDriver, @unchecked Sendable {
 
     static let baudRates = [4800, 9600, 19200, 38400]
@@ -97,30 +105,6 @@ final class ElecraftK3Driver: RadioDriver, @unchecked Sendable {
         return digit.map { "MD\($0);" }
     }
 
-    /// KY accepts ≤24 chars per command; chunk at word boundaries when possible.
-    static func cmdKeyerText(_ text: String) -> [String] {
-        var chunks: [String] = []
-        var remaining = Substring(text)
-        while !remaining.isEmpty {
-            if remaining.count <= 24 {
-                chunks.append(String(remaining))
-                break
-            }
-            let window = remaining.prefix(24)
-            if let cut = window.lastIndex(of: " "), cut > window.startIndex {
-                chunks.append(String(remaining[..<cut]))
-                remaining = remaining[remaining.index(after: cut)...]
-            } else {
-                chunks.append(String(window))
-                remaining = remaining.dropFirst(24)
-            }
-        }
-        return chunks.map { "KY \($0);" }
-    }
-
-    /// Immediately terminate internal-keyer transmission (KY with '@').
-    static let cmdKeyerStop = "KY @;"
-
     func setFrequency(hz: Int) {
         currentTransport()?.write(Self.cmdSetFrequency(hz: hz))
     }
@@ -133,19 +117,11 @@ final class ElecraftK3Driver: RadioDriver, @unchecked Sendable {
         currentTransport()?.write(cmd)
     }
 
+    /// Sets the radio's own keyer speed — the paddles and the front-panel
+    /// display, not the app's keying, which is done on the key line. Sent the
+    /// moment the operator asks so the two never disagree (Article 11).
     func setKeyerSpeed(wpm: Int) {
         currentTransport()?.write(Self.cmdSetKeyerSpeed(wpm: wpm))
-    }
-
-    func sendInternalKeyerText(_ text: String) {
-        guard let transport = currentTransport() else { return }
-        for cmd in Self.cmdKeyerText(text) {
-            transport.write(cmd)
-        }
-    }
-
-    func stopInternalKeyer() {
-        currentTransport()?.write(Self.cmdKeyerStop)
     }
 
     // MARK: Response parsing (pure — unit tested)

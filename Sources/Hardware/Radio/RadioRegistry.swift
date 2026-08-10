@@ -14,13 +14,11 @@ struct RadioDescriptor: Identifiable, Sendable {
     let connection: Connection
     let defaultBaud: Int
     let baudRates: [Int]
-    /// DTR/RTS line keying is possible (serial radios only).
+    /// DTR/RTS line keying is possible (serial radios only) — and where it is,
+    /// it is the *only* CW path (Article 11). A descriptor with this false
+    /// must make a driver conforming to `InternalKeyerDriver`, or the radio
+    /// has no way to send at all; `RadioRegistryTests` checks both halves.
     let supportsDirectKeying: Bool
-    /// How the keyer picker names *this* radio's own keyer. The shared
-    /// `KeyerBackend` setting is radio-neutral (Article 11), so the model's
-    /// command name lives here rather than in the enum or the UI: keep the
-    /// neutral "Radio keyer" prefix and add the command in parentheses.
-    let keyerLabel: String
     let makeDriver: @Sendable () -> any RadioDriver
 }
 
@@ -42,7 +40,6 @@ enum RadioRegistry {
             defaultBaud: 38400,
             baudRates: ElecraftK3Driver.baudRates,
             supportsDirectKeying: true,
-            keyerLabel: "Radio keyer (KY)",
             makeDriver: { ElecraftK3Driver() }
         ),
         RadioDescriptor(
@@ -52,7 +49,6 @@ enum RadioRegistry {
             defaultBaud: 9600,
             baudRates: QRPLabsQMXDriver.baudRates,
             supportsDirectKeying: true,
-            keyerLabel: "Radio keyer (KY)",
             makeDriver: { QRPLabsQMXDriver() }
         ),
         RadioDescriptor(
@@ -62,7 +58,6 @@ enum RadioRegistry {
             defaultBaud: 0,
             baudRates: [],
             supportsDirectKeying: false,
-            keyerLabel: "Radio keyer (CWX)",
             makeDriver: { FlexRadioDriver() }
         ),
     ]

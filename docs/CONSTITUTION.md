@@ -315,46 +315,75 @@ stops the frozen-token exemption above from being used to smuggle in a label.
 > type reference in `AppSettings.init`, and a help string naming a vendor's
 > client software in `RadioBar`.
 
-### Article 11 — Direct CW keying is the preferred path
+### Article 11 — Direct CW keying is the only path where key lines exist
 
-**Where the radio's interface exposes hardware key lines, direct keying is the
-default and the driver ships `supportsDirectKeying: true`.**
+**Every radio has exactly one way to send CW.** Where the radio's interface
+exposes hardware key lines, the app keys it directly and *only* directly, and
+the driver ships `supportsDirectKeying: true`. Where it does not, the radio's
+own keyer is the only path, and the driver says so by conforming to
+`InternalKeyerDriver`. Never both, never neither —
+`RadioRegistryTests.testEveryRadioHasExactlyOneWayToSendCW` enforces it.
 
 Direct DTR/RTS line keying — timed in the app by
-[`CWKeyer`](../Sources/Hardware/Keying/CWKeyer.swift) — is preferred over
-handing text to the radio's own keyer, because:
+[`CWKeyer`](../Sources/Hardware/Keying/CWKeyer.swift) — wins over handing text
+to the radio's own keyer, because:
 
 - **Esc aborts mid-character.** Text sitting in a radio's keyer buffer keeps
   sending after you have decided to stop.
 - **Timing is ours.** Buffer latency and the radio's internal housekeeping do
   not stretch a dit.
 - **Element timing is testable** without a radio on the bench
-  (`KeyerTimingTests`, `MorseCodeTests`).
+  (`KeyerTimingTests`, `MorseCodeTests`, `CWKeyerTests`).
+- **Behaviour stops being a per-model firmware question.** Speed changes
+  mid-message, abort lands mid-character, and completion is known rather than
+  estimated — on every serial radio, by the same code, proved by the same test.
 
 Therefore:
 
 - Any radio reached over serial or USB-serial gets `supportsDirectKeying: true`
   and a `KeyerLineConfig`-compatible wiring story documented in the README.
-- The radio's internal keyer is a **fallback, offered but not the default**, and
-  is the *only* path for radios with no control lines — network radios take
-  `supportsDirectKeying: false` and key through their own keyer (Flex CWX).
-- **Where both paths exist, implement both.** `sendInternalKeyerText` and
-  `stopInternalKeyer` are not protocol members to stub out; an operator who
-  prefers the radio's keyer weighting must be able to choose it.
-- **Keyer settings and labels stay radio-neutral.** A shared enum case must not
-  name one manufacturer's command. `AppSettings.KeyerBackend`'s raw values are
-  frozen `UserDefaults` tokens and are never displayed; the picker's label comes
-  from `KeyerBackend.displayName(for:)`, which reads the connected descriptor's
-  `keyerLabel` — "Radio keyer (CWX)" on a Flex, "Radio keyer (KY)" on a K3, and
-  a bare "Radio keyer" when nothing is connected. Likewise
-  `RadioInternalKeyer` is named for the protocol members it drives
-  (`sendInternalKeyerText` / `stopInternalKeyer`), not for a model.
+- **A driver with key lines implements no internal-keyer path at all.** Not a
+  stub, not an unused-but-tested builder: `sendInternalKeyerText` and
+  `stopInternalKeyer` live on `InternalKeyerDriver`, which such a driver does
+  not conform to. Dead protocol members are how a second path creeps back.
+- **There is no keyer preference.** One path per radio means nothing to choose
+  between, so no setting, no picker, and no per-model label. `RadioInternalKeyer`
+  is named for the protocol members it drives, not for a model.
+- **The wiring story is now load-bearing, not advisory.** Removing the fallback
+  means an operator whose key line is not set up has no in-app way out, and
+  keying is open-loop — no radio reports that a line it is ignoring was
+  toggled. A QMX ships `Key from USB DTR: None`. The README tells them, per
+  model, in the same commit as the driver.
 - **Never key on connect.** Deassert both control lines when the transport
   opens, before any polling starts, so the rig cannot transmit because the app
   launched. Abort must take effect immediately, not at the end of the current
   message.
 - Keyer speed syncs **both ways**: `setKeyerSpeed(wpm:)` out, and
   `onKeyerSpeedChange` in when the operator turns the front-panel knob.
+- **Speed is a live parameter, not a per-message constant.** `⌘=` during a
+  transmission changes *that* transmission. A keyer that reads the speed once,
+  at the top of a message, is broken however accurate its timing is.
+  Concretely:
+  - Schedules are denominated in **dit units, never milliseconds**
+    (`KeyerTiming.KeyEvent.dits`). A schedule that cannot name a speed cannot
+    bind a stale one; speed is applied at playback, one element at a time.
+  - A key-down element in flight finishes at the speed it began at — half of
+    one speed and half of another is a malformed element on the air, and worse
+    than a few milliseconds of lag. Key-up gaps re-read every dit, which caps
+    the lag at one dah rather than the seven dits of a word gap.
+  - `setKeyerSpeed(wpm:)` goes out the moment the operator asks, never queued
+    behind the message in flight — and a driver must not adopt a protocol form
+    that *defers* side-effects. Elecraft's `KYW` ("wait") is the trap this
+    names: rev G5 documents it as delaying "any following host commands …
+    until the current message has been sent … e.g., KS (keyer speed)", which
+    is precisely the behaviour this article forbids.
+  - Nothing may infer that a message has ended from a duration computed when
+    it began. Once speed can change mid-message that arithmetic is wrong, so
+    the direct keyer reports real completion (`CWKeyer.onFinished`).
+  - The test floor is a **timed** one: drive the keyer through a transport that
+    timestamps every line transition, change speed part-way, and assert both
+    that later elements really did change length and that no single element
+    was sent at two speeds (`CWKeyerTests`).
 
 ### Article 12 — Protocol provenance
 
@@ -374,14 +403,26 @@ A driver implements the whole `RadioDriver` surface, honestly:
 | `onKeyerSpeedChange` | Front-panel speed changes reported |
 | `setFrequency(hz:)` | Exact Hz |
 | `setMode(rawMode:)` | **Resolves `"SSB"` to the conventional sideband for the current frequency** — the driver owns the band plan, not the caller |
-| `setKeyerSpeed(wpm:)` | 8–50 WPM |
-| `sendInternalKeyerText` / `stopInternalKeyer` | Real implementation where the radio has a keyer |
+| `setKeyerSpeed(wpm:)` | 8–50 WPM, sent immediately — never queued behind a message in flight |
+| `sendInternalKeyerText` / `stopInternalKeyer` | On `InternalKeyerDriver` only, and only for a radio with no key lines (Article 11) |
 
 Tests drive a **mock transport**: feed captured radio responses in, assert
 parsed `RadioState` out; assert the exact bytes the driver emits for a QSY, a
 mode change, and a speed change. Include at least one malformed/truncated
 response — radios do send partial lines, and a driver that traps on one takes
 the app down mid-contest.
+
+Two more, both about the path *not* taken:
+
+- A direct-keying driver proves on the wire that it never sends its radio's
+  keyer-text command — drive a full session over the mock and assert the bytes
+  never appear (`testDriverNeverSendsKY`). Reading the source is not the test:
+  the command can come back through a poll loop.
+- Mid-message speed change is proved per path. Direct keying gets the timed
+  test in Article 11. A radio keyed by its own keyer gets the exact bytes, and
+  the driver's banked reference is quoted on whether the radio applies them to
+  a message already sending — or the entry states that the manual is silent
+  (Article 3). Never assume it works because another maker's does.
 
 ### Article 14 — Connection must be validated, never silently "successful"
 

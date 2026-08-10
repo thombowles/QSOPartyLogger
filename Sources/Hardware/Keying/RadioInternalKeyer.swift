@@ -1,14 +1,19 @@
 import Foundation
 
-/// CW via the radio's own keyer — zero extra wiring; the radio does the
-/// element timing. Radio-neutral: it drives whatever driver it is handed
-/// through `sendInternalKeyerText` / `stopInternalKeyer`, so the same class
-/// serves a K3's `KY` buffer and a Flex's CWX. This is the fallback path:
-/// direct DTR/RTS keying is preferred wherever control lines exist
-/// (Article 11).
+/// CW via the radio's own keyer — the radio does the element timing.
+/// Radio-neutral: it drives whatever driver it is handed through
+/// `sendInternalKeyerText` / `stopInternalKeyer`, and is named for those
+/// members rather than for any one model's command.
+///
+/// This path exists only for radios with no control lines to key from
+/// (Article 11), which is why it takes an `InternalKeyerDriver` rather than
+/// any driver: a radio that *can* be keyed directly is, and never reaches
+/// here. Speed changes still have to reach a message already sending, so the
+/// `wpm` setter forwards to the radio immediately rather than waiting for the
+/// next `send`.
 final class RadioInternalKeyer: CWSender, @unchecked Sendable {
 
-    private let driver: any RadioDriver
+    private let driver: any InternalKeyerDriver
     private let lock = NSLock()
     private var _wpm: Int
 
@@ -21,7 +26,7 @@ final class RadioInternalKeyer: CWSender, @unchecked Sendable {
         }
     }
 
-    init(driver: any RadioDriver, wpm: Int = 20) {
+    init(driver: any InternalKeyerDriver, wpm: Int = 20) {
         self.driver = driver
         self._wpm = wpm
     }

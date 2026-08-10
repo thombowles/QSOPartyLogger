@@ -46,9 +46,6 @@ struct RadioBar: View {
                 modeGroup
             }
             wpmStepper
-            if descriptor?.supportsDirectKeying ?? true {
-                keyerGroup
-            }
             if let sending = radio.nowSending {
                 sendingIndicator(sending)
             }
@@ -225,18 +222,6 @@ struct RadioBar: View {
             radio.syncWPM(settings.wpm, settings: settings)
         }
         .help("CW speed — ⌘= / ⌘- adjusts by 2 WPM; syncs with the radio's speed knob")
-    }
-
-    private var keyerGroup: some View {
-        captioned("Keyer") {
-            Picker("", selection: $settings.keyerBackend) {
-                ForEach(AppSettings.KeyerBackend.allCases, id: \.self) { backend in
-                    Text(backend.displayName(for: radio.connectedDescriptor)).tag(backend)
-                }
-            }
-            .labelsHidden()
-            .frame(width: 170)
-        }
     }
 
     private func sendingIndicator(_ sending: String) -> some View {

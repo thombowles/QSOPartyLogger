@@ -116,7 +116,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `Esc` | Abort CW, stop repeat-CQ, close an open sheet — or, in the park picker's search box, clear it and close the results |
 | `↑` / `↓` | In the park picker: move through the results; `Return` adds the highlighted park |
 | Any key | While repeat-CQ is running: stop it and abort the CQ on the air, then do the key's own job |
-| `⌘=` / `⌘-` | CW speed ±2 WPM (syncs to the radio) |
+| `⌘=` / `⌘-` | CW speed ±2 WPM — takes effect mid-message (syncs to the radio) |
 | `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
 | `⌘R` | Toggle Run / Search & Pounce |
 | `⌘J` | Jump back to your CQ run frequency |
@@ -315,9 +315,20 @@ frequency — or warns **Radio not answering** in orange, with the details one
 tooltip away. The button offers **Disconnect** only once the radio has answered;
 an unproven link gets **Cancel**.
 
-**CW keys two ways**: direct DTR/RTS line keying with sub-millisecond software
-timing (8–50 WPM, optional PTT line with lead and tail), or the radio's internal
-keyer. F1–F8 messages support `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH}
+**CW keying.** A radio with key lines is keyed directly: DTR/RTS line keying
+with sub-millisecond software timing (8–50 WPM, optional PTT line with lead and
+tail). That is the only path on those radios — it is what lets **Esc** cut a
+message mid-character and **⌘=** / **⌘-** change speed *while the message is
+still going out*, rather than on the next one. A radio with no key lines, like
+the Flex, keys through its own keyer instead.
+
+> **Set your radio's key line up before the contest, not during it.** With no
+> internal-keyer fallback there is no in-app way out, and keying is one-way —
+> the radio never reports that it is ignoring the line. On a **QMX** set
+> CW menu → *Key from USB DTR* to **USB 1**; it ships as *None* and will sit
+> there silently until you do. On a **K3**, set CONFIG:PTT-KEY to map DTR.
+
+F1–F8 messages support `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH}
 {MEMBER}` and default to the active party's own exchange shape — a serial party
 sends `{SERIAL}` where the report would go, a name party sends `{NAME}`, and a
 QRP-sprint party trails the location with `{MEMBER}`, which keys `NR 13` for a
