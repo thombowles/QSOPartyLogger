@@ -113,9 +113,9 @@ final class KeyMonitorGateTests: XCTestCase {
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 111, command: false), .clearEntry)
     }
 
-    func testEscapeAbortsCW() {
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 53, command: false), .abortCW)
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 53, command: true), .abortCW)
+    func testEscapeAbortsTransmission() {
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 53, command: false), .abortTransmission)
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 53, command: true), .abortTransmission)
     }
 
     func testCommandChords() {
@@ -245,7 +245,7 @@ final class KeyMonitorGateTests: XCTestCase {
     func testAnyKeyDuringARepeatingCQHaltsTheMessageOnAir() {
         XCTAssertEqual(
             response(letterA, repeatRunning: true),
-            .init(stopsRepeat: true, abortsCW: true, action: nil, consumesEvent: false)
+            .init(stopsRepeat: true, abortsTransmission: true, action: nil, consumesEvent: false)
         )
     }
 
@@ -256,7 +256,7 @@ final class KeyMonitorGateTests: XCTestCase {
             response(f2, repeatRunning: true),
             .init(
                 stopsRepeat: true,
-                abortsCW: true,
+                abortsTransmission: true,
                 action: .sendMessage(index: 1),
                 consumesEvent: true
             )
@@ -270,7 +270,7 @@ final class KeyMonitorGateTests: XCTestCase {
             response(f1, repeatRunning: true),
             .init(
                 stopsRepeat: true,
-                abortsCW: true,
+                abortsTransmission: true,
                 action: .sendMessage(index: 0),
                 consumesEvent: true
             )
@@ -279,7 +279,7 @@ final class KeyMonitorGateTests: XCTestCase {
 
     /// The guard rail on the feature. With no repeat running, typing the next
     /// call while your F2 exchange goes out must not cut the exchange off.
-    func testTypingDoesNotAbortCWWhenNoRepeatIsRunning() {
+    func testTypingDoesNotAbortTransmissionWhenNoRepeatIsRunning() {
         XCTAssertEqual(response(letterA), .init())
     }
 
@@ -288,7 +288,7 @@ final class KeyMonitorGateTests: XCTestCase {
     func testEscapeAbortsWithNoRepeatRunning() {
         XCTAssertEqual(
             response(escape),
-            .init(stopsRepeat: false, abortsCW: true, action: nil, consumesEvent: true)
+            .init(stopsRepeat: false, abortsTransmission: true, action: nil, consumesEvent: true)
         )
     }
 
@@ -297,7 +297,7 @@ final class KeyMonitorGateTests: XCTestCase {
     func testEscapeOnOneOfOurSheetsAbortsButIsNeverConsumed() {
         XCTAssertEqual(
             response(escape, focus: .sheet),
-            .init(stopsRepeat: false, abortsCW: true, action: nil, consumesEvent: false)
+            .init(stopsRepeat: false, abortsTransmission: true, action: nil, consumesEvent: false)
         )
     }
 
@@ -305,7 +305,7 @@ final class KeyMonitorGateTests: XCTestCase {
     func testASheetKeystrokeStillStopsARunningRepeat() {
         XCTAssertEqual(
             response(letterA, focus: .sheet, repeatRunning: true),
-            .init(stopsRepeat: true, abortsCW: true, action: nil, consumesEvent: false)
+            .init(stopsRepeat: true, abortsTransmission: true, action: nil, consumesEvent: false)
         )
     }
 

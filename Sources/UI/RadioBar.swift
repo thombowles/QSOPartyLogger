@@ -246,7 +246,7 @@ struct RadioBar: View {
                 .foregroundStyle(.red)
                 .lineLimit(1)
                 .frame(maxWidth: 260)
-            Button("Esc") { radio.abortCW(settings: settings) }
+            Button("Esc") { radio.abortTransmission(settings: settings) }
                 .controlSize(.small)
                 .fixedSize()
         }

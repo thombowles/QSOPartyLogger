@@ -1,11 +1,22 @@
 import SwiftUI
 
-/// F1–F8 CW message buttons for the active operating mode, plus the
-/// Run/S&P toggle, ESM, repeat-CQ, and the CQ-frequency jump chip.
+/// F1–F8 message buttons for the active operating mode — CW text, or the
+/// radio's voice memories on phone — plus the Run/S&P toggle, ESM, repeat-CQ,
+/// and the CQ-frequency jump chip.
 struct MessagesRow: View {
+    /// One F-key as the row draws it. Built by the caller so the row never has
+    /// to know whether it is showing expanded CW text or a voice memory.
+    struct MessageKey: Equatable {
+        /// The full caption — "CQ TEST KE5CW", or "M4 AGN?". Truncated here for
+        /// the button and shown whole in the tooltip.
+        var caption: String
+        /// Whether this key does anything: a non-empty CW slot, or a memory
+        /// mapping this radio can actually play.
+        var isActive: Bool
+    }
+
     @Binding var operatingMode: OperatingMode
-    let messages: [String]
-    let expand: (String) -> String
+    let keys: [MessageKey]
     /// Send the message in F-key slot `index` (0-based).
     let onSend: (Int) -> Void
     let enabled: Bool
@@ -45,7 +56,7 @@ struct MessagesRow: View {
                 .accessibilityHidden(true)
             }
 
-            ForEach(Array(messages.prefix(8).enumerated()), id: \.offset) { index, template in
+            ForEach(Array(keys.prefix(8).enumerated()), id: \.offset) { index, key in
                 Button {
                     onSend(index)
                 } label: {
@@ -53,20 +64,20 @@ struct MessagesRow: View {
                         Text("F\(index + 1)")
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(.secondary)
-                        Text(shortLabel(template))
+                        Text(shortLabel(key.caption))
                             .font(.caption)
                             .lineLimit(1)
                     }
                     .frame(minWidth: 62)
                 }
-                .disabled(!enabled || template.isEmpty)
+                .disabled(!enabled || !key.isActive)
                 .overlay {
                     if index == pendingIndex {
                         RoundedRectangle(cornerRadius: 5)
                             .strokeBorder(.purple, lineWidth: 2)
                     }
                 }
-                .help(index == pendingIndex ? "Return sends this: \(expand(template))" : expand(template))
+                .help(index == pendingIndex ? "Return sends this: \(key.caption)" : key.caption)
             }
 
             Spacer()
@@ -108,8 +119,7 @@ struct MessagesRow: View {
         .padding(.vertical, 4)
     }
 
-    private func shortLabel(_ template: String) -> String {
-        let expanded = expand(template)
-        return expanded.count > 13 ? String(expanded.prefix(12)) + "…" : expanded
+    private func shortLabel(_ caption: String) -> String {
+        caption.count > 13 ? String(caption.prefix(12)) + "…" : caption
     }
 }

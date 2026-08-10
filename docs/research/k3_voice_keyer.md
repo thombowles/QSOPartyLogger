@@ -95,6 +95,29 @@ Positions 10–11 are therefore the model discriminator: `01`/`02` means KX2/KX3
 at index 4, none fitted otherwise). Source 1's `ID` entry confirms `OM` is the
 documented way to tell the three apart.
 
+**OPEN QUESTION — the K3's trailing dashes are reserved, not guaranteed empty.**
+Source 1 says of the K3/K3S format, in the sentence immediately after its
+example: unused dashes are reserved for future module letters *and product ID*.
+So Elecraft explicitly anticipates one day populating indices 10–11 on a K3 with
+the same kind of product identifier the KX models already carry. Every K3/K3S
+example in every revision consulted shows literal dashes there, so the
+discriminator is correct for everything that has shipped — but it rests on a
+field the manufacturer has reserved the right to fill.
+
+The consequence is not cosmetic: K3 and KX play a memory with *different command
+sequences*, so a K3 misread as a KX would be sent bytes from the wrong table.
+`parseOM` therefore carries one extra guard beyond what the discriminator
+strictly needs — **the KX branch also requires that index 4 is not `D`.** No KX
+can have a `D` there (index 4 is a reserved dash in the `APF---TBXI0n` layout),
+while a `D` on a K3 means the KDVR3 is fitted. That cannot produce a false
+negative on any real KX, and it closes the dangerous half of the future case: a
+K3 that one day reports a product ID *and* has a recorder fitted still resolves
+as a K3. A recorder-less K3 that reported `01`/`02` would still be misread, but
+that radio has no memories to play wrongly.
+
+Re-check this against the current Programmer's Reference each season, per
+Article 20.
+
 ## The bank is per mode group — CW memories are safe
 
 Source 1, Table 4, footnote §, attached to the MSG-bank bit: the bank number is

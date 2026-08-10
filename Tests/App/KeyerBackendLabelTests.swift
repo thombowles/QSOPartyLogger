@@ -93,4 +93,36 @@ final class KeyerBackendLabelTests: XCTestCase {
             )
         }
     }
+
+    // MARK: Voice status text
+
+    /// Article 10's other half: the grep over Sources/UI cannot see whether a
+    /// *displayed* sentence names a model, so the strings are asserted here.
+    func testVoiceStatusTextNamesNoManufacturer() {
+        let banned = ["k3", "kx3", "kx2", "flex", "icom", "yaesu", "kenwood", "elecraft", "ci-v",
+                      "kdvr", "dvr"]
+        let texts = [
+            MessagesEditor.voiceStatusText(.unsupported, bank: nil),
+            MessagesEditor.voiceStatusText(.notInstalled, bank: nil),
+            MessagesEditor.voiceStatusText(.available(count: 2), bank: nil),
+            MessagesEditor.voiceStatusText(.available(count: 8), bank: 1),
+            MessagesEditor.voiceStatusText(.available(count: 8), bank: 2),
+        ]
+        for text in texts {
+            for term in banned {
+                XCTAssertFalse(
+                    text.lowercased().contains(term),
+                    "voice status '\(text)' names '\(term)' — Article 10 keeps these neutral"
+                )
+            }
+        }
+    }
+
+    /// One memory is a memory, not "1 memories".
+    func testVoiceStatusTextPluralises() {
+        XCTAssertTrue(MessagesEditor.voiceStatusText(.available(count: 1), bank: nil)
+            .contains("1 voice memory"))
+        XCTAssertTrue(MessagesEditor.voiceStatusText(.available(count: 8), bank: nil)
+            .contains("8 voice memories"))
+    }
 }

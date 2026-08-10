@@ -22,6 +22,16 @@ enum VoiceKeyerStatus: Equatable, Sendable {
     var isReady: Bool { memoryCount > 0 }
 }
 
+/// Why a requested voice memory was not transmitted.
+enum VoiceMessageDropReason: Equatable, Sendable {
+    /// The radio never confirmed the state the memory needed — on a banked
+    /// radio, the message bank. Nothing was sent, and the operator should be
+    /// told: the press looked like it worked and did not.
+    case unconfirmed
+    /// A play was already in flight. Ordinary fast typing, not a fault.
+    case busy
+}
+
 /// A radio that can play its own recorded voice messages.
 ///
 /// A separate protocol rather than more `RadioDriver` members with no-op
@@ -42,8 +52,11 @@ protocol VoiceMessageCapable: RadioDriver {
     /// not an estimate.
     var onVoicePlaybackChange: (@Sendable (Bool) -> Void)? { get set }
     /// A play that could not be carried out safely, and so was not carried out
-    /// at all. Carries the memory that was asked for. Nothing was transmitted.
-    var onVoiceMessageDropped: (@Sendable (Int) -> Void)? { get set }
+    /// at all. Carries the memory that was asked for and why it was refused.
+    /// Nothing was transmitted. The reason matters to the UI: `.unconfirmed` is
+    /// a failure worth reporting, `.busy` is a double-tap and should not read
+    /// as an error.
+    var onVoiceMessageDropped: (@Sendable (Int, VoiceMessageDropReason) -> Void)? { get set }
     /// The message bank the radio was last *observed* in, on radios that have
     /// banks. Radios without them never fire it, so the UI shows nothing.
     /// Reported because the app leaves the bank where the last play put it,
