@@ -315,7 +315,7 @@ stops the frozen-token exemption above from being used to smuggle in a label.
 > type reference in `AppSettings.init`, and a help string naming a vendor's
 > client software in `RadioBar`.
 
-### Article 11 — Direct CW keying is the only path where key lines exist
+### Article 11 — Direct CW keying is the only path where key lines exist; voice comes from the radio
 
 **Every radio has exactly one way to send CW.** Where the radio's interface
 exposes hardware key lines, the app keys it directly and *only* directly, and
@@ -385,6 +385,60 @@ Therefore:
     that later elements really did change length and that no single element
     was sent at two speeds (`CWKeyerTests`).
 
+#### Voice: the radio's own memories, and never the computer's audio
+
+**Where a radio has on-board voice memories, phone messages are played from
+them. This app does not stream recorded audio to a radio** — no WAV playback,
+no sound-card path, no virtual audio cable, not as a fallback and not behind a
+preference.
+
+The reasoning is the mirror image of the CW rule above, and it lands the other
+way round on purpose:
+
+- **The audio path would not be ours to be responsible for.** A WAV keyed
+  through a sound card depends on output level, sample rate, the host's audio
+  stack, and either VOX or a second PTT line. A memory recorded in the radio
+  went in through the radio's own mic chain at the operator's own gain and comes
+  back out the same every time.
+- **The radio knows when it stopped, and can say so.** Playback state comes back
+  over CAT, so Esc aborts for real, repeat CQ times itself off the actual end of
+  the message, and the TX badge reflects the radio instead of a guess.
+- **No second interface to get wrong at 0200Z.** The same argument as the
+  internal CW keyer, only stronger — there are no control lines to wire.
+
+We can time a CW element better than the radio can. We cannot record or replay a
+human voice better than the radio can. So for CW the app keys the line itself
+wherever there is a line to key, and for voice the radio's memories are the
+*only* path on every radio.
+
+Therefore:
+
+- A radio with on-board voice memories implements `VoiceMessageCapable`. Its
+  driver reports **how many memories exist** and **whether the hardware that
+  provides them is fitted** — both discovered from the radio at connect, never
+  hard-coded per model in the app layer (Article 10). Counts differ within one
+  descriptor's family: 8 on a K3 with the recorder option, 2 on a KX3 or KX2, 0
+  on a K3 without it.
+- A radio with none reports none, and the phone keys stay inert behind an inline
+  explanation. They never fail silently and never claim a capability the radio
+  has not confirmed.
+- **Never transmit the wrong memory.** Where reaching a memory takes more than
+  one command — selecting a bank first — the driver confirms the intermediate
+  state before triggering, and **abandons the transmission rather than play an
+  unconfirmed memory.** Wrong audio on the air is worse than silence.
+- **Never transmit on connect**, exactly as for CW.
+
+> **Amended 2026-08-09.** The article covered CW only, which left the obvious
+> reading of "add voice keying" pointing at what every other logger does: play
+> WAV files from the computer. N1MM's own manual records where that leads for a
+> radio that has its own recorder — it documents that the program cannot know
+> when a radio's built-in recorder has finished, and therefore requires VOX,
+> cannot reliably abort with Esc, and cannot time an auto-CQ repeat. Every one
+> of those is a consequence of the audio living on the wrong side of the cable.
+> The Elecraft radios answer all three over CAT (`RX;`, `IC;` byte a bit B2, and
+> automatic PTT during message play), so the rule is written down before someone
+> reaches for a sound card on the next radio.
+
 ### Article 12 — Protocol provenance
 
 The driver's header comment names the document and revision it was written
@@ -405,6 +459,7 @@ A driver implements the whole `RadioDriver` surface, honestly:
 | `setMode(rawMode:)` | **Resolves `"SSB"` to the conventional sideband for the current frequency** — the driver owns the band plan, not the caller |
 | `setKeyerSpeed(wpm:)` | 8–50 WPM, sent immediately — never queued behind a message in flight |
 | `sendInternalKeyerText` / `stopInternalKeyer` | On `InternalKeyerDriver` only, and only for a radio with no key lines (Article 11) |
+| `VoiceMessageCapable` | Conformed to — with a real memory count and a real fitted/not-fitted answer — wherever the radio has on-board voice memories. Never sound-card audio (Article 11) |
 
 Tests drive a **mock transport**: feed captured radio responses in, assert
 parsed `RadioState` out; assert the exact bytes the driver emits for a QSY, a

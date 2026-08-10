@@ -762,3 +762,39 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   (Sep 19; the sponsor says Sep 12) — bundled sponsor schedules always
   supersede calendar dates, which are used only for parties this app has no
   rules for, labeled as calendar-sourced.
+
+## Radio protocols — Elecraft voice memories
+
+Extracted and reasoned about in
+[`docs/research/k3_voice_keyer.md`](research/k3_voice_keyer.md). All fetched
+2026-08-09.
+
+- **K3S/K3/KX3/KX2 Programmer's Reference, Rev. G5, Feb. 20 2019** —
+  <https://ftp.elecraft.com/KX2/Manuals%20Downloads/K3S&K3&KX3&KX2%20Pgmrs%20Ref,%20G5.pdf>
+  Authority for every command byte and switch code: `SWT`/`SWH` Tables 7, 8 and
+  8A, `RX`, `IC` Table 4, `OM`. The same revision the driver already cited for
+  `IF`/`FA`/`MD`/`KS`/`KY`. Its `OM` entry reserves the K3's trailing dashes
+  "for future module letters and product ID", which is why `parseOM` will not
+  read a recorder-equipped K3 as a KX however those bytes are filled.
+- **K3 Owner's Manual, Rev. D10** —
+  <https://ftp.elecraft.com/K3/Manuals%20Downloads/E740107%20K3%20Owner's%20man%20D10.pdf>
+  Front-panel semantics: what M1–M4 mean, and the `CONFIG:KDVR3` note that
+  playing a transmit message asserts PTT by itself.
+- **KDVR3 Option Installation, Rev. C** —
+  <https://ftp.elecraft.com/K3S/Manuals%20Downloads/E740130%20KDVR3%20Option%20Installation%20Rev%20C.pdf>
+  Authority for the K3's memory count: 2 banks of 4.
+- **KX3 Owner's Manual, Rev. C5** —
+  <https://ftp.elecraft.com/KX3/Manuals%20Downloads/E740163%20KX3%20Owner's%20man%20Rev%20C5.pdf>
+  Two memories; played by tapping MSG then the digit.
+- **KX2 Owner's Manual, Rev. B2** —
+  <https://ftp.elecraft.com/KX2/Manuals%20Downloads/KX2%20owner's%20man%20B2.pdf>
+  Identical two-memory behaviour.
+
+The reference alone was not enough: it gives the switch codes but never says
+what a switch *means*, and documents no memory counts at all. Selecting a KX
+memory needs both — the owner's manual for the two-keystroke sequence, the
+reference for each keystroke's code.
+
+The N1MM Logger+ manual was read for interaction precedent and is cited in the
+research file. Per Article 1 it is authority for nothing here, and no byte in
+the driver comes from it.

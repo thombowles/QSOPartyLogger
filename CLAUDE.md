@@ -22,7 +22,8 @@ The non-negotiables, so they are never a surprise:
    scoring identically. Structural refactors are their own party-free commit.
 5. **Direct DTR/RTS CW keying is the preferred keying path** — the radio's
    internal keyer is a fallback, and never the default where control lines exist.
-   Never key on connect.
+   **Voice is the mirror image: phone messages play from the radio's own voice
+   memories, never as audio streamed from the Mac.** Never key on connect.
 6. **One party, or one radio, per commit.** A scoring regression must bisect to a
    single sponsor's rules.
 7. **Verification is by test, build, and log — never by looking.** Report the

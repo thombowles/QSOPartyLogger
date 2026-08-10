@@ -7,9 +7,9 @@ struct MainView: View {
 
     @State private var settings = AppSettings.shared
     @State private var radio = RadioController()
-    /// Everything the radio keys goes through here. This view builds the
-    /// context, calls the flow, and hands the returned text to the radio — it
-    /// never decides what that text is.
+    /// Everything the radio puts on the air goes through here. This view builds
+    /// the context, calls the flow, and hands the returned transmission to the
+    /// radio — it never decides what that transmission is.
     @State private var flow: EntryFlow
     @FocusState private var focusedField: EntryBar.Field?
 
@@ -83,8 +83,26 @@ struct MainView: View {
             freqKHz: radio.radioState?.frequencyKHz,
             radioConnected: radio.isConnected,
             cursor: esmCursor,
-            keying: settings.keying
+            keying: settings.keying,
+            voiceMemoryCount: radio.voiceStatus.memoryCount
         )
+    }
+
+    /// What the messages row draws for F1–F8 right now. Built here rather than
+    /// in the row so the row never has to know which mode class is live.
+    private var messageKeys: [MessagesRow.MessageKey] {
+        let context = operatingContext
+        return (0..<8).map { index in
+            switch flow.transmission(at: index, context: context) {
+            case .cw(let text):
+                MessagesRow.MessageKey(caption: text, isActive: true)
+            case .voice(_, let caption):
+                MessagesRow.MessageKey(caption: caption, isActive: true)
+            case .silent:
+                MessagesRow.MessageKey(caption: context.modeClass == .phone ? "—" : "",
+                                       isActive: false)
+            }
+        }
     }
 
     /// The document owns the mode so it survives a reopen. Writes go straight
@@ -127,7 +145,8 @@ struct MainView: View {
                            locationProvider: locationProvider)
             }
             .sheet(isPresented: $showMessagesEditor) {
-                MessagesEditor(document: document, settings: settings)
+                MessagesEditor(document: document, settings: settings,
+                               voiceStatus: radio.voiceStatus, voiceBank: radio.voiceBank)
             }
             .sheet(isPresented: $showSelfSpot) {
                 if let party, let source = party.hubSpots {
@@ -292,10 +311,11 @@ struct MainView: View {
 
             MessagesRow(
                 operatingMode: operatingMode,
-                messages: flow.activeMessages,
-                expand: { flow.expandMacros($0, context: operatingContext) },
+                keys: messageKeys,
                 onSend: sendMessageAt,
-                enabled: radio.isConnected && currentModeClass == .cw,
+                enabled: radio.isConnected
+                    && (currentModeClass == .cw
+                        || (currentModeClass == .phone && radio.voiceStatus.isReady)),
                 pendingIndex: pendingMessageIndex,
                 repeatEnabled: $repeatCQ,
                 repeatInterval: $settings.repeatIntervalSeconds,
@@ -939,13 +959,16 @@ struct MainView: View {
     /// Mode changes (radio or manual): swap pre-filled RST defaults
     /// (599 ↔ 59) and re-check validation/dupes for the new mode.
     private func modeChanged() {
+        // A repeat started on CW must not keep running after a switch to phone,
+        // where F1 means a different thing entirely.
+        if repeatCQ { stopRepeat() }
         flow.modeChanged(operatingContext)
     }
 
     /// Return key. The flow decides what happens and what goes on the air; this
     /// only carries the decision out to the radio, the focus ring and the setup
-    /// sheet. Nothing here may re-expand a message — expansion order is exactly
-    /// what the flow exists to pin down.
+    /// sheet. Nothing here may re-resolve a message — resolution order is
+    /// exactly what the flow exists to pin down.
     private func returnPressed() {
         apply(flow.returnPressed(operatingContext, undoManager: undoManager))
     }
@@ -954,15 +977,37 @@ struct MainView: View {
         switch outcome {
         case .qsy(let command):
             execute(command)
-        case .send(let index, let text):
-            keyed(text, fromMessageAt: index)
-        case .logged(let rows, let text):
+        case .send(let index, let transmission):
+            sent(transmission, fromMessageAt: index)
+        case .logged(let rows, let transmission):
             addWorkedStationsToBandMap(rows)
             focusedField = .call
-            if !text.isEmpty { radio.sendCW(text, settings: settings) }
+            transmit(transmission)
         case .needsSetup:
             showSetup = true
         case .nothing:
+            break
+        }
+    }
+
+    private func sent(_ transmission: EntryFlow.Transmission, fromMessageAt index: Int) {
+        // F1 in Run mode is the CQ — remember where we're running from.
+        if operatingMode.wrappedValue == .run, index == 0 {
+            captureCQFrequency()
+        }
+        transmit(transmission)
+    }
+
+    /// The one place a resolved transmission reaches the radio. Nothing here
+    /// may re-resolve a message — resolution order is exactly what the flow
+    /// exists to pin down.
+    private func transmit(_ transmission: EntryFlow.Transmission) {
+        switch transmission {
+        case .cw(let text):
+            radio.sendCW(text, settings: settings)
+        case .voice(let memory, let caption):
+            radio.playVoiceMessage(memory: memory, caption: caption)
+        case .silent:
             break
         }
     }
@@ -981,14 +1026,6 @@ struct MainView: View {
                                      mode: operatingMode.wrappedValue) {
             spotStore.addIfAbsent(spot)
         }
-    }
-
-    private func keyed(_ text: String, fromMessageAt index: Int) {
-        // F1 in Run mode is the CQ — remember where we're running from.
-        if operatingMode.wrappedValue == .run, index == 0 {
-            captureCQFrequency()
-        }
-        radio.sendCW(text, settings: settings)
     }
 
     /// Only the call and exchange fields change what Return does; the signal
@@ -1013,10 +1050,9 @@ struct MainView: View {
     }
 
     private func sendMessageAt(_ index: Int) {
-        let context = operatingContext
-        let message = flow.expandedMessage(at: index, context: context)
-        guard !message.isEmpty else { return }
-        keyed(message, fromMessageAt: index)
+        let transmission = flow.transmission(at: index, context: operatingContext)
+        guard transmission != .silent else { return }
+        sent(transmission, fromMessageAt: index)
     }
 
     // MARK: Typed QSY commands + spot tuning
@@ -1306,28 +1342,71 @@ struct MainView: View {
 
     private func startRepeat() {
         repeatTask?.cancel()
-        guard radio.isConnected, currentModeClass == .cw else {
+        let voiceReady = currentModeClass == .phone && radio.voiceStatus.isReady
+        guard radio.isConnected, currentModeClass == .cw || voiceReady else {
             repeatCQ = false
             return
         }
-        let cq = document.log.messages.run.first ?? ""
-        guard !cq.isEmpty else {
+        // F1 in Run is the CQ, in whichever mode class is live.
+        let transmission = flow.transmission(at: 0, context: operatingContext)
+        guard transmission != .silent else {
             repeatCQ = false
             return
         }
         captureCQFrequency()
         repeatTask = Task {
             while !Task.isCancelled && repeatCQ {
-                let text = flow.expandMacros(cq, context: operatingContext)
-                radio.sendCW(text, settings: settings)
-                let onAir = radio.estimatedSendDuration(text, settings: settings)
-                let wait = onAir + settings.repeatIntervalSeconds
+                // Re-resolve each pass: the CW macros expand against live entry
+                // state, and the mapping may have been edited between repeats.
+                let outgoing = flow.transmission(at: 0, context: operatingContext)
+                transmit(outgoing)
+                await waitForEndOfTransmission(outgoing)
                 do {
-                    try await Task.sleep(nanoseconds: UInt64(wait * 1_000_000_000))
+                    try await Task.sleep(
+                        nanoseconds: UInt64(settings.repeatIntervalSeconds * 1_000_000_000))
                 } catch {
                     break
                 }
             }
+        }
+    }
+
+    /// How long to hold before the next repeat. CW is estimated from the text
+    /// and the speed; voice is not estimated at all — the radio reports when a
+    /// message stops, which is exactly what other loggers cannot do for a
+    /// radio's own recorder, and why their repeat interval has to be hand-tuned.
+    private func waitForEndOfTransmission(_ transmission: EntryFlow.Transmission) async {
+        switch transmission {
+        case .cw(let text):
+            let onAir = radio.estimatedSendDuration(text, settings: settings)
+            try? await Task.sleep(nanoseconds: UInt64(onAir * 1_000_000_000))
+        case .voice:
+            await waitForVoicePlaybackToFinish()
+        case .silent:
+            break
+        }
+    }
+
+    /// Wait for the radio to start, then finish, playing. Only the *start* half
+    /// is bounded — 2 s, since `IC` is polled every 0.5 s and a short message
+    /// can begin and end between polls, in which case this falls through to
+    /// the repeat interval rather than wait for a start it already missed.
+    ///
+    /// The *finish* half has no deadline: it holds for as long as
+    /// `radio.isVoicePlaying` keeps reading true, so a link that dies without
+    /// the transport noticing would stall it. Accepted rather than closed
+    /// because Esc, a disconnect, or a mode change all cancel the repeat task
+    /// this runs under regardless of what the radio is reporting, and every
+    /// iteration awaits 100 ms, so the wait sits at a light 10 Hz poll rather
+    /// than busy-looping while it lasts.
+    private func waitForVoicePlaybackToFinish() async {
+        let startDeadline = Date().addingTimeInterval(2)
+        while !radio.isVoicePlaying, Date() < startDeadline, !Task.isCancelled {
+            try? await Task.sleep(nanoseconds: 100_000_000)
+        }
+        guard radio.isVoicePlaying else { return }
+        while radio.isVoicePlaying, !Task.isCancelled {
+            try? await Task.sleep(nanoseconds: 100_000_000)
         }
     }
 
@@ -1430,7 +1509,7 @@ struct MainView: View {
             )
 
             if response.stopsRepeat { stopRepeat() }
-            if response.abortsCW { radio.abortCW(settings: settings) }
+            if response.abortsTransmission { radio.abortTransmission(settings: settings) }
             if let action = response.action { perform(action) }
             return response.consumesEvent ? nil : event
         }
@@ -1459,10 +1538,10 @@ struct MainView: View {
         case .toggleBandMap: toggleBandMap()
         case .sendMessage(let index): sendMessageAt(index)
         case .clearEntry: clearEntry()
-        // The gate hoists Esc into `Response.abortsCW` — which every key does
-        // during a repeat — so this never arrives here. It keeps the table
-        // exhaustive.
-        case .abortCW: radio.abortCW(settings: settings)
+        // The gate hoists Esc into `Response.abortsTransmission` — which every
+        // key does during a repeat — so this never arrives here. It keeps the
+        // table exhaustive.
+        case .abortTransmission: radio.abortTransmission(settings: settings)
         case .exportADIF: exportADIF()
         case .exportCabrillo: exportCabrillo()
         }

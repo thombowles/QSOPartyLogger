@@ -143,4 +143,43 @@ final class MessagesDraftTests: XCTestCase {
         let stored = MessageSets.defaults(for: cqp)
         XCTAssertEqual(MessagesDraft(stored).edited, stored)
     }
+
+    // MARK: Phone (voice memory) mappings
+
+    func testDraftRoundTripsPhoneMappings() {
+        var draft = MessagesDraft(.standard)
+        draft[voice: .run, 3] = 6
+        XCTAssertEqual(draft[voice: .run, 3], 6)
+        XCTAssertEqual(draft.edited.phoneRun[3], 6)
+        // The other set is untouched — Run and S&P map independently.
+        XCTAssertNil(draft.edited.phoneSearchPounce[3])
+    }
+
+    func testDraftRoundTripsMemoryNames() {
+        var draft = MessagesDraft(.standard)
+        draft.setVoiceMemoryName("59 BELL", at: 1)
+        XCTAssertEqual(draft.edited.voiceMemoryCaption(2), "M2 59 BELL")
+    }
+
+    func testDraftIgnoresOutOfRangeWrites() {
+        var draft = MessagesDraft(.standard)
+        draft[voice: .run, 99] = 3
+        draft.setVoiceMemoryName("nope", at: 99)
+        XCTAssertEqual(draft.edited.phoneRun, MessageSets.defaultPhoneRun)
+        XCTAssertEqual(draft.edited.voiceMemoryNames, MessageSets.defaultVoiceMemoryNames)
+    }
+
+    /// Restore Defaults is whole-set on purpose — a half-restored set is a set
+    /// that disagrees with itself — and the phone side restores from constants,
+    /// since a party's exchange shape cannot change what is on a recording.
+    func testRestoreDefaultsAlsoRestoresThePhoneSide() {
+        var draft = MessagesDraft(.standard)
+        draft[voice: .run, 0] = 8
+        draft.setVoiceMemoryName("stale", at: 0)
+
+        draft.restoreDefaults(for: nil)
+
+        XCTAssertEqual(draft.edited.phoneRun, MessageSets.defaultPhoneRun)
+        XCTAssertEqual(draft.edited.voiceMemoryNames, MessageSets.defaultVoiceMemoryNames)
+    }
 }

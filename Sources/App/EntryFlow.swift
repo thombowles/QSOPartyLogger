@@ -40,11 +40,12 @@ extension AppSettings {
 /// left the whole suite green. See
 /// `docs/superpowers/specs/2026-07-25-keying-path-seam-design.md`.
 ///
-/// The rule that makes it testable: **this type never keys anything.** It
-/// returns the string it would key, and the caller hands that to the radio. A
-/// caller that has to be handed the text cannot key a different one, which is
-/// what closes the ordering bug — expanding a message after logging keys the
-/// *next* contact's number.
+/// The rule that makes it testable: **this type never transmits anything.** It
+/// returns the `Transmission` it would put on the air — expanded CW text, or a
+/// voice memory to play — and the caller hands that to the radio. A caller that
+/// has to be handed the resolved transmission cannot send a different one,
+/// which is what closes the ordering bug: resolving a message after logging
+/// keys the *next* contact's number.
 @MainActor
 @Observable
 final class EntryFlow {
@@ -109,6 +110,12 @@ final class EntryFlow {
         var radioConnected: Bool
         var cursor: ESM.Cursor
         var keying: KeyingSettings
+        /// How many voice memories the connected radio actually has, 0 for none.
+        /// A count rather than a Bool so `transmission(at:)` can tell an
+        /// unassigned key from one pointing past the end of this radio's
+        /// memories — the second is a mapping built for a different radio, and
+        /// must not fire a neighbouring recording.
+        var voiceMemoryCount: Int
 
         init(
             band: Band = .m20,
@@ -117,7 +124,8 @@ final class EntryFlow {
             freqKHz: Int? = nil,
             radioConnected: Bool = false,
             cursor: ESM.Cursor = .call,
-            keying: KeyingSettings = KeyingSettings()
+            keying: KeyingSettings = KeyingSettings(),
+            voiceMemoryCount: Int = 0
         ) {
             self.band = band
             self.modeClass = modeClass
@@ -126,22 +134,37 @@ final class EntryFlow {
             self.radioConnected = radioConnected
             self.cursor = cursor
             self.keying = keying
+            self.voiceMemoryCount = voiceMemoryCount
         }
+    }
+
+    /// What a message slot puts on the air.
+    ///
+    /// CW carries expanded text; a voice message carries a memory number,
+    /// because a recording has no text and no macro can reach inside one. The
+    /// caption rides along so the TX badge and the messages row cannot word the
+    /// same memory two different ways.
+    enum Transmission: Equatable {
+        case cw(String)
+        case voice(memory: Int, caption: String)
+        /// An empty CW slot, an unassigned phone key, or one pointing at a
+        /// memory this radio does not have.
+        case silent
     }
 
     /// What Return decided, for the caller to apply.
     ///
-    /// The keyed text rides in the value rather than going straight to the
-    /// radio, because the text *is* the thing under test.
+    /// The resolved `Transmission` rides in the value rather than going
+    /// straight to the radio, because what would go on the air *is* the thing
+    /// under test.
     enum Outcome: Equatable {
         /// "14025", "40M", "CW" in the call field: a QSY, not a contact.
         case qsy(EntryCommand)
-        /// Nothing was logged; `text` goes on the air.
-        case send(index: Int, text: String)
-        /// `rows` were appended and `text` goes out after them — expanded
-        /// *before* the append, which is the whole point. `text` is "" when the
-        /// slot is empty.
-        case logged(rows: [QSO], text: String)
+        /// Nothing was logged; `transmission` goes on the air.
+        case send(index: Int, transmission: Transmission)
+        /// `rows` were appended and `transmission` goes out after them —
+        /// resolved *before* the append, which is the whole point.
+        case logged(rows: [QSO], transmission: Transmission)
         /// The exchange is valid but the station has no location: Contest Setup
         /// has never run.
         case needsSetup
@@ -237,12 +260,34 @@ final class EntryFlow {
         return expandMacros(set[index], context: context)
     }
 
+    /// What F<index+1> would put on the air right now. `expandedMessage`
+    /// survives for its own tests and as this method's CW arm — the CW
+    /// preview itself now goes through `transmission`/`messageKeys` like
+    /// everything else that keys.
+    func transmission(at index: Int, context: Context) -> Transmission {
+        if context.modeClass == .phone {
+            guard context.voiceMemoryCount > 0 else { return .silent }
+            let memories = document.log.messages.voiceMemories(for: document.log.operatingMode)
+            guard memories.indices.contains(index), let memory = memories[index],
+                  (1...context.voiceMemoryCount).contains(memory) else { return .silent }
+            return .voice(memory: memory,
+                          caption: document.log.messages.voiceMemoryCaption(memory))
+        }
+        let text = expandedMessage(at: index, context: context)
+        return text.isEmpty ? .silent : .cw(text)
+    }
+
     // MARK: ESM
 
-    /// ESM only drives Return on CW with the radio connected — otherwise Return
-    /// is a plain log key.
+    /// ESM drives Return on CW, and on phone once the radio has voice memories
+    /// to play — otherwise Return is a plain log key.
     func esmDrivesReturn(_ context: Context) -> Bool {
-        context.keying.esmEnabled && context.radioConnected && context.modeClass == .cw
+        guard context.keying.esmEnabled, context.radioConnected else { return false }
+        switch context.modeClass {
+        case .cw: return true
+        case .phone: return context.voiceMemoryCount > 0
+        case .digital: return false
+        }
     }
 
     private var esmExchangeState: ESM.ExchangeState {
@@ -295,21 +340,21 @@ final class EntryFlow {
             // The cursor is never moved for you. Wherever it is, that is where
             // it stays, so a Return that called once calls again — Space is
             // what advances, when the operator decides the contact has.
-            let text = expandedMessage(at: index, context: context)
-            return text.isEmpty ? .nothing : .send(index: index, text: text)
+            let outgoing = transmission(at: index, context: context)
+            return outgoing == .silent ? .nothing : .send(index: index, transmission: outgoing)
 
         case .logAndSend(let index):
-            // Expand before logging: logging advances the entry to the next QSO
-            // number, so expanding afterwards would key a number one higher
+            // Resolve before logging: logging advances the entry to the next
+            // QSO number, so resolving afterwards would key a number one higher
             // than the one just written to the log — and the other station
             // would log that, putting both of us NIL.
             //
-            // This ordering is the 2026-07-25 bug. It is why the expansion
+            // This ordering is the 2026-07-25 bug. It is why the resolution
             // happens here rather than in the caller.
-            let pending = expandedMessage(at: index, context: context)
+            let pending = transmission(at: index, context: context)
             switch logContact(context, undoManager: undoManager) {
             case .logged(let rows, _):
-                return .logged(rows: rows, text: pending)
+                return .logged(rows: rows, transmission: pending)
             case let other:
                 // Nothing was logged — a missing location or an invalid
                 // exchange. Do not key a report for a contact that did not
@@ -409,7 +454,7 @@ final class EntryFlow {
         entry.clearForNextContact(modeClass: context.modeClass)
         // The call just left the field; no strip may outlive it.
         refreshSCPMatches()
-        return .logged(rows: rows, text: "")
+        return .logged(rows: rows, transmission: .silent)
     }
 
     // MARK: Entry housekeeping

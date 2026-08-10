@@ -97,7 +97,7 @@ enum KeyMonitorGate {
         case toggleBandMap
         case sendMessage(index: Int)
         case clearEntry
-        case abortCW
+        case abortTransmission
         case exportADIF
         case exportCabrillo
     }
@@ -120,7 +120,7 @@ enum KeyMonitorGate {
         }
         switch keyCode {
         case 111: return .clearEntry  // F12: wipe the entry and start over
-        case 53: return .abortCW  // Esc
+        case 53: return .abortTransmission  // Esc
         default: return nil
         }
     }
@@ -130,14 +130,17 @@ enum KeyMonitorGate {
     /// Everything the monitor does with a single key down, in the order it
     /// must happen: stop the loop, take the transmitter down, then dispatch.
     ///
-    /// `abortsCW` is the only place an abort is decided — `Action.abortCW`
-    /// never reaches `action`, so no caller can abort twice or abort *after*
-    /// starting the message the same keystroke asked for.
+    /// `abortsTransmission` is the only place an abort is decided —
+    /// `Action.abortTransmission` never reaches `action`, so no caller can
+    /// abort twice or abort *after* starting the message the same keystroke
+    /// asked for.
     struct Response: Equatable {
         /// Cancel a running repeat-CQ loop.
         var stopsRepeat = false
-        /// Force key and PTT up now, discarding whatever is on the air.
-        var abortsCW = false
+        /// Force key/PTT up and stop any voice memory now playing, discarding
+        /// whatever is on the air. Named for what it does, not for CW alone —
+        /// it has covered voice too since the K3 voice keyer landed.
+        var abortsTransmission = false
         /// The action to dispatch, once the transmitter is down.
         var action: Action?
         /// Swallow the event so it never reaches the focused control.
@@ -167,18 +170,18 @@ enum KeyMonitorGate {
         var response = Response()
         if repeatRunning {
             response.stopsRepeat = true
-            response.abortsCW = true
+            response.abortsTransmission = true
         }
 
         let mapped = action(keyCode: keyCode, command: command, shift: shift)
-        if mapped == .abortCW { response.abortsCW = true }
+        if mapped == .abortTransmission { response.abortsTransmission = true }
 
         // A sheet owns the keyboard: the abort above still stands, but the key
         // is never consumed and no action is dispatched, so Esc also closes the
         // sheet and F1–F8 cannot key a macro that is being edited.
         guard focus == .document else { return response }
 
-        if let mapped, mapped != .abortCW { response.action = mapped }
+        if let mapped, mapped != .abortTransmission { response.action = mapped }
         response.consumesEvent = mapped != nil
         return response
     }

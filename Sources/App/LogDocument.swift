@@ -236,7 +236,7 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
                 doc.updateMessages(old, undoManager: undoManager)
             }
         }
-        undoManager?.setActionName("Edit CW Messages")
+        undoManager?.setActionName("Edit Messages")
     }
 
     @MainActor

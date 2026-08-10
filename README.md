@@ -112,8 +112,8 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `Tab` | Walk every field, reports included — landing in one selects the S digit, so 599 → 579 is one keystroke |
 | `Tab` to **P2P park(s)** | During a POTA activation, the other station's park reference(s). Deliberately outside the `Space` cycle — most contacts aren't park-to-park — so `Space` from it returns to the call |
 | `F12` | Wipe the entry fields and start over |
-| `F1`–`F8` | Send CW message (Run or S&P set) |
-| `Esc` | Abort CW, stop repeat-CQ, close an open sheet — or, in the park picker's search box, clear it and close the results |
+| `F1`–`F8` | Send the message in that slot (Run or S&P set) — CW text on CW, the radio's own voice memory on phone. The button shows what it will send: the expanded text, or `M4 AGN?` |
+| `Esc` | Abort instantly — a CW message mid-character, or a voice memory mid-playback — stop repeat-CQ, close an open sheet — or, in the park picker's search box, clear it and close the results |
 | `↑` / `↓` | In the park picker: move through the results; `Return` adds the highlighted park |
 | Any key | While repeat-CQ is running: stop it and abort the CQ on the air, then do the key's own job |
 | `⌘=` / `⌘-` | CW speed ±2 WPM — takes effect mid-message (syncs to the radio) |
@@ -296,7 +296,9 @@ county grid groups by contest and then by state.
 ## Radio control and CW
 
 **Elecraft K3 / K3S / KX3 / KX2** over serial at 4800–38400 baud, with live
-frequency, mode and TX polling, and the band stamped onto each QSO.
+frequency, mode and TX polling, and the band stamped onto each QSO. The app asks
+which model answered and what options are fitted, so it knows how many voice
+memories the rig actually has before it offers you any.
 
 **QRP Labs QMX+ / QMX** over its USB serial port — the whole series, since they
 share one CAT manual. Same live frequency, mode and TX polling. The rig has no
@@ -335,6 +337,25 @@ QRP-sprint party trails the location with `{MEMBER}`, which keys `NR 13` for a
 member number and `5W` verbatim for a power. The editor
 warns you, with a one-key fix (⇧⌘R), when a message contradicts its party's
 exchange. Optional cut numbers (599 → 5NN, 40 → 4T). **Esc aborts instantly.**
+
+**Phone keys from the radio's own voice memories** — never audio streamed from
+the Mac. The app asks the radio what it has and reports the answer: 8 memories
+on a K3 with the KDVR3 recorder fitted, 2 on a KX3 or KX2. Without the recorder
+the F-keys simply go inert — captioned `—` and disabled on the main window —
+and the messages editor explains why. On phone the F-keys map to memories you
+choose, ESM steps through them exactly as it does on CW, `Esc` aborts playback,
+and Repeat CQ times itself off the radio's own end-of-message report rather
+than a guess. No VOX and no second interface are needed on the K3, which
+asserts PTT itself during playback.
+
+Record the memories from the radio's front panel — the app only plays them.
+Three things it cannot see, and so cannot warn you about: whether a memory
+holds a recording at all, whether you have re-recorded one since naming it
+here, and whether an M1–M4 button has been reassigned as a programmable
+function switch, which makes that memory unavailable for playback. Reaching
+memories 5–8 changes the radio's message bank and leaves it there, so the
+front panel's own buttons address that bank afterwards; the messages editor
+shows which bank the radio is in.
 
 ### Wiring a K3 for direct keying
 
@@ -707,10 +728,11 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2296 unit tests**, none of which need hardware or a network — no serial port,
+**2381 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3, QMX and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
-as a stone-deaf serial port), cluster login and telnet handling, call history
+as a stone-deaf serial port), the voice-memory bank sequence and its refusal to
+transmit a memory the radio has not confirmed, cluster login and telnet handling, call history
 parsing and its prefill priority chain, super check partial parsing, matching
 and its download client, spot parsing and filtering and navigation, the
 spotting policy, the band map scale and column stacking, the band plan, typed
