@@ -176,7 +176,13 @@ recordings in a voice mode.
 
 **All three are limits of a generic architecture, not of these radios**, and
 sources 1–5 close each one: `RX;` aborts, `IC;` bit B2 reports the end of
-playback, and the radio asserts PTT itself.
+playback, and on the K3 the radio asserts PTT itself.
+
+**The PTT point is banked for the K3 only.** Source 2's `CONFIG:KDVR3` entry is
+where it comes from; sources 4 and 5 make no PTT claim for the KX3 or KX2 either
+way. Do not restate it as a property of the family — it is one menu entry in one
+manual. Whether a KX needs VOX for message play is an open question nobody has
+had to answer yet, because the app does not manage PTT for any of them.
 
 ## Engine shapes to watch
 
