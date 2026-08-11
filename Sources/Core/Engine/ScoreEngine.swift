@@ -68,12 +68,17 @@ enum ScoreEngine {
         /// Set from the entrant's `MultRule.maxScoredMultipliers` where the
         /// party pays for fewer multipliers than it recognises (CQP: 58 of 63).
         var multiplierCap: Int?
+        /// Set from the entrant's `MultRule.multiplierFloor` — the count that
+        /// reaches the score never drops below it (FOBB's printed "Defaults
+        /// to … = 1"). 0 everywhere else, which is inert.
+        var multiplierFloor = 0
 
         /// Multipliers that reach the score. Every key is still tallied in
-        /// `multiplierKeys` — the cap limits what is paid for, not what counts
-        /// as worked, which is the sponsor's own distinction.
+        /// `multiplierKeys` — the cap limits what is paid for and the floor
+        /// holds the product up, neither changing what counts as worked,
+        /// which is the sponsors' own distinction.
         var multiplierCount: Int {
-            min(multiplierKeys.count, multiplierCap ?? .max)
+            max(min(multiplierKeys.count, multiplierCap ?? .max), multiplierFloor)
         }
 
         var total: Int {
@@ -114,6 +119,7 @@ enum ScoreEngine {
         let rule = log.myLocation.isInState ? party.multipliers.inState : party.multipliers.outState
         let wantedClasses = Set(rule.classes)
         result.multiplierCap = rule.maxScoredMultipliers
+        result.multiplierFloor = rule.multiplierFloor
         var dxCount = 0
 
         // Multipliers the party hands over without them being worked (PAQP's

@@ -404,6 +404,17 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
         var maxScoredMultipliers: Int? { maxScoredMultipliersRaw }
         private let maxScoredMultipliersRaw: Int?
 
+        /// The floor under the multiplier count that reaches the **score**,
+        /// where a sponsor's formula never lets the product zero out. FOBB
+        /// prints it in the scoring block — "(Defaults to [Total Contacts]
+        /// = 1 and [Number of Bumblebees] = 1)" — so a bee-less log with
+        /// contacts scores contacts × 1 × 3. Zero (the default everywhere)
+        /// is inert: max(n, 0) == n. An empty log still totals 0, because
+        /// `qsoPoints` is 0 — the sponsor's own calculator scored a 0-QSO
+        /// entry 0, not 3.
+        var multiplierFloor: Int { multiplierFloorRaw ?? 0 }
+        private let multiplierFloorRaw: Int?
+
         /// Multipliers credited outright, because the party's own exchange makes
         /// them unreachable by working anyone. PAQP 12.d: "EPA and WPA
         /// multipliers are automatically added during the rescore process —
@@ -448,6 +459,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
             countScope: CountScope,
             dxMultCap: Int? = nil,
             maxScoredMultipliers: Int? = nil,
+            multiplierFloor: Int? = nil,
             granted: [GrantedMultiplier]? = nil,
             activatedCountyMultiplier: ActivatedCountyMultiplier? = nil,
             dxCountsEntities: Bool? = nil
@@ -457,6 +469,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
             self.countScope = countScope
             self.dxMultCapRaw = dxMultCap
             self.maxScoredMultipliersRaw = maxScoredMultipliers
+            self.multiplierFloorRaw = multiplierFloor
             self.grantedRaw = granted
             self.activatedCountyMultiplier = activatedCountyMultiplier
             self.dxCountsEntitiesRaw = dxCountsEntities
@@ -466,6 +479,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
             case classes, homeStateCountsViaCounty, countScope, activatedCountyMultiplier
             case dxMultCapRaw = "dxMultCap"
             case maxScoredMultipliersRaw = "maxScoredMultipliers"
+            case multiplierFloorRaw = "multiplierFloor"
             case grantedRaw = "grantedMultipliers"
             case dxCountsEntitiesRaw = "dxCountsEntities"
         }
