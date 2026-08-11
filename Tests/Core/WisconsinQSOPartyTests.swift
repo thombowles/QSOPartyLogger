@@ -396,27 +396,38 @@ final class WisconsinQSOPartyTests: XCTestCase {
     /// overall. Pinned so the claim in the README and the notes stays true.
     ///
     /// Since the Skeeter Hunt landed, the claim is scoped to **state QSO
-    /// parties**: the four-hour QRP sprint is shorter than everything, holds
-    /// the overall superlative, and the notes say so.
+    /// parties**, and the two QRP sprints are excluded by name: the Skeeter
+    /// Hunt's single four-hour window holds the overall superlative, and
+    /// FOBB — the ARS sprint, added 2026-08-10 — **ties it per window**
+    /// while running twice a year, so its eight-hour total is longer than
+    /// WIQP's seven. Both are stated below rather than merely filtered out.
     func testItIsTheShortestTotalOperatingTimeOfAnyBundledStateParty() throws {
         func total(_ p: PartyDefinition) -> TimeInterval {
             (p.schedule ?? []).reduce(0) { $0 + $1.end.timeIntervalSince($1.start) }
         }
-        let sprint = try XCTUnwrap(PartyCatalog.party(id: "skeeter"))
-        XCTAssertEqual(total(sprint), 4 * 3600,
-                       "the sprint holds the overall superlative now")
+        func shortestWindow(_ p: PartyDefinition) -> TimeInterval? {
+            (p.schedule ?? []).map { $0.end.timeIntervalSince($0.start) }.min()
+        }
+        let sprints = ["skeeter", "fobb"]
+
+        let skeeter = try XCTUnwrap(PartyCatalog.party(id: "skeeter"))
+        XCTAssertEqual(total(skeeter), 4 * 3600,
+                       "the sprint holds the overall superlative")
+        let fobb = try XCTUnwrap(PartyCatalog.party(id: "fobb"))
+        XCTAssertEqual(shortestWindow(fobb), 4 * 3600, "it ties per window…")
+        XCTAssertEqual(total(fobb), 8 * 3600, "…but runs two of them a year")
 
         let mine = total(wiqp)
         XCTAssertEqual(mine, 7 * 3600)
         for party in PartyCatalog.loadBundled()
-        where party.id != "wiqp" && party.id != "skeeter" {
+        where party.id != "wiqp" && !sprints.contains(party.id) {
             guard !(party.schedule ?? []).isEmpty else { continue }
             XCTAssertGreaterThan(total(party), mine,
                                  "\(party.id) runs no longer than WIQP overall")
         }
         // ...and the claim is specifically NOT about single windows.
         let shortestElsewhere = PartyCatalog.loadBundled()
-            .filter { $0.id != "wiqp" && $0.id != "skeeter" }
+            .filter { $0.id != "wiqp" && !sprints.contains($0.id) }
             .flatMap { $0.schedule ?? [] }
             .map { $0.end.timeIntervalSince($0.start) }
             .min()

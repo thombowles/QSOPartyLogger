@@ -18,10 +18,11 @@ final class CallHistorySourceTests: XCTestCase {
         XCTAssertEqual(source.token, "QSOPARTY AL")
     }
 
-    /// 46 of the 49 bundled parties have a source upstream — 45 on the N1MM
-    /// listing plus the Skeeter Hunt's sponsor roster page. A party joining
-    /// or leaving this set changes what the app downloads, so it must be a
-    /// deliberate edit backed by a regenerated mapping — never incidental.
+    /// 47 of the 50 bundled parties have a source upstream — 45 on the N1MM
+    /// listing plus two sponsor rosters (the Skeeter Hunt's sheet and FOBB's
+    /// report). A party joining or leaving this set changes what the app
+    /// downloads, so it must be a deliberate edit backed by a regenerated
+    /// mapping — never incidental.
     func testExactlyThreePartiesHaveNoCallHistoryFile() {
         let without = PartyCatalog.loadBundled()
             .filter { $0.callHistory == nil }
@@ -30,16 +31,23 @@ final class CallHistorySourceTests: XCTestCase {
         XCTAssertEqual(without, ["azqp", "mdc", "vtqp"],
                        "no QSOP_AZ, QSOP_MD/MDC or QSOP_VT file exists in the "
                        + "504-file inventory of 2026-07-28")
-        XCTAssertEqual(PartyCatalog.loadBundled().count - without.count, 46)
+        XCTAssertEqual(PartyCatalog.loadBundled().count - without.count, 47)
     }
 
-    /// The one non-N1MM source: the Skeeter Hunt roster, discovered from the
-    /// sponsor page because its sheet id changes every season.
+    /// The two non-N1MM sources, each a sponsor's own roster: the Skeeter
+    /// Hunt's, discovered from the blog page because its sheet id changes
+    /// every season, and FOBB's, fetched straight from a report URL that
+    /// does not change.
     func testOnlyTheSkeeterHuntUsesARosterPage() {
         let rosters = PartyCatalog.loadBundled()
             .filter { $0.callHistory?.kind == .w2ljRosterPage }
             .map(\.id)
         XCTAssertEqual(rosters, ["skeeter"])
+
+        let reports = PartyCatalog.loadBundled()
+            .filter { $0.callHistory?.kind == .arsFobbRoster }
+            .map(\.id)
+        XCTAssertEqual(reports, ["fobb"])
         for party in PartyCatalog.loadBundled()
         where party.callHistory?.kind == .n1mm {
             XCTAssertNil(party.callHistory?.pageURL,

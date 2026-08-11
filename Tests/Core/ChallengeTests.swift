@@ -20,10 +20,12 @@ final class ChallengeTests: XCTestCase {
         // in7qpne is a combined ENTRY, not a contest the Challenge tracks;
         // NAQP is not a state QSO party at all and is deliberately absent
         // (KE5CW: "they do not count in the state qso party challenge"), and
-        // the Skeeter Hunt is a club QRP sprint outside it the same way.
+        // the Skeeter Hunt and FOBB are club QRP sprints outside it the same
+        // way.
         XCTAssertEqual(
             Set(mapped),
-            bundledIDs.subtracting(["meqp", "in7qpne", "naqpcw", "naqpssb", "skeeter"]))
+            bundledIDs.subtracting(
+                ["meqp", "in7qpne", "naqpcw", "naqpssb", "skeeter", "fobb"]))
 
         XCTAssertNil(calendar.approvedContests.first { $0.name.localizedCaseInsensitiveContains("maine") })
         XCTAssertEqual(calendar.contest(partyID: "njqp")?.name, "New Jersey QSO Party")

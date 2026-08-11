@@ -60,11 +60,13 @@ final class NoCountyPartyTests: XCTestCase {
         XCTAssertTrue(party.validEntrantTokens.contains("ON"))
     }
 
-    /// The parties that genuinely enumerate nothing — the Skeeter Hunt is
-    /// the first and only, its multipliers being entirely the standard
-    /// tables. A party shipping empty joins this roster deliberately.
+    /// The parties that genuinely enumerate nothing: the Skeeter Hunt, whose
+    /// multipliers are entirely the standard tables, and FOBB, whose S/P/C
+    /// is validated against those tables and multiplies nothing at all. A
+    /// party shipping empty joins this roster deliberately.
     func testWhichBundledPartiesHaveNoCounties() {
-        let empty = PartyCatalog.loadBundled().filter(\.counties.isEmpty).map(\.id)
-        XCTAssertEqual(empty, ["skeeter"])
+        let empty = PartyCatalog.loadBundled()
+            .filter(\.counties.isEmpty).map(\.id).sorted()
+        XCTAssertEqual(empty, ["fobb", "skeeter"])
     }
 }
