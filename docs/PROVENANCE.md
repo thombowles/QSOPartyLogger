@@ -92,6 +92,35 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   Cabrillo name and the sponsor accepts no log files — `SKEETER-HUNT` is
   this app's own header. Research write-up:
   [`skeeter_rules.md`](research/skeeter_rules.md).
+
+- fobb (ARS Flight of the Bumblebees): rules from the sponsor's own page
+  (ars-qrp.com/FOBB/FOBB.html), fetched 2026-08-10 and banked as
+  [`fobb_rules_2026.txt`](research/fobb_rules_2026.txt). One page carries
+  both annual runnings; at fetch it was headed for the Fall event
+  ("Sunday, September 20, 2026"), and its only revision marker is a
+  "Last Updated : 27JUL26" footer — it is edited in place, so **re-check
+  before each running**. Its HTML `<title>` still reads 2024: never take a
+  date from it. The **July running's printed date** comes from the Internet
+  Archive's capture of the same URL three days before that event (snapshot
+  20260723202047, "Sunday, July 26, 2026"), banked as
+  [`fobb_rules_2026_july_wayback.txt`](research/fobb_rules_2026_july_wayback.txt);
+  every rule is identical between the two captures. The score formula **is**
+  printed, and is additionally corroborated by the results venue the rules
+  designate by name: all 90 rows of the July 2026 claimed scores at
+  3830scores.com (`editionscores.php?arg=RvJxJizV77DLxU`, fetched
+  2026-08-10, banked as
+  [`fobb_3830_claimed_2026-07.csv`](research/fobb_3830_claimed_2026-07.csv))
+  satisfy Contacts × Bumblebees × 3 exactly, and
+  [`gen_fobb.py`](research/gen_fobb.py) re-verifies them. The Bumblebee
+  roster is the sponsor's self-serve report at a **stable** URL
+  (ars-qrp.com/FOBB/Process_Get_All_By_Number.php, fetched 2026-08-10,
+  banked as [`fobb_roster_page_2026-07.html`](research/fobb_roster_page_2026-07.html)
+  and [`fobb_roster_2026-07.csv`](research/fobb_roster_2026-07.csv) — 234
+  numbers, of which 233 carry a callsign), so no discovery hop is needed;
+  numbers are reissued per event. The WA7BNM registry has no Cabrillo name
+  (checked 2026-08-10) and the sponsor accepts no log files at all —
+  `ARS-FOBB` is this app's own header. Research write-up:
+  [`fobb_rules.md`](research/fobb_rules.md).
 - Cabrillo V3 header values — the `CATEGORY-*` enumerations (including
   `CATEGORY-ASSISTED`), the `OPERATORS:` `@host` convention, and
   `GRID-LOCATOR:` — from the WWROF Cabrillo specification
