@@ -490,4 +490,129 @@ final class CallHistoryClientTests: XCTestCase {
         }
         XCTAssertTrue(message.contains("changed shape"), message)
     }
+
+    // MARK: The stable-report kind (ARS Flight of the Bumblebees)
+
+    /// A synthetic party carrying the report kind — one GET and no
+    /// discovery hop, the whole difference from the sheet kind above.
+    private func reportParty(
+        pageURL: String = "https://sponsor.test/FOBB/Process_Get_All_By_Number.php"
+    ) throws -> PartyDefinition {
+        let json = """
+        {"schemaVersion":1,"id":"rr","name":"RR","cabrilloContest":"RR","homeState":"NA",
+        "countyAbbrLength":2,"validBands":["40m"],"points":{"phone":1,"cw":1,"digital":1},
+        "dupeScope":"bandMode","hasHomeRegion":false,
+        "multipliers":{"inState":{"classes":["state"],"homeStateCountsViaCounty":false,"countScope":"once"},
+        "outState":{"classes":["state"],"homeStateCountsViaCounty":false,"countScope":"once"}},
+        "bonuses":[],"counties":[],
+        "callHistory":{"kind":"arsFobbRoster","pageURL":"\(pageURL)",
+        "filePrefix":"FOBB","token":"FOBB ROSTER"}}
+        """
+        return try PartyCatalog.decode(Data(json.utf8))
+    }
+
+    /// The report's own markup: headings wrapped in <font>, data cells bare.
+    private let reportHTML = """
+    <table><tr>
+    <td> <font face="Arial">BB</font> </td>
+    <td> <font face="Arial">Callsign</font> </td>
+    <td> <font face="Arial">Name</font> </td>
+    <td> <font face="Arial">SPC</font> </td>
+    <td> <font face="Arial">Expected Location</font> </td>
+    </tr><tr>
+    <td>7</td><td>W4KAC</td><td>Ken</td><td>NC</td><td>Family farm</td>
+    </tr><tr>
+    <td>23</td><td>N7CQR</td><td>Dan</td><td>OR</td><td>A hilltop</td>
+    </tr></table>
+    """
+
+    func testFOBBRosterInstallsFromTheReportPage() async throws {
+        fetcher.getResponses = [("sponsor.test", 200, Data(reportHTML.utf8))]
+        await client.refreshIfStale(party: try reportParty(), now: now)
+
+        XCTAssertEqual(published.map(\.partyID), ["rr"])
+        // Two bees, each under its bare call and its /BB form.
+        XCTAssertEqual(published.map(\.records), [4])
+        guard case .ready(let id, let revision, let records) = client.status else {
+            return XCTFail("expected ready, got \(client.status)")
+        }
+        XCTAssertEqual(id, "rr")
+        XCTAssertEqual(records, 4)
+        XCTAssertTrue(revision.hasPrefix("roster "), revision)
+
+        let cached = try XCTUnwrap(store.loadCached(partyID: "rr"))
+        XCTAssertEqual(cached.parsed.entry(for: "W4KAC")?.locations, ["7", "NC"])
+        XCTAssertEqual(cached.parsed.entry(for: "W4KAC/BB")?.locations, ["7", "NC"])
+        XCTAssertTrue(
+            cached.parsed.tokens.contains(CallHistorySource.normalized("FOBB ROSTER")))
+
+        // One request, straight to the report — there is nothing to discover.
+        XCTAssertEqual(fetcher.requests.count, 1, "\(fetcher.requests)")
+    }
+
+    func testFOBBRosterKeepsTheCacheOnHTTPFailure() async throws {
+        fetcher.getResponses = [("sponsor.test", 200, Data(reportHTML.utf8))]
+        let party = try reportParty()
+        await client.refreshIfStale(party: party, now: now)
+
+        fetcher.getResponses = [("sponsor.test", 503, Data())]
+        await client.refreshIfStale(
+            party: party, now: now.addingTimeInterval(60), force: true)
+
+        guard case .failed(let message) = client.status else {
+            return XCTFail("expected a failure, got \(client.status)")
+        }
+        XCTAssertTrue(message.contains("answered 503"), message)
+        XCTAssertNotNil(store.loadCached(partyID: "rr"),
+                        "the cached roster stays in service")
+    }
+
+    func testFOBBRosterRefusesDriftedMarkup() async throws {
+        fetcher.getResponses = [
+            ("sponsor.test", 200, Data("<html><p>maintenance</p></html>".utf8)),
+        ]
+        await client.refreshIfStale(party: try reportParty(), now: now)
+
+        guard case .failed(let message) = client.status else {
+            return XCTFail("expected a failure, got \(client.status)")
+        }
+        XCTAssertTrue(message.contains("changed shape"), message)
+        XCTAssertNil(store.loadCached(partyID: "rr"), "nothing was installed")
+    }
+
+    /// Numbers issue until the event, so there is no revision to compare
+    /// against — the daily throttle alone paces it, and Refresh overrides.
+    func testFOBBRosterHoldsToTheThrottleAndForceBypassesIt() async throws {
+        fetcher.getResponses = [("sponsor.test", 200, Data(reportHTML.utf8))]
+        let party = try reportParty()
+        await client.refreshIfStale(party: party, now: now)
+        XCTAssertEqual(fetcher.requests.count, 1)
+
+        await client.refreshIfStale(party: party, now: now.addingTimeInterval(3600))
+        XCTAssertEqual(fetcher.requests.count, 1,
+                       "within the day, the sponsor's site is left alone")
+
+        await client.refreshIfStale(party: party, now: now.addingTimeInterval(90_000))
+        XCTAssertEqual(fetcher.requests.count, 2,
+                       "a day later it re-downloads, with nothing to compare")
+
+        await client.refreshIfStale(
+            party: party, now: now.addingTimeInterval(90_060), force: true)
+        XCTAssertEqual(fetcher.requests.count, 3, "Refresh is the operator's override")
+    }
+
+    /// A plain-HTTP page URL is upgraded here too — ATS refuses HTTP
+    /// outright, and the sponsor writes its own links however it likes.
+    func testFOBBRosterUpgradesAPlainHTTPPageURL() async throws {
+        fetcher.getResponses = [("sponsor.test", 200, Data(reportHTML.utf8))]
+        await client.refreshIfStale(
+            party: try reportParty(pageURL: "http://sponsor.test/FOBB/report.php"),
+            now: now)
+
+        XCTAssertEqual(published.map(\.records), [4])
+        XCTAssertTrue(
+            fetcher.requests.contains { $0.hasPrefix("GET https://sponsor.test") },
+            "\(fetcher.requests)")
+        XCTAssertFalse(fetcher.requests.contains { $0.contains("GET http://") })
+    }
 }

@@ -105,6 +105,8 @@ final class CallHistoryClient {
             await refreshFromListing(party: party, source: source, meta: meta, now: now)
         case .w2ljRosterPage:
             await refreshFromRosterPage(party: party, source: source, now: now)
+        case .arsFobbRoster:
+            await refreshFromFOBBRoster(party: party, source: source, now: now)
         }
     }
 
@@ -215,6 +217,80 @@ final class CallHistoryClient {
                 fromCSV: csv, token: source.token ?? source.filePrefix) else {
                 throw RefreshProblem(message:
                     "The roster sheet has changed shape — not reading it "
+                    + "until the app is updated. The cached roster, if any, "
+                    + "stays in use.")
+            }
+
+            let data = Data(converted.utf8)
+            guard let parsed = CallHistoryFile.parse(data: data),
+                  parsed.recordCount > 0,
+                  source.isDeclared(inCommentTokens: parsed.tokens) else {
+                throw RefreshProblem(message:
+                    "The converted roster came back empty — not installing it.")
+            }
+
+            let revision = "roster " + Self.dayStamp(now)
+            try store.save(
+                partyID: party.id,
+                data: data,
+                meta: CallHistoryStore.Meta(
+                    sourceFileName: revision,
+                    listedDate: Self.dayStamp(now),
+                    fetchedAt: now,
+                    lastCheckedAt: now
+                )
+            )
+            status = .ready(
+                partyID: party.id,
+                revision: revision,
+                records: parsed.recordCount
+            )
+            log("*** installed the roster — \(parsed.recordCount) stations")
+            onIndex?(party.id, parsed)
+        } catch let error as RefreshProblem {
+            fail(error.message)
+        } catch {
+            fail("Couldn't reach the sponsor's roster: "
+                 + "\(error.localizedDescription) The cached roster, if any, "
+                 + "stays in use.")
+        }
+    }
+
+    /// The FOBB arrangement: the sponsor's self-serve number report is one
+    /// HTML table at a stable URL, so there is no discovery hop — fetch the
+    /// report, convert, install. Live data (numbers issue until the event,
+    /// and the table resets for each running), so there is no
+    /// unchanged-revision short circuit; the once-a-day throttle alone paces
+    /// the re-download, exactly as for the roster-page kind above.
+    private func refreshFromFOBBRoster(
+        party: PartyDefinition,
+        source: CallHistorySource,
+        now: Date
+    ) async {
+        guard let pageURLString = source.pageURL,
+              let pageURL = URL(string: Self.secured(pageURLString)) else {
+            fail("This party's roster source names no page URL — "
+                 + "the definition is incomplete.")
+            return
+        }
+        status = .checking
+        lastError = nil
+        log("*** checking the sponsor's roster report")
+
+        do {
+            let (pageData, pageResponse) = try await fetcher.get(pageURL)
+            guard pageResponse.statusCode == 200,
+                  let pageHTML = String(data: pageData, encoding: .utf8) else {
+                throw RefreshProblem(message:
+                    "The roster page answered \(pageResponse.statusCode). "
+                    + "The cached roster, if any, stays in use.")
+            }
+            guard let converted = FOBBRosterParser.n1mmText(
+                fromHTML: pageHTML, token: source.token ?? source.filePrefix) else {
+                // Positional reads of somebody else's markup, so a redesign
+                // is not something to guess at — the listing parser's stance.
+                throw RefreshProblem(message:
+                    "The roster page has changed shape — not reading it "
                     + "until the app is updated. The cached roster, if any, "
                     + "stays in use.")
             }
