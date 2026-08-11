@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "fobb",
+  "name": "ARS Flight of the Bumblebees",
+  "cabrilloContest": "ARS-FOBB",
+  "homeState": "NA",
+  "countyAbbrLength": 2,
+  "validBands": [
+    "80m",
+    "40m",
+    "20m",
+    "15m",
+    "10m"
+  ],
+  "points": {
+    "phone": 3,
+    "cw": 3,
+    "digital": 3
+  },
+  "dupeScope": "bandMode",
+  "multipliers": {
+    "inState": {
+      "classes": [
+        "member"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBand",
+      "multiplierFloor": 1
+    },
+    "outState": {
+      "classes": [
+        "member"
+      ],
+      "homeStateCountsViaCounty": false,
+      "countScope": "perBand",
+      "multiplierFloor": 1
+    }
+  },
+  "bonuses": [],
+  "dxStyle": "prefix",
+  "acceptsDXToken": true,
+  "allowedModes": [
+    "cw"
+  ],
+  "maxSimultaneousCounties": 1,
+  "hasHomeRegion": false,
+  "memberExchange": {
+    "term": "Bumblebee number",
+    "shortTerm": "BB #",
+    "memberPlural": "Bumblebees",
+    "memberPoints": 3,
+    "qrpPoints": 3,
+    "otherPoints": 3,
+    "qrpMaxWatts": {
+      "phone": 5,
+      "cw": 5,
+      "digital": 5
+    }
+  },
+  "schedule": [
+    {
+      "start": "2026-07-26T17:00:00Z",
+      "end": "2026-07-26T21:00:00Z"
+    },
+    {
+      "start": "2026-09-20T17:00:00Z",
+      "end": "2026-09-20T21:00:00Z"
+    }
+  ],
+  "counties": [],
+  "notes": "Rules from the sponsor's own page: ars-qrp.com/FOBB/FOBB.html, read live and fetched 2026-08-10 ('Last Updated : 27JUL26'), headed for the next running - 'Fall Flight of the Bumblebees / Sunday, September 20, 2026 / 1700 to 2100 UTC'. The July (Legacy) edition of the same page, captured by the Internet Archive on 2026-07-23 (snapshot 20260723202047), printed 'Legacy Flight of the Bumblebees / Sunday, July 26, 2026' with every rule identical. NOT A STATE QSO PARTY: a four-hour Adventure Radio Society QRP CW sprint held twice a year - 'held twice each Year - Annually on the last Sunday of July. - Annually on the 3rd Sunday in September' - and the event the NJQRP Skeeter Hunt was modelled on. BOTH 2026 WINDOWS SHIP (Article 19, target year only - the NAQP precedent for a twice-a-year contest): 2026-07-26 and 2026-09-20, each 1700-2100Z, both sponsor-printed. EXCHANGE IS RST + S/P/C + BUMBLEBEE NUMBER OR POWER OUTPUT ('If you are a Bumblebee: RST / Your State, Province, or Country / Your BB Number. If you are a Home Station: RST / Your State, Province, or Country / Your Power Output'). THE NUMBER IS WHAT MAKES A BUMBLEBEE CONTACT, NOT THE /BB SUFFIX: 'Bumblebees will put a /BB after their Call, and/or will give you a BB Number', and the POTA/SOTA note settles it - 'As long as a Bumblebee Number is sent in the Outgoing Exchange, that will be a valid FOBB Bumblebee Contact.' Log the call as sent, /BB and all, and type the number you copy; a station that sends no number is a home station whatever its suffix. EVERY VALID CONTACT PAYS THE SAME - the printed formula is '[Total Score] = [Total Contacts] x [Number of Bumblebees] x 3', and '[Total Contacts] includes both Bumblebees and non-Bumblebees' - carried here as 3 points per contact times the Bumblebee multiplier. THE MULTIPLIER IS BUMBLEBEES WORKED, COUNTED AGAIN ON EACH BAND: 'Working the same Bumblebee on a different band counts as an additional Contact and as an additional Bumblebee Worked.' THE S/P/C IS NOT A MULTIPLIER - no counting phrase attaches to it anywhere in the rules; it is exchanged and validated (the standard state and province tables plus DXCC prefixes, the C in S/P/C) and worth nothing, WHICH IS WHY THIS PARTY ENUMERATES NO LIST OF ITS OWN. THE MULTIPLIER NEVER DROPS BELOW ONE: '(Defaults to [Total Contacts] = 1 and [Number of Bumblebees] = 1)' - a log with contacts and no Bumblebee scores contacts x 1 x 3. DUPES: 'You can work each Bumblebee or Home Station once on each Band' - and with one legal mode, the app's band-x-mode dupe scope IS that rule, so nothing here is inferred. MODE IS CW ONLY, QRP: 'Open to all QRP CW operators', 'You run QRP CW - You can work Non-QRP Stations'; the power limits ('Participating FOBB Home Stations are expected to be running 5W QRP Maximum'; hunters over 5 W 'cannot Submit FOBB Results') are entry conditions, not categories, and never move a score here. BANDS 80/40/20/15/10, taken from the rules' TARGET SCENTS frequency list (3.566/7.036/14.036/21.036/28.036 '+/-'), the only bands the sponsor names. HOME vs BUMBLEBEE IS A REPORTING SPLIT on 3830scores.com ('Select 'Home' or 'Bumblebee' so that you end up in the proper Results List'), not a scoring class - same formula, separate lists. THE FORMULA WAS ALSO VERIFIED AGAINST THE SPONSOR-DESIGNATED CALCULATOR: all 90 rows of the July 2026 claimed-scores table on 3830scores.com satisfy Contacts x Bumblebees x 3 exactly - gen_fobb.py re-verifies from the banked table and refuses to build otherwise. THE ROSTER IS THE PREFILL SOURCE: the sponsor's self-serve Bumblebee number report at the stable URL ars-qrp.com/FOBB/Process_Get_All_By_Number.php (number, call, name, S/P/C), re-fetched through the call history machinery on the daily clock - 'Self-Serve Bumblebee Numbers Will Be Available Starting One Month Before the Event Date', and numbers issue until the event. Each bee is offered under both its bare call and its /BB form, since bees sign /BB on the air. Roster data is prefill only - Bumblebee credit comes from the number the station actually sends you, never from roster membership. verified: partial - one reading is unconfirmed by data, below, with what it costs. OPEN QUESTION 1: WHAT DOES A LOG WITH CONTACTS BUT NO BUMBLEBEES SCORE? The printed default says the multiplier is 1 (contacts x 3); the 3830 calculator's one observed zero row (K4UPG, 0 QSOs / 0 Bumblebees) computed 0, and no contacts-but-no-Bumblebees row has appeared to decide the case. This app follows the printed line - points x max(1, Bumblebees) - which also gives an empty log 0. If the sponsor's calculator instead zeroes a Bumblebee-less log, this app overstates it. KNOWN LIMITATION 1: THE CABRILLO CONTEST HEADER 'ARS-FOBB' IS THIS APP'S OWN INVENTION. The sponsor accepts no log files at all - results are self-reported totals on 3830scores.com ('You will enter your [Total Contacts] that you made and the [Number of Bumblebees] that you worked') - and the WA7BNM registry has no FOBB entry (checked 2026-08-10), so the header has no recipient anywhere; the export exists for your own records. The score sidebar keeps both numbers the form wants on screen: valid contacts, and Bumblebees as the multiplier count. KNOWN LIMITATION 2: BETWEEN EVENTS THE ROSTER PREFILLS THE PREVIOUS EVENT'S NUMBERS. 'Bumblebee Numbers are only valid for One FOBB Event' and are reissued each time, with self-serve opening a month before the event - so a number offered before the new event's roster opens can be a station's old one. Prefill is a hint: log the number the station sends.",
+  "callHistory": {
+    "kind": "arsFobbRoster",
+    "pageURL": "https://ars-qrp.com/FOBB/Process_Get_All_By_Number.php",
+    "filePrefix": "FOBB",
+    "token": "FOBB ROSTER"
+  },
+  "caveats": [
+    {
+      "kind": "ruleInference",
+      "summary": "A log with contacts but no Bumblebees scores contacts × 3 — the printed default; the sponsor’s calculator has never been observed on that case.",
+      "detail": "WHAT DOES A LOG WITH CONTACTS BUT NO BUMBLEBEES SCORE? The printed default says the multiplier is 1 (contacts x 3); the 3830 calculator's one observed zero row (K4UPG, 0 QSOs / 0 Bumblebees) computed 0, and no contacts-but-no-Bumblebees row has appeared to decide the case. This app follows the printed line - points x max(1, Bumblebees) - which also gives an empty log 0. If the sponsor's calculator instead zeroes a Bumblebee-less log, this app overstates it."
+    },
+    {
+      "kind": "cosmetic",
+      "summary": "The Cabrillo CONTEST header is this app’s invention — results are self-reported totals on 3830scores.com, which the sidebar’s numbers serve.",
+      "detail": "THE CABRILLO CONTEST HEADER 'ARS-FOBB' IS THIS APP'S OWN INVENTION. The sponsor accepts no log files at all - results are self-reported totals on 3830scores.com ('You will enter your [Total Contacts] that you made and the [Number of Bumblebees] that you worked') - and the WA7BNM registry has no FOBB entry (checked 2026-08-10), so the header has no recipient anywhere; the export exists for your own records. The score sidebar keeps both numbers the form wants on screen: valid contacts, and Bumblebees as the multiplier count."
+    },
+    {
+      "kind": "cosmetic",
+      "summary": "Between events the roster prefills the previous event’s numbers — log the number the station sends.",
+      "detail": "BETWEEN EVENTS THE ROSTER PREFILLS THE PREVIOUS EVENT'S NUMBERS. 'Bumblebee Numbers are only valid for One FOBB Event' and are reissued each time, with self-serve opening a month before the event - so a number offered before the new event's roster opens can be a station's old one. Prefill is a hint: log the number the station sends."
+    },
+    {
+      "kind": "provenance",
+      "summary": "Rules read from ars-qrp.com (fetched 2026-08-10); the page is edited in place, so re-check before each running — and ignore its stale HTML title."
+    }
+  ]
+}

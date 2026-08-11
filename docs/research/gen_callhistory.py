@@ -76,6 +76,17 @@ ROSTER_BLOCKS = {
         "filePrefix": "SKEETER",
         "token": "SKEETER ROSTER",
     },
+    # FOBB likewise has no N1MM file under any name (inventory grep
+    # 2026-08-10), and its roster is the sponsor's own self-serve number
+    # report — one HTML table at a URL that does not change, so there is no
+    # discovery hop to make. Numbers are reissued per event, so the app
+    # re-fetches on the daily clock.
+    "fobb": {
+        "kind": "arsFobbRoster",
+        "pageURL": "https://ars-qrp.com/FOBB/Process_Get_All_By_Number.php",
+        "filePrefix": "FOBB",
+        "token": "FOBB ROSTER",
+    },
 }
 
 
