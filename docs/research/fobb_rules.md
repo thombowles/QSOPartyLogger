@@ -38,7 +38,8 @@ next running is the **Fall** event, Sunday 2026-09-20.
   `BB | Callsign | Name | SPC | Expected Location`. Fetched 2026-08-10 (234
   numbers — the July event's roster still being served), banked raw as
   [`fobb_roster_page_2026-07.html`](fobb_roster_page_2026-07.html) and
-  extracted to [`fobb_roster_2026-07.csv`](fobb_roster_2026-07.csv).
+  extracted to [`fobb_roster_2026-07.csv`](fobb_roster_2026-07.csv) — 234
+  numbered rows, of which **233 carry a callsign** (§13).
   Sibling reports exist by SPC (`Process_Get_All_By_SPC.php`,
   `Process_SPC_Count.php`, `Form_Get_One_SPC.php`) and for number recovery
   (`Form_Get_One_Entry.php`); number problems go to
@@ -277,8 +278,11 @@ Skeeter's per-season Google Sheet. Shape of the banked July 2026 capture:
 header row `BB | Callsign | Name | SPC | Expected Location`; **234 assigned
 numbers**, all numbers unique; K2SQS is #1, W4KAC #7, K4KBL #234. Quirks
 the parser must survive, observed in the banked file: **one call under two
-numbers** (NN5DE — the Skeeter K3UT case), mixed-case free-text locations,
-and names ranging from a first name to full names. Numbers are **per-event
+numbers** (NN5DE — the Skeeter K3UT case); **one number with no callsign at
+all** (#50, whose call, name and SPC cells are empty — issued and never
+claimed, so 234 numbers yield **233 offerable stations**, and a row keyed on
+nothing must be dropped rather than indexed); mixed-case free-text
+locations; and names ranging from a first name to full names. Numbers are **per-event
 and reissued**: "Bumblebee Numbers are only valid for One FOBB Event. You
 must request a new sequentially issued BB Number for each ARS FOBB Event",
 with self-serve opening "One Month Before the Event Date" — so the table
