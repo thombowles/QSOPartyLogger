@@ -271,9 +271,16 @@ final class EntryState {
         switch ExchangeParser.parse(trimmedExchange, party: party, role: role) {
         case .success(let parsed):
             exchangeStatus = .valid(parsed.locations)
+            // The call and the member element ride along because a party may
+            // count the worked station itself as the multiplier (FOBB counts
+            // Bumblebees, again on each band), so the badge cannot be decided
+            // by the location alone. Both are inert for every other party.
+            let typedMember = memberRcvd.trimmingCharacters(in: .whitespaces)
             isNewMult = ScoreEngine.wouldAddMultiplier(
                 theirLocs: parsed.locations, band: band, modeClass: modeClass,
-                log: log, party: party
+                log: log, party: party,
+                call: callNormalized,
+                memberRcvd: typedMember.isEmpty ? nil : typedMember
             )
             updateDupeWarning(parsed: parsed, log: log, band: band, modeClass: modeClass)
         case .failure(let error):
