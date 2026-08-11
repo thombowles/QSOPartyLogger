@@ -1,0 +1,157 @@
+
+Adventure Radio Society Flight of the Bumblebees
+Overview & DETAILS
+FOR THE ADVENTURE RADIO SOCIETY
+Fall Flight of the Bumblebees
+Sunday, September 20, 2026
+1700 to 2100 UTC
+Goal: Have Fun making QRP CW
+Contacts
+What is the Flight of the Bumblebees and how can I
+participate?
+The Flight of the
+Bumblebees is a four-hour event held twice each Year
+- Annually on the last
+Sunday of July.
+- Annually on the 3rd
+Sunday in September. 
+Open
+to all QRP CW operators – there is no membership requirement.
+You
+run QRP CW – You can work Non-QRP Stations   
+(The “Bumblebees” are the stations that are operating out in the
+field).
+ZULU   1700 to 2100 EDST
+EASTERN   1300 to 1700 EDST
+CENTRAL   1200 to 1600 CDST
+MOUNTAIN  1100 to 1500 MDST
+PACIFIC   1000 to 1400 PDST
+WHO CAN PLAY?
+Home Based Stations and Portable QRP
+Stations
+TARGET SCENTS (FREQUENCIES) 
+80m : 
+3.566 +/-
+40m :  7.036 +/- 
+  20m : 
+14.036 +/-
+15m :  21.036 +/-
+10m :  28.036 +/
+(You
+can be anywhere – These are just suggested gathering spots)
+OPERATION
+Call  
+CQ BB     Or listen for calling stations and
+respond.
+Bumblebees will add /BB to their calls. 
+(NOTE:
+Home-based stations do not ever add /BB to their callsign.)
+EXCHANGE
+If you are a Bumblebee:
+- RST
+- Your State, Province, or Country
+- Your BB Number
+If you are a Home Station:
+- RST
+- Your State, Province, or Country
+- Your Power Output
+How do I know that I worked a Bumblebee?
+Bumblebees will put a /BB after their Call, and/or will give you
+a BB Number.
+Keep track of how many Bumblebee
+you work - that total will be needed. 
+WHAT COUNTS ?
+You can work each Bumblebee or Home Station once on each Band.
+Working the same Bumblebee on a different band counts as an
+additional Contact and as an additional Bumblebee Worked.
+So, try looking for Bumblebees on all of the bands that are open
+during this event.
+SELF-SERVE BUMBLEBEE NUMBERS
+If you plan to operate the FOBB as a
+Portable Field Station – you need a Bumblebee Number
+Bumblebee Numbers are only valid for One FOBB Event. 
+You must request a new sequentially issued BB Number for each
+ARS FOBB Event. 
+Get your Bumblebee Number here :
+* Self-Serve Bumblebee Numbers Will 
+Be Available Starting One Month Before the Event Date. * 
+(Problem obtaining a BB Number? 
+Send an email to [href=mailto:fobb-number@ars-qrp.com] fobb-number@ars-qrp.com)
+Have
+a Bumblebee Number but have forgotten it? 
+[href=Form_Get_One_Entry.php] Click Here to Find Your
+Existing Bumblebee Number
+REPORTING
+If you choose to report your results, go to [href=http://www.3830scores.com/] 3830scores.com, and 
+select the ‘ARS FOBB’ (on the Left side)
+Select 'Home' or 'Bumblebee' so that you end up in the
+proper Results List   
+You will enter your [Total Contacts] that you made and the [Number of
+Bumblebees] that you worked.
+([Total
+Contacts] includes both Bumblebees and non-Bumblebees)
+If you are a Bumblebee,  Soapbox comments may
+also include your portable location, power, equipment, antennas, band
+conditions, outdoor conditions, outdoor experiences, and anything else about
+the event that you wish to comment on.
+If you are a Home Station, Soapbox comments may include your power,
+equipment, antennas, band conditions, and anything else about the event that
+you wish to comment on.    
+SCORING
+Total Scores will be
+Automatically Calculated using this Formula:
+ [Total Score]  =  [Total Contacts]  x  [Number of Bumblebees]  x  3 
+Working the same station on a different band counts as another
+contact.
+(Defaults to [Total Contacts] = 1 and [Number of Bumblebees] = 1)
+Separate Reports will be available for
+the 'Home' and the 'Bumblebee' entrants.
+OTHER BUMBLEBEE NUMBER REPORTS
+AVAILABLE:
+[href=Form_Get_One_SPC.php] Click
+Here to See the Bumblebees in One Specific SPC
+[href=Process_SPC_Count.php] Click
+Here to See the Quantity of Bumblebees in Each SPC
+[href=Process_Get_All_By_SPC.php] Click Here to See ALL of the Bumblebees -
+Sorted by SPC
+[href=Process_Get_All_By_Number.php] Click Here to See ALL of the Bumblebees -
+Sorted by BB Number
+SUBMITTING  BUMBLEBEE  PHOTOS
+If you would like to submit Photos of
+your Bumblebee Operation, email your .jpg files to:  
+fobb-pictures@ars-qrp.com
+Include your Call and Name.  Add any Comments that you wish to add.  
+As time permits, they will eventually
+get posted on https://ars-qrp.com
+NOTE ABOUT POTA/SOTA OPERATIONS AND HIGHER-POWERED HUNTERS/CHASERS:
+Many of the Bumblebees have indicated
+that they will be operating from POTA or SOTA locations.  
+Many Bumblebees have said that they
+will also be responding to POTA Hunters and/or SOTA Chasers.
+As long as a Bumblebee Number is sent
+in the Outgoing Exchange, that will be a valid FOBB Bumblebee Contact. 
+Participating FOBB Home Stations are
+expected to be running 5W QRP Maximum.
+However, most POTA Hunters and SOTA
+Chasers will be running more than 5W QRP.
+A Bumblebee should strive to obtain and
+log the Power of the POTA Hunter or SOTA Chaser.
+ However, that is not always going to be
+possible - do not dwell on it - it is a FOBB Contact - move on.
+ (POTA Hunters and SOTA Chasers running more
+than 5W QRP cannot Submit FOBB Results)
+SAFETY:
+As with all ARS events, please keep
+safety in front of mind when conducting operations in the field. 
+Such things as weather, power lines,
+terrain, dehydration, and fatigue can be lethal. 
+Above all, we want all participants to
+have a fabulous and safe experience.
+Here is a nice video from Bumblebee WG0AT in 2012
+[href=https://www.youtube.com/watch?v=A0-0-pMH8Y4%20] https://www.youtube.com/watch?v=A0-0-pMH8Y4
+Looking forward to working you during the Flight of the Bumblebees.
+73,  Jody – K3JZD on behalf of
+Russ Carpenter - AA7QU and Richard Fisher - KI6SN
+The Adventure Radio Society
+Pioneers 
+Last Updated : 27JUL26
