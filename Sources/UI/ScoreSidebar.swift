@@ -506,6 +506,10 @@ struct ScoreSidebar: View {
         case .province: "Provinces"
         case .section: "Sections"
         case .dx: "DX"
+        // A member party names its own members ("Bumblebees"); the fallback
+        // is never reached by a bundled party, since the class only counts
+        // where a member exchange exists.
+        case .member: party.memberExchange?.memberPlural ?? "Members"
         }
     }
 

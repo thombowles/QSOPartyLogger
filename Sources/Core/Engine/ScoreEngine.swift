@@ -160,6 +160,7 @@ enum ScoreEngine {
             for contribution in multContributions(
                 theirLoc: row.theirLoc.uppercased(),
                 call: row.call,
+                memberRcvd: row.memberRcvd,
                 countyAbbrs: countyAbbrs,
                 party: party,
                 rule: rule
@@ -319,8 +320,36 @@ enum ScoreEngine {
         var dxEntityCode: String?
     }
 
-    /// Which multiplier(s) a received location contributes under the rule.
+    /// Which multiplier(s) a row contributes under the rule: the member key
+    /// where the party counts worked members and the received element is a
+    /// number, plus whatever the received location contributes.
     private static func multContributions(
+        theirLoc: String,
+        call: String,
+        memberRcvd: String?,
+        countyAbbrs: Set<String>,
+        party: PartyDefinition,
+        rule: PartyDefinition.MultRule
+    ) -> [Contribution] {
+        var out: [Contribution] = []
+        // FOBB: "Working the same Bumblebee on a different band counts …
+        // as an additional Bumblebee Worked." Keyed by the raw logged
+        // callsign; a power or a blank element is not a member. The empty-call
+        // guard keeps a locations-only caller (the band map) from minting a
+        // valueless key.
+        if !call.isEmpty, let raw = memberRcvd,
+           case .member = MemberExchange.parse(raw) {
+            out.append(Contribution(multClass: .member, value: call.uppercased()))
+        }
+        out.append(contentsOf: locationContributions(
+            theirLoc: theirLoc, call: call, countyAbbrs: countyAbbrs,
+            party: party, rule: rule
+        ))
+        return out
+    }
+
+    /// Which multiplier(s) a received location contributes under the rule.
+    private static func locationContributions(
         theirLoc: String,
         call: String,
         countyAbbrs: Set<String>,
@@ -584,7 +613,9 @@ enum ScoreEngine {
         band: Band,
         modeClass: ModeClass,
         log: ContestLog,
-        party: PartyDefinition
+        party: PartyDefinition,
+        call: String = "",
+        memberRcvd: String? = nil
     ) -> Bool {
         guard party.allowedModeClasses.contains(modeClass) else { return false }
         let current = score(log: log, party: party).multiplierKeys
@@ -599,7 +630,8 @@ enum ScoreEngine {
         for loc in theirLocs {
             for c in multContributions(
                 theirLoc: loc.uppercased(),
-                call: "",
+                call: call,
+                memberRcvd: memberRcvd,
                 countyAbbrs: countyAbbrs,
                 party: party,
                 rule: rule

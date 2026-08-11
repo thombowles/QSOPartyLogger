@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		001422B5EA133D81250B56D7 /* Parties in Resources */ = {isa = PBXBuildFile; fileRef = E70A4C058DB0BE3BF9AA15BC /* Parties */; };
 		00C7117A6FF2B28F0F627443 /* SerialExchangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */; };
+		00F64B433E3EC47B0CCEAAD9 /* MemberMultiplierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0D74F754FD20FDF7B880B7 /* MemberMultiplierTests.swift */; };
 		01606F1E31E5F998B5D4231E /* ContestHistorianTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E700FD390A66A174C5681EA /* ContestHistorianTests.swift */; };
 		01AE0F21DE7C831820358813 /* CallHistoryPrefillTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359DF0F30A9EF39FE37A2287 /* CallHistoryPrefillTests.swift */; };
 		02382A492D70F37AA11A029D /* RadioBarStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35603FAC30DAAF7154DA76E3 /* RadioBarStatusTests.swift */; };
@@ -619,6 +620,7 @@
 		CA4CFCAA1F93033279C3D7CF /* DupeCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DupeCheckerTests.swift; sourceTree = "<group>"; };
 		CBC49C26B1FFD6EC5D00830A /* CallAreaSumBonusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallAreaSumBonusTests.swift; sourceTree = "<group>"; };
 		CCE7AD7E3989A66634D0BF7A /* RateMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateMeter.swift; sourceTree = "<group>"; };
+		CD0D74F754FD20FDF7B880B7 /* MemberMultiplierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberMultiplierTests.swift; sourceTree = "<group>"; };
 		CDFB83A71484799D6871283B /* DXCC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DXCC; path = Resources/DXCC; sourceTree = SOURCE_ROOT; };
 		CF06BEF609DB286524A03268 /* SelfSpotSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSpotSheet.swift; sourceTree = "<group>"; };
 		CF6D999640AF4FF7CB86AF56 /* VirginiaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirginiaQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -881,6 +883,7 @@
 				464472573FD7960DD5AC5B7B /* MaineQSOPartyTests.swift */,
 				5892A4EA032BA925FA66EA70 /* MarylandDCQSOPartyTests.swift */,
 				75214B2954E32E9289B737EE /* MemberExchangeTests.swift */,
+				CD0D74F754FD20FDF7B880B7 /* MemberMultiplierTests.swift */,
 				663F629E69E4BCAFF3D76139 /* MessageDefaultsTests.swift */,
 				1D8987995CCBBA5AAABC8B1C /* MessagesDraftTests.swift */,
 				6C80842521494976B5E96C54 /* MessageSetsVoiceTests.swift */,
@@ -1471,6 +1474,7 @@
 				545DEA6ED14085E9058FA5CB /* MaineQSOPartyTests.swift in Sources */,
 				DB32F376EC8DA6665E9ED5A2 /* MarylandDCQSOPartyTests.swift in Sources */,
 				CD43C2A39B7F73159CA453D9 /* MemberExchangeTests.swift in Sources */,
+				00F64B433E3EC47B0CCEAAD9 /* MemberMultiplierTests.swift in Sources */,
 				035AFCF57A3A41C906E0EC90 /* MessageDefaultsTests.swift in Sources */,
 				E807AEDC6DD4493748F002F3 /* MessageSetsVoiceTests.swift in Sources */,
 				D8D18E1ACF630156435191F6 /* MessagesDraftTests.swift in Sources */,
