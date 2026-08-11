@@ -358,6 +358,10 @@ struct MainView: View {
                 .padding(.vertical, 8)
                 .onChange(of: entry.exchange) { revalidate() }
                 .onChange(of: entry.call) { flow.callChanged(operatingContext) }
+                // The member element can decide the NEW MULT badge (a party
+                // may count the worked station itself), so it revalidates
+                // like the exchange rather than only gating the log.
+                .onChange(of: entry.memberRcvd) { revalidate() }
 
             superCheckStrip
 

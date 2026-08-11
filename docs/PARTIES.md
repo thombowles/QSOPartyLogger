@@ -352,6 +352,41 @@ Entries are in contest-date order.
 - **Alabama QSO Party** (Jul 25–26, 2026) — verified against the official 2026
   rules: 2 pts CW/phone, mults once **per mode**, DX-prefix mults, DC→MD,
   county-line sitting not permitted, phone/CW only.
+- **ARS Flight of the Bumblebees** (Jul 26 **and** Sep 20, 2026) — the second
+  **QRP sprint**, and the Adventure Radio Society event the Skeeter Hunt was
+  modelled on. Four hours, 1700–2100Z, **twice a year** ("the last Sunday of
+  July" and "the 3rd Sunday in September"), so both windows ship in one
+  party — the NAQP arrangement. CW only, 80/40/20/15/10.
+  **The S/P/C is exchanged and worth nothing.** It is validated against the
+  standard state and province tables plus DXCC prefixes, and no counting
+  phrase attaches to it anywhere in the rules, so the party enumerates no
+  list of its own. **The only multiplier is Bumblebees worked, counted again
+  on each band**: "Working the same Bumblebee on a different band counts as
+  an additional Contact and as an additional Bumblebee Worked." Every valid
+  contact pays the same, so the printed formula — `[Total Contacts] ×
+  [Number of Bumblebees] × 3` — falls out as 3 points per contact times that
+  count. The multiplier **never drops below 1**, the sponsor's own printed
+  default, so a log with contacts and no bee still scores contacts × 3.
+  **The number, not the `/BB` suffix, is what makes a Bumblebee contact** —
+  "As long as a Bumblebee Number is sent in the Outgoing Exchange, that will
+  be a valid FOBB Bumblebee Contact." Log the call as sent, suffix and all,
+  and type the number you copy; a blank element is simply a home station, and
+  only unreadable text is refused. The **Bumblebee roster** (number → call,
+  name, S/P/C) auto-downloads from the sponsor's own self-serve report at a
+  URL that does not change, and each bee is offered under both its bare call
+  and its `/BB` form; nothing from it scores.
+  The formula is printed, and [`gen_fobb.py`](research/gen_fobb.py)
+  additionally re-verifies it on all 90 rows of the sponsor-designated 3830
+  table for July 2026. Results are **self-reported totals on 3830scores.com**
+  — no log file of any kind is accepted — so the Cabrillo header `ARS-FOBB`
+  is the app's own invention, and the sidebar keeps both numbers the form
+  asks for. `verified: partial`, 4 caveats, none warning.
+  **Not modelled, deliberately:** the Home/Bumblebee split is a reporting
+  choice on 3830, not a scoring class (same formula, separate lists), and the
+  5 W limit is an entry condition rather than a category. **Open question:**
+  a log with contacts but *no* Bumblebees scores contacts × 3 here, following
+  the printed default; the sponsor's calculator scored its one observed 0/0
+  entry as 0, and no contacts-but-no-bees row has appeared to settle it.
 - **Maryland-DC QSO Party** (Aug 8, 2026) — verified against the official
   rules PDF (rev. 06 AUG 2024 v.5): 25 entities including Baltimore City
   separate from Baltimore County and DC as `WDC`, exchange is call +

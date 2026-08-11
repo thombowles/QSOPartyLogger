@@ -63,7 +63,7 @@ final class ExchangeParserTests: XCTestCase {
     /// the day it lands.
     func testEveryPrefixPartyAcceptsRealPrefixesForBothRoles() throws {
         let prefixParties = PartyCatalog.loadBundled().filter { $0.dxStyle == .prefix }
-        XCTAssertEqual(prefixParties.count, 17, "the catalogue's prefix parties")
+        XCTAssertEqual(prefixParties.count, 18, "the catalogue's prefix parties")
         for party in prefixParties {
             for role in [ExchangeParser.Role.inState, .outOfState] {
                 XCTAssertTrue(

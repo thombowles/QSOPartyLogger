@@ -60,6 +60,12 @@ KINDS = {
         (3, "scoreAffecting", "The 50-point electronic-submission bonus is not applied."),
         (4, "cosmetic", "FT8/FT4 use a Field Day exchange grammar that is not modelled."),
     ],
+    "fobb": [
+        (0, "ruleInference", "A log with contacts but no Bumblebees scores contacts × 3 — the printed default; the sponsor’s calculator has never been observed on that case."),
+        (1, "cosmetic", "The Cabrillo CONTEST header is this app’s invention — results are self-reported totals on 3830scores.com, which the sidebar’s numbers serve."),
+        (2, "cosmetic", "Between events the roster prefills the previous event’s numbers — log the number the station sends."),
+        (None, "provenance", "Rules read from ars-qrp.com (fetched 2026-08-10); the page is edited in place, so re-check before each running — and ignore its stale HTML title."),
+    ],
     "fqp": [
         (0, "scoreAffecting", "Maritime-mobile ITU regions are credited as DXCC countries, not as their own multiplier class."),
         (1, "ruleInference", "The out-of-state restriction is implied by the rules rather than stated."),
@@ -258,7 +264,7 @@ VALID_KINDS = {"exportBlocking", "scoreAffecting", "ruleInference", "provenance"
 
 def main():
     files = sorted(f for f in os.listdir(PARTIES) if f.endswith(".json"))
-    assert len(files) == 49, f"expected 49 bundled parties, found {len(files)}"
+    assert len(files) == 50, f"expected 50 bundled parties, found {len(files)}"
 
     unclassified = []
     badge_count = 0

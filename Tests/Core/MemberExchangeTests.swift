@@ -188,11 +188,13 @@ final class MemberExchangeTests: XCTestCase {
 
     /// The bundled parties whose exchange carries the element, named so a
     /// party cannot gain one incidentally — each flip is its own commit
-    /// (Article 9). The Skeeter Hunt is the first.
+    /// (Article 9). The Skeeter Hunt was the first; FOBB, the ARS sprint it
+    /// was modelled on, is the second — and the first whose element decides
+    /// only the multiplier, never the rate (all three of its rates are 3).
     func testWhichPartiesCarryAMemberExchange() {
         let withMember = PartyCatalog.loadBundled()
-            .filter { $0.memberExchange != nil }.map(\.id)
-        XCTAssertEqual(withMember, ["skeeter"],
+            .filter { $0.memberExchange != nil }.map(\.id).sorted()
+        XCTAssertEqual(withMember, ["fobb", "skeeter"],
                        "a party gaining the element is a deliberate edit here")
     }
 

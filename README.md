@@ -29,13 +29,14 @@ never costs contacts.
 
 ## Supported parties
 
-All 49 below are bundled, each built from the sponsor's own rules — with the
+All 50 below are bundled, each built from the sponsor's own rules — with the
 official county list wherever the party has one. **Every US state and regional
 QSO party running from 2026-07-24 through 2026-12-31 is included**, and the
 season's earlier parties are in as well; three parties remain to be added, plus
 the Canadian Prairies, which is blocked because its districts are published
-only as images. The NJQRP Skeeter Hunt, a four-hour QRP sprint, joins the two
-NAQPs as the catalogue's non-state contests.
+only as images. Two four-hour QRP sprints — the NJQRP Skeeter Hunt and the ARS
+Flight of the Bumblebees — join the two NAQPs as the catalogue's non-state
+contests.
 
 Dates are the UTC start of each running; "12 h each" means two separate
 runnings of that length.
@@ -72,6 +73,7 @@ runnings of that length.
 | Arkansas QSO Party | May 16 | 12 h | 75 counties |
 | Kentucky QSO Party | Jun 6 | 12 h | 120 counties |
 | Alabama QSO Party | Jul 25 | 12 h | 67 counties |
+| ARS Flight of the Bumblebees | Jul 26 + Sep 20 | 4 h each | Bumblebees worked |
 | Maryland-DC QSO Party | Aug 8 | 14 h | 25 jurisdictions |
 | NJQRP Skeeter Hunt | Aug 16 | 4 h | S/P/Cs |
 | Hawaii QSO Party | Aug 22 | 36 h | 14 districts |
@@ -108,7 +110,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | Keys | Action |
 | --- | --- |
 | `Enter` | Log the QSO (or send the next ESM message, or run a typed QSY command) |
-| `Space` | Cycle Call → Exchange → Call — via QSO number and Name ahead of the exchange, and the member number/power (Skeeter #) after it, where the party uses them. Signal reports are stepped over |
+| `Space` | Cycle Call → Exchange → Call — via QSO number and Name ahead of the exchange, and the member number/power (Skeeter #, BB #) after it, where the party uses them. Signal reports are stepped over |
 | `Tab` | Walk every field, reports included — landing in one selects the S digit, so 599 → 579 is one keystroke |
 | `Tab` to **P2P park(s)** | During a POTA activation, the other station's park reference(s). Deliberately outside the `Space` cycle — most contacts aren't park-to-park — so `Space` from it returns to the call |
 | `F12` | Wipe the entry fields and start over |
@@ -452,7 +454,7 @@ stays on screen when another app takes focus, so it can sit beside a panadapter.
   (toolbar antenna icon), optionally automatically when a contest opens. On top
   of that, the app polls [qsopartyhub.com](http://qsopartyhub.com) for the active
   party — and unlike a cluster spot, a hub spot carries the **county**, which is
-  the multiplier you're actually chasing. 39 of the 49 bundled parties have a hub
+  the multiplier you're actually chasing. 39 of the 50 bundled parties have a hub
   page. A spot seen on both feeds is one entry.
 - **Filters** (funnel button): North American stations only, North American
   spotters only, hide worked stations, hide RBN/skimmer spots, hub-only, per
@@ -556,11 +558,13 @@ name parties.
   exchange parser for your operating role first. Offers rank below your own log
   and above a spot's claim, grey out until you accept them, and the row says
   **log what you copy**. Nothing from these files ever reaches the score.
-- 46 of the 49 bundled parties have a source upstream — 45 on the N1MM
-  listing, and the NJQRP Skeeter Hunt from its sponsor's own roster page,
-  where each season's Skeeter-number sheet is discovered and converted to the
-  same shape. Arizona, Maryland-DC and Vermont have none, and simply show no
-  row in Contest Setup.
+- 47 of the 50 bundled parties have a source upstream — 45 on the N1MM
+  listing, and two from their sponsors' own rosters: the NJQRP Skeeter Hunt,
+  where each season's Skeeter-number sheet is discovered from the blog page,
+  and the Flight of the Bumblebees, whose self-serve Bumblebee numbers come
+  straight from the ARS report page (each bee offered under both its bare
+  call and its `/BB` form). Both are converted to the same shape. Arizona,
+  Maryland-DC and Vermont have none, and simply show no row in Contest Setup.
 
 Cached files live in `~/Library/Application Support/QSOPartyLogger/CallHistory/`.
 
@@ -773,7 +777,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2490 unit tests**, none of which need hardware or a network — no serial port,
+**2530 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3, QMX and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), the voice-memory bank sequence and its refusal to

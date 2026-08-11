@@ -29,12 +29,16 @@ final class UpcomingContestsTests: XCTestCase {
         XCTAssertEqual(first?.isLive, false)
         XCTAssertEqual(first?.isApproved, true)
         XCTAssertEqual(first?.nextWindow.start, instant("2026-07-25T15:00:00Z"))
-        // Sorted by next start: NAQP CW follows on Aug 1 — a bundled
-        // non-Challenge contest takes its place in the list like any other —
-        // and Maryland-DC after it on Aug 8.
-        XCTAssertEqual(list.dropFirst().first?.partyID, "naqpcw")
+        // Sorted by next start: FOBB's July running is the very next day,
+        // then NAQP CW on Aug 1 and Maryland-DC on Aug 8 — bundled
+        // non-Challenge contests take their place in the list like any other.
+        XCTAssertEqual(list.dropFirst().first?.partyID, "fobb")
         XCTAssertEqual(list.dropFirst().first?.isApproved, false)
-        XCTAssertEqual(list.dropFirst(2).first?.partyID, "mdc")
+        XCTAssertEqual(list.dropFirst().first?.nextWindow.start,
+                       instant("2026-07-26T17:00:00Z"))
+        XCTAssertEqual(list.dropFirst(2).first?.partyID, "naqpcw")
+        XCTAssertEqual(list.dropFirst(2).first?.isApproved, false)
+        XCTAssertEqual(list.dropFirst(3).first?.partyID, "mdc")
     }
 
     func testLiveWindowIsFlaggedAndStaysFirst() {

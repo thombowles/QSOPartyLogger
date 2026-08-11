@@ -12,7 +12,7 @@ final class PartyCatalogTests: XCTestCase {
         let parties = PartyCatalog.loadBundled()
         XCTAssertEqual(
             Set(parties.map(\.id)),
-            ["alqp", "arqp", "azqp", "bcqp", "coqp", "cqp", "deqp", "fqp", "gaqp", "hqp", "iaqp", "in7qpne", "idqp", "ilqp", "inqp", "ksqp", "kyqp", "mdc",
+            ["alqp", "arqp", "azqp", "bcqp", "coqp", "cqp", "deqp", "fobb", "fqp", "gaqp", "hqp", "iaqp", "in7qpne", "idqp", "ilqp", "inqp", "ksqp", "kyqp", "mdc",
              "meqp", "miqp",
              "laqp", "mnqp", "moqp", "msqp", "naqpcw", "naqpssb", "ncqp", "ndqp", "neqp", "newenglandqp", "nhqp", "nmqp", "njqp", "nyqp", "ohqp", "okqp", "oqp", "paqp", "qcqp", "scqp", "sdqp", "sevenqp", "skeeter", "tnqp", "tqp", "vaqp", "vtqp",
              "warun", "wiqp"]
@@ -41,8 +41,10 @@ final class PartyCatalogTests: XCTestCase {
     /// logged two-way exchange between a North American station and any other
     /// station", so everyone works everyone. The Skeeter Hunt is the same
     /// shape: a QRP sprint with no home region, where every contact pays.
+    /// FOBB is the third — "You run QRP CW – You can work Non-QRP Stations",
+    /// and its own contacts count for both Home and Bumblebee entrants.
     func testOutOfStateCreditRestrictionPerParty() {
-        let unrestricted: Set<String> = ["meqp", "naqpcw", "naqpssb", "skeeter"]
+        let unrestricted: Set<String> = ["fobb", "meqp", "naqpcw", "naqpssb", "skeeter"]
         for party in PartyCatalog.loadBundled() {
             XCTAssertEqual(
                 party.outStateWorksHomeStationsOnly,
@@ -77,6 +79,9 @@ final class PartyCatalogTests: XCTestCase {
             "sdqp", "tnqp", "tqp", "vtqp", "mnqp", "bcqp", "scqp", "ncqp", "okqp", "idqp",
             "wiqp", "vaqp", "laqp", "msqp", "moqp", "nmqp", "gaqp", "ndqp", "miqp", "oqp", "qcqp", "neqp", "fqp", "sevenqp", "inqp", "deqp", "newenglandqp", "arqp", "kyqp", "in7qpne",
             "skeeter",
+            // FOBB: the zero-Bumblebee log is the one reading the sponsor's
+            // printed defaults and its own calculator do not settle between.
+            "fobb",
         ]
         for party in PartyCatalog.loadBundled() {
             XCTAssertEqual(

@@ -29,6 +29,13 @@ struct CallHistorySource: Codable, Equatable, Sendable {
     enum Kind: String, Codable, Sendable {
         case n1mm
         case w2ljRosterPage
+        /// The ARS Flight of the Bumblebees arrangement: the sponsor's
+        /// self-serve number report is one HTML table at a stable URL
+        /// (`pageURL`), so there is no discovery hop at all — fetch, parse,
+        /// convert. Live data like the roster kind above: numbers issue
+        /// until the event and the table resets for each running, so the
+        /// daily clock re-downloads with no unchanged-revision short circuit.
+        case arsFobbRoster
     }
 
     var kind: Kind { kindRaw ?? .n1mm }
