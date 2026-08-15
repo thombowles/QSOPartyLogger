@@ -400,7 +400,13 @@ final class FlexRadioDriverTests: XCTestCase {
                        ["client udpport 51234", "dax audio set 1 slice=0 tx=1", "stream create type=dax_tx"])
         XCTAssertTrue(events.all.isEmpty, "nothing keyed before the radio confirms")
 
-        confirmStream(transport)
+        // The create is answered with the id; the driver then claims transmit
+        // on that stream — the radio modulates only the dax_tx stream that
+        // has `tx=1`, and drops packets from every other one.
+        transport.reply(to: FlexRadioDriver.cmdStreamCreateDAXTX, code: "0", message: "0x84000001")
+        XCTAssertEqual(transport.commands.last, "stream set 0x84000001 tx=1")
+        XCTAssertFalse(transport.commands.contains("xmit 1"), "still nothing keyed: tx=1 not yet reported")
+        transport.feed("S1A2B3C4|stream 0x84000001 type=dax_tx client_handle=0x1A2B3C4 tx=1\n")
         waitForTerminal(events)
         XCTAssertEqual(Array(transport.commands.suffix(4)),
                        ["transmit set dax=1", "xmit 1", "xmit 0", "transmit set dax=0"])
@@ -409,6 +415,41 @@ final class FlexRadioDriverTests: XCTestCase {
         XCTAssertGreaterThan(udp.sent.count, 40)
         XCTAssertLessThan(udp.sent.count, 50)
         XCTAssertTrue(udp.sent.allSatisfy { $0.count == 1052 })
+        // The transcript the operator can copy names what happened, in order.
+        let transcript = driver.transmitAudioTranscript.joined(separator: "\n")
+        XCTAssertTrue(transcript.contains("stream create type=dax_tx"), transcript)
+        XCTAssertTrue(transcript.contains("tx=1"), transcript)
+        XCTAssertTrue(transcript.contains("packets"), transcript)
+        driver.stop()
+    }
+
+    /// The status line can carry the id and `tx=1` before the reply does; the
+    /// claim is still sent exactly once, and only when `tx=1` has not been
+    /// seen for our stream.
+    func testClaimIsSentOnceEvenWhenTheStatusArrivesFirst() {
+        let (driver, transport, _) = connectedDriver()
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        transport.feed("S1A2B3C4|stream 0x84000001 type=dax_tx client_handle=0x1A2B3C4 tx=0\n")
+        transport.reply(to: FlexRadioDriver.cmdStreamCreateDAXTX, code: "0", message: "0x84000001")
+        XCTAssertEqual(transport.commands.filter { $0 == "stream set 0x84000001 tx=1" }.count, 1)
+        transport.feed("S1A2B3C4|stream 0x84000001 type=dax_tx client_handle=0x1A2B3C4 tx=1\n")
+        waitForTerminal(events)
+        XCTAssertEqual(events.all, [.started, .finished])
+        driver.stop()
+    }
+
+    /// A stream the radio reports as ours and already `tx=1` needs no claim.
+    func testNoClaimWhenTheRadioAlreadyMarksOurStreamTX() {
+        let (driver, transport, _) = connectedDriver()
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        transport.feed("S1A2B3C4|stream 0x84000001 type=dax_tx client_handle=0x1A2B3C4 tx=1\n")
+        waitForTerminal(events)
+        XCTAssertFalse(transport.commands.contains { $0.hasPrefix("stream set") })
+        XCTAssertEqual(events.all, [.started, .finished])
         driver.stop()
     }
 

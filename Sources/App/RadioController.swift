@@ -137,6 +137,16 @@ final class RadioController {
     /// The reason shown while the sound-card path has no device chosen.
     nonisolated static let chooseOutputReason = "Choose the radio's audio output in Messages → Phone."
 
+    /// The network path's own log — what the driver sent and heard — for
+    /// the Phone tab's Details disclosure. Empty on every other path.
+    /// Snapshotted after each play and event (the driver's list is not
+    /// observable), and on `refreshVoiceLog()` when the disclosure opens.
+    private(set) var voiceLog: [String] = []
+
+    func refreshVoiceLog() {
+        voiceLog = streamer?.transmitAudioTranscript ?? []
+    }
+
     var availablePorts: [SerialPortInfo] = []
 
     private var transport: (any SerialTransport)?
@@ -657,6 +667,7 @@ final class RadioController {
             }
             networkGeneration.value = generation
             streamer.transmitAudio(forRadio)
+            refreshVoiceLog()
             return
         }
 
@@ -679,6 +690,7 @@ final class RadioController {
     /// of the play it belongs to. An event from a play that was since
     /// replaced is ignored, so it cannot clear the badge the new play owns.
     func recordingDidReport(_ event: TransmitAudioEvent, generation: Int) {
+        refreshVoiceLog()
         guard isConnected, recordingIsPlaying, generation == recordingGeneration else { return }
         switch event {
         case .started:

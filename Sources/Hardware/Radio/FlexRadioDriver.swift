@@ -59,7 +59,15 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
     /// The radio's `tx=1` on our stream — the confirmation that packets we
     /// send are the ones it will modulate. Never key without it.
     private var daxStreamTX = false
+    /// Whether `stream set <id> tx=1` has been sent for the current stream.
+    /// The radio modulates only the dax_tx stream that has claimed transmit
+    /// and drops packets from every other one — "PTT keys with silence" is
+    /// what a stream that never claimed looks like.
+    private var daxStreamTXClaimed = false
     private var pendingStreamCreateSeq: Int?
+    /// The path's own log, most recent last, capped — see `transmitAudioTranscript`.
+    private var transcript: [String] = []
+    private static let transcriptCap = 120
     /// The clip waiting for the stream to be confirmed, or in flight.
     private var pendingClip: VoiceAudio?
     private var streamer: FlexDAXStreamer?
@@ -133,6 +141,7 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
         let socket = udp
         daxStreamID = nil
         daxStreamTX = false
+        daxStreamTXClaimed = false
         pendingStreamCreateSeq = nil
         pendingClip = nil
         udp = nil
@@ -257,8 +266,20 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
 
     static let cmdStreamCreateDAXTX = "stream create type=dax_tx"
 
+    static func hexID(_ streamID: UInt32) -> String {
+        "0x\(String(streamID, radix: 16, uppercase: true))"
+    }
+
     static func cmdStreamRemove(_ streamID: UInt32) -> String {
-        "stream remove 0x\(String(streamID, radix: 16, uppercase: true))"
+        "stream remove \(hexID(streamID))"
+    }
+
+    /// `stream set <stream_id> tx=1` — claims transmit for our dax_tx stream.
+    /// The wiki documents the command; two working clients (and FlexLib's
+    /// later `RequestTX`) show it is what makes the radio modulate *this*
+    /// stream rather than another client's.
+    static func cmdStreamSetTX(_ streamID: UInt32) -> String {
+        "stream set \(hexID(streamID)) tx=1"
     }
 
     /// `transmit set dax=<0|1>` — "enable (dax=1) or disable (dax=0) DAX as
@@ -469,7 +490,11 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
             lock.unlock()
             if changed { onKeyerSpeedChange?(wpm) }
         } else if let dax = Self.parseTransmitDAX(status) {
-            lock.withLock { transmitDAXOn = dax }
+            let changed: Bool = lock.withLock {
+                defer { transmitDAXOn = dax }
+                return transmitDAXOn != dax
+            }
+            if changed { note("← transmit dax=\(dax ? 1 : 0)") }
         } else if let stream = Self.parseStreamStatus(status) {
             handleStreamStatus(stream)
         }
@@ -508,6 +533,32 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
 
     var transmitSampleRate: Double { FlexDAXPacketizer.sampleRate }
 
+    var transmitAudioTranscript: [String] { lock.withLock { transcript } }
+
+    /// One line in the path's own log — timestamped, capped, readable from the
+    /// Phone tab. Called with the lock *not* held.
+    private func note(_ line: String) {
+        let stamp = Self.transcriptClock.string(from: Date())
+        lock.withLock {
+            transcript.append("\(stamp)  \(line)")
+            if transcript.count > Self.transcriptCap { transcript.removeFirst(transcript.count - Self.transcriptCap) }
+        }
+    }
+
+    private static let transcriptClock: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "HH:mm:ss.SSS"
+        return f
+    }()
+
+    /// A command on the voice path: sent and noted.
+    @discardableResult
+    private func sendVoiceCommand(_ body: String) -> Int {
+        let seq = sendCommand(body)
+        note("→ C\(seq)|\(body)")
+        return seq
+    }
+
     /// Key the radio, stream `audio`, unkey. The first play of a session
     /// sets the stream up — socket, `client udpport`, the transmit-source
     /// claim, `stream create` — and waits for the radio to confirm the
@@ -519,6 +570,7 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
             pendingClip = audio
             return (udp == nil, daxStreamID == nil)
         }
+        note(String(format: "play requested: %.2f s of audio at %.0f Hz", audio.duration, audio.sampleRate))
 
         if needsSocket {
             guard let host = (currentTransport() as? any NetworkTransport)?.hostName else {
@@ -541,18 +593,23 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
                 if let tx, let dax = tx.value.daxChannel, dax > 0 { return (dax, nil) }
                 return (1, tx?.key)
             }
-            sendCommand(Self.cmdClientUDPPort(socket.localPort))
-            sendCommand(Self.cmdDAXAudioSetTX(channel: channel, slice: sliceToAssign))
+            note("udp: local port \(socket.localPort) → \(host):\(Self.daxUDPPort)")
+            sendVoiceCommand(Self.cmdClientUDPPort(socket.localPort))
+            sendVoiceCommand(Self.cmdDAXAudioSetTX(channel: channel, slice: sliceToAssign))
         }
         if needsSocket || needsStream {
             // First play, or the radio removed our stream since: create (again).
-            let created = sendCommand(Self.cmdStreamCreateDAXTX)
-            lock.withLock { pendingStreamCreateSeq = created }
+            let created = sendVoiceCommand(Self.cmdStreamCreateDAXTX)
+            lock.withLock {
+                pendingStreamCreateSeq = created
+                daxStreamTXClaimed = false
+            }
         }
         // Armed before the readiness check, which cancels it the moment it
         // starts streaming — so a stream the radio never confirms fails
         // rather than leaving a clip pending forever.
         armConfirmTimer()
+        claimTransmitIfNeeded()
         beginStreamingIfReady()
     }
 
@@ -572,9 +629,10 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
         running?.stop()
         guard wasStreaming || hadPending else { return }
         if wasStreaming {
-            sendCommand(Self.cmdXmit(false))
-            if restore { sendCommand(Self.cmdTransmitDAX(false)) }
+            sendVoiceCommand(Self.cmdXmit(false))
+            if restore { sendVoiceCommand(Self.cmdTransmitDAX(false)) }
         }
+        note("stopped by the operator")
         onTransmitAudioEvent?(.stopped)
     }
 
@@ -583,6 +641,7 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
     private func handleReply(_ reply: (seq: Int, code: UInt32, message: String)) {
         let isStreamCreate: Bool = lock.withLock { reply.seq == pendingStreamCreateSeq }
         guard isStreamCreate else { return }
+        note(String(format: "← R%d|%08X|%@", reply.seq, reply.code, reply.message))
         lock.withLock { pendingStreamCreateSeq = nil }
         guard reply.code == 0 else {
             lock.withLock { confirmTimer?.cancel(); confirmTimer = nil }
@@ -594,6 +653,7 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
         if let id = Self.parseHex(Substring(reply.message.trimmingCharacters(in: .whitespaces))) {
             lock.withLock { if daxStreamID == nil { daxStreamID = id } }
         }
+        claimTransmitIfNeeded()
         beginStreamingIfReady()
     }
 
@@ -602,8 +662,13 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
         let mine: Bool
         if update.removed {
             mine = update.id == daxStreamID
-            if mine { daxStreamID = nil; daxStreamTX = false }
+            if mine {
+                daxStreamID = nil
+                daxStreamTX = false
+                daxStreamTXClaimed = false
+            }
             lock.unlock()
+            if mine { note("← stream \(Self.hexID(update.id)) removed by the radio") }
             return
         }
         // Ours if it names our handle, or if it is the id our create returned.
@@ -614,7 +679,30 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
             if let tx = update.tx { daxStreamTX = tx }
         }
         lock.unlock()
-        if mine { beginStreamingIfReady() }
+        if update.type == "dax_tx" {
+            note("← stream \(Self.hexID(update.id)) type=dax_tx"
+                 + (update.clientHandle.map { " client_handle=\(Self.hexID($0))" } ?? "")
+                 + (update.tx.map { " tx=\($0 ? 1 : 0)" } ?? "")
+                 + (mine ? "  (ours)" : "  (another client's)"))
+        }
+        if mine {
+            claimTransmitIfNeeded()
+            beginStreamingIfReady()
+        }
+    }
+
+    /// Once the stream id is known and the radio has not marked it `tx=1`,
+    /// claim transmit for it — once per stream. The radio modulates only the
+    /// dax_tx stream that has claimed, and drops packets from every other
+    /// one; without this a message keys the radio and puts silence on it.
+    private func claimTransmitIfNeeded() {
+        let claim: UInt32? = lock.withLock {
+            guard let id = daxStreamID, !daxStreamTX, !daxStreamTXClaimed, pendingClip != nil else { return nil }
+            daxStreamTXClaimed = true
+            return id
+        }
+        guard let claim else { return }
+        sendVoiceCommand(Self.cmdStreamSetTX(claim))
     }
 
     /// The window a first play waits for the radio to answer the create and
@@ -630,7 +718,9 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
                 return true
             }
             guard stillWaiting else { return }
-            self.fail("The radio did not confirm the transmit audio stream in time.")
+            self.fail("The radio did not confirm the transmit audio stream in time. If another program on "
+                      + "the network holds the radio's transmit audio (its transmit channel enabled), turn "
+                      + "that off and try again.")
         }
         timer.resume()
         lock.withLock {
@@ -666,12 +756,17 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
         let packets = FlexDAXPacketizer.packets(for: VoiceAudio(sampleRate: rate, samples: samples),
                                                 streamID: streamID, startingSequence: start)
         lock.withLock { packetSequence = FlexDAXPacketizer.nextSequence(after: start, packetCount: packets.count) }
+        note(String(format: "stream %@ confirmed tx=1; %d packets to send (peak %.2f), transmit source dax was %@",
+                    Self.hexID(streamID), packets.count, clip.peak, daxWasOn ? "on" : "off"))
 
-        if !daxWasOn { sendCommand(Self.cmdTransmitDAX(true)) }
-        sendCommand(Self.cmdXmit(true))
+        if !daxWasOn { sendVoiceCommand(Self.cmdTransmitDAX(true)) }
+        sendVoiceCommand(Self.cmdXmit(true))
         streamer.stream(
             packets,
-            onFirstPacket: { [weak self] in self?.onTransmitAudioEvent?(.started) },
+            onFirstPacket: { [weak self] in
+                self?.note("first packet sent")
+                self?.onTransmitAudioEvent?(.started)
+            },
             onFinished: { [weak self] in
                 guard let self else { return }
                 // Nil when a stop already unkeyed and reported this play —
@@ -685,8 +780,9 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
                     return self.restoreDAXOffAfterPlay
                 }
                 guard let restore else { return }
-                self.sendCommand(Self.cmdXmit(false))
-                if restore { self.sendCommand(Self.cmdTransmitDAX(false)) }
+                self.note("all \(packets.count) packets sent")
+                self.sendVoiceCommand(Self.cmdXmit(false))
+                if restore { self.sendVoiceCommand(Self.cmdTransmitDAX(false)) }
                 self.onTransmitAudioEvent?(.finished)
             }
         )
@@ -700,6 +796,7 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
             confirmTimer?.cancel()
             confirmTimer = nil
         }
+        note("failed: \(reason)")
         onTransmitAudioEvent?(.failed(reason))
     }
 }

@@ -38,6 +38,12 @@ protocol AudioStreamTransmitCapable: RadioDriver {
     func transmitAudio(_ audio: VoiceAudio)
     func stopTransmitAudio()
     var onTransmitAudioEvent: (@Sendable (TransmitAudioEvent) -> Void)? { get set }
+    /// What the driver said and heard on this path, most recent last — the
+    /// commands it sent, the replies and status lines it acted on, packet
+    /// counts, and each event. Shown to the operator on request so a
+    /// message that keyed but did not modulate can be diagnosed from the
+    /// radio's own words rather than guessed at.
+    var transmitAudioTranscript: [String] { get }
 }
 
 /// The sound-card path: plays a clip to an output device and keys the radio

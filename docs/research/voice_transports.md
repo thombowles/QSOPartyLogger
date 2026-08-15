@@ -46,6 +46,7 @@ first play:   [open connected UDP socket → radio:4991; local port P]
               client udpport P
               dax audio set <ch> tx=1           <ch> = TX slice's dax channel, or 1 (with slice=<tx slice>) if it has none
               stream create type=dax_tx          → R<seq>|0|<id>  and/or  S…|stream <id> type=dax_tx client_handle=<ours> tx=…
+              stream set <id> tx=1               the claim (added 2026-08-15 after the bench — see OPEN QUESTION 1); then wait for tx=1
 every play:   transmit set dax=1               (only if the transmit status says dax=0; restored after)
               xmit 1
               120 ms of silence packets, then the clip, one packet per 128/24000 s
@@ -66,14 +67,21 @@ size 263 words, packet count mod 16, timestamps zero.
 Verified from the sources above; unverified on a bench. Named so the first
 session with a radio on the desk knows what to look at.
 
-1. **Which command makes this client the DAX transmit source.** The wiki
-   documents `dax audio set <ch> [slice=] [tx=1]` as issued "by the actual
-   client that will supply transmit data samples", and separately `dax tx
-   <T|F>` "for manipulation of DAX TX channels". FlexLib only *reacts* to the
-   radio's `tx=1`; the two working clients use `dax audio set … tx=1`. The
-   driver does the same and confirms readiness from its stream's `tx=1` status
-   before it keys; if the radio never says `tx=1`, the play is refused with the
-   reason shown, and `dax tx 1` is the thing to try next.
+1. **Which command makes this client the DAX transmit source.** *Answered on
+   the bench 2026-08-15, in the negative form:* with `dax audio set <ch> tx=1`
+   alone the radio keyed on `xmit 1` and put silence on the air. Two further
+   clients read afterwards — one written against SmartSDR v4 through FlexLib
+   itself (github.com/patrickrb/cqk1af, `flexlib_client.py`), one from scratch
+   (github.com/dividebysandwich/sdroxide, `net.rs`) — both say the same thing:
+   the radio modulates only the `dax_tx` stream that has claimed transmit with
+   **`stream set 0x<id> tx=1`** (the wiki's `stream set <stream_id> tx=[1|0]`,
+   banked page [4]) and drops packets from every other; "PTT keys with
+   silence" is the documented symptom of a stream that never claimed. The
+   driver now sends the claim as soon as it knows its stream id and still
+   waits for the radio's `tx=1` before keying. cqk1af adds the operational
+   half: **if the DAX application's own TX channel is enabled, the radio keeps
+   that stream and drops ours** — the README says to turn it off. `dax audio
+   set … tx=1` is kept as well (nDAX and M0LTE.Flex send it and work).
 2. **Whether a non-GUI client may key.** SmartSDR v3 multiFLEX binds
    transmit to a GUI client's station; the wiki says `client bind` "performs
    no function in the radio" as of v3.0. The existing driver's `cwx send`
