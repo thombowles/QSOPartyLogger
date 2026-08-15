@@ -222,6 +222,7 @@ struct RadioBar: View {
             radio.syncWPM(settings.wpm, settings: settings)
         }
         .help("CW speed — ⌘= / ⌘- adjusts by 2 WPM; syncs with the radio's speed knob")
+        .shortcutHint("⌘= ⌘-")
     }
 
     private func sendingIndicator(_ sending: String) -> some View {

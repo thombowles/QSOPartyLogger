@@ -480,6 +480,42 @@ final class RadioController {
         driver?.setFrequency(hz: Int((kHz * 1000).rounded()))
     }
 
+    // MARK: VFO nudge (⇧⌘← / ⇧⌘→)
+
+    /// How long a nudge target outranks the polled frequency. Long enough for
+    /// a burst of presses, shorter than a deliberate turn of the knob.
+    static let nudgeWindow: TimeInterval = 1.5
+
+    private var lastNudgeTargetHz: Int?
+    private var lastNudgeIssuedAt: Date?
+
+    /// What a nudge is relative to. The polled frequency lags the radio by up
+    /// to a poll interval, so two quick presses computed from it would set the
+    /// same target twice and move once; a target issued within `nudgeWindow`
+    /// wins. Nil when there is nothing to nudge from at all.
+    static func nudgeBase(polledHz: Int?, lastTargetHz: Int?, lastIssuedAt: Date?, now: Date) -> Int? {
+        if let lastTargetHz, let lastIssuedAt, now.timeIntervalSince(lastIssuedAt) < nudgeWindow {
+            return lastTargetHz
+        }
+        return polledHz
+    }
+
+    /// Move the VFO by `hz` (signed). Returns the frequency asked for, or nil
+    /// when no radio is connected or it has not reported a frequency yet — the
+    /// caller then moves whatever cursor it has instead.
+    @discardableResult
+    func nudgeFrequency(byHz hz: Int, now: Date = Date()) -> Int? {
+        guard isConnected, let driver,
+              let base = Self.nudgeBase(polledHz: radioState?.frequencyHz, lastTargetHz: lastNudgeTargetHz,
+                                        lastIssuedAt: lastNudgeIssuedAt, now: now)
+        else { return nil }
+        let target = max(0, base + hz)
+        lastNudgeTargetHz = target
+        lastNudgeIssuedAt = now
+        driver.setFrequency(hz: target)
+        return target
+    }
+
     func setMode(rawMode: String) {
         driver?.setMode(rawMode: rawMode)
     }

@@ -173,8 +173,41 @@ final class KeyMonitorGateTests: XCTestCase {
             KeyMonitorGate.action(keyCode: 124, command: true),
             "⌘→ belongs to the text field, not the band map"
         )
-        XCTAssertNil(KeyMonitorGate.action(keyCode: 123, command: true, shift: true))
-        XCTAssertNil(KeyMonitorGate.action(keyCode: 124, command: true, shift: true))
+    }
+
+    // MARK: VFO nudge (2026-08-15)
+
+    /// ⇧⌘← / ⇧⌘→ move the VFO 100 Hz — asked for by name. The shifted pair
+    /// was "select to line start/end" in the entry fields, which a callsign
+    /// never needs; the plain ⌘ arrows stay with the field.
+    func testShiftedCommandArrowsNudgeTheVFO() {
+        XCTAssertEqual(
+            KeyMonitorGate.action(keyCode: 123, command: true, shift: true),
+            .nudgeVFO(byHz: -100)
+        )
+        XCTAssertEqual(
+            KeyMonitorGate.action(keyCode: 124, command: true, shift: true),
+            .nudgeVFO(byHz: 100)
+        )
+    }
+
+    /// ⇧← alone extends a text selection — the field's, not ours.
+    func testShiftedArrowsWithoutCommandStayWithTheField() {
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 123, command: false, shift: true))
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 124, command: false, shift: true))
+    }
+
+    /// The nudge is a document key like the rest: refused from a sheet,
+    /// consumed from the document.
+    func testNudgeIsConsumedFromTheDocumentAndRefusedFromASheet() {
+        let fromDocument = KeyMonitorGate.response(
+            keyCode: 124, command: true, shift: true, focus: .document, repeatRunning: false)
+        XCTAssertEqual(fromDocument.action, .nudgeVFO(byHz: 100))
+        XCTAssertTrue(fromDocument.consumesEvent)
+        let fromSheet = KeyMonitorGate.response(
+            keyCode: 124, command: true, shift: true, focus: .sheet, repeatRunning: false)
+        XCTAssertNil(fromSheet.action)
+        XCTAssertFalse(fromSheet.consumesEvent)
     }
 
     /// Without ⌘ the arrows belong to whatever has focus — a text field, the

@@ -743,6 +743,11 @@ final class EntryFlowTests: XCTestCase {
 
     func testCWTransmissionStillCarriesExpandedText() {
         let document = LogDocument()
+        // Run, explicitly: a fresh out-of-state log opens in S&P, where F1 is
+        // the bare `{MYCALL}` — empty until some *other* test has saved a
+        // profile into the store, which is how this passed by order for a
+        // while. Run's F1 carries text of its own.
+        document.log.operatingMode = .run
         let flow = EntryFlow(document: document)
         flow.entry.call = "W6ABC"
         var keying = KeyingSettings()

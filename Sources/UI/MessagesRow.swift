@@ -55,6 +55,7 @@ struct MessagesRow: View {
                 .opacity(0)
                 .accessibilityHidden(true)
             }
+            .shortcutHint("⌘R")
 
             ForEach(Array(keys.prefix(8).enumerated()), id: \.offset) { index, key in
                 Button {
@@ -90,6 +91,7 @@ struct MessagesRow: View {
                         .font(.caption.monospacedDigit())
                 }
                 .help("Jump back to your CQ run frequency and Run mode (⌘J)")
+                .shortcutHint("⌘J")
             }
 
             Toggle(isOn: $esmEnabled) {

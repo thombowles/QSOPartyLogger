@@ -202,6 +202,7 @@ struct VoiceMessagesPane: View {
                 .keyboardShortcut(Self.recordKey(memory: memory), modifiers: .command)
                 .help(recordingThis ? "Stop recording (⌘\(memory), Space or Return)"
                                     : "Record M\(memory) (⌘\(memory)); press again to stop. Stops by itself after 30 s.")
+                .shortcutHint("⌘\(memory)")
 
                 Button {
                     if store.previewingMemory == memory { store.stopPreview() } else { store.preview(memory: memory) }
@@ -211,6 +212,7 @@ struct VoiceMessagesPane: View {
                 .keyboardShortcut(Self.recordKey(memory: memory), modifiers: [.command, .option])
                 .disabled(store.rendered[memory] == nil)
                 .help("Play M\(memory) on this Mac (⌥⌘\(memory))")
+                .shortcutHint("⌥⌘\(memory)")
 
                 Button {
                     trimming = memory

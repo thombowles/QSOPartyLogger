@@ -118,6 +118,7 @@ struct EntryBar: View {
                 Button("Log", action: onLog)
                     .keyboardShortcut(.defaultAction)
                     .disabled(!canLog)
+                    .shortcutHint("⏎")
             }
             if let warning = entry.dupeWarning {
                 Label(warning, systemImage: "exclamationmark.triangle.fill")

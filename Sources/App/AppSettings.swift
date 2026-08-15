@@ -9,6 +9,12 @@ final class AppSettings {
 
     private let defaults: UserDefaults
 
+    /// Whether this settings object persists into `store`. Read-only, so the
+    /// test bundle can prove `shared` was built on the redirected store —
+    /// i.e. that nothing touched `AppSettings.shared` at app launch, before
+    /// `TestBundleSetup` ran — without writing a byte anywhere.
+    func isBacked(by store: UserDefaults) -> Bool { defaults === store }
+
     var radioID: String {
         didSet { defaults.set(radioID, forKey: "radioID") }
     }
@@ -301,6 +307,15 @@ final class AppSettings {
         }
     }
 
+    /// Shortcut hints (⌘/, Help › Keyboard Shortcut Hints): every button
+    /// wears its key, and the legend under the messages row lists the keys
+    /// that have no button. Global, like the advisor goal — a preference
+    /// about the operator, not the log. Off by default: hints are for
+    /// learning the keys, not for keeping.
+    var showShortcutHints: Bool {
+        didSet { defaults.set(showShortcutHints, forKey: "showShortcutHints") }
+    }
+
     /// `defaults` is injected so a test can exercise settings against a scratch
     /// suite. It defaults to `Preferences.store`, which is `.standard` in the
     /// app — production behaviour is unchanged.
@@ -374,6 +389,7 @@ final class AppSettings {
         voicePTTLeadMs = min(500, max(0, defaults.object(forKey: "voicePTTLeadMs") as? Int ?? 120))
         lastStationProfile = defaults.data(forKey: "lastStationProfile")
             .flatMap { try? JSONDecoder().decode(StationProfile.self, from: $0) }
+        showShortcutHints = defaults.object(forKey: "showShortcutHints") as? Bool ?? false
     }
 
     /// CW cut numbers: 0→T and 9→N always, 1→A when `cutOne` is set

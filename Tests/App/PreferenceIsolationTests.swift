@@ -21,6 +21,22 @@ final class PreferenceIsolationTests: XCTestCase {
         )
     }
 
+    /// The redirect only helps if `AppSettings.shared` was built *after* it.
+    /// Anything the app touches at launch — a menu item's state, a scene's
+    /// binding — builds `shared` on `.standard` first, and then every write
+    /// through it lands in the operator's live prefs (2026-08-15: a Help-menu
+    /// Toggle did exactly that, and a full run rewrote the saved station
+    /// profile). Read-only: this proves the binding without writing a byte.
+    @MainActor
+    func testSharedSettingsWereBuiltOnTheRedirectedStore() {
+        XCTAssertTrue(
+            AppSettings.shared.isBacked(by: Preferences.store),
+            "AppSettings.shared was built before TestBundleSetup redirected the store — "
+                + "something touches it at app launch; every shared write is going to the real domain"
+        )
+        XCTAssertFalse(AppSettings.shared.isBacked(by: UserDefaults.standard))
+    }
+
     /// The regression, stated behaviourally: a setup change writes the profile
     /// somewhere, and that somewhere is not the operator's real preferences.
     @MainActor

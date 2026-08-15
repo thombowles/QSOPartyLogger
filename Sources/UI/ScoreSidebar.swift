@@ -172,6 +172,7 @@ struct ScoreSidebar: View {
         .contextMenu {
             Button("Copy Score Summary") { copySummary() }
         }
+        .shortcutHint("⇧⌘C copy")
     }
 
     /// The keyboard half of the same action (⇧⌘C) — constitution rule 9.
@@ -344,6 +345,7 @@ struct ScoreSidebar: View {
                 .foregroundStyle(.secondary)
                 .keyboardShortcut("m", modifiers: [.command, .shift])
                 .help("Expand or collapse every multiplier list (⇧⌘M)")
+                .shortcutHint("⇧⌘M")
             }
 
             // Every class the party counts, drawn whole — worked and still

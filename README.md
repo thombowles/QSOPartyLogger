@@ -107,6 +107,11 @@ Per-party detail — what's unusual about each, and every known limitation — i
 
 ## Keyboard reference
 
+Press **⌘/** (or Help › Keyboard Shortcut Hints) and every button wears its key
+as a small badge — the toolbar, the message row, Log, WPM, the sidebar, the
+editors — while a legend under the message buttons lists the keys that have no
+button and shows the last key the app received. Press ⌘/ again to hide them.
+
 | Keys | Action |
 | --- | --- |
 | `Enter` | Log the QSO (or send the next ESM message, or run a typed QSY command) |
@@ -123,6 +128,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | Any key | While repeat-CQ is running: stop it and abort the CQ on the air, then do the key's own job |
 | `⌘=` / `⌘-` | CW speed ±2 WPM — takes effect mid-message (syncs to the radio) |
 | `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
+| `⇧⌘←` / `⇧⌘→` | Nudge the VFO down / up 100 Hz (a burst of presses adds up; disconnected, the band-map cursor moves instead) |
 | `⌘R` | Toggle Run / Search & Pounce |
 | `⌘J` | Jump back to your CQ run frequency |
 | `⌘B` | Toggle the band map window |
@@ -136,6 +142,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `⌥⌘A` | Toggle what the Advisor optimises: Score ↔ QSOs |
 | `⌘A` | Select every row in the log (`⇧`-click for a range, `⌘`-click for scattered rows) |
 | `⌘.` | Dismiss the spots-already-used badge for this sitting |
+| `⌘/` | Shortcut hints on / off (also Help › Keyboard Shortcut Hints): every button wears its key, and a legend under the message buttons lists the keys that have no button, with a "last key" readout of what the app received |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY, change band, change mode |
 
 In the Contest Dashboard (**⌘⇧D**): `⌘[` / `⌘]` change year, `⌘R` re-reads the
@@ -152,6 +159,18 @@ the exchange finish.
 These keys belong to the log window with focus. While a sheet is open it owns
 the keyboard — `F1`–`F8` do not transmit, so revising F2 and pressing it never
 keys the old message. `Esc` still aborts CW instantly either way.
+
+**If the F-keys do nothing but the buttons work**, the keyboard is almost
+certainly sending its F row as media keys — brightness, Mission Control,
+backlight — which never reach the logger as `F1`–`F12`. The app tells you when
+that happens: a line under the message buttons names what arrived ("F1 arrived
+as Brightness ▼ …") with the fix. Keychron and most third-party boards in Mac
+mode default to multimedia on the F row; hold `fn`+`X`+`L` for 4 s to lock it
+to function keys (older firmware: `fn`+`K`+`C` for 3 s), or press `fn` with the
+key. Apple keyboards: System Settings › Keyboard › Keyboard Shortcuts… ›
+Function Keys. Every key the app rules on is also traced to the unified log —
+`log show --predicate 'subsystem == "org.b5n.QSOPartyLogger"' --last 10m` shows
+the key code, which window had focus, and what the app did with it.
 
 ## Logging
 
@@ -575,6 +594,9 @@ stays on screen when another app takes focus, so it can sit beside a panadapter.
   come from 47 CFR §97.305(c). Untick **Follow band plan on QSY** to disable.
 - **CQ frequency memory**: sending F1 in Run mode remembers your run frequency;
   **⌘J** jumps back to it after an S&P excursion.
+- **VFO nudge**: **⇧⌘←** / **⇧⌘→** move the radio 100 Hz down / up without
+  leaving the entry field — zero-beating a caller, or edging off a neighbour on
+  phone. A burst of presses adds up even before the radio has reported back.
 
 Hub spots are hand-posted, so they live longer than cluster spots — 60 minutes
 against 15, matching what the hub itself keeps. Hub polling runs once a minute
@@ -916,7 +938,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2721 unit tests**, none of which need hardware, a network or a microphone —
+**2756 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
 (driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank

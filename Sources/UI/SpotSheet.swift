@@ -76,9 +76,11 @@ struct SpotSheet: View {
                 Spacer()
                 Button("Cancel", role: .cancel, action: onCancel)
                     .keyboardShortcut(.cancelAction)
+                    .shortcutHint("Esc")
                 Button("Post Spot") { onSend(draft.sending(available: available)) }
                     .keyboardShortcut(.defaultAction)
                     .disabled(!canPost)
+                    .shortcutHint("⏎")
             }
             .background(shortcuts)
         }

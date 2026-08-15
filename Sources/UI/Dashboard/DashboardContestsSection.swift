@@ -28,6 +28,7 @@ struct DashboardContestsSection: View {
                 .keyboardShortcut("e", modifiers: .command)
                 .disabled(!(selectedRow?.exportable ?? false))
                 .help(exportBlockedReason ?? "Export the selected contest's log as ADIF (⌘E)")
+                .shortcutHint("⌘E")
 
                 Button {
                     if let row = selectedRow {
@@ -39,6 +40,7 @@ struct DashboardContestsSection: View {
                 .keyboardShortcut("e", modifiers: [.command, .shift])
                 .disabled(!(selectedRow?.exportable ?? false))
                 .help(exportBlockedReason ?? "Export the selected contest's log as Cabrillo (⇧⌘E)")
+                .shortcutHint("⇧⌘E")
             }
 
             if rows.isEmpty {

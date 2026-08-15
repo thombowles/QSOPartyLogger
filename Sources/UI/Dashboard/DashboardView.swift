@@ -58,6 +58,7 @@ struct DashboardView: View {
             .keyboardShortcut("[", modifiers: .command)
             .help("Previous year (⌘[)")
             .disabled(model.years.sorted().first == model.selectedYear)
+            .shortcutHint("⌘[")
 
             Picker("Year", selection: $model.selectedYear) {
                 ForEach(model.years, id: \.self) { year in
@@ -75,6 +76,7 @@ struct DashboardView: View {
             .keyboardShortcut("]", modifiers: .command)
             .help("Next year (⌘])")
             .disabled(model.years.sorted().last == model.selectedYear)
+            .shortcutHint("⌘]")
 
             Spacer()
 
@@ -103,6 +105,7 @@ struct DashboardView: View {
             }
             .keyboardShortcut("r", modifiers: .command)
             .help("Re-read the history file (⌘R)")
+            .shortcutHint("⌘R")
         }
     }
 
