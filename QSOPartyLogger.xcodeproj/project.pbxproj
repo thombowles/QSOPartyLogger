@@ -88,6 +88,7 @@
 		322428A6E8BFF4A899E390B9 /* SerialPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8C4419151BB1282C6E55EC /* SerialPort.swift */; };
 		32DC0E794DD42A7AAF64CA38 /* CallHistoryFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4627D54BA3531AC67C9B082 /* CallHistoryFile.swift */; };
 		33BE9DE36032EDF41BD68C4E /* DashboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421798B9AC00F2AAE678F54 /* DashboardModel.swift */; };
+		3632F7B4059D67DF128F898D /* SpotRepeatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CA401969F43D5B6B37D7E0 /* SpotRepeatTests.swift */; };
 		36855A41F241A73EAF900267 /* SalmonRunTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD1F2D81475C7AC090117A5 /* SalmonRunTests.swift */; };
 		36D1463B5DC69485948798D3 /* LogDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */; };
 		39531F3450A50C5765C48B87 /* ClusterProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2914E1429C4152BCF4A61DC /* ClusterProtocolTests.swift */; };
@@ -219,6 +220,7 @@
 		A05D552978623253F23B4C79 /* CallHistoryFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F8E0DD4DFDC0CB0DF3FEF1 /* CallHistoryFileTests.swift */; };
 		A1A60A0CFC217C5D31753DEE /* pota_parks_sample.json in Resources */ = {isa = PBXBuildFile; fileRef = 3369698E7590F081AF65EB4D /* pota_parks_sample.json */; };
 		A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC43C19DF629A758F1B4641 /* ContestLog.swift */; };
+		A373657BB6B2233665770B83 /* SpotSendState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4750D73F12A657C4B503D40 /* SpotSendState.swift */; };
 		A4276D42A299E140C2F6C501 /* CountyLineExpanderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */; };
 		A42E6B812AB3926365054BE2 /* WisconsinQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAEBB7A441C9608FDD951FB /* WisconsinQSOPartyTests.swift */; };
 		A528B72837E1537BDA590A5B /* IdahoQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED18DA5065D11D03393147E1 /* IdahoQSOPartyTests.swift */; };
@@ -243,6 +245,7 @@
 		B56E15627B99B1F7E3CBFEF8 /* BulkEditTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6303BA9E80467E06D2B64C54 /* BulkEditTests.swift */; };
 		B697AC58255763D8708239E5 /* SCPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA34D87EC7908A404F08591 /* SCPClient.swift */; };
 		B6FBE02A952C1AE6A69D169F /* StationMemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8199BE77C57911CB47B7B016 /* StationMemoryTests.swift */; };
+		B7A10BA679D25B2381EEEDFF /* SpotFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD6F1CD9E4B5D9387123E6C /* SpotFrequency.swift */; };
 		B99DE9236CC16993B455BC8E /* SpottingPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C881733E52B4CD62D43604 /* SpottingPolicyTests.swift */; };
 		BA29F9177B9172AD408E813B /* OneByOneTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */; };
 		BB37CFF1FA39DE72C1AF9A0F /* swpc_planetary_k_index_2026-08-09.json in Resources */ = {isa = PBXBuildFile; fileRef = 7DC4C4A853BB7179CD85AC18 /* swpc_planetary_k_index_2026-08-09.json */; };
@@ -260,6 +263,7 @@
 		C3CDE006A150B8867C4B7794 /* SkeeterRosterParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC7EEC941E41165B0FE43C9 /* SkeeterRosterParser.swift */; };
 		C46093573C4E0C33B0EE6086 /* QSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28174F39D351A29CC80B77F2 /* QSO.swift */; };
 		C4A0BBE3CA76C438A158B860 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4617D5E5CB3103CD4E042746 /* MainView.swift */; };
+		C51EA8F46AB45C0DBBA944C7 /* SpotRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198B67F829207C5E6DBB329C /* SpotRepeat.swift */; };
 		C538ACCF93B5DCFFFE15C1B3 /* PotaParkDirectoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2D9B1FCC05FCBCC978861F /* PotaParkDirectoryTests.swift */; };
 		C58A052DB7DBAC19355917EA /* CallHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCF2F37A32D904FCCB58446 /* CallHistoryStoreTests.swift */; };
 		C60CC51CEC644E079173FDD5 /* NorthCarolinaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3503B1BC8F8AE6F11E4221F7 /* NorthCarolinaQSOPartyTests.swift */; };
@@ -314,6 +318,7 @@
 		EA548A4E8ACEAACF1F2452DC /* MessagesRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D2158467D3A61358A399D7 /* MessagesRow.swift */; };
 		EA68D3C9DCC810F20F865121 /* GeorgiaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E3BF99C529E7F7490BE0B6 /* GeorgiaQSOPartyTests.swift */; };
 		EADC3E655DA027365F53814C /* PotaPark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEC4DEED07DBB72D0194DA8 /* PotaPark.swift */; };
+		EB99F8B29A2B21C818F93ABF /* SpotFrequencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77008B4098813D7986E66E3E /* SpotFrequencyTests.swift */; };
 		EC56BDD4BA4DD578EFC84597 /* BandPlanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F437B56480EB7F8E109AF5 /* BandPlanTests.swift */; };
 		ED5F3D5F6931292ADBF3E385 /* MorseCodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6989E84D7AABBEB0B1451F /* MorseCodeTests.swift */; };
 		ED6D904A680FE4DA2B03DA38 /* PotaParkStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BF3A3E0D2A190DDA4A0941 /* PotaParkStoreTests.swift */; };
@@ -369,6 +374,7 @@
 		03674EF03D1FFEDC38888A79 /* ExchangeSummaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeSummaryTests.swift; sourceTree = "<group>"; };
 		03CE1E1946B617E9A436FD8A /* CallHistoryClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryClient.swift; sourceTree = "<group>"; };
 		04053E0272A2391F55417D60 /* SpotFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFilterTests.swift; sourceTree = "<group>"; };
+		05CA401969F43D5B6B37D7E0 /* SpotRepeatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotRepeatTests.swift; sourceTree = "<group>"; };
 		0676CB4B55B41FD7B226CA31 /* IndianaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndianaQSOPartyTests.swift; sourceTree = "<group>"; };
 		067FE6B0EB648263DEECAC66 /* OperatorAlertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatorAlertTests.swift; sourceTree = "<group>"; };
 		075DC2D7011F9E054C8826A8 /* HubSpotPrefillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotPrefillTests.swift; sourceTree = "<group>"; };
@@ -393,6 +399,7 @@
 		17C9CCE3682DD1DBEC9CD5F3 /* SpotExchangePrefillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotExchangePrefillTests.swift; sourceTree = "<group>"; };
 		186FAD70DFDE9D915C1A471E /* DXCCTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCTable.swift; sourceTree = "<group>"; };
 		1897E0B91EAB87E646FB5A8F /* NAQPCW-004.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "NAQPCW-004.txt"; sourceTree = "<group>"; };
+		198B67F829207C5E6DBB329C /* SpotRepeat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotRepeat.swift; sourceTree = "<group>"; };
 		1A23E3ADEAE3B7F86B2A421E /* LogTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTable.swift; sourceTree = "<group>"; };
 		1B5620BAC49FB9D14CC47186 /* SCPDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCPDatabase.swift; sourceTree = "<group>"; };
 		1BE324A25B998F570B53C353 /* SouthDakotaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SouthDakotaQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -440,6 +447,7 @@
 		369C26C343E2C414BF592CC6 /* SkeeterHuntTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeeterHuntTests.swift; sourceTree = "<group>"; };
 		369E1591F09C47EEADB9A4D7 /* MaidenheadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaidenheadTests.swift; sourceTree = "<group>"; };
 		3B07E26A34F4A74B9165A344 /* EntryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryState.swift; sourceTree = "<group>"; };
+		3BD6F1CD9E4B5D9387123E6C /* SpotFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFrequency.swift; sourceTree = "<group>"; };
 		3C9EEF88A7F58AFB94F83B07 /* MultiplierRoster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplierRoster.swift; sourceTree = "<group>"; };
 		3CAE6A6F0991A97405ABD310 /* DXCCLabelClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCLabelClient.swift; sourceTree = "<group>"; };
 		3E3270C8AA34DCB8481F768F /* PartyModeInferenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyModeInferenceTests.swift; sourceTree = "<group>"; };
@@ -527,6 +535,7 @@
 		7486E1CA45DB77F701EB47EA /* ArchivedLogExport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedLogExport.swift; sourceTree = "<group>"; };
 		75214B2954E32E9289B737EE /* MemberExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberExchangeTests.swift; sourceTree = "<group>"; };
 		75970653CB7669E2A41577F5 /* Challenge */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Challenge; path = Resources/Challenge; sourceTree = SOURCE_ROOT; };
+		77008B4098813D7986E66E3E /* SpotFrequencyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFrequencyTests.swift; sourceTree = "<group>"; };
 		771A2A2E70C2A91608F19549 /* RadioBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioBar.swift; sourceTree = "<group>"; };
 		782905999AE900BBDBBE6D2C /* fobb-roster-page-2026-07.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "fobb-roster-page-2026-07.html"; sourceTree = "<group>"; };
 		797C5CEFFBDB939E217C6D60 /* OperatingFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatingFeatureTests.swift; sourceTree = "<group>"; };
@@ -637,6 +646,7 @@
 		D1E1360204AB093D08447987 /* CWKeyerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CWKeyerTests.swift; sourceTree = "<group>"; };
 		D2052FF6C863AA0209875C20 /* DelawareQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelawareQSOPartyTests.swift; sourceTree = "<group>"; };
 		D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDocumentTests.swift; sourceTree = "<group>"; };
+		D4750D73F12A657C4B503D40 /* SpotSendState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSendState.swift; sourceTree = "<group>"; };
 		D47BB5516631675CE4FCBD4F /* UTCTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCTime.swift; sourceTree = "<group>"; };
 		D4C4C03006937E6B0629C681 /* QRPLabsQMXDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRPLabsQMXDriver.swift; sourceTree = "<group>"; };
 		D4DADB486A8C86FA27396EB4 /* CallHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryStore.swift; sourceTree = "<group>"; };
@@ -958,7 +968,9 @@
 				458F13A4AC7D10092F93F2D9 /* SpotCommandTests.swift */,
 				17C9CCE3682DD1DBEC9CD5F3 /* SpotExchangePrefillTests.swift */,
 				04053E0272A2391F55417D60 /* SpotFilterTests.swift */,
+				77008B4098813D7986E66E3E /* SpotFrequencyTests.swift */,
 				14A9F5FF0C8233FC92821648 /* SpotLabelSizeTests.swift */,
+				05CA401969F43D5B6B37D7E0 /* SpotRepeatTests.swift */,
 				A2215D1E38A85D6578624B1D /* SpottingTests.swift */,
 				8199BE77C57911CB47B7B016 /* StationMemoryTests.swift */,
 				71E49449BB9A7AE6DB367D27 /* StationProfileNormalizationTests.swift */,
@@ -1120,8 +1132,11 @@
 				3FD300005CA528B8CA373476 /* Spot.swift */,
 				7E1D19BC072C08DBE666952A /* SpotCommand.swift */,
 				14042D5B6DD33CC2A46A276C /* SpotFilter.swift */,
+				3BD6F1CD9E4B5D9387123E6C /* SpotFrequency.swift */,
 				B54B32AF67B7058055ADD0B7 /* SpotLabelSize.swift */,
 				731055DFF68E6AF98B5FD807 /* SpotParser.swift */,
+				198B67F829207C5E6DBB329C /* SpotRepeat.swift */,
+				D4750D73F12A657C4B503D40 /* SpotSendState.swift */,
 				65578A775A74FB103913C439 /* SpotStore.swift */,
 				9382E762282D91D8950B0F07 /* WorkedSpot.swift */,
 			);
@@ -1568,8 +1583,10 @@
 				EFB55589DABD4E2FB936B338 /* SpotCommandTests.swift in Sources */,
 				D67843C425FEB57DE8F76C0E /* SpotExchangePrefillTests.swift in Sources */,
 				D92268C1083B39CB08B32393 /* SpotFilterTests.swift in Sources */,
+				EB99F8B29A2B21C818F93ABF /* SpotFrequencyTests.swift in Sources */,
 				25593919ADA400E0D07798E1 /* SpotLabelSizePreferenceTests.swift in Sources */,
 				0D2F571A94C690BB239E696A /* SpotLabelSizeTests.swift in Sources */,
+				3632F7B4059D67DF128F898D /* SpotRepeatTests.swift in Sources */,
 				B99DE9236CC16993B455BC8E /* SpottingPolicyTests.swift in Sources */,
 				A632469108D3943D5C878CD7 /* SpottingTests.swift in Sources */,
 				B6FBE02A952C1AE6A69D169F /* StationMemoryTests.swift in Sources */,
@@ -1723,8 +1740,11 @@
 				451EEEAEAD526B20F82A3045 /* SpotClient.swift in Sources */,
 				D4DBB738375F8F40611BC220 /* SpotCommand.swift in Sources */,
 				65EA39B0B0AE20B7666BF414 /* SpotFilter.swift in Sources */,
+				B7A10BA679D25B2381EEEDFF /* SpotFrequency.swift in Sources */,
 				3EC65F34682AFB29CB5CB473 /* SpotLabelSize.swift in Sources */,
 				69C27FF9CA35A238F328CAD7 /* SpotParser.swift in Sources */,
+				C51EA8F46AB45C0DBBA944C7 /* SpotRepeat.swift in Sources */,
+				A373657BB6B2233665770B83 /* SpotSendState.swift in Sources */,
 				0DEA3D34B4EF4162D9FC21D9 /* SpotStore.swift in Sources */,
 				7C1E04CC6A3B21CD6BDBCF0C /* SpottingPolicy.swift in Sources */,
 				9E71B475BAC195A3262398C8 /* StationMemory.swift in Sources */,

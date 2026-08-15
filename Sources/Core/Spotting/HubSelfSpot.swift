@@ -46,8 +46,9 @@ enum HubSelfSpot {
         "station": 15, "frequency": 10, "comment": 50, "poster": 15,
     ]
 
-    /// An identical spot repeated inside this window is a stuck key, not news.
-    static let duplicateWindow: TimeInterval = 5 * 60
+    /// An identical spot repeated inside this window is a stuck key, not news
+    /// — the guard every network shares.
+    static let duplicateWindow: TimeInterval = SpotRepeat.window
 
     // MARK: Validation
 
@@ -105,8 +106,7 @@ enum HubSelfSpot {
     static func isDuplicate(
         _ fields: Fields, of previous: Fields, lastSentAt: Date, now: Date
     ) -> Bool {
-        guard now.timeIntervalSince(lastSentAt) < duplicateWindow else { return false }
-        return fields == previous
+        SpotRepeat.isRepeat(fields, of: previous, lastSentAt: lastSentAt, now: now)
     }
 
     // MARK: Wire format
@@ -133,15 +133,10 @@ enum HubSelfSpot {
 
     /// Kilohertz, the way the form's own `14150` placeholder asks for it, with
     /// no trailing zeros. Posting clean kHz is the one thing this app can do
-    /// to reduce the ambiguity its own parser exists to resolve.
-    /// Not `%g`: its six significant digits turn 14045.25 into 14045.2, which
-    /// would broadcast a frequency 50 Hz off to everyone reading the board.
+    /// to reduce the ambiguity its own parser exists to resolve. The one
+    /// formatter every network shares — see `SpotFrequency` for why not `%g`.
     static func formattedFrequency(_ kHz: Double) -> String {
-        if kHz == kHz.rounded() { return String(Int(kHz)) }
-        var text = String(format: "%.2f", kHz)
-        while text.hasSuffix("0") { text.removeLast() }
-        if text.hasSuffix(".") { text.removeLast() }
-        return text
+        SpotFrequency.text(kHz: kHz)
     }
 
     /// Our official abbreviations translated to the tokens the hub's own form
