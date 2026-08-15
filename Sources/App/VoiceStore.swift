@@ -16,11 +16,29 @@ final class VoiceStore {
     /// What the auto-trim keeps on each side of the voice, so a clip does not
     /// start mid-consonant.
     nonisolated static let autoTrimPad: TimeInterval = 0.12
-    nonisolated static let autoTrimThresholdDB: Float = -40
+    /// The auto-trim's threshold: this far under the clip's own peak, judged
+    /// over 10 ms windows, never lower than the floor — so breath and room
+    /// noise before the first word are trimmed, and a quiet recording is not
+    /// mistaken for a voice.
+    nonisolated static let autoTrimRelativeToPeakDB: Float = 25
+    nonisolated static let autoTrimFloorDB: Float = -45
+    nonisolated static let autoTrimWindow: TimeInterval = 0.01
     /// Read by the render task off the main actor, hence `nonisolated`.
     nonisolated static let waveformBins = 96
 
-    let library: VoiceLibrary
+    /// Where the recordings live: the operator's iCloud folder when one is
+    /// chosen (so the other Macs see them), else this Mac's Application
+    /// Support. Re-evaluated on every reload, so choosing a folder later
+    /// moves them there.
+    enum Location: Equatable, Sendable {
+        case cloudFolder(path: String)
+        case thisMac
+    }
+
+    private(set) var library: VoiceLibrary
+    private(set) var location: Location
+    /// A library handed in (tests) is never relocated.
+    private let pinnedLibrary: Bool
     private let makeRecorder: () -> any VoiceRecording
     private var recorder: (any VoiceRecording)?
     private var previewOutput: (any AudioOutput)?
@@ -46,14 +64,55 @@ final class VoiceStore {
 
     private var renderTask: Task<Void, Never>?
 
-    init(library: VoiceLibrary = VoiceLibrary(folder: VoiceLibrary.defaultFolder),
+    /// `library` nil = follow the iCloud folder setting (the app); a library
+    /// given (tests) is used as-is and never relocated.
+    init(library: VoiceLibrary? = nil,
          makeRecorder: @escaping () -> any VoiceRecording = { EngineVoiceRecorder() }) {
-        self.library = library
+        if let library {
+            self.library = library
+            self.location = .thisMac
+            self.pinnedLibrary = true
+        } else {
+            let preferred = Self.preferredLibrary()
+            self.library = preferred.library
+            self.location = preferred.location
+            self.pinnedLibrary = false
+        }
         self.makeRecorder = makeRecorder
+    }
+
+    /// The iCloud folder's `Voice` subfolder when one is chosen, else this
+    /// Mac's Application Support.
+    private static func preferredLibrary() -> (library: VoiceLibrary, location: Location) {
+        if let cloud = CloudMirror.activeFolder() {
+            return (VoiceLibrary(folder: cloud.appendingPathComponent("Voice", isDirectory: true)),
+                    .cloudFolder(path: CloudMirror.folderDisplayPath ?? cloud.path))
+        }
+        return (VoiceLibrary(folder: VoiceLibrary.defaultFolder), .thisMac)
+    }
+
+    /// The location may have changed since the last look (an iCloud folder
+    /// chosen mid-session): switch to it, and bring the sets this Mac already
+    /// holds along — once, whole, never overwriting a set the folder has.
+    private func relocateIfNeeded() {
+        guard !pinnedLibrary else { return }
+        let preferred = Self.preferredLibrary()
+        library = preferred.library
+        location = preferred.location
+        let legacy = VoiceLibrary(folder: VoiceLibrary.defaultFolder)
+        guard library.folder != legacy.folder else { return }
+        do {
+            _ = try library.adoptSets(from: legacy)
+        } catch {
+            lastError = "Couldn't move the recordings to the iCloud folder: \(error.localizedDescription)"
+        }
     }
 
     /// Party ids with recordings, for the "Copy from…" menu.
     var partiesWithRecordings: [String] { library.partiesWithRecordings() }
+
+    /// The folder the files are in, for the tab and for Reveal in Finder.
+    var locationDescription: Location { location }
 
     // MARK: Loading and rendering
 
@@ -62,6 +121,7 @@ final class VoiceStore {
         rendered = [:]
         waveforms = [:]
         lastError = nil
+        relocateIfNeeded()
         guard let partyID else {
             set = VoiceMessageSet()
             return
@@ -85,23 +145,44 @@ final class VoiceStore {
         renderTask = Task.detached(priority: .userInitiated) { [weak self] in
             var out: [Int: VoiceAudio] = [:]
             var waves: [Int: [Float]] = [:]
+            var missing = 0
             for (memory, clip) in set.clips {
                 if Task.isCancelled { return }
-                guard let audio = try? AudioFileIO.read(library.fileURL(partyID: partyID, fileName: clip.fileName))
-                else { continue }
+                let url = library.fileURL(partyID: partyID, fileName: clip.fileName)
+                guard let audio = try? AudioFileIO.read(url) else {
+                    // Not there yet — iCloud may still be bringing it down.
+                    library.requestDownloadIfPlaceholder(url)
+                    missing += 1
+                    continue
+                }
                 let cut = audio.trimmed(from: clip.trimStart, to: clip.trimEnd).applyingGain(dB: clip.gainDB)
                 out[memory] = cut
                 waves[memory] = cut.waveform(bins: VoiceStore.waveformBins)
             }
             let rendered = out
             let waveforms = waves
+            let retry = missing > 0
             await MainActor.run { [weak self] in
                 guard let self, self.partyID == partyID, !Task.isCancelled else { return }
                 self.rendered = rendered
                 self.waveforms = waveforms
+                // One more look a few seconds later, for files iCloud is
+                // still downloading; after that the operator reopens the tab.
+                if retry, self.renderRetries < 3 {
+                    self.renderRetries += 1
+                    Task { @MainActor [weak self] in
+                        try? await Task.sleep(nanoseconds: 4_000_000_000)
+                        guard let self, self.partyID == partyID else { return }
+                        self.renderAll()
+                    }
+                } else if !retry {
+                    self.renderRetries = 0
+                }
             }
         }
     }
+
+    private var renderRetries = 0
 
     private func persist() {
         guard let partyID else { return }
@@ -157,7 +238,8 @@ final class VoiceStore {
             return
         }
         // A silent capture keeps the whole clip; the row will say so.
-        let voiced = audio.voicedRange(thresholdDB: Self.autoTrimThresholdDB, pad: Self.autoTrimPad)
+        let voiced = audio.voicedRange(relativeToPeakDB: Self.autoTrimRelativeToPeakDB, floorDB: Self.autoTrimFloorDB,
+                                        window: Self.autoTrimWindow, pad: Self.autoTrimPad)
         set[memory] = VoiceClip(
             fileName: fileName, duration: audio.duration,
             trimStart: voiced?.lowerBound ?? 0, trimEnd: voiced?.upperBound ?? audio.duration,
@@ -196,7 +278,8 @@ final class VoiceStore {
     /// Redo the silence trim on the whole file.
     func autoTrim(memory: Int) {
         guard set[memory] != nil, let audio = fullAudio(memory: memory) else { return }
-        let range = audio.voicedRange(thresholdDB: Self.autoTrimThresholdDB, pad: Self.autoTrimPad)
+        let range = audio.voicedRange(relativeToPeakDB: Self.autoTrimRelativeToPeakDB, floorDB: Self.autoTrimFloorDB,
+                                        window: Self.autoTrimWindow, pad: Self.autoTrimPad)
         setTrim(memory: memory, start: range?.lowerBound ?? 0, end: range?.upperBound ?? audio.duration)
     }
 

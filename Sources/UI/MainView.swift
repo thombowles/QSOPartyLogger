@@ -706,7 +706,9 @@ struct MainView: View {
                     Text(path)
                 }
                 Button(CloudMirror.isConfigured ? "Change iCloud Folder…" : "Choose iCloud Folder…") {
-                    _ = CloudMirror.chooseFolder()
+                    // The recordings follow the folder: reload moves this
+                    // Mac's sets into it and reads from there.
+                    if CloudMirror.chooseFolder() { voiceStore.reload() }
                 }
                 if CloudMirror.isConfigured {
                     Toggle("Auto-Save Copies to iCloud", isOn: Binding(

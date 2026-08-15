@@ -29,6 +29,7 @@ struct VoiceMessagesPane: View {
     @State private var inputDevices: [AudioDevice] = []
     @State private var outputDevices: [AudioDevice] = []
     @State private var localError: String?
+    @State private var showDetails = false
 
     // MARK: Pure helpers (tested)
 
@@ -292,12 +293,53 @@ struct VoiceMessagesPane: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
+            Text(Self.locationText(store.locationDescription))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
             if let message = localError ?? store.lastError {
                 Label(message, systemImage: "exclamationmark.triangle.fill")
                     .font(.caption)
                     .foregroundStyle(.orange)
                     .fixedSize(horizontal: false, vertical: true)
             }
+            if path == .readyOverNetwork {
+                DisclosureGroup("Details — what the radio said", isExpanded: $showDetails) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        ScrollView {
+                            Text(radio.voiceLog.isEmpty ? "Nothing yet — play a memory to the radio."
+                                                        : radio.voiceLog.joined(separator: "\n"))
+                                .font(.caption2.monospaced())
+                                .textSelection(.enabled)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .frame(height: 120)
+                        HStack {
+                            Button("Refresh") { radio.refreshVoiceLog() }
+                            Button("Copy") {
+                                NSPasteboard.general.clearContents()
+                                NSPasteboard.general.setString(radio.voiceLog.joined(separator: "\n"), forType: .string)
+                            }
+                            .disabled(radio.voiceLog.isEmpty)
+                        }
+                        .controlSize(.small)
+                    }
+                }
+                .font(.caption)
+                .onChange(of: showDetails) { if showDetails { radio.refreshVoiceLog() } }
+            }
+        }
+    }
+
+    /// Where the files are, and whether the other Macs see them.
+    nonisolated static func locationText(_ location: VoiceStore.Location) -> String {
+        switch location {
+        case .cloudFolder(let path):
+            "Recordings live in your iCloud folder (\(path)/Voice), so your other Macs see them once "
+                + "iCloud has synced."
+        case .thisMac:
+            "Recordings live on this Mac only. Choose an iCloud folder (toolbar → iCloud) and they move "
+                + "there, for your other Macs."
         }
     }
 

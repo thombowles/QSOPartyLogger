@@ -13,6 +13,11 @@ struct VoiceTrimPopover: View {
     @State private var bins: [Float] = []
     @State private var start: Double = 0
     @State private var end: Double = 0
+    @State private var gainDB: Double = 0
+
+    /// The gain slider's range. Normalize can land anywhere inside it; the
+    /// slider is for nudging by ear after that.
+    static let gainRange: ClosedRange<Double> = -20...20
 
     private var duration: Double { full?.duration ?? store.set[memory]?.duration ?? 0 }
 
@@ -36,6 +41,15 @@ struct VoiceTrimPopover: View {
                         .frame(width: 320)
                     Text(String(format: "%.2f s", end)).font(.caption.monospacedDigit()).frame(width: 52)
                 }
+                GridRow {
+                    Text("Gain").frame(width: 40, alignment: .trailing)
+                    Slider(value: $gainDB, in: Self.gainRange, step: 0.5) { editing in
+                        if !editing { store.setGain(memory: memory, dB: Float(gainDB)) }
+                    }
+                    .frame(width: 320)
+                    .help("Level of this recording, in dB — Normalize sets it so the peak sits at −1 dBFS; nudge by ear from there")
+                    Text(String(format: "%+.1f dB", gainDB)).font(.caption.monospacedDigit()).frame(width: 52)
+                }
             }
             HStack(spacing: 8) {
                 Button(store.previewingMemory == memory ? "Stop" : "Play") {
@@ -48,15 +62,16 @@ struct VoiceTrimPopover: View {
                     reload()
                 }
                 .help("Find the voice again and keep 120 ms each side")
-                Button("Normalize") { store.normalize(memory: memory) }
-                    .help("Set the gain so the peak sits at −1 dBFS")
-                if let gain = store.set[memory]?.gainDB, gain != 0 {
-                    Text(String(format: "%+.1f dB", gain))
-                        .font(.caption.monospacedDigit())
-                        .foregroundStyle(.secondary)
-                    Button("Reset gain") { store.setGain(memory: memory, dB: 0) }
-                        .controlSize(.small)
+                Button("Normalize") {
+                    store.normalize(memory: memory)
+                    gainDB = Double(store.set[memory]?.gainDB ?? 0)
                 }
+                .help("Set the gain so the peak sits at −1 dBFS")
+                Button("Reset gain") {
+                    store.setGain(memory: memory, dB: 0)
+                    gainDB = 0
+                }
+                .disabled(gainDB == 0)
                 Spacer()
                 Button("Done") { dismiss() }
                     .keyboardShortcut(.defaultAction)
@@ -75,6 +90,7 @@ struct VoiceTrimPopover: View {
         bins = full?.waveform(bins: 140) ?? []
         start = store.set[memory]?.trimStart ?? 0
         end = store.set[memory]?.trimEnd ?? duration
+        gainDB = Double(store.set[memory]?.gainDB ?? 0)
     }
 
     private func commit() {

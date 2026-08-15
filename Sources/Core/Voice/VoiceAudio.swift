@@ -71,6 +71,39 @@ struct VoiceAudio: Equatable, Sendable {
         return start...end
     }
 
+    /// The recorder's trim. The threshold is `relativeToPeakDB` below the
+    /// clip's own peak (never lower than `floorDB`), and it is met by a
+    /// `window`-second RMS rather than a single sample — so room noise, a
+    /// breath before the first word and a click on the desk do not start the
+    /// clip, and a hot or quiet recording is judged against itself. Padded by
+    /// `pad` each side and clamped; nil when nothing reaches the threshold.
+    func voicedRange(relativeToPeakDB: Float, floorDB: Float, window: TimeInterval,
+                     pad: TimeInterval) -> ClosedRange<TimeInterval>? {
+        let peakDB = Self.decibels(peak)
+        guard peakDB > floorDB else { return nil }
+        let threshold = Self.linear(dB: max(peakDB - relativeToPeakDB, floorDB))
+        let size = max(1, Int(window * sampleRate))
+        guard !samples.isEmpty else { return nil }
+        var first: Int?
+        var last: Int?
+        var index = 0
+        while index < samples.count {
+            let end = min(samples.count, index + size)
+            var sum: Float = 0
+            for i in index..<end { sum += samples[i] * samples[i] }
+            let rms = sqrtf(sum / Float(end - index))
+            if rms >= threshold {
+                if first == nil { first = index }
+                last = end
+            }
+            index = end
+        }
+        guard let first, let last else { return nil }
+        let start = max(0, Double(first) / sampleRate - pad)
+        let stop = min(duration, Double(last) / sampleRate + pad)
+        return start...stop
+    }
+
     /// The gain, in dB, that puts the peak at `targetDB`. 0 for a silent clip
     /// — there is nothing to normalize, and infinite gain would be the answer.
     func normalizationGainDB(targetDB: Float = -1) -> Float {

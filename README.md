@@ -394,15 +394,25 @@ Phone (⇧⌘V) and record eight memories — `M1 CQ`, `M2 Exch`, `M3 TU`, `M4
 AGN?` by default — straight from the microphone: ⌘1–⌘8 record and stop (30 s
 maximum), ⌥⌘1–⌥⌘8 play a memory back on the Mac, and each row shows its
 waveform and length. Leading and trailing silence are trimmed off
-automatically; ✂ opens a trim editor with a big waveform, two handles, Auto-trim
-and Normalize, and everything is non-destructive. Import a WAV or any audio file
-instead, or **Copy from another party…** to fill the memories every party
-shares — TU, AGN?, 73 and your call — and re-record only CQ and the exchange.
-Recordings are kept **per party**, so next year's Texas QSO Party finds this
-year's messages, and they save the moment the red button stops (names and F-key
-mappings save with the sheet). ⇢ Radio plays a memory to the radio exactly as
-the F-key will, so the level can be set against the radio's ALC meter with the
-Level slider.
+automatically — the start is where your voice reaches 25 dB under the clip's
+own peak, so a breath before the first word is trimmed too, with 120 ms kept
+either side; ✂ opens a trim editor with a big waveform, two handles, a **Gain**
+slider (±20 dB), Auto-trim and Normalize, and everything is non-destructive.
+Import a WAV or any audio file instead, or **Copy from another party…** to fill
+the memories every party shares — TU, AGN?, 73 and your call — and re-record
+only CQ and the exchange. Recordings are kept **per party** and save the moment
+the red button stops (names and F-key mappings save with the sheet). ⇢ Radio
+plays a memory to the radio exactly as the F-key will, so the level can be set
+against the radio's ALC meter with the Level slider.
+
+**They live in your iCloud folder.** Once you have chosen an iCloud Drive
+folder (toolbar → iCloud → *Choose iCloud Folder…*, the same folder your logs
+mirror to), recordings are kept in its `Voice` subfolder — one folder per
+party — so your other Macs see the same messages once iCloud has synced them,
+and next year's Texas QSO Party finds this year's. Recordings made before a
+folder was chosen move there by themselves the next time the tab loads. With
+no folder chosen they stay in this Mac's Application Support, and the tab says
+so.
 
 On the air the F-keys, ESM, `Esc` and Repeat CQ behave exactly as on CW: the TX
 badge shows the caption while the clip plays and clears at the real end, `Esc`
@@ -499,16 +509,33 @@ Network if you dismissed it). The app keeps retrying while the prompt is up.
 recordings you make in Messages → Phone are streamed to the radio as its own
 transmit audio, and the radio is keyed for each one. There is nothing to wire
 and no sound card to pick. On the first message after connecting, the app
-registers itself with the radio, claims the transmit-audio source and opens a
-stream; that takes a moment, and nothing is keyed until the radio has confirmed
-the stream is the app's. For each message it then switches the radio's transmit
-audio source to that stream (SmartSDR's DAX button lights while a message
-plays), keys, streams the clip with a short lead and tail of silence, unkeys,
-and puts the source back so your microphone works between messages. Whichever
-slice is the transmitter is what goes on the air. If the radio refuses the
-stream, the reason — with the radio's own response code — appears in the radio
-bar, and nothing is transmitted. The Level slider is the only level there is on
-this path (the radio's speech processor still applies, as it does to a mic).
+registers itself with the radio, opens a DAX transmit stream and **claims
+transmit on it** (`stream set … tx=1` — the radio modulates only the one DAX
+TX stream that has claimed, and drops packets from every other); nothing is
+keyed until the radio reports the stream is the app's and `tx=1`. For each
+message it then switches the radio's transmit audio source to DAX (the DAX
+button in SmartSDR's TX panel lights while a message plays), keys, streams the
+clip with a short lead and tail of silence, unkeys, and puts the source back so
+your microphone works between messages. Whichever slice is the transmitter is
+what goes on the air.
+
+Three things to check if the radio keys but nothing is heard:
+
+- **The DAX control panel's own TX channel must be off.** If SmartSDR's DAX
+  application (or any other program) has a TX channel enabled, the radio takes
+  its transmit audio from *that* stream and silently drops this app's — PTT
+  with silence is exactly what that looks like. Turn that program's TX off
+  while you use recordings here; you can turn it back on for digital modes
+  afterwards.
+- MIC level and RF power on the radio must be non-zero, as for a microphone.
+- Open **Details — what the radio said** at the bottom of the Phone tab: it
+  lists every command the app sent for the stream, the radio's replies and
+  status lines, and the packet count, and it has a Copy button. If the radio
+  refuses the stream, the reason — with the radio's own response code — also
+  appears in the radio bar, and nothing is transmitted.
+
+The Level slider is the only level there is on this path (the radio's speech
+processor still applies, as it does to a mic).
 
 ## Spotting and the band map
 
@@ -845,7 +872,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2629 unit tests**, none of which need hardware, a network or a microphone —
+**2635 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
 (driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank

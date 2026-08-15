@@ -64,7 +64,10 @@ struct VoiceLibrary: Sendable {
     func load(partyID: String) throws -> VoiceMessageSet {
         try validated(partyID)
         let url = sidecarURL(partyID: partyID)
-        guard FileManager.default.fileExists(atPath: url.path) else { return VoiceMessageSet() }
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            requestDownloadIfPlaceholder(url)
+            return VoiceMessageSet()
+        }
         return try JSONDecoder.voice.decode(VoiceMessageSet.self, from: Data(contentsOf: url))
     }
 
@@ -112,6 +115,34 @@ struct VoiceLibrary: Sendable {
         }
         if copied > 0 { try save(dst, partyID: destination) }
         return copied
+    }
+
+    /// Move every party set `legacy` has and this library lacks — files and
+    /// sidecar, whole — and return the ids moved, sorted. Sets already here
+    /// are left alone, and so are the legacy copies of those. This is how
+    /// recordings made before an iCloud folder was chosen follow it, once.
+    func adoptSets(from legacy: VoiceLibrary) throws -> [String] {
+        let names = (try? FileManager.default.contentsOfDirectory(atPath: legacy.folder.path)) ?? []
+        var moved: [String] = []
+        for partyID in names.filter({ Self.isValidPartyID($0) }).sorted() {
+            let source = legacy.setFolder(partyID: partyID)
+            guard FileManager.default.fileExists(atPath: legacy.sidecarURL(partyID: partyID).path),
+                  !FileManager.default.fileExists(atPath: setFolder(partyID: partyID).path) else { continue }
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            try FileManager.default.moveItem(at: source, to: setFolder(partyID: partyID))
+            moved.append(partyID)
+        }
+        return moved
+    }
+
+    /// iCloud Drive may hold a not-yet-downloaded placeholder where a file
+    /// should be. Ask for it; the next load or render finds it. Best effort —
+    /// a folder that is not in iCloud simply has no placeholders.
+    func requestDownloadIfPlaceholder(_ url: URL) {
+        let placeholder = url.deletingLastPathComponent()
+            .appendingPathComponent(".\(url.lastPathComponent).icloud")
+        guard FileManager.default.fileExists(atPath: placeholder.path) else { return }
+        try? FileManager.default.startDownloadingUbiquitousItem(at: url)
     }
 
     /// Party ids with at least one recording, sorted — the "Copy from…" menu.

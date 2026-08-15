@@ -71,6 +71,53 @@ final class VoiceAudioTests: XCTestCase {
         XCTAssertNil(VoiceAudio(sampleRate: 48_000, samples: []).voicedRange())
     }
 
+    /// The recorder's trim: room noise and breath before the voice sit well
+    /// under the clip's own peak, so the start is where the voice reaches
+    /// (peak − 25 dB) over a 10 ms window — not the first sample above a
+    /// fixed floor.
+    func testVoicedRangeRelativeToPeakIgnoresRoomNoiseAndBreath() {
+        let rate = 48_000.0
+        // 0.4 s of noise at −45 dBFS, then a breath at −38 dBFS for 0.1 s,
+        // then 0.3 s of voice at −6 dBFS, then noise.
+        var samples: [Float] = []
+        var seed: UInt32 = 12345
+        func noise(_ amplitude: Float, _ n: Int) -> [Float] {
+            (0..<n).map { _ in
+                seed = seed &* 1664525 &+ 1013904223
+                return amplitude * (Float(seed >> 8) / Float(1 << 24) * 2 - 1)
+            }
+        }
+        samples += noise(VoiceAudio.linear(dB: -45), Int(0.4 * rate))
+        samples += noise(VoiceAudio.linear(dB: -38), Int(0.1 * rate))
+        samples += tone(seconds: 0.3, peak: VoiceAudio.linear(dB: -6)).samples
+        samples += noise(VoiceAudio.linear(dB: -45), Int(0.4 * rate))
+        let a = VoiceAudio(sampleRate: rate, samples: samples)
+        let r = a.voicedRange(relativeToPeakDB: 25, floorDB: -45, window: 0.01, pad: 0.12)!
+        XCTAssertEqual(r.lowerBound, 0.5 - 0.12, accuracy: 0.015, "starts at the voice, not the breath")
+        XCTAssertEqual(r.upperBound, 0.8 + 0.12, accuracy: 0.015)
+        // The old fixed −40 dBFS floor would have started at the breath.
+        XCTAssertLessThan(a.voicedRange(thresholdDB: -40, pad: 0.12)!.lowerBound, 0.35)
+    }
+
+    /// A quiet recording is judged against the floor, not against its own
+    /// tiny peak — otherwise a clip of pure noise "finds" a voice in it.
+    func testVoicedRangeRelativeToPeakUsesTheFloorForQuietClips() {
+        let quiet = VoiceAudio(sampleRate: 48_000, samples: tone(seconds: 0.2, peak: VoiceAudio.linear(dB: -50)).samples)
+        XCTAssertNil(quiet.voicedRange(relativeToPeakDB: 25, floorDB: -45, window: 0.01, pad: 0.12))
+        XCTAssertNil(VoiceAudio(sampleRate: 48_000, samples: []).voicedRange(relativeToPeakDB: 25, floorDB: -45, window: 0.01, pad: 0.12))
+    }
+
+    /// One click does not start a clip: the window's RMS, not a single sample.
+    func testVoicedRangeRelativeToPeakIgnoresASingleClick() {
+        let rate = 48_000.0
+        var samples = [Float](repeating: 0, count: Int(0.5 * rate))
+        samples[100] = 0.9                                     // a click at 2 ms
+        samples += tone(seconds: 0.3, peak: 0.5).samples
+        let a = VoiceAudio(sampleRate: rate, samples: samples)
+        let r = a.voicedRange(relativeToPeakDB: 25, floorDB: -45, window: 0.01, pad: 0.12)!
+        XCTAssertEqual(r.lowerBound, 0.5 - 0.12, accuracy: 0.015)
+    }
+
     func testNormalizationGainBringsPeakToTarget() {
         let a = tone(peak: 0.25)
         let g = a.normalizationGainDB(targetDB: -1)

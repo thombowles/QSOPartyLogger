@@ -93,6 +93,29 @@ final class VoiceLibraryTests: XCTestCase {
         XCTAssertEqual(VoiceLibrary(folder: folder.appendingPathComponent("nowhere")).partiesWithRecordings(), [])
     }
 
+    /// Moving to the iCloud folder: every set the new home lacks comes over
+    /// whole — files and sidecar — and a set already there is left alone.
+    func testAdoptSetsMovesMissingPartiesOnly() throws {
+        let cloud = VoiceLibrary(folder: folder.appendingPathComponent("cloud", isDirectory: true))
+        var a = VoiceMessageSet(); a[1] = clip(1)
+        try library.save(a, partyID: "naqpssb")
+        try writeFakeWAV(partyID: "naqpssb", memory: 1)
+        try library.save(a, partyID: "txqp")
+        try writeFakeWAV(partyID: "txqp", memory: 1)
+        var already = VoiceMessageSet(); already[2] = clip(2, duration: 7)
+        try cloud.save(already, partyID: "txqp")
+
+        let moved = try cloud.adoptSets(from: library)
+        XCTAssertEqual(moved, ["naqpssb"])
+        XCTAssertEqual(try cloud.load(partyID: "naqpssb").recordedMemories, [1])
+        XCTAssertTrue(FileManager.default.fileExists(atPath: cloud.fileURL(partyID: "naqpssb", fileName: "M1.wav").path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: library.setFolder(partyID: "naqpssb").path), "moved, not copied")
+        XCTAssertEqual(try cloud.load(partyID: "txqp")[2]?.duration, 7, "the destination's own set is kept")
+        XCTAssertEqual(try library.load(partyID: "txqp").recordedMemories, [1], "and the legacy one left where it is")
+        XCTAssertEqual(try cloud.adoptSets(from: library), [], "a second pass moves nothing")
+        XCTAssertEqual(try cloud.adoptSets(from: VoiceLibrary(folder: folder.appendingPathComponent("nowhere"))), [])
+    }
+
     func testPartyIDsAreValidatedBeforeTouchingDisk() {
         XCTAssertTrue(VoiceLibrary.isValidPartyID("nyqp"))
         XCTAssertTrue(VoiceLibrary.isValidPartyID("7qp_2026-x"))
