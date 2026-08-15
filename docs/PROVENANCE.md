@@ -749,6 +749,23 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   duplicates a record per park pair because POTA's park-to-park page
   requires it for n-fer credit, not because ADIF asks for it — ADIF's own
   field is a comma list.
+- POTA spotting — the contract of `POST api.pota.app/spot` is taken from
+  pota.app's own "Add Spot" form (`SpotForm` in the site's bundle: the seven
+  JSON keys, no authentication, its callsign and reference regexes and its
+  "Frequency in kHz (> 1000)" rule, the response being the board's list),
+  because POTA's documentation describes the page and not the API — the same
+  standard the hub's form markup is held to. Fetched 2026-08-15, quoted
+  verbatim with live-board observations in
+  [`research/pota/SOURCES.md`](research/pota/SOURCES.md) § "POTA spot API".
+  No test post was made; a live send is confirmed by the response and two
+  follow-up reads.
+- DX cluster spotting — the `DX` command from the DXSpider User Manual v1.51
+  ("frequency is in kilohertz"; "The callout will also be sent to you as
+  proof of receipt", which is why the node's echo is the confirmation) and
+  the AR-Cluster manual's DX page ("DX frequency callsign misc-info"). Both
+  fetched 2026-08-15 and quoted in
+  [`research/dxcluster-dx-command.md`](research/dxcluster-dx-command.md).
+  Neither states a remarks length, so none is enforced.
 - Band edges and ADIF band strings: the ADIF 3.1.4 Band Enumeration
   (adif.org/314/ADIF_314.htm), read 2026-07-24, cross-checked against
   47 CFR §97.301(a). Default per-band frequencies — used only for Cabrillo rows

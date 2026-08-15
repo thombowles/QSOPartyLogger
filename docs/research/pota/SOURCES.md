@@ -87,3 +87,86 @@ Verified live 2026-08-05:
 - The park picker searches a cached copy of the US program list and sorts
   by distance from the operator's Core Location fix or grid square — so it
   works offline at the park.
+
+## POTA spot API — pota.app's own "Add Spot" form
+Fetched 2026-08-15. POTA's documentation describes the spot page but not the
+API behind it, so the contract is taken from the site's own client code — the
+same standard `docs/research/qsopartyhub.md` §5 applies to the hub, where the
+form's markup is the contract.
+
+- **The activator guide** (`docs.pota.app/docs/activator_reference/activator_guide-english.html`):
+  *"Self-spot on the POTA spotting page if you have access to the internet."*
+  and *"If you cannot self-spot, ask your first contact on the air to spot
+  you, and repeat your request once in a while to keep your spot fresh."* —
+  re-spotting is expected; third-party spotting is expected. The guide does
+  not mention an API.
+- **The form's code.** `https://pota.app/` loads `/js/app.54fcf9fc.js`
+  (content-hashed name as of the fetch date); its `SpotForm` component:
+  - `save()` — verbatim, from the minified bundle:
+    `var e={activator:this.activator,spotter:this.spotter,frequency:this.frequency,reference:this.reference,mode:this.mode,source:"Web",comments:this.comments};O.a.post("https://".concat("api.pota.app","/spot"),e).then((function(o){t.$store.commit("SET_SPOTS",o.data),t.$store.dispatch("addHunted",e)})).catch((function(e){t.$dialog.error({title:"Error",text:"".concat(e.response.data)})}))`
+    — a JSON POST (axios' default `Content-Type: application/json`) to
+    `https://api.pota.app/spot`, **no authentication header** (the
+    neighbouring `ActivationForm` passes `this.$store.getters.authTokenHeader`
+    to its `/activation` POST; the spot form passes nothing), the response
+    body committed to the site's spot list (`SET_SPOTS(o.data)`), and an
+    error's `e.response.data` shown as text.
+  - `frequencyRules`: `"Frequency (kHz) required"`, `/^[\d.]+$/` with the
+    message `"Example: 7123 or 14234"`, and `parseInt(t)>1e3` with the message
+    `"Frequency in kHz (> 1000)"`. The field label is `"Frequency (kHz)"`.
+  - `activatorRules` / `spotterRules`: required, and the store's
+    `validCallsignRegex` =
+    `/^(?:[A-Z\d]{1,4}\/)?[A-Z\d]{1,3}\d[A-Z\d]*(?:\/[A-Z\d]{1,4})?$/i`;
+    both fields upper-case on keyup.
+  - `referenceRules`: required, and the store's `validReferenceRegex` =
+    `/^[A-Z0-9]{1,2}-[0-9]{4,5}$/` **or the literal `"K-TEST"`**.
+  - `mode`: taken from a prop (`pmode`) — set when re-spotting an existing
+    spot; a new spot from the form carries whatever it was given, and the
+    form's own hint reads: *"Wrong mode? Mention a mode in the Comments field
+    to change the mode for this spot (e.g. "QSY CW", "RTTY" or "Switching to
+    FT8"). Mention QRT if this activator is no longer on the air to mark this
+    spot as finished."* The client-side preview (`scanComments`) checks each
+    comment word against the ADIF submode list, folding LSB/USB to SSB — so a
+    mode word in the comment overrides the mode field, server-side.
+  - `comments`: free text; the anonymous form shows the field read-only
+    ("Login to add a comment") but still posts it.
+- **The site reads spots from** `GET https://api.pota.app/v1/spots`
+  (`getSpots` in the store). `GET https://api.pota.app/spot/activator` serves
+  the same list in a shorter shape (verified 2026-08-15: both returned 162
+  rows). Row shape, verbatim first row of `/spot/activator`:
+  `{"spotId": 55209219, "activator": "W8EKM", "frequency": "21320",
+  "mode": "SSB", "reference": "US-6653", "parkName": null,
+  "spotTime": "2026-08-15T16:04:15", "spotter": "W8EKM", "comments": "CQ",
+  "source": "Web", "invalid": null, "name": "Dansville State Game Land",
+  "locationDesc": "US-MI", "grid4": "EN72", "grid6": "EN72um",
+  "latitude": 42.5111, "longitude": -84.3128, "count": 9, "expire": 1764}`.
+- **Live board observations, 2026-08-15 16:05Z (162 spots):** `source`
+  carried other loggers' names verbatim — `Ham2K Portable Logger` (17),
+  `HAMRS Pro/2.52.0` (2), `GT2` (13), `GT` (7), `POTACAT` (2),
+  `Smart Logger` (3), `Greyline FT8` (1), beside `Web` (74) and `RBN` (41) —
+  so a logger posting under its own name is the norm; 11 spots carried
+  `mode: ""`, so an empty mode is accepted; frequencies came as `"14039.5"`,
+  `"14062.0"` and `"18101"` alike; comments included `"Self-spot via HAMRS
+  Pro"`, `"QRT"`, `"Moved 2-fer: US-1044 US-3791"`.
+- `Tests/Fixtures/pota_spots_sample.json` holds five rows copied verbatim
+  from that payload (W8EKM, K1SN, KQ4TAX, N4GBN with `"source": "HAMRS
+  Pro/2.52.0"`, and one RBN row), so the tests exercise the real shape.
+- **No test post was made.** The board is public and a test spot is a real
+  spot; the first live send is verified by the POST's own response — the
+  board's list — and, failing that, by two follow-up reads of
+  `/spot/activator`.
+
+### What this bakes into the app
+
+- `PotaSpot` posts exactly the form's seven keys as JSON to
+  `https://api.pota.app/spot`, `source: "QSOPartyLogger"`, frequency as
+  clean-kHz text, calls upper-cased, the reference through the ADIF grammar
+  with any `@subdivision` dropped (the page's regex has no room for one),
+  and validates with the form's own regexes and its `> 1000` kHz rule.
+- A 2xx whose body is the board's list and shows the spot is `confirmed` at
+  once; a 2xx that does not is `sent` and looked for on `/spot/activator` at
+  +10 s and +40 s; a non-2xx shows the server's own text when it is a
+  readable line, else the status.
+- The mode sent is the ADIF mode of the radio's current mode
+  (`AdifExporter.adifMode` — USB/LSB → SSB), editable in the sheet; the
+  comment is the operator's own words, uncombined with the county, because
+  a mode word in the comment overrides the mode field.
