@@ -257,6 +257,7 @@
 		B6FBE02A952C1AE6A69D169F /* StationMemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8199BE77C57911CB47B7B016 /* StationMemoryTests.swift */; };
 		B99DE9236CC16993B455BC8E /* SpottingPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C881733E52B4CD62D43604 /* SpottingPolicyTests.swift */; };
 		BA29F9177B9172AD408E813B /* OneByOneTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */; };
+		BA85DF2E6283531372C18D2F /* RecordingAccumulatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34704454454658A0550C75FC /* RecordingAccumulatorTests.swift */; };
 		BB37CFF1FA39DE72C1AF9A0F /* swpc_planetary_k_index_2026-08-09.json in Resources */ = {isa = PBXBuildFile; fileRef = 7DC4C4A853BB7179CD85AC18 /* swpc_planetary_k_index_2026-08-09.json */; };
 		BBB53615A635E239E38E29E1 /* ContestArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C1B661CE889D39EFE333E /* ContestArchive.swift */; };
 		BC4A23B103FF85F464A09796 /* VirginiaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6D999640AF4FF7CB86AF56 /* VirginiaQSOPartyTests.swift */; };
@@ -310,6 +311,7 @@
 		DECFF08699FBD43DBA559547 /* SeasonStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D222FC07C47B321835C0B0 /* SeasonStats.swift */; };
 		DEEA1D77A5CEF8E4E60D2BEC /* UTCTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47BB5516631675CE4FCBD4F /* UTCTime.swift */; };
 		DFEE77F4956D853E7A2CE5F6 /* CountyGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA279B8AFAB9972853CCA93 /* CountyGrouping.swift */; };
+		E0169ECCC1FCF0D39C40C821 /* VoiceRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB35991482F5BE3211657A3F /* VoiceRecorder.swift */; };
 		E08E671185832A9BD05A62D0 /* SCPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A0D8EDD44C17364359A07 /* SCPClientTests.swift */; };
 		E19F4F34905150E1AC1CB86F /* ContestArchiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC488FDCD9B9458276688D9 /* ContestArchiveTests.swift */; };
 		E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52BEC7154012161AF51ED0 /* CWSender.swift */; };
@@ -449,6 +451,7 @@
 		33BC43AE60F2FE1CE974FFF5 /* BandMapScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapScale.swift; sourceTree = "<group>"; };
 		3421798B9AC00F2AAE678F54 /* DashboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardModel.swift; sourceTree = "<group>"; };
 		3451A53ECE9C61AD37E8E16C /* NewHampshireQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHampshireQSOPartyTests.swift; sourceTree = "<group>"; };
+		34704454454658A0550C75FC /* RecordingAccumulatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingAccumulatorTests.swift; sourceTree = "<group>"; };
 		3503B1BC8F8AE6F11E4221F7 /* NorthCarolinaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorthCarolinaQSOPartyTests.swift; sourceTree = "<group>"; };
 		35603FAC30DAAF7154DA76E3 /* RadioBarStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioBarStatusTests.swift; sourceTree = "<group>"; };
 		359DF0F30A9EF39FE37A2287 /* CallHistoryPrefillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryPrefillTests.swift; sourceTree = "<group>"; };
@@ -653,6 +656,7 @@
 		C8008DF74BE1374A98273ECC /* IllinoisQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllinoisQSOPartyTests.swift; sourceTree = "<group>"; };
 		C999FF4972E859F8CFD19B12 /* ArchiveStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveStore.swift; sourceTree = "<group>"; };
 		CA4CFCAA1F93033279C3D7CF /* DupeCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DupeCheckerTests.swift; sourceTree = "<group>"; };
+		CB35991482F5BE3211657A3F /* VoiceRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorder.swift; sourceTree = "<group>"; };
 		CBC49C26B1FFD6EC5D00830A /* CallAreaSumBonusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallAreaSumBonusTests.swift; sourceTree = "<group>"; };
 		CCE7AD7E3989A66634D0BF7A /* RateMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateMeter.swift; sourceTree = "<group>"; };
 		CD0D74F754FD20FDF7B880B7 /* MemberMultiplierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberMultiplierTests.swift; sourceTree = "<group>"; };
@@ -1099,6 +1103,7 @@
 				26C770738C3FEFA2071FBF53 /* AudioFileIO.swift */,
 				AF67E920BF8D84C9C94C101E /* AudioResampler.swift */,
 				AA1B6B87D6DA82FC8932F72E /* VoicePlayer.swift */,
+				CB35991482F5BE3211657A3F /* VoiceRecorder.swift */,
 				7486A5D4D50DD521C9D97112 /* VoiceTransports.swift */,
 			);
 			path = Voice;
@@ -1156,6 +1161,7 @@
 				EF6989E84D7AABBEB0B1451F /* MorseCodeTests.swift */,
 				51CE38D4FB00F99FA2C6D973 /* QMXProtocolTests.swift */,
 				9D222D2D642B661FCA00F173 /* RadioRegistryTests.swift */,
+				34704454454658A0550C75FC /* RecordingAccumulatorTests.swift */,
 				6904B66416910440D9E4B71A /* VoiceKeyerStatusTests.swift */,
 				4AF43DDFA3090F565A8328AF /* VoicePlayerSequenceTests.swift */,
 			);
@@ -1605,6 +1611,7 @@
 				9B5CFCE3C27C45119FC5574E /* RadioRegistryTests.swift in Sources */,
 				7820E065122DA7959EF0D0DC /* RateColumnTests.swift in Sources */,
 				3A857866492731ADB2E7B655 /* RateMeterTests.swift in Sources */,
+				BA85DF2E6283531372C18D2F /* RecordingAccumulatorTests.swift in Sources */,
 				E08E671185832A9BD05A62D0 /* SCPClientTests.swift in Sources */,
 				9A1D1AAD285B8D3F63E205C6 /* SCPDatabaseTests.swift in Sources */,
 				6615F01A1746C284C34DD7C4 /* SCPStoreTests.swift in Sources */,
@@ -1806,6 +1813,7 @@
 				4DAE81B45EDC32DB2E66AD2F /* VoiceKeyer.swift in Sources */,
 				C5D61D94DC78A4138E5ECF68 /* VoiceLibrary.swift in Sources */,
 				4C6F3EB10F2A2E571A4BBE0B /* VoicePlayer.swift in Sources */,
+				E0169ECCC1FCF0D39C40C821 /* VoiceRecorder.swift in Sources */,
 				171E6C1DC757589BA9E99552 /* VoiceTransports.swift in Sources */,
 				820C4377EA5B9A172E10F6F3 /* WorkedBeforeTable.swift in Sources */,
 				FD9C2EB6C5010F7BB499DE43 /* WorkedSpot.swift in Sources */,
