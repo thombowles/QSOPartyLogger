@@ -6,9 +6,12 @@ import Network
 /// rate passed to `open` is ignored. Writes issued before the connection is
 /// ready are queued and flushed on connect, so callers can fire-and-forget
 /// their setup commands exactly like they do on a serial port.
-final class TCPTransport: SerialTransport, @unchecked Sendable {
+final class TCPTransport: NetworkTransport, @unchecked Sendable {
 
     private let host: NWEndpoint.Host
+    /// The host as given, so a driver can open a datagram channel to the
+    /// same radio (`NetworkTransport`).
+    let hostName: String
     private let port: NWEndpoint.Port
     private let queue = DispatchQueue(label: "org.b5n.QSOPartyLogger.tcp", qos: .userInitiated)
     private let lock = NSLock()
@@ -29,6 +32,7 @@ final class TCPTransport: SerialTransport, @unchecked Sendable {
     }
 
     init(host: String, port: UInt16) {
+        self.hostName = host
         self.host = NWEndpoint.Host(host)
         self.port = NWEndpoint.Port(rawValue: port) ?? NWEndpoint.Port(rawValue: 4992)!
     }

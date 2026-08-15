@@ -260,4 +260,384 @@ final class FlexRadioDriverTests: XCTestCase {
         XCTAssertEqual(received?.frequencyKHz, 14042)
         driver.stop()
     }
+
+    // MARK: Transmit audio over DAX (docs/research/voice_transports.md)
+
+    /// A TCP-shaped mock: records every `C<seq>|<body>` write, answers on
+    /// request, and names a host so the driver can open its UDP channel.
+    final class MockNetworkTransport: NetworkTransport, @unchecked Sendable {
+        var isOpen = true
+        var onReceive: (@Sendable (Data) -> Void)?
+        let hostName = "10.0.0.5"
+        private let lock = NSLock()
+        private var lines: [String] = []
+
+        func open(baudRate: Int) throws {}
+        func close() { isOpen = false }
+        func set(line: SerialLine, active: Bool) {}
+        func write(_ data: Data) {
+            lock.withLock { lines.append(String(data: data, encoding: .utf8) ?? "") }
+        }
+
+        /// The command bodies, in order — "C12|xmit 1\n" → "xmit 1".
+        var commands: [String] {
+            lock.withLock {
+                lines.compactMap { line in
+                    guard line.hasPrefix("C"), let bar = line.firstIndex(of: "|") else { return nil }
+                    return String(line[line.index(after: bar)...]).trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+            }
+        }
+
+        /// The sequence number of the first write whose body is `command`.
+        func seq(of command: String) -> Int? {
+            lock.withLock {
+                for line in lines {
+                    guard line.hasPrefix("C"), let bar = line.firstIndex(of: "|") else { continue }
+                    let body = String(line[line.index(after: bar)...]).trimmingCharacters(in: .whitespacesAndNewlines)
+                    if body == command { return Int(line[line.index(after: line.startIndex)..<bar]) }
+                }
+                return nil
+            }
+        }
+
+        func clearWritten() { lock.withLock { lines.removeAll() } }
+        func feed(_ line: String) { onReceive?(Data(line.utf8)) }
+        /// The radio's reply to `command`: `R<seq>|<code>|<message>`.
+        func reply(to command: String, code: String, message: String) {
+            guard let seq = seq(of: command) else { return XCTFail("\(command) was never sent") }
+            feed("R\(seq)|\(code)|\(message)\n")
+        }
+    }
+
+    final class FakeUDP: UDPSending, @unchecked Sendable {
+        let localPort: UInt16 = 51234
+        let localDescription = "10.0.0.7:51234"
+        var sendFailures: (count: Int, lastErrno: Int32?) { (0, nil) }
+        private let lock = NSLock()
+        private var stored: [Data] = []
+        private(set) var closed = 0
+        var sent: [Data] { lock.withLock { stored } }
+        func send(_ data: Data) { lock.withLock { stored.append(data) } }
+        func close() { lock.withLock { closed += 1 } }
+    }
+
+    final class Events: @unchecked Sendable {
+        private let lock = NSLock()
+        private var stored: [TransmitAudioEvent] = []
+        var all: [TransmitAudioEvent] { lock.withLock { stored } }
+        func append(_ e: TransmitAudioEvent) { lock.withLock { stored.append(e) } }
+    }
+
+    /// A driver started against the mock, with the prologue, an active TX
+    /// slice on DAX channel 0 and DAX off — the state a Flex on SSB is in.
+    private func connectedDriver(makeUDP: FakeUDP = FakeUDP()) -> (FlexRadioDriver, MockNetworkTransport, FakeUDP) {
+        let transport = MockNetworkTransport()
+        let driver = FlexRadioDriver()
+        driver.makeUDPSender = { host, port in
+            XCTAssertEqual(host, "10.0.0.5")
+            XCTAssertEqual(port, 4991)
+            return makeUDP
+        }
+        driver.start(transport: transport)
+        transport.feed("V1.4.0.0\n")
+        transport.feed("H1A2B3C4\n")
+        transport.feed("S0|slice 0 in_use=1 RF_frequency=14.250000 mode=USB active=1 tx=1 dax=0\n")
+        transport.feed("S0|transmit dax=0 rfpower=50\n")
+        transport.clearWritten()
+        return (driver, transport, makeUDP)
+    }
+
+    /// 256 frames at 24 kHz — two packets of clip between the lead and tail.
+    private let clip = VoiceAudio(sampleRate: 24_000, samples: [Float](repeating: 0.1, count: 256))
+
+    /// Feed the reply to the create and the `tx=1` status for our stream.
+    private func confirmStream(_ transport: MockNetworkTransport, id: String = "0x84000001") {
+        transport.reply(to: FlexRadioDriver.cmdStreamCreateDAXTX, code: "0", message: id)
+        transport.feed("S1A2B3C4|stream \(id) type=dax_tx client_handle=0x1A2B3C4 tx=1\n")
+    }
+
+    /// Wait until the streamer has finished (or failed) — bounded.
+    private func waitForTerminal(_ events: Events, timeout: TimeInterval = 5) {
+        let e = expectation(description: "terminal event")
+        DispatchQueue.global().async {
+            let deadline = Date().addingTimeInterval(timeout)
+            while Date() < deadline {
+                if events.all.contains(where: { $0 == .finished || $0 == .stopped || { if case .failed = $0 { return true }; return false }($0) }) {
+                    e.fulfill(); return
+                }
+                usleep(10_000)
+            }
+        }
+        wait(for: [e], timeout: timeout + 1)
+    }
+
+    func testStartSubscribesToDAX() {
+        let transport = MockNetworkTransport()
+        let driver = FlexRadioDriver()
+        driver.start(transport: transport)
+        XCTAssertTrue(transport.commands.contains("sub dax all"))
+        driver.stop()
+    }
+
+    func testNoSocketUntilTheFirstPlay() {
+        let transport = MockNetworkTransport()
+        let driver = FlexRadioDriver()
+        nonisolated(unsafe) var made = 0
+        driver.makeUDPSender = { _, _ in made += 1; return FakeUDP() }
+        driver.start(transport: transport)
+        transport.feed("H1A2B3C4\n")
+        XCTAssertEqual(made, 0)
+        XCTAssertFalse(transport.commands.contains { $0.hasPrefix("client udpport") })
+        XCTAssertFalse(transport.commands.contains { $0.hasPrefix("stream create") })
+        driver.stop()
+    }
+
+    func testFirstPlaySetsUpTheStreamThenKeysStreamsAndUnkeys() {
+        let (driver, transport, udp) = connectedDriver()
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        XCTAssertEqual(transport.commands,
+                       ["client udpport 51234", "dax audio set 1 slice=0 tx=1", "stream create type=dax_tx"])
+        XCTAssertTrue(events.all.isEmpty, "nothing keyed before the radio confirms")
+
+        // The create is answered with the id; the driver then claims transmit
+        // on that stream — the radio modulates only the dax_tx stream that
+        // has `tx=1`, and drops packets from every other one.
+        transport.reply(to: FlexRadioDriver.cmdStreamCreateDAXTX, code: "0", message: "0x84000001")
+        XCTAssertEqual(transport.commands.last, "stream set 0x84000001 tx=1")
+        XCTAssertFalse(transport.commands.contains("xmit 1"), "still nothing keyed: tx=1 not yet reported")
+        transport.feed("S1A2B3C4|stream 0x84000001 type=dax_tx client_handle=0x1A2B3C4 tx=1\n")
+        waitForTerminal(events)
+        XCTAssertEqual(Array(transport.commands.suffix(4)),
+                       ["transmit set dax=1", "xmit 1", "xmit 0", "transmit set dax=0"])
+        XCTAssertEqual(events.all, [.started, .finished])
+        // 120 ms lead ≈ 23 packets, 2 clip packets, 100 ms tail ≈ 19 packets.
+        XCTAssertGreaterThan(udp.sent.count, 40)
+        XCTAssertLessThan(udp.sent.count, 50)
+        XCTAssertTrue(udp.sent.allSatisfy { $0.count == 1052 })
+        // The transcript the operator can copy names what happened, in order.
+        let transcript = driver.transmitAudioTranscript.joined(separator: "\n")
+        XCTAssertTrue(transcript.contains("stream create type=dax_tx"), transcript)
+        XCTAssertTrue(transcript.contains("tx=1"), transcript)
+        XCTAssertTrue(transcript.contains("packets"), transcript)
+        driver.stop()
+    }
+
+    /// The status line can carry the id and `tx=1` before the reply does; the
+    /// claim is still sent exactly once, and only when `tx=1` has not been
+    /// seen for our stream.
+    func testClaimIsSentOnceEvenWhenTheStatusArrivesFirst() {
+        let (driver, transport, _) = connectedDriver()
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        transport.feed("S1A2B3C4|stream 0x84000001 type=dax_tx client_handle=0x1A2B3C4 tx=0\n")
+        transport.reply(to: FlexRadioDriver.cmdStreamCreateDAXTX, code: "0", message: "0x84000001")
+        XCTAssertEqual(transport.commands.filter { $0 == "stream set 0x84000001 tx=1" }.count, 1)
+        transport.feed("S1A2B3C4|stream 0x84000001 type=dax_tx client_handle=0x1A2B3C4 tx=1\n")
+        waitForTerminal(events)
+        XCTAssertEqual(events.all, [.started, .finished])
+        driver.stop()
+    }
+
+    /// The bench (2026-08-15): the radio reported `tx=1` on a fresh stream by
+    /// itself and still modulated nothing. So the claim goes out whatever the
+    /// status says — once — and before `xmit 1`.
+    func testClaimIsSentEvenWhenTheRadioAlreadyMarksOurStreamTX() {
+        let (driver, transport, _) = connectedDriver()
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        transport.feed("S1A2B3C4|stream 0x84000001 type=dax_tx client_handle=0x1A2B3C4 tx=1\n")
+        waitForTerminal(events)
+        let commands = transport.commands
+        XCTAssertEqual(commands.filter { $0 == "stream set 0x84000001 tx=1" }.count, 1)
+        XCTAssertLessThan(commands.firstIndex(of: "stream set 0x84000001 tx=1")!, commands.firstIndex(of: "xmit 1")!,
+                          "the claim precedes the key-down on the wire")
+        XCTAssertEqual(events.all, [.started, .finished])
+        // The transcript says where the packets left from and that none failed.
+        let transcript = driver.transmitAudioTranscript.joined(separator: "\n")
+        XCTAssertTrue(transcript.contains("10.0.0.7:51234"), transcript)
+        XCTAssertTrue(transcript.contains("no send errors"), transcript)
+        driver.stop()
+    }
+
+    func testSecondPlaySkipsTheSetup() {
+        let (driver, transport, _) = connectedDriver()
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        confirmStream(transport)
+        waitForTerminal(events)
+
+        transport.clearWritten()
+        let second = Events()
+        driver.onTransmitAudioEvent = { second.append($0) }
+        driver.transmitAudio(clip)
+        waitForTerminal(second)
+        XCTAssertEqual(transport.commands, ["transmit set dax=1", "xmit 1", "xmit 0", "transmit set dax=0"])
+        XCTAssertEqual(second.all, [.started, .finished])
+        driver.stop()
+    }
+
+    func testDAXAlreadyOnIsLeftOn() {
+        let (driver, transport, _) = connectedDriver()
+        transport.feed("S0|transmit dax=1\n")
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        confirmStream(transport)
+        waitForTerminal(events)
+        XCTAssertFalse(transport.commands.contains("transmit set dax=1"))
+        XCTAssertFalse(transport.commands.contains("transmit set dax=0"))
+        XCTAssertEqual(Array(transport.commands.suffix(2)), ["xmit 1", "xmit 0"])
+        driver.stop()
+    }
+
+    func testTXSliceWithADAXChannelUsesItWithoutReassigning() {
+        let (driver, transport, _) = connectedDriver()
+        transport.feed("S0|slice 0 dax=3\n")
+        driver.transmitAudio(clip)
+        XCTAssertTrue(transport.commands.contains("dax audio set 3 tx=1"))
+        XCTAssertFalse(transport.commands.contains { $0.contains("slice=") })
+        driver.stop()
+    }
+
+    func testRefusedStreamNeverKeysAndReportsTheCode() {
+        let (driver, transport, _) = connectedDriver()
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        transport.reply(to: FlexRadioDriver.cmdStreamCreateDAXTX, code: "50000064", message: "")
+        XCTAssertEqual(events.all, [.failed("The radio refused the transmit audio stream (0x50000064 — no UDP port registered).")])
+        XCTAssertFalse(transport.commands.contains("xmit 1"))
+        driver.stop()
+    }
+
+    func testNoTXConfirmationWithinTheWindowFailsWithoutKeying() {
+        let (driver, transport, _) = connectedDriver()
+        driver.streamConfirmTimeout = 0.2
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        transport.reply(to: FlexRadioDriver.cmdStreamCreateDAXTX, code: "0", message: "0x84000001")
+        // No `tx=1` status ever arrives.
+        waitForTerminal(events, timeout: 2)
+        guard case .failed(let reason)? = events.all.first else { return XCTFail("expected .failed, got \(events.all)") }
+        XCTAssertTrue(reason.contains("did not confirm"), reason)
+        XCTAssertFalse(transport.commands.contains("xmit 1"))
+        driver.stop()
+    }
+
+    func testStopMidClipUnkeysAndReportsStopped() {
+        let (driver, transport, _) = connectedDriver()
+        let longClip = VoiceAudio(sampleRate: 24_000, samples: [Float](repeating: 0.1, count: 24_000 * 3))
+        let events = Events()
+        let started = expectation(description: "started")
+        driver.onTransmitAudioEvent = { events.append($0); if $0 == .started { started.fulfill() } }
+        driver.transmitAudio(longClip)
+        confirmStream(transport)
+        wait(for: [started], timeout: 3)
+        driver.stopTransmitAudio()
+        XCTAssertEqual(Array(transport.commands.suffix(2)), ["xmit 0", "transmit set dax=0"])
+        XCTAssertEqual(events.all, [.started, .stopped])
+        usleep(50_000)
+        XCTAssertEqual(events.all, [.started, .stopped], "no .finished after a stop")
+        driver.stop()
+    }
+
+    func testStopDuringSetupReportsStoppedAndNeverKeys() {
+        let (driver, transport, _) = connectedDriver()
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        driver.stopTransmitAudio()
+        XCTAssertEqual(events.all, [.stopped])
+        confirmStream(transport)                       // arrives late
+        usleep(50_000)
+        XCTAssertFalse(transport.commands.contains("xmit 1"), "a play stopped during setup never keys")
+        driver.stop()
+    }
+
+    func testStopRemovesTheStreamAndClosesTheSocket() {
+        let (driver, transport, udp) = connectedDriver()
+        driver.transmitAudio(clip)
+        transport.reply(to: FlexRadioDriver.cmdStreamCreateDAXTX, code: "0", message: "0x84000001")
+        driver.stop()
+        XCTAssertTrue(transport.commands.contains("stream remove 0x84000001"))
+        XCTAssertEqual(udp.closed, 1)
+    }
+
+    func testStreamRemovedByTheRadioIsRecreatedOnTheNextPlay() {
+        let (driver, transport, _) = connectedDriver()
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.transmitAudio(clip)
+        confirmStream(transport)
+        waitForTerminal(events)
+        transport.feed("S1A2B3C4|stream 0x84000001 removed\n")
+        transport.clearWritten()
+        driver.transmitAudio(clip)
+        XCTAssertEqual(transport.commands, ["stream create type=dax_tx"], "no second udpport or claim, one new create")
+        driver.stop()
+    }
+
+    func testAnotherClientsStreamIsNotOurs() {
+        let (driver, transport, _) = connectedDriver()
+        let events = Events()
+        driver.onTransmitAudioEvent = { events.append($0) }
+        driver.streamConfirmTimeout = 0.3
+        driver.transmitAudio(clip)
+        transport.feed("S1A2B3C5|stream 0x84000009 type=dax_tx client_handle=0x1A2B3C5 tx=1\n")
+        usleep(50_000)
+        XCTAssertFalse(transport.commands.contains("xmit 1"), "someone else's stream must not key us")
+        waitForTerminal(events, timeout: 2)
+        driver.stop()
+    }
+
+    func testPureParsersForTheTransmitAudioPath() {
+        XCTAssertEqual(FlexRadioDriver.parseHandle("H1A2B3C4"), 0x1A2B3C4)
+        XCTAssertNil(FlexRadioDriver.parseHandle("V1.4.0.0"))
+        XCTAssertNil(FlexRadioDriver.parseHandle("H"))
+        let r = FlexRadioDriver.parseReply("R12|50000064|")
+        XCTAssertEqual(r?.seq, 12)
+        XCTAssertEqual(r?.code, 0x50000064)
+        XCTAssertEqual(r?.message, "")
+        XCTAssertEqual(FlexRadioDriver.parseReply("R3|0|0x84000001|OK")?.message, "0x84000001")
+        XCTAssertNil(FlexRadioDriver.parseReply("S0|slice 0"))
+        let s = FlexRadioDriver.parseStreamStatus("stream 0x84000001 type=dax_tx client_handle=0x1A2B3C4 tx=1")
+        XCTAssertEqual(s?.id, 0x84000001)
+        XCTAssertEqual(s?.type, "dax_tx")
+        XCTAssertEqual(s?.clientHandle, 0x1A2B3C4)
+        XCTAssertEqual(s?.tx, true)
+        XCTAssertEqual(s?.removed, false)
+        XCTAssertEqual(FlexRadioDriver.parseStreamStatus("stream 0x84000001 removed")?.removed, true)
+        XCTAssertNil(FlexRadioDriver.parseStreamStatus("slice 0 dax=1"))
+        XCTAssertEqual(FlexRadioDriver.parseTransmitDAX("transmit dax=1 rfpower=50"), true)
+        XCTAssertEqual(FlexRadioDriver.parseTransmitDAX("transmit dax=0"), false)
+        XCTAssertNil(FlexRadioDriver.parseTransmitDAX("transmit rfpower=50"))
+        XCTAssertNil(FlexRadioDriver.parseTransmitDAX("slice 0 dax=1"))
+        let u = FlexRadioDriver.parseSlice("slice 0 tx=1 dax=2")
+        XCTAssertEqual(u?.tx, true)
+        XCTAssertEqual(u?.daxChannel, 2)
+        XCTAssertNil(FlexRadioDriver.parseSlice("slice 0 mode=USB")?.tx)
+        XCTAssertEqual(FlexRadioDriver.replyMeaning(0x50000064), "no UDP port registered")
+        XCTAssertNil(FlexRadioDriver.replyMeaning(0x12345678))
+        XCTAssertEqual(FlexRadioDriver.streamRefusedText(code: 0x12345678),
+                       "The radio refused the transmit audio stream (0x12345678).")
+    }
+
+    func testTransmitAudioCommandBuilders() {
+        XCTAssertEqual(FlexRadioDriver.cmdClientUDPPort(4993), "client udpport 4993")
+        XCTAssertEqual(FlexRadioDriver.cmdDAXAudioSetTX(channel: 2, slice: nil), "dax audio set 2 tx=1")
+        XCTAssertEqual(FlexRadioDriver.cmdDAXAudioSetTX(channel: 1, slice: 0), "dax audio set 1 slice=0 tx=1")
+        XCTAssertEqual(FlexRadioDriver.cmdStreamRemove(0x84000001), "stream remove 0x84000001")
+        XCTAssertEqual(FlexRadioDriver.cmdTransmitDAX(true), "transmit set dax=1")
+        XCTAssertEqual(FlexRadioDriver.cmdXmit(false), "xmit 0")
+        XCTAssertEqual(FlexRadioDriver().transmitSampleRate, 24_000)
+        XCTAssertNotNil(FlexRadioDriver() as? any AudioStreamTransmitCapable)
+        XCTAssertNil(FlexRadioDriver() as? any TransmitControlCapable, "exactly one path")
+    }
 }

@@ -1,0 +1,60 @@
+FlexRadio DAX audio — sample rate and sample format, from a FlexRadio staff answer
+=================================================================================
+
+Source: FlexRadio Community (community.flexradio.com — FlexRadio Systems' own
+support forum), thread "What are the audio stream specifications for DAX and how
+do they compare to VAC in the 3000/5000?"
+https://community.flexradio.com/discussion/6346756/what-are-the-audio-stream-specifications-for-dax-and-how-do-they-compare-to-vac-in-the-3000-5000
+Replies by Steve-N5AC, shown on the page as "Community Manager admin" (Steve
+Hicks, N5AC — FlexRadio's VP of Engineering at the time), September 2014
+(reply 1 shown as edited February 2017). Fetched 2026-08-15.
+
+Why this file exists: neither the SmartSDR TCP/IP API wiki nor FlexLib names the
+DAX audio sample rate. This is the manufacturer saying it, on the manufacturer's
+own site. Quoted verbatim; the parts about ADC bit depth, tuning-word accuracy
+and the 3000/5000 are omitted as irrelevant to sending audio.
+
+The question (author "st", September 2014):
+> I understand that the native input and output sample rate for DAX connections
+> is 24KSPS, correct? …
+
+Steve-N5AC, reply 1:
+> There are two types of DAX: DAX audio and DAX IQ. It sounds like you are
+> talking about DAX audio so I'll focus on that. There are two ways to use DAX --
+> you can connect directly to the API in which case you will be working with
+> 24ksps VITA-49 data streams. You can also connect to the sound cards in the PC
+> which have been upsampled to 48ksps. In the native API, the data is provided as
+> stereo IEEE-754 single precision floating point data with 0dBFS at 1.0F give
+> or take. So this is 64-bits-per-sample with a 23-bit mantissa.
+> …
+> The other way to access the data is after we have put it into a Microsoft
+> Windows audio device. You will see these enumerated in the system as audio
+> channels with DAX RX and TX names. This data has been upsampled to 48ksps, but
+> is otherwise the same data.
+>
+> For DAX audio, the DAX data replaces the microphone audio so it goes through
+> the compressor and the modulator. If you do not want to use the compressor, you
+> can disable it. To remove the modulator and just perform upconversion, select
+> DIGU which will essentially do what you want.
+
+Steve-N5AC, reply 3:
+> The equalizer is actually implemented in the CODEC for transmit and is only on
+> mic audio today. So if you want equalization done, it needs to be done before
+> the audio is provided to DAX.
+
+Steve-N5AC, reply 4 (excerpt):
+> If you need exact results, stick with the data out of the radio direct without
+> resampling. We do this with DAX for convenience until a better standard than a
+> Windows sound card is used for digital IF and audio data. We would like to see
+> VITA-49 as the standard since it was created for this purpose.
+
+What the app takes from it:
+- Audio to the radio over the API is 24 000 samples per second per channel,
+  stereo, IEEE-754 float32, full scale ±1.0 — the caller resamples the 48 kHz
+  recording to 24 kHz and duplicates the mono sample into both channels, which
+  is what FlexLib's 128-frame stereo packet expects
+  (flexlib_3_2_37_dax_tx_excerpts.txt).
+- DAX audio replaces the microphone and goes through the compressor and the
+  modulator: the radio's own speech processor still applies, which is why the
+  app does not process the recording beyond level and trim.
+- The 48 ksps figure is the *Windows sound-card* face of DAX, not the API's.

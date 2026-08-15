@@ -315,7 +315,7 @@ stops the frozen-token exemption above from being used to smuggle in a label.
 > type reference in `AppSettings.init`, and a help string naming a vendor's
 > client software in `RadioBar`.
 
-### Article 11 — Direct CW keying is the only path where key lines exist; voice comes from the radio
+### Article 11 — Direct CW keying is the only path where key lines exist; voice is played by the app, or by the radio
 
 **Every radio has exactly one way to send CW.** Where the radio's interface
 exposes hardware key lines, the app keys it directly and *only* directly, and
@@ -385,48 +385,63 @@ Therefore:
     that later elements really did change length and that no single element
     was sent at two speeds (`CWKeyerTests`).
 
-#### Voice: the radio's own memories, and never the computer's audio
+#### Voice: recordings this app plays itself, and the radio's own memories
 
-**Where a radio has on-board voice memories, phone messages are played from
-them. This app does not stream recorded audio to a radio** — no WAV playback,
-no sound-card path, no virtual audio cable, not as a fallback and not behind a
-preference.
+**Phone messages are recordings made on this Mac, played to the radio by this
+app, which keys the radio around them.** Where a radio also has on-board voice
+memories, those remain a supported source the operator can choose instead. Two
+things are absolute either way: the app never hands playback to something it
+cannot stop, and it never keys a radio it has not been asked to key.
 
-The reasoning is the mirror image of the CW rule above, and it lands the other
-way round on purpose:
+The reasoning parallels the CW rule above — **own the path, and the path can be
+tested and aborted:**
 
-- **The audio path would not be ours to be responsible for.** A WAV keyed
-  through a sound card depends on output level, sample rate, the host's audio
-  stack, and either VOX or a second PTT line. A memory recorded in the radio
-  went in through the radio's own mic chain at the operator's own gain and comes
-  back out the same every time.
-- **The radio knows when it stopped, and can say so.** Playback state comes back
-  over CAT, so Esc aborts for real, repeat CQ times itself off the actual end of
-  the message, and the TX badge reflects the radio instead of a guess.
-- **No second interface to get wrong at 0200Z.** The same argument as the
-  internal CW keyer, only stronger — there are no control lines to wire.
-
-We can time a CW element better than the radio can. We cannot record or replay a
-human voice better than the radio can. So for CW the app keys the line itself
-wherever there is a line to key, and for voice the radio's memories are the
-*only* path on every radio.
+- **The app knows when the clip ends, because it is playing it.** Esc stops the
+  player and drops PTT the same instant; repeat CQ times itself off the real
+  end; the TX badge clears when the audio does, not on an estimate.
+- **The recording is the operator's, per contest.** "CQ Texas QSO Party" and
+  "CQ Alabama" are different files; the exchange changes county to county. A
+  set kept per party outlives the log, and is re-recorded only where the
+  contest changed.
+- **The audio path is stated, not assumed.** Level is the one thing the app
+  cannot know, so it gives the operator a meter, a level control, and a
+  play-to-radio button, and the README says which jack and which menu.
 
 Therefore:
 
-- A radio with on-board voice memories implements `VoiceMessageCapable`. Its
-  driver reports **how many memories exist** and **whether the hardware that
-  provides them is fitted** — both discovered from the radio at connect, never
-  hard-coded per model in the app layer (Article 10). Counts differ within one
-  descriptor's family: 8 on a K3 with the recorder option, 2 on a KX3 or KX2, 0
-  on a K3 without it.
-- A radio with none reports none, and the phone keys stay inert behind an inline
-  explanation. They never fail silently and never claim a capability the radio
-  has not confirmed.
-- **Never transmit the wrong memory.** Where reaching a memory takes more than
-  one command — selecting a bank first — the driver confirms the intermediate
-  state before triggering, and **abandons the transmission rather than play an
-  unconfirmed memory.** Wrong audio on the air is worse than silence.
-- **Never transmit on connect**, exactly as for CW.
+- **A radio the app plays through implements exactly one of two paths, in its
+  driver, and nothing in the app layer names either radio.**
+  `TransmitControlCapable` (`setTransmit`) is for a radio reached through a
+  sound card, which the app keys over CAT — `TX;`/`RX;` on the Elecraft
+  family. `AudioStreamTransmitCapable` is for a radio that takes the samples
+  over its own link — DAX on a Flex — where the driver keys, streams and unkeys
+  and reports `started`/`finished`/`stopped`/`failed` for real. A driver whose
+  radio can do neither conforms to neither; the phone keys then use the radio's
+  memories if it has any, and say so.
+- **Recordings are the default source; the radio's memories are the option.**
+  On a radio with both, `AppSettings.phoneMessageSource` picks; it starts on
+  recordings. On a radio with no recorder there is nothing to pick.
+- **A source that is not ready leaves the keys inert, with the reason.** No
+  output device chosen, a stream the radio refused, a memory that holds nothing:
+  the key is disabled and its tooltip and the Messages editor say why. **It
+  never falls back to the other source on its own** — the operator chose, and
+  a fallback would put a different recording on the air than the one they
+  expect.
+- A radio with on-board voice memories still implements `VoiceMessageCapable`,
+  reports **how many memories exist** and **whether the hardware that provides
+  them is fitted** — discovered from the radio at connect, never hard-coded per
+  model (Article 10) — and still **never transmits an unconfirmed memory**:
+  where reaching one takes a bank change first, the driver confirms the bank or
+  abandons the play. Wrong audio on the air is worse than silence.
+- **Never transmit on connect**, exactly as for CW. No socket, no stream, no
+  `TX;` until an F-key, Return under ESM, repeat CQ, or the editor's
+  play-to-radio asks.
+- **The transport is tested without a radio:** the exact CAT bytes and the exact
+  packet bytes over mock transports, the keying sequence (lead, play, tail,
+  unkey; abort at every point) over a fake player, and the flow's choice of
+  what goes on the air over synthetic buffers (`DAXPacketizerTests`,
+  `VoicePlayerSequenceTests`, `FlexRadioDriverTests`, `K3ProtocolTests`,
+  `EntryFlowTests`).
 
 > **Amended 2026-08-09.** The article covered CW only, which left the obvious
 > reading of "add voice keying" pointing at what every other logger does: play
@@ -436,8 +451,23 @@ Therefore:
 > cannot reliably abort with Esc, and cannot time an auto-CQ repeat. Every one
 > of those is a consequence of the audio living on the wrong side of the cable.
 > The Elecraft radios answer all three over CAT (`RX;`, `IC;` byte a bit B2, and
-> automatic PTT during message play), so the rule is written down before someone
-> reaches for a sound card on the next radio.
+> automatic PTT during message play), so the rule was written down before
+> someone reached for a sound card on the next radio.
+
+> **Amended 2026-08-15.** Six days later the sound card was reached for on
+> purpose. The operator asked to record, edit and save voice files for each
+> contest and play them to the radio — over the network on a Flex, through the
+> sound card on an Elecraft — with the radio's own memories kept as an option.
+> The 2026-08-09 text had weighed only the case where *another program* owns
+> the WAV: no end signal, no reliable Esc, VOX required. When this app owns
+> the player all three invert, and the article's real principle — own the path
+> so it can be aborted and tested — points the other way. Two facts the earlier
+> text did not weigh forced it: a Flex has no recorder at all, so Article 11 as
+> written left the app's network radio with no phone keys; and message sets are
+> per contest while a radio's recorder holds one set. The 2026-08-09 design
+> stays in force for the radio's memories; see
+> [`2026-08-15-voice-messages-design.md`](superpowers/specs/2026-08-15-voice-messages-design.md)
+> for the recordings.
 
 ### Article 12 — Protocol provenance
 
@@ -459,7 +489,9 @@ A driver implements the whole `RadioDriver` surface, honestly:
 | `setMode(rawMode:)` | **Resolves `"SSB"` to the conventional sideband for the current frequency** — the driver owns the band plan, not the caller |
 | `setKeyerSpeed(wpm:)` | 8–50 WPM, sent immediately — never queued behind a message in flight |
 | `sendInternalKeyerText` / `stopInternalKeyer` | On `InternalKeyerDriver` only, and only for a radio with no key lines (Article 11) |
-| `VoiceMessageCapable` | Conformed to — with a real memory count and a real fitted/not-fitted answer — wherever the radio has on-board voice memories. Never sound-card audio (Article 11) |
+| `VoiceMessageCapable` | Conformed to — with a real memory count and a real fitted/not-fitted answer — wherever the radio has on-board voice memories (Article 11) |
+| `TransmitControlCapable` | Conformed to wherever the app can key the radio over CAT around a sound-card message; the exact bytes for on and off are tested (Article 11) |
+| `AudioStreamTransmitCapable` | Conformed to wherever the radio takes transmit audio over its own link; the setup commands, the packet bytes, the key/unkey order and every failure are tested over mock transports (Article 11) |
 
 Tests drive a **mock transport**: feed captured radio responses in, assert
 parsed `RadioState` out; assert the exact bytes the driver emits for a QSY, a

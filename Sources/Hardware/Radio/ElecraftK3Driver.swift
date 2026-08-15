@@ -20,10 +20,13 @@ enum ElecraftModel: Equatable, Sendable {
 /// remains, because the radio's own keyer speed still drives the paddles and
 /// the front-panel display.
 ///
-/// Voice is the other way round: `VoiceMessageCapable` plays the radio's own
-/// recordings, because there is no key line for audio and Article 11 keeps
-/// voice on the radio rather than piping Mac audio at it.
-final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, @unchecked Sendable {
+/// Voice has two paths on this family, and the app picks (Article 11 as
+/// amended 2026-08-15). Recordings made on the Mac play through a sound card
+/// into the radio's line input, and this driver keys the radio around them
+/// over CAT — `TransmitControlCapable`, `TX;`/`RX;` (Programmer's Reference
+/// G5: "Same as activating PTT or using the XMIT switch"). The radio's own
+/// recorder remains the option: `VoiceMessageCapable` plays its memories.
+final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlCapable, @unchecked Sendable {
 
     static let baudRates = [4800, 9600, 19200, 38400]
 
@@ -153,8 +156,15 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, @unchecked Senda
     /// K3 REC hold — selects voice bank 1 or 2. The bank is stored separately
     /// per mode group, so this cannot disturb the operator's CW memory bank.
     static let cmdSelectBank = "SWH37;"
-    /// Documented to terminate transmit in all modes, message play included.
-    static let cmdStopVoiceMessage = "RX;"
+    /// `RX` — "Terminates transmit in all modes, including message play and
+    /// repeating messages" (Pgmrs Ref G5). One command, two jobs: it stops a
+    /// memory playing, and it unkeys after a recording from the Mac.
+    static let cmdReceive = "RX;"
+    static let cmdStopVoiceMessage = cmdReceive
+    /// `TX` — "Same as activating PTT or using the XMIT switch. Applies to all
+    /// modes except direct data, i.e. FSK-D and PSK-D" (Pgmrs Ref G5). Sent by
+    /// the sound-card player before a recording, never at connect.
+    static let cmdTransmit = "TX;"
 
     static func cmdSetFrequency(hz: Int) -> String {
         String(format: "FA%011d;", max(0, hz))
@@ -197,6 +207,16 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, @unchecked Senda
     /// moment the operator asks so the two never disagree (Article 11).
     func setKeyerSpeed(wpm: Int) {
         currentTransport()?.write(Self.cmdSetKeyerSpeed(wpm: wpm))
+    }
+
+    // MARK: Transmit control (recordings played through a sound card)
+
+    /// Key or unkey the radio around a recording the Mac is playing into its
+    /// line input. Nothing else here changes: the recorder's own state
+    /// machine below is untouched, and `RX;` is the same byte string that
+    /// stops a memory, so an abort needs no second command.
+    func setTransmit(_ on: Bool) {
+        currentTransport()?.write(on ? Self.cmdTransmit : Self.cmdReceive)
     }
 
     // MARK: Voice memories

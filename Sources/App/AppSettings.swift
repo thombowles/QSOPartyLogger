@@ -213,6 +213,42 @@ final class AppSettings {
         didSet { defaults.set(repeatIntervalSeconds, forKey: "repeatIntervalSeconds") }
     }
 
+    // MARK: Voice messages recorded on this Mac
+
+    /// Where phone keys get their audio on a radio that offers both sources.
+    /// Recordings by default (Article 11 as amended 2026-08-15); the radio's
+    /// own memories are the option, offered only when it reports some.
+    var phoneMessageSource: PhoneMessageSource {
+        didSet { defaults.set(phoneMessageSource.rawValue, forKey: "phoneMessageSource") }
+    }
+
+    /// Microphone for recording; nil = the system default input.
+    var voiceInputDeviceUID: String? {
+        didSet { defaults.set(voiceInputDeviceUID, forKey: "voiceInputDeviceUID") }
+    }
+
+    /// The radio's audio input, for the sound-card path; nil = not chosen,
+    /// which leaves that path not ready rather than guessing a device — the
+    /// Mac's speakers are never the radio.
+    var voiceOutputDeviceUID: String? {
+        didSet { defaults.set(voiceOutputDeviceUID, forKey: "voiceOutputDeviceUID") }
+    }
+
+    /// Transmit audio level, 0…1, applied to both paths.
+    var voiceLevel: Double {
+        didSet { defaults.set(voiceLevel, forKey: "voiceLevel") }
+    }
+
+    /// How the sound-card path keys the radio.
+    var voicePTT: VoicePTTMode {
+        didSet { defaults.set(voicePTT.rawValue, forKey: "voicePTT") }
+    }
+
+    /// Milliseconds between keying the radio and the first sample, 0…500.
+    var voicePTTLeadMs: Int {
+        didSet { defaults.set(voicePTTLeadMs, forKey: "voicePTTLeadMs") }
+    }
+
     /// Multiplier roster sections the operator has collapsed, keyed
     /// `"<partyID>.<multClass>"`. Absent means expanded, so a party seen for
     /// the first time shows its whole checklist rather than hiding it.
@@ -317,6 +353,16 @@ final class AppSettings {
         cwCutNumbers = defaults.object(forKey: "cwCutNumbers") as? Bool ?? false
         cwCutNumberOne = defaults.object(forKey: "cwCutNumberOne") as? Bool ?? false
         repeatIntervalSeconds = defaults.object(forKey: "repeatIntervalSeconds") as? Double ?? 3.0
+        // Unreadable tokens fall back to the defaults, and out-of-range numbers
+        // are clamped rather than trusted — a hand-edited preference file must
+        // never leave the phone keys with no source or the level at 700%.
+        phoneMessageSource = PhoneMessageSource(rawValue: defaults.string(forKey: "phoneMessageSource") ?? "")
+            ?? .recordings
+        voiceInputDeviceUID = defaults.string(forKey: "voiceInputDeviceUID")
+        voiceOutputDeviceUID = defaults.string(forKey: "voiceOutputDeviceUID")
+        voiceLevel = min(1, max(0, defaults.object(forKey: "voiceLevel") as? Double ?? 0.6))
+        voicePTT = VoicePTTMode(rawValue: defaults.string(forKey: "voicePTT") ?? "") ?? .radioCommand
+        voicePTTLeadMs = min(500, max(0, defaults.object(forKey: "voicePTTLeadMs") as? Int ?? 120))
         lastStationProfile = defaults.data(forKey: "lastStationProfile")
             .flatMap { try? JSONDecoder().decode(StationProfile.self, from: $0) }
     }

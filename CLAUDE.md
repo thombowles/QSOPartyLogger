@@ -22,8 +22,11 @@ The non-negotiables, so they are never a surprise:
    scoring identically. Structural refactors are their own party-free commit.
 5. **Direct DTR/RTS CW keying is the preferred keying path** — the radio's
    internal keyer is a fallback, and never the default where control lines exist.
-   **Voice is the mirror image: phone messages play from the radio's own voice
-   memories, never as audio streamed from the Mac.** Never key on connect.
+   **Voice: phone messages are recordings made on this Mac, played by the app,
+   which keys the radio around them (CAT PTT through a sound card, or the
+   radio's own network audio stream); the radio's own voice memories are the
+   option where it has them (Article 11, amended 2026-08-15).** Never key on
+   connect — no `TX;`, no socket, no stream until an F-key asks.
 6. **One party, or one radio, per commit.** A scoring regression must bisect to a
    single sponsor's rules.
 7. **Verification is by test, build, and log — never by looking.** Report the
@@ -42,8 +45,10 @@ The non-negotiables, so they are never a surprise:
 | `Sources/Core/Export/` | Cabrillo V3, ADIF 3.1.4 |
 | `Sources/Core/History/` | Contest archive (one iCloud file), score snapshots, season stats, SQP Challenge, upcoming calendar |
 | `Sources/Core/Spotting/` | Cluster protocol, spot parsing, filters, band map scale |
+| `Sources/Core/Voice/` | `VoiceAudio` DSP, `VoiceClip`/`VoiceMessageSet`, `VoiceLibrary` (per-party recordings on disk) |
 | `Sources/Hardware/Radio/` | `RadioDriver` protocol, `RadioRegistry`, per-radio drivers |
 | `Sources/Hardware/Keying/` | `CWSender` protocol, direct `CWKeyer`, internal-keyer bridge, timing |
+| `Sources/Hardware/Voice/` | Voice transport protocols, `VoicePlayer` keying sequence, recorder, file IO, resampler, device list |
 | `Sources/App/` | `RadioController`, settings, document, cluster client |
 | `Sources/UI/` | SwiftUI views — **no radio-specific or party-specific branching here** |
 | `Resources/Parties/` | Bundled party JSON (user files override by `id`) |
