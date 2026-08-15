@@ -97,7 +97,7 @@ struct MainView: View {
             switch flow.transmission(at: index, context: context) {
             case .cw(let text):
                 MessagesRow.MessageKey(caption: text, isActive: true)
-            case .voice(_, let caption):
+            case .voice(_, let caption), .recording(_, _, let caption):
                 MessagesRow.MessageKey(caption: caption, isActive: true)
             case .silent:
                 MessagesRow.MessageKey(caption: context.modeClass == .phone ? "—" : "",
@@ -1073,6 +1073,11 @@ struct MainView: View {
             radio.sendCW(text, settings: settings)
         case .voice(let memory, let caption):
             radio.playVoiceMessage(memory: memory, caption: caption)
+        case .recording:
+            // Wired to `RadioController.playRecording` once it exists; until
+            // then the flow never produces this case (no view passes
+            // `.recordings` in its context).
+            break
         case .silent:
             break
         }
@@ -1446,7 +1451,7 @@ struct MainView: View {
         case .cw(let text):
             let onAir = radio.estimatedSendDuration(text, settings: settings)
             try? await Task.sleep(nanoseconds: UInt64(onAir * 1_000_000_000))
-        case .voice:
+        case .voice, .recording:
             await waitForVoicePlaybackToFinish()
         case .silent:
             break

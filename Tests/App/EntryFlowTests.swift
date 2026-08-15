@@ -757,6 +757,93 @@ final class EntryFlowTests: XCTestCase {
         XCTAssertFalse(text.isEmpty)
     }
 
+    // MARK: Recordings on this Mac
+
+    /// Phone, ESM on, the recordings source — ready unless a test says otherwise.
+    private func recordingsContext(ready: Bool = true) -> EntryFlow.Context {
+        var keying = KeyingSettings()
+        keying.esmEnabled = true
+        return EntryFlow.Context(
+            modeClass: .phone, rawMode: "USB", radioConnected: true,
+            cursor: .call, keying: keying, voiceMemoryCount: 0,
+            phoneSource: .recordings(ready: ready)
+        )
+    }
+
+    private let clip = VoiceAudio(sampleRate: 48_000, samples: [0.1, 0.2, 0.3])
+
+    func testRecordingsSourcePlaysTheMappedRecording() {
+        let document = LogDocument()
+        document.log.operatingMode = .run
+        let flow = EntryFlow(document: document)
+        flow.voiceRecordings = [1: clip]
+        // Run default: F1 → M1, named "CQ".
+        XCTAssertEqual(
+            flow.transmission(at: 0, context: recordingsContext()),
+            .recording(memory: 1, audio: clip, caption: "M1 CQ")
+        )
+    }
+
+    func testUnrecordedMemoryIsSilentUnderRecordings() {
+        let document = LogDocument()
+        document.log.operatingMode = .run
+        let flow = EntryFlow(document: document)
+        flow.voiceRecordings = [2: clip]                 // F1 → M1 has nothing
+        XCTAssertEqual(flow.transmission(at: 0, context: recordingsContext()), .silent)
+        XCTAssertEqual(
+            flow.transmission(at: 1, context: recordingsContext()),
+            .recording(memory: 2, audio: clip, caption: "M2 Exch")
+        )
+    }
+
+    /// The operator chose recordings; the path is not set up. The key stays
+    /// silent — it must not quietly play the radio's own memory 1 instead,
+    /// which would be a different recording than the one they expect.
+    func testUnreadyRecordingsSourceIsSilentAndNeverFallsBackToTheRadio() {
+        let document = LogDocument()
+        document.log.operatingMode = .run
+        let flow = EntryFlow(document: document)
+        flow.voiceRecordings = [1: clip]
+        var context = recordingsContext(ready: false)
+        context.voiceMemoryCount = 8                       // the radio has memories, too
+        XCTAssertEqual(flow.transmission(at: 0, context: context), .silent)
+        XCTAssertFalse(flow.esmDrivesReturn(context))
+    }
+
+    func testESMDrivesReturnUnderRecordingsOnlyWhenReadyAndSomethingIsRecorded() {
+        let flow = EntryFlow(document: LogDocument())
+        XCTAssertFalse(flow.esmDrivesReturn(recordingsContext()), "nothing recorded")
+        flow.voiceRecordings = [3: clip]
+        XCTAssertTrue(flow.esmDrivesReturn(recordingsContext()))
+        XCTAssertFalse(flow.esmDrivesReturn(recordingsContext(ready: false)))
+    }
+
+    /// The default `phoneSource` is the radio's memories, so every context
+    /// built before this feature — and every test above — means what it did.
+    func testRadioMemoriesSourceIgnoresRecordings() {
+        let document = LogDocument()
+        document.log.operatingMode = .run
+        let flow = EntryFlow(document: document)
+        flow.voiceRecordings = [1: clip]
+        XCTAssertEqual(
+            flow.transmission(at: 0, context: phoneContext(memories: 8)),
+            .voice(memory: 1, caption: "M1 CQ")
+        )
+        XCTAssertEqual(EntryFlow.Context().phoneSource, .radioMemories)
+    }
+
+    /// Return under ESM with a recording mapped: the same `.send`/`.logged`
+    /// outcomes CW gets, carrying the recording.
+    func testReturnSendsARecordingUnderESM() {
+        let document = LogDocument()
+        document.log.operatingMode = .run
+        let flow = EntryFlow(document: document)
+        flow.voiceRecordings = [1: clip]
+        // Empty call field in Run: F1 (CQ) is what Return sends.
+        let outcome = flow.returnPressed(recordingsContext(), undoManager: nil)
+        XCTAssertEqual(outcome, .send(index: 0, transmission: .recording(memory: 1, audio: clip, caption: "M1 CQ")))
+    }
+
     // MARK: Posture
 
     /// Every logged row is stamped from the log's own Run/S&P flag — the same

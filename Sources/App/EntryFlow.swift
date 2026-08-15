@@ -62,6 +62,11 @@ final class EntryFlow {
     /// in flight. A mismatched tag is simply not consulted.
     var callHistoryIndex: (partyID: String, parsed: CallHistoryFile.Parsed)?
 
+    /// The active party's recordings on this Mac, memory number → rendered
+    /// audio — set by the view from `VoiceStore`, like `callHistoryIndex`.
+    /// Only read under `PhoneSource.recordings`.
+    var voiceRecordings: [Int: VoiceAudio] = [:]
+
     /// The super check partial database, when the option is on and a
     /// MASTER.SCP is cached or downloaded. Nil (option off, nothing
     /// downloaded yet) empties the strip immediately.
@@ -116,6 +121,11 @@ final class EntryFlow {
         /// memories — the second is a mapping built for a different radio, and
         /// must not fire a neighbouring recording.
         var voiceMemoryCount: Int
+        /// Where phone keys get their audio. `.radioMemories` reads
+        /// `voiceMemoryCount`; `.recordings` reads `voiceRecordings` on the
+        /// flow, and only when `ready`. Defaulted to the radio, so every
+        /// context built before recordings existed means what it did.
+        var phoneSource: PhoneSource
 
         init(
             band: Band = .m20,
@@ -125,7 +135,8 @@ final class EntryFlow {
             radioConnected: Bool = false,
             cursor: ESM.Cursor = .call,
             keying: KeyingSettings = KeyingSettings(),
-            voiceMemoryCount: Int = 0
+            voiceMemoryCount: Int = 0,
+            phoneSource: PhoneSource = .radioMemories
         ) {
             self.band = band
             self.modeClass = modeClass
@@ -135,7 +146,21 @@ final class EntryFlow {
             self.cursor = cursor
             self.keying = keying
             self.voiceMemoryCount = voiceMemoryCount
+            self.phoneSource = phoneSource
         }
+    }
+
+    /// The two places a phone key's audio can come from — decided by the view
+    /// from the setting, the connected radio and the audio path's readiness
+    /// (Article 11 as amended 2026-08-15).
+    enum PhoneSource: Equatable, Sendable {
+        /// The radio's own recorder, memories 1...`voiceMemoryCount`.
+        case radioMemories
+        /// Recordings on this Mac. An unready path leaves every key silent,
+        /// with the reason shown by the row — it never falls back to the
+        /// radio's recorder, which would put a different recording on the
+        /// air than the one the operator chose.
+        case recordings(ready: Bool)
     }
 
     /// What a message slot puts on the air.
@@ -146,9 +171,14 @@ final class EntryFlow {
     /// same memory two different ways.
     enum Transmission: Equatable {
         case cw(String)
+        /// One of the radio's own voice memories.
         case voice(memory: Int, caption: String)
-        /// An empty CW slot, an unassigned phone key, or one pointing at a
-        /// memory this radio does not have.
+        /// A recording on this Mac, resolved to its audio here so the caller
+        /// hands exactly this to the radio path — it cannot pick a different
+        /// clip than the one the flow decided on.
+        case recording(memory: Int, audio: VoiceAudio, caption: String)
+        /// An empty CW slot, an unassigned phone key, one pointing at a memory
+        /// this radio does not have, or one with nothing recorded in it.
         case silent
     }
 
@@ -266,12 +296,19 @@ final class EntryFlow {
     /// everything else that keys.
     func transmission(at index: Int, context: Context) -> Transmission {
         if context.modeClass == .phone {
-            guard context.voiceMemoryCount > 0 else { return .silent }
             let memories = document.log.messages.voiceMemories(for: document.log.operatingMode)
-            guard memories.indices.contains(index), let memory = memories[index],
-                  (1...context.voiceMemoryCount).contains(memory) else { return .silent }
-            return .voice(memory: memory,
-                          caption: document.log.messages.voiceMemoryCaption(memory))
+            guard memories.indices.contains(index), let memory = memories[index] else { return .silent }
+            let caption = document.log.messages.voiceMemoryCaption(memory)
+            switch context.phoneSource {
+            case .radioMemories:
+                // Not `(1...count).contains` on a zero count — `1...0` traps.
+                guard context.voiceMemoryCount > 0,
+                      (1...context.voiceMemoryCount).contains(memory) else { return .silent }
+                return .voice(memory: memory, caption: caption)
+            case .recordings(let ready):
+                guard ready, let audio = voiceRecordings[memory] else { return .silent }
+                return .recording(memory: memory, audio: audio, caption: caption)
+            }
         }
         let text = expandedMessage(at: index, context: context)
         return text.isEmpty ? .silent : .cw(text)
@@ -279,13 +316,18 @@ final class EntryFlow {
 
     // MARK: ESM
 
-    /// ESM drives Return on CW, and on phone once the radio has voice memories
-    /// to play — otherwise Return is a plain log key.
+    /// ESM drives Return on CW, and on phone once there is something to play
+    /// — the radio's memories, or a ready path with a recording in it.
+    /// Otherwise Return is a plain log key.
     func esmDrivesReturn(_ context: Context) -> Bool {
         guard context.keying.esmEnabled, context.radioConnected else { return false }
         switch context.modeClass {
         case .cw: return true
-        case .phone: return context.voiceMemoryCount > 0
+        case .phone:
+            switch context.phoneSource {
+            case .radioMemories: return context.voiceMemoryCount > 0
+            case .recordings(let ready): return ready && !voiceRecordings.isEmpty
+            }
         case .digital: return false
         }
     }
