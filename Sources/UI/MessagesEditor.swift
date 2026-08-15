@@ -186,14 +186,17 @@ struct MessagesEditor: View {
                     // shadow this button entirely.
                     .keyboardShortcut("r", modifiers: [.command, .shift])
                     .help("Replace all messages with \(party?.name ?? "this party")'s defaults (⇧⌘R)")
+                    .shortcutHint("⇧⌘R")
                 Spacer()
                 Button("Cancel") { dismiss() }
                     .keyboardShortcut(.cancelAction)
+                    .shortcutHint("Esc")
                 Button("Save") {
                     document.updateMessages(draft.edited, undoManager: undoManager)
                     dismiss()
                 }
                 .keyboardShortcut(.defaultAction)
+                .shortcutHint("⏎")
             }
         }
         .padding(20)

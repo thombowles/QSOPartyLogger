@@ -469,11 +469,27 @@ struct MainView: View {
         }
     }
 
-    /// Under the messages row: the F-row notice, when the keyboard sent a
-    /// media key where an F-key was expected. Inline, dismissable, and gone
-    /// by itself the moment a real F-key arrives — never a modal.
+    /// Under the messages row: the shortcut legend while hints are on (⌘/),
+    /// and the F-row notice when the keyboard sent a media key where an F-key
+    /// was expected. Inline, dismissable, and gone by itself the moment a real
+    /// F-key arrives — never a modal.
     @ViewBuilder
     private var keyNoticeStrip: some View {
+        if settings.showShortcutHints {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(ShortcutLegend.line)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(ShortcutLegend.lastKeyLine(lastKeyReadout))
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(.secondary)
+                    .help("What the logger last received from the keyboard, and what it did with it — "
+                          + "press an F-key here to check the F row reaches the app")
+            }
+            .padding(.horizontal, 14)
+            .padding(.bottom, 4)
+        }
         if let notice = fRowNotice {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Label(notice, systemImage: "exclamationmark.triangle.fill")
@@ -726,6 +742,7 @@ struct MainView: View {
                 Label("Export", systemImage: "square.and.arrow.up")
             }
             .help("Export the log — ADIF (⌘E) or Cabrillo (⇧⌘E)")
+            .shortcutHint("⌘E · ⇧⌘E")
 
             Button {
                 beginSpotForMode()
@@ -735,6 +752,7 @@ struct MainView: View {
             .keyboardShortcut("s", modifiers: [.command, .shift])
             .disabled(!canSpotNow)
             .help(spotCommandHelp)
+            .shortcutHint("⇧⌘S")
 
             Button {
                 messagesEditorClass = .cw
@@ -743,6 +761,7 @@ struct MainView: View {
                 Label("Messages", systemImage: "keyboard")
             }
             .help("F-key messages — CW text, and phone recordings made here (⇧⌘V opens the Phone tab)")
+            .shortcutHint("⇧⌘V phone")
             // Article 7 — the Phone tab's keyboard path. An invisible button
             // carries the shortcut, the pattern the Run/S&P toggle uses.
             .background {
@@ -761,6 +780,7 @@ struct MainView: View {
                 Label("Band Map", systemImage: "ruler")
             }
             .help("Band map — spots by frequency with the VFO marker (⌘B)")
+            .shortcutHint("⌘B")
 
             Button {
                 showClusterPopover.toggle()
@@ -1898,6 +1918,8 @@ struct MainView: View {
         case .exportCabrillo: exportCabrillo()
         // ⇧⌘← / ⇧⌘→: the VFO by 100 Hz.
         case .nudgeVFO(let hz): nudgeVFO(byHz: hz)
+        // ⌘/: hints on every button, and the legend under the messages row.
+        case .toggleShortcutHints: settings.showShortcutHints.toggle()
         }
     }
 

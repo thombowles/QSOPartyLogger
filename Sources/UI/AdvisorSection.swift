@@ -81,6 +81,7 @@ struct AdvisorSection: View {
             .labelsHidden()
             .frame(width: 104)
             .help(goalHelp)
+            .shortcutHint("⌥⌘A")
 
             Button {
                 settings.advisorCollapsed.toggle()
@@ -91,6 +92,7 @@ struct AdvisorSection: View {
             .buttonStyle(.plain)
             .foregroundStyle(.secondary)
             .help("Collapse or expand the Advisor (⇧⌘A)")
+            .shortcutHint("⇧⌘A")
         }
         .contextMenu {
             ForEach(Advisor.Advisory.Kind.allCases, id: \.self) { kind in

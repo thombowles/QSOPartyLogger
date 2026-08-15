@@ -102,6 +102,8 @@ enum KeyMonitorGate {
         case exportCabrillo
         /// ⇧⌘← / ⇧⌘→: the VFO by this many hertz, sign and all.
         case nudgeVFO(byHz: Int)
+        /// ⌘/: shortcut hints on every button, and the legend.
+        case toggleShortcutHints
     }
 
     /// One press of ⇧⌘← / ⇧⌘→, in hertz.
@@ -210,6 +212,10 @@ enum KeyMonitorGate {
         // The only chord ⇧ distinguishes. In the toolbar's Export menu these
         // are badge text; the gate is what actually fires them.
         case 14: return shift ? .exportCabrillo : .exportADIF  // 'e'
+        // ⌘/ — shortcut hints. Also Help › Keyboard Shortcut Hints, which is
+        // what answers it from a sheet or the dashboard, where the gate does
+        // not consume it. (⌘? is macOS's own Help-menu search.)
+        case 44: return .toggleShortcutHints  // '/'
         default: return nil
         }
     }

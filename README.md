@@ -107,6 +107,11 @@ Per-party detail — what's unusual about each, and every known limitation — i
 
 ## Keyboard reference
 
+Press **⌘/** (or Help › Keyboard Shortcut Hints) and every button wears its key
+as a small badge — the toolbar, the message row, Log, WPM, the sidebar, the
+editors — while a legend under the message buttons lists the keys that have no
+button and shows the last key the app received. Press ⌘/ again to hide them.
+
 | Keys | Action |
 | --- | --- |
 | `Enter` | Log the QSO (or send the next ESM message, or run a typed QSY command) |
@@ -137,6 +142,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `⌥⌘A` | Toggle what the Advisor optimises: Score ↔ QSOs |
 | `⌘A` | Select every row in the log (`⇧`-click for a range, `⌘`-click for scattered rows) |
 | `⌘.` | Dismiss the spots-already-used badge for this sitting |
+| `⌘/` | Shortcut hints on / off (also Help › Keyboard Shortcut Hints): every button wears its key, and a legend under the message buttons lists the keys that have no button, with a "last key" readout of what the app received |
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY, change band, change mode |
 
 In the Contest Dashboard (**⌘⇧D**): `⌘[` / `⌘]` change year, `⌘R` re-reads the
