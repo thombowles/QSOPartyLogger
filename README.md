@@ -153,6 +153,18 @@ These keys belong to the log window with focus. While a sheet is open it owns
 the keyboard — `F1`–`F8` do not transmit, so revising F2 and pressing it never
 keys the old message. `Esc` still aborts CW instantly either way.
 
+**If the F-keys do nothing but the buttons work**, the keyboard is almost
+certainly sending its F row as media keys — brightness, Mission Control,
+backlight — which never reach the logger as `F1`–`F12`. The app tells you when
+that happens: a line under the message buttons names what arrived ("F1 arrived
+as Brightness ▼ …") with the fix. Keychron and most third-party boards in Mac
+mode default to multimedia on the F row; hold `fn`+`X`+`L` for 4 s to lock it
+to function keys (older firmware: `fn`+`K`+`C` for 3 s), or press `fn` with the
+key. Apple keyboards: System Settings › Keyboard › Keyboard Shortcuts… ›
+Function Keys. Every key the app rules on is also traced to the unified log —
+`log show --predicate 'subsystem == "org.b5n.QSOPartyLogger"' --last 10m` shows
+the key code, which window had focus, and what the app did with it.
+
 ## Logging
 
 - **County lines, N1MM style.** Type `LIN/AND` (up to 4 counties) and each

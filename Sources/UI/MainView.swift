@@ -1,5 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
+import os
 
 struct MainView: View {
     @Bindable var document: LogDocument
@@ -34,6 +35,15 @@ struct MainView: View {
     @State private var exportName = ""
     @State private var isExporting = false
     @State private var keyMonitor: Any?
+    /// The second monitor: media keys (`.systemDefined`), watched only so an
+    /// F-key that arrives as brightness or backlight can say so. Never
+    /// consumed.
+    @State private var mediaKeyMonitor: Any?
+    /// The line under the messages row when the F row arrives as media keys —
+    /// `KeyDiagnostics.fRowNotice`. Cleared by the next real function key.
+    @State private var fRowNotice: String?
+    /// The last key the monitor ruled on, for the shortcut-hints legend.
+    @State private var lastKeyReadout: String?
 
     @State private var repeatCQ = false
     @State private var repeatTask: Task<Void, Never>?
@@ -442,6 +452,8 @@ struct MainView: View {
                 onJumpToCQ: jumpToCQFrequency
             )
 
+            keyNoticeStrip
+
             if workedBeforeHeight > 0 {
                 WorkedBeforeTable(
                     call: entry.callNormalized,
@@ -454,6 +466,31 @@ struct MainView: View {
             Divider()
 
             logTable
+        }
+    }
+
+    /// Under the messages row: the F-row notice, when the keyboard sent a
+    /// media key where an F-key was expected. Inline, dismissable, and gone
+    /// by itself the moment a real F-key arrives — never a modal.
+    @ViewBuilder
+    private var keyNoticeStrip: some View {
+        if let notice = fRowNotice {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Label(notice, systemImage: "exclamationmark.triangle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button {
+                    fRowNotice = nil
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+                .accessibilityLabel("Dismiss keyboard notice")
+            }
+            .padding(.horizontal, 14)
+            .padding(.bottom, 4)
         }
     }
 
@@ -577,6 +614,10 @@ struct MainView: View {
         if let monitor = keyMonitor {
             NSEvent.removeMonitor(monitor)
             keyMonitor = nil
+        }
+        if let monitor = mediaKeyMonitor {
+            NSEvent.removeMonitor(monitor)
+            mediaKeyMonitor = nil
         }
         spotPurgeTask?.cancel()
         spotPurgeTask = nil
@@ -1761,6 +1802,12 @@ struct MainView: View {
 
     // MARK: F-key handling (AppKit monitor — reliable across macOS versions)
 
+    /// Every key the monitor rules on, and every media key it notices, goes to
+    /// the unified log — `log show --predicate 'subsystem ==
+    /// "org.b5n.QSOPartyLogger"' --last 10m` — so "the F-keys do nothing" can
+    /// be read off the Mac that said it, key code and all.
+    private static let keyLog = Logger(subsystem: "org.b5n.QSOPartyLogger", category: "keys")
+
     private func installKeyMonitor() {
         guard keyMonitor == nil else { return }
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
@@ -1771,18 +1818,52 @@ struct MainView: View {
             // and the transmitter comes down *before* the key's own action, so
             // F2 during a repeating CQ replaces the CQ instead of stacking
             // behind it.
+            let command = event.modifierFlags.contains(.command)
+            let shift = event.modifierFlags.contains(.shift)
+            let focus = KeyMonitorGate.focus(currentWindows())
             let response = KeyMonitorGate.response(
                 keyCode: event.keyCode,
-                command: event.modifierFlags.contains(.command),
-                shift: event.modifierFlags.contains(.shift),
-                focus: KeyMonitorGate.focus(currentWindows()),
+                command: command,
+                shift: shift,
+                focus: focus,
                 repeatRunning: repeatTask != nil
             )
+            Self.keyLog.log("\(KeyDiagnostics.traceLine(keyCode: event.keyCode, command: command, shift: shift, focus: focus, response: response), privacy: .public)")
+            if focus == .document {
+                noteKeyDown(keyCode: event.keyCode, command: command, shift: shift, action: response.action)
+            }
 
             if response.stopsRepeat { stopRepeat() }
             if response.abortsTransmission { radio.abortTransmission(settings: settings) }
             if let action = response.action { perform(action) }
             return response.consumesEvent ? nil : event
+        }
+        // Media keys are the system's; this only looks. An F row in
+        // multimedia mode sends brightness where F1 should be, and the
+        // operator deserves to be told rather than left pressing.
+        mediaKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .systemDefined) { event in
+            guard let key = KeyDiagnostics.mediaKey(subtype: Int(event.subtype.rawValue), data1: event.data1),
+                  KeyMonitorGate.focus(currentWindows()) == .document
+            else { return event }
+            Self.keyLog.log("media key \(key.name, privacy: .public) \(key.isDown ? "down" : "up", privacy: .public)")
+            if let notice = KeyDiagnostics.fRowNotice(for: key) {
+                fRowNotice = notice
+                lastKeyReadout = "\(key.name) — a media key, not a function key"
+            }
+            return event
+        }
+    }
+
+    /// The legend's last-key line, and the F-row notice's lifecycle: a system
+    /// key on an F position raises it, any real function key clears it.
+    private func noteKeyDown(keyCode: UInt16, command: Bool, shift: Bool, action: KeyMonitorGate.Action?) {
+        lastKeyReadout = KeyDiagnostics.lastKeyReadout(keyCode: keyCode, command: command, shift: shift, action: action)
+        if let notice = KeyDiagnostics.fRowNotice(forKeyCode: keyCode) {
+            fRowNotice = notice
+        } else if case .sendMessage = action {
+            fRowNotice = nil
+        } else if action == .clearEntry {
+            fRowNotice = nil
         }
     }
 
