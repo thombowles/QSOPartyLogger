@@ -1896,6 +1896,21 @@ struct MainView: View {
         case .abortTransmission: radio.abortTransmission(settings: settings)
         case .exportADIF: exportADIF()
         case .exportCabrillo: exportCabrillo()
+        // ⇧⌘← / ⇧⌘→: the VFO by 100 Hz.
+        case .nudgeVFO(let hz): nudgeVFO(byHz: hz)
+        }
+    }
+
+    /// The radio when there is one; otherwise the band-map cursor, which is
+    /// the only VFO the app has while disconnected. Either way the spot
+    /// cursor follows, so ⌘↑/⌘↓ step from where the radio now is. The band
+    /// plan is left alone: 100 Hz never crosses a mode boundary on purpose.
+    private func nudgeVFO(byHz hz: Int) {
+        if let target = radio.nudgeFrequency(byHz: hz) {
+            spotCursorKHz = Double(target) / 1000
+        } else if !radio.isConnected {
+            let base = spotCursorKHz ?? Double(currentBand.defaultFreqKHz)
+            spotCursorKHz = base + Double(hz) / 1000
         }
     }
 

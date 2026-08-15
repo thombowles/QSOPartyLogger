@@ -123,6 +123,7 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | Any key | While repeat-CQ is running: stop it and abort the CQ on the air, then do the key's own job |
 | `⌘=` / `⌘-` | CW speed ±2 WPM — takes effect mid-message (syncs to the radio) |
 | `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
+| `⇧⌘←` / `⇧⌘→` | Nudge the VFO down / up 100 Hz (a burst of presses adds up; disconnected, the band-map cursor moves instead) |
 | `⌘R` | Toggle Run / Search & Pounce |
 | `⌘J` | Jump back to your CQ run frequency |
 | `⌘B` | Toggle the band map window |
@@ -587,6 +588,9 @@ stays on screen when another app takes focus, so it can sit beside a panadapter.
   come from 47 CFR §97.305(c). Untick **Follow band plan on QSY** to disable.
 - **CQ frequency memory**: sending F1 in Run mode remembers your run frequency;
   **⌘J** jumps back to it after an S&P excursion.
+- **VFO nudge**: **⇧⌘←** / **⇧⌘→** move the radio 100 Hz down / up without
+  leaving the entry field — zero-beating a caller, or edging off a neighbour on
+  phone. A burst of presses adds up even before the radio has reported back.
 
 Hub spots are hand-posted, so they live longer than cluster spots — 60 minutes
 against 15, matching what the hub itself keeps. Hub polling runs once a minute

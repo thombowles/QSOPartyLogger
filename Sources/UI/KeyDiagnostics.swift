@@ -196,6 +196,7 @@ enum KeyDiagnostics {
         case .abortTransmission: return "abort"
         case .exportADIF: return "export ADIF"
         case .exportCabrillo: return "export Cabrillo"
+        case .nudgeVFO(let hz): return "VFO \(hz > 0 ? "+" : "")\(hz) Hz"
         }
     }
 }

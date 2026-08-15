@@ -190,6 +190,7 @@
 		7080C793C13BE40229760869 /* ArchivedLogExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4863BAC6A4DFB9BD99769399 /* ArchivedLogExportTests.swift */; };
 		71A53F1DD6528F6C6485C0ED /* HubPollPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3068869DC84695A9621519CB /* HubPollPolicyTests.swift */; };
 		73942B2919A08066576E5060 /* alqp-table-2026-07-25-busy.html in Resources */ = {isa = PBXBuildFile; fileRef = 468D38B74FF2D7C5B9DBDFF9 /* alqp-table-2026-07-25-busy.html */; };
+		74B3B2C1C034061411EA9B2B /* RadioControllerNudgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F83A531E3F0B565E7C2710D /* RadioControllerNudgeTests.swift */; };
 		74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */; };
 		75B4B677B2E8E0D1B4F0795D /* AdifExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A779F556F857265114F40CB4 /* AdifExporter.swift */; };
 		77C26EE87D82A2EBF557EFDE /* SpotSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFA325FEB27F5D7ED9C236E /* SpotSheet.swift */; };
@@ -438,6 +439,7 @@
 		0E4D5D5EFD3CC5CD8F7F2B06 /* SpotReceipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotReceipt.swift; sourceTree = "<group>"; };
 		0EC4FB2912638C4B5052ED72 /* HubSpotParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotParser.swift; sourceTree = "<group>"; };
 		0F52BEC7154012161AF51ED0 /* CWSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CWSender.swift; sourceTree = "<group>"; };
+		0F83A531E3F0B565E7C2710D /* RadioControllerNudgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioControllerNudgeTests.swift; sourceTree = "<group>"; };
 		11006733B29859B820BF14AE /* DXCCTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCTableTests.swift; sourceTree = "<group>"; };
 		112CC71F65B097523B39BC9B /* HubSelfSpotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSelfSpotTests.swift; sourceTree = "<group>"; };
 		126046DF54E2EDABBDB36074 /* PotaSpotClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaSpotClientTests.swift; sourceTree = "<group>"; };
@@ -1334,6 +1336,7 @@
 				126046DF54E2EDABBDB36074 /* PotaSpotClientTests.swift */,
 				2FF4DB3C69EF4EB9FFF24B24 /* PreferenceIsolationTests.swift */,
 				D96F76D3F0F364CAA514E629 /* RadioControllerConnectionTests.swift */,
+				0F83A531E3F0B565E7C2710D /* RadioControllerNudgeTests.swift */,
 				15F470675F687ABB38604249 /* RadioControllerRecordingTests.swift */,
 				B7048B719696E04B4942D1AC /* RadioControllerVoiceTests.swift */,
 				5F8A0D8EDD44C17364359A07 /* SCPClientTests.swift */,
@@ -1725,6 +1728,7 @@
 				8B798A3A385449902326AB88 /* QuebecQSOPartyTests.swift in Sources */,
 				02382A492D70F37AA11A029D /* RadioBarStatusTests.swift in Sources */,
 				3CB5FBA489EFFACEE3A57BB1 /* RadioControllerConnectionTests.swift in Sources */,
+				74B3B2C1C034061411EA9B2B /* RadioControllerNudgeTests.swift in Sources */,
 				AC7BABF01C4A1A0F06D46D0F /* RadioControllerRecordingTests.swift in Sources */,
 				FED0EBDE88307F2AA6D6B6D7 /* RadioControllerVoiceTests.swift in Sources */,
 				9B5CFCE3C27C45119FC5574E /* RadioRegistryTests.swift in Sources */,

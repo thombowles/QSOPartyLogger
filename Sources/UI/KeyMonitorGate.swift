@@ -100,7 +100,12 @@ enum KeyMonitorGate {
         case abortTransmission
         case exportADIF
         case exportCabrillo
+        /// ⇧⌘← / ⇧⌘→: the VFO by this many hertz, sign and all.
+        case nudgeVFO(byHz: Int)
     }
+
+    /// One press of ⇧⌘← / ⇧⌘→, in hertz.
+    static let vfoNudgeHz = 100
 
     /// F1–F8 → message index 0–7.
     private static let fKeyIndex: [UInt16: Int] = [
@@ -195,6 +200,11 @@ enum KeyMonitorGate {
         // draws high frequency at the top, so up the map is up the band.
         case 126: return .nextSpot  // ↑
         case 125: return .previousSpot  // ↓
+        // The horizontal axis is the VFO, and only with ⇧: ⇧⌘←/⇧⌘→ nudge it
+        // 100 Hz (2026-08-15). The shifted pair was "select to line
+        // start/end" in the entry fields, which a callsign never needs.
+        case 123 where shift: return .nudgeVFO(byHz: -vfoNudgeHz)  // ←
+        case 124 where shift: return .nudgeVFO(byHz: vfoNudgeHz)  // →
         case 38: return .jumpToCQFrequency  // 'j'
         case 11: return .toggleBandMap  // 'b'
         // The only chord ⇧ distinguishes. In the toolbar's Export menu these
