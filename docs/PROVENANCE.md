@@ -849,3 +849,42 @@ For recordings made on the Mac and played through a sound card into the radio
   below the level at which the sound card's output stage starts clipping".
   The K3S, KX3 and KX2 manuals were **not** read for their audio input; the
   README says so rather than describing a jack it has not seen.
+
+## Radio protocols — Flex transmit audio (DAX)
+
+For recordings made on the Mac and streamed to a FLEX-6000/8000 as its own
+transmit audio (Article 11 as amended 2026-08-15). Reasoned about, with the
+open questions a bench has yet to answer, in
+[`docs/research/voice_transports.md`](research/voice_transports.md). All
+fetched 2026-08-15.
+
+- **SmartSDR TCP/IP API wiki** — <https://github.com/flexradio/smartsdr-api-docs/wiki>
+  (FlexRadio Systems' own GitHub organisation), pages `SmartSDR-TCPIP-API`,
+  `SmartSDR-Ethernet-API`, `TCPIP-client`, `TCPIP-stream`, `TCPIP-dax`,
+  `TCPIP-transmit`, `TCPIP-xmit`, `TCPIP-slice`, `TCPIP-sub`, `Boolean-State`,
+  `SmartSDR-Status-Responses`, `Known-API-Responses`, banked whole as
+  [`flex_smartsdr_tcpip_api_voice.txt`](research/flex_smartsdr_tcpip_api_voice.txt)
+  (the wiki carries no revision or date). Authority for every command
+  `FlexRadioDriver`'s transmit-audio path sends — `client udpport`, `dax audio
+  set … tx=1`, `stream create type=dax_tx`, `stream remove`, `transmit set
+  dax=`, `xmit`, `sub dax all` — the `R<seq>|<hex>|<message>` reply format, the
+  reply codes it names for the operator, and UDP port 4991 for VITA-49.
+- **FlexLib API v3.2.37** (FlexRadio Systems, © 2012-2017; `DAXTXAudioStream.cs`,
+  `Radio.cs`, `Slice.cs`, `Vita/*.cs`), read from the versioned copy at
+  github.com/KevinSShaffer/JJFlexRadio (`FlexLib_API_v3.2.37/`) — the
+  manufacturer's own client, and the only primary source for the packet a
+  client sends *to* the radio. Banked as constants and line numbers, not code,
+  in [`flexlib_3_2_37_dax_tx_excerpts.txt`](research/flexlib_3_2_37_dax_tx_excerpts.txt):
+  header bits, OUI `0x001C2D`, information class `0x534C`, packet class
+  `0x03E3`, 128 stereo float32 frames per packet, 263 words, sequence mod 16,
+  big-endian throughout — `FlexDAXPacketizer` byte for byte
+  (`FlexDAXPacketizerTests`).
+- **FlexRadio Community, Steve-N5AC (Community Manager, admin), September 2014**
+  — <https://community.flexradio.com/discussion/6346756/what-are-the-audio-stream-specifications-for-dax-and-how-do-they-compare-to-vac-in-the-3000-5000>
+  Authority for the sample rate (24 ksps) and format (stereo IEEE-754 float32,
+  0 dBFS = 1.0) of DAX audio over the API, quoted in
+  [`flex_dax_audio_format_staff_answer.txt`](research/flex_dax_audio_format_staff_answer.txt).
+
+Two working third-party clients (nDAX, FT8CN) were read as **hints only** for
+the order in which the wiki's commands are issued; no byte comes from either,
+and `voice_transports.md` says where they were consulted.

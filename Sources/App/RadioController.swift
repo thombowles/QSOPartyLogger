@@ -46,6 +46,18 @@ enum VoicePathStatus: Equatable, Sendable {
     }
 }
 
+/// A play generation the network voice path's driver thread can read when it
+/// stamps an event. Top-level, not nested: a type nested in a `@MainActor`
+/// class inherits the isolation, and this must be touched off the actor.
+private final class PlayGenerationBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var stored = 0
+    var value: Int {
+        get { lock.withLock { stored } }
+        set { lock.withLock { stored = newValue } }
+    }
+}
+
 /// Glue between the hardware layer and SwiftUI: connection lifecycle, live
 /// radio state, and CW sending over the selected backend.
 @MainActor
@@ -144,6 +156,11 @@ final class RadioController {
     /// Bumped per play; a terminal event stamped with an older generation
     /// belongs to a play that was replaced and is ignored.
     private var recordingGeneration = 0
+    /// The generation the network path is playing for, readable from the
+    /// driver's thread: its events are stamped at emission, so a `.stopped`
+    /// the driver reports synchronously while a new play replaces the old
+    /// one carries the old generation and cannot end the new one.
+    private let networkGeneration = PlayGenerationBox()
     private var sendingClearTask: Task<Void, Never>?
     /// Which path owns `nowSending`, so the CW timer and the radio's real
     /// end-of-playback signal cannot clear each other's badge.
@@ -272,8 +289,11 @@ final class RadioController {
         // before `start()` for the same reason the voice callbacks are.
         transmitControl = newDriver as? any TransmitControlCapable
         if let streaming = newDriver as? any AudioStreamTransmitCapable {
+            let generation = networkGeneration
             streaming.onTransmitAudioEvent = { [weak self] event in
-                Task { @MainActor [weak self] in self?.recordingDidReport(event, generation: nil) }
+                // Stamped here, on the driver's thread, before the hop.
+                let stamp = generation.value
+                Task { @MainActor [weak self] in self?.recordingDidReport(event, generation: stamp) }
             }
             streamer = streaming
         }
@@ -632,9 +652,10 @@ final class RadioController {
             do {
                 forRadio = try AudioResampler.resample(audio, to: streamer.transmitSampleRate).scaled(by: level)
             } catch {
-                recordingDidReport(.failed(error.localizedDescription), generation: nil)
+                recordingDidReport(.failed(error.localizedDescription), generation: generation)
                 return
             }
+            networkGeneration.value = generation
             streamer.transmitAudio(forRadio)
             return
         }
@@ -654,13 +675,11 @@ final class RadioController {
         }
     }
 
-    /// One event from whichever path is playing. `generation` nil = the
-    /// network path, which is single-instance and needs no stamp; a stamped
-    /// event from a play that was since replaced is ignored, so it cannot
-    /// clear the badge the new play owns.
-    func recordingDidReport(_ event: TransmitAudioEvent, generation: Int?) {
-        guard isConnected, recordingIsPlaying,
-              generation == nil || generation == recordingGeneration else { return }
+    /// One event from whichever path is playing, stamped with the generation
+    /// of the play it belongs to. An event from a play that was since
+    /// replaced is ignored, so it cannot clear the badge the new play owns.
+    func recordingDidReport(_ event: TransmitAudioEvent, generation: Int) {
+        guard isConnected, recordingIsPlaying, generation == recordingGeneration else { return }
         switch event {
         case .started:
             break

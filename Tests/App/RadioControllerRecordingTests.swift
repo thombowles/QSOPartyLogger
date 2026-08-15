@@ -214,6 +214,21 @@ final class RadioControllerRecordingTests: XCTestCase {
         XCTAssertEqual(radio.voicePathStatus, .unsupported, "disconnect resets the path")
     }
 
+    /// A radio that takes the audio over its own link is ready with no device
+    /// and no PTT setting at all. 127.0.0.1:1 never leaves the machine and is
+    /// never awaited — the path is derived at connect, before any packet.
+    func testNetworkPathIsReadyOnAStreamingDriver() {
+        let radio = RadioController()
+        let settings = AppSettings(defaults: Preferences.store)
+        settings.radioID = "flex-6000"
+        settings.tcpHost = "127.0.0.1"
+        settings.tcpPort = 1
+        settings.voiceOutputDeviceUID = nil
+        radio.connect(settings: settings)
+        defer { radio.disconnect() }
+        XCTAssertEqual(radio.voicePathStatus, .readyOverNetwork)
+    }
+
     /// The K3 driver keys over CAT, so radio-command PTT is ready on a sound
     /// card — and the player is handed a keying closure.
     func testRadioCommandPTTIsReadyOnADriverThatKeysOverCAT() {

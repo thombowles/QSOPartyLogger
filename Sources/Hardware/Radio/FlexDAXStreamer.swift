@@ -17,10 +17,11 @@ final class FlexDAXStreamer: @unchecked Sendable {
         self.interval = intervalSeconds
     }
 
+    /// Single-use: a `stop()` that lands before `stream` ends it before the
+    /// first packet, so a play the driver has already abandoned never goes out.
     func stream(_ packets: [Data],
                 onFirstPacket: @escaping @Sendable () -> Void,
                 onFinished: @escaping @Sendable () -> Void) {
-        lock.withLock { stopped = false }
         let t = Thread { [self] in
             var deadline = DispatchTime.now().uptimeNanoseconds
             let step = UInt64(interval * 1_000_000_000)

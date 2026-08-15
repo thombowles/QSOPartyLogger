@@ -356,8 +356,9 @@ FM and its `MD8` is not a mode but SWR Tune, so nothing you can type into the
 mode field will key it into a tune-up.
 
 **FlexRadio 6000 / 8000** over TCP/IP (SmartSDR API, port 4992). Push-based
-slice status — no polling — with CW through the radio's CWX keyer and
-bidirectional WPM sync.
+slice status — no polling — with CW through the radio's CWX keyer,
+bidirectional WPM sync, and phone messages streamed to the radio as its own
+transmit audio (DAX) over the same connection.
 
 Opening a contest file reconnects the last radio you used, and every connect
 *validates* that the radio actually answers rather than letting a dead link
@@ -493,6 +494,21 @@ no control lines to wire.
 The first connection triggers macOS's **Local Network** permission prompt. Allow
 it, or the Flex is unreachable (System Settings → Privacy & Security → Local
 Network if you dismissed it). The app keeps retrying while the prompt is up.
+
+**Phone messages go to the Flex over the same network connection** — the
+recordings you make in Messages → Phone are streamed to the radio as its own
+transmit audio, and the radio is keyed for each one. There is nothing to wire
+and no sound card to pick. On the first message after connecting, the app
+registers itself with the radio, claims the transmit-audio source and opens a
+stream; that takes a moment, and nothing is keyed until the radio has confirmed
+the stream is the app's. For each message it then switches the radio's transmit
+audio source to that stream (SmartSDR's DAX button lights while a message
+plays), keys, streams the clip with a short lead and tail of silence, unkeys,
+and puts the source back so your microphone works between messages. Whichever
+slice is the transmitter is what goes on the air. If the radio refuses the
+stream, the reason — with the radio's own response code — appears in the radio
+bar, and nothing is transmitted. The Level slider is the only level there is on
+this path (the radio's speech processor still applies, as it does to a mic).
 
 ## Spotting and the band map
 
@@ -829,7 +845,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2603 unit tests**, none of which need hardware, a network or a microphone —
+**2629 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
 (driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank
