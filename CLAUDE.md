@@ -44,12 +44,12 @@ The non-negotiables, so they are never a surprise:
 | `Sources/Core/CallHistory/` | N1MM call history file parser, site page parsers, on-disk cache |
 | `Sources/Core/Export/` | Cabrillo V3, ADIF 3.1.4 |
 | `Sources/Core/History/` | Contest archive (one iCloud file), score snapshots, season stats, SQP Challenge, upcoming calendar |
-| `Sources/Core/Spotting/` | Cluster protocol, spot parsing, filters, band map scale |
+| `Sources/Core/Spotting/` | Cluster protocol, spot parsing, filters, band map scale; outgoing spots — `SpotNetwork`, `SpotDraft`, `SpotReceipt`, per-network bodies |
 | `Sources/Core/Voice/` | `VoiceAudio` DSP, `VoiceClip`/`VoiceMessageSet`, `VoiceLibrary` (per-party recordings on disk) |
 | `Sources/Hardware/Radio/` | `RadioDriver` protocol, `RadioRegistry`, per-radio drivers |
 | `Sources/Hardware/Keying/` | `CWSender` protocol, direct `CWKeyer`, internal-keyer bridge, timing |
 | `Sources/Hardware/Voice/` | Voice transport protocols, `VoicePlayer` keying sequence, recorder, file IO, resampler, device list |
-| `Sources/App/` | `RadioController`, settings, document, cluster client |
+| `Sources/App/` | `RadioController`, settings, document, cluster client, spot clients and `SpotDispatcher`, `VoiceStore` |
 | `Sources/UI/` | SwiftUI views — **no radio-specific or party-specific branching here** |
 | `Resources/Parties/` | Bundled party JSON (user files override by `id`) |
 | `docs/research/` | Banked official rules research + county generators |

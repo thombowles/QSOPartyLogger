@@ -12,13 +12,13 @@ struct LogTable: View {
     /// Two or more rows selected → the bulk editor, with the selection in
     /// chronological order so its seed value is the earliest contact's.
     let onBulkEdit: ([QSO]) -> Void
-    /// Whether this party is on the QSO Party Hub and there is a callsign to
-    /// post under. False leaves the menu item out rather than offering
+    /// Whether a spot has anywhere to go — a callsign to post under and a
+    /// network on offer. False leaves the menu item out rather than offering
     /// something that cannot work.
-    let canSpotToHub: Bool
-    /// Right-click → post this station to the hub. Opens the confirmation
-    /// sheet; nothing is posted from the menu itself.
-    let onSpotToHub: (QSO) -> Void
+    let canSpot: Bool
+    /// Right-click → spot this station, to whichever networks apply. Opens the
+    /// confirmation sheet; nothing is posted from the menu itself.
+    let onSpotStation: (QSO) -> Void
 
     /// A set, not one id: shift-click for a range, ⌘-click for scattered rows,
     /// ⌘A for the lot — the selection model N1MM's Log window documents, and
@@ -135,8 +135,8 @@ struct LogTable: View {
                 Button("Edit…") { onEdit(qso) }
                 // One station per post, so this stays single-row however many
                 // are selected.
-                if canSpotToHub {
-                    Button("Spot \(qso.call) to QSO Party Hub…") { onSpotToHub(qso) }
+                if canSpot {
+                    Button("Spot \(qso.call)…") { onSpotStation(qso) }
                 }
                 Divider()
                 Button("Delete Row", role: .destructive) { onDeleteRows([qso.id]) }

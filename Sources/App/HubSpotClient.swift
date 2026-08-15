@@ -140,19 +140,15 @@ final class HubSpotClient {
 
     // MARK: Self-spotting
 
-    enum SendState: Equatable {
-        case idle
-        case sending
-        /// The POST returned 200. That means *sent*, not *accepted* — the page
-        /// re-renders rather than reporting a status, so this is provisional
-        /// until the spot is seen on the board.
-        case sent(Date)
-        /// Seen in a later poll. This is the only real confirmation.
-        case confirmed
-        case failed(String)
+    /// A POST returning 200 means *sent*, not *accepted* — the page re-renders
+    /// rather than reporting a status, so `.sent` is provisional until the
+    /// spot is seen on the board in a later poll, which is `.confirmed`.
+    private(set) var sendState: SpotSendState = .idle {
+        didSet { onSendStateChange?(sendState) }
     }
-
-    private(set) var sendState: SendState = .idle
+    /// The dispatcher's window on the send — every change, including the
+    /// confirmation or failure a later poll delivers.
+    var onSendStateChange: ((SpotSendState) -> Void)?
     private var lastSent: HubSelfSpot.Fields?
     private var lastSentAt: Date?
     /// Polls checked since a send without seeing it land.
