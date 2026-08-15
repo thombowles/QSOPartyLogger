@@ -827,3 +827,25 @@ reference for each keystroke's code.
 The N1MM Logger+ manual was read for interaction precedent and is cited in the
 research file. Per Article 1 it is authority for nothing here, and no byte in
 the driver comes from it.
+
+## Radio protocols — Elecraft transmit control and line input
+
+For recordings made on the Mac and played through a sound card into the radio
+(Article 11 as amended 2026-08-15). Reasoned about in
+[`docs/research/voice_transports.md`](research/voice_transports.md).
+
+- **K3S/K3/KX3/KX2 Programmer's Reference, Rev. G5, Feb. 20 2019** (the
+  revision the driver already cites, banked in full as
+  [`k3_programmers_reference_g5.txt`](research/k3_programmers_reference_g5.txt))
+  — authority for `TX;` ("Same as activating PTT or using the XMIT switch") and
+  `RX;` ("Terminates transmit in all modes, including message play"), the two
+  bytes `ElecraftK3Driver.setTransmit` sends. Fetched 2026-08-09.
+- **K3 Owner's Manual, Rev. D10** (Aug. 24 2011) —
+  <https://ftp.elecraft.com/K3/Manuals%20Downloads/E740107%20K3%20Owner's%20man%20D10.pdf>
+  Fetched 2026-08-15; the passages the README's wiring steps rest on are banked
+  as [`k3_owners_d10_voice_excerpts.txt`](research/k3_owners_d10_voice_excerpts.txt):
+  LINE IN "should be connected to your computer's soundcard output",
+  `MAIN:MIC SEL` = LINE IN or `MIC+LIN` ON, and the sound-card level "6 to 10 dB
+  below the level at which the sound card's output stage starts clipping".
+  The K3S, KX3 and KX2 manuals were **not** read for their audio input; the
+  README says so rather than describing a jack it has not seen.

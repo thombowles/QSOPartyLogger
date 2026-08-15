@@ -214,14 +214,20 @@ final class RadioControllerRecordingTests: XCTestCase {
         XCTAssertEqual(radio.voicePathStatus, .unsupported, "disconnect resets the path")
     }
 
-    /// Until ElecraftK3Driver conforms (its own commit), CAT PTT has nobody to key.
-    func testRadioCommandPTTWithoutACapableDriverIsUnsupportedHere() {
+    /// The K3 driver keys over CAT, so radio-command PTT is ready on a sound
+    /// card — and the player is handed a keying closure.
+    func testRadioCommandPTTIsReadyOnADriverThatKeysOverCAT() {
         let radio = RadioController()
+        let player = FakePlayer()
+        radio.makeVoicePlayer = { player }
         radio.resolveOutputDevice = { _ in "USB Audio CODEC" }
         let settings = makeSettings()
         settings.voicePTT = .radioCommand
         radio.connect(settings: settings)
         defer { radio.disconnect() }
-        XCTAssertEqual(radio.voicePathStatus, .unsupported)
+        XCTAssertEqual(radio.voicePathStatus, .readyOverDevice(name: "USB Audio CODEC"))
+        radio.playRecording(clip, caption: "M1 CQ", settings: settings)
+        XCTAssertEqual(player.plays.count, 1)
+        XCTAssertTrue(player.plays[0].keysRadio, "radio command: the player keys through the driver")
     }
 }

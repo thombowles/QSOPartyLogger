@@ -446,6 +446,46 @@ final class K3ProtocolTests: XCTestCase {
         XCTAssertEqual(transport.writtenExcludingPolls, "RX;")
     }
 
+    // MARK: Transmit control for recordings made on the Mac (Pgmrs Ref G5: TX, RX)
+
+    /// `TX;` — "Same as activating PTT or using the XMIT switch"; `RX;` —
+    /// "Terminates transmit in all modes". The sound-card player calls these
+    /// around a clip, lead before and tail after.
+    func testSetTransmitOnWritesTXAndOffWritesRX() {
+        let (driver, transport) = startedK3()
+        driver.setTransmit(true)
+        XCTAssertEqual(transport.writtenExcludingPolls, "TX;")
+        driver.setTransmit(false)
+        XCTAssertEqual(transport.writtenExcludingPolls, "TX;RX;")
+    }
+
+    /// The bytes are the same on every model the driver serves — the
+    /// reference lists neither command as model-specific.
+    func testSetTransmitIsTheSameOnAKX() {
+        let (driver, transport) = startedRadio(om: "OM APF---TBXI02;", bank: 1)
+        driver.setTransmit(true)
+        driver.setTransmit(false)
+        XCTAssertEqual(transport.writtenExcludingPolls, "TX;RX;")
+    }
+
+    /// The Elecraft family keys over CAT for a sound-card recording, and never
+    /// takes the samples over its own link (Article 11: exactly one path).
+    func testDriverKeysOverCATAndDoesNotStream() {
+        XCTAssertNotNil(ElecraftK3Driver() as? any TransmitControlCapable)
+        XCTAssertNil(ElecraftK3Driver() as? any AudioStreamTransmitCapable)
+    }
+
+    /// Nothing about the recorder's own path is disturbed by keying: a play
+    /// after `TX;`/`RX;` still taps the memory directly.
+    func testKeyingLeavesTheVoiceMemoryPathAlone() {
+        let (driver, transport) = startedK3()
+        driver.setTransmit(true)
+        driver.setTransmit(false)
+        transport.clearWritten()
+        driver.playVoiceMessage(memory: 2)
+        XCTAssertEqual(transport.writtenExcludingPolls, "SWT31;")
+    }
+
     /// A memory this radio does not have is ignored, never clamped onto a
     /// neighbouring recording.
     func testOutOfRangeMemoriesTransmitNothing() {

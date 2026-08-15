@@ -442,6 +442,30 @@ Phone tab shows which bank the radio is in.
 
 No extra interface needed — the same single-cable setup N1MM uses.
 
+### Playing recordings through a K3
+
+The K3's rear-panel **LINE IN** jack "should be connected to your computer's
+soundcard output" (Owner's Manual D10) — a USB audio interface, or the Mac's
+headphone jack, into LINE IN.
+
+1. On the K3, set `MAIN:MIC SEL` to **LINE IN** — or leave the microphone
+   selected and set `MAIN:MIC+LIN` to **ON**, so the mic and the line input are
+   both live and you can answer on the mic between recordings.
+2. In Messages → Phone, choose that interface as **Radio audio out** and leave
+   **PTT** on *Radio command*: the app sends `TX;` before each recording and
+   `RX;` after it, with the **Lead** you set (120 ms to start) so the first
+   syllable is not clipped. Choose *VOX* instead if you would rather the radio's
+   own VOX keyed on the audio.
+3. Level: press ⇢ Radio on a memory and watch the ALC meter. The manual asks
+   for the sound-card level "6 to 10 dB below the level at which the sound
+   card's output stage starts clipping" — the app's **Level** slider is that
+   control — and the K3's `MIC` knob (with MIC SEL on LINE IN) sets the line
+   input gain.
+
+The K3S, KX3 and KX2 route computer audio differently; their manuals name the
+jack and the menu, and the app's side is the same. The radio's own recorder is
+still one setting away — *Phone messages play from: The radio's voice memories*.
+
 ### Wiring a QMX for direct keying
 
 1. Connect the QMX's USB port to the Mac. It appears as a serial port with no
@@ -805,7 +829,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2599 unit tests**, none of which need hardware, a network or a microphone —
+**2603 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
 (driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank
