@@ -9,6 +9,12 @@ final class AppSettings {
 
     private let defaults: UserDefaults
 
+    /// Whether this settings object persists into `store`. Read-only, so the
+    /// test bundle can prove `shared` was built on the redirected store —
+    /// i.e. that nothing touched `AppSettings.shared` at app launch, before
+    /// `TestBundleSetup` ran — without writing a byte anywhere.
+    func isBacked(by store: UserDefaults) -> Bool { defaults === store }
+
     var radioID: String {
         didSet { defaults.set(radioID, forKey: "radioID") }
     }

@@ -13,11 +13,18 @@ struct QSOPartyLoggerApp: App {
             // log window itself the key monitor answers ⌘/ first; this item is
             // what answers it from a sheet or the dashboard, and where a new
             // operator finds it at all.
+            //
+            // A Button, not a Toggle with a checkmark: SwiftUI reads a menu
+            // Toggle's binding while it builds the main menu at launch, and the
+            // test bundle is hosted inside this executable — that read built
+            // `AppSettings.shared` on the operator's real preference domain
+            // before `TestBundleSetup` could redirect it, and a full test run
+            // wrote into the live prefs (2026-08-15). Nothing here may touch
+            // `AppSettings.shared` until the operator clicks.
             CommandGroup(after: .help) {
-                Toggle("Keyboard Shortcut Hints", isOn: Binding(
-                    get: { AppSettings.shared.showShortcutHints },
-                    set: { AppSettings.shared.showShortcutHints = $0 }
-                ))
+                Button("Keyboard Shortcut Hints") {
+                    AppSettings.shared.showShortcutHints.toggle()
+                }
                 .keyboardShortcut("/", modifiers: .command)
             }
         }
