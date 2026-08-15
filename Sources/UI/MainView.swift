@@ -47,11 +47,18 @@ struct MainView: View {
     @State private var spaceWeatherClient = SpaceWeatherClient()
     @State private var scpClient = SCPClient()
     @State private var potaParkClient = PotaParkClient()
+    @State private var potaSpotClient = PotaSpotClient()
+    /// Fans one confirmed spot out to every ticked network and keeps the
+    /// receipt. Its transports are wired in `onAppear`, once the clients
+    /// exist to wire them to.
+    @State private var spotDispatcher = SpotDispatcher(transports: .init(
+        sendClusterCommand: { _ in false }, postToHub: { _, _ in }, postToPota: { _ in }
+    ))
     @State private var locationProvider = MacLocationProvider()
-    @State private var showSelfSpot = false
-    @State private var selfSpotFields = HubSelfSpot.Fields(
-        station: "", frequencyKHz: 0, county: nil, comment: "", poster: ""
-    )
+    @State private var showSpotSheet = false
+    @State private var spotDraft = SpotDraft.empty
+    /// Who the open sheet is for — it decides POTA's row (your park, or theirs).
+    @State private var spotTarget = SpotNetworkAvailability.Target.myself
     /// The county the last self-spot went out for, so a rover is prompted when
     /// it moves — the moment that matters, and the one most often forgotten.
     @State private var lastSelfSpotCounty: String?
@@ -149,17 +156,27 @@ struct MainView: View {
                 MessagesEditor(document: document, settings: settings,
                                voiceStatus: radio.voiceStatus, voiceBank: radio.voiceBank)
             }
-            .sheet(isPresented: $showSelfSpot) {
-                if let party, let source = party.hubSpots {
-                    SelfSpotSheet(
+            .sheet(isPresented: $showSpotSheet) {
+                if let party {
+                    SpotSheet(
+                        target: spotTarget,
                         party: party,
-                        source: source,
-                        fields: $selfSpotFields,
-                        onSend: { fields in
-                            showSelfSpot = false
-                            Task { await hubSpotClient.post(fields, source: source, party: party) }
+                        baseContext: spotContext(target: spotTarget, draftPark: spotDraft.park),
+                        draft: $spotDraft,
+                        onSend: { draft in
+                            showSpotSheet = false
+                            // Remember the ticks — for the networks that were
+                            // on offer; an unavailable one keeps its old bit.
+                            settings.spotNetworks = SpotNetwork.updatedPreference(
+                                preferred: settings.spotNetworks,
+                                available: SpotNetworkAvailability.available(
+                                    in: spotContext(target: spotTarget, draftPark: draft.park)
+                                ),
+                                selected: draft.networks
+                            )
+                            spotDispatcher.send(draft, party: party)
                         },
-                        onCancel: { showSelfSpot = false }
+                        onCancel: { showSpotSheet = false }
                     )
                 }
             }
@@ -461,9 +478,10 @@ struct MainView: View {
         // close rather than stacking a sheet on top of it.
         .onChange(of: showSetup) { _, isOpen in
             guard !isOpen else { return }
-            // Setup is also where the callsign arrives, and there is no
-            // spotting without one.
-            bandMapModel?.canSpotToHub = canSpotToHub
+            // Setup is also where the callsign and the park arrive, and
+            // there is no spotting without the one and no POTA without the
+            // other.
+            bandMapModel?.canSpot = canSpotStation
             offerReSpotOnCountyChange()
         }
         // The QSO number needs no re-seeding here: `EntryState.serialSent`
@@ -474,7 +492,7 @@ struct MainView: View {
             bandMapModel?.partyBands = party?.validBands ?? Band.allCases
             bandMapModel?.allowedModes = party?.allowedModeClasses ?? []
             bandMapModel?.party = party
-            bandMapModel?.canSpotToHub = canSpotToHub
+            bandMapModel?.canSpot = canSpotStation
             syncHubSpotClient()
             activateCallHistory()
             activateSuperCheck()
@@ -493,12 +511,14 @@ struct MainView: View {
             onDeleteGroup: { document.removeGroup(groupID: $0.groupID, undoManager: undoManager) },
             onEdit: { editingQSO = $0 },
             onBulkEdit: { bulkEditing = BulkEditSheet.Request(rows: $0) },
-            canSpotToHub: canSpotToHub,
-            onSpotToHub: { qso in
+            canSpot: canSpotStation,
+            onSpotStation: { qso in
                 beginSpot(
                     station: qso.call,
                     frequencyKHz: qso.freqKHz.map(Double.init),
-                    location: qso.theirLoc
+                    location: qso.theirLoc,
+                    target: .station,
+                    park: qso.theirPotaRefs?.first ?? ""
                 )
             }
         )
@@ -576,6 +596,8 @@ struct MainView: View {
                 .help(SpottingPolicy.detail)
             }
 
+            spotReceiptCapsule
+
             Spacer()
 
             Text("\(currentBand.rawValue) \(currentRawMode)")
@@ -586,6 +608,20 @@ struct MainView: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
+    }
+
+    /// What became of the last spot — a state per network, live — beside the
+    /// other notices. Its own view, so the strip's expression grows by one
+    /// name; every string and rule is `SpotReceipt`'s.
+    @ViewBuilder
+    private var spotReceiptCapsule: some View {
+        if let receipt = spotDispatcher.receipt {
+            SpotReceiptView(
+                receipt: receipt,
+                onRetry: retryFailedSpotNetworks,
+                onDismiss: { spotDispatcher.dismiss() }
+            )
+        }
     }
 
     @ToolbarContentBuilder
@@ -611,7 +647,7 @@ struct MainView: View {
                 Label(spotCommandLabel, systemImage: spotCommandIcon)
             }
             .keyboardShortcut("s", modifiers: [.command, .shift])
-            .disabled(!canSpotToHub)
+            .disabled(!canSpotNow)
             .help(spotCommandHelp)
 
             Button {
@@ -879,6 +915,8 @@ struct MainView: View {
         spotClient.onSpot = { spot in
             spotStore.add(spot)
             document.noteSpotsUsed()
+            // Our own spot coming back is the node's proof of receipt.
+            spotDispatcher.noteIncomingSpot(spot)
         }
         // Hub spots land in the same store, so the band map, filters, stacking
         // and ⌘↑/⌘↓ treat them exactly like any other spot — including the
@@ -887,6 +925,7 @@ struct MainView: View {
             for spot in spots { spotStore.add(spot) }
             if !spots.isEmpty { document.noteSpotsUsed() }
         }
+        wireSpotDispatcher()
         syncHubSpotClient()
         // The download may land after the operator has moved to another
         // party; the tag check keeps a late file from leaking into it.
@@ -928,12 +967,17 @@ struct MainView: View {
             model.log = document.log
             model.onTuneSpot = { tune(to: $0) }
             model.onTuneKHz = { qsyTo(kHz: $0) }
-            model.canSpotToHub = canSpotToHub
-            model.onSpotToHub = { spot in
+            model.canSpot = canSpotStation
+            model.onSpotStation = { spot in
+                // A spot names no park, but the log may: a station worked
+                // park-to-park earlier is offered to POTA with that park.
+                let park = document.log.qsos.last { $0.call == spot.call }?.theirPotaRefs?.first
                 beginSpot(
                     station: spot.call,
                     frequencyKHz: spot.freqKHz,
-                    location: spot.county
+                    location: spot.county,
+                    target: .station,
+                    park: park ?? ""
                 )
             }
             bandMapModel = model
@@ -1207,10 +1251,71 @@ struct MainView: View {
         focusedField = .call
     }
 
-    /// Whether spotting is available at all: the hub has to serve this party,
-    /// and there has to be a callsign to post under.
-    private var canSpotToHub: Bool {
-        party?.hubSpots != nil && !document.log.station.callsign.isEmpty
+    // MARK: Spotting — one sheet, every network
+
+    /// What the availability rules need to know right now. `draftPark` is the
+    /// one half that changes while the sheet is open, so the sheet supplies
+    /// it live; everything else is read from the clients and the log.
+    private func spotContext(
+        target: SpotNetworkAvailability.Target, draftPark: String
+    ) -> SpotNetworkAvailability.Context {
+        SpotNetworkAvailability.Context(
+            clusterConnected: spotClient.status == .connected,
+            clusterHost: settings.clusterHost,
+            clusterBlockedReason: spottingAllowed ? nil : SpottingPolicy.blockedReason,
+            hubHost: party?.hubSpots.flatMap { URL(string: $0.postURL)?.host },
+            target: target,
+            myParks: document.log.myPotaRefs,
+            draftPark: draftPark
+        )
+    }
+
+    /// Whether spotting is possible at all: a party to spot in, a callsign to
+    /// post under, and — for whichever target ⇧⌘S means right now — somewhere
+    /// to send. For another station the sheet opens even with nothing on
+    /// offer yet, because typing their park is the way onto POTA.
+    private func canSpot(target: SpotNetworkAvailability.Target) -> Bool {
+        party != nil && !document.log.station.callsign.isEmpty
+            && SpotNetworkAvailability.canOpenSheet(in: spotContext(target: target, draftPark: ""))
+    }
+
+    /// The gate for the band map's and the log's right-click — always another
+    /// station.
+    private var canSpotStation: Bool { canSpot(target: .station) }
+
+    /// The gate for ⇧⌘S and its toolbar button — whoever the mode says.
+    private var canSpotNow: Bool {
+        canSpot(target: spotCommand == .myself ? .myself : .station)
+    }
+
+    /// The transports the dispatcher fans a spot out through: the open node
+    /// session, the hub client, the POTA client — and their reports back.
+    /// Wired once the clients exist, in `onAppear`.
+    private func wireSpotDispatcher() {
+        spotDispatcher.transports = SpotDispatcher.Transports(
+            sendClusterCommand: { command in
+                guard spotClient.status == .connected else { return false }
+                spotClient.send(command)
+                return true
+            },
+            postToHub: { fields, party in
+                guard let source = party.hubSpots else { return }
+                Task { await hubSpotClient.post(fields, source: source, party: party) }
+            },
+            postToPota: { fields in
+                Task { await potaSpotClient.post(fields) }
+            }
+        )
+        hubSpotClient.onSendStateChange = { spotDispatcher.update(.hub, state: $0) }
+        potaSpotClient.onSendStateChange = { spotDispatcher.update(.pota, state: $0) }
+    }
+
+    /// The receipt's Retry: the same draft again, only the failed network(s)
+    /// ticked — and the sheet again, because every send is confirmed.
+    private func retryFailedSpotNetworks() {
+        guard let receipt = spotDispatcher.receipt, party != nil else { return }
+        spotDraft.networks = Set(receipt.failedNetworks)
+        showSpotSheet = true
     }
 
     /// What ⇧⌘S means right now — running advertises you, searching puts the
@@ -1231,16 +1336,18 @@ struct MainView: View {
     }
 
     private var spotCommandHelp: String {
-        guard canSpotToHub else {
-            return "This party isn't on the QSO Party Hub, or your callsign isn't set"
+        guard canSpotNow else {
+            return "Nothing to spot to yet — connect a cluster node, pick a party with a "
+                + "QSO Party Hub page, or set your park in Contest Setup; and set your callsign"
         }
         let what = switch spotCommand {
-        case .myself: "Post your own spot to the QSO Party Hub (⇧⌘S)"
-        case .station(let call): "Post \(call) to the QSO Party Hub (⇧⌘S)"
-        case .blankStation: "Spot a station to the QSO Party Hub (⇧⌘S) — type the call in the sheet"
+        case .myself: "Spot yourself (⇧⌘S)"
+        case .station(let call): "Spot \(call) (⇧⌘S)"
+        case .blankStation: "Spot a station (⇧⌘S) — type the call in the sheet"
         }
-        return what + " — confirmed before it sends. Or right-click any spot on the "
-            + "band map, or any row in the log."
+        return what + " — to the DX cluster, the QSO Party Hub and POTA, whichever apply, "
+            + "confirmed before it sends. Or right-click any spot on the band map, or any "
+            + "row in the log."
     }
 
     /// Where the radio is, to 10 Hz — finer than that is noise on a spot, and
@@ -1252,7 +1359,8 @@ struct MainView: View {
 
     /// ⇧⌘S — the only spot shortcut, and the operating mode decides who it
     /// means. Searching takes the county out of the exchange as copied so far,
-    /// and only if it really is one of this party's counties.
+    /// and only if it really is one of this party's counties — and the park
+    /// out of the P2P field, for a station that gave one.
     private func beginSpotForMode() {
         switch spotCommand {
         case .myself:
@@ -1261,47 +1369,72 @@ struct MainView: View {
             beginSpot(
                 station: call,
                 frequencyKHz: vfoKHzForSpotting,
-                location: entry.exchange
+                location: entry.exchange,
+                target: .station,
+                park: entry.theirParkTyped
             )
         case .blankStation:
             // Heard a call and reached for the command before typing it. The
             // sheet opens on the empty station field, the way it already opens
             // on an empty frequency, and validation holds the send.
-            beginSpot(station: "", frequencyKHz: vfoKHzForSpotting, location: nil)
+            beginSpot(station: "", frequencyKHz: vfoKHzForSpotting, location: nil,
+                      target: .station, park: "")
         }
     }
 
-    /// Open the spot sheet for a station that is not you — from the band map,
-    /// the log, or the entry field. It still only opens the sheet: every send
-    /// is confirmed, because the board takes whatever it is given, publicly
-    /// and at once.
-    private func beginSpot(station: String, frequencyKHz: Double?, location: String?) {
-        guard canSpotToHub, let party else { return }
-        selfSpotFields = HubSpotPrefill.fields(
+    /// Open the spot sheet — for you, or for a station from the band map, the
+    /// log, or the entry field. It still only opens the sheet: every send is
+    /// confirmed, because every network takes what it is given, publicly and
+    /// at once.
+    ///
+    /// The county prefill is `HubSpotPrefill`'s, so its rules hold once for
+    /// every network: an out-of-state location is not offered as a county, a
+    /// county line is offered whole, and no radio means a blank frequency the
+    /// sheet holds rather than a band default posted publicly as fact. The
+    /// networks open ticked are the ones on offer that were ticked last time.
+    private func beginSpot(
+        station: String, frequencyKHz: Double?, location: String?,
+        target: SpotNetworkAvailability.Target, park: String
+    ) {
+        guard canSpot(target: target), let party else { return }
+        let hub = HubSpotPrefill.fields(
             station: station,
             frequencyKHz: frequencyKHz,
             location: location,
             poster: document.log.station.callsign,
             party: party
         )
-        showSelfSpot = true
+        let context = spotContext(target: target, draftPark: park)
+        spotTarget = target
+        spotDraft = SpotDraft(
+            station: hub.station,
+            frequencyKHz: hub.frequencyKHz,
+            county: hub.county,
+            comment: "",
+            poster: hub.poster,
+            park: park,
+            mode: AdifExporter.adifMode(currentRawMode),
+            networks: SpotNetwork.initialSelection(
+                available: SpotNetworkAvailability.available(in: context),
+                preferred: settings.spotNetworks
+            )
+        )
+        showSpotSheet = true
     }
 
-    /// Open the self-spot sheet, pre-filled from live state.
+    /// Open the sheet for yourself, pre-filled from live state.
     ///
     /// Everything here is already known — the call from the station profile,
-    /// the frequency from the radio, the counties from the log — and retyping
-    /// it mid-run is exactly why operators stop self-spotting.
-    ///
-    /// The same prefill as every other spot, so the rules hold once instead of
-    /// twice: an out-of-state location is not offered as a county, a county
-    /// line is offered whole, and no radio means a blank frequency the sheet
-    /// holds rather than a band default posted publicly as fact.
+    /// the frequency from the radio, the counties from the log, the park from
+    /// Contest Setup — and retyping it mid-run is exactly why operators stop
+    /// self-spotting.
     private func beginSelfSpot() {
         beginSpot(
             station: document.log.station.callsign,
             frequencyKHz: vfoKHzForSpotting,
-            location: HubSpotPrefill.ownCounty(document.log.myLocation)
+            location: HubSpotPrefill.ownCounty(document.log.myLocation),
+            target: .myself,
+            park: document.log.myPotaRefs.first ?? ""
         )
     }
 
@@ -1323,7 +1456,7 @@ struct MainView: View {
         // MDSN/LAWR changes in the second position only, and that is just as
         // much a county change to re-spot for.
         guard !showSetup else { return }
-        guard canSpotToHub, settings.hubSpotsEnabled,
+        guard canSpot(target: .myself), settings.hubSpotsEnabled,
               let county = HubSpotPrefill.ownCounty(document.log.myLocation),
               let previous = lastSelfSpotCounty, previous != county
         else {

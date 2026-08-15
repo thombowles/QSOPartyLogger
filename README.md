@@ -123,7 +123,8 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `⌘R` | Toggle Run / Search & Pounce |
 | `⌘J` | Jump back to your CQ run frequency |
 | `⌘B` | Toggle the band map window |
-| `⇧⌘S` | Spot to the QSO Party Hub — yourself in Run, the call field in S&P |
+| `⇧⌘S` | Spot — yourself in Run, the call field in S&P — to the DX cluster, the QSO Party Hub and POTA, whichever apply, from one sheet |
+| `⌘1` / `⌘2` / `⌘3` | In the spot sheet: tick or untick the cluster / the hub / POTA; `Return` posts to every ticked network at once |
 | `⇧⌘R` | Restore the party's default CW messages (Messages editor) |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
 | `⇧⌘M` | Expand / collapse every multiplier list in the score sidebar |
@@ -510,33 +511,68 @@ stops, and declaring it mid-contest drops the connection and clears network
 spots off the map. Sponsors score any spotting-network use as Assisted, so the
 app makes the claim true rather than warning you afterwards.
 
-Self-spotting (⇧⌘S) and your own logged contacts on the band map stay available:
-neither is receiving spotting information. And if you switch to NON-ASSISTED
-*after* taking spots, an orange badge says so — those contacts are already made.
-Dismiss it with ⌘.; it returns once more at Cabrillo export, which is never
-altered or held up.
+Spotting *outward* (⇧⌘S) to the hub and to POTA, and your own logged contacts on
+the band map, stay available: neither is receiving spotting information. The
+cluster row of the spot sheet is the one thing that goes dark, because there is
+no node to send through — the sheet says so, in the policy's own words. And if
+you switch to NON-ASSISTED *after* taking spots, an orange badge says so —
+those contacts are already made. Dismiss it with ⌘.; it returns once more at
+Cabrillo export, which is never altered or held up.
 
-### Self-spotting (⇧⌘S)
+### Spotting to the networks (⇧⌘S)
 
-One shortcut, and your operating mode decides who it means.
+One shortcut, one sheet, every network that applies. Your operating mode
+decides who the spot is for:
 
 | Mode | Call field | ⇧⌘S spots |
 | --- | --- | --- |
-| Run | anything | **you** — your call, the VFO, your counties from the log |
-| S&P | `N4RT` | **N4RT** — the VFO and the county you've copied so far |
+| Run | anything | **you** — your call, the VFO, your counties from the log, your park |
+| S&P | `N4RT` | **N4RT** — the VFO, the county you've copied so far, the park from the P2P field |
 | S&P | empty | a blank sheet, cursor in the call field |
 
 You can also right-click a spot on the band map, or a row in the log, to spot a
-station you worked earlier. Every send is confirmed first, because the hub's
-form has no authentication and submitting twice posts twice. County lines go out
-whole (`MDSN/LIME`), every county is checked against the party's list first, and
-nothing is invented — with no radio connected the sheet waits for you to type a
-frequency rather than guessing on a public board. Change county in the log and
-the spot sheet opens by itself, pre-filled.
+station you worked earlier. The sheet lists three networks under **Send to**,
+each with a checkbox (`⌘1`/`⌘2`/`⌘3`), where it goes, and — once ticked —
+**exactly what that network will receive**, so nothing that goes out is a
+surprise:
 
-A 200 from the hub means *sent*, not *accepted*, so the app watches the next
-couple of polls for your call and says **confirmed on the board** only once it
-has actually seen it.
+| Network | On offer when | What goes out | Confirmed by |
+| --- | --- | --- | --- |
+| **DX cluster** | a node is connected (so never under NON-ASSISTED) | `DX 7047 KE5CW AL-QSO-PARTY MDSN …` — the party's Cabrillo name and the county in the remarks, then your comment | the node echoing your spot back — DXSpider's own "proof of receipt" |
+| **QSO Party Hub** | the party has a hub page | the form's own fields — call, kHz, county, comment, poster | your call appearing on the board at the next poll |
+| **POTA** | the log is an activation (your park from Contest Setup); or, for another station, once you type their park on the row | pota.app's own Add-Spot fields — activator, spotter, kHz, one park, mode, comment, and `QSOPartyLogger` as the source | the board's own list, which the post answers with; else two follow-up reads |
+
+A network that isn't on offer stays greyed with the reason in place of the
+preview — *Not connected — Spots ▸ Connect*, *This party has no page on
+qsopartyhub.com*, *Set your park in Contest Setup to spot yourself on POTA*
+— so the way to enable it is never a mystery. The ticks are remembered per
+network: untick POTA at home and it stays unticked next time POTA is offered,
+without touching your hub and cluster habits. `Return` posts to every ticked
+network at once; **Post Spot** waits until every ticked network is satisfied,
+and an objection is shown under the row it belongs to (a county the party
+doesn't have blocks the hub, not the cluster; a bad park blocks POTA alone),
+so you fix it or untick it and nothing is skipped silently.
+
+Every send is confirmed first, because the hub's form has no authentication
+and submitting twice posts twice, and fanning one press out to three public
+boards makes that rule matter more, not less. County lines go out whole
+(`MDSN/LIME`), every county is checked against the party's list first, and
+nothing is invented — with no radio connected the sheet waits for you to type a
+frequency rather than guessing on a public board. An identical spot inside five
+minutes is refused by every network; a changed frequency, county or park never
+counts as a repeat. Change county in the log and the sheet opens by itself,
+pre-filled.
+
+After **Post Spot** the sheet closes and a **receipt capsule** appears in the
+station strip, live: `KE5CW 7047 · Cluster — echoed by the node · Hub — on the
+board · POTA — on pota.app`. Grey while anything is still in flight (a 200
+means *sent*, not *accepted*), green once every network has shown the spot
+back, orange the moment one fails — with the network's own words for why
+(`pota.app refused the spot: …`, `The spot was sent but hasn't appeared on the
+board`) and a **Retry…** that reopens the sheet with only the failed network
+ticked. It leaves by itself twelve seconds after the last change (a minute
+after a failure) and comes back for a verdict that lands late, such as the
+hub's poll two minutes on. The hub, cluster and POTA windows keep the record.
 
 ## Call history files
 
@@ -675,9 +711,17 @@ only the contacts made after it.
   is POTA's own instruction for n-fers — work a three-fer and the QSO is listed
   three times, one park each — so activation, park-to-park, and n-fer credit
   all survive the upload. A log with no parks exports byte-for-byte as before.
+- **Spot yourself on pota.app from the same ⇧⌘S** that spots you to the
+  cluster and the hub. While the log is an activation the spot sheet's POTA
+  row is on offer, pre-filled with your first park and the radio's mode as
+  ADIF spells it (USB → `SSB`), both editable; the post is the one pota.app's
+  own Add-Spot form makes, under `QSOPartyLogger` as the source, and the
+  receipt says **on pota.app** only once the board's own list shows it. Work a
+  park-to-park station and ⇧⌘S in S&P offers to spot *them*, park taken from
+  the P2P field. See [Spotting to the networks](#spotting-to-the-networks-s).
 
 The cached park list lives in `~/Library/Application Support/QSOPartyLogger/POTA/`.
-Field definitions and upload rules are banked in
+Field definitions, upload rules and the spot API's contract are banked in
 [`docs/research/pota/SOURCES.md`](docs/research/pota/SOURCES.md).
 
 ## Adding a party without writing code
@@ -777,14 +821,17 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2530 unit tests**, none of which need hardware or a network — no serial port,
+**2616 unit tests**, none of which need hardware or a network — no serial port,
 no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
 K3, QMX and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
 as a stone-deaf serial port), the voice-memory bank sequence and its refusal to
 transmit a memory the radio has not confirmed, cluster login and telnet handling, call history
 parsing and its prefill priority chain, super check partial parsing, matching
 and its download client, spot parsing and filtering and navigation, the
-spotting policy, the band map scale and column stacking, the band plan, typed
+spotting policy, outgoing spots — which networks are on offer and why not,
+the cluster `DX` command byte for byte, pota.app's own form rules and JSON
+body, the fan-out dispatcher and its receipt — the band map scale and column
+stacking, the band plan, typed
 QSY commands, what the radio keys at every step of the entry flow, keyer
 timing, the history archive and its two-Mac merge, season stats, the SQP
 Challenge formula, the upcoming-contest engine, and the Advisor — solar

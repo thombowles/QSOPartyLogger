@@ -37,13 +37,14 @@ final class BandMapModel {
     @ObservationIgnored private var neededMultiplierCache: [String: Bool] = [:]
     var onTuneSpot: ((Spot) -> Void)?
     var onTuneKHz: ((Double) -> Void)?
-    /// Right-click → post this station to the QSO Party Hub. Opens the same
-    /// confirmation sheet ⇧⌘S does; nothing is ever posted from the menu.
-    var onSpotToHub: ((Spot) -> Void)?
-    /// Whether the hub can be posted to at all: this party has to have a hub
-    /// page, and there has to be a callsign to post under. False hides the
-    /// menu item rather than offering something that cannot work.
-    var canSpotToHub = false
+    /// Right-click → spot this station, to whichever networks apply. Opens
+    /// the same confirmation sheet ⇧⌘S does; nothing is ever posted from the
+    /// menu.
+    var onSpotStation: ((Spot) -> Void)?
+    /// Whether a spot has anywhere to go at all — a callsign to post under and
+    /// a network on offer. False hides the menu item rather than offering
+    /// something that cannot work.
+    var canSpot = false
 
     private let radio: RadioController
     private let spotStore: SpotStore
@@ -449,9 +450,9 @@ struct BandMapView: View {
                 }
                 .buttonStyle(.plain)
                 .contextMenu {
-                    if model.canSpotToHub {
-                        Button("Spot \(row.spot.call) to QSO Party Hub…") {
-                            model.onSpotToHub?(row.spot)
+                    if model.canSpot {
+                        Button("Spot \(row.spot.call)…") {
+                            model.onSpotStation?(row.spot)
                         }
                     }
                 }
