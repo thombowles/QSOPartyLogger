@@ -266,6 +266,7 @@
 		BD620D19CDA5954AD41075B9 /* KeyerTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD16E7B08B6FA679CE465107 /* KeyerTiming.swift */; };
 		BDB25B4030F43CADA054C81E /* ColoradoQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD35AA6A29190DFD49C7D72 /* ColoradoQSOPartyTests.swift */; };
 		BDE105E89B5774A9A615D824 /* MississippiQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44F85963D8820FBCA6986965 /* MississippiQSOPartyTests.swift */; };
+		BE693C74252E94F5B376BE2A /* SpotDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8406DD0E324590D588D72B5 /* SpotDispatcher.swift */; };
 		BEB6284CA706FC461D203DAE /* HubFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC05BC2077B42827CBC8A537 /* HubFrequency.swift */; };
 		BF4B93C891EBDA79CBD3E843 /* ChallengeStanding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B598E336484B5D8CC5B9A2F9 /* ChallengeStanding.swift */; };
 		C25E39578901DDEEB086BD35 /* MultiplierRoster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9EEF88A7F58AFB94F83B07 /* MultiplierRoster.swift */; };
@@ -317,6 +318,7 @@
 		E08E671185832A9BD05A62D0 /* SCPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A0D8EDD44C17364359A07 /* SCPClientTests.swift */; };
 		E19F4F34905150E1AC1CB86F /* ContestArchiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC488FDCD9B9458276688D9 /* ContestArchiveTests.swift */; };
 		E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52BEC7154012161AF51ED0 /* CWSender.swift */; };
+		E34624A2D637C9A83D39EF83 /* SpotDispatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6591008A672F612DB9FA26 /* SpotDispatcherTests.swift */; };
 		E64FE26D4B39A995603DC746 /* ActivatedCountyMultiplierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E51C701CCCCEE5527FA99E /* ActivatedCountyMultiplierTests.swift */; };
 		E69FB34E0D878351AFD87628 /* Advisor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E6305A1D5D177F6DF014E0 /* Advisor.swift */; };
 		E6A1CF88C19C7DADF81B78DE /* PartyCaveatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DA0DF56D3346FEB3B3B11C /* PartyCaveatTests.swift */; };
@@ -620,6 +622,7 @@
 		AA812496670164897C4A0447 /* ScoreSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreSidebar.swift; sourceTree = "<group>"; };
 		AB030727FF0C38B6B3944150 /* SpotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotClient.swift; sourceTree = "<group>"; };
 		AC31E16279BA2D431AEE0582 /* PartyNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyNotice.swift; sourceTree = "<group>"; };
+		AD6591008A672F612DB9FA26 /* SpotDispatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotDispatcherTests.swift; sourceTree = "<group>"; };
 		AD7B9510D707A5A3BC7B61F8 /* SolarGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarGeometryTests.swift; sourceTree = "<group>"; };
 		AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabrilloExporterTests.swift; sourceTree = "<group>"; };
 		AEA4A841592D4E7DF22124AB /* QSOPostureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSOPostureTests.swift; sourceTree = "<group>"; };
@@ -726,6 +729,7 @@
 		F53E1CCA809156CAFA061676 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountyLineExpanderTests.swift; sourceTree = "<group>"; };
 		F689EEB61AA9DD9FF44C03FB /* DXCCLabelRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCLabelRefresh.swift; sourceTree = "<group>"; };
+		F8406DD0E324590D588D72B5 /* SpotDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotDispatcher.swift; sourceTree = "<group>"; };
 		F8EB12C03231B219068E0737 /* HawaiiQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HawaiiQSOPartyTests.swift; sourceTree = "<group>"; };
 		F970162F8C3C567192DEB1BB /* alqp-table-2026-07-25-early.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "alqp-table-2026-07-25-early.html"; sourceTree = "<group>"; };
 		F9DC0A15D96B2BE826452A38 /* alqp-table-2026-07-25-late.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "alqp-table-2026-07-25-late.html"; sourceTree = "<group>"; };
@@ -1229,6 +1233,7 @@
 				B7048B719696E04B4942D1AC /* RadioControllerVoiceTests.swift */,
 				5F8A0D8EDD44C17364359A07 /* SCPClientTests.swift */,
 				4965CF427FF28FE0F8D27B4E /* SpaceWeatherClientTests.swift */,
+				AD6591008A672F612DB9FA26 /* SpotDispatcherTests.swift */,
 				6A83B90871BA86343AB446AA /* SpotLabelSizePreferenceTests.swift */,
 				EA8FAE342F109F10019D3BA4 /* SuperCheckFlowTests.swift */,
 				BACC3C74F70765598FFE57A5 /* VoiceStatusTextTests.swift */,
@@ -1322,6 +1327,7 @@
 				5FA34D87EC7908A404F08591 /* SCPClient.swift */,
 				BAC96D1A4EDCC926D5935AA7 /* SpaceWeatherClient.swift */,
 				AB030727FF0C38B6B3944150 /* SpotClient.swift */,
+				F8406DD0E324590D588D72B5 /* SpotDispatcher.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -1630,6 +1636,7 @@
 				7D3248C77339AC6A6805DDC1 /* SpaceWeatherClientTests.swift in Sources */,
 				2DCEA978445DEC87C9962CF0 /* SpaceWeatherTests.swift in Sources */,
 				EFB55589DABD4E2FB936B338 /* SpotCommandTests.swift in Sources */,
+				E34624A2D637C9A83D39EF83 /* SpotDispatcherTests.swift in Sources */,
 				D0D1F31090A7D5B23D094EAD /* SpotDraftTests.swift in Sources */,
 				D67843C425FEB57DE8F76C0E /* SpotExchangePrefillTests.swift in Sources */,
 				D92268C1083B39CB08B32393 /* SpotFilterTests.swift in Sources */,
@@ -1795,6 +1802,7 @@
 				AC51CD88CDF9CBFA21C5C25F /* Spot.swift in Sources */,
 				451EEEAEAD526B20F82A3045 /* SpotClient.swift in Sources */,
 				D4DBB738375F8F40611BC220 /* SpotCommand.swift in Sources */,
+				BE693C74252E94F5B376BE2A /* SpotDispatcher.swift in Sources */,
 				9EA22C83474785B1EF0C8B2C /* SpotDraft.swift in Sources */,
 				65EA39B0B0AE20B7666BF414 /* SpotFilter.swift in Sources */,
 				B7A10BA679D25B2381EEEDFF /* SpotFrequency.swift in Sources */,

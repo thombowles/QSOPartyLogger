@@ -101,6 +101,13 @@ final class AppSettings {
         didSet { defaults.set(prefillExchangeFromSpots, forKey: "prefillExchangeFromSpots") }
     }
 
+    /// The networks the spot sheet opens ticked — remembered from the last
+    /// post, per network, so a park weekend and a home weekend each keep
+    /// their own habit. Every network by default.
+    var spotNetworks: Set<SpotNetwork> {
+        didSet { defaults.set(spotNetworks.map(\.rawValue).sorted(), forKey: "spotNetworks") }
+    }
+
     /// Download the active party's N1MM community call history file and offer
     /// what it says a station sends. On by default, like the hub: the file is
     /// fetched at party selection and at most once a day, never mid-contact.
@@ -286,6 +293,8 @@ final class AppSettings {
         hubSpotsEnabled = defaults.object(forKey: "hubSpotsEnabled") as? Bool ?? true
         prefillExchangeFromSpots =
             defaults.object(forKey: "prefillExchangeFromSpots") as? Bool ?? true
+        spotNetworks = defaults.stringArray(forKey: "spotNetworks")
+            .map { Set($0.compactMap(SpotNetwork.init(rawValue:))) } ?? Set(SpotNetwork.allCases)
         callHistoryEnabled = defaults.object(forKey: "callHistoryEnabled") as? Bool ?? true
         superCheckEnabled = defaults.object(forKey: "superCheckEnabled") as? Bool ?? true
         spotSources = Set((defaults.stringArray(forKey: "spotSources") ?? [])
