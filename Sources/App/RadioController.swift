@@ -24,6 +24,28 @@ struct RadioConnectionError: Equatable, Sendable {
     var detail: String
 }
 
+/// Whether recordings on this Mac can reach the connected radio, and how.
+/// Top-level for the same reason `RadioConnectionPhase` is: the editor's
+/// status wording is a nonisolated pure function of it.
+enum VoicePathStatus: Equatable, Sendable {
+    /// This radio takes no audio from the Mac. Phone keys use its own
+    /// memories if it has any, and the editor says so.
+    case unsupported
+    /// Supported, but not set up — the reason is what the operator must fix.
+    case notReady(reason: String)
+    /// Ready over the radio's own network connection.
+    case readyOverNetwork
+    /// Ready through a sound card, to the named output device.
+    case readyOverDevice(name: String)
+
+    var isReady: Bool {
+        switch self {
+        case .readyOverNetwork, .readyOverDevice: true
+        case .unsupported, .notReady: false
+        }
+    }
+}
+
 /// Glue between the hardware layer and SwiftUI: connection lifecycle, live
 /// radio state, and CW sending over the selected backend.
 @MainActor
@@ -90,6 +112,19 @@ final class RadioController {
     /// last play put it, which changes what the front panel's buttons address.
     private(set) var voiceBank: Int?
 
+    /// Whether recordings on this Mac can reach the connected radio, and how.
+    /// `.unsupported` until a driver offers a path — the same honest default
+    /// as `voiceStatus`.
+    private(set) var voicePathStatus: VoicePathStatus = .unsupported
+    /// Built per play so a stale engine never survives a device change; tests
+    /// hand in a fake.
+    var makeVoicePlayer: () -> any VoicePlaying = { VoicePlayer(output: EngineAudioOutput()) }
+    /// UID → the device's name if it is present now. Tests inject; the app
+    /// asks CoreAudio.
+    var resolveOutputDevice: (String) -> String? = { AudioDevices.device(uid: $0)?.name }
+    /// The reason shown while the sound-card path has no device chosen.
+    static let chooseOutputReason = "Choose the radio's audio output in Messages → Phone."
+
     var availablePorts: [SerialPortInfo] = []
 
     private var transport: (any SerialTransport)?
@@ -97,6 +132,18 @@ final class RadioController {
     private var directKeyer: CWKeyer?
     private var internalKeyer: RadioInternalKeyer?
     private var voiceDriver: (any VoiceMessageCapable)?
+    /// The two ways a recording reaches the radio; at most one is non-nil,
+    /// and both are nil on a radio that takes no audio from the Mac.
+    private var streamer: (any AudioStreamTransmitCapable)?
+    private var transmitControl: (any TransmitControlCapable)?
+    private var voicePlayer: (any VoicePlaying)?
+    /// True from `playRecording` until its terminal event — the recordings
+    /// path's own flag, so an abort can end it without touching the radio's
+    /// DVR bookkeeping.
+    private var recordingIsPlaying = false
+    /// Bumped per play; a terminal event stamped with an older generation
+    /// belongs to a play that was replaced and is ignored.
+    private var recordingGeneration = 0
     private var sendingClearTask: Task<Void, Never>?
     /// Which path owns `nowSending`, so the CW timer and the radio's real
     /// end-of-playback signal cannot clear each other's badge.
@@ -219,6 +266,17 @@ final class RadioController {
             }
             voiceDriver = voice
         }
+        // The two ways a recording made here can reach the radio. Optional
+        // capabilities like the one above: a driver conforms to one, or the
+        // radio takes no audio from the Mac and the phone keys say so. Wired
+        // before `start()` for the same reason the voice callbacks are.
+        transmitControl = newDriver as? any TransmitControlCapable
+        if let streaming = newDriver as? any AudioStreamTransmitCapable {
+            streaming.onTransmitAudioEvent = { [weak self] event in
+                Task { @MainActor [weak self] in self?.recordingDidReport(event, generation: nil) }
+            }
+            streamer = streaming
+        }
 
         newDriver.start(transport: newTransport)
 
@@ -259,6 +317,7 @@ final class RadioController {
         }
         connectedDescriptor = descriptor
         isConnected = true
+        refreshVoicePath(settings: settings)
 
         // Every connect gets the response check. A TCP connection to the
         // wrong IP "succeeds" silently, and an opened serial port with a
@@ -338,12 +397,19 @@ final class RadioController {
     func disconnect() {
         validationTask?.cancel()
         validationTask = nil
+        // A recording still playing comes down before the driver goes: the
+        // player unkeys through `transmitControl`, which must still exist.
+        stopRecordingPlayback()
+        recordingIsPlaying = false
         directKeyer?.shutdown()
         directKeyer = nil
         internalKeyer = nil
         driver?.stop()
         driver = nil
         voiceDriver = nil
+        streamer = nil
+        transmitControl = nil
+        voicePathStatus = .unsupported
         transport?.close()
         transport = nil
         connectedDescriptor = nil
@@ -463,6 +529,10 @@ final class RadioController {
 
     func voiceDidChangePlayback(_ playing: Bool) {
         guard isConnected else { return }
+        // While a recording from this Mac is on the air, `isVoicePlaying` and
+        // the badge belong to that path; the radio's own recorder is idle and
+        // its poll must not end them early.
+        guard !recordingIsPlaying else { return }
         isVoicePlaying = playing
         if !playing, nowSendingIsVoice {
             nowSending = nil
@@ -508,14 +578,137 @@ final class RadioController {
         badgeBeforeVoiceClaim = nil
     }
 
-    /// Esc. Stops CW and voice both — `RX;` on a radio with voice memories is
-    /// documented to terminate message play as well as a keyed transmission.
-    /// Unconditional: `voiceDriver` is already nil on a radio with no
-    /// recorder, so gating on `voiceStatus.isReady` on top of that would buy
-    /// nothing.
+    // MARK: Recordings on this Mac
+
+    /// The truth table behind `voicePathStatus`, testable without a driver.
+    /// The network path needs nothing else; the sound-card path needs an
+    /// output device and either a driver that keys over CAT or VOX.
+    static func voicePath(
+        streams: Bool, keysOverCAT: Bool, ptt: VoicePTTMode, outputName: String?
+    ) -> VoicePathStatus {
+        if streams { return .readyOverNetwork }
+        guard keysOverCAT || ptt == .vox else { return .unsupported }
+        guard let outputName else { return .notReady(reason: chooseOutputReason) }
+        return .readyOverDevice(name: outputName)
+    }
+
+    /// Re-derive after connect and whenever the voice settings change — the
+    /// view calls it from `onChange` of the device, PTT and source prefs.
+    func refreshVoicePath(settings: AppSettings) {
+        guard isConnected else {
+            voicePathStatus = .unsupported
+            return
+        }
+        voicePathStatus = Self.voicePath(
+            streams: streamer != nil,
+            keysOverCAT: transmitControl != nil,
+            ptt: settings.voicePTT,
+            outputName: settings.voiceOutputDeviceUID.flatMap(resolveOutputDevice)
+        )
+    }
+
+    /// Play a recording made on this Mac. Replaces one already playing — a
+    /// voice keyer interrupts, because the station that answered mid-CQ is
+    /// what the next key is for. The flow resolved `audio`; this only chooses
+    /// the path and owns the badge.
+    func playRecording(_ audio: VoiceAudio, caption: String, settings: AppSettings) {
+        guard isConnected, voicePathStatus.isReady else { return }
+        stopRecordingPlayback()
+        recordingGeneration += 1
+        let generation = recordingGeneration
+        recordingIsPlaying = true
+        // The same claim `playVoiceMessage` makes, minus the busy-restore:
+        // this path never refuses synchronously.
+        badgeBeforeVoiceClaim = nil
+        sendingClearTask?.cancel()
+        sendingClearTask = nil
+        nowSending = caption
+        nowSendingIsVoice = true
+        isVoicePlaying = true
+        let level = Float(settings.voiceLevel)
+
+        if let streamer {
+            let forRadio: VoiceAudio
+            do {
+                forRadio = try AudioResampler.resample(audio, to: streamer.transmitSampleRate).scaled(by: level)
+            } catch {
+                recordingDidReport(.failed(error.localizedDescription), generation: nil)
+                return
+            }
+            streamer.transmitAudio(forRadio)
+            return
+        }
+
+        let player = makeVoicePlayer()
+        voicePlayer = player
+        // The player keys from its own thread; the drivers are thread-safe
+        // (every one is `@unchecked Sendable` behind a lock) and the protocol
+        // says so, which is what lets the closure be `@Sendable`.
+        var keyRadio: (@Sendable (Bool) -> Void)?
+        if settings.voicePTT == .radioCommand, let control = transmitControl {
+            keyRadio = { on in control.setTransmit(on) }
+        }
+        player.play(audio, deviceUID: settings.voiceOutputDeviceUID, gain: level,
+                    keyRadio: keyRadio, leadMs: settings.voicePTTLeadMs, tailMs: 100) { [weak self] event in
+            Task { @MainActor [weak self] in self?.recordingDidReport(event, generation: generation) }
+        }
+    }
+
+    /// One event from whichever path is playing. `generation` nil = the
+    /// network path, which is single-instance and needs no stamp; a stamped
+    /// event from a play that was since replaced is ignored, so it cannot
+    /// clear the badge the new play owns.
+    func recordingDidReport(_ event: TransmitAudioEvent, generation: Int?) {
+        guard isConnected, recordingIsPlaying,
+              generation == nil || generation == recordingGeneration else { return }
+        switch event {
+        case .started:
+            break
+        case .finished, .stopped:
+            endRecordingPlayback()
+        case .failed(let reason):
+            endRecordingPlayback()
+            lastError = ConnectionError(
+                summary: "Voice message not sent",
+                detail: "The recording did not go out: \(reason)"
+            )
+        }
+    }
+
+    private func endRecordingPlayback() {
+        recordingIsPlaying = false
+        isVoicePlaying = false
+        voicePlayer = nil
+        if nowSendingIsVoice {
+            nowSending = nil
+            nowSendingIsVoice = false
+        }
+        badgeBeforeVoiceClaim = nil
+    }
+
+    /// Bring a recording down now: the player unkeys before it reports, and
+    /// the streamer likewise. The terminal event they then send is ignored
+    /// (`recordingIsPlaying` is false) — the caller decides what happens next.
+    private func stopRecordingPlayback() {
+        guard recordingIsPlaying || voicePlayer != nil else { return }
+        recordingIsPlaying = false
+        voicePlayer?.stop()
+        voicePlayer = nil
+        streamer?.stopTransmitAudio()
+    }
+
+    /// Esc. Stops CW, the radio's own voice memory, and a recording playing
+    /// from this Mac — `RX;` on a radio with voice memories is documented to
+    /// terminate message play as well as a keyed transmission, and the
+    /// recording paths unkey before they report. Unconditional: each handle
+    /// is already nil on a radio that lacks that path, so gating on a status
+    /// on top of that would buy nothing.
     func abortTransmission(settings: AppSettings) {
         activeSender(settings)?.abort()
         voiceDriver?.stopVoiceMessage()
+        let wasPlayingRecording = recordingIsPlaying
+        stopRecordingPlayback()
+        if wasPlayingRecording { isVoicePlaying = false }
         sendingClearTask?.cancel()
         sendingClearTask = nil
         nowSending = nil

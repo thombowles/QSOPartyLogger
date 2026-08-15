@@ -5,7 +5,11 @@ import Foundation
 /// Nothing about the audio: that goes out a CoreAudio device the operator
 /// picked. Conform in the driver, and only where the maker's reference
 /// documents the on and off commands (Article 11).
-protocol TransmitControlCapable: RadioDriver {
+///
+/// `Sendable` because the player keys from its own thread, between the lead
+/// and the first sample; every driver is `@unchecked Sendable` behind a lock,
+/// and this is where that promise is stated.
+protocol TransmitControlCapable: RadioDriver, Sendable {
     func setTransmit(_ on: Bool)
 }
 

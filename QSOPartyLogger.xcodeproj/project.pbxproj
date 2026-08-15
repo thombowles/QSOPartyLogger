@@ -243,6 +243,7 @@
 		ABB809BEB34E708DA91380F3 /* NorthAmericanQSOPartyCWTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 250F1FBFEB632D5492568FE7 /* NorthAmericanQSOPartyCWTests.swift */; };
 		ABDD0E4BC39F882357AA73DC /* IndianaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0676CB4B55B41FD7B226CA31 /* IndianaQSOPartyTests.swift */; };
 		AC51CD88CDF9CBFA21C5C25F /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD300005CA528B8CA373476 /* Spot.swift */; };
+		AC7BABF01C4A1A0F06D46D0F /* RadioControllerRecordingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F470675F687ABB38604249 /* RadioControllerRecordingTests.swift */; };
 		AE2D036E6F83E9F0F1141634 /* QSOPartyLoggerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C2D0EBC8E5FC6F24E96A7A /* QSOPartyLoggerApp.swift */; };
 		AE3930DE09489C6F2B7CC827 /* HubSelfSpotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112CC71F65B097523B39BC9B /* HubSelfSpotTests.swift */; };
 		AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A15E4511652305732261EE /* SetupSheet.swift */; };
@@ -404,6 +405,7 @@
 		14042D5B6DD33CC2A46A276C /* SpotFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFilter.swift; sourceTree = "<group>"; };
 		14A9F5FF0C8233FC92821648 /* SpotLabelSizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotLabelSizeTests.swift; sourceTree = "<group>"; };
 		14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialExchangeTests.swift; sourceTree = "<group>"; };
+		15F470675F687ABB38604249 /* RadioControllerRecordingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioControllerRecordingTests.swift; sourceTree = "<group>"; };
 		165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneByOneTrackerTests.swift; sourceTree = "<group>"; };
 		16C804DC994EBCD81FCA5E94 /* FOBBRosterParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FOBBRosterParser.swift; sourceTree = "<group>"; };
 		172209629CABE8C51196517E /* ArchiveStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveStoreTests.swift; sourceTree = "<group>"; };
@@ -1232,6 +1234,7 @@
 				4A13C34B4765F4AE9FB37456 /* PotaParkClientTests.swift */,
 				2FF4DB3C69EF4EB9FFF24B24 /* PreferenceIsolationTests.swift */,
 				D96F76D3F0F364CAA514E629 /* RadioControllerConnectionTests.swift */,
+				15F470675F687ABB38604249 /* RadioControllerRecordingTests.swift */,
 				B7048B719696E04B4942D1AC /* RadioControllerVoiceTests.swift */,
 				5F8A0D8EDD44C17364359A07 /* SCPClientTests.swift */,
 				4965CF427FF28FE0F8D27B4E /* SpaceWeatherClientTests.swift */,
@@ -1610,6 +1613,7 @@
 				8B798A3A385449902326AB88 /* QuebecQSOPartyTests.swift in Sources */,
 				02382A492D70F37AA11A029D /* RadioBarStatusTests.swift in Sources */,
 				3CB5FBA489EFFACEE3A57BB1 /* RadioControllerConnectionTests.swift in Sources */,
+				AC7BABF01C4A1A0F06D46D0F /* RadioControllerRecordingTests.swift in Sources */,
 				FED0EBDE88307F2AA6D6B6D7 /* RadioControllerVoiceTests.swift in Sources */,
 				9B5CFCE3C27C45119FC5574E /* RadioRegistryTests.swift in Sources */,
 				7820E065122DA7959EF0D0DC /* RateColumnTests.swift in Sources */,

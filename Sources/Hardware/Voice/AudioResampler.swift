@@ -1,5 +1,5 @@
 import Foundation
-import AVFAudio
+@preconcurrency import AVFAudio
 
 /// `AVAudioConverter` between two mono float rates. Used once per clip when
 /// the party's set loads (for a radio whose rate is not the recording's), and
