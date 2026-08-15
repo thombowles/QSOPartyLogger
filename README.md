@@ -125,7 +125,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⌘1`–`⌘8` | In the Phone tab: record memory M1–M8; the same key (or the button) stops. Stops by itself at 30 s |
 | `⌥⌘1`–`⌥⌘8` | In the Phone tab: play memory M1–M8 back on the Mac (not the radio) |
 | `↑` / `↓` | In the park picker: move through the results; `Return` adds the highlighted park |
-| Any key | While repeat-CQ is running: stop it and abort the CQ on the air, then do the key's own job |
+| Any key | While repeat-CQ is running: pause the loop and abort the CQ on the air, then do the key's own job. The mode stays armed (the button turns orange, `Repeat CQ ⏸`) — `F1`, the CQ button or ESM's `Return` start it repeating again |
 | `⌘=` / `⌘-` | CW speed ±2 WPM — takes effect mid-message (syncs to the radio) |
 | `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
 | `⇧⌘←` / `⇧⌘→` | Nudge the VFO down / up 100 Hz (a burst of presses adds up; disconnected, the band-map cursor moves instead) |
@@ -148,13 +148,17 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 In the Contest Dashboard (**⌘⇧D**): `⌘[` / `⌘]` change year, `⌘R` re-reads the
 history file, `Return` opens that contest's log, and `⌘E` / `⇧⌘E` export it.
 
-While repeat-CQ is running, **any key does what `Esc` does**: the loop stops and
+While repeat-CQ is running, **any key does what `Esc` does**: the loop pauses and
 the CQ on the air comes down mid-character, so the moment you start typing his
 call you are not talking over him. A key that has its own job still does it,
 after the abort — `F2` replaces the CQ with the exchange, `F1` starts the CQ
-over — and an ordinary letter still lands in the call field. With repeat off
-nothing is cut short: typing the next call while an `F2` exchange goes out lets
-the exchange finish.
+over — and an ordinary letter still lands in the call field. Repeat CQ is a
+*mode*, the way N1MM's Alt+R is: pausing leaves it armed (the button turns
+orange, `Repeat CQ ⏸`), so after the QSO `F1`, the CQ button or ESM's `Return`
+start it repeating again from the top — no click on the toggle between
+contacts. Only the toggle itself, a mode change or a disconnect turn the mode
+off. With repeat off nothing is cut short: typing the next call while an `F2`
+exchange goes out lets the exchange finish.
 
 These keys belong to the log window with focus. While a sheet is open it owns
 the keyboard — `F1`–`F8` do not transmit, so revising F2 and pressing it never
@@ -938,7 +942,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2756 unit tests**, none of which need hardware, a network or a microphone —
+**2760 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
 (driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank

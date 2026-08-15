@@ -446,6 +446,7 @@ struct MainView: View {
                         || (currentModeClass == .phone && phoneKeysEnabled)),
                 pendingIndex: pendingMessageIndex,
                 repeatEnabled: $repeatCQ,
+                repeatPaused: repeatPaused,
                 repeatInterval: $settings.repeatIntervalSeconds,
                 esmEnabled: $settings.esmEnabled,
                 cqFrequencyLabel: cqFrequencyHz.map { String(format: "%.1f", Double($0) / 1000) },
@@ -1224,12 +1225,21 @@ struct MainView: View {
         }
     }
 
+    /// An F-key, its button, or ESM's Return, resolved. F1 in Run is the CQ:
+    /// it remembers the run frequency, and while Repeat CQ is armed it starts
+    /// the loop (again) rather than sending once — the keystroke that paused
+    /// the loop to work a caller left the mode on, and this is what N1MM's
+    /// "press F1, Repeat CQ will resume" means (`RepeatCQPolicy`).
     private func sent(_ transmission: EntryFlow.Transmission, fromMessageAt index: Int) {
-        // F1 in Run mode is the CQ — remember where we're running from.
         if operatingMode.wrappedValue == .run, index == 0 {
             captureCQFrequency()
         }
-        transmit(transmission)
+        switch RepeatCQPolicy.onSend(index: index, operatingMode: operatingMode.wrappedValue, armed: repeatCQ) {
+        case .restartLoop:
+            restartRepeat()
+        case .sendOnce:
+            transmit(transmission)
+        }
     }
 
     /// The one place a resolved transmission reaches the radio. Nothing here
@@ -1668,8 +1678,36 @@ struct MainView: View {
 
     // MARK: Repeat CQ
 
+    /// Repeat CQ is a mode (the toggle) with a loop running inside it (the
+    /// task). Three things happen to it, and they are kept apart on purpose:
+    ///
+    /// - **pause** (`pauseRepeat`): the loop stops, the mode stays armed. Any
+    ///   keystroke does this — the operator has started answering someone —
+    ///   and F1, the CQ button, or ESM's Return start it again.
+    /// - **restart** (`restartRepeat`): the CQ comes off the air and the loop
+    ///   starts over from the top, at once.
+    /// - **disengage** (`stopRepeat`): loop and mode both off — the toggle
+    ///   clicked, a mode change, a disconnect, the window going away.
+    ///
+    /// N1MM's Alt+R behaves this way (`RepeatCQPolicy`); until 2026-08-15 a
+    /// keystroke here disengaged, so every QSO cost a click on the toggle.
     private func repeatCQChanged() {
         repeatCQ ? startRepeat() : stopRepeat()
+    }
+
+    /// The loop is running when the task is; the mode is armed when the
+    /// toggle is. Paused is armed and not running.
+    private var repeatPaused: Bool { repeatCQ && repeatTask == nil }
+
+    private func pauseRepeat() {
+        repeatTask?.cancel()
+        repeatTask = nil
+    }
+
+    private func restartRepeat() {
+        pauseRepeat()
+        radio.abortTransmission(settings: settings)
+        startRepeat()
     }
 
     private func startRepeat() {
@@ -1742,9 +1780,9 @@ struct MainView: View {
         }
     }
 
+    /// Disengage: loop and mode both off.
     private func stopRepeat() {
-        repeatTask?.cancel()
-        repeatTask = nil
+        pauseRepeat()
         if repeatCQ { repeatCQ = false }
     }
 
@@ -1853,7 +1891,9 @@ struct MainView: View {
                 noteKeyDown(keyCode: event.keyCode, command: command, shift: shift, action: response.action)
             }
 
-            if response.stopsRepeat { stopRepeat() }
+            // A keystroke pauses the loop and leaves the mode armed — the
+            // operator is answering someone; F1 will start it again.
+            if response.stopsRepeat { pauseRepeat() }
             if response.abortsTransmission { radio.abortTransmission(settings: settings) }
             if let action = response.action { perform(action) }
             return response.consumesEvent ? nil : event

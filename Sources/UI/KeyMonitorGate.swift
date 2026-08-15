@@ -142,7 +142,8 @@ enum KeyMonitorGate {
     /// abort twice or abort *after* starting the message the same keystroke
     /// asked for.
     struct Response: Equatable {
-        /// Cancel a running repeat-CQ loop.
+        /// Pause a running repeat-CQ loop. The mode stays armed — F1 starts
+        /// it again (`RepeatCQPolicy`); only the toggle itself disengages.
         var stopsRepeat = false
         /// Force key/PTT up and stop any voice memory now playing, discarding
         /// whatever is on the air. Named for what it does, not for CW alone —
