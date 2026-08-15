@@ -5,8 +5,8 @@ import XCTest
 /// falls back to. A scratch suite per test — never the operator's domain.
 @MainActor
 final class VoiceSettingsTests: XCTestCase {
-    private var suiteName: String!
-    private var scratch: UserDefaults!
+    nonisolated(unsafe) private var suiteName: String!
+    nonisolated(unsafe) private var scratch: UserDefaults!
 
     override func setUp() {
         suiteName = "VoiceSettingsTests-\(UUID().uuidString)"

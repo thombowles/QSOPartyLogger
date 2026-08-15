@@ -123,7 +123,7 @@ final class RadioController {
     /// asks CoreAudio.
     var resolveOutputDevice: (String) -> String? = { AudioDevices.device(uid: $0)?.name }
     /// The reason shown while the sound-card path has no device chosen.
-    static let chooseOutputReason = "Choose the radio's audio output in Messages → Phone."
+    nonisolated static let chooseOutputReason = "Choose the radio's audio output in Messages → Phone."
 
     var availablePorts: [SerialPortInfo] = []
 

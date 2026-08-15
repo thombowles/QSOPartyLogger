@@ -1,9 +1,10 @@
 import SwiftUI
 
 /// Editor for the document's F-key messages — separate Run and S&P sets, on
-/// both CW (text the app keys) and phone (which of the radio's own voice
-/// memories each key plays) — stored in the log file so every contest keeps
-/// its own macros.
+/// both CW (text the app keys) and phone (eight voice memories: recordings
+/// made here on the Mac, or the radio's own) — stored in the log file so
+/// every contest keeps its own macros. The recordings themselves live per
+/// party on disk (`VoiceStore`), and save as they are made.
 struct MessagesEditor: View {
     let document: LogDocument
     @Bindable var settings: AppSettings
@@ -11,19 +12,38 @@ struct MessagesEditor: View {
     @Environment(\.undoManager) private var undoManager
 
     @State private var editMode: OperatingMode = .run
-    @State private var editClass: ModeClass = .cw
+    @State private var editClass: ModeClass
     /// The connected radio's voice-memory situation, for the status line and
     /// for greying memories this radio cannot play.
     let voiceStatus: VoiceKeyerStatus
     /// Which message bank the radio is currently in, or nil on a radio with no
     /// banks. Reported rather than corrected — see `voiceStatusText`.
     let voiceBank: Int?
+    /// The active party's recordings and the recorder.
+    let voiceStore: VoiceStore
+    /// The connection, for the phone tab's path status and play-to-radio.
+    let radio: RadioController
+    /// Play memory N to the radio, exactly as an F-key would.
+    let onPlayToRadio: (Int) -> Void
     /// The edits so far. A value, so Restore Defaults and the warning banner
     /// are testable — see `MessagesDraftTests`.
     @State private var draft = MessagesDraft()
     /// Resolved once on appear — `document.party` re-reads the bundle and the
     /// user parties folder on every call, which a view body must not do.
     @State private var party: PartyDefinition?
+
+    init(document: LogDocument, settings: AppSettings, voiceStatus: VoiceKeyerStatus, voiceBank: Int?,
+         voiceStore: VoiceStore, radio: RadioController, onPlayToRadio: @escaping (Int) -> Void,
+         initialClass: ModeClass = .cw) {
+        self.document = document
+        self.settings = settings
+        self.voiceStatus = voiceStatus
+        self.voiceBank = voiceBank
+        self.voiceStore = voiceStore
+        self.radio = radio
+        self.onPlayToRadio = onPlayToRadio
+        _editClass = State(initialValue: initialClass)
+    }
 
     /// The caption under the title — the one place an operator can discover
     /// what they may type into an F-key. A named constant, and derived from
@@ -54,14 +74,14 @@ struct MessagesEditor: View {
     nonisolated static func voiceStatusText(_ status: VoiceKeyerStatus, bank: Int?) -> String {
         switch status {
         case .unsupported:
-            return "No radio with voice memories is connected. These keys will do "
-                + "nothing until one is."
+            return "This radio reports no voice memories of its own."
         case .notInstalled:
             return "This radio's voice recorder option isn't installed, so it has no "
                 + "memories to play."
         case .available(let count):
-            var text = "\(count) voice \(count == 1 ? "memory" : "memories") available. "
-                + "Record them from the radio's front panel; the app only plays them."
+            var text = "The radio has \(count) voice \(count == 1 ? "memory" : "memories") of its own. "
+                + "Record those from its front panel; the app plays them when the source is set "
+                + "to the radio's memories."
             if let bank {
                 // The app leaves the bank where the last play put it, so the
                 // radio's own M-buttons may not address what their labels say.
@@ -91,7 +111,8 @@ struct MessagesEditor: View {
                 Text("Phone").tag(ModeClass.phone)
             }
             .pickerStyle(.segmented)
-            .help("CW messages are text the app keys. Phone messages play the radio's own voice memories.")
+            .help("CW messages are text the app keys. Phone messages are recordings made here, "
+                  + "or the radio's own voice memories.")
 
             Picker("", selection: $editMode) {
                 ForEach(OperatingMode.allCases, id: \.self) { mode in
@@ -114,52 +135,24 @@ struct MessagesEditor: View {
                     }
                 }
             } else {
-                Text("Voice memories — what you recorded in the radio")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
-                    ForEach(0..<MessageSets.voiceMemorySlots, id: \.self) { memoryIndex in
-                        GridRow {
-                            Text("M\(memoryIndex + 1)")
-                                .font(.callout.weight(.bold))
-                                .frame(width: 30, alignment: .trailing)
-                            TextField("", text: nameBinding(memoryIndex))
-                                .frame(width: 360)
-                                .disabled(memoryIndex >= voiceStatus.memoryCount
-                                          && voiceStatus.memoryCount > 0)
-                        }
-                    }
-                }
+                // The recorder rows, the source and device controls, and the
+                // F-key mapping — one place for everything about phone keys.
+                // `voiceMemoryPickerCaption`, not `draft.edited.…`: the latter
+                // rebuilds the whole MessageSets once per row per memory, 64
+                // times a render.
+                VoiceMessagesPane(
+                    store: voiceStore, settings: settings, radio: radio,
+                    voiceStatus: voiceStatus, editMode: editMode,
+                    name: nameBinding, mapping: memoryBinding,
+                    pickerCaption: voiceMemoryPickerCaption, onPlayToRadio: onPlayToRadio
+                )
 
-                Text("F-keys — which memory each one plays")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
-                    ForEach(0..<MessagesDraft.slotCount, id: \.self) { index in
-                        GridRow {
-                            Text("F\(index + 1)")
-                                .font(.callout.weight(.bold))
-                                .frame(width: 30, alignment: .trailing)
-                            Picker("", selection: memoryBinding(index)) {
-                                Text("—").tag(Int?.none)
-                                ForEach(1...MessageSets.voiceMemorySlots, id: \.self) { memory in
-                                    // `draft.voiceMemoryCaption`, not
-                                    // `draft.edited.…`: the latter rebuilds the
-                                    // whole MessageSets once per row per memory,
-                                    // 64 times a render.
-                                    Text(voiceMemoryPickerCaption(memory)).tag(Int?.some(memory))
-                                }
-                            }
-                            .labelsHidden()
-                            .frame(width: 360, alignment: .leading)
-                        }
-                    }
+                if voiceStatus != .unsupported {
+                    Text(Self.voiceStatusText(voiceStatus, bank: voiceBank))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-
-                Text(Self.voiceStatusText(voiceStatus, bank: voiceBank))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
             }
 
             if editClass == .cw, let party, let mismatch = draft.mismatch(with: party) {
@@ -209,7 +202,7 @@ struct MessagesEditor: View {
         // `.topLeading` is load-bearing: the default `.center` would split the
         // banner's height evenly above and below, moving the eight F-key fields
         // 21.5 pt each time the verdict flips — under the operator's own caret.
-        .frame(minWidth: 740, minHeight: 500, alignment: .topLeading)
+        .frame(minWidth: 900, minHeight: 560, alignment: .topLeading)
         .onAppear {
             party = document.party
             draft = MessagesDraft(document.log.messages)

@@ -39,6 +39,12 @@ struct MainView: View {
     @State private var repeatTask: Task<Void, Never>?
     @State private var hostWindow: NSWindow?
 
+    /// The active party's recordings on this Mac and the recorder behind the
+    /// Messages editor's Phone tab. Per window, like the flow.
+    @State private var voiceStore = VoiceStore()
+    /// Which tab the Messages editor opens on — ⇧⌘V lands on Phone.
+    @State private var messagesEditorClass: ModeClass = .cw
+
     @State private var spotStore = SpotStore()
     @State private var spotClient = SpotClient()
     @State private var hubSpotClient = HubSpotClient()
@@ -85,8 +91,36 @@ struct MainView: View {
             radioConnected: radio.isConnected,
             cursor: esmCursor,
             keying: settings.keying,
-            voiceMemoryCount: radio.voiceStatus.memoryCount
+            voiceMemoryCount: radio.voiceStatus.memoryCount,
+            phoneSource: phoneSource
         )
+    }
+
+    /// Where phone keys get their audio right now — the one place the setting,
+    /// the connected radio and the audio path's readiness are combined
+    /// (Article 11 as amended 2026-08-15). A radio that takes no audio from
+    /// the Mac falls to its own memories, and the editor says so; a path that
+    /// is merely not set up leaves the keys silent, never a different source.
+    private var phoneSource: EntryFlow.PhoneSource {
+        switch settings.phoneMessageSource {
+        case .radioMemories:
+            return .radioMemories
+        case .recordings:
+            switch radio.voicePathStatus {
+            case .unsupported: return .radioMemories
+            case .notReady: return .recordings(ready: false)
+            case .readyOverNetwork, .readyOverDevice: return .recordings(ready: true)
+            }
+        }
+    }
+
+    /// Whether the phone F-keys can do anything at all: the radio's recorder
+    /// is ready, or the recordings path is.
+    private var phoneKeysEnabled: Bool {
+        switch phoneSource {
+        case .radioMemories: radio.voiceStatus.isReady
+        case .recordings(let ready): ready
+        }
     }
 
     /// What the messages row draws for F1–F8 right now. Built here rather than
@@ -147,7 +181,10 @@ struct MainView: View {
             }
             .sheet(isPresented: $showMessagesEditor) {
                 MessagesEditor(document: document, settings: settings,
-                               voiceStatus: radio.voiceStatus, voiceBank: radio.voiceBank)
+                               voiceStatus: radio.voiceStatus, voiceBank: radio.voiceBank,
+                               voiceStore: voiceStore, radio: radio,
+                               onPlayToRadio: playRecordingToRadio,
+                               initialClass: messagesEditorClass)
             }
             .sheet(isPresented: $showSelfSpot) {
                 if let party, let source = party.hubSpots {
@@ -343,10 +380,18 @@ struct MainView: View {
             .onChange(of: radio.radioReportedWPM) { syncSpeedFromRadio() }
             .onChange(of: repeatCQ) { repeatCQChanged() }
             .onChange(of: radio.isConnected) { if !radio.isConnected { stopRepeat() } }
+            // The recordings path re-derives from the voice settings while
+            // connected; `connect` derives it itself.
+            .onChange(of: settings.voiceOutputDeviceUID) { radio.refreshVoicePath(settings: settings) }
+            .onChange(of: settings.voicePTT) { radio.refreshVoicePath(settings: settings) }
+            .onChange(of: settings.phoneMessageSource) { radio.refreshVoicePath(settings: settings) }
+            // The flow reads recordings by value, like the call history file.
+            .onChange(of: voiceStore.rendered) { flow.voiceRecordings = voiceStore.rendered }
             Divider()
 
             stationStrip
                 .onChange(of: document.log.partyID) { applyDefaultDocumentName() }
+                .onChange(of: document.log.partyID) { voiceStore.partyID = document.log.partyID }
                 .onChange(of: document.log.station.callsign) { applyDefaultDocumentName() }
                 .onChange(of: document.log.setupCompleted) { autoSaveNewDocumentIfNeeded() }
                 .onChange(of: document.log.qsos) { autoSaveAfterChange() }
@@ -371,7 +416,7 @@ struct MainView: View {
                 onSend: sendMessageAt,
                 enabled: radio.isConnected
                     && (currentModeClass == .cw
-                        || (currentModeClass == .phone && radio.voiceStatus.isReady)),
+                        || (currentModeClass == .phone && phoneKeysEnabled)),
                 pendingIndex: pendingMessageIndex,
                 repeatEnabled: $repeatCQ,
                 repeatInterval: $settings.repeatIntervalSeconds,
@@ -615,9 +660,22 @@ struct MainView: View {
             .help(spotCommandHelp)
 
             Button {
+                messagesEditorClass = .cw
                 showMessagesEditor = true
             } label: {
-                Label("CW Messages", systemImage: "keyboard")
+                Label("Messages", systemImage: "keyboard")
+            }
+            .help("F-key messages — CW text, and phone recordings made here (⇧⌘V opens the Phone tab)")
+            // Article 7 — the Phone tab's keyboard path. An invisible button
+            // carries the shortcut, the pattern the Run/S&P toggle uses.
+            .background {
+                Button("Voice Messages") {
+                    messagesEditorClass = .phone
+                    showMessagesEditor = true
+                }
+                .keyboardShortcut("v", modifiers: [.command, .shift])
+                .opacity(0)
+                .accessibilityHidden(true)
             }
 
             Button {
@@ -870,6 +928,9 @@ struct MainView: View {
         focusedField = .call
         flow.onAppear(operatingContext)
         installKeyMonitor()
+        // The party's recordings load and render off the main actor; the
+        // `onChange` on `rendered` hands them to the flow when they land.
+        voiceStore.partyID = document.log.partyID
         radio.autoConnect(settings: settings)
 
         // A spot can only get this far under an ASSISTED declaration, so the
@@ -1073,14 +1134,18 @@ struct MainView: View {
             radio.sendCW(text, settings: settings)
         case .voice(let memory, let caption):
             radio.playVoiceMessage(memory: memory, caption: caption)
-        case .recording:
-            // Wired to `RadioController.playRecording` once it exists; until
-            // then the flow never produces this case (no view passes
-            // `.recordings` in its context).
-            break
+        case .recording(_, let audio, let caption):
+            radio.playRecording(audio, caption: caption, settings: settings)
         case .silent:
             break
         }
+    }
+
+    /// The editor's ⇢ Radio button: memory N to the radio, exactly as an
+    /// F-key mapped to it would — the same rendered clip, the same path.
+    private func playRecordingToRadio(memory: Int) {
+        guard let audio = voiceStore.rendered[memory] else { return }
+        radio.playRecording(audio, caption: document.log.messages.voiceMemoryCaption(memory), settings: settings)
     }
 
     /// A station nobody spotted leaves nothing on the band map: work him, and
@@ -1413,7 +1478,7 @@ struct MainView: View {
 
     private func startRepeat() {
         repeatTask?.cancel()
-        let voiceReady = currentModeClass == .phone && radio.voiceStatus.isReady
+        let voiceReady = currentModeClass == .phone && phoneKeysEnabled
         guard radio.isConnected, currentModeClass == .cw || voiceReady else {
             repeatCQ = false
             return
