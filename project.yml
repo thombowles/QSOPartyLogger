@@ -60,6 +60,7 @@ targets:
         LSMinimumSystemVersion: "15.0"
         NSHumanReadableCopyright: "© 2026 Tom Bowles, KE5CW"
         NSLocalNetworkUsageDescription: "QSO Party Logger connects to your FlexRadio and DX cluster spotting nodes on your local network."
+        NSMicrophoneUsageDescription: "Voice messages are recorded here and played to your radio."
         NSLocationUsageDescription: "Your location fills in your Maidenhead grid square and finds the POTA parks nearest you."
         NSLocationWhenInUseUsageDescription: "Your location fills in your Maidenhead grid square and finds the POTA parks nearest you."
         # qsopartyhub.com serves a self-signed certificate on 443, so the spot
@@ -107,6 +108,9 @@ targets:
         # Fills the grid square and sorts the POTA park picker by distance.
         # Asked for only when the operator presses Locate.
         com.apple.security.personal-information.location: true
+        # Recording phone messages in Messages → Phone. Asked for only when
+        # the record button is first pressed; playback needs no permission.
+        com.apple.security.device.audio-input: true
         com.apple.security.device.serial: true
         com.apple.security.device.usb: true
         com.apple.security.files.user-selected.read-write: true

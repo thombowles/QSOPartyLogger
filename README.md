@@ -114,8 +114,11 @@ Per-party detail — what's unusual about each, and every known limitation — i
 | `Tab` | Walk every field, reports included — landing in one selects the S digit, so 599 → 579 is one keystroke |
 | `Tab` to **P2P park(s)** | During a POTA activation, the other station's park reference(s). Deliberately outside the `Space` cycle — most contacts aren't park-to-park — so `Space` from it returns to the call |
 | `F12` | Wipe the entry fields and start over |
-| `F1`–`F8` | Send the message in that slot (Run or S&P set) — CW text on CW, the radio's own voice memory on phone. The button shows what it will send: the expanded text, or `M4 AGN?` |
-| `Esc` | Abort instantly — a CW message mid-character, or a voice memory mid-playback — stop repeat-CQ, close an open sheet — or, in the park picker's search box, clear it and close the results |
+| `F1`–`F8` | Send the message in that slot (Run or S&P set) — CW text on CW; on phone, the voice memory recorded on this Mac (or the radio's own, if that source is chosen). The button shows what it will send: the expanded text, or `M4 AGN?`. A second key during a recording replaces it |
+| `Esc` | Abort instantly — a CW message mid-character, a recording mid-playback (audio stops and the radio unkeys together), or a voice memory — stop repeat-CQ, close an open sheet — or, in the park picker's search box, clear it and close the results |
+| `⇧⌘V` | Open the Messages editor on the Phone tab — the voice recorder |
+| `⌘1`–`⌘8` | In the Phone tab: record memory M1–M8; the same key (or the button) stops. Stops by itself at 30 s |
+| `⌥⌘1`–`⌥⌘8` | In the Phone tab: play memory M1–M8 back on the Mac (not the radio) |
 | `↑` / `↓` | In the park picker: move through the results; `Return` adds the highlighted park |
 | Any key | While repeat-CQ is running: stop it and abort the CQ on the air, then do the key's own job |
 | `⌘=` / `⌘-` | CW speed ±2 WPM — takes effect mid-message (syncs to the radio) |
@@ -385,24 +388,49 @@ member number and `5W` verbatim for a power. The editor
 warns you, with a one-key fix (⇧⌘R), when a message contradicts its party's
 exchange. Optional cut numbers (599 → 5NN, 40 → 4T). **Esc aborts instantly.**
 
-**Phone keys from the radio's own voice memories** — never audio streamed from
-the Mac. The app asks the radio what it has and reports the answer: 8 memories
-on a K3 with the KDVR3 recorder fitted, 2 on a KX3 or KX2. Without the recorder
-the F-keys simply go inert — captioned `—` and disabled on the main window —
-and the messages editor explains why. On phone the F-keys map to memories you
-choose, ESM steps through them exactly as it does on CW, `Esc` aborts playback,
-and Repeat CQ times itself off the radio's own end-of-message report rather
-than a guess. No VOX and no second interface are needed on the K3, which
-asserts PTT itself during playback.
+**Phone keys play voice messages you record on the Mac.** Open Messages →
+Phone (⇧⌘V) and record eight memories — `M1 CQ`, `M2 Exch`, `M3 TU`, `M4
+AGN?` by default — straight from the microphone: ⌘1–⌘8 record and stop (30 s
+maximum), ⌥⌘1–⌥⌘8 play a memory back on the Mac, and each row shows its
+waveform and length. Leading and trailing silence are trimmed off
+automatically; ✂ opens a trim editor with a big waveform, two handles, Auto-trim
+and Normalize, and everything is non-destructive. Import a WAV or any audio file
+instead, or **Copy from another party…** to fill the memories every party
+shares — TU, AGN?, 73 and your call — and re-record only CQ and the exchange.
+Recordings are kept **per party**, so next year's Texas QSO Party finds this
+year's messages, and they save the moment the red button stops (names and F-key
+mappings save with the sheet). ⇢ Radio plays a memory to the radio exactly as
+the F-key will, so the level can be set against the radio's ALC meter with the
+Level slider.
 
-Record the memories from the radio's front panel — the app only plays them.
-Three things it cannot see, and so cannot warn you about: whether a memory
-holds a recording at all, whether you have re-recorded one since naming it
-here, and whether an M1–M4 button has been reassigned as a programmable
-function switch, which makes that memory unavailable for playback. Reaching
-memories 5–8 changes the radio's message bank and leaves it there, so the
-front panel's own buttons address that bank afterwards; the messages editor
-shows which bank the radio is in.
+On the air the F-keys, ESM, `Esc` and Repeat CQ behave exactly as on CW: the TX
+badge shows the caption while the clip plays and clears at the real end, `Esc`
+stops the audio and unkeys the same instant, Repeat CQ times itself off the
+clip's actual end, and a second F-key during a message **replaces** it — what a
+voice keyer does, and what you want when a station answers mid-CQ. Two paths
+carry the audio, and the driver decides which:
+
+- **Through a sound card** (Elecraft): the Mac plays into an audio device you
+  pick — the radio's USB codec or an interface into its line input — and keys
+  the radio over CAT (`TX;`/`RX;`) with an adjustable lead, or leaves keying
+  to VOX. See *Playing recordings through a K3* below.
+- **Over the network** (Flex): the app streams the audio to the radio itself and
+  keys it for each message. Nothing to wire; see *Connecting a Flex*.
+
+Nothing keys the radio until an F-key, Return under ESM, Repeat CQ or ⇢ Radio
+asks. If the path isn't ready — no output device chosen, the radio refused the
+stream — the phone keys stay inert with the reason in their tooltip and in the
+Phone tab, and never fall back to a different source on their own.
+
+**The radio's own voice memories remain an option.** Where the radio reports
+some (8 on a K3 with the KDVR3 recorder fitted, 2 on a KX3 or KX2), the Phone
+tab offers *Phone messages play from: Recordings on this Mac / The radio's
+voice memories*. On the radio's memories the app only plays: record them from
+the front panel, and three things the app cannot see are whether a memory holds
+a recording at all, whether you have re-recorded one since naming it, and
+whether an M1–M4 button has been reassigned as a programmable function switch.
+Reaching memories 5–8 changes the radio's message bank and leaves it there; the
+Phone tab shows which bank the radio is in.
 
 ### Wiring a K3 for direct keying
 
@@ -777,11 +805,14 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2530 unit tests**, none of which need hardware or a network — no serial port,
-no cluster, no HTTP. They cover the scoring engine, county data, exporters, the
-K3, QMX and FlexRadio protocols and the connection lifecycle (driven over `/dev/null`
-as a stone-deaf serial port), the voice-memory bank sequence and its refusal to
-transmit a memory the radio has not confirmed, cluster login and telnet handling, call history
+**2599 unit tests**, none of which need hardware, a network or a microphone —
+no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
+exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
+(driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank
+sequence and its refusal to transmit a memory the radio has not confirmed, the
+voice recorder's model and DSP and its per-party files, the sound-card keying
+sequence (lead, play, tail, unkey — abort at every point, over a fake output),
+what the flow puts on the air from a recording, cluster login and telnet handling, call history
 parsing and its prefill priority chain, super check partial parsing, matching
 and its download client, spot parsing and filtering and navigation, the
 spotting policy, the band map scale and column stacking, the band plan, typed
