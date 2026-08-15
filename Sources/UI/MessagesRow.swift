@@ -25,6 +25,9 @@ struct MessagesRow: View {
     let pendingIndex: Int?
 
     @Binding var repeatEnabled: Bool
+    /// Armed but not running: a keystroke paused the loop, and F1 or the CQ
+    /// button starts it again. Drawn in orange so the state is visible.
+    var repeatPaused: Bool = false
     @Binding var repeatInterval: Double
     @Binding var esmEnabled: Bool
 
@@ -103,12 +106,15 @@ struct MessagesRow: View {
             .help("Enter Sends Message: with the cursor in the call field Return only calls — it never logs. Move to the exchange and Return logs and sends your report. An exchange that matches nothing sends AGN?. The outlined key is what Return sends next.")
 
             Toggle(isOn: $repeatEnabled) {
-                Label("Repeat CQ", systemImage: "repeat")
+                Label(repeatPaused ? "Repeat CQ ⏸" : "Repeat CQ", systemImage: "repeat")
                     .font(.caption)
             }
             .toggleStyle(.button)
+            .tint(repeatPaused ? .orange : .accentColor)
             .disabled(!enabled || operatingMode != .run)
-            .help("Re-send F1 after each interval. Any keystroke cancels.")
+            .help("Re-send F1 after each interval. Typing or Esc pauses the loop and leaves the mode on "
+                  + "— F1, the CQ button or ESM's Return start it again from the top. "
+                  + "Click to turn the mode off.")
 
             Stepper(value: $repeatInterval, in: 0.5...15, step: 0.5) {
                 Text(String(format: "%.1fs", repeatInterval))
