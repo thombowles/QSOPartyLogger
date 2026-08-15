@@ -8,9 +8,17 @@ protocol NetworkTransport: SerialTransport {
 }
 
 /// What the Flex driver needs from a UDP socket, behind a protocol so tests
-/// record packets instead of sending them.
-protocol UDPSending: AnyObject {
+/// record packets instead of sending them. `Sendable`: the pacing thread
+/// sends and the finish callback reads the failure count.
+protocol UDPSending: AnyObject, Sendable {
     var localPort: UInt16 { get }
+    /// "192.168.20.5:58432" — the address the packets leave from, for the
+    /// transcript: a wrong interface (a VPN, a second NIC) shows up here.
+    var localDescription: String { get }
+    /// How many `send` calls the kernel refused, and the last errno — the
+    /// difference between "the radio ignored the packets" and "they never
+    /// left the Mac".
+    var sendFailures: (count: Int, lastErrno: Int32?) { get }
     func send(_ data: Data)
     func close()
 }
@@ -24,6 +32,13 @@ final class UDPSender: UDPSending, @unchecked Sendable {
     private let lock = NSLock()
     private var fd: Int32
     let localPort: UInt16
+    let localDescription: String
+    private var failureCount = 0
+    private var lastFailure: Int32?
+
+    var sendFailures: (count: Int, lastErrno: Int32?) {
+        lock.withLock { (failureCount, lastFailure) }
+    }
 
     enum UDPError: Error, LocalizedError {
         case resolve(String)
@@ -66,13 +81,24 @@ final class UDPSender: UDPSending, @unchecked Sendable {
         }
         fd = s
         localPort = UInt16(bigEndian: address.sin_port)
+        var text = [CChar](repeating: 0, count: Int(INET_ADDRSTRLEN))
+        var ip = address.sin_addr
+        let name = inet_ntop(AF_INET, &ip, &text, socklen_t(INET_ADDRSTRLEN)).map { String(cString: $0) } ?? "?"
+        localDescription = "\(name):\(localPort)"
     }
 
     func send(_ data: Data) {
         let handle: Int32 = lock.withLock { fd }
         guard handle >= 0 else { return }
-        data.withUnsafeBytes { buffer in
-            _ = Darwin.send(handle, buffer.baseAddress, buffer.count, 0)
+        let sent = data.withUnsafeBytes { buffer in
+            Darwin.send(handle, buffer.baseAddress, buffer.count, 0)
+        }
+        if sent < 0 {
+            let e = errno
+            lock.withLock {
+                failureCount += 1
+                lastFailure = e
+            }
         }
     }
 

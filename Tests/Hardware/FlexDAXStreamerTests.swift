@@ -9,6 +9,8 @@ final class FlexDAXStreamerTests: XCTestCase {
         let lock = NSLock()
         private var stored: [(Data, UInt64)] = []
         var localPort: UInt16 { 4991 }
+        var localDescription: String { "127.0.0.1:4991" }
+        var sendFailures: (count: Int, lastErrno: Int32?) { (0, nil) }
         var packets: [(Data, UInt64)] { lock.withLock { stored } }
         func send(_ data: Data) { lock.withLock { stored.append((data, DispatchTime.now().uptimeNanoseconds)) } }
         func close() {}

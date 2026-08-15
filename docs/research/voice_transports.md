@@ -77,8 +77,13 @@ session with a radio on the desk knows what to look at.
    **`stream set 0x<id> tx=1`** (the wiki's `stream set <stream_id> tx=[1|0]`,
    banked page [4]) and drops packets from every other; "PTT keys with
    silence" is the documented symptom of a stream that never claimed. The
-   driver now sends the claim as soon as it knows its stream id and still
-   waits for the radio's `tx=1` before keying. cqk1af adds the operational
+   driver now sends the claim as soon as it knows its stream id — **whatever
+   the status line says**: the second bench transcript showed the radio
+   reporting `tx=1` on the fresh stream by itself, the driver therefore
+   skipping the claim, 774 packets going out, and no modulation — and still
+   waits for the radio's `tx=1` before keying. sdroxide's packet is
+   byte-for-byte this driver's (24 kHz, 128 frames, mono into L and R, class
+   0x03E3), so the format is not in question. cqk1af adds the operational
    half: **if the DAX application's own TX channel is enabled, the radio keeps
    that stream and drops ours** — the README says to turn it off. `dax audio
    set … tx=1` is kept as well (nDAX and M0LTE.Flex send it and work).

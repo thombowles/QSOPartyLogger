@@ -593,7 +593,7 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
                 if let tx, let dax = tx.value.daxChannel, dax > 0 { return (dax, nil) }
                 return (1, tx?.key)
             }
-            note("udp: local port \(socket.localPort) → \(host):\(Self.daxUDPPort)")
+            note("udp: from \(socket.localDescription) → \(host):\(Self.daxUDPPort)")
             sendVoiceCommand(Self.cmdClientUDPPort(socket.localPort))
             sendVoiceCommand(Self.cmdDAXAudioSetTX(channel: channel, slice: sliceToAssign))
         }
@@ -691,13 +691,16 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
         }
     }
 
-    /// Once the stream id is known and the radio has not marked it `tx=1`,
-    /// claim transmit for it — once per stream. The radio modulates only the
-    /// dax_tx stream that has claimed, and drops packets from every other
-    /// one; without this a message keys the radio and puts silence on it.
+    /// Once the stream id is known, claim transmit for it — once per stream,
+    /// and whatever the status line said: the bench showed the radio
+    /// reporting `tx=1` on a fresh stream by itself and still modulating
+    /// nothing, and the clients that work send the claim unconditionally.
+    /// The radio modulates only the dax_tx stream that has *called* this and
+    /// drops packets from every other; without it a message keys the radio
+    /// and puts silence on it.
     private func claimTransmitIfNeeded() {
         let claim: UInt32? = lock.withLock {
-            guard let id = daxStreamID, !daxStreamTX, !daxStreamTXClaimed, pendingClip != nil else { return nil }
+            guard let id = daxStreamID, !daxStreamTXClaimed, pendingClip != nil else { return nil }
             daxStreamTXClaimed = true
             return id
         }
@@ -780,7 +783,13 @@ final class FlexRadioDriver: InternalKeyerDriver, AudioStreamTransmitCapable, @u
                     return self.restoreDAXOffAfterPlay
                 }
                 guard let restore else { return }
-                self.note("all \(packets.count) packets sent")
+                let failures = socket.sendFailures
+                if failures.count == 0 {
+                    self.note("all \(packets.count) packets handed to the kernel from \(socket.localDescription), no send errors")
+                } else {
+                    let reason = failures.lastErrno.map { String(cString: strerror($0)) } ?? "?"
+                    self.note("\(failures.count) of \(packets.count) sends failed — last error: \(reason)")
+                }
                 self.sendVoiceCommand(Self.cmdXmit(false))
                 if restore { self.sendVoiceCommand(Self.cmdTransmitDAX(false)) }
                 self.onTransmitAudioEvent?(.finished)

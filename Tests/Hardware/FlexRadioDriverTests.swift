@@ -312,6 +312,8 @@ final class FlexRadioDriverTests: XCTestCase {
 
     final class FakeUDP: UDPSending, @unchecked Sendable {
         let localPort: UInt16 = 51234
+        let localDescription = "10.0.0.7:51234"
+        var sendFailures: (count: Int, lastErrno: Int32?) { (0, nil) }
         private let lock = NSLock()
         private var stored: [Data] = []
         private(set) var closed = 0
@@ -440,16 +442,25 @@ final class FlexRadioDriverTests: XCTestCase {
         driver.stop()
     }
 
-    /// A stream the radio reports as ours and already `tx=1` needs no claim.
-    func testNoClaimWhenTheRadioAlreadyMarksOurStreamTX() {
+    /// The bench (2026-08-15): the radio reported `tx=1` on a fresh stream by
+    /// itself and still modulated nothing. So the claim goes out whatever the
+    /// status says — once — and before `xmit 1`.
+    func testClaimIsSentEvenWhenTheRadioAlreadyMarksOurStreamTX() {
         let (driver, transport, _) = connectedDriver()
         let events = Events()
         driver.onTransmitAudioEvent = { events.append($0) }
         driver.transmitAudio(clip)
         transport.feed("S1A2B3C4|stream 0x84000001 type=dax_tx client_handle=0x1A2B3C4 tx=1\n")
         waitForTerminal(events)
-        XCTAssertFalse(transport.commands.contains { $0.hasPrefix("stream set") })
+        let commands = transport.commands
+        XCTAssertEqual(commands.filter { $0 == "stream set 0x84000001 tx=1" }.count, 1)
+        XCTAssertLessThan(commands.firstIndex(of: "stream set 0x84000001 tx=1")!, commands.firstIndex(of: "xmit 1")!,
+                          "the claim precedes the key-down on the wire")
         XCTAssertEqual(events.all, [.started, .finished])
+        // The transcript says where the packets left from and that none failed.
+        let transcript = driver.transmitAudioTranscript.joined(separator: "\n")
+        XCTAssertTrue(transcript.contains("10.0.0.7:51234"), transcript)
+        XCTAssertTrue(transcript.contains("no send errors"), transcript)
         driver.stop()
     }
 
