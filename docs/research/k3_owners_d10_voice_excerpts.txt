@@ -1,0 +1,87 @@
+Elecraft K3 Owner's Manual, Revision D10 (August 24, 2011) — the passages behind
+playing this Mac's recordings through the radio's LINE IN
+==================================================================================
+
+Source: E740107 K3 Owner's man D10.pdf
+https://ftp.elecraft.com/K3/Manuals%20Downloads/E740107%20K3%20Owner's%20man%20D10.pdf
+Fetched 2026-08-15; extracted with `pdftotext -layout` (the same manual, same
+revision, that k3_voice_keyer.md cites for the front-panel M1–M4 semantics).
+Only the passages the README's wiring instructions rely on are banked; the
+manual is 100+ pages and its full text is not needed here.
+
+The two CAT commands the driver uses come from the Programmer's Reference,
+already banked in full as k3_programmers_reference_g5.txt:
+
+  TX (Transmit Mode; SET only)
+  SET format: TX; (no data). Same as activating PTT or using the XMIT switch.
+  Applies to all modes except direct data, i.e. FSK-D and PSK-D. […] Use the RX
+  command to cancel TX (some special considerations apply; see RX). RX/TX status
+  is available via TQ and is also included in the IF response.
+
+  RX (Receive Mode; SET only)
+  SET format: RX; (no data). Terminates transmit in all modes, including message
+  play and repeating messages. RX/TX status is available via the TQ command and
+  is also included in the IF response.
+
+------------------------------------------------------------------------
+Rear panel — LINE IN (p. 19 of the manual, "SPKRS / LINE IN" column)
+------------------------------------------------------------------------
+  LINE IN
+  MONO, transformer-isolated; 600 Ω (nominal)
+  This input should be connected to your computer's soundcard output. The MIC
+  gain control sets the line input level when the MAIN:MIC SEL menu entry is set
+  to LINE IN.
+
+  The LINE IN level should be set carefully to avoid transmit signal distortion
+  due to saturation of the K3's input audio transformer. In addition, sound card
+  gain should be set 6 to 10 dB below the level at which the sound card's output
+  stage starts clipping.
+
+------------------------------------------------------------------------
+MAIN menu — MIC SEL and MIC+LIN (menu table)
+------------------------------------------------------------------------
+  MIC SEL   FP, low range, bias off
+            Mic/line transmit audio source, mic gain range, and mic bias. Source
+            selections: FP (front panel 8-pin MIC jack), RP (rear panel 3.5 mm
+            MIC jack), and LINE IN (rear-panel LINE IN jack). Tap 1 to toggle
+            between .Low and .High mic gain range for the selected mic. Tap 2 to
+            turn mic BIAS on/off (turn on for electret mics). […]
+
+  MIC+LIN   OFF
+            If set to ON, and MIC SEL is set for FP or RP, the present mic OR
+            line input can be used for transmit audio. NOTE: Setting MIC SEL to
+            LINE overrides the MIC+LIN menu entry (its parameter becomes "N-A").
+            When MIC+LIN is in effect, rotating the MIC control shows MIC gain.
+            The op has to set MIC SEL to LINE temporarily to adjust LINE IN gain.
+
+------------------------------------------------------------------------
+Data Mode Connections (p. 30) — the same LINE IN, and PTT
+------------------------------------------------------------------------
+  You can transmit and receive data with a computer in three ways:
+  • Connect your soundcard I/O to the K3. Use MAIN:MIC SEL to use LINE IN/OUT,
+    front-panel mic jack, or rear-panel mic jack. You can use VOX or PTT to
+    control transmit.
+
+  (and, in the data-mode setup steps)
+  • Locate MAIN:MIC SEL and set the audio source for data to LINE IN. Exit the
+    menu.
+
+------------------------------------------------------------------------
+What the app takes from it (README, "Playing recordings through a K3")
+------------------------------------------------------------------------
+- Audio: the Mac's audio output (a USB audio interface, or the headphone jack)
+  into the K3's rear-panel LINE IN.
+- Source: MAIN:MIC SEL = LINE IN, or leave the mic selected and set MIC+LIN =
+  ON so the mic and the line input are both live — the contest setting, since
+  the operator answers on the mic between recordings.
+- Level: the app's Level slider is the sound-card gain the manual asks you to
+  keep 6–10 dB under clipping; the K3's MIC control (with MIC SEL on LINE IN)
+  sets the line input level against the ALC meter.
+- Keying: the app sends TX; before the clip and RX; after it (Programmer's
+  Reference), so no VOX is required; VOX remains an option in the app if the
+  station prefers it.
+
+Not covered by this manual: the K3S, KX3 and KX2 rear panels differ, and their
+audio-input menus were not read for this file. The README says so and points at
+those manuals rather than paraphrasing them here (Article 1: nothing is
+described that was not seen in the maker's own words).

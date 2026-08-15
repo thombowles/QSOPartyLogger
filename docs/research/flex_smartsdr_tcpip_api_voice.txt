@@ -1,0 +1,2151 @@
+FlexRadio SmartSDR TCP/IP API — the pages a DAX transmit-audio client needs, full text
+https://github.com/flexradio/smartsdr-api-docs/wiki  (FlexRadio Systems' own GitHub
+organisation; the API documentation flexradio.com/api points to)
+Fetched 2026-08-15 from the wiki's raw markdown
+(raw.githubusercontent.com/wiki/flexradio/smartsdr-api-docs/<page>.md). The wiki
+carries no revision number or date of its own, which is why the pages are banked
+whole rather than by excerpt — the same practice as flex_smartsdr_tcpip_api_cw.txt.
+
+Pages, in order:
+  [1] SmartSDR-TCPIP-API        — command / response / status formats (R<seq>|<hex>|<message>)
+  [2] SmartSDR-Ethernet-API     — VITA-49 streaming is UDP, port 4991
+  [3] TCPIP-client              — client udpport / gui / bind / program
+  [4] TCPIP-stream              — stream create type=dax_tx, stream remove, stream set
+  [5] TCPIP-dax                 — dax audio set <ch> [slice=] [tx=]; dax tx <T|F>
+  [6] TCPIP-transmit            — transmit set dax=<0|1> ("DAX as the primary transmit audio source")
+  [7] TCPIP-xmit                — xmit <state>, interlock states
+  [8] TCPIP-slice               — slice set … dax=<ch> tx=<0|1> (parameter table)
+  [9] TCPIP-sub                 — sub dax all
+ [10] Boolean-State             — 0/1, T/F, on/off all accepted
+ [11] SmartSDR-Status-Responses — slice and interlock status formats
+ [12] Known-API-Responses       — the hex response codes (SL_ERROR_BASE = 0x50000000)
+
+Load-bearing for FlexRadioDriver's AudioStreamTransmitCapable path:
+  - `client udpport <port>` "should be entered once at the start of a session";
+    `stream create` answers 50000064 "No IP or PORT" without it ([3], [4]).
+  - `stream create type=dax_tx` ([4]); the stream id comes back in the reply's
+    message field (see docs/research/voice_transports.md for the two hints that
+    show its position) and in `stream <id> type=dax_tx …` status.
+  - `dax audio set <channel> [slice=<slice>] [tx=<1|0>]` — "It uses the client ID
+    for the sender of this command and sets this internally. So this command
+    should be issued by the actual client that will supply transmit data
+    samples" ([5]).
+  - `transmit set dax=1` selects DAX as the transmit audio source ([6]);
+    `xmit 1` / `xmit 0` key and unkey through the interlock state machine ([7]).
+
+KNOWN GAPS (Article 3): the wiki documents no VITA-49 packet layout for audio
+sent *to* the radio, no sample rate and no sample format. Those come from
+FlexLib (the manufacturer's own reference library) and a FlexRadio staff answer,
+banked separately — see flexlib_3_2_37_dax_tx_excerpts.txt and
+flex_dax_audio_format_staff_answer.txt.
+
+========================================================================
+[1] SmartSDR-TCPIP-API.md
+========================================================================
+## SmartSDR TCP/IP API
+
+The SmartSDR TCP/IP API performs the following functions:
+
+1.  Issuing [commands](#Command-Format "wikilink") to the radio
+2.  Querying the radio for status
+3.  Receiving streaming [status information](#Status-Format "wikilink")
+    from the radio
+4.  Locating radios via the discovery protocol
+
+The command API is accessed using a TCP/IP socket connection to port
+4992 of the radio. To locate radios on the local network, use the
+[discovery protocol](Discovery-Protocol "wikilink")
+
+## SmartSDR TCP/IP Command Protocol
+
+### Command Prologue
+
+Upon connecting to the client port, SmartSDR will provide the version
+number of the interface and the client handle identifier. Both of these
+are provided each time the client connects to the radio.
+
+#### VERSION
+
+Protocol version is sent from the radio to the client to notify the
+client of the protocol version to be used.
+
+    V<d.e.a.b>
+
+    V          = indicates version information
+    <d.e.a.b>  = major version number in decimal '.' minor version number in decimal '.' a '.' b
+
+Example:
+
+    V1.0.0.0
+
+The 'a' and 'b' numbers are developers discretion and are subject to
+change without notice. Generally, no decisions should be made on these
+numbers.
+
+#### HANDLE
+
+The handle provided by the radio is a 32-bit hexadecimal number that
+uniquely identifies this client connection. It will subsequently be sent
+to the the client, along with handles of other clients, to denote which
+clients executed actions that triggered [status
+responses](#Status-Format "wikilink"). Handle Information (from radio to
+client):
+
+    H<handle>
+
+    H         = indicates that the handle follows
+    <handle>  = 32-bit hexadecimal handle
+
+Example:
+
+    H6F4EC23D
+
+### Command Format
+
+Once the connection is established, the client may begin sending
+commands to the radio. Commands follow a general ASCII format. Command
+format (from client to radio):
+
+    C[D]<seq_number>|command<terminator>
+
+    C             = indicates a command
+    D             = optional D after the C requests verbose debug output for this command execution which is returned in the response
+    <seq_number>  = numeric, up to 32-bits
+    <terminator>  = 0x0D, 0x0A, or 0x0D 0x0A
+
+### Response Format
+
+All commands receive responses from the radio. One and only one response
+will be sent for each command received by the radio. The response is
+tied to the command by the sequence number supplied by the client. This
+sequence number will be echoed back to the client in the response. The
+client should check the hex response to determine if the command issued
+was successful. A zero (0) value indicates success. Any other value
+represents a failure of the command to execute. The response value is
+unique and provides insight into the failure mode. It is recommended
+that any decisions that are made in the client based on a response
+should use the hexadecimal response to make the decisions. Response
+Format (from radio to client):
+
+    R<seq_number>|<hex_response>|Message[|Debug output]
+
+    <seq_number>   = numeric, up to 32-bits -- echoed from the command sent from the client
+    <hex response> = ASCII hexadecimal number (32-bit) return value (see table below for possibilities)
+    <message>      = response value for parsing
+    <debug output> = optional debug free-format text to assist in application development.
+
+It is generally not recommended that the debug output be parsed by
+computer to extract information since the debug output could change at
+any time.
+
+A list of responses can be found on the
+[known_responses](Known-API-Responses "wikilink") page.
+
+### Status Format
+
+Objects in the radio will send out status when they are changed. To find
+out about objects, the client must have either subscribed to status for
+the object ot controlled the object first (in which case an automatic
+subscription is entered on the client's behalf). Status messages are
+asynchronous and can be sent to the client at any time. Status Format
+(from radio to client):
+
+    S<handle>|<message>
+
+    <handle>    = the handle of the client that triggered the update (or 0 for a command line/system change)
+    <message>   = status value for parsing
+
+The period character is used as a decimal separator independent of
+locale. A detailed list of status responses can be found in [SmartSDR
+Status Responses](SmartSDR-Status-Responses "wikilink")
+
+### Message Format
+
+Messages from the radio can be emitted to the client to let the client
+know about various status changes, alarms, etc. inside the radio.
+Messages are generally free format and also have a 32-bit message number
+so that they may be trapped by the client and displayed differently if
+appropriate. Message Format (from radio to client):
+
+    M<message_num>|<message_text>
+
+    <message_num>    = 32-bit hexadecimal number where bits 24-25 contain the severity of the message (0=Informational, 1=Warning, 2=Error, 3=Fatal Error)
+    <message_text>   = text to show operator if this message should be displayed
+
+If command A is executed before command B, all status reported by
+command A will be sent before the first status reported by command B.
+
+A detailed list of messages can be found in [SmartSDR
+Messages](SmartSDR-Messages "wikilink")
+
+## SmartSDR TCP/IP Commands
+
+-   [amplifier](TCPIP-amplifier "wikilink") → register and control
+    amplifier clients
+-   [antenna-list](TCPIP-antenna-list "wikilink") → retrieve a list of
+    available antennas
+-   [atu](TCPIP-atu "wikilink") → antenna tuner commands
+-   [audio client](TCPIP-audio-client "wikilink") → Add/Remove/Set
+    Gain/Pan of Slices for each client
+-   [client](TCPIP-client "wikilink") → identify, register or make
+    changes to client settings
+-   [cw](TCPIP-cw "wikilink") → make changes to the CW keyer or CW mode
+    parameters
+-   [cwx](TCPIP-cwx "wikilink") → send CW with ASCII characters and
+    update/play the CW macros
+-   [dax](TCPIP-dax "wikilink") → control DAX subsystem, subscribe to
+    audio or I/Q samples
+-   [display pan](TCPIP-display-pan "wikilink") → creation and control
+    of panadapter displays
+-   [display panf](TCPIP-display-panf "wikilink") → creation and
+    control of panafall displays
+-   [eq](TCPIP-eq "wikilink") → adjust RX or TX equalizer
+-   [file](TCPIP-file "wikilink") → file upload interface for updating
+    the radio, importing settings and loading waveforms
+-   [filt](TCPIP-filt "wikilink") → adjust slice receiver filter
+    settings
+-   [info](TCPIP-info "wikilink") → get radio information such as model
+    and serial number
+-   [interlock](TCPIP-interlock "wikilink") → adjust transmitter
+    interlock settings, TX1/2/3 outputs, timeouts, etc.
+-   [keepalive](TCPIP-keepalive "wikilink") → enable or disable the
+    TCP/IP channel keepalive system
+-   [memory](TCPIP-memory "wikilink") → update and display memories
+-   [message](TCPIP-message "wikilink") → display an important message
+    on client systems
+-   [meter](TCPIP-meter "wikilink") → control or list meters in radio
+-   [mic](TCPIP-mic "wikilink") → adjust mic settings or change mic
+    source
+-   [mixer](TCPIP-mixer "wikilink") → adjust audio mixer settings
+-   [name](TCPIP-name "wikilink") → identify the name of the current
+    client program
+-   [ping](TCPIP-ping "wikilink") → inform the keep-alive mechanism
+    that the client remains active
+-   [profile](TCPIP-profile "wikilink") → save, load or get info on
+    transmit or global profiles
+-   [preamp](TCPIP-preamp "wikilink") → adjust preamplifier settings on
+    an SCU
+-   [radio](TCPIP-radio "wikilink") → adjust radio name or callsign or
+    change GPS parameters
+-   [read_mclpower](TCPIP-read-mclpower "wikilink") → read power in dBm
+    from attached Mini-Circuits USB Power Meter
+-   [remote_audio](TCPIP-remote-audio "wikilink") → control audio to a
+    remote client
+-   [slice](TCPIP-slice "wikilink") → creation or manipulation of slice
+    receivers
+-   [spot](TCPIP-spot "wikilink") → create, modify, remove spots that
+    show up on the Panadapter
+-   [stream](TCPIP-stream "wikilink") → create or remove radio data
+    streams (for use in DAX, for exmaple)
+-   [sub](TCPIP-sub "wikilink") → creation of status subscriptions to
+    objects
+-   [scu](TCPIP-scu "wikilink") → manipulation of Spectrum Capture
+    Units (SCUs) including preamplifiers, etc.
+-   [tnf](TCPIP-tnf "wikilink") → create/save/adjust tracking notch
+    filter (TNF) settings
+-   [trace](TCPIP-trace "wikilink") → return results of a command trace
+-   [transmit](TCPIP-transmit "wikilink") → adjust transmitter settings
+    including mic levels, monitor levels, vox settings, power and tune
+    settings
+-   [unsub](TCPIP-unsub "wikilink") → removal of status subscriptions
+    to objects
+-   [version](TCPIP-version "wikilink") → report versions of radio
+    firmware that are currently running
+-   [waveform](TCPIP-waveform "wikilink") → register and control
+    waveforms
+-   [xmit](TCPIP-xmit "wikilink") → place or remove the radio from
+    transmit
+-   [xvtr](TCPIP-xvtr "wikilink") → create, remove or adjust
+    transverter settings
+
+========================================================================
+[2] SmartSDR-Ethernet-API.md
+========================================================================
+The SmartSDR Ethernet API has a number of distinct pieces:
+
+1.  The [SmartSDR Command API](SmartSDR-TCPIP-API "wikilink") which is
+    used to command the radio and receive streaming status information
+    from the radio. The command API uses TCP/IP port 4992.
+2.  Streaming data is sent from the radio in the VITA-49 format from
+    UDP/IP port 4991 to targeted clients. This data carries:
+    1.  FFT data used in panadapters and waterfall displays
+    2.  [Metering protocol](Metering-protocol "wikilink") which provides
+        meter data on the radio itself as well as receivers and such
+    3.  Oscilloscope data used to draw audio vs. time data
+    4.  Streaming I/Q data for demodulation by other computer software
+3.  [Discovery protocol](Discovery-protocol "wikilink") which announces
+    the radio's presence on the local network for facilitating client
+    connections sent to UDP port 4992
+
+========================================================================
+[3] TCPIP-client.md
+========================================================================
+### BIND
+
+Registers that a non-GUI client will be binding to a client with a
+particular \]Client ID\]. From a radio perspective as of v3.0, this
+command is simply for debugging and troubleshooting and assists
+developers in determining how non-GUI clients are processing radio data,
+but in and of itself performs no function in the radio. It is
+recommended that non-GUI clients send the statement when they bind to
+maximize information for debugging.
+
+    C[D]<seq_number>|client bind client_id=<client_id>
+
+    <client_id>       =  the client_id of the GUI client that this non-GUI client intends to "follow"
+
+Example:
+
+    C44|client bind client_id=72E8C7F3-5766-4ADF-9286-EBF2F525C77
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message        | Debug Output / Meaning                                                         |
+|--------------|----------------|--------------------------------------------------------------------------------|
+| 00000000     | \|\[<handle>\] | OK, handle is the handle of the GUI client that may be used for filtering data |
+
+Responses
+
+Response Example:
+
+    R44|0|0x6F54A02B|OK
+
+### DISCONNECT
+
+Disconnects a client that is currently connected to the radio
+
+    C[D]<seq_number>|client disconnect <handle>
+
+    <handle>       =  an optional client handle (32-bit hex value sent to client on connection)
+
+Example:
+
+    C44|client disconnect
+
+Issuing the disconnect without a handle will disconnect all GUI clients
+currently connected to the radio. If a handle is specified, only the
+client with that handle is disconnected. When specifying a handle,
+either a GUI or non-GUI client may be disconnected.
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning |
+|--------------|---------|------------------------|
+| 00000000     |         | OK                     |
+| 50000062     |         | Invalid Client         |
+
+Responses
+
+Response Example:
+
+    R44|0||OK
+
+### GUI
+
+Registers your program as the sole GUI to the radio (v1.x and v2.x) or
+registers your client as one of possibly many GUI clients (v3.x+). For
+v1.x and v2.x, all displays (panadapter, waterfall, etc.) will be sent
+to this client. For later versions of SmartSDR, the displays will be
+sent to the client that requested them and any resources (slices, etc)
+that are used will be considered as "owned" by that GUI client.
+
+    C[D]<seq_number>|client gui [<client_id>]
+
+Example:
+
+    C42|client gui
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message          | Debug Output / Meaning                                                                          |
+|--------------|------------------|-------------------------------------------------------------------------------------------------|
+| 00000000     |   \| <client_id> | OK; for v3.x+, if no client_id was specified when the command was issued, one will be returned. |
+|              |                  |                                                                                                 |
+|              |                  |                                                                                                 |
+
+Responses
+
+Response Example:
+
+    R42|0|72E8C7F3-5766-4ADE-9286-EBF2F525C77|OK
+
+Note that the client that initially connects without the client_id
+(v3.0+) should then store the returned client_id (in the response) and
+then for all subsequent sessions with this (or any v3.x+) transceiver
+should present this in the later commands as the client's client_id. The
+preferred method is to save the ID in a path that will be reused by the
+client software as new releases are issued.
+
+### NAME / NICKNAME
+
+Registers nickname of the radio that can be stored in the radio
+
+    C[D]<seq_number>|client nickname < nickname >
+
+    < nickname >       =  the nickname of the radio being updated
+
+Example:
+
+    C44|client nickname Shack6000
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning |
+|--------------|---------|------------------------|
+| 00000000     |         | OK                     |
+
+Responses
+
+Response Example:
+
+    R44|0|0x6F54A02B|OK
+
+### PROGRAM
+
+Registers the name of the client program connected to the radio. Not yet
+implemented; do not use.
+
+    C[D]<seq_number>|client program <name>
+
+    <name>         = An alpha-numeric name for your program (no spaces)
+
+Example:
+
+    C42|client program MyProgram
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning                  |
+|--------------|---------|-----------------------------------------|
+| 00000000     |         | OK                                      |
+|              |         |                                         |
+| 10000002     |         | unknown client program                  |
+| F3000001     |         | Too many clients connected to the radio |
+
+Responses
+
+The "unknown client program" response is not an error -- it simply means
+that SmartSDR has not heard of this client. In general, we ask that
+clients identify with their program name so that when we are debugging
+issues, we can see other programs connected and what is issuing commands
+as this can help with debugging. All messages starting with a "1" are
+strictly informational.
+
+Response Example:
+
+    R42|0||OK
+
+### START_PERSISTENCE
+
+Loads data for this client from the persistence database. This restores
+the client to the last state prior to the previous shutdown
+
+    C[D]<seq_number>|client start_persistence <value>
+
+    <value>       =  a 1 or 0 to indicate if we persistence should be started
+
+Example:
+
+    C44|client start_persistence 1
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning |
+|--------------|---------|------------------------|
+| 00000000     |         | OK                     |
+
+Responses
+
+Response Example:
+
+    R44|0||OK
+
+### STATION
+
+Stores a friendly name for the client (GUI) that can be displayed in
+other places for clarity. This command should only be issued for a GUI
+client.
+
+    C[D]<seq_number>|client station <station_name>
+
+    <station_name>       =  a text string with no spaces that is the name of the station
+
+Example:
+
+    C44|client station Rlyeh
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning |
+|--------------|---------|------------------------|
+| 00000000     |         | OK                     |
+
+Responses
+
+Response Example:
+
+    R44|0||OK
+
+### UDPPORT
+
+Provides the radio with the UDP port that should be used on the client
+to receive streaming VITA-49 UDP data. This command should be entered once
+at the start of a session. Issuing this command to change the UDP port after
+streaming of UDP data has begun has an undefined behavior.
+
+    C[D]<seq_number>|client udpport <port>
+
+    <port>  =  The 16-bit UDP/IP port number on the client computer
+
+Example:
+
+    C43|client udpport 4993
+
+Note: this port must be *free*, meaning not in use by any other running
+application.
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning                 |
+|--------------|---------|----------------------------------------|
+| 00000000     |         | OK Successfully registered port number |
+
+Responses
+
+Response Example:
+
+    R43|0||OK
+
+========================================================================
+[4] TCPIP-stream.md
+========================================================================
+### CREATE
+
+Create a stream
+
+    C[D]<seq_number>|stream create type=dax_rx dax_channel=<num>
+    C[D]<seq_number>|stream create type=dax_tx
+    C[D]<seq_number>|stream create type=dax_iq daxiq_channel=<num>
+    C[D]<seq_number>|stream create type=dax_mic
+    C[D]<seq_number>|stream create type=remote_audio_rx compression=none|opus
+    C[D]<seq_number>|stream create type=remote_audio_tx
+
+Examples:
+
+    C19|stream create type=dax_rx dax_channel=3
+    C20|stream create type=dax_iq daxiq_channel=1
+    C21|stream create type=remote_radio_rx compression=opus
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 50000025     |         | Client Stream ID not found     |
+| 5000002C     |         | Incorrect number of parameters |
+| 50000059     |         | Invalid Stream ID              |
+| 50000064     |         | No IP or PORT                  |
+
+Responses
+
+Response Example:
+
+    R19|0|
+
+### REMOVE
+
+Remove a stream
+
+    C[D]<seq_number>|stream remove <stream_id>
+
+    <stream_id> = client stream id of the IQ/Slice stream
+
+Example:
+
+    C19|stream remove 0x84000000
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 50000025     |         | Client Stream ID not found     |
+| 5000002C     |         | Incorrect number of parameters |
+| 50000059     |         | Invalid Stream ID              |
+
+Responses
+
+Response Example:
+
+    R19|0|
+
+### GET_ERROR
+
+Get error of a stream
+
+    C[D]<seq_number>|stream get_error <stream_id>
+
+Example:
+
+    C21|stream get_error 101
+
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 50000016     |         | Malformed Command              |
+| 50000025     |         | Client Stream ID not found     |
+| 50000059     |         | Invalid Stream ID              |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SET
+
+Set a stream
+
+    C[D]<seq_number>|stream set <stream_id> tx=[1|0] daxiq_rate=[24|48|96|192]
+
+Example:
+
+    C18|stream set 87 tx=1 daxiq_rate=48
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 50000016     |         | Malformed Command              |
+| 5000002C     |         | Incorrect number of parameters |
+
+========================================================================
+[5] TCPIP-dax.md
+========================================================================
+### DAX_AUDIO
+
+Used for manipulation of DAX audio channels
+
+    C[D]<seq_number>|dax audio set <channel> [slice=<slice>] [tx=<1|0>]
+
+    <slice>    =  the slice number to assign a DAX channel to a slice
+    <1|0>      =  enable or disable the client as transmit source for DAX channel
+
+Example:
+
+    C19|dax audio set 1 1 0
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000000D     |         | Invalid slice receiver         |
+| 50000016     |         | Malformed Command              |
+| 5000002C     |         | Incorrect number of parameters |
+| 50000065     |         | Invalid DAX Channel            |
+
+Responses
+
+Response Example:
+
+    R19|0|1|1|0|
+
+Since multiple DAX clients can run on the same network using the same
+DAX channel, it is necessary to specify which one to use when
+transmitting. It uses the client ID for the sender of this command and
+sets this internally. So this command should be issued by the actual
+client that will supply transmit data samples (typically the DAX
+application).
+
+### DAX_IQ_SET
+
+Used for manipulation of DAX iq channels
+
+    C[D]<seq_number>|dax iq set <channel> [pan=<panadapter id>] [rate=<24|48|96|192>]
+
+    <channel>    =  DAX channel number
+    <panadapter id>     =  panadapter reference for the DAX channel
+    <rate>    =  sampling rate desired in ksps
+
+Example:
+
+    C19|dax iq set 1 1 24
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 50000016     |         | Malformed command              |
+| 5000002C     |         | Incorrect number of parameters |
+| 5000002D     |         | Bad field                      |
+| 50000066     |         | Invalid dax iq channel         |
+
+Responses
+
+Response Example:
+
+    R19|0|1|1|24|
+
+### DAX_TX
+
+Used for manipulation of DAX TX channels
+
+    C[D]<seq_number>|dax tx <T|F|0|1>
+
+Example:
+
+    C19|dax tx T
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning |
+|--------------|---------|------------------------|
+| 00000000     |         | OK                     |
+| 50000016     |         | Malformed Command      |
+
+Responses
+
+Response Example:
+
+    R19|0|1|
+
+### DAX_DUMP
+
+Displays parameters of the DAX.
+
+    C[D]<seq_number>|dax dump
+
+Example:
+
+    C47|dax dump
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning |
+|--------------|---------|------------------------|
+| 00000000     |         | OK                     |
+| 50000016     |         | Malformed Command      |
+
+========================================================================
+[6] TCPIP-transmit.md
+========================================================================
+### TUNE
+
+    C[D]<seq_number>|transmit tune on|off
+
+Example:
+
+    C19|transmit tune off
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK                             |
+| 5000002C     |         | Incorrect number of parameters |
+| 5000003D     |         | TX not supported               |
+| 50000042     |         | Not ready to transmit          |
+| 50000043     |         | No Transmitter                 |
+
+Responses
+
+Response Example:
+
+    R19|0|
+
+### SET
+
+Changes various operational parameters specific to transmission.
+
+    C[D]<seq_number>|transmit set <parameter=value> [<parameter=value>...]
+
+Example:
+
+    C41|transmit set dax=1
+
+Parameters that can be set and the appropriate values are listed in the
+table below:
+
+| Parameter               | Value                                                                                       |
+|-------------------------|:--------------------------------------------------------------------------------------------|
+| compander               | enable/disable                                                                              |
+| compander_level         | range 0-100                                                                                 |
+| dax                     | enable (dax=1) or disable (dax=0) DAX as the primary transmit audio source                  |
+| extra_mic_gain          | range 0-24dB                                                                                |
+| extra_line_gain         | range 0-2dB                                                                                 |
+| hwalc_enabled           | enable/disable                                                                              |
+| max_power_level         | range 0-100                                                                                 |
+| met_in_rx               | enable/disable                                                                              |
+| miclevel                | microphone level: range 0-100                                                               |
+| mon_pan_cw              | sidetone volume: range 0-100                                                                |
+| mon_pan_sb              | sidetone volume: range 0-100                                                                |
+| mon_gain_cw             | sidetone volume: range 0-100                                                                |
+| mon_gain_sb             | sidetone volume: range 0-100                                                                |
+| mon                     | sidetone volume: range 0-100                                                                |
+| rfpower                 | range 0-100                                                                                 |
+| show_tx_in_waterfall    | enable/disable                                                                              |
+| speech_processor_enable | enable (speech_processor_enable=1) or disable (speech_processor_enable=0) speech processing |
+| speech_processor_level  | speech processing level: 0=normal, 1=DX, 2=DX+                                              |
+| tunepower               | tuning power level: range 0-100                                                             |
+| vox                     | enable/disable                                                                              |
+| vox_level               | range 0-100                                                                                 |
+| vox_delay               | delay in ms                                                                                 |
+| filter_low,high         | bandwidth filter frequency: low >= 0, high <= 10000                                                                                            | 
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning |
+|--------------|---------|------------------------|
+| 00000000     |         | OK - update successful |
+| 50000016     |         | Malformed command      |
+| 5000002D     |         | Bad field              |
+| 50000033     |         | Parameter out of range |
+
+Responses
+
+### BANDSET
+
+Bandset configuration settings
+
+
+    C[D]<seq_number>|transmit bandset <band_id> <key>=<value> rfpower=<0-100> tunepower=<0-100> hwalc_enabled=<0|1>
+
+Example:
+    
+   C41|transmit bandset 1 <key>=1 rfpower=50 tunepower=30 hwalc_enable=1
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning |
+|--------------|---------|------------------------|
+| 00000000     |         | OK                     |
+| 50000016     |         | Malformed command      |
+| 50000033     |         | Parameter out of range |
+
+### MIRROR_FPGA
+
+Transmit mirror_fpga with ip address and port destination
+    
+   C[D]<seq_number>|transmit mirror_fpga off | ip={IP_ADDR} port={DEST_PORT}
+
+Responses
+
+Example:
+
+   C41|transmit mirror_fpga on ip=192.168.20.8 port=32
+
+| Hex Response | Message | Debug Output / Meaning |
+|--------------|---------|------------------------|
+| 00000000     |         | OK                     |
+| 50000016     |         | Malformed command      |
+| 5000002C     |         | Incorrect number of parameters|
+
+Responses
+
+========================================================================
+[7] TCPIP-xmit.md
+========================================================================
+### XMIT
+
+Instructs the radio to start or stop transmitting
+
+    C[D]<seq_number>|xmit <state>
+
+    <state>    =  representation of either on or off (see below)
+
+Example:
+
+    C19|xmit 1
+
+See [Boolean State](Boolean-State "wikilink") for different text
+representations for a state
+The **xmit 1** and **xmit 0** commands initiate transitions in the
+**Interlock State Machine**, the state transition diagram for which is
+[**here**](Interlock-State-Transition-Diagram "wikilink").
+
+Each transition of the Interlock State Machine generates a status
+message reporting the name of the current state, e.g.
+
+    S0|interlock state=PTT_REQUESTED reason= source=SW
+
+| Name            | Description                                                                                        |
+|-----------------|----------------------------------------------------------------------------------------------------|
+| NOT_READY       | the radio is receiving, but is not ready to transmit (e.g. frequency or transmit slice is invalid) |
+| PTT_REQUESTED   | the radio has been commanded to transmit and is setting things up to do so                         |
+| READY           | the radio is receiving, and is ready to transmit (valid frequency etc)                             |
+| RECEIVE         | an intermediate state between READY and NOT_READY states                                           |
+| TIMEOUT         | an operation has timed out as the result of the transmit timeout setting                           |
+| TRANSMITTING    | the radio is transmitting                                                                          |
+| TX_FAULT        | the radio has been commanded to transmit, but cannot because an error has occurred                 |
+| UNKEY_REQUESTED | the radio has been commanded to stop transmitting and is settings things up to do so               |
+
+Interlock States
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning               |
+|--------------|---------|--------------------------------------|
+| 00000000     |         | OK                                   |
+| 5000002C     |         | Incorrect number of parameters       |
+| 5000003D     |         | Transmit not supported in this radio |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+========================================================================
+[8] TCPIP-slice.md
+========================================================================
+### CREATE
+
+Create a slice receiver. *See [SmartSDR Supported
+Modes](SmartSDR-Supported-Modes "wikilink") for a complete list of
+supported modes*
+
+    C[D]<seq_number>|slice create [freq=<MHz>][pan=<streamID>][ant=<antenna_port>][mode=<mode>][clone_slice=<source_slice>]
+
+    <MHz>          = frequency in MHz, up to 15 significant digits
+    <streamID>     = stream identification
+    <antenna_port> = antenna designator: ANT1, ANT2, RXA, RXB, or XVTR
+    <mode>         = alphanumeric mode designator: usb, lsb, cw, am ...
+    <source_slice> = slice to be cloned
+
+Example:
+
+    C21|slice create freq=10.0 ant=ANT1 mode=usb
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message    | Debug Output / Meaning                                      |
+|--------------|------------|-------------------------------------------------------------|
+| 00000000     | <slice_rx> | OK Slice receiver <num> created on <freq>MHz on port <port> |
+| 50000001     |            | Unable to get foundation receiver assignment                |
+| 50000003     |            | License check failed, cannot create slice receiver          |
+| 50000004     |            | Slice parameter error                                       |
+| 50000005     |            | The number or type of parameters supplied is incorrect      |
+| 50000016     |            | Malformed Command                                           |
+| 5000002C     |            | Incorrect number of parameters                              |
+| 50000032     |            | Bad Mode                                                    |
+
+Responses
+
+`   `<slice_rx>` = the slice receiver number assigned to this slice receiver`
+`   `
+`   `
+
+Response Example:
+
+    R21|0|2|OK Slice receiver 2 created on 10.000 MHz on port ANT1
+
+### GET_ERROR
+
+Returns the frequency error of a slice. Slices are tuned using a set of
+digital tuning elements that can be slightly off-frequency. This command
+will report the known difference in the requested and actual frequency.
+Note that this command is only useful if the radio is GPS locked or
+locked to a 10MHz reference. The result does not take into account any
+drift in the internal OCXO or TCXO. Note that the FLEX-6500 and
+FLEX-6700(R) use a PLL master oscillator with a very narrow loop
+bandwidth (10Hz) that will have around a 3-4 cycle-per-minute sinusoid
+that will modulate the receiver and transmitter. Typical error induced
+by the oscillation is in the vicinity of 3mHz peak-to-peak. Long-term
+averaging should null out this error (v1.10.8 and later)
+
+    C[D]<seq_number>|slice get_error <slice_rx>
+
+    <slice_rx>    =  the slice receiver number that has the error.  Slice receivers are numbered starting with zero (0)
+
+Example:
+
+    C21|slice get_error 0
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message                           | Debug Output / Meaning                                                                                                                                                 |
+|--------------|-----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 00000000     | <rx_error_value>,<tx_error_value> | <rx_error_value> is the frequency offset in mHz for the receiver (tx for transmitter). Negative values indicate the receiver or transmitter is tuned low in frequency. |
+| 50000004     |                                   | Incorrect number of parameters                                                                                                                                         |
+| 50000005     |                                   | The number or type of parameters supplied is incorrect                                                                                                                 |
+| 5000000D     |                                   | Invalid Slice Receiver                                                                                                                                                 |
+| 5000002C     |                                   | Incorrect number of parameters                                                                                                                                         |
+
+Responses
+
+Response Example:
+
+    R21|0|+3.56432,-11.346234
+
+### REMOVE
+
+Remove (delete) a slice receiver
+
+    C[D]<seq_number>|slice r <slice_rx>
+
+    <slice_rx>    =  the slice receiver number to be removed.  Slice receivers are numbered starting with zero (0)
+
+Example:
+
+    C19|slice r 0
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning                                 |
+|--------------|---------|--------------------------------------------------------|
+| 00000000     |         | Successfully deleted slice receiver                    |
+| 50000005     |         | The number or type of parameters supplied is incorrect |
+| 5000000D     |         | Invalid Slice Receiver                                 |
+| 5000002C     |         | Incorrect number of parameters                         |
+| 534C9999     |         | The slice number provided is invalid                   |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### TUNE
+
+Tune the slice receiver to a new frequency
+
+    C[D]<seq_number>|slice t <slice_rx> <frequency> [autopan=<0|1>]
+
+    <slice_rx>    =  the slice receiver number to be removed.  Slice receivers are numbered starting with zero (0)
+    <frequency>   =  the new frequency for the slice receiver specified in MHz
+    autopan specifies if panadapters should be tuned to keep slice in view
+
+Example:
+
+    C12|slice t 1 14.2055
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning                                                                   |
+|--------------|---------|------------------------------------------------------------------------------------------|
+| 00000000     |         | Successfully tuned slice receiver                                                        |
+| 50000005     |         | The number or type of parameters supplied is incorrect                                   |
+| 5000000C     |         | The frequency requested is out of range                                                  |
+| 5000000D     |         | Invalid slice receiver number                                                            |
+| 5000001D     |         | Insufficient resources to tune to that frequency (requires new minimixer, not available) |
+| 534C9999     |         | The slice number provided is invalid                                                     |
+
+Responses
+
+Response Example:
+
+    R12|0||
+
+### LIST
+
+Retrieve a list of slice receivers currently enabled. Note that the
+single letter after the slice command is a lower case L, not a number
+one.
+
+    C[D]<seq_number>|slice list
+
+Example:
+
+    C41|slice list
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message      | Debug Output / Meaning           |
+|--------------|--------------|----------------------------------|
+| 00000000     | <slice list> | list of slice receivers provided |
+|              |              |                                  |
+
+Responses
+
+Response Example:
+
+    R41|0|0 1 3 4|
+
+In this example, slice receivers 0, 1, 3 and 4 are all enabled and in
+use.
+
+### SET
+
+Changes various operational parameters specific to the slice receiver.
+
+    C[D]<seq_number>|slice s <slice_rx> <parameter=value> [<parameter=value>...]
+
+Example:
+
+    C41|slice s 0 nr=50
+
+Parameters that can be set and the appropriate values are listed in the
+table below:
+
+| Parameter     | Value                                                                                                                            |
+|---------------|:---------------------------------------------------------------------------------------------------------------------------------|
+| active        | select (active=1) or deselect (active=0) the specified slice                                                                     |
+| agc_mode      | specify the agc mode \<off\|slow\|med\|fast\>                                                                                    |
+| agc_off_level | specify at what level agc will turn off                                                                                          |
+| agc_threshold | set the agc threshold \<0-100\>                                                                                                  |
+| anf           | automatic notch filter state (on or off)                                                                                         |
+| anf_level     | automatic notch filter level: 0=OFF, range 0-100                                                                                 |
+| apf           |                                                                                                                                  |
+| apf_level     | set apf level \<0-100\>                                                                                                          |
+| dax           | dax channel to be used by the specified slice receiver                                                                           |
+| diversity     | enable/disable diversity                                                                                                         |
+| mode          | demodulation mode (*See [SmartSDR Supported Modes](SmartSDR_Supported_Modes "wikilink") for a complete list of supported modes*). Note that changing the mode may alter the associated meters for the slice object. |
+| nb            | noise blanking state (on or off)                                                                                                 |
+| nb_level      | noise blanking level: 0=OFF, range 0-100                                                                                         |
+| nr            | noise reduction state (on or off)                                                                                                |
+| nr_level      | noise reduction level: 0=OFF, range 0-100                                                                                        |
+| tnf           | enable/disable tnf \<T\|F\>                                                                                                      |
+| tx            | enable (tx=1) or disable (tx=0) transmission via the specified slice                                                             |
+| txant         | specify the tx antenna port ex: ANT1                                                                                             |
+| wnb           | enable/disable white noise blanker \<on\|off\>                                                                                   |
+| wnb_level     | set the wnb level \<0-100\>                                                                                                      |                      
+| step          | specifies a step                                                                                                                 |
+| step_list     | returns list of steps                                                                                                            |
+| record        | starts recording <0|1>                                                                                                           |
+| play          | starts playing recording <0|1>                                                                                                   |
+| fm_deviation  | changes the frequency deviation in Hz                                                                                            |
+| dfm_pre_de_emphasis | <T|F>                                                                                                                      |
+| rf_gain       | changes frequency gain <-10|0|10|20|30>                                                                                          |
+| audio_level   | audio level <0-100>                                                                                                              |
+| audio_pan     | pan audio level <0-100>                                                                                                          |
+| sample_rate   | adjust sample rate <24000|48000|96000>                                                                                           |
+| squelch       | enable/disable squelch <1|0>                                                                                                     |
+| squelch_level | squelch level state <1|m|h|<0-100>>                                                                                              |
+| pos_mute      | toggle pos mute <0|1>                                                                                                            |
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning                                                             |
+|--------------|---------|------------------------------------------------------------------------------------|
+| 00000000     |         | OK - update successful                                                             |
+| 5000000F     |         | Invalid DSP process (the process you attempted to set it not in this signal chain) |
+| 50000016     |         | Malformed command                                                                  |
+| 5000002D     |         | Bad field                                                                          |
+| 5000002F     |         | Unimplemented mode (mode recognized, but not yet implemented)                      |
+| 50000030     |         | Signal chain error - likely bad mode                                               |
+| 50000032     |         | Unrecognized mode (string)                                                         |
+| 50000033     |         | Parameter out of range                                                             |
+
+Responses
+
+Response Example:
+
+    R41|0|0 1 3 4|
+
+In this example, slice receivers 0, 1, 3 and 4 are all enabled and in
+use.
+
+========================================================================
+[9] TCPIP-sub.md
+========================================================================
+### Overview
+
+This command will subscribe to messages produced by SmartSDR to inform a
+client of the status of certain objects. Once a subscription has been
+enabled, status messages will be sent to the client for changes in the
+object that is the target of the subscription. In the event that a
+subscription request is made for an object that does not exist, the
+following response will be generated:
+
+| Hex Response | Message | Debug Output / Meaning           |
+|--------------|---------|----------------------------------|
+| 500000A3     |         | Invalid subscription object name |
+
+Responses
+
+To unsubscribe from an object, use the [unsub](TCPIP-unsub "wikilink")
+command. This will revert the previous subscription command and
+discontinue status messages about the object.
+
+### SUB AMPLIFIER
+
+Subscribe to status of any amplifiers that have registered with the
+radio over TCP/IP. (v1.10.8 and later)
+
+    C[D]<seq_number>|sub amplifier <handle|all>
+
+    <handle|all>  = the 32-bit handle of the amplifier (if it is known) or all to subscribe to all amplifiers
+
+Example:
+
+    C21|sub amplifier all
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB ATU
+
+Subscribe to status of the internal antenna tuner (ATU) when present.
+
+    C[D]<seq_number>|sub atu all
+
+Example:
+
+    C21|sub atu all
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB AUDIO_STREAM
+
+Subscribe to data from all or a specific audio stream.
+
+    C[D]<seq_number>|sub audio_stream <stream_id|all>
+
+    < stream_id |all>  = the stream id to subscribe to or the word "all" to subscribe to all
+
+Example:
+
+    C21|sub audio_stream all
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB CWX
+
+Subscribe to changes to the CWX memories that are able to transmit
+specific CW phrases on command.
+
+    C[D]<seq_number>|sub cwx all
+
+Example:
+
+    C21|sub cwx all
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB DAX
+
+Subscribe to changes to a specific DAX audio channel or all DAX
+channels.
+
+    C[D]<seq_number>|sub dax <dax_channel|all>
+
+    <dax_channel|all>  = the DAX audio channel to subscribe to or the word "all" to subscribe to all
+
+Example:
+
+    C21|sub dax_channel all
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB DAX_IQ
+
+Subscribe to changes to a specific DAX I/Q channel or all DAX I/Q
+channels.
+
+    C[D]<seq_number>|sub dax_iq <dax_iq_channel|all>
+
+    <dax_iq_channel|all>  = the DAX I/Q channel to subscribe to or the word "all" to subscribe to all
+
+Example:
+
+    C21|sub dax_iq_channel all
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB FOUNDATION
+
+Subscribe to data from all or a specific foundation receiver. When any
+of the data that defines the foundation receiver changes, a status
+update will be sent to the client. This allows a client to keep track of
+objects in the radio. For example if a client is displaying panadapter 1
+and another client moves the panadapter, the subscription will allow the
+second client to get an update on the new frequency.
+
+    C[D]<seq_number>|sub foundation <foundation_rx|all>
+
+    <foundation_rx|all>  = the number of the foundation receiver to subscribe to or the word "all" to subscribe to all
+
+Example:
+
+    C21|sub foundation all
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB GPS
+
+Subscribe to data from the on-board GPS receiver (must be present). Data
+provided is from the GPS data strings that come from the engine and
+include latitude, longitude, grid square, altitude, satellites tracked
+and in-view, speed, frequency error, GPS status, track angle and the
+current time. This command will only function on FLEX-6000 that is GPS
+capable. On platforms that are not GPS capable (FLEX-6300, for example),
+the incorrect parameters response will be generated.
+
+    C[D]<seq_number>|sub gps all
+
+Example:
+
+    C21|sub gps all
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning                                                  |
+|--------------|---------|-------------------------------------------------------------------------|
+| 00000000     |         | OK subscription registered                                              |
+| 5000002C     |         | Incorrect number of parameters or platform not capable of GPS operation |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB MEMORIES
+
+Subscribe to changes, additions and deletions to the memory table.
+
+    C[D]<seq_number>|sub memories all
+
+Example:
+
+    C19|sub memories all
+
+See [Response Format](SmartSDR-TCPIP-API#Response-Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning               |
+|--------------|---------|--------------------------------------|
+| 00000000     |         | Successfully subscribed to the meter |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### SUB METER
+
+Subscribe to a specific meter. The list of meters must be obtained first
+by selecting the [Meter List](Metering-protocol "wikilink") command and
+obtaining a list of meters.
+
+    C[D]<seq_number>|sub meter <meter_id>
+
+    <meter_id>    =  the identifier of the meter
+
+Example:
+
+    C19|sub meter 1
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning               |
+|--------------|---------|--------------------------------------|
+| 00000000     |         | Successfully subscribed to the meter |
+
+Responses
+
+Response Example:
+
+    R19|0||
+
+### SUB PAN
+
+Subscribe to data from all panadapters. When any of the data that
+defines any panadapter changes, a status update will be sent to the
+client.
+
+    C[D]<seq_number>|sub pan all>
+
+Example:
+
+    C21|sub pan all
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB RADIO
+
+Subscribe to radio-wide data. Radio-wide data includes a number of types
+of information not bound to other objects including:
+
+-   file upload/download status
+-   client registrations/deregistrations
+-   interlock status (for transmitter state and ability to transmit)
+-   Tracking Notch Filters (TNF)
+-   Memories
+-   Profiles
+-   Radio status including:
+
+` * number of slices available`
+` * filter sharpness state`
+` * network parameters`
+` * lineout gain`
+` * remote on enable status`
+` * PLL for adjustment of frequency standard`
+` * radio nickname`
+` * binaural status (radio-wide)`
+` * full duplex status`
+` * RTTY mark frequency default`
+` * security including enforcement of private IP connections`
+
+-   TURF (for region transmit frequency rules)
+
+<!-- -->
+
+    C[D]<seq_number>|sub radio all>
+
+Example:
+
+    C21|sub radio all
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB SCU
+
+Subscribe to data from all or a specific SCU. When any of the data that
+defines the SCU, a status update will be sent to the client. This allows
+a client to keep track of objects in the radio. For example if a client
+is displaying SCU 1 and another client enables the preamp, the
+subscription will allow the second client to get an update on the preamp
+status.
+
+    C[D]<seq_number>|sub scu <slice_rx|all>
+
+    <slice_rx|all>  = the number of the scu to subscribe to or the word "all" to subscribe to all
+
+Example:
+
+    C21|sub scu all
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB SLICE
+
+Subscribe to data from all or a specific slice receiver. When any of the
+data that defines the slice receiver changes, a status update will be
+sent to the client. This allows a client to keep track of objects in the
+radio. For example if a client is displaying slice receiver 1 and
+another client moves the receiver, the subscription will allow the
+second client to get an update on the new position of the slice
+receiver.
+
+    C[D]<seq_number>|sub slice <slice_rx|all>
+
+    <slice_rx|all>  = the number of the slice receiver to subscribe to or the word "all" to subscribe to all
+
+Example:
+
+    C21|sub slice all
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB TX
+
+Subscribe to data from the transmitter including power settings, speech
+processor status, mic levels, VOX status, transmit frequency and power,
+etc.
+
+    C[D]<seq_number>|sub tx all
+
+Example:
+
+    C21|sub tx all
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB USB_CABLE
+
+Subscribe to updates in the USB cable table or status of any of the
+current USB cables. (requires SmartSDR v1.10 or later)
+
+    C[D]<seq_number>|sub usb_cable all
+
+Example:
+
+    C21|sub usb_cable all
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+### SUB XVTR
+
+Subscribe to data from the transverter objects.
+
+    C[D]<seq_number>|sub xvtr <unit|all>
+
+    <unit|all>  = the unit number of the transverter object or the word "all" to subscribe to all
+
+Example:
+
+    C21|sub xvtr all
+
+See [Response Format](SmartSDR-TCPIP-API#Response_Format "wikilink")
+for details on the format of the response messages from the radio
+
+| Hex Response | Message | Debug Output / Meaning         |
+|--------------|---------|--------------------------------|
+| 00000000     |         | OK subscription registered     |
+| 5000002C     |         | Incorrect number of parameters |
+
+Responses
+
+Response Example:
+
+    R21|0|
+
+## Notes
+
+<references/>
+
+========================================================================
+[10] Boolean-State.md
+========================================================================
+Many SmartSDR API command parameters that require a boolean state to
+indicate an on or off value will accept a number of different values.
+The table below lists common values that can be used for the on or off
+values.
+
+| Value | Meaning |
+|-------|:--------|
+| 0     | off     |
+| \-    | off     |
+| F     | off     |
+| off   | off     |
+| 1     | on      |
+| \+    | on      |
+| T     | on      |
+| on    | on      |
+
+========================================================================
+[11] SmartSDR-Status-Responses.md
+========================================================================
+## Slice Receiver Status
+
+Slice receiver responses always start with the standard status header
+and are followed by the word 'slice' and the slice number that
+corresponds to the update. Each status line will only contain updates
+for a single slice. Here is the format for a slice update:
+
+    S<client>|slice <slice_rx> <field_value_pair> ...
+
+    <client>            = the hexadecimal client that precipitated the change to the value
+    <slice_rx>          = the slice receiver being updated
+    <field_value_pair>  = a field name and its new value, may occur one or more times
+
+Not all field-value-pairs are required in an update and in many
+situations only one field will be provided. For example, when tuning
+only the frequency is likely to be emitted. The field-value-pairs are
+available in this list:
+
+| Field Name   | Value Type   | Example              | Field Description                                                                                                                     |
+|--------------|--------------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| in_use       | 0 or 1       | in_use=0             | A boolean (0=False) indicating if the slice receiver is in use. If no clients are using the slice, this value will be false           |
+| RF_frequency | double       | RF_frequency=14.2012 | The current carrier frequency of the slice receiver in MHz                                                                            |
+| antenna_id   | unsigned int | antenna_id=1         | The current antenna in use by the slice receiver. A list of antenna ports vs. the numbers provided here is available \*\*\*here\*\*\* |
+| mode         | string       | mode=USB             | The demodulation [mode](#Supported_Modes "wikilink") for the slice receiver.                                                          |
+| wide         | 0 or 1       | wide=1               | Indicates if the underlying SCU is in wideband mode (no preselectors, wide=1) or narrowband mode (preselectors on, wide=0)            |
+| filter_lo    | double       | filter_lo=0.0003     | Lower frequency of final filter in the demodulator in MHz (in this example 300Hz)                                                     |
+| filter_hi    | double       | filter_hi=0.0024     | Upper frequency of final filter in the demodulator in MHz (in this example 2.4kHz)                                                    |
+|              |              |                      |                                                                                                                                       |
+
+Example slice status response:
+
+    SA4E3D1C9|slice 2 in_use=1 RF_frequency=1.44 antenna_id=5 mode=USB wide=1 filter_lo=0.0003 filter_hi=0.0024
+
+#### Supported Modes
+
+| Mode Name | Mode Description     |
+|-----------|----------------------|
+| USB       | Upper Sideband       |
+| LSB       | Lower Sideband       |
+| CW        | CW (sideband)        |
+| AM        | Amplitude Modulation |
+|           |                      |
+
+## Panadapter Status
+
+Panadapter responses always start with the standard status header and
+are followed by the words 'display pan' and the output stream that
+corresponds to the panadapter. This stream identification number is
+provided on creation of the panadapter and is the unique handle for
+manipulating and receiving status on the panadapter. Each status line
+will only contain updates for a single panadapter. Here is the format
+for a panadapter update:
+
+    S<client>|display pan <stream_id> <field_value_pair> ...
+
+    <client>            = the hexadecimal client that precipitated the change to the value
+    <stream_id>         = the 32-bit hexadecimal stream ID for the panadapter, such as 0x11223344
+    <field_value_pair>  = a field name and its new value, may occur one or more times
+
+Not all field-value-pairs are required in an update and in many
+situations only one field will be provided. The field-value-pairs are
+available in this list:
+
+| Field Name | Value Type   | Example         | Field Description                                                        |
+|------------|--------------|-----------------|--------------------------------------------------------------------------|
+| center     | double       | center=14.2051  | A double precision frequency that is the center of the panadapter in MHz |
+| bandwidth  | double       | bandwidth=0.200 | The bandwidth to be displayed in MHz                                     |
+| x-pixels   | unsigned int | x-pixels=500    | Width of the panadapter display in pixels                                |
+| y-pixels   | unsigned int | y-pixels=200    | Height of the panadapter display in pixels                               |
+| fps        | unsigned int | fps=20          | Frame rate in frames per second                                          |
+|            |              |                 |                                                                          |
+
+Example slice status response:
+
+    SA4E3D1C9|display pan 0x40000000 center=1.3 bandwidth=0.384 x_pixels=300 y_pixels=200 fps=20
+
+## Interlock / PTT Status
+
+The FLEX-6000 uses an interlock model that prevents the transmitter from
+keying unless interlock conditions are met. The status of the interlock
+and the transmitter are sent to the client to assist in displaying the
+status and helping the operator troubleshoot the interlock status. Here
+is the format for a interlock update:
+
+    S0|interlock state=<state> [reason=<reason>] [source=<source>] [timeout=<timeout_ms>]
+                [acc_txreq_enable=<T|F>] [rca_txreq_enable=<T|F>] [acc_txreq_polarity=<T|F>] [rca_txreq_polarity=<T|F>]
+
+    <state>         = the current interlock state. Always shown
+    <reason>        = if the radio is unable to transmit, a reason why it cannot.  Only shown when there is an interlock problem
+    <source>        = if the radio is transmitting, the source of the PTT.  Only shown when the radio is transmitting
+    <T|F>           = 'T' for TRUE or 'F' for FALSE when used with enables.  For TXREQ line polarity, 'T' indicates that it is OK to transmit when this line is +V and 'F' when 0 V.
+
+| Interlock State | Meaning                                                                                                              |
+|-----------------|:---------------------------------------------------------------------------------------------------------------------|
+| RECEIVE         | The radio is either receive only or no slice has been designated as the transmitter                                  |
+| READY           | The radio is ready to transmit                                                                                       |
+| NOT_READY       | The radio has an assigned transmitter, but cannot transmit because of an interlock problem                           |
+| PTT_REQUESTED   | PTT has been pressed and the radio has engaged the transmitter, but waiting on hardware interlocks before sending RF |
+| TRANSMITTING    | The radio transmitter is engaged                                                                                     |
+| TX_FAULT        | An interlock condition occurred during transmit and the transmitter has been shut off                                |
+| TIMEOUT         | The transmitter was running, but stopped because the timeout timer was exceeded                                      |
+| STUCK_INPUT     | An input is stuck in the "on" position and the transmitter has been disabled                                         |
+
+See the [Interlock State Transition
+Diagram](Interlock-State-Transition-Diagram "wikilink") for details on
+state transitions
+
+| PTT Source | Meaning                                                         |
+|------------|:----------------------------------------------------------------|
+| SW         | Software PTT such as a MOX button on a client or CAT            |
+| MIC        | The front-panel microphone connector (foster)                   |
+| ACC        | The PTT pin on the accessory connector on the rear of the radio |
+| RCA        | The PTT foot-switch connector on the read of the radio          |
+
+| Interlock Reasons | Meaning                                                                                                      |
+|-------------------|:-------------------------------------------------------------------------------------------------------------|
+| RCA_TXREQ         | The TXREQ line on the rear of the radio (RCA connector) is asserted. Check the polarity and enabled state    |
+| ACC_TXREQ         | The TXREQ line on the accessory connector (DB15 connector) is asserted. Check the polarity and enabled state |
+| BAD_MODE          | The transmit antenna, receive antenna and SCU combination is invalid for transmit                            |
+| TOO_FAR           | While using the PA, the transmitter was tuned outside of the current PA filter range                         |
+| PA_RANGE          | The PA cannot transmit on this frequency                                                                     |
+
+Example slice status response:
+
+    S0|interlock state=TRANSMITTING source=RCA
+
+========================================================================
+[12] Known-API-Responses.md
+========================================================================
+The SmartSDR API can produce a number of error codes that provide clues
+about why a particular command failed. This list contains the list of
+error, warning and information codes that exist at the time of last
+update of this page. Note that they are listed as a C header file and
+you will need to interpret the code values in order to arrive at the hex
+value for the message you may be receiving.
+
+    ///*! \file messages.h
+    // *  \brief CMessages
+    // *
+    // *    Copyright 2012-2015 FlexRadio Systems.  All Rights Reserved.
+    // *
+    // *  Unauthorized use, duplication or distribution of this software is
+    // *  strictly prohibited by law.
+    // *
+    // *    \author Stephen Hicks, N5AC
+    // *
+    // *  DATE:   04-SEP-2012
+    // *
+    // */
+
+    #ifndef SL_MESSAGES_H
+    #define SL_MESSAGES_H
+
+
+    #define SL_ERROR_BASE                   0x50000000
+    #define SL_INFO                         0x10000000
+    #define SL_WARNING                      0x31000000
+    #define SL_ERROR                        0xE2000000
+    #define SL_FATAL                        0xF3000000
+
+    #define SL_MYSQL                        0x00001000
+
+    #define SL_NO_FOUNDATION_RCVR           SL_ERROR_BASE + 0x001
+    extern const char*SL_R_NO_FOUNDATION_RCVR;
+    #define SL_LICENSE_NO_SLICE_AVAIL       SL_ERROR_BASE + 0x002
+    #define SL_ERROR_ALL_SLICES_IN_USE      SL_ERROR_BASE + 0x003
+    #define SL_ERROR_SLICE_PARAM            SL_ERROR_BASE + 0x004
+    extern const char* SL_R_ERROR_SLICE_PARAM;
+    #define SL_MALLOC_FAIL_SIGNAL_CHAIN     SL_ERROR_BASE + 0x005
+    #define SL_MALLOC_FAIL_DSP_PROCESS      SL_ERROR_BASE + 0x006
+    #define SL_NO_SCU_AVAILABLE             SL_ERROR_BASE + 0x007
+    #define SL_SCU_NOT_IN_USE               SL_ERROR_BASE + 0x008
+    #define SL_NO_FOUNDATION_RX_AVAILABLE   SL_ERROR_BASE + 0x009
+    #define SL_FOUNDATION_RX_NOT_IN_USE     SL_ERROR_BASE + 0x00A
+    #define SL_OUT_OF_MEMORY                SL_ERROR_BASE + 0x00B
+    #define SL_FREQUENCY_OUT_OF_RANGE       SL_ERROR_BASE + 0x00C
+    extern const char* SL_R_FREQUENCY_OUT_OF_RANGE;
+    #define SL_INVALID_SLICE_RECEIVER       SL_ERROR_BASE + 0x00D
+    extern const char* SL_R_INVALID_SLICE_RECEIVER;
+    #define SL_INVALID_FOUNDATION_RX        SL_ERROR_BASE + 0x00E
+    #define SL_INVALID_DSP_PROCESS          SL_ERROR_BASE + 0x00F
+    #define SL_INVALID_SIGNAL_CHAIN         SL_ERROR_BASE + 0x010
+    #define SL_FREQUENCY_TOO_HIGH           SL_ERROR_BASE + 0x011
+    #define SL_NYQUIST_MISMATCH             SL_ERROR_BASE + 0x012
+    #define SL_BAD_COMMAND                  SL_ERROR_BASE + 0x013
+    extern const char* SL_R_BAD_COMMAND;
+    #define SL_UNKNOWN_COMMAND              SL_ERROR_BASE + 0x015
+    extern const char* SL_R_UNKNOWN_COMMAND;
+    #define SL_MALFORMED_COMMAND            SL_ERROR_BASE + 0x016
+    extern const char* SL_R_MALFORMED_COMMAND;
+    #define SL_NO_SUB                       SL_ERROR_BASE + 0x017
+    extern const char* SL_R_NO_SUB;
+    #define SL_BAD_SCU_NUMBER               SL_ERROR_BASE + 0x018
+    extern const char* SL_R_BAD_SCU_NUMBER;
+    #define SL_UNKNOWN_PREAMP               SL_ERROR_BASE + 0x019
+    extern const char* SL_R_UNKNOWN_PREAMP;
+    #define SL_NULL_POINTER_IN_SIG_CHAIN    SL_ERROR_BASE + 0x01A
+    extern const char* SL_R_NULL_POINTER_IN_SIG_CHAIN;
+    #define SL_REF_COUNT_UNDERFLOW          SL_ERROR_BASE + 0x01B
+    extern const char* SL_R_REF_COUNT_UNDERFLOW;
+    #define SL_INVALID_MINIMIXER_RX         SL_ERROR_BASE + 0x01C
+    extern const char* SL_R_INVALID_MINIMIXER_RX;
+    #define SL_NO_MINIMIXER                 SL_ERROR_BASE + 0x01D
+    extern const char* SL_R_NO_MINIMIXER;
+    #define SL_SHARED_MINIMIXER             SL_ERROR_BASE + 0x01E
+    extern const char* SL_R_SHARED_MINIMIXER;
+    #define SL_NO_MINIMIXER_IN_RANGE        SL_ERROR_BASE + 0x01F
+    extern const char* SL_R_NO_MINIMIXER_IN_RANGE;
+    #define SL_MMX_LIMIT_REACHED            SL_ERROR_BASE + 0x020
+    #define SL_SECURITY_FAULT               SL_ERROR_BASE + 0x021
+    extern const char* SL_R_SECURITY_FAULT;
+    #define SL_RECAHED_MMX_LIMIT            SL_ERROR_BASE + 0x022
+    #define SL_FOUNDATION_MMX_LIMIT         SL_ERROR_BASE + 0x023
+    extern const char* SL_R_FOUNDATION_MMX_LIMIT;
+    #define SL_AUDIO_CLIENT_NOT_FOUND           SL_ERROR_BASE+0x024
+    extern const char* SL_R_AUDIO_CLIENT_NOT_FOUND;
+    #define SL_AUDIO_CLIENT_STREAM_ID_NOT_FOUND SL_ERROR_BASE+0x025
+    extern const char* SL_R_AUDIO_CLIENT_STREAM_ID_NOT_FOUND;
+    #define SL_AUDIO_CLIENT_GAIN_INVALID        SL_ERROR_BASE+0x026
+    extern const char* SL_R_AUDIO_CLIENT_GAIN_INVALID;
+    #define SL_AUDIO_CLIENT_PAN_INVALID     SL_ERROR_BASE+0x027
+    extern const char* SL_R_AUDIO_CLIENT_PAN_INVALID;
+    #define SL_SLICE_RECEIVER_NOT_IN_USE    SL_ERROR_BASE + 0x028
+    extern const char* SL_R_SLICE_RECEIVER_NOT_IN_USE;
+    #define SL_CLIENT_STREAM_ID_NOT_FOUND   SL_ERROR_BASE + 0x029
+    extern const char* SL_R_CLIENT_STREAM_ID_NOT_FOUND;
+    #define SL_UNKNOWN_ANT_PORT             SL_ERROR_BASE + 0x02A
+    extern const char* SL_R_UNKNOWN_ANT_PORT;
+    #define SL_INVALID_NUMERIC_VALUE        SL_ERROR_BASE + 0x02B
+    extern const char* SL_R_INVALID_NUMERIC_VALUE;
+    #define SL_INCORRECT_NUM_PARAMS         SL_ERROR_BASE + 0x02C
+    extern const char* SL_R_INCORRECT_NUM_PARAMS;
+    #define SL_BAD_FIELD                    SL_ERROR_BASE + 0x02D
+    extern const char* SL_R_BAD_FIELD;
+    #define SL_NO_SUBSCRIPTION              SL_ERROR_BASE + 0x02E
+    extern const char* SL_R_UNIMPLEMENTED_MODE;
+    #define SL_UNIMPLEMENTED_MODE           SL_ERROR_BASE + 0x02F
+    #define SL_SIGNAL_CHAIN_ERROR           SL_ERROR_BASE + 0x030
+    #define SL_RFGAIN_OUT_OF_RANGE          SL_ERROR_BASE + 0x031
+    extern const char* SL_R_RFGAIN_OUT_OF_RANGE;
+    #define SL_BAD_MODE                     SL_ERROR_BASE + 0x032
+    extern const char* SL_R_BAD_MODE;
+    #define SL_PARAM_OUT_OF_RANGE           SL_ERROR_BASE + 0x033
+    extern const char* SL_R_PARAM_OUT_OF_RANGE;
+    #define SL_BAD_METER                    SL_ERROR_BASE + 0x034
+    extern const char* SL_R_BAD_METER;
+    #define SL_LOW_LEVEL                    SL_ERROR_BASE + 0x035
+    extern const char* SL_R_LOW_LEVEL;
+    #define SL_INVALID_METER                SL_ERROR_BASE + 0x036
+    #define SL_TERMINATE                    SL_ERROR_BASE + 0x037
+    #define SL_NO_COMMAND                   SL_ERROR_BASE + 0x038
+    #define SL_FFT_FPS_OUT_OF_RANGE         SL_ERROR_BASE + 0x039
+    extern const char* SL_R_FFT_FPS_OUT_OF_RANGE;
+    #define SL_CLOSE_CLIENT                 SL_ERROR_BASE + 0x03A
+    #define SL_TXSC_INVALID_TONE_INDEX      SL_ERROR_BASE + 0x03B
+    #define SL_INVALID_TX_ANTENNA           SL_ERROR_BASE + 0x03C
+    extern const char* SL_R_INVALID_TX_ANTENNA;
+    #define SL_TX_NOT_SUPPORTED             SL_ERROR_BASE + 0x03D
+    extern const char* SL_R_TX_NOT_SUPPORTED;
+    #define SL_BAD_ADC_SOURCE               SL_ERROR_BASE + 0x03E
+    #define SL_BAD_CAL_TABLE_TYPE           SL_ERROR_BASE + 0x03F
+    #define SL_BAD_CAL_TABLE_POINTS         SL_ERROR_BASE + 0x040
+    #define SL_CAL_TABLE_READ_FAIL          SL_ERROR_BASE + 0x041
+    extern const char* SL_R_TRANSMIT_NOT_READY;
+    #define SL_NOT_READY_TO_TRANSMIT        SL_ERROR_BASE + 0x042
+    extern const char* SL_R_NO_TRANSMITTER;
+    #define SL_NO_TRANSMITTER               SL_ERROR_BASE + 0x043
+    #define SL_INVALID_TUNE_POWER           SL_ERROR_BASE + 0x044
+    #define SL_UNCALIBRATED_POWER           SL_ERROR_BASE + 0x045
+    #define SL_BITE2_FAULT                  SL_ERROR_BASE + 0x046
+    #define SL_CALIBRATION_WRITE_FAIL       SL_ERROR_BASE + 0x047
+    #define SL_INVALID_RF_POWER             SL_ERROR_BASE + 0x048
+    #define SL_READ_EMPTY_CAL_TABLE         SL_ERROR_BASE + 0x049
+    #define SL_INVALID_ADL5201_DEVICE       SL_ERROR_BASE + 0x04A
+    #define SL_INVALID_MIC_LEVEL            SL_ERROR_BASE + 0x04B
+    #define SL_INVALID_ALSA_CONTROL_NAME    SL_ERROR_BASE + 0x04C
+    #define SL_INVALID_OSC_INDEX            SL_ERROR_BASE + 0x04D
+    #define SL_INVALID_BOOLEAN              SL_ERROR_BASE + 0x04E
+    #define SL_INVALID_BIAS_CAL_TARGET      SL_ERROR_BASE + 0x04F
+    #define SL_INVALID_PA_CLASS             SL_ERROR_BASE + 0x050
+    #define SL_MCL_INIT_FAILURE             SL_ERROR_BASE + 0x051
+    #define SL_UNEXPECTED_FILE_SIZE         SL_ERROR_BASE + 0x052
+    #define SL_FILE_SERVER_BUSY             SL_ERROR_BASE + 0x053
+    #define SL_INVALID_TX_EQ_STAGE          SL_ERROR_BASE + 0x054
+    #define SL_INVALID_RX_EQ_STAGE          SL_ERROR_BASE + 0x055
+    #define SL_INVALID_FILTER               SL_ERROR_BASE + 0x056
+    #define SL_STORAGE_NOT_INITIALIZED      SL_ERROR_BASE + 0x057
+    extern const char* SL_R_INVALID_FILTER;
+    #define SL_PTT_TIMEOUT                  SL_ERROR_BASE + 0x058
+    extern const char* SL_PTT_TIMEOUT_FMT;
+    #define SL_INVALID_STREAM_ID            SL_ERROR_BASE + 0x059
+    extern const char* SL_R_INVALID_STREAM_ID;
+    #define SL_NO_CHANGE_ANT_IN_TX          SL_ERROR_BASE + 0x060
+    extern const char* SL_R_NO_CHANGE_ANT_IN_TX;
+    #define SL_INVALID_DSP_ALG_FOR_MODE     SL_ERROR_BASE + 0x061
+    #define SL_INVALID_CLIENT               SL_ERROR_BASE + 0x062
+    #define SL_INVALID_FREQUENCY            SL_ERROR_BASE + 0x063
+    #define SL_NO_IP_OR_PORT                SL_ERROR_BASE + 0x064
+    #define SL_INVALID_DAX_CHANNEL          SL_ERROR_BASE + 0x065
+    extern const char* SL_R_NO_IP_OR_PORT;
+    #define SL_NO_DAX_TX                    SL_ERROR_BASE + 0x066
+    extern const char* SL_R_NO_DAX_TX;
+    #define SL_INVALID_DAX_IQ_CHANNEL       SL_ERROR_BASE + 0x066
+    extern const char* SL_R_INVALID_DAX_IQ_CHANNEL;
+    #define SL_INVALID_DAX_IQ_RATE          SL_ERROR_BASE + 0x067
+    extern const char* SL_R_INVALID_DAX_IQ_RATE;
+    #define SL_SLICE_IS_LOCKED              SL_ERROR_BASE + 0x068
+    extern const char* SL_R_SLICE_IS_LOCKED;
+    #define SL_FREQUENCY_TOO_LOW            SL_ERROR_BASE + 0x069
+    #define SL_FULL_DUPLEX_NOT_AVAILABLE     SL_ERROR_BASE + 0x06A
+    extern const char* SL_R_FULL_DUPLEX_NOT_AVAILABLE;
+    #define SL_DAXIQ_DUPLEX_NOT_AVAILABLE   SL_ERROR_BASE + 0x06B
+    extern const char* SL_R_DAXIQ_DUPLEX_NOT_AVAILABLE;
+    #define SL_INVALID_BAND_FOR_PERSISTENCE SL_ERROR_BASE + 0x06C
+    #define SL_LOOP_NOT_VALID_FOR_MODEL     SL_ERROR_BASE + 0x06D
+    extern const char* SL_R_LOOP_NOT_VALID_FOR_MODEL;
+    extern const char* SL_R_OUT_OF_MEMORY;
+    #define SLM_INVALID_CLIENT_NOT_PAN      SL_ERROR_BASE + 0x06E
+    #define SL_NO_VALID_CLIENT              SL_ERROR_BASE + 0x06F
+    extern const char* SL_R_NO_VALID_CLIENT;
+    #define SL_EXCESS_TX_COMPRESSION_FAIL   SL_ERROR_BASE + 0x070
+    #define SL_NO_RECORDED_DATA             SL_ERROR_BASE + 0x071
+    #define SL_BAD_ECO_TABLE_TYPE           SL_ERROR_BASE + 0x072
+    #define SL_EMPTY_ECO_TABLE              SL_ERROR_BASE + 0x073
+    #define SL_FULL_ECO_TABLE               SL_ERROR_BASE + 0x074
+    #define SL_BAD_ECO_NUMBER               SL_ERROR_BASE + 0x075
+    extern const char* SL_R_BAD_ECO_NUMBER;
+    #define SL_ECO_NOT_FOUND                SL_ERROR_BASE + 0x076
+    extern const char* SL_R_ECO_NOT_FOUND;
+    #define SL_NO_HEADLESS_SLCS             SL_ERROR_BASE + 0x077
+    #define SL_INVALID_PROFILE              SL_ERROR_BASE + 0x078
+    extern const char* SL_R_INVALID_PROFILE;
+    #define SL_INVALID_CMD_WHILE_XMIT       SL_ERROR_BASE + 0x079
+    #define SL_CWX_BAD_MACRO                SL_ERROR_BASE + 0x07A
+    extern const char* SL_R_CWX_BAD_MACRO;
+    #define SL_CWX_BUFFER_OVERFLOW          SL_ERROR_BASE + 0x07B
+    extern const char* SL_R_CWX_BUFFER_OVERFLOW;
+    #define SL_XVTR_NOT_FOUND               SL_ERROR_BASE + 0x7C
+    #define SL_XVTR_CREATE_FAIL             SL_ERROR_BASE + 0x7D
+    #define SL_XVTR_DELETED                 SL_ERROR_BASE + 0x7E
+    #define SL_DIVERSITY_ANT_MISMATCH       SL_ERROR_BASE + 0x07F
+    extern const char* SL_R_DIVERISTY_ANT_MISMATCH;
+    #define SL_INVALID_DATABASE_SCHEMA_VERSION  SL_ERROR_BASE + 0x080
+    extern const char* SL_R_INVALID_WAVEFORM;
+    #define SL_INVALID_WAVEFORM             SL_ERROR_BASE + 0x081
+    #define SL_RESPONSE_WITHOUT_COMMAND     SL_ERROR_BASE + 0x082
+    #define SL_UNABLE_TO_SEND_RESPONSE      SL_ERROR_BASE + 0x083
+    #define SL_INVALID_MEMORY_INDEX      SL_ERROR_BASE + 0x084
+    extern const char* SL_R_INVALID_MEMORY_INDEX;
+    #define SL_INVALID_CMD_FOR_MODE     SL_ERROR_BASE + 0x085
+    extern const char* SL_R_INVALID_CMD_FOR_MODE;
+    #define SL_LOCK_NOT_FOUND               SL_ERROR_BASE + 0x086
+    #define SL_KEEPALIVE_FAIL               SL_ERROR_BASE + 0x087
+    #define SL_REMOVE_CLIENT                SL_ERROR_BASE + 0x088
+    #define SL_CLIENT_CLOSED_SOCKET         SL_ERROR_BASE + 0x089
+    #define SL_INVALID_ATU_PROFILE_ID        SL_ERROR_BASE + 0x08A
+    #define SL_INVALID_ATU_PROFILE_NAME  SL_ERROR_BASE + 0x08B
+    #define SL_ATU_PROFILE_NAME_ALREADY_EXISTS   SL_ERROR_BASE + 0x08C
+    #define SL_INVALID_EINTERLOCK           SL_ERROR_BASE + 0x08D
+    extern const char* SL_R_INVALID_EINTERLOCK;
+    #define SL_COULD_NOT_CREATE_AUDIO_CLIENT    SL_ERROR_BASE + 0x08E
+    extern const char * SL_R_COULD_NOT_CREATE_AUDIO_CLIENT;
+    #define SL_NULL_POINTER                     SL_ERROR_BASE + 0x08F
+    extern const char* SL_R_NULL_POINTER;
+    #define SL_CWX_INVALID_INDEX            SL_ERROR_BASE + 0x090
+    extern const char * SL_R_CWX_INVALID_INDEX;
+    #define SL_CWX_INSERT_FAILED            SL_ERROR_BASE + 0x091
+    extern const char * SL_R_CWX_INSERT_FAILED;
+    #define SL_CLIENT_DISCONNECTED_BY_ANOTHER_CLIENT SL_ERROR_BASE + 0x092
+    extern const char * SL_R_CLIENT_DISCONNECTED_BY_ANOTHER_CLIENT;
+    #define SL_BAD_NTP_RATE                 SL_ERROR_BASE + 0x093
+    #define SL_INVALID_IPV4_IP              SL_ERROR_BASE + 0x094
+    extern const char * SL_R_INVALID_IPV4_IP;
+    #define SL_CLIENT_DISCONNECTED_BY_ABORT SL_ERROR_BASE + 0x95
+    #define SL_INVALID_PTT_CMD_IN_CW_MESSAGE    SL_ERROR_BASE + 0x96
+    extern const char * SL_R_INVALID_PTT_CMD_IN_CW_MESSAGE;
+    #define SL_USB_SERIAL_NUMBER_NOT_FOUND  SL_ERROR_BASE + 0x097
+    extern const char * SL_R_USB_SERIAL_NUMBER_NOT_FOUND;
+    #define SL_INVALID_CABLE_TYPE           SL_ERROR_BASE + 0x098
+    extern const char * SL_R_INVALID_CABLE_TYPE;
+    #define SL_INVALID_FREQUENCY_RANGE      SL_ERROR_BASE + 0x099
+    extern const char * SL_R_INVALID_FREQUENCY_RANGE;
+    #define SL_EXCEEDS_MAX_CHAR_LIMIT       SL_ERROR_BASE + 0x09A
+    extern const char * SL_R_EXCEEDS_MAX_CHAR_LIMIT;
+    #define SL_INVALID_SOURCE_TYPE          SL_ERROR_BASE + 0x09B
+    extern const char * SL_R_INVALID_SOURCE_TYPE;
+    #define SL_INVALID_OUTPUT_TYPE          SL_ERROR_BASE + 0x09C
+    extern const char * SL_R_INVALID_OUTPUT_TYPE;
+    #define SL_INVALID_BCD_BIT_VALUE        SL_ERROR_BASE + 0x09D
+    extern const char * SL_R_INVALID_BCD_BIT_VALUE;
+    extern const char * SL_R_V49PACKET_LENGTH;
+    #define SL_INVALID_BIT_CABLE            SL_ERROR_BASE + 0x09E
+    extern const char * SL_R_INVALID_BIT_CABLE;
+    #define SL_USB_CABLE_DELETE_FAILED      SL_ERROR_BASE + 0x09F
+    extern const char * SL_R_USB_CABLE_DELETE_FAILED;
+    #define SL_USB_CABLE_CANT_CHANGE_INVALID_TYPE   SL_ERROR_BASE + 0xA0
+    extern const char * SL_R_USB_CABLE_CANT_CHANGE_INVALID_TYPE;
+    #define SL_CWX_UNTERMINATED_INLINE_CMD      SL_ERROR_BASE + 0xA1
+    extern const char * SL_R_CWX_UNTERMINATED_INLINE_CMD;
+    #define SL_CWX_INVALID_INLINE_CMD           SL_ERROR_BASE + 0xA2
+    extern const char * SL_R_CWX_INVALID_INLINE_CMD;
+    #define SL_INVALID_SUBSCRIPTION         SL_ERROR_BASE + 0xA3
+    extern const char * SL_R_INVALID_SUBSCRIPTION;
+
+
+    #define SL_MYSQL_CONNECTION_FAIL        SL_ERROR_BASE + SL_MYSQL + 0x001
+    #define SL_MYSQL_LOGIN_FAIL             SL_ERROR_BASE + SL_MYSQL + 0x002
+    #define SL_MYSQL_NOT_CONNECTED          SL_ERROR_BASE + SL_MYSQL + 0x003
+    #define SL_MYSQL_PCB_ALREADY_REG        SL_ERROR_BASE + SL_MYSQL + 0x004
+    #define SL_MYSQL_PCB_NOT_REGISTERED     SL_ERROR_BASE + SL_MYSQL + 0x005
+    #define SL_MYSQL_PCB_SN_BLANK           SL_ERROR_BASE + SL_MYSQL + 0x006
+    #define SL_MYSQL_PCB_SN_TOO_LONG        SL_ERROR_BASE + SL_MYSQL + 0x007
+    #define SL_MYSQL_MNEMONIC_BLANK         SL_ERROR_BASE + SL_MYSQL + 0x008
+    #define SL_MYSQL_MNEMONIC_TOO_LONG      SL_ERROR_BASE + SL_MYSQL + 0x009
+    #define SL_MYSQL_PCB_REV_BLANK          SL_ERROR_BASE + SL_MYSQL + 0x00A
+    #define SL_MYSQL_PCB_REV_TOO_LONG       SL_ERROR_BASE + SL_MYSQL + 0x00B
+    #define SL_MYSQL_PCB_MODEL_BLANK        SL_ERROR_BASE + SL_MYSQL + 0x00C
+    #define SL_MYSQL_PCB_MODEL_TOO_LONG     SL_ERROR_BASE + SL_MYSQL + 0x00D
+    #define SL_MYSQL_BAD_TESTID             SL_ERROR_BASE + SL_MYSQL + 0x00E
+    #define SL_MYSQL_PART_DESIG_BLANK       SL_ERROR_BASE + SL_MYSQL + 0x00F
+    #define SL_MYSQL_SW_NAME_BLANK          SL_ERROR_BASE + SL_MYSQL + 0x010
+    #define SL_MYSQL_SW_VERSION_BLANK       SL_ERROR_BASE + SL_MYSQL + 0x011
+    #define SL_MYSQL_BOM_REV_BLANK          SL_ERROR_BASE + SL_MYSQL + 0x012
+    #define SL_MYSQL_BOM_REV_TOO_LONG       SL_ERROR_BASE + SL_MYSQL + 0x013
+    #define SL_MYSQL_BOM_BLANK              SL_ERROR_BASE + SL_MYSQL + 0x014
+    #define SL_MYSQL_BOM_TOO_LONG           SL_ERROR_BASE + SL_MYSQL + 0x015
+    #define SL_MYSQL_MODEL_BLANK            SL_ERROR_BASE + SL_MYSQL + 0x016
+    #define SL_MYSQL_MODEL_TOO_LONG         SL_ERROR_BASE + SL_MYSQL + 0x017
+
+    // This response is sent when SmartSDR does not generate a result itself, forcing a default
+    // response.  This generally indicates that the command code has failed to close the response
+    // loop on all command paths
+    #define SL_RESP_UNKNOWN                 SL_ERROR_BASE + 0x00001000
+    extern const char* SL_R_RESP_UNKNOWN;
+
+    #define SLM_I_CLIENT_CONNECTED          SL_INFO + 0x0001
+    #define SLM_I_UNKNOWN_CLIENT            SL_INFO + 0x0002
+    #define SL_I_CWX_NOTHING_TO_ERASE       SL_INFO + 0x0003
+    extern const char* SLM_I_CWX_NOTHING_TO_ERASE;
+
+
+
+    #define SLM_F_MAX_CLIENTS               SL_FATAL + 0x0001
+    #define SLM_F_FPGA_TEMP_ERR             SL_FATAL + 0x0002
+    #define SLM_F_REV_POWER_ERR             SL_FATAL + 0x0003
+    // this is a bogus error displayed on a stolen radio
+    #define SLM_F_OVERTEMP                  SL_FATAL + 0x0004
+
+    #define SLM_W_SERVICE                   SL_WARNING + 0x0001
+    #define SLM_W_NO_TRANSMITTER            SL_WARNING + 0x0002
+    #define SLM_W_INTERLOCK                 SL_WARNING + 0x0003
+    #define SL_W_NOTHING_TO_SEND            SL_WARNING + 0x0004
+    #define SLM_W_FPGA_TEMP_WARN            SL_WARNING + 0x0005
+    #define SL_W_CWX_NO_MORE                SL_WARNING + 0x0007
+    #define SLM_W_DEFAULT_PROFILE           SL_WARNING + 0x0008
+    #define SL_W_ATU_MAX_POWER_INTERFERENCE SL_WARNING + 0x0009
+

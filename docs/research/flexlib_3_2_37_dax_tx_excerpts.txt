@@ -1,0 +1,116 @@
+FlexLib API v3.2.37 — how the manufacturer's own library sends DAX transmit audio
+==================================================================================
+
+Source: FlexRadio Systems' FlexLib API, version 3.2.37, files
+  FlexLib/DAXTXAudioStream.cs   ("Copyright 2012-2017 FlexRadio Systems. All Rights
+                                  Reserved." — file header; author Eric Wachsmann, KE5DTO)
+  FlexLib/Radio.cs
+  FlexLib/Slice.cs
+  Vita/VitaFlex.cs
+  Vita/VitaCommon.cs
+  Vita/VitaIFDataPacket.cs
+  Vita/VitaSocket.cs
+Read 2026-08-15 from a versioned copy of the FlexLib distribution kept in the
+public GitHub repository KevinSShaffer/JJFlexRadio, path FlexLib_API_v3.2.37/
+(raw.githubusercontent.com/KevinSShaffer/JJFlexRadio/master/FlexLib_API_v3.2.37/…).
+FlexRadio distributes FlexLib to developers from community.flexradio.com under its
+own licence; the copy is cited as the manufacturer's reference implementation, and
+this file quotes only the constants and the order of operations — facts about the
+wire protocol — not the code. Line numbers are those of the 3.2.37 files.
+
+Why FlexLib and not the wiki: the SmartSDR TCP/IP API wiki (banked as
+flex_smartsdr_tcpip_api_voice.txt) documents every *command* below but no VITA-49
+layout for packets a client sends *to* the radio. FlexLib is the manufacturer's
+own client and is the only primary source for that layout.
+
+------------------------------------------------------------------------
+1. Setup order (Radio.cs)
+------------------------------------------------------------------------
+Radio.cs 1755–1773  after connecting, FlexLib subscribes — among others —
+                    "sub tx all", "sub slice all", "sub audio_stream all",
+                    "sub cwx all", "sub dax all".
+Radio.cs 1787       `SendReplyCommand(…, "client udpport " + UDPPort)` — the local
+                    UDP port is registered right after connect ("if we're local").
+Radio.cs 13562–13580 StartUDP(): on a LAN, `new VitaSocket(4991, callback, IP, 4991)`
+                    — the socket tries to bind local port 4991 (and counts upward
+                    if it is taken: VitaSocket.cs 46–66), and its remote endpoint is
+                    the radio's IP, **port 4991** (VitaSocket.cs 86–92, SendUDP 75–84).
+Radio.cs 4446–4449  `RequestDAXTXAudioStream()` sends `"stream create type=dax_tx"`.
+Radio.cs 2836–2837  a `stream <id> type=dax_tx …` status line is routed to
+                    ParseDAXTXStatus (3025–3038), which creates the
+                    DAXTXAudioStream with that id and passes the key/value pairs
+                    on: DAXTXAudioStream.StatusUpdate (232–297) reads
+                    `client_handle=<h>` and `tx=<0|1>`.
+Radio.cs 8421–8434  `Mox` setter sends `"xmit " + 0|1`.
+Radio.cs 8926–8935  `DAXOn` setter sends `"transmit set dax=" + 0|1`; the
+                    `transmit` status key `dax` (9352–9364) reads it back.
+Slice.cs 345, 1191  `slice set <n> dax=<ch>` and `slice set <n> tx=<0|1>`; the slice
+                    status keys `dax` (2014–2028) and `tx` (2766–2778) read them back.
+
+------------------------------------------------------------------------
+2. What the library sends, and only when told it is the TX client
+------------------------------------------------------------------------
+DAXTXAudioStream.cs 27   `private const int TX_SAMPLES_PER_PACKET = 128;
+                          // Samples can be mono-int or stereo-float`
+DAXTXAudioStream.cs 129  `if (!_transmit) return;` — "skip this if we are not the
+                          DAX TX Client". `_transmit` is set ONLY from the radio's
+                          own `tx=1` in the stream status (232–297); the setter that
+                          used to send `stream set <id> tx=…` is commented out with
+                          "we no longer need to send this state back down to the
+                          radio as it is tracked from the radio" (63–76).
+DAXTXAudioStream.cs 134–142
+                          header.pkt_type = IFDataWithStream (VitaCommon.cs: value 1)
+                          header.c        = true   (class ID present)
+                          header.t        = false  (no trailer)
+                          header.tsi      = Other  (VitaCommon.cs: value 3)
+                          header.tsf      = SampleCount (VitaCommon.cs: value 1)
+                          stream_id       = the id the radio gave the dax_tx stream
+                          class_id.OUI    = 0x001C2D
+                          class_id.InformationClassCode = 0x534C
+DAXTXAudioStream.cs 147–151
+                          class_id.PacketClassCode = 0x0123 for the reduced-bandwidth
+                          form (mono int16), 0x03E3 for the normal form
+                          (VitaFlex.cs: SL_VITA_IF_NARROW_REDUCED_BW_CLASS = 0x0123,
+                          SL_VITA_IF_NARROW_CLASS = 0x03E3, FLEX_OUI = 0x1C2D).
+DAXTXAudioStream.cs 155–157
+                          the caller must hand in exactly 128 * 2 floats: "Expecting
+                          128 samples of left/right float pairs" — i.e. 128 frames of
+                          interleaved stereo float per packet.
+DAXTXAudioStream.cs 201–209
+                          normal form: payload = 256 floats;
+                          `header.packet_size = num_samples_to_send + 7
+                          // 7*4=28 bytes of Vita overhead` — 263 32-bit words.
+DAXTXAudioStream.cs 218  `_radio.VitaSock.SendUDP(_txPacket.ToBytes(…))`
+DAXTXAudioStream.cs 227  `packet_count = (packet_count + 1) % 16` after every packet.
+DAXTXAudioStream.cs 121  Close(): `"stream remove 0x" + id.ToString("X")`.
+
+------------------------------------------------------------------------
+3. Byte layout (VitaIFDataPacket.cs ToBytes, 209–300)
+------------------------------------------------------------------------
+Everything is big-endian ("network order"); the header is four bytes:
+  byte 0 = pkt_type << 4 | c << 3 | t << 2
+  byte 1 = tsi << 6 | tsf << 4 | packet_count
+  bytes 2–3 = packet_size (16-bit, in 32-bit words, whole packet)
+then, in order:
+  stream_id            4 bytes
+  class_id.OUI         4 bytes (24-bit OUI in the low bytes)
+  InformationClassCode 2 bytes
+  PacketClassCode      2 bytes
+  timestamp_int        4 bytes (present because tsi != None)
+  timestamp_frac       8 bytes (present because tsf != None)
+  payload              256 × float32, each byte-swapped to big-endian
+Word count: 1 + 1 + 2 + 1 + 2 + 256 = 263 = packet_size.  Bytes: 1052.
+FlexLib leaves timestamp_int and timestamp_frac at their zero defaults for TX
+audio; DAXTXAudioStream never assigns them.
+
+------------------------------------------------------------------------
+4. What this file does NOT establish
+------------------------------------------------------------------------
+- The sample rate. No FlexLib file names it for DAX audio; it is taken from a
+  FlexRadio staff answer instead — see flex_dax_audio_format_staff_answer.txt.
+- Which command makes *this* client the transmit source. FlexLib only reacts to
+  the radio's `tx=1`; the DAX application that issues the claim is closed. The
+  wiki's `dax audio set <ch> tx=1` page says the sender of that command becomes
+  the source; two independent working clients (nDAX, FT8CN — hints, not
+  authority) issue exactly that before `stream create type=dax_tx`. Recorded as
+  an OPEN QUESTION in voice_transports.md.
