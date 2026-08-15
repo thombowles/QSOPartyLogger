@@ -62,10 +62,21 @@ TSF=SampleCount, OUI `0x001C2D`, info class `0x534C`, packet class `0x03E3`,
 128 frames of stereo float32 (mono duplicated into L and R), big-endian, packet
 size 263 words, packet count mod 16, timestamps zero.
 
+## Bench, 2026-08-15
+
+The Flex path was tried on a FLEX-6000-series radio the day it was written.
+Two attempts keyed the radio and put silence on the air (transcripts in the
+session notes); the third — with the `stream set 0x<id> tx=1` claim sent
+unconditionally once the stream id is known — **modulated and was heard in the
+monitor**. That answers questions 1–4 below in the affirmative: a non-GUI
+client keys with `xmit`, UDP 4991 is the port, the transmit slice's own DAX
+channel is the one to name, and the claim is the command that matters. Only 5
+and 6 remain open. The Elecraft path has not been on a bench.
+
 ## OPEN QUESTIONS
 
-Verified from the sources above; unverified on a bench. Named so the first
-session with a radio on the desk knows what to look at.
+Named so the first session with the relevant radio on the desk knows what to
+look at. 1–4 are kept for the record of how the answer was reached.
 
 1. **Which command makes this client the DAX transmit source.** *Answered on
    the bench 2026-08-15, in the negative form:* with `dax audio set <ch> tx=1`
@@ -87,18 +98,19 @@ session with a radio on the desk knows what to look at.
    half: **if the DAX application's own TX channel is enabled, the radio keeps
    that stream and drops ours** — the README says to turn it off. `dax audio
    set … tx=1` is kept as well (nDAX and M0LTE.Flex send it and work).
-2. **Whether a non-GUI client may key.** SmartSDR v3 multiFLEX binds
-   transmit to a GUI client's station; the wiki says `client bind` "performs
-   no function in the radio" as of v3.0. The existing driver's `cwx send`
-   already transmits from an unbound non-GUI client, which is the evidence
-   `xmit 1` will too.
-3. **Port 4991 for a LAN client's transmit packets.** FlexLib sends to
-   `IP:4991`; FT8CN sends to 4993. FlexLib is the manufacturer's; the driver
-   uses 4991.
-4. **The DAX channel.** The design uses the TX slice's own DAX channel when it
-   has one and channel 1 otherwise, associating it with the slice only in the
-   second case. Whether any association is required for TX at all is unknown;
-   FT8CN passes `slice=` every time.
+2. **Whether a non-GUI client may key.** *Answered on the bench: yes.*
+   SmartSDR v3 multiFLEX binds transmit to a GUI client's station; the wiki
+   says `client bind` "performs no function in the radio" as of v3.0. The
+   existing driver's `cwx send` already transmitted from an unbound non-GUI
+   client, and `xmit 1` keyed the radio every time.
+3. **Port 4991 for a LAN client's transmit packets.** *Answered on the
+   bench: yes.* FlexLib sends to `IP:4991`; FT8CN sends to 4993. FlexLib is
+   the manufacturer's; the driver uses 4991, and the radio modulated.
+4. **The DAX channel.** *Answered on the bench for the common case:* the
+   transmit slice had DAX channel 1 already, the driver sent `dax audio set 1
+   tx=1` with no `slice=`, and the radio modulated. The other case — a
+   transmit slice with no channel, where the driver assigns channel 1 to it —
+   has not been tried.
 5. **PTT lead on the K3.** 120 ms between `TX;` and the first sample is a
    default, adjustable in the tab; an amplifier's sequencer may want more.
 6. **KX3/KX2 audio input.** Their manuals were not read; the README points at

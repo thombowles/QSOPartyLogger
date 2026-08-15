@@ -533,11 +533,13 @@ Then a `merge:` commit onto master, as the previous features did.
 
 ### Known gaps, stated
 
-- **No hardware verification.** The bytes, the sequence, the timing and the
-  flow are tested; whether the Flex accepts a non-GUI client's `dax audio set
-  … tx=1`, whether 4991 is the port it listens on for a LAN client, and whether
-  the K3's `TX;` lead of 120 ms is enough for a given amplifier are bench
-  questions. Each is named in the research file's OPEN QUESTIONS.
+- **Hardware verification.** The Flex path was verified on the air on
+  2026-08-15 — after two silent attempts that taught it the one thing the
+  sources had not stated plainly: the `dax_tx` stream must *call* `stream set
+  0x<id> tx=1` to be the one the radio modulates, whatever its status line
+  says. The Elecraft path is tested to the byte over a mock transport but has
+  not been on a bench; whether a 120 ms `TX;` lead suits a given amplifier is
+  the open question there. See the research file's "Bench" and OPEN QUESTIONS.
 - **PTT over a serial control line is not offered.** `KeyerLineConfig` already
   models a PTT line for CW; wiring voice to it is a later, separate change if
   the radio command proves too slow for someone's station.
