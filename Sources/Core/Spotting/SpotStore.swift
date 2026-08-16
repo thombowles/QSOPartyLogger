@@ -111,4 +111,37 @@ final class SpotStore {
             return workable.last { $0.freqKHz < afterKHz - tolerance } ?? workable.last
         }
     }
+
+    /// The spot the VFO is sitting on: the nearest within `withinHz`, or nil.
+    /// This is N1MM's call frame — "if a station on the Bandmap is within
+    /// the tuning tolerance, its call will be placed in the Entry window's
+    /// call-frame" (Entry window, fetched 2026-08-15).
+    ///
+    /// Worked stations are included — N1MM shows a dupe in grey so "You can
+    /// tune by them more quickly" — but lose a tie to an unworked one. A
+    /// superseded call is skipped outright, as `next` skips it. The last
+    /// tie-break is the call, so two polls at one frequency agree.
+    nonisolated static func nearest(
+        in spots: [Spot],
+        toKHz vfoKHz: Double,
+        withinHz toleranceHz: Int,
+        workedCalls: Set<String> = [],
+        workedCallCounties: Set<String> = []
+    ) -> Spot? {
+        // 0.1 Hz of slack: 14040.3 − 14040.0 is 0.30000000000068 in binary.
+        let toleranceKHz = Double(toleranceHz) / 1000 + 0.0001
+        func distance(_ spot: Spot) -> Double { abs(spot.freqKHz - vfoKHz) }
+        func worked(_ spot: Spot) -> Bool {
+            SpotFilter.isWorked(spot, workedCalls: workedCalls, workedCallCounties: workedCallCounties)
+        }
+        return spots
+            .filter { !$0.isSuperseded && distance($0) <= toleranceKHz }
+            .min { a, b in
+                let da = distance(a), db = distance(b)
+                if abs(da - db) > 0.0001 { return da < db }
+                let aWorked = worked(a), bWorked = worked(b)
+                if aWorked != bWorked { return !aWorked }
+                return a.call < b.call
+            }
+    }
 }
