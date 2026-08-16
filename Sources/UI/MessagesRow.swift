@@ -44,7 +44,9 @@ struct MessagesRow: View {
             }
             .pickerStyle(.segmented)
             .fixedSize()
-            .help("Run = calling CQ; S&P = search and pounce. Each has its own F1–F8 set. Toggle Run / Search & Pounce (⌘R)")
+            .help("Run = calling CQ; S&P = search and pounce. Each has its own F1–F8 set. "
+                  + "Toggle Run / Search & Pounce (⌘R). Tuning off your CQ frequency switches to "
+                  + "S&P and tuning back onto it switches to Run — the band map's Tuning options.")
             // Article 7 — keyboard-first. An out-of-state log opens in S&P, and
             // ⌘J only reaches Run once a CQ frequency has been captured, which
             // needs Run already. A picker carries no shortcut of its own, so an

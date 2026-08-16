@@ -88,6 +88,11 @@ struct MainView: View {
     @State private var spotCursorKHz: Double?
     /// Run frequency captured when CQ is sent; ⌘J jumps back to it.
     @State private var cqFrequencyHz: Int?
+    /// Which side of the CQ frequency the VFO was on at the last report — on
+    /// it, near it, or away — so only a *change* of zone switches the mode
+    /// (`TuningPolicy`). Reset to `.onFrequency` when a CQ frequency is
+    /// captured; nil when there is none.
+    @State private var cqZone: TuningPolicy.Zone?
 
     @State private var bandMapModel: BandMapModel?
     @State private var bandMapPanel: NSPanel?
@@ -109,7 +114,8 @@ struct MainView: View {
             cursor: esmCursor,
             keying: settings.keying,
             voiceMemoryCount: radio.voiceStatus.memoryCount,
-            phoneSource: phoneSource
+            phoneSource: phoneSource,
+            offersSpotCounty: settings.prefillExchangeFromSpots
         )
     }
 
@@ -389,31 +395,40 @@ struct MainView: View {
         )
     }
 
+    /// The radio bar with the radio-driven wiring — frequency, band, mode,
+    /// speed, connection, and the voice path — pulled out of `leftPaneContent`
+    /// so that VStack stays under the type-checker's budget (2026-08-04).
+    private var radioBar: some View {
+        RadioBar(
+            settings: settings,
+            radio: radio,
+            party: party,
+            manualBand: $manualBand,
+            manualRawMode: $manualRawMode
+        )
+        .onChange(of: radio.radioState?.band) { revalidate() }
+        .onChange(of: radio.radioState?.rawMode) { modeChanged() }
+        // The knob: Run ⇄ S&P round the CQ frequency, and the call frame.
+        .onChange(of: radio.radioState?.frequencyHz) { vfoMoved() }
+        .onChange(of: radio.radioReportedWPM) { syncSpeedFromRadio() }
+        .onChange(of: repeatCQ) { repeatCQChanged() }
+        .onChange(of: radio.isConnected) { if !radio.isConnected { stopRepeat() } }
+        // The recordings path re-derives from the voice settings while
+        // connected; `connect` derives it itself.
+        .onChange(of: settings.voiceOutputDeviceUID) { radio.refreshVoicePath(settings: settings) }
+        .onChange(of: settings.voicePTT) { radio.refreshVoicePath(settings: settings) }
+        .onChange(of: settings.phoneMessageSource) { radio.refreshVoicePath(settings: settings) }
+        // The flow reads recordings by value, like the call history file.
+        .onChange(of: voiceStore.rendered) { flow.voiceRecordings = voiceStore.rendered }
+    }
+
     /// The pane's content, separate from its `onChange` wiring: one
     /// expression holding both put the type-checker over its budget the day
     /// the super check strip joined the stack (2026-08-04). Splitting at an
     /// opaque seam bounds each half.
     private var leftPaneContent: some View {
         VStack(spacing: 0) {
-            RadioBar(
-                settings: settings,
-                radio: radio,
-                party: party,
-                manualBand: $manualBand,
-                manualRawMode: $manualRawMode
-            )
-            .onChange(of: radio.radioState?.band) { revalidate() }
-            .onChange(of: radio.radioState?.rawMode) { modeChanged() }
-            .onChange(of: radio.radioReportedWPM) { syncSpeedFromRadio() }
-            .onChange(of: repeatCQ) { repeatCQChanged() }
-            .onChange(of: radio.isConnected) { if !radio.isConnected { stopRepeat() } }
-            // The recordings path re-derives from the voice settings while
-            // connected; `connect` derives it itself.
-            .onChange(of: settings.voiceOutputDeviceUID) { radio.refreshVoicePath(settings: settings) }
-            .onChange(of: settings.voicePTT) { radio.refreshVoicePath(settings: settings) }
-            .onChange(of: settings.phoneMessageSource) { radio.refreshVoicePath(settings: settings) }
-            // The flow reads recordings by value, like the call history file.
-            .onChange(of: voiceStore.rendered) { flow.voiceRecordings = voiceStore.rendered }
+            radioBar
             Divider()
 
             stationStrip
@@ -421,10 +436,16 @@ struct MainView: View {
                 .onChange(of: document.log.partyID) { voiceStore.partyID = document.log.partyID }
                 .onChange(of: document.log.station.callsign) { applyDefaultDocumentName() }
                 .onChange(of: document.log.setupCompleted) { autoSaveNewDocumentIfNeeded() }
-                .onChange(of: document.log.qsos) { autoSaveAfterChange() }
+                .onChange(of: document.log.qsos) {
+                    autoSaveAfterChange()
+                    // Every change to the log changes which multipliers are
+                    // still needed — including a row deleted on another band.
+                    bandMapModel?.log = document.log
+                }
             Divider()
 
             EntryBar(entry: entry, party: party, showsP2P: !document.log.myPotaRefs.isEmpty,
+                     callFrameColor: callFrameColor, onTakeCallFrame: takeCallFrame,
                      onLog: returnPressed, focus: $focusedField)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
@@ -546,6 +567,7 @@ struct MainView: View {
         }
         .onChange(of: cqFrequencyHz) {
             bandMapModel?.cqKHz = cqFrequencyHz.map { Double($0) / 1000 }
+            cqZone = cqFrequencyHz == nil ? nil : .onFrequency
         }
         .onChange(of: settings.spotMaxAgeMinutes) {
             spotStore.maxAgeMinutes = settings.spotMaxAgeMinutes
@@ -558,8 +580,19 @@ struct MainView: View {
         .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
     }
 
-    private var leftPane: some View {
+    /// The mode and tuning wiring — its own seam for the same type-checker
+    /// reason as the other two.
+    private var leftPaneTuningWired: some View {
         leftPaneSpotWired
+        // Leaving Run — by ⌘R or by tuning off the CQ frequency — takes Repeat
+        // CQ down (N1MM: turned off "when … the mode changed to S&P"), and
+        // the call frame follows the mode: empty in Run.
+        .onChange(of: document.log.operatingMode) { operatingModeChanged() }
+        .onChange(of: settings.callFrameEnabled) { refreshCallFrame() }
+    }
+
+    private var leftPane: some View {
+        leftPaneTuningWired
         // Declaring NON-ASSISTED takes effect at once — an open connection is
         // dropped and the network spots come off the map, because a claim
         // that only applies to future spots is not a claim.
@@ -1057,6 +1090,7 @@ struct MainView: View {
         callHistoryClient.onIndex = { [weak flow] partyID, parsed in
             guard let flow, flow.party?.id == partyID else { return }
             flow.callHistoryIndex = (partyID, parsed)
+            bandMapModel?.callHistory = parsed
         }
         scpClient.onDatabase = { [weak flow] database in
             flow?.updateSCPDatabase(database)
@@ -1090,6 +1124,8 @@ struct MainView: View {
             model.workedCallCounties = workedCallCountiesOnCurrentBandMode
             model.party = party
             model.log = document.log
+            model.archiveIndex = flow.archiveIndex
+            model.callHistory = flow.callHistoryIndex?.parsed
             model.onTuneSpot = { tune(to: $0) }
             model.onTuneKHz = { qsyTo(kHz: $0) }
             model.canSpot = canSpotStation
@@ -1115,6 +1151,7 @@ struct MainView: View {
     /// disabled toggle or a party with no file stops the offers immediately.
     private func activateCallHistory() {
         flow.callHistoryIndex = nil
+        bandMapModel?.callHistory = nil
         guard settings.callHistoryEnabled,
               let party, party.callHistory != nil else { return }
         callHistoryClient.publishCached(party: party)
@@ -1175,6 +1212,7 @@ struct MainView: View {
                 return StationMemory.Index.build(archive, countiesByParty: counties)
             }.value
             flow.archiveIndex = index
+            bandMapModel?.archiveIndex = index
         }
     }
 
@@ -1389,7 +1427,8 @@ struct MainView: View {
         flow.stationChanged(
             to: spot.call,
             operatingContext,
-            spotCounty: settings.prefillExchangeFromSpots ? spot.county : nil
+            spotCounty: settings.prefillExchangeFromSpots ? spot.county : nil,
+            atKHz: spot.freqKHz
         )
         focusedField = .call
     }
@@ -1652,6 +1691,9 @@ struct MainView: View {
     private func captureCQFrequency() {
         if let hz = radio.radioState?.frequencyHz {
             cqFrequencyHz = hz
+            // Captured at the VFO, so by definition on it — even when the
+            // frequency is the same one as before and no `onChange` fires.
+            cqZone = .onFrequency
         }
     }
 
@@ -1662,6 +1704,91 @@ struct MainView: View {
         spotCursorKHz = kHz
         applyBandPlanMode(kHz: kHz)
         operatingMode.wrappedValue = .run
+    }
+
+    // MARK: Following the knob — Run ⇄ S&P, and the call frame
+
+    /// Every frequency the radio reports. The zone check runs first so a turn
+    /// that leaves Run can seed the call frame in the same pass.
+    private func vfoMoved() {
+        guard let hz = radio.radioState?.frequencyHz else {
+            cqZone = nil
+            flow.updateCallFrame(nil)
+            return
+        }
+        followCQFrequency(vfoHz: hz)
+        followSpots(vfoHz: hz)
+    }
+
+    /// N1MM: on the CQ frequency you are in Run and QSYing switches to S&P;
+    /// tuning back within tolerance switches to Run. `TuningPolicy` decides,
+    /// edge-triggered, so ⌘R is never fought.
+    private func followCQFrequency(vfoHz: Int) {
+        guard let cq = cqFrequencyHz else {
+            cqZone = nil
+            return
+        }
+        let zone = TuningPolicy.zone(
+            vfoHz: vfoHz, cqHz: cq,
+            toleranceHz: settings.tuningToleranceHz.hz(for: currentModeClass),
+            leaveHz: settings.leaveRunDistanceHz.hz(for: currentModeClass)
+        )
+        if let mode = TuningPolicy.modeChange(
+            from: cqZone, to: zone, mode: operatingMode.wrappedValue,
+            leaveEnabled: settings.autoLeaveRun, returnEnabled: settings.autoReturnToRun
+        ) {
+            operatingMode.wrappedValue = mode
+        }
+        cqZone = zone
+    }
+
+    /// The call frame: searching, the nearest visible spot within the tuning
+    /// tolerance — the list ⌘↑/⌘↓ step through, so a hidden worked station
+    /// never ghosts. First the erase rule for a call the app filled earlier,
+    /// then the frame for wherever the VFO is now.
+    private func followSpots(vfoHz: Int) {
+        guard settings.callFrameEnabled, operatingMode.wrappedValue == .searchPounce else {
+            flow.updateCallFrame(nil)
+            return
+        }
+        let vfoKHz = Double(vfoHz) / 1000
+        let toleranceHz = settings.tuningToleranceHz.hz(for: currentModeClass)
+        flow.tunedAway(toKHz: vfoKHz, toleranceKHz: Double(toleranceHz) / 1000, operatingContext)
+        flow.updateCallFrame(SpotStore.nearest(
+            in: visibleSpotsOnBand,
+            toKHz: vfoKHz,
+            withinHz: toleranceHz,
+            workedCalls: workedCallsOnCurrentBandMode,
+            workedCallCounties: workedCallCountiesOnCurrentBandMode
+        ))
+    }
+
+    /// Recompute the frame from where the radio is now — after the option or
+    /// the mode changes rather than the VFO.
+    private func refreshCallFrame() {
+        guard let hz = radio.radioState?.frequencyHz else {
+            flow.updateCallFrame(nil)
+            return
+        }
+        followSpots(vfoHz: hz)
+    }
+
+    private func operatingModeChanged() {
+        if !RepeatCQPolicy.continues(in: operatingMode.wrappedValue) {
+            stopRepeat()
+        }
+        refreshCallFrame()
+    }
+
+    /// Space in the empty call field, with a ghost showing.
+    private func takeCallFrame() {
+        guard flow.takeCallFrame(operatingContext) else { return }
+        focusedField = .call
+    }
+
+    /// The ghost call's colour — the band map's colour for that spot.
+    private var callFrameColor: Color {
+        entry.callFrame.flatMap { bandMapModel?.status(for: $0) }?.color ?? .secondary
     }
 
     // MARK: CW speed
