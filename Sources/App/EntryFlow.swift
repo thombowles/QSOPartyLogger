@@ -126,6 +126,11 @@ final class EntryFlow {
         /// flow, and only when `ready`. Defaulted to the radio, so every
         /// context built before recordings existed means what it did.
         var phoneSource: PhoneSource
+        /// Whether a spot's county is offered into the exchange when a
+        /// station arrives from the call frame — the band map's "Offer the
+        /// spotted county as the exchange" option. Defaulted on, so every
+        /// context built before the frame existed means what it did.
+        var offersSpotCounty: Bool
 
         init(
             band: Band = .m20,
@@ -136,7 +141,8 @@ final class EntryFlow {
             cursor: ESM.Cursor = .call,
             keying: KeyingSettings = KeyingSettings(),
             voiceMemoryCount: Int = 0,
-            phoneSource: PhoneSource = .radioMemories
+            phoneSource: PhoneSource = .radioMemories,
+            offersSpotCounty: Bool = true
         ) {
             self.band = band
             self.modeClass = modeClass
@@ -147,6 +153,7 @@ final class EntryFlow {
             self.keying = keying
             self.voiceMemoryCount = voiceMemoryCount
             self.phoneSource = phoneSource
+            self.offersSpotCounty = offersSpotCounty
         }
     }
 
@@ -365,7 +372,7 @@ final class EntryFlow {
         // "14025", "40M", "CW"… in the call field tunes instead of logging —
         // hands stay on the keyboard.
         if let command = EntryCommand.parse(entry.call) {
-            entry.call = ""
+            entry.callTyped = ""
             revalidate(context)
             return .qsy(command)
         }
@@ -375,6 +382,15 @@ final class EntryFlow {
 
         guard esmDrivesReturn(context) else {
             return logContact(context, undoManager: undoManager)
+        }
+
+        // N1MM: "Hitting the space bar (or Enter, in ESM) will pull the
+        // call-sign from the call-frame into the Call-sign textbox." Only from
+        // the call field — it never logs, so filling it here is always safe;
+        // from the exchange field ESM reads the cursor as "I have him", and a
+        // row filled with a county could log on the same keystroke.
+        if context.cursor == .call, entry.callNormalized.isEmpty {
+            takeCallFrame(context)
         }
 
         switch esmAction(context) {
@@ -530,13 +546,17 @@ final class EntryFlow {
     /// never cost the operator text they typed; arriving at a new station is a
     /// deliberate move away, so what was copied for the last one comes off the
     /// row — kept under his call, not thrown away.
-    func stationChanged(to call: String, _ context: Context, spotCounty: String? = nil) {
+    func stationChanged(
+        to call: String, _ context: Context, spotCounty: String? = nil, atKHz: Double? = nil
+    ) {
         stashPending()
         entry.exchangeTyped = ""
         entry.serialRcvd = ""
         entry.nameTyped = ""
         entry.memberTyped = ""
-        entry.call = call
+        entry.autoFillCall(call)
+        // Where the app filled it, for the erase rule; nil when nobody arrived.
+        autoFilledCallKHz = entry.callIsAutoFilled ? atKHz : nil
         // Tied to the call it arrived with, so typing over a busted spot does
         // not carry the old station's county to the new one.
         spotCountyHint = spotCounty
@@ -544,6 +564,53 @@ final class EntryFlow {
             .flatMap { $0.isEmpty ? nil : (call: entry.callNormalized, county: $0) }
         refreshPrefill(context)
         revalidate(context)
+    }
+
+    /// The station left the row without a contact — the VFO moved on. The
+    /// same bookkeeping as arriving at a new one, with nobody arriving.
+    func stationLeft(_ context: Context) {
+        stationChanged(to: "", context)
+    }
+
+    /// The frequency the app filled the call at — a spot's, from the frame, a
+    /// click or ⌘↑/⌘↓. Compared with the VFO by `tunedAway`.
+    private var autoFilledCallKHz: Double?
+
+    // MARK: The call frame
+
+    /// The spot under the VFO, or nil. Written by the view on every VFO
+    /// change while searching; never touches the call field.
+    func updateCallFrame(_ spot: Spot?) {
+        if entry.callFrame != spot { entry.callFrame = spot }
+    }
+
+    /// Space, or Return under ESM, in an empty call field: the frame's call
+    /// goes into the field and its county — when the option is on — into the
+    /// exchange, exactly as a spot click arrives. False when there is nothing
+    /// to take or the field already holds text, typed or filled.
+    @discardableResult
+    func takeCallFrame(_ context: Context) -> Bool {
+        guard entry.callNormalized.isEmpty, let spot = entry.callFrame else { return false }
+        stationChanged(
+            to: spot.call, context,
+            spotCounty: context.offersSpotCounty ? spot.county : nil,
+            atKHz: spot.freqKHz
+        )
+        return true
+    }
+
+    /// N1MM: "If you tune the VFO outside that range, any call-sign captured
+    /// into the Entry window's call-frame or brought into the Entry window's
+    /// call-sign textbox will be erased." Here: a call the app filled, once the
+    /// VFO is more than the tolerance from where it was filled, and only while
+    /// the row holds nothing the operator typed. Typed text is never touched
+    /// by tuning.
+    func tunedAway(toKHz vfoKHz: Double, toleranceKHz: Double, _ context: Context) {
+        guard entry.callIsAutoFilled, !entry.hasOperatorText,
+              let filledAt = autoFilledCallKHz,
+              abs(vfoKHz - filledAt) > toleranceKHz + 0.0001
+        else { return }
+        stationLeft(context)
     }
 
     /// The county a spot claimed for a station, and which station it claimed it
@@ -600,19 +667,22 @@ final class EntryFlow {
             // an exchange the operator owns ends the matter, an empty one
             // still deserves a hint.
             if entry.exchange.isEmpty || entry.exchangeIsAutoFilled {
-                if let candidate = StationMemory.candidate(
+                // This log, the archive, then the call history file — the
+                // community's roster ranks below anything we copied ourselves.
+                // The band map colours spots by the same call, so a red spot
+                // is one whose county lands here.
+                if let known = StationMemory.knownLocation(
                     call: call,
                     log: document.log.qsos,
                     index: archiveIndex,
+                    callHistory: callHistoryParsed(for: party),
                     party: party,
                     role: role
                 ) {
-                    entry.autoFillExchange(candidate.text)
-                } else if let exchange = history?.exchange {
-                    // The community's roster of what this station sends —
-                    // curated, but still third-party and last season's, so it
-                    // ranks below anything we copied ourselves.
-                    entry.autoFillExchange(exchange, origin: .callHistory)
+                    entry.autoFillExchange(
+                        known.text,
+                        origin: known.source == .callHistory ? .callHistory : .ownLog
+                    )
                 } else if let hint = spotCountyHint, hint.call == call {
                     // A spot's county is the last resort and the weakest
                     // evidence there is — a stranger's claim about a station
@@ -681,6 +751,13 @@ final class EntryFlow {
             for: call, in: callHistoryIndex.parsed, party: party, role: role)
     }
 
+    /// The party's parsed call history file, or nil when the one loaded is
+    /// another party's (the download may land after a party change).
+    private func callHistoryParsed(for party: PartyDefinition) -> CallHistoryFile.Parsed? {
+        guard let callHistoryIndex, callHistoryIndex.partyID == party.id else { return nil }
+        return callHistoryIndex.parsed
+    }
+
     /// Mode changes (radio or manual): swap pre-filled RST defaults (599 ↔ 59)
     /// and re-check validation/dupes for the new mode.
     func modeChanged(_ context: Context) {
@@ -690,6 +767,7 @@ final class EntryFlow {
 
     /// F12 — wipe a half-typed contact.
     func clearEntry(_ context: Context) {
+        autoFilledCallKHz = nil
         entry.clearForNextContact(modeClass: context.modeClass)
         revalidate(context)
     }

@@ -13,6 +13,9 @@ enum StationMemory {
     enum Source: Equatable, Sendable {
         case thisLog
         case archive(partyID: String, year: Int)
+        /// The party's call history file — a curated community roster of what
+        /// a station usually sends; third-party, and last season's.
+        case callHistory
     }
 
     struct Candidate: Equatable, Sendable {
@@ -118,6 +121,30 @@ enum StationMemory {
             )
         }
         return nil
+    }
+
+    /// The best location the app can offer for `call` from everything it has:
+    /// this log and the archive (`candidate`), then the party's call history
+    /// file. The exchange pre-fill and the band map's colours both read this,
+    /// so a red spot is exactly one whose county the entry row would offer.
+    /// Nil when nothing usable is known — the map then says "location unknown"
+    /// rather than guessing.
+    static func knownLocation(
+        call: String,
+        log: [QSO],
+        index: Index,
+        callHistory: CallHistoryFile.Parsed?,
+        party: PartyDefinition,
+        role: ExchangeParser.Role
+    ) -> Candidate? {
+        if let remembered = candidate(call: call, log: log, index: index, party: party, role: role) {
+            return remembered
+        }
+        guard let callHistory,
+              let history = CallHistoryFile.candidate(for: call, in: callHistory, party: party, role: role),
+              let exchange = history.exchange
+        else { return nil }
+        return Candidate(text: exchange, source: .callHistory)
     }
 
     private static func parses(

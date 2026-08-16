@@ -206,6 +206,54 @@ final class SpottingTests: XCTestCase {
         XCTAssertEqual(SpotStore.next(in: only, afterKHz: 14005.0, direction: .down)?.call, "A1AA")
     }
 
+    // MARK: The spot under the VFO (call frame)
+
+    /// N1MM: "if a station on the Bandmap is within the tuning tolerance, its
+    /// call will be placed in the Entry window's call-frame."
+    func testNearestWithinToleranceIsTheSpotUnderTheVFO() {
+        let spots = [
+            spot(call: "A1AA", freqKHz: 14005.0),
+            spot(call: "B1BB", freqKHz: 14026.1),
+            spot(call: "C1CC", freqKHz: 14026.5),
+        ]
+        XCTAssertEqual(SpotStore.nearest(in: spots, toKHz: 14026.2, withinHz: 300)?.call, "B1BB")
+        XCTAssertEqual(SpotStore.nearest(in: spots, toKHz: 14026.4, withinHz: 300)?.call, "C1CC")
+    }
+
+    func testNothingWithinToleranceMeansNoSpot() {
+        let spots = [spot(call: "A1AA", freqKHz: 14005.0)]
+        XCTAssertNil(SpotStore.nearest(in: spots, toKHz: 14005.4, withinHz: 300))
+        XCTAssertNil(SpotStore.nearest(in: [], toKHz: 14005.0, withinHz: 300))
+    }
+
+    func testTheToleranceBoundaryIsInside() {
+        let spots = [spot(call: "A1AA", freqKHz: 14005.0)]
+        XCTAssertEqual(SpotStore.nearest(in: spots, toKHz: 14005.3, withinHz: 300)?.call, "A1AA")
+        XCTAssertEqual(SpotStore.nearest(in: spots, toKHz: 14004.7, withinHz: 300)?.call, "A1AA")
+    }
+
+    /// A call the board has already corrected is not somewhere to point the
+    /// operator, exactly as ⌘↑/⌘↓ skip it.
+    func testSupersededSpotsAreNeverUnderTheVFO() {
+        var busted = spot(call: "B1BB", freqKHz: 14026.1)
+        busted.isSuperseded = true
+        let spots = [busted, spot(call: "C1CC", freqKHz: 14026.3)]
+        XCTAssertEqual(SpotStore.nearest(in: spots, toKHz: 14026.1, withinHz: 300)?.call, "C1CC")
+    }
+
+    /// Two spots at one frequency: the one still worth working shows.
+    func testATieGoesToTheUnworkedStation() {
+        let spots = [spot(call: "A1AA", freqKHz: 14026.1), spot(call: "B1BB", freqKHz: 14026.1)]
+        XCTAssertEqual(
+            SpotStore.nearest(in: spots, toKHz: 14026.1, withinHz: 300, workedCalls: ["A1AA"])?.call,
+            "B1BB"
+        )
+        XCTAssertEqual(
+            SpotStore.nearest(in: spots, toKHz: 14026.1, withinHz: 300)?.call,
+            "A1AA", "both unworked: by call, so the answer is stable between polls"
+        )
+    }
+
     // MARK: Worked stations are stepped over
 
     private var threeSpots: [Spot] {

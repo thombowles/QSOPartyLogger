@@ -141,6 +141,47 @@ final class AppSettings {
         didSet { defaults.set(followBandPlan, forKey: "followBandPlan") }
     }
 
+    // MARK: Tuning — the band map's TUNING section
+
+    /// The spot under the VFO shows as a ghost call in the empty call field
+    /// while searching; Space or Return (ESM) takes it. N1MM's call frame.
+    var callFrameEnabled: Bool {
+        didSet { defaults.set(callFrameEnabled, forKey: "callFrameEnabled") }
+    }
+
+    /// Tuning past the leave-Run distance from the CQ frequency switches to
+    /// S&P. N1MM: "QSYing will switch to S&P mode. Press Alt+F11 to disable
+    /// this automatic mode change."
+    var autoLeaveRun: Bool {
+        didSet { defaults.set(autoLeaveRun, forKey: "autoLeaveRun") }
+    }
+
+    /// Tuning back within the tolerance of the CQ frequency switches to Run.
+    /// Off is N1MM's "Do not automatically switch to Run on CQ-frequency".
+    var autoReturnToRun: Bool {
+        didSet { defaults.set(autoReturnToRun, forKey: "autoReturnToRun") }
+    }
+
+    /// How close the VFO must be to a spot for the call frame, and to the CQ
+    /// frequency to be "on" it — per mode class, as N1MM's Configurer has it.
+    var tuningToleranceHz: TuningDistances {
+        didSet {
+            if let data = try? JSONEncoder().encode(tuningToleranceHz) {
+                defaults.set(data, forKey: "tuningToleranceHz")
+            }
+        }
+    }
+
+    /// How far off the CQ frequency counts as leaving it. Larger than the
+    /// tolerance so a QRM dodge stays in Run.
+    var leaveRunDistanceHz: TuningDistances {
+        didSet {
+            if let data = try? JSONEncoder().encode(leaveRunDistanceHz) {
+                defaults.set(data, forKey: "leaveRunDistanceHz")
+            }
+        }
+    }
+
     /// Mode classes to show; empty means every mode.
     var spotModes: Set<ModeClass> {
         didSet { defaults.set(spotModes.map(\.rawValue), forKey: "spotModes") }
@@ -362,6 +403,16 @@ final class AppSettings {
         // yardstick, since every weighting reads one.
         advisorGoal = Advisor.Goal(rawValue: defaults.string(forKey: "advisorGoal") ?? "") ?? .score
         followBandPlan = defaults.object(forKey: "followBandPlan") as? Bool ?? true
+        callFrameEnabled = defaults.object(forKey: "callFrameEnabled") as? Bool ?? true
+        autoLeaveRun = defaults.object(forKey: "autoLeaveRun") as? Bool ?? true
+        autoReturnToRun = defaults.object(forKey: "autoReturnToRun") as? Bool ?? true
+        // Unreadable data falls back to the defaults rather than to nothing.
+        tuningToleranceHz = defaults.data(forKey: "tuningToleranceHz")
+            .flatMap { try? JSONDecoder().decode(TuningDistances.self, from: $0) }
+            ?? .defaultTolerance
+        leaveRunDistanceHz = defaults.data(forKey: "leaveRunDistanceHz")
+            .flatMap { try? JSONDecoder().decode(TuningDistances.self, from: $0) }
+            ?? .defaultLeaveRun
         spotModes = Set((defaults.stringArray(forKey: "spotModes") ?? []).compactMap(ModeClass.init(rawValue:)))
         spotBands = Set((defaults.stringArray(forKey: "spotBands") ?? []).compactMap(Band.init(rawValue:)))
         // An unreadable token falls back to the default rather than to nothing:

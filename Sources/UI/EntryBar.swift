@@ -1,7 +1,9 @@
 import SwiftUI
 
 /// N1MM-style entry row: call, RSTs, exchange with live validation and
-/// dupe / new-mult badges. Enter logs from any field.
+/// dupe / new-mult badges. Enter logs from any field. The empty call field
+/// shows the spot under the VFO as a ghost call (N1MM's call frame); Space,
+/// or Return under ESM, takes it.
 struct EntryBar: View {
     @Bindable var entry: EntryState
     let party: PartyDefinition?
@@ -10,6 +12,12 @@ struct EntryBar: View {
     /// home station, and the bar stays exactly as it is for every non-POTA
     /// contest.
     let showsP2P: Bool
+    /// The colour of the ghost call — the band map's colour for the spot under
+    /// the VFO — and what Space does when the empty call field shows one.
+    /// Defaulted so a bar built without a band map (the caret tests) is the
+    /// bar it always was.
+    var callFrameColor: Color = .secondary
+    var onTakeCallFrame: () -> Void = {}
     let onLog: () -> Void
 
     enum Field: Hashable {
@@ -58,7 +66,10 @@ struct EntryBar: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 10) {
-                field("Call", text: $entry.call, width: 140, focusTag: .call)
+                field("Call", text: $entry.callTyped, width: 140, focusTag: .call,
+                      ghost: entry.call.isEmpty
+                          ? entry.callFrame.map { (text: $0.call, color: callFrameColor) }
+                          : nil)
                 if party?.exchangeIncludesRST ?? true {
                     field("RST S", text: $entry.rstSent, width: 60, focusTag: .rstSent)
                     field("RST R", text: $entry.rstRcvd, width: 60, focusTag: .rstRcvd)
@@ -239,7 +250,8 @@ struct EntryBar: View {
         text: Binding<String>,
         width: CGFloat,
         focusTag: Field,
-        provisional: Bool = false
+        provisional: Bool = false,
+        ghost: (text: String, color: Color)? = nil
     ) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
@@ -250,6 +262,19 @@ struct EntryBar: View {
                 .font(.system(.body, design: .monospaced))
                 .foregroundStyle(provisional ? AnyShapeStyle(.secondary) : AnyShapeStyle(.primary))
                 .frame(width: width)
+                // N1MM's call frame, drawn inside the field: the spot the VFO
+                // is on, in the map's colour for it, while the field is empty.
+                // Not interactive — Space or Return takes it.
+                .overlay(alignment: .leading) {
+                    if let ghost {
+                        Text(ghost.text)
+                            .font(.system(.body, design: .monospaced))
+                            .foregroundStyle(ghost.color)
+                            .padding(.leading, 5)
+                            .allowsHitTesting(false)
+                            .accessibilityLabel("Spot under the VFO: \(ghost.text)")
+                    }
+                }
                 .focused($focus, equals: focusTag)
                 .onSubmit(onLog)
                 .autocorrectionDisabled()
@@ -257,6 +282,13 @@ struct EntryBar: View {
                 // the exchange it wraps back to the call, so the row cycles.
                 // Mults are separated with "/" or "," instead.
                 .onKeyPress(.space) {
+                    // An empty call field showing a ghost: Space takes it —
+                    // "if a call is in the callframe, space will load it into
+                    // the call textbox" — and stays put. Otherwise it advances.
+                    if focusTag == .call, entry.call.isEmpty, entry.callFrame != nil {
+                        onTakeCallFrame()
+                        return .handled
+                    }
                     focus = focusTag.next(
                         includesRST: party?.exchangeIncludesRST ?? true,
                         includesSerial: party?.exchangeIncludesSerial ?? false,

@@ -27,4 +27,13 @@ enum RepeatCQPolicy {
     static func onSend(index: Int, operatingMode: OperatingMode, armed: Bool) -> OnSend {
         armed && operatingMode == .run && index == 0 ? .restartLoop : .sendOnce
     }
+
+    /// Whether the loop may go on in `mode`. Only Run: leaving it — by ⌘R or
+    /// by tuning off the CQ frequency — takes the loop down, or its next pass
+    /// would re-resolve slot 0 against the S&P set and key "my call" every
+    /// few seconds. N1MM: the function "is automatically turned off when no
+    /// longer on the CQ-frequency and the mode changed to S&P."
+    static func continues(in mode: OperatingMode) -> Bool {
+        mode == .run
+    }
 }
