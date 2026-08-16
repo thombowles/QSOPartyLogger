@@ -34,6 +34,12 @@ struct MainView: View {
     @State private var exportType: UTType = .plainText
     @State private var exportName = ""
     @State private var isExporting = false
+    /// Why the last export could not run — the save panel refused, or the
+    /// write failed — shown inline under the messages row until dismissed or
+    /// the next export succeeds. Never a modal, and never silence: on
+    /// 2026-08-15 ⌘E "did nothing" twelve times in a row while AppKit was
+    /// logging "Unable to display save panel" (`AppIntegrity`).
+    @State private var exportNotice: String?
     @State private var keyMonitor: Any?
     /// The second monitor: media keys (`.systemDefined`), watched only so an
     /// F-key that arrives as brightness or backlight can say so. Never
@@ -262,7 +268,12 @@ struct MainView: View {
                 document: exportDoc,
                 contentType: exportType,
                 defaultFilename: exportName
-            ) { _ in }
+            ) { result in
+                // A failure to write is news; a cancel is not.
+                if case .failure(let error) = result {
+                    exportNotice = "Export failed — \(error.localizedDescription)"
+                }
+            }
             .toolbar { toolbarContent }
     }
 
@@ -526,6 +537,26 @@ struct MainView: View {
                 .buttonStyle(.plain)
                 .foregroundStyle(.secondary)
                 .accessibilityLabel("Dismiss keyboard notice")
+            }
+            .padding(.horizontal, 14)
+            .padding(.bottom, 4)
+        }
+        // An export that could not run says so here — the same inline place,
+        // never a modal (Tom's rule), and never silence.
+        if let notice = exportNotice {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Label(notice, systemImage: "square.and.arrow.up.trianglebadge.exclamationmark")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button {
+                    exportNotice = nil
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+                .accessibilityLabel("Dismiss export notice")
             }
             .padding(.horizontal, 14)
             .padding(.bottom, 4)
@@ -2114,12 +2145,13 @@ struct MainView: View {
 
     private func exportADIF() {
         guard let party else { return }
-        exportDoc = TextExportDocument(text: AdifExporter.export(log: document.log, party: party))
         // Through .plainText the save panel would append ".txt" — .adi is not
         // an extension of any plain-text type. .adi (LogDocument.swift) is.
-        exportType = .adi
-        exportName = LogDocument.exportBaseName(fileURL: exportFileURL, log: document.log) + ".adi"
-        isExporting = true
+        presentExport(
+            TextExportDocument(text: AdifExporter.export(log: document.log, party: party)),
+            type: .adi,
+            name: LogDocument.exportBaseName(fileURL: exportFileURL, log: document.log) + ".adi"
+        )
     }
 
     private func exportCabrillo() {
@@ -2132,12 +2164,39 @@ struct MainView: View {
             conflict: document.log.spotsContradictNonAssistedClaim
         )
         guard let party else { return }
-        exportDoc = TextExportDocument(
-            text: CabrilloExporter.export(log: document.log, party: party, score: score)
+        presentExport(
+            TextExportDocument(
+                text: CabrilloExporter.export(log: document.log, party: party, score: score)
+            ),
+            type: .plainText,
+            name: LogDocument.exportBaseName(fileURL: exportFileURL, log: document.log) + ".log"
         )
-        exportType = .plainText
-        exportName = LogDocument.exportBaseName(fileURL: exportFileURL, log: document.log) + ".log"
-        isExporting = true
+    }
+
+    /// Open the save panel for an export — or say why it cannot open.
+    ///
+    /// The panel is a sandbox service that validates its caller, so a copy of
+    /// the app that was rebuilt while running is refused: AppKit logs "Unable
+    /// to display save panel", SwiftUI leaves `isPresented` up, and every
+    /// later ⌘E is a no-op (2026-08-15). So: ask `AppIntegrity` first and put
+    /// the answer on screen instead of trying; and when the flag is still up
+    /// from a presentation that never completed, drop it and raise it again
+    /// next turn, so a retry actually presents.
+    private func presentExport(_ export: TextExportDocument, type: UTType, name: String) {
+        if let notice = AppIntegrity.check() {
+            exportNotice = notice
+            return
+        }
+        exportNotice = nil
+        exportDoc = export
+        exportType = type
+        exportName = name
+        guard isExporting else {
+            isExporting = true
+            return
+        }
+        isExporting = false
+        Task { @MainActor in isExporting = true }
     }
 }
 

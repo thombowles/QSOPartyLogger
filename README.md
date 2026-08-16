@@ -986,7 +986,7 @@ Challenge formula, the upcoming-contest engine, and the Advisor — solar
 geometry pinned against the US Naval Observatory, the SWPC parsers against
 payloads captured from the live products, and every advisory's own wording.
 
-Three notes for anyone working in here:
+Four notes for anyone working in here:
 
 - What goes on the air is decided by
   [`EntryFlow`](Sources/App/EntryFlow.swift), not by the view, so tests can drive
@@ -1003,6 +1003,13 @@ Three notes for anyone working in here:
   and the next redraw resolves that by replacing the editor's text — which puts
   the caret at the end of the field, mid-word. The pieces are private to that
   file so the two halves cannot be separated again.
+- Never rebuild a copy of the app that is running. The process keeps going, but
+  the code identity the kernel recorded at launch no longer matches the file, so
+  every sandbox service that checks its caller refuses it — the save panel first
+  of all, and ⌘E / ⇧⌘E silently do nothing (2026-08-15). The app now checks
+  itself before opening a save panel and says so inline, with the remedy: quit
+  and reopen. Build to a path nobody is running from (`Tools/make-dmg.sh` uses
+  `build/Release`), and install releases in /Applications.
 
 ## Adding a radio
 
