@@ -114,8 +114,8 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 
 | Keys | Action |
 | --- | --- |
-| `Enter` | Log the QSO (or send the next ESM message, or run a typed QSY command) |
-| `Space` | Cycle Call → Exchange → Call — via QSO number and Name ahead of the exchange, and the member number/power (Skeeter #, BB #) after it, where the party uses them. Signal reports are stepped over |
+| `Enter` | Log the QSO (or send the next ESM message, or run a typed QSY command). In the empty call field under ESM with a ghost call showing, take it — call and county — and call him |
+| `Space` | In an empty call field showing a ghost call: take it (call and county) and stay put. Otherwise cycle Call → Exchange → Call — via QSO number and Name ahead of the exchange, and the member number/power (Skeeter #, BB #) after it, where the party uses them. Signal reports are stepped over |
 | `Tab` | Walk every field, reports included — landing in one selects the S digit, so 599 → 579 is one keystroke |
 | `Tab` to **P2P park(s)** | During a POTA activation, the other station's park reference(s). Deliberately outside the `Space` cycle — most contacts aren't park-to-park — so `Space` from it returns to the call |
 | `F12` | Wipe the entry fields and start over |
@@ -129,7 +129,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⌘=` / `⌘-` | CW speed ±2 WPM — takes effect mid-message (syncs to the radio) |
 | `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
 | `⇧⌘←` / `⇧⌘→` | Nudge the VFO down / up 100 Hz (a burst of presses adds up; disconnected, the band-map cursor moves instead) |
-| `⌘R` | Toggle Run / Search & Pounce |
+| `⌘R` | Toggle Run / Search & Pounce (the knob also switches: off the CQ frequency → S&P, back onto it → Run) |
 | `⌘J` | Jump back to your CQ run frequency |
 | `⌘B` | Toggle the band map window |
 | `⇧⌘S` | Spot — yourself in Run, the call field in S&P — to the DX cluster, the QSO Party Hub and POTA, whichever apply, from one sheet |
@@ -584,6 +584,14 @@ stays on screen when another app takes focus, so it can sit beside a panadapter.
 - **Rovers stop hiding.** A mobile that changes county is a new contact: work
   them in one county and they grey out, then come back the moment they spot from
   a county you still need.
+- **Colours say what a spot is worth** — N1MM's scheme. **Red**: a multiplier
+  you still need. **Blue**: unworked, not a multiplier (or nobody knows where
+  he is). **Grey**, struck through: worked on this band and mode, or
+  superseded. A cluster spot carries no county, so the app looks the call up
+  the way the exchange pre-fill does — your log, previous contests, the party's
+  call history file — and a red cluster spot is one whose county lands in the
+  exchange field the moment you tune to it. The tooltip says where the county
+  came from.
 - **Stations you worked land on the map** while you're searching, at the
   frequency you worked them, so a station nobody spotted doesn't leave a hole in
   the band. **Running, they don't** — everyone answering your CQ is on your own
@@ -598,6 +606,22 @@ stays on screen when another app takes focus, so it can sit beside a panadapter.
   come from 47 CFR §97.305(c). Untick **Follow band plan on QSY** to disable.
 - **CQ frequency memory**: sending F1 in Run mode remembers your run frequency;
   **⌘J** jumps back to it after an S&P excursion.
+- **Run and S&P follow the knob.** Tune more than the leave-Run distance off
+  your CQ frequency (1 kHz on CW and digital, 3 kHz on phone) and the mode goes
+  to S&P — a QRM dodge inside it keeps you in Run; tune back within the
+  tolerance and you're in Run again, F1 ready to CQ. Only a *change* of zone
+  acts, so ⌘R is never fought. Leaving Run stops Repeat CQ. Both halves are
+  N1MM's ("QSYing will switch to S&P mode"; back "within the tuning tolerance
+  of the marker, the program will switch automatically to Run mode"), each
+  with its own switch under the funnel's **Tuning** section.
+- **The call frame — a ghost call.** Searching, the nearest visible spot within
+  the tuning tolerance (300 Hz on CW and digital, 1 kHz on phone; settable)
+  appears in the empty call field in the map's colour for it. **Space**, or
+  **Return** under ESM, takes it — call and county — and that same Return then
+  calls him. Type anything and the ghost is just gone. A call the app put there
+  (ghost, spot click, ⌘↑/⌘↓) is erased when you tune more than the tolerance
+  away without having typed anything; typed text is never touched. Off, or
+  the numbers, under **Tuning**.
 - **VFO nudge**: **⇧⌘←** / **⇧⌘→** move the radio 100 Hz down / up without
   leaving the entry field — zero-beating a caller, or edging off a neighbour on
   phone. A burst of presses adds up even before the radio has reported back.
