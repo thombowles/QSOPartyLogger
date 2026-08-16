@@ -5,6 +5,55 @@ import Observation
 @Observable
 final class EntryState {
     var call = ""
+
+    /// Whether `call` holds text the app put there — a spot click, ⌘↑/⌘↓,
+    /// or the call frame — rather than text the operator typed. The same
+    /// ownership rule as the exchange, name and member: tuning away may take
+    /// back only what the app wrote, and never what was typed.
+    private(set) var callIsAutoFilled = false
+
+    /// The call as the operator edits it; the entry field binds here, never
+    /// to `call`. Writing through it is what makes the text theirs.
+    var callTyped: String {
+        get { call }
+        set {
+            call = newValue
+            callIsAutoFilled = false
+        }
+    }
+
+    func autoFillCall(_ text: String) {
+        call = text
+        callIsAutoFilled = !text.isEmpty
+    }
+
+    /// N1MM's call frame: the spot the VFO is sitting on while searching. Drawn
+    /// as a ghost in the empty call field and taken by Space, or by Return
+    /// under ESM. It never writes `call` by itself — "When the call-sign
+    /// textbox is empty, pressing the space bar will copy the call-sign from
+    /// the call-frame to the call-sign textbox" (Entry window, fetched
+    /// 2026-08-15).
+    var callFrame: Spot?
+
+    /// Whether the row holds anything the operator typed: a call, exchange,
+    /// name or member element that is not auto-filled, a received number, a
+    /// park, a sent-number override, or a report changed from the default.
+    /// The one question the erase rule asks — a row the operator has engaged
+    /// with is never cleared by tuning.
+    var hasOperatorText: Bool {
+        if !call.isEmpty, !callIsAutoFilled { return true }
+        if !exchange.isEmpty, !exchangeIsAutoFilled { return true }
+        if !nameRcvd.isEmpty, !nameIsAutoFilled { return true }
+        if !memberRcvd.isEmpty, !memberIsAutoFilled { return true }
+        if !serialRcvd.trimmingCharacters(in: .whitespaces).isEmpty { return true }
+        if !theirParkTyped.trimmingCharacters(in: .whitespaces).isEmpty { return true }
+        if hasSerialOverride { return true }
+        let defaults = Set(ModeClass.allCases.map(\.defaultRST))
+        if !rstSent.isEmpty, !defaults.contains(rstSent) { return true }
+        if !rstRcvd.isEmpty, !defaults.contains(rstRcvd) { return true }
+        return false
+    }
+
     var rstSent = ""
     var rstRcvd = ""
     var serialRcvd = ""
@@ -324,6 +373,7 @@ final class EntryState {
 
     func clearForNextContact(modeClass: ModeClass) {
         call = ""
+        callIsAutoFilled = false
         rstSent = modeClass.defaultRST
         rstRcvd = modeClass.defaultRST
         // Back to following the log, which has just advanced past the contact

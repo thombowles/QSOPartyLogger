@@ -47,6 +47,7 @@
 		117D7D394184CA651CF5BBBB /* FlexDAXStreamer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72036BDCB3570C1CC5A20611 /* FlexDAXStreamer.swift */; };
 		122FB6190515703980A91D42 /* SpaceWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E3B88134A7EDA380CC2C2 /* SpaceWeather.swift */; };
 		12C6DC13CA936881DB5F134C /* ScoreSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA812496670164897C4A0447 /* ScoreSidebar.swift */; };
+		12E1FE53CDC81A2F09F47D71 /* CallFrameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94354D23B8B582B72B8FC894 /* CallFrameTests.swift */; };
 		151F7624A914409CC5E9DAA5 /* MessageSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B4B1D3D7E785B3640D0399 /* MessageSets.swift */; };
 		15589DCB85C1493D1D277EB7 /* PotaSpotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E41369000406AEFA755AE71 /* PotaSpotClient.swift */; };
 		15C3B40327ABFE9DB29B1309 /* HubSelfSpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909A650EB49961812900CFD5 /* HubSelfSpot.swift */; };
@@ -655,6 +656,7 @@
 		92BF3A3E0D2A190DDA4A0941 /* PotaParkStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkStoreTests.swift; sourceTree = "<group>"; };
 		9382E762282D91D8950B0F07 /* WorkedSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedSpot.swift; sourceTree = "<group>"; };
 		9392F2187275B71B5789F836 /* CallHistoryPageParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryPageParser.swift; sourceTree = "<group>"; };
+		94354D23B8B582B72B8FC894 /* CallFrameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallFrameTests.swift; sourceTree = "<group>"; };
 		944ACFBCB11B916DDD2F8933 /* EntryFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryFlowTests.swift; sourceTree = "<group>"; };
 		946CE99241815D626D18A649 /* ScoreSummaryText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreSummaryText.swift; sourceTree = "<group>"; };
 		948FA6065D5E16C881FCE1EE /* SpaceWeatherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWeatherTests.swift; sourceTree = "<group>"; };
@@ -1338,6 +1340,7 @@
 				E158548019775B5706D58253 /* AdifExportTypeTests.swift */,
 				DA5E27E442F21DB53D12923E /* AdvisorPreferenceTests.swift */,
 				725F2EE6C91643ADCAC4B72C /* BandMapObservationTests.swift */,
+				94354D23B8B582B72B8FC894 /* CallFrameTests.swift */,
 				B311ACDB55F4A18F8A7B3A0F /* CallHistoryClientTests.swift */,
 				359DF0F30A9EF39FE37A2287 /* CallHistoryPrefillTests.swift */,
 				57263564A0C38ADE1B3E1897 /* CloudMirrorTests.swift */,
@@ -1633,6 +1636,7 @@
 				74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */,
 				0C98121EB0A1EFAF11C23781 /* CaliforniaQSOPartyTests.swift in Sources */,
 				AFABF3686AB980194F459E40 /* CallAreaSumBonusTests.swift in Sources */,
+				12E1FE53CDC81A2F09F47D71 /* CallFrameTests.swift in Sources */,
 				4B57DE872C673ADDFB695588 /* CallHistoryClientTests.swift in Sources */,
 				A05D552978623253F23B4C79 /* CallHistoryFileTests.swift in Sources */,
 				F163F72E6DB347B808CAE90A /* CallHistoryPageParserTests.swift in Sources */,
