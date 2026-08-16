@@ -600,19 +600,22 @@ final class EntryFlow {
             // an exchange the operator owns ends the matter, an empty one
             // still deserves a hint.
             if entry.exchange.isEmpty || entry.exchangeIsAutoFilled {
-                if let candidate = StationMemory.candidate(
+                // This log, the archive, then the call history file — the
+                // community's roster ranks below anything we copied ourselves.
+                // The band map colours spots by the same call, so a red spot
+                // is one whose county lands here.
+                if let known = StationMemory.knownLocation(
                     call: call,
                     log: document.log.qsos,
                     index: archiveIndex,
+                    callHistory: callHistoryParsed(for: party),
                     party: party,
                     role: role
                 ) {
-                    entry.autoFillExchange(candidate.text)
-                } else if let exchange = history?.exchange {
-                    // The community's roster of what this station sends —
-                    // curated, but still third-party and last season's, so it
-                    // ranks below anything we copied ourselves.
-                    entry.autoFillExchange(exchange, origin: .callHistory)
+                    entry.autoFillExchange(
+                        known.text,
+                        origin: known.source == .callHistory ? .callHistory : .ownLog
+                    )
                 } else if let hint = spotCountyHint, hint.call == call {
                     // A spot's county is the last resort and the weakest
                     // evidence there is — a stranger's claim about a station
@@ -679,6 +682,13 @@ final class EntryFlow {
         }
         return CallHistoryFile.candidate(
             for: call, in: callHistoryIndex.parsed, party: party, role: role)
+    }
+
+    /// The party's parsed call history file, or nil when the one loaded is
+    /// another party's (the download may land after a party change).
+    private func callHistoryParsed(for party: PartyDefinition) -> CallHistoryFile.Parsed? {
+        guard let callHistoryIndex, callHistoryIndex.partyID == party.id else { return nil }
+        return callHistoryIndex.parsed
     }
 
     /// Mode changes (radio or manual): swap pre-filled RST defaults (599 ↔ 59)

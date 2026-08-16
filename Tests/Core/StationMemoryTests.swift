@@ -192,4 +192,67 @@ final class StationMemoryTests: XCTestCase {
         )
         XCTAssertEqual(index.entries(for: "W1ABC").first?.isCountyOfItsParty, false)
     }
+
+    // MARK: knownLocation — the chain the band map colours by
+
+    /// This log, then the archive, then the call history file — the order the
+    /// exchange pre-fill uses, so a red spot is one whose county will land in
+    /// the exchange field.
+    func testKnownLocationPrefersThisLogOverTheCallHistoryFile() {
+        let history = CallHistoryFile.parse("""
+        !!Order!!,Call,Name,Exch1,UserText,
+        # QSOPARTY KS
+        K5NA,,SED,
+        """)
+        let known = StationMemory.knownLocation(
+            call: "K5NA", log: [qso(call: "K5NA", their: "MIA")], index: .empty,
+            callHistory: history, party: ksqp, role: .outOfState
+        )
+        XCTAssertEqual(known?.text, "MIA")
+        XCTAssertEqual(known?.source, .thisLog)
+    }
+
+    func testKnownLocationFallsBackToTheCallHistoryFile() {
+        let history = CallHistoryFile.parse("""
+        !!Order!!,Call,Name,Exch1,UserText,
+        # QSOPARTY KS
+        K5NA,,SED,
+        """)
+        let known = StationMemory.knownLocation(
+            call: "K5NA", log: [], index: .empty,
+            callHistory: history, party: ksqp, role: .outOfState
+        )
+        XCTAssertEqual(known?.text, "SED")
+        XCTAssertEqual(known?.source, .callHistory)
+    }
+
+    func testKnownLocationUsesTheArchiveBeforeTheFile() {
+        let history = CallHistoryFile.parse("""
+        !!Order!!,Call,Name,Exch1,UserText,
+        # QSOPARTY KS
+        K5NA,,SED,
+        """)
+        let index = StationMemory.Index(byCall: [
+            "K5NA": [entry(call: "K5NA", loc: "MIA", party: "ksqp", year: 2025, county: true)]
+        ])
+        let known = StationMemory.knownLocation(
+            call: "K5NA", log: [], index: index,
+            callHistory: history, party: ksqp, role: .outOfState
+        )
+        XCTAssertEqual(known?.text, "MIA")
+        XCTAssertEqual(known?.source, .archive(partyID: "ksqp", year: 2025))
+    }
+
+    func testKnownLocationIsNilWhenNothingIsKnown() {
+        XCTAssertNil(StationMemory.knownLocation(
+            call: "K5NA", log: [], index: .empty, callHistory: nil, party: ksqp, role: .outOfState
+        ))
+        let unrelated = CallHistoryFile.parse("""
+        !!Order!!,Call,Name,Exch1,UserText,
+        W0BH,,BAR,
+        """)
+        XCTAssertNil(StationMemory.knownLocation(
+            call: "K5NA", log: [], index: .empty, callHistory: unrelated, party: ksqp, role: .outOfState
+        ))
+    }
 }
