@@ -44,4 +44,13 @@ final class RepeatCQPolicyTests: XCTestCase {
             .sendOnce
         )
     }
+
+    /// N1MM: Repeat CQ "is automatically turned off when no longer on the
+    /// CQ-frequency and the mode changed to S&P." Leaving Run — by ⌘R or by
+    /// tuning off the CQ frequency — takes the loop down; left running, its
+    /// next pass would key S&P's F1, which is "my call", not a CQ.
+    func testTheLoopContinuesOnlyInRun() {
+        XCTAssertTrue(RepeatCQPolicy.continues(in: .run))
+        XCTAssertFalse(RepeatCQPolicy.continues(in: .searchPounce))
+    }
 }
