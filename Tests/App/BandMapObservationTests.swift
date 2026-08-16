@@ -92,4 +92,34 @@ final class BandMapObservationTests: XCTestCase {
         XCTAssertFalse(model.isNeededMultiplier(spot),
                        "Baldwin is in the log now — the memo must have been dropped")
     }
+
+    /// The same rule for the location memo behind a cluster spot's colour: the
+    /// first read computes and stores it, and that store must not invalidate
+    /// the view either.
+    func testReadingAClusterSpotsColourDoesNotInvalidateTheView() throws {
+        let alqp = try XCTUnwrap(PartyCatalog.party(id: "alqp"))
+        let model = model(party: alqp)
+        model.callHistory = CallHistoryFile.parse("""
+        !!Order!!,Call,Name,Exch1,UserText,
+        K4EES,,BALD,
+        N4UC,,MDSN,
+        """)
+        let cluster = { (call: String, kHz: Double) in
+            Spot(call: call, freqKHz: kHz, spotter: "W3LPL", comment: "", receivedAt: Date())
+        }
+
+        final class Flag: @unchecked Sendable { var tripped = false }
+        let invalidated = Flag()
+
+        withObservationTracking {
+            _ = model.status(for: cluster("K4EES", 7030))
+        } onChange: {
+            invalidated.tripped = true
+        }
+        _ = model.status(for: cluster("N4UC", 7032))
+        _ = model.status(for: cluster("WA1FCN", 7034))
+
+        XCTAssertFalse(invalidated.tripped,
+                       "classifying a spot invalidated the view — the render loop again")
+    }
 }

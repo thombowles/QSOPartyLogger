@@ -20,10 +20,20 @@ final class BandMapModel {
     /// The active party and log, for deciding whether a spot's county is a
     /// multiplier still worth chasing. Setting either drops the cache.
     var party: PartyDefinition? {
-        didSet { neededMultiplierCache = [:] }
+        didSet { dropCaches() }
     }
     var log: ContestLog? {
-        didSet { neededMultiplierCache = [:] }
+        didSet { dropCaches() }
+    }
+    /// Previous contests, and the party's call history file — what a cluster
+    /// spot's location is looked up in when it carries none. Set by MainView
+    /// wherever it sets the flow's; the file is already checked against the
+    /// party there.
+    var archiveIndex = StationMemory.Index.empty {
+        didSet { dropCaches() }
+    }
+    var callHistory: CallHistoryFile.Parsed? {
+        didSet { dropCaches() }
     }
     /// Deliberately **not** observed. `isNeededMultiplier` runs once per spot
     /// inside the band map's body, and memoises as it goes. Were this an
@@ -35,6 +45,16 @@ final class BandMapModel {
     /// redraw because it changed; `party` and `log` are observed, and dropping
     /// the cache in their `didSet` is what keeps it honest.
     @ObservationIgnored private var neededMultiplierCache: [String: Bool] = [:]
+    /// Call → what the app knows of its location, nil included — the second
+    /// memo under the same rule. A dictionary of optionals so "looked up,
+    /// nothing known" is remembered too, and not re-derived every render.
+    @ObservationIgnored private var locationCache: [String: Located?] = [:]
+
+    private func dropCaches() {
+        neededMultiplierCache = [:]
+        locationCache = [:]
+    }
+
     var onTuneSpot: ((Spot) -> Void)?
     var onTuneKHz: ((Double) -> Void)?
     /// Right-click → spot this station, to whichever networks apply. Opens
@@ -92,25 +112,110 @@ final class BandMapModel {
                             workedCallCounties: workedCallCounties)
     }
 
-    /// Whether this spot's county is a multiplier still worth chasing.
+    /// Where a spot's location came from, for the tooltip and for how far to
+    /// trust it. A hub or local spot names its own county; a cluster spot is
+    /// looked up the way the exchange pre-fill looks the call up.
+    enum LocationSource: Equatable, Sendable {
+        case spot, thisLog, archive, callHistory
+
+        init(_ source: StationMemory.Source) {
+            switch source {
+            case .thisLog: self = .thisLog
+            case .archive: self = .archive
+            case .callHistory: self = .callHistory
+            }
+        }
+    }
+
+    struct LocationVerdict: Equatable, Sendable {
+        let location: String
+        let source: LocationSource
+        /// Whether that location would still add a multiplier on the spot's
+        /// band and mode.
+        let needed: Bool
+    }
+
+    private struct Located: Equatable {
+        let location: String
+        let source: LocationSource
+    }
+
+    /// The location the app knows for this spot's station and whether it is a
+    /// multiplier still worth chasing — nil when nothing is known, which the
+    /// map draws blue and calls "location unknown".
     ///
-    /// Only hub spots carry a county, and there are few of them next to a
-    /// cluster's hundreds, so the scoring call below is reached rarely — and
-    /// memoised per county+band+mode besides. `wouldAddMultiplier` honours the
-    /// party's scored-multiplier ceiling, so this never sends the operator
-    /// after a multiplier that pays nothing.
-    func isNeededMultiplier(_ spot: Spot) -> Bool {
-        guard let county = spot.county, !county.isEmpty,
-              let party, let log, let band = spot.band else { return false }
+    /// A hub or local spot carries a county and uses it: the spot is where he
+    /// is *now*, which for a rover outranks where the log last had him. A
+    /// cluster spot carries none, so `StationMemory.knownLocation` resolves
+    /// the call — this log, the archive, the call history file — the same
+    /// chain the exchange pre-fill uses, so a red spot is exactly one whose
+    /// county will land in the exchange field.
+    ///
+    /// `wouldAddMultiplier` honours the party's scored-multiplier ceiling, so
+    /// this never sends the operator after a multiplier that pays nothing.
+    /// Memoised per call and per location+band+mode; see the caches.
+    func verdict(for spot: Spot) -> LocationVerdict? {
+        guard let party, let log, let band = spot.band else { return nil }
+        let located: Located?
+        if let county = spot.county, !county.isEmpty {
+            located = Located(location: county, source: .spot)
+        } else {
+            located = knownLocation(call: spot.call, log: log, party: party)
+        }
+        guard let located else { return nil }
         let mode = SpotFilter.modeClass(freqKHz: spot.freqKHz, comment: spot.comment,
                                         allowedModes: allowedModes)
-        let key = "\(county)|\(band.rawValue)|\(mode.rawValue)"
-        if let cached = neededMultiplierCache[key] { return cached }
-        let needed = ScoreEngine.wouldAddMultiplier(
-            theirLocs: [county], band: band, modeClass: mode, log: log, party: party
+        let key = "\(located.location)|\(band.rawValue)|\(mode.rawValue)"
+        let needed: Bool
+        if let cached = neededMultiplierCache[key] {
+            needed = cached
+        } else {
+            needed = ScoreEngine.wouldAddMultiplier(
+                theirLocs: [located.location], band: band, modeClass: mode, log: log, party: party
+            )
+            neededMultiplierCache[key] = needed
+        }
+        return LocationVerdict(location: located.location, source: located.source, needed: needed)
+    }
+
+    private func knownLocation(call: String, log: ContestLog, party: PartyDefinition) -> Located? {
+        let key = call.uppercased()
+        if let cached = locationCache[key] { return cached }
+        let role: ExchangeParser.Role = log.myLocation.isInState ? .inState : .outOfState
+        let known = StationMemory.knownLocation(
+            call: key, log: log.qsos, index: archiveIndex, callHistory: callHistory,
+            party: party, role: role
         )
-        neededMultiplierCache[key] = needed
-        return needed
+        let located = known.map { Located(location: $0.text, source: LocationSource($0.source)) }
+        // updateValue, not subscript assignment: assigning nil would remove
+        // the key, and "nothing known" is exactly what is worth remembering.
+        locationCache.updateValue(located, forKey: key)
+        return located
+    }
+
+    /// Whether this spot's county is a multiplier still worth chasing.
+    func isNeededMultiplier(_ spot: Spot) -> Bool {
+        verdict(for: spot)?.needed ?? false
+    }
+
+    /// The colour: grey for worked or superseded, red for a needed
+    /// multiplier, blue otherwise. Read by the map for every spot and by the
+    /// entry bar for the ghost call, so the two never disagree.
+    func status(for spot: Spot) -> SpotStatus {
+        if spot.isSuperseded || isWorked(spot) { return .worked }
+        return verdict(for: spot)?.needed == true ? .neededMultiplier : .unworked
+    }
+}
+
+extension SpotStatus {
+    /// N1MM's scheme: "Blue: Will be a good QSO, not a multiplier / Red:
+    /// Single Multiplier / Gray: Dupe".
+    var color: Color {
+        switch self {
+        case .worked: .secondary
+        case .neededMultiplier: .red
+        case .unworked: .blue
+        }
     }
 }
 
@@ -154,6 +259,11 @@ struct BandMapView: View {
         HStack(spacing: 8) {
             Text(model.band.rawValue)
                 .font(.headline)
+                .help("Red — a multiplier you still need. Blue — unworked, not a multiplier "
+                      + "(or nobody knows where he is). Grey — worked on this band and mode, "
+                      + "or superseded. A cluster spot's county comes from your log, previous "
+                      + "contests or the party's call history file — the same places the "
+                      + "exchange pre-fill looks.")
             if let vfo = model.vfoKHz {
                 Text(String(format: "%.1f", vfo))
                     .font(.callout.monospacedDigit().weight(.semibold))
@@ -283,6 +393,9 @@ struct BandMapView: View {
                 .help("Switch the radio between CW and SSB to match the band plan when you tune from the app — clicking a spot, typing a frequency, ⌘↑ / ⌘↓, ⌘J. Turning the VFO knob never changes your mode.")
 
             Divider()
+            tuningSection
+
+            Divider()
             HStack {
                 Button("Reset All") {
                     settings.northAmericanSpottersOnly = false
@@ -293,8 +406,14 @@ struct BandMapView: View {
                     settings.spotBands = []
                     settings.spotMaxAgeMinutes = 15
                     settings.followBandPlan = true
+                    settings.callFrameEnabled = true
+                    settings.autoLeaveRun = true
+                    settings.autoReturnToRun = true
+                    settings.tuningToleranceHz = .defaultTolerance
+                    settings.leaveRunDistanceHz = .defaultLeaveRun
                 }
-                .disabled(!model.filtersActive && settings.spotMaxAgeMinutes == 15 && settings.followBandPlan)
+                .disabled(!model.filtersActive && settings.spotMaxAgeMinutes == 15
+                          && settings.followBandPlan && tuningAtDefaults)
                 Spacer()
                 Button("Done") { showFilters = false }
                     .keyboardShortcut(.defaultAction)
@@ -302,7 +421,104 @@ struct BandMapView: View {
         }
         .toggleStyle(.checkbox)
         .padding(14)
-        .frame(width: 290)
+        .frame(width: 330)
+    }
+
+    /// TUNING — how the app follows the knob: the ghost call, leaving and
+    /// returning to Run, and the two distances per mode. Its own seam so the
+    /// popover's one expression stays inside the type-checker's budget.
+    @ViewBuilder
+    private var tuningSection: some View {
+        @Bindable var settings = model.settings
+        Text("TUNING")
+            .font(.caption.weight(.bold))
+            .foregroundStyle(.secondary)
+        Toggle("Show the spot under the VFO as a ghost call (S&P)", isOn: $settings.callFrameEnabled)
+            .help("Searching, the nearest visible spot within the tuning tolerance appears in "
+                  + "the empty call field in the map's colour for it — Space, or Return under "
+                  + "ESM, takes it and its county. Tuning further than the tolerance away erases "
+                  + "a call the app put there; typed text is never touched. N1MM's call frame.")
+        Toggle("Leave Run when the VFO moves off your CQ frequency", isOn: $settings.autoLeaveRun)
+            .help("Past the leave-Run distance below you are hunting, so the mode goes to S&P — "
+                  + "a QRM dodge inside it keeps you in Run. F1 in Run remembers the CQ frequency; "
+                  + "⌘J jumps back to it. Leaving Run stops Repeat CQ.")
+        Toggle("Return to Run when it comes back", isOn: $settings.autoReturnToRun)
+            .help("Tuning back within the tolerance of your CQ frequency puts you in Run again — "
+                  + "N1MM's default. Off, only F1, ⌘R and ⌘J switch to Run "
+                  + "(N1MM's \"Do not automatically switch to Run on CQ-frequency\").")
+        Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 4) {
+            GridRow {
+                Text("")
+                ForEach(ModeClass.allCases) { mode in
+                    Text(mode.displayName)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            GridRow {
+                Text("Spot within").font(.caption)
+                ForEach(ModeClass.allCases) { mode in
+                    distancePicker(
+                        binding: toleranceBinding(mode, settings: settings),
+                        choices: Self.toleranceChoices
+                    )
+                }
+            }
+            GridRow {
+                Text("Leave Run at").font(.caption)
+                ForEach(ModeClass.allCases) { mode in
+                    distancePicker(
+                        binding: leaveRunBinding(mode, settings: settings),
+                        choices: Self.leaveRunChoices
+                    )
+                }
+            }
+        }
+        .help("The tuning tolerance (N1MM's Configurer keeps one per mode, 300 Hz each; "
+              + "phone is wider here because SSB spots are posted to the kHz) and how far off "
+              + "your CQ frequency counts as leaving it.")
+    }
+
+    private static let toleranceChoices = [100, 200, 300, 500, 1000, 2000]
+    private static let leaveRunChoices = [500, 1000, 2000, 3000, 5000, 10000]
+
+    private var tuningAtDefaults: Bool {
+        let settings = model.settings
+        return settings.callFrameEnabled && settings.autoLeaveRun && settings.autoReturnToRun
+            && settings.tuningToleranceHz == .defaultTolerance
+            && settings.leaveRunDistanceHz == .defaultLeaveRun
+    }
+
+    private static func hzLabel(_ hz: Int) -> String {
+        hz < 1000 ? "\(hz) Hz" : String(format: "%g kHz", Double(hz) / 1000)
+    }
+
+    /// A menu of the usual values — plus whatever is stored, so a hand-edited
+    /// preference still shows rather than a blank control.
+    private func distancePicker(binding: Binding<Int>, choices: [Int]) -> some View {
+        let all = choices.contains(binding.wrappedValue) ? choices : (choices + [binding.wrappedValue]).sorted()
+        return Picker("", selection: binding) {
+            ForEach(all, id: \.self) { hz in
+                Text(Self.hzLabel(hz)).tag(hz)
+            }
+        }
+        .labelsHidden()
+        .controlSize(.small)
+        .frame(width: 70)
+    }
+
+    private func toleranceBinding(_ mode: ModeClass, settings: AppSettings) -> Binding<Int> {
+        Binding(
+            get: { settings.tuningToleranceHz.hz(for: mode) },
+            set: { settings.tuningToleranceHz.set($0, for: mode) }
+        )
+    }
+
+    private func leaveRunBinding(_ mode: ModeClass, settings: AppSettings) -> Binding<Int> {
+        Binding(
+            get: { settings.leaveRunDistanceHz.hz(for: mode) },
+            set: { settings.leaveRunDistanceHz.set($0, for: mode) }
+        )
     }
 
     /// Built from the presets rather than written out, so the point sizes in
@@ -419,8 +635,9 @@ struct BandMapView: View {
 
             // Spots, stacked sideways where they collide (see BandMapLayout).
             ForEach(placements(scale: scale, size: size)) { row in
-                let worked = model.isWorked(row.spot)
-                let needed = model.isNeededMultiplier(row.spot)
+                let status = model.status(for: row.spot)
+                let verdict = model.verdict(for: row.spot)
+                let needed = status == .neededMultiplier
                 Button {
                     model.onTuneSpot?(row.spot)
                 } label: {
@@ -429,7 +646,7 @@ struct BandMapView: View {
                         Text(row.spot.call)
                             .font(.system(size: CGFloat(labelSize.callPointSize),
                                           design: .monospaced).weight(.semibold))
-                            .strikethrough(worked || row.spot.isSuperseded)
+                            .strikethrough(status == .worked)
                         // The county is the whole reason the hub feed exists —
                         // a cluster spot never carries one.
                         if let county = row.spot.county, !county.isEmpty {
@@ -440,10 +657,10 @@ struct BandMapView: View {
                                 .padding(.vertical, 1)
                                 .background(
                                     RoundedRectangle(cornerRadius: 2)
-                                        .fill(needed ? Color.accentColor.opacity(0.25)
+                                        .fill(needed ? Color.red.opacity(0.18)
                                                      : Color.secondary.opacity(0.15))
                                 )
-                                .foregroundStyle(needed ? Color.accentColor : Color.secondary)
+                                .foregroundStyle(needed ? Color.red : Color.secondary)
                         }
                     }
                     .contentShape(Rectangle())
@@ -456,33 +673,38 @@ struct BandMapView: View {
                         }
                     }
                 }
-                .foregroundStyle(spotColor(worked: worked, spot: row.spot))
+                .foregroundStyle(status.color)
                 .opacity(row.spot.isSuperseded ? 0.45 : 1)
                 .offset(
                     x: rulerWidth + labelInset
                         + CGFloat(row.column) * CGFloat(labelSize.columnWidth),
                     y: CGFloat(row.y) - CGFloat(labelSize.verticalOffset)
                 )
-                .help(helpText(for: row.spot, worked: worked, needed: needed))
+                .help(helpText(for: row.spot, status: status, verdict: verdict))
             }
         }
         .clipped()
     }
 
-    private func spotColor(worked: Bool, spot: Spot) -> Color {
-        if spot.isSuperseded || worked { return .secondary }
-        return .primary
-    }
-
     /// Everything the label had no room for. The reconstructed-frequency and
     /// superseded notes are warnings, not decoration: one means the frequency
     /// was inferred rather than read, the other that the board has already
-    /// corrected this call.
-    private func helpText(for spot: Spot, worked: Bool, needed: Bool) -> String {
+    /// corrected this call. The location line says where the app got it, so a
+    /// red spot from last season's roster reads as exactly that.
+    private func helpText(for spot: Spot, status: SpotStatus, verdict: BandMapModel.LocationVerdict?) -> String {
         var parts = [String(format: "%.1f de %@", spot.freqKHz, spot.spotter)]
         if !spot.comment.isEmpty { parts.append("(\(spot.comment))") }
-        if let county = spot.county, !county.isEmpty {
-            parts.append(needed ? "\(county) — NEW MULTIPLIER" : "\(county) — already counted")
+        if let verdict {
+            let origin = switch verdict.source {
+            case .spot: ""
+            case .thisLog: " (your log)"
+            case .archive: " (a previous contest)"
+            case .callHistory: " (call history)"
+            }
+            parts.append(verdict.location + origin
+                         + (verdict.needed ? " — NEW MULTIPLIER" : " — already counted"))
+        } else if spot.county == nil {
+            parts.append("location unknown")
         }
         if spot.source == .hub { parts.append("via QSO Party Hub") }
         if spot.source == .local { parts.append("from your own log — nobody spotted him") }
@@ -492,7 +714,7 @@ struct BandMapView: View {
         if spot.isSuperseded {
             parts.append("a later spot on this frequency corrected this call")
         }
-        parts.append(worked ? "already worked on this band and mode" : "click to tune")
+        parts.append(status == .worked ? "already worked on this band and mode" : "click to tune")
         return parts.joined(separator: " — ")
     }
 

@@ -65,6 +65,7 @@
 		1EFC7078C2C24D6FB36D9408 /* AudioFileIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C770738C3FEFA2071FBF53 /* AudioFileIO.swift */; };
 		1F00CED8C43362316C761617 /* QMXProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CE38D4FB00F99FA2C6D973 /* QMXProtocolTests.swift */; };
 		1F03EEA369072913AD9AACE8 /* PotaParkDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D56FC1028278EEC43767DE /* PotaParkDirectory.swift */; };
+		1F1FBEDEE908B3EBB86AFC61 /* BandMapStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5BA028001710ECEF0674D1 /* BandMapStatusTests.swift */; };
 		1F398856D0FD6956763806D5 /* Challenge in Resources */ = {isa = PBXBuildFile; fileRef = 75970653CB7669E2A41577F5 /* Challenge */; };
 		209C0DA71AC3EE5A16488856 /* IllinoisQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8008DF74BE1374A98273ECC /* IllinoisQSOPartyTests.swift */; };
 		20DFF58F66D982FF805E63C0 /* DXCCTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186FAD70DFDE9D915C1A471E /* DXCCTable.swift */; };
@@ -443,6 +444,7 @@
 		093C918A35B84A46D9369272 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		09DA0DF56D3346FEB3B3B11C /* PartyCaveatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCaveatTests.swift; sourceTree = "<group>"; };
 		09EA7AC5651A2B6A5FAEEA94 /* ShortcutHintsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutHintsTests.swift; sourceTree = "<group>"; };
+		0A5BA028001710ECEF0674D1 /* BandMapStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapStatusTests.swift; sourceTree = "<group>"; };
 		0A5F9E99BE569E4E2DFB8FC7 /* LocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProvider.swift; sourceTree = "<group>"; };
 		0B4B7B2632E809D2D53F4D08 /* Maidenhead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maidenhead.swift; sourceTree = "<group>"; };
 		0DEA58106A345669FAF4E466 /* HubSpotFilteringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotFilteringTests.swift; sourceTree = "<group>"; };
@@ -1342,6 +1344,7 @@
 				E158548019775B5706D58253 /* AdifExportTypeTests.swift */,
 				DA5E27E442F21DB53D12923E /* AdvisorPreferenceTests.swift */,
 				725F2EE6C91643ADCAC4B72C /* BandMapObservationTests.swift */,
+				0A5BA028001710ECEF0674D1 /* BandMapStatusTests.swift */,
 				94354D23B8B582B72B8FC894 /* CallFrameTests.swift */,
 				B311ACDB55F4A18F8A7B3A0F /* CallHistoryClientTests.swift */,
 				359DF0F30A9EF39FE37A2287 /* CallHistoryPrefillTests.swift */,
@@ -1630,6 +1633,7 @@
 				AA298B42C48C6E77E848FD97 /* AudioResamplerTests.swift in Sources */,
 				9ECF4B187A1C5F95F20C0C4C /* BandMapLayoutTests.swift in Sources */,
 				D8C66775D3C9F52A735ABA85 /* BandMapObservationTests.swift in Sources */,
+				1F1FBEDEE908B3EBB86AFC61 /* BandMapStatusTests.swift in Sources */,
 				83FA7452B5CF0039189A7995 /* BandMapTests.swift in Sources */,
 				EC56BDD4BA4DD578EFC84597 /* BandPlanTests.swift in Sources */,
 				2116FEE0D5157A280241DAE1 /* BonusScopeTests.swift in Sources */,
