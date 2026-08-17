@@ -1,0 +1,9 @@
+source: https://www.country-files.com/bigcty/cty.csv
+fetched: 2026-08-17
+release: VER20260814
+records: 346
+bytes: 301678
+sha256: 0d59b15b2b1ad2d65713a0c840ac6e7168bcbbda6a8e37240ad3e7c74511f5c4
+format: primary prefix, name, ADIF entity code, continent, CQ zone, ITU zone, lat, lon, tz, prefix list ending ';'
+        (a leading * on the primary prefix marks a WAE-only entity; =CALL is an exact callsign; (n) CQ and [n] ITU overrides)
+see: docs/research/cty_dat_format.txt

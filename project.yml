@@ -41,6 +41,9 @@ targets:
       - path: Resources/Data
         type: folder
         buildPhase: resources
+      - path: Resources/CTY
+        type: folder
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: org.b5n.QSOPartyLogger
