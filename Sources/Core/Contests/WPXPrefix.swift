@@ -8,25 +8,40 @@ import Foundation
 /// assigned a zero (Ø) after the first two letters … Maritime mobile, mobile,
 /// /A, /E, /J, /P, or other license class identifiers do not count as prefixes."
 enum WPXPrefix {
-    /// Suffixes that are class identifiers, not designators.
+    /// Suffixes that are class identifiers, not designators. `MM`, mobile
+    /// (`M`), `/A /E /J /P` are the sponsor's list; `AM` and `QRP` are read
+    /// as "other license class identifiers" — an inference, like the
+    /// bare-digit rule below.
     static let ignoredSuffixes: Set<String> = ["MM", "AM", "M", "A", "E", "J", "P", "QRP"]
 
-    static func of(_ raw: String) -> String? {
+    /// - Parameter isKnownPrefix: Answers "is this whole part an authorized
+    ///   prefix?" Rule V.C.1 says a portable prefix "must be an authorized
+    ///   prefix of the country/call area of operation", so a part that is a
+    ///   listed cty prefix key is a designator even when it ends in a letter
+    ///   (`VK9C`, `PY0F`, `CE0Y`). Defaults to the bundled cty table.
+    static func of(_ raw: String, isKnownPrefix: (String) -> Bool = { CTYTable.shared?.hasPrefix($0) ?? false }) -> String? {
         let parts = raw.uppercased().split(separator: "/").map(String.init).filter { !$0.isEmpty }
         guard !parts.isEmpty else { return nil }
-        var candidates = parts.filter { !ignoredSuffixes.contains($0) }
-        if candidates.isEmpty { candidates = [parts[0]] }
+        let candidates = parts.filter { !ignoredSuffixes.contains($0) }
+        // A call that is nothing but class identifiers (/QRP, MM/AM) has no prefix.
+        if candidates.isEmpty { return nil }
         if candidates.count == 1 { return prefix(of: candidates[0]) }
-        // A bare digit designator replaces the number (NOT STATED — inference).
+        // A bare digit designator keeps the base prefix with its trailing
+        // digit run dropped, then appends the new digit (NOT STATED — inference).
         if let digit = candidates.first(where: { $0.allSatisfy(\.isNumber) }),
            let home = candidates.first(where: { !$0.allSatisfy(\.isNumber) }),
            let base = prefix(of: home) {
-            let letters = base.prefix { $0.isLetter }
-            return String(letters) + digit
+            var chars = Array(base)
+            while chars.last?.isNumber == true { chars.removeLast() }
+            return String(chars) + digit
         }
-        // The designator is the part that does not read as a full call
-        // (no letters after its digits); ties go to the shorter, then the first.
-        let designators = candidates.filter { !looksLikeFullCall($0) }
+        // A part is a designator if it doesn't read as a full call (no
+        // letters after its digits), or if it is itself an authorized
+        // prefix per V.C.1; ties go to the shorter, then the first.
+        let designators = candidates.filter { isDesignator($0, isKnownPrefix: isKnownPrefix) }
+        // candidates.count >= 2 here (count == 0 and count == 1 both return
+        // above), so `designators.isEmpty ? candidates : designators` is
+        // never empty and `.min` cannot be nil.
         let pick = (designators.isEmpty ? candidates : designators)
             .enumerated()
             .min { ($0.element.count, $0.offset) < ($1.element.count, $1.offset) }!
@@ -50,9 +65,13 @@ enum WPXPrefix {
         return String(chars[...cut])
     }
 
-    private static func looksLikeFullCall(_ part: String) -> Bool {
+    /// A part is a designator if it has no digit, or its last digit is not
+    /// followed by a letter, or `isKnownPrefix` recognizes the whole part as
+    /// an authorized prefix (the letter-ending case, e.g. `VK9C`).
+    private static func isDesignator(_ part: String, isKnownPrefix: (String) -> Bool) -> Bool {
         let chars = Array(part)
-        guard let lastDigit = chars.lastIndex(where: \.isNumber) else { return false }
-        return chars[(lastDigit + 1)...].contains(where: \.isLetter)
+        guard let lastDigit = chars.lastIndex(where: \.isNumber) else { return true }
+        guard chars[(lastDigit + 1)...].contains(where: \.isLetter) else { return true }
+        return isKnownPrefix(part)
     }
 }

@@ -50,6 +50,9 @@ struct CTYTable: Sendable {
         return try? parse(csv: text)
     }
 
+    /// The bundled table, loaded once; nil only if the resource is missing.
+    static let shared: CTYTable? = CTYTable.load()
+
     enum ParseError: Error, Equatable { case malformedRecord(String), noRecords }
 
     static func parse(csv: String) throws -> CTYTable {
@@ -102,6 +105,15 @@ struct CTYTable: Sendable {
 
     func entity(forPrimaryPrefix prefix: String) -> Entity? {
         entities.first { $0.primaryPrefix == prefix.uppercased() }
+    }
+
+    /// Whether `prefix`, uppercased, is exactly one of the file's prefix
+    /// keys (not one of its exact-call `=CALL` keys). A record's own
+    /// primary prefix (field 0) counts only if the file also lists it as a
+    /// token — Easter Island's primary prefix `CE0Y` does not list itself,
+    /// so `hasPrefix("CE0Y")` is false even though `CE0Y` names the entity.
+    func hasPrefix(_ prefix: String) -> Bool {
+        prefixes[prefix.uppercased()] != nil
     }
 
     /// The entity and zones for a callsign: an exact `=CALL` entry (with or

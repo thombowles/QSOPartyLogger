@@ -77,4 +77,11 @@ final class CTYTableTests: XCTestCase {
         let arrlCodes = Set(arrl.entities.compactMap { Int($0.code) })
         XCTAssertEqual(ctyCodes, arrlCodes, "cty/ARRL disagree on: \(ctyCodes.symmetricDifference(arrlCodes))")
     }
+
+    func testSharedAndHasPrefix() {
+        XCTAssertNotNil(CTYTable.shared)
+        XCTAssertTrue(CTYTable.shared!.hasPrefix("DL"))
+        XCTAssertFalse(CTYTable.shared!.hasPrefix("DL1AA"))   // a full call is not a prefix key
+        XCTAssertFalse(CTYTable.shared!.hasPrefix(""))
+    }
 }
