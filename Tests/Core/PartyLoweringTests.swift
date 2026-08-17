@@ -185,4 +185,122 @@ final class PartyLoweringTests: XCTestCase {
         let wa = try lowered("warun"), wap = try party("warun")
         XCTAssertEqual(wa.multipliers.first { $0.id == "dx" }?.caps?["inside"], wap.multipliers.inState.dxMultCap)
     }
+
+    /// A lowered party is a v2 file: every field it sets survives being written
+    /// and read back, and the reader's own `validate()` accepts it.
+    func testLoweredContestsRoundTripThroughJSON() throws {
+        for id in ["ksqp", "paqp", "skeeter", "sevenqp", "naqpcw"] {
+            let c = try lowered(id)
+            XCTAssertEqual(try ContestDefinition.decode(try c.encoded()), c, id)
+        }
+    }
+
+    /// `alqp.json` is the first bundled party alphabetically carrying
+    /// `"stateAliases": {"DC": "MD"}` — Alabama credits a DC station as
+    /// Maryland, so DC is an accepted spelling but not a token of its own.
+    func testStateAliasesCreditTheAliasedState() throws {
+        let c = try lowered("alqp")
+        let states = try XCTUnwrap(c.tokenSet(id: "states"))
+        XCTAssertFalse(states.abbrs.contains("DC"))
+        XCTAssertFalse(states.tokens.contains { $0.abbr == "DC" })
+        XCTAssertTrue(states.accepts("DC"))
+        XCTAssertEqual(states.canonical("DC"), "MD")
+        XCTAssertNoThrow(try c.validate())
+    }
+
+    /// Ohio lists 11 provinces, not the built-in 13; a contest's own set
+    /// shadows the built-in of the same id.
+    func testProvinceOverrideShadowsTheBuiltIn() throws {
+        let c = try lowered("ohqp")
+        XCTAssertEqual(c.tokenSet(id: "provinces")?.tokens.count, 11)
+        XCTAssertNotEqual(c.tokenSet(id: "provinces")?.tokens.count, TokenSet.provinces.tokens.count)
+    }
+
+    /// azqp.json: the inside side counts states, provinces and DX `perMode`;
+    /// the outside side counts counties `perBandMode`. The two sides' classes
+    /// are disjoint there, so each class's `counting` carries exactly the side
+    /// that counts it, at that side's own scope.
+    func testArizonaScopesDifferPerSide() throws {
+        let c = try lowered("azqp"), p = try party("azqp")
+        XCTAssertNotEqual(p.multipliers.inState.countScope, p.multipliers.outState.countScope)
+        let state = try XCTUnwrap(c.multipliers.first { $0.id == "state" })
+        XCTAssertEqual(state.counting["inside"], p.multipliers.inState.countScope)
+        XCTAssertNil(state.counting["outside"], "Arizona's outside side counts counties, not states")
+        let county = try XCTUnwrap(c.multipliers.first { $0.id == "county" })
+        XCTAssertEqual(county.counting["outside"], p.multipliers.outState.countScope)
+        XCTAssertNil(county.counting["inside"])
+        // Hawaii counts the same class on both sides at different scopes —
+        // one class, two scopes, which is where a per-contest scope would show.
+        let hi = try lowered("hqp"), hip = try party("hqp")
+        let hiCounty = try XCTUnwrap(hi.multipliers.first { $0.id == "county" })
+        XCTAssertEqual(hiCounty.counting["inside"], hip.multipliers.inState.countScope)
+        XCTAssertEqual(hiCounty.counting["outside"], hip.multipliers.outState.countScope)
+        XCTAssertNotEqual(hiCounty.counting["inside"], hiCounty.counting["outside"])
+    }
+
+    /// MDC excludes both its own tokens: a Maryland or DC station sends a
+    /// county, never a state.
+    func testMarylandExcludesBothTokens() throws {
+        let states = try XCTUnwrap(try lowered("mdc").tokenSet(id: "states"))
+        XCTAssertFalse(states.accepts("MD"))
+        XCTAssertFalse(states.accepts("DC"))
+    }
+
+    /// The assumptions the lowering makes about the whole catalogue. Each would
+    /// be a silent scoring change if a party file stopped honouring it.
+    func testCatalogueGuards() throws {
+        for p in PartyCatalog.loadBundled() {
+            for (side, rule) in [("inState", p.multipliers.inState), ("outState", p.multipliers.outState)]
+            where rule.homeStateCountsViaCounty {
+                // The county→group resolver is added to the state class.
+                XCTAssertTrue(rule.classes.contains(.state),
+                              "\(p.id) \(side): homeStateCountsViaCounty without the state class")
+            }
+            // Both would scale the same rows; the lowering writes designated
+            // counties first and home stations second, and never both.
+            XCTAssertFalse(p.homeStationPoints != nil && p.countyPointFactor != nil,
+                           "\(p.id): home-station points and a county point factor would stack")
+            if !p.hasHomeRegion {
+                // One side, lowered from `outState` — so the unused `inState`
+                // rule must say the same thing.
+                XCTAssertEqual(p.multipliers.inState, p.multipliers.outState,
+                               "\(p.id): a party with no home region has one side; its two rules must agree")
+            }
+        }
+    }
+
+    func testSkeeterMemberSpecAndEntryClassOrder() throws {
+        let c = try lowered("skeeter"), p = try party("skeeter")
+        let member = try XCTUnwrap(c.exchange.first { $0.id == "member" })
+        XCTAssertEqual(member.member?.qrpMaxWatts, p.memberExchange?.qrpMaxWatts)
+        XCTAssertEqual(c.scoreFactors?.entryClasses.map(\.id), p.entryClasses.map(\.id))
+        XCTAssertFalse(member.required, "a blank member element is a QRO station, not a missing field")
+        // Only the member element is optional. Skeeter sends no name, so the
+        // name element's own default is pinned where there is one — NAQP's.
+        XCTAssertTrue(try XCTUnwrap(try lowered("naqpcw").exchange.first { $0.id == "name" }).required)
+    }
+
+    /// A party with a home region names one `LOCATION:` for everybody inside —
+    /// the 7th Call Area's primary state, whichever of its eight the entrant
+    /// sits in. A party without one leaves the header to the entrant's token.
+    func testMultiStateHomeLocation() throws {
+        XCTAssertEqual(try lowered("sevenqp").cabrillo.homeLocation, try party("sevenqp").homeState)
+        XCTAssertNil(try lowered("naqpcw").cabrillo.homeLocation)
+    }
+
+    /// `SetupSheet` forces `isInState = false` for a party with no home region,
+    /// so `ScoreEngine` scores it with `outState` — and so must the single side.
+    func testNoHomeRegionUsesTheOutsideRule() throws {
+        let c = try lowered("fobb"), p = try party("fobb")
+        let member = try XCTUnwrap(c.multipliers.first { $0.id == "member" })
+        XCTAssertEqual(member.counting["all"], p.multipliers.outState.countScope)
+        // Skeeter and FOBB name no counties. `tokenSet(id:)` falls back to the
+        // built-ins, and there is no built-in "counties" — nil is the answer.
+        XCTAssertNil(c.tokenSet(id: "counties"))
+        XCTAssertNil(try lowered("skeeter").tokenSet(id: "counties"))
+        for id in ["fobb", "skeeter"] {
+            let sets = try XCTUnwrap(try lowered(id).exchange.first { $0.id == "location" }?.sentBy["all"]?.sets)
+            XCTAssertFalse(sets.contains("counties"), id)
+        }
+    }
 }

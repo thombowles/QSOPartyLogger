@@ -22,6 +22,10 @@ struct MultiplierClass: Codable, Equatable, Sendable, Identifiable {
     /// Side id → the most distinct values that count (WA in-state: 10 DX).
     let caps: [String: Int]?
     /// The token set the sidebar lists in full (nil = worked-only).
+    /// A roster builder must also add the groups reachable through a
+    /// `receivedToken` resolver with `mapTo: "group"` — a party's home state is
+    /// not in its `states` set (an entrant never sends it) but is earned
+    /// through a county.
     let roster: String?
     let layout: Layout
 

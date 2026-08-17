@@ -6,23 +6,33 @@ import Foundation
 enum PartyLowering {
     static let insideID = "inside", outsideID = "outside", allID = "all"
 
+    /// Validates the result, so a user party file that lowers into an
+    /// inconsistent model is rejected here, not at scoring time.
     static func lower(_ p: PartyDefinition) throws -> ContestDefinition {
         let sides = sides(for: p)
         let sideIDs = sides.map(\.id)
         var sets = tokenSets(for: p)
         var points = pointRules(for: p, sets: &sets)
         if points.last?.when.isEmpty != true { points.append(PointRule(points: p.points.phone)) }
-        return ContestDefinition(
+        // Exhaustive, so a new v1 dupe scope fails to compile until it maps.
+        let dupe: DupeRule = switch p.dupeScope { case .bandMode: .partyDefault }
+        let contest = ContestDefinition(
+            // TODO(spec §1.3): read PartyDefinition.family once the four non-state parties carry it.
             id: p.id, name: p.name, family: .stateQSOParty, notes: p.notes, caveats: p.caveats,
             schedule: p.schedule, bands: p.validBands, modeClasses: p.allowedModeClasses,
-            tokenSets: sets, sides: sides, exchange: exchange(for: p, sideIDs: sideIDs, sets: sets),
-            multipliers: multipliers(for: p, sideIDs: sideIDs), points: points, dupe: .partyDefault,
+            tokenSets: sets, sides: sides, exchange: exchange(for: p, sideIDs: sideIDs),
+            multipliers: multipliers(for: p, sideIDs: sideIDs), points: points, dupe: dupe,
+            // No bundled party combines `outStateWorksHomeStationsOnly` with
+            // `hasHomeRegion: false`; a single-side contest has no pairing.
             pairing: p.outStateWorksHomeStationsOnly && p.hasHomeRegion ? [outsideID: [insideID]] : nil,
             sideRules: sideRules(for: p, sideIDs: sideIDs), bonuses: p.bonuses,
             scoreFactors: scoreFactors(for: p),
-            cabrillo: CabrilloSpec(contest: p.cabrilloContest, location: p.hasHomeRegion ? .state : .entrantToken),
+            cabrillo: CabrilloSpec(contest: p.cabrilloContest, location: p.hasHomeRegion ? .state : .entrantToken,
+                                   homeLocation: p.hasHomeRegion ? p.homeState : nil),
             sources: ContestSources(hubSpots: p.hubSpots, callHistory: p.callHistory, oneByOne: p.oneByOne, combines: p.combines)
         )
+        try contest.validate()
+        return contest
     }
 
     // MARK: Sides
@@ -38,18 +48,24 @@ enum PartyLowering {
         ]
     }
 
-    /// The v1 rule that governs a side.
+    /// The v1 rule that governs a side. Only the `inside` side of a party with
+    /// a home region takes `inState`: a party without one has the single `all`
+    /// side, and `SetupSheet` forces `isInState = false` for those parties, so
+    /// `ScoreEngine` scores their entrants with `party.multipliers.outState`.
     private static func rule(_ p: PartyDefinition, _ side: String) -> PartyDefinition.MultRule {
-        side == outsideID ? p.multipliers.outState : p.multipliers.inState
+        side == insideID ? p.multipliers.inState : p.multipliers.outState
     }
 
     // MARK: Token sets
 
     private static func tokenSets(for p: PartyDefinition) -> [TokenSet] {
-        var out: [TokenSet] = [
-            TokenSet(id: "counties", term: p.countyTerm, termPlural: p.countyTermPlural,
-                     tokens: p.counties.map { TokenSet.Token(abbr: $0.abbr, name: $0.name, group: p.state(forCounty: $0.abbr)) }),
-        ]
+        var out: [TokenSet] = []
+        // Skeeter and FOBB name no counties at all — an empty set no side sends
+        // and no class counts is noise in the model.
+        if !p.counties.isEmpty {
+            out.append(TokenSet(id: "counties", term: p.countyTerm, termPlural: p.countyTermPlural,
+                                tokens: p.counties.map { TokenSet.Token(abbr: $0.abbr, name: $0.name, group: p.state(forCounty: $0.abbr)) }))
+        }
         if p.usesSections {
             out.append(TokenSet(id: "sections", term: "section", termPlural: "sections",
                                 tokens: p.sections.sorted().map { TokenSet.Token(abbr: $0) }))
@@ -81,7 +97,7 @@ enum PartyLowering {
 
     // MARK: Exchange
 
-    private static func exchange(for p: PartyDefinition, sideIDs: [String], sets: [TokenSet]) -> [ExchangeElement] {
+    private static func exchange(for p: PartyDefinition, sideIDs: [String]) -> [ExchangeElement] {
         let all = Dictionary(uniqueKeysWithValues: sideIDs.map { ($0, ExchangeElement.SentSpec()) })
         var out: [ExchangeElement] = []
         if p.exchangeIncludesRST { out.append(ExchangeElement(id: "rst", kind: .rst, sentBy: all, cabrilloWidth: 3)) }
@@ -89,17 +105,22 @@ enum PartyLowering {
         if p.exchangeIncludesName { out.append(ExchangeElement(id: "name", kind: .name, sentBy: all, fixed: true, cabrilloWidth: 3, prefill: [.callHistory, .stationMemory])) }
         let cap = min(ExchangeParser.maxCounties, p.maxSimultaneousCounties)
         let inside = ExchangeElement.SentSpec(sets: ["counties"], multi: .init(max: cap))
+        // A party with no counties (Skeeter, FOBB) has no `counties` set to send.
+        let single = (p.counties.isEmpty ? [] : ["counties"]) + outsideSets(for: p)
         let sentBy: [String: ExchangeElement.SentSpec] = p.hasHomeRegion
             ? [insideID: inside, outsideID: .init(sets: outsideSets(for: p))]
-            : [allID: .init(sets: ["counties"] + outsideSets(for: p), multi: .init(max: cap))]
+            : [allID: .init(sets: single, multi: .init(max: cap))]
         out.append(ExchangeElement(
             id: "location", kind: .token,
             label: p.hasHomeRegion ? "\(p.countyTerm.sentenceCased)/State" : "Location",
             sentBy: sentBy, fixed: true, cabrilloWidth: 6, prefill: [.spot, .callHistory, .stationMemory]))
         if let m = p.memberExchange {
+            // A blank member element is a valid QRO station, not a missing
+            // field: `MemberExchange.workedClass(forReceived: nil)` is `.other`,
+            // and `EntryState` logs a row without one.
             out.append(ExchangeElement(
                 id: "member", kind: .memberOrPower, label: m.term, shortLabel: m.shortTerm, sentBy: all, fixed: true,
-                cabrilloWidth: 3, prefill: [.callHistory, .stationMemory],
+                required: false, cabrilloWidth: 3, prefill: [.callHistory, .stationMemory],
                 member: MemberSpec(term: m.term, shortTerm: m.shortTerm, memberPlural: m.memberPlural, qrpMaxWatts: m.qrpMaxWatts)))
         }
         return out
@@ -142,8 +163,11 @@ enum PartyLowering {
                     resolvers.append(Resolver(kind: .dxccEntity, element: "location", from: .receivedTokenOrCallsign, list: .arrl,
                                               countEntities: true, sides: entitySides.count == sideIDs.count ? nil : entitySides))
                 }
+                // A cap only means something for a side that counts the class.
                 var caps: [String: Int] = [:]
-                for s in sideIDs { if let cap = rule(p, s).dxMultCap { caps[s] = cap } }
+                for s in sideIDs where counting[s] != nil {
+                    if let cap = rule(p, s).dxMultCap { caps[s] = cap }
+                }
                 return MultiplierClass(id: "dx", term: "DX entity", termPlural: "DX entities", resolvers: resolvers,
                                        counting: counting, caps: caps.isEmpty ? nil : caps, layout: .workedOnly)
             case .member:
