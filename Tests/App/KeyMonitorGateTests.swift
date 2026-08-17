@@ -322,6 +322,102 @@ final class KeyMonitorGateTests: XCTestCase {
         )
     }
 
+    // MARK: Shortcuts leave a repeating CQ alone (2026-08-16)
+
+    private let commandEquals: UInt16 = 24
+    private let f12: UInt16 = 111
+
+    /// The report, on the air: "Make shortcuts allowed during calling CQ
+    /// without canceling." Changing the speed while the CQ loops is not
+    /// answering anyone; the loop and the CQ on the air both carry on.
+    func testAShortcutDuringARepeatingCQLeavesItRunning() {
+        XCTAssertEqual(
+            response(commandEquals, command: true, repeatRunning: true),
+            .init(
+                stopsRepeat: false,
+                abortsTransmission: false,
+                action: .adjustWPM(by: 1),
+                consumesEvent: true
+            )
+        )
+    }
+
+    /// Every ⌘ chord the gate owns is a shortcut: the band map, the spots,
+    /// the CQ jump, the VFO nudge, the exports, the hints.
+    func testEveryCommandChordLeavesARepeatingCQAlone() {
+        let chords: [(UInt16, Bool)] = [
+            (11, false), (126, false), (125, false), (38, false),
+            (123, true), (124, true), (14, false), (14, true), (44, false),
+        ]
+        for (code, shift) in chords {
+            let r = response(code, command: true, shift: shift, repeatRunning: true)
+            XCTAssertFalse(r.stopsRepeat, "keyCode \(code) shift \(shift) paused the loop")
+            XCTAssertFalse(r.abortsTransmission, "keyCode \(code) shift \(shift) aborted the CQ")
+            XCTAssertNotNil(r.action, "keyCode \(code) shift \(shift) lost its own job")
+        }
+    }
+
+    /// ⌘R (Run ⇄ S&P) and ⇧⌘S (the spot sheet) are SwiftUI's, not the gate's
+    /// — but they pass through the monitor first, and used to take the CQ
+    /// down on the way. Not ours to act on, and not ours to stop.
+    func testAnUnmappedCommandChordLeavesARepeatingCQAlone() {
+        XCTAssertEqual(response(15, command: true, repeatRunning: true), .init())  // ⌘R
+        XCTAssertEqual(response(1, command: true, shift: true, repeatRunning: true), .init())  // ⇧⌘S
+    }
+
+    /// Esc means stop, modifier or not.
+    func testCommandEscapeStillStopsARepeatingCQ() {
+        XCTAssertEqual(
+            response(escape, command: true, repeatRunning: true),
+            .init(stopsRepeat: true, abortsTransmission: true, action: nil, consumesEvent: true)
+        )
+    }
+
+    /// ⌘F2 falls through to the message table (it has always sent F2), and a
+    /// message must still take the CQ off the air first.
+    func testCommandFunctionKeyStillReplacesTheCQ() {
+        XCTAssertEqual(
+            response(f2, command: true, repeatRunning: true),
+            .init(
+                stopsRepeat: true,
+                abortsTransmission: true,
+                action: .sendMessage(index: 1),
+                consumesEvent: true
+            )
+        )
+    }
+
+    /// F12 wipes an entry; while the loop runs the entry is empty, so there
+    /// is nothing to wipe and no one being answered. N1MM names only "a
+    /// call-sign, or … Escape" as what stops a repeat.
+    func testF12DuringARepeatingCQLeavesItRunning() {
+        XCTAssertEqual(
+            response(f12, repeatRunning: true),
+            .init(stopsRepeat: false, abortsTransmission: false, action: .clearEntry, consumesEvent: true)
+        )
+    }
+
+    /// From a sheet a shortcut is nobody's: not acted on, not consumed, and no
+    /// longer a reason to stop the loop either.
+    func testAShortcutFromASheetLeavesARepeatingCQAlone() {
+        XCTAssertEqual(response(commandEquals, command: true, focus: .sheet, repeatRunning: true), .init())
+    }
+
+    /// The predicate itself, so the table is readable in one place.
+    func testShortcutsAreCommandChordsAndF12ButNeverEscOrAMessageKey() {
+        XCTAssertTrue(KeyMonitorGate.isShortcut(keyCode: commandEquals, command: true))
+        XCTAssertTrue(KeyMonitorGate.isShortcut(keyCode: 15, command: true), "an unmapped ⌘ chord too")
+        XCTAssertTrue(KeyMonitorGate.isShortcut(keyCode: f12, command: false))
+        XCTAssertFalse(KeyMonitorGate.isShortcut(keyCode: letterA, command: false))
+        XCTAssertFalse(KeyMonitorGate.isShortcut(keyCode: escape, command: false))
+        XCTAssertFalse(KeyMonitorGate.isShortcut(keyCode: escape, command: true))
+        XCTAssertFalse(KeyMonitorGate.isShortcut(keyCode: f1, command: false))
+        XCTAssertFalse(KeyMonitorGate.isShortcut(keyCode: f2, command: true))
+        XCTAssertFalse(KeyMonitorGate.isShortcut(keyCode: 36, command: false), "Return")
+        XCTAssertFalse(KeyMonitorGate.isShortcut(keyCode: 49, command: false), "Space takes the ghost call")
+        XCTAssertFalse(KeyMonitorGate.isShortcut(keyCode: 48, command: false), "Tab")
+    }
+
     /// The guard rail on the feature. With no repeat running, typing the next
     /// call while your F2 exchange goes out must not cut the exchange off.
     func testTypingDoesNotAbortTransmissionWhenNoRepeatIsRunning() {

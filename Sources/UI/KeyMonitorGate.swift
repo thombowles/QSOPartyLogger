@@ -132,6 +132,27 @@ enum KeyMonitorGate {
         }
     }
 
+    /// Whether a keystroke is a shortcut — a key doing a job of its own —
+    /// rather than the operator answering someone. A running repeat leaves
+    /// these alone (2026-08-16: "make shortcuts allowed during calling CQ
+    /// without canceling"); everything else pauses it.
+    ///
+    /// Shortcuts are every ⌘ chord — the gate's own (WPM, spots, band map,
+    /// exports, hints, the VFO) and SwiftUI's (⌘R, ⇧⌘S, ⌘Z…) alike — and F12,
+    /// which wipes an entry that is empty while the loop runs. Two ⌘ chords
+    /// are not: ⌘Esc, because Esc means stop whatever rides with it, and a
+    /// ⌘F-key, which falls through to the message table and must still take
+    /// the CQ off the air before it sends. N1MM names only "a call-sign, or
+    /// … Escape" as what stops a repeat, and this is that rule with the
+    /// keys this app has.
+    static func isShortcut(keyCode: UInt16, command: Bool, shift: Bool = false) -> Bool {
+        switch action(keyCode: keyCode, command: command, shift: shift) {
+        case .abortTransmission, .sendMessage: return false
+        case .clearEntry: return true
+        default: return command
+        }
+    }
+
     // MARK: The whole decision for one key down
 
     /// Everything the monitor does with a single key down, in the order it
@@ -155,12 +176,14 @@ enum KeyMonitorGate {
         var consumesEvent = false
     }
 
-    /// While a repeat-CQ loop is running, *every* key does what Esc does: the
-    /// operator has started answering someone, and the half-sent CQ must come
-    /// off the air mid-character rather than talk over him. A key that has its
-    /// own job still does it afterwards, so F2 replaces the CQ instead of
-    /// queueing behind it, and a letter is left unconsumed so it still lands in
-    /// the call field.
+    /// While a repeat-CQ loop is running, every key that is not a shortcut
+    /// does what Esc does: the operator has started answering someone, and
+    /// the half-sent CQ must come off the air mid-character rather than talk
+    /// over him. A key that has its own job still does it afterwards, so F2
+    /// replaces the CQ instead of queueing behind it, and a letter is left
+    /// unconsumed so it still lands in the call field. A shortcut (`isShortcut`
+    /// — ⌘= for the speed, ⌘B for the band map, ⌘R…) does its job and leaves
+    /// the loop and the CQ alone.
     ///
     /// With no repeat running nothing is aborted but Esc — typing the next call
     /// while an F2 exchange goes out must let the exchange finish.
@@ -176,7 +199,7 @@ enum KeyMonitorGate {
         guard focus != .elsewhere else { return Response() }
 
         var response = Response()
-        if repeatRunning {
+        if repeatRunning, !isShortcut(keyCode: keyCode, command: command, shift: shift) {
             response.stopsRepeat = true
             response.abortsTransmission = true
         }

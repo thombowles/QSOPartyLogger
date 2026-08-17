@@ -125,7 +125,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⌘1`–`⌘8` | In the Phone tab: record memory M1–M8; the same key (or the button) stops. Stops by itself at 30 s |
 | `⌥⌘1`–`⌥⌘8` | In the Phone tab: play memory M1–M8 back on the Mac (not the radio) |
 | `↑` / `↓` | In the park picker: move through the results; `Return` adds the highlighted park |
-| Any key | While repeat-CQ is running: pause the loop and abort the CQ on the air, then do the key's own job. The mode stays armed (the button turns orange, `Repeat CQ ⏸`) — `F1`, the CQ button or ESM's `Return` start it repeating again |
+| Any key but a shortcut | While repeat-CQ is running: pause the loop and abort the CQ on the air, then do the key's own job. The mode stays armed (the button turns orange, `Repeat CQ ⏸`) — `F1`, the CQ button or ESM's `Return` start it repeating again. Shortcuts — every `⌘` chord (`⌘=`, `⌘B`, `⌘↑`, `⌘R`, `⇧⌘S`…) and `F12` — do their job and leave the CQ alone; only `⌘Esc` and a `⌘F-key` still stop it |
 | `⌘=` / `⌘-` | CW speed ±1 WPM — takes effect mid-message (syncs to the radio) |
 | `⇧⌘=` / `⇧⌘-` | CW speed ±2 WPM (`⇧⌘=` is `⌘+`) |
 | `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
@@ -149,11 +149,14 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 In the Contest Dashboard (**⌘⇧D**): `⌘[` / `⌘]` change year, `⌘R` re-reads the
 history file, `Return` opens that contest's log, and `⌘E` / `⇧⌘E` export it.
 
-While repeat-CQ is running, **any key does what `Esc` does**: the loop pauses and
-the CQ on the air comes down mid-character, so the moment you start typing his
-call you are not talking over him. A key that has its own job still does it,
-after the abort — `F2` replaces the CQ with the exchange, `F1` starts the CQ
-over — and an ordinary letter still lands in the call field. Repeat CQ is a
+While repeat-CQ is running, **any key but a shortcut does what `Esc` does**: the
+loop pauses and the CQ on the air comes down mid-character, so the moment you
+start typing his call you are not talking over him. A key that has its own job
+still does it, after the abort — `F2` replaces the CQ with the exchange, `F1`
+starts the CQ over — and an ordinary letter still lands in the call field.
+Shortcuts are the exception: changing speed with `⌘=`, stepping spots, opening
+the band map or the spot sheet, `⌘R`, `F12` — none of them is answering anyone,
+so the CQ keeps going (only `⌘Esc` and a `⌘F-key` still stop it). Repeat CQ is a
 *mode*, the way N1MM's Alt+R is: pausing leaves it armed (the button turns
 orange, `Repeat CQ ⏸`), so after the QSO `F1`, the CQ button or ESM's `Return`
 start it repeating again from the top — no click on the toggle between
