@@ -379,7 +379,7 @@ its own commit (Article 4).
   `ScoreEngine.total`, `ScoreSidebar`'s `Text("\(score.categoryFactor)")` — and
   `ScoreSnapshot.Figures.categoryFactor`, persisted to the iCloud contest
   archive, so it was a stored-history migration too. Shipped as sketched:
-  [`ScoreFactor`](../../Sources/Core/Parties/ScoreFactor.swift) is an exact
+  [`ScoreFactor`](../../Sources/Core/Contests/ScoreFactor.swift) is an exact
   rational (numerator/denominator, never a `Double`), a party file writes the
   number the sponsor prints (`1.5`), the archive keeps its whole-number key and
   adds `categoryFactorExact` beside it, and the sidebar renders "×1.5" without

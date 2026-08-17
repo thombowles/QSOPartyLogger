@@ -873,7 +873,7 @@ struct PartyDefinition: Codable, Identifiable, Equatable, Sendable {
     /// This used to be a *shape* test — 1–5 alphanumerics that matched nothing
     /// else — which meant every mistyped county validated as a DX entity, and
     /// a Maidenhead grid square like `EM32` did too. It is now an exact lookup
-    /// in [`DXCCTable`](DXCCTable.swift), so `SAF` and `EM32` are errors again
+    /// in [`DXCCTable`](../Contests/DXCCTable.swift), so `SAF` and `EM32` are errors again
     /// and `DL` is Germany.
     ///
     /// **The party's own tables still win.** A great many state and province
