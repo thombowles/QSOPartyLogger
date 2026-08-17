@@ -423,7 +423,7 @@ struct MainView: View {
         .onChange(of: radio.radioState?.frequencyHz) { vfoMoved() }
         .onChange(of: radio.radioReportedWPM) { syncSpeedFromRadio() }
         .onChange(of: repeatCQ) { repeatCQChanged() }
-        .onChange(of: radio.isConnected) { if !radio.isConnected { stopRepeat() } }
+        .onChange(of: radio.isConnected) { if !radio.isConnected { interruptRepeat(.disconnected) } }
         // The recordings path re-derives from the voice settings while
         // connected; `connect` derives it itself.
         .onChange(of: settings.voiceOutputDeviceUID) { radio.refreshVoicePath(settings: settings) }
@@ -691,7 +691,7 @@ struct MainView: View {
     }
 
     private func onDisappear() {
-        stopRepeat()
+        pauseRepeat()
         if let monitor = keyMonitor {
             NSEvent.removeMonitor(monitor)
             keyMonitor = nil
@@ -1264,8 +1264,8 @@ struct MainView: View {
     /// (599 ↔ 59) and re-check validation/dupes for the new mode.
     private func modeChanged() {
         // A repeat started on CW must not keep running after a switch to phone,
-        // where F1 means a different thing entirely.
-        if repeatCQ { stopRepeat() }
+        // where F1 means a different recording or text. The mode stays armed.
+        interruptRepeat(.modeClassChanged)
         flow.modeChanged(operatingContext)
     }
 
@@ -1305,7 +1305,7 @@ struct MainView: View {
         }
         switch RepeatCQPolicy.onSend(index: index, operatingMode: operatingMode.wrappedValue, armed: repeatCQ) {
         case .restartLoop:
-            restartRepeat()
+            restartRepeat(sending: transmission)
         case .sendOnce:
             transmit(transmission)
         }
@@ -1806,7 +1806,7 @@ struct MainView: View {
 
     private func operatingModeChanged() {
         if !RepeatCQPolicy.continues(in: operatingMode.wrappedValue) {
-            stopRepeat()
+            interruptRepeat(.leftRun)
         }
         refreshCallFrame()
     }
@@ -1839,22 +1839,31 @@ struct MainView: View {
     /// Repeat CQ is a mode (the toggle) with a loop running inside it (the
     /// task). Three things happen to it, and they are kept apart on purpose:
     ///
-    /// - **pause** (`pauseRepeat`): the loop stops, the mode stays armed. Any
-    ///   keystroke does this — the operator has started answering someone —
-    ///   and F1, the CQ button, or ESM's Return start it again.
+    /// - **arm** (the toggle on): the mode is on and nothing goes on the air.
+    ///   F1, the CQ button, or ESM's Return start the loop.
+    /// - **pause** (`pauseRepeat`, `interruptRepeat`): the loop stops, the
+    ///   mode stays armed. Any keystroke but a shortcut does this — the
+    ///   operator has started answering someone — and so do leaving Run, a
+    ///   CW ⇄ phone change and a disconnect. F1 starts it again.
     /// - **restart** (`restartRepeat`): the CQ comes off the air and the loop
     ///   starts over from the top, at once.
-    /// - **disengage** (`stopRepeat`): loop and mode both off — the toggle
-    ///   clicked, a mode change, a disconnect, the window going away.
     ///
-    /// N1MM's Alt+R behaves this way (`RepeatCQPolicy`); until 2026-08-15 a
-    /// keystroke here disengaged, so every QSO cost a click on the toggle.
+    /// Only the toggle itself turns the mode off. N1MM's Alt+R behaves this
+    /// way (`RepeatCQPolicy`); until 2026-08-15 a keystroke here disengaged,
+    /// so every QSO cost a click on the toggle, and until 2026-08-16 the
+    /// toggle keyed a CQ on the click and every interruption disarmed it.
     private func repeatCQChanged() {
-        repeatCQ ? startRepeat() : stopRepeat()
+        switch RepeatCQPolicy.onToggle(armed: repeatCQ) {
+        case .armOnly:
+            break
+        case .cancelLoop:
+            pauseRepeat()
+        }
     }
 
     /// The loop is running when the task is; the mode is armed when the
-    /// toggle is. Paused is armed and not running.
+    /// toggle is. Paused is armed and not running — which is also the state
+    /// right after arming, before F1.
     private var repeatPaused: Bool { repeatCQ && repeatTask == nil }
 
     private func pauseRepeat() {
@@ -1862,26 +1871,31 @@ struct MainView: View {
         repeatTask = nil
     }
 
-    private func restartRepeat() {
+    /// Something other than the toggle took the loop down. The mode follows
+    /// `RepeatCQPolicy` — it stays armed through all of them.
+    private func interruptRepeat(_ interruption: RepeatCQPolicy.Interruption) {
         pauseRepeat()
-        radio.abortTransmission(settings: settings)
-        startRepeat()
+        if !RepeatCQPolicy.staysArmed(through: interruption) { repeatCQ = false }
     }
 
-    private func startRepeat() {
-        repeatTask?.cancel()
-        let voiceReady = currentModeClass == .phone && phoneKeysEnabled
-        guard radio.isConnected, currentModeClass == .cw || voiceReady else {
-            repeatCQ = false
+    /// Whether the loop has a radio and a message path to run on: CW, or
+    /// phone with the voice path ready.
+    private var canRunRepeatLoop: Bool {
+        radio.isConnected && (currentModeClass == .cw || (currentModeClass == .phone && phoneKeysEnabled))
+    }
+
+    /// F1 in Run while the mode is armed: the CQ comes off the air and the
+    /// loop starts from the top, sending `transmission` first. When the loop
+    /// cannot run — no radio, a phone path that is not ready — the CQ goes
+    /// out once, as with the mode off, and the mode stays armed: never a
+    /// silent disarm.
+    private func restartRepeat(sending transmission: EntryFlow.Transmission) {
+        pauseRepeat()
+        radio.abortTransmission(settings: settings)
+        guard canRunRepeatLoop, transmission != .silent else {
+            transmit(transmission)
             return
         }
-        // F1 in Run is the CQ, in whichever mode class is live.
-        let transmission = flow.transmission(at: 0, context: operatingContext)
-        guard transmission != .silent else {
-            repeatCQ = false
-            return
-        }
-        captureCQFrequency()
         repeatTask = Task {
             while !Task.isCancelled && repeatCQ {
                 // Re-resolve each pass: the CW macros expand against live entry
@@ -1936,12 +1950,6 @@ struct MainView: View {
         while radio.isVoicePlaying, !Task.isCancelled {
             try? await Task.sleep(nanoseconds: 100_000_000)
         }
-    }
-
-    /// Disengage: loop and mode both off.
-    private func stopRepeat() {
-        pauseRepeat()
-        if repeatCQ { repeatCQ = false }
     }
 
     // MARK: Document naming + automatic first save

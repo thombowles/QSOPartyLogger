@@ -53,4 +53,33 @@ final class RepeatCQPolicyTests: XCTestCase {
         XCTAssertTrue(RepeatCQPolicy.continues(in: .run))
         XCTAssertFalse(RepeatCQPolicy.continues(in: .searchPounce))
     }
+
+    // MARK: The toggle arms; the mode survives everything but the toggle (2026-08-16)
+
+    /// The report: "don't start calling CQ when I click the repeat CQ
+    /// button." N1MM: "When you first press F1 after selecting repeat CQs, an
+    /// icon will appear … As long as the icon is visible, the CQ will repeat"
+    /// — Alt+R selects the mode, F1 starts it. Article 11 says the same:
+    /// nothing keys the radio until an F-key asks.
+    func testTurningTheModeOnArmsItAndKeysNothing() {
+        XCTAssertEqual(RepeatCQPolicy.onToggle(armed: true), .armOnly)
+    }
+
+    /// Off takes the loop down; a CQ already on the air is left to finish.
+    func testTurningTheModeOffCancelsTheLoop() {
+        XCTAssertEqual(RepeatCQPolicy.onToggle(armed: false), .cancelLoop)
+    }
+
+    /// The report: "make repeat CQ enable setting persistent when leaving RUN
+    /// and coming back." Leaving Run, a CW ⇄ phone change and a disconnect
+    /// all pause the loop; none of them turns the mode off — back in Run,
+    /// the toggle is where the operator left it and F1 resumes.
+    func testTheModeSurvivesEveryInterruptionButTheToggle() {
+        for interruption in RepeatCQPolicy.Interruption.allCases {
+            XCTAssertTrue(
+                RepeatCQPolicy.staysArmed(through: interruption),
+                "\(interruption) must pause the loop, not disarm the mode"
+            )
+        }
+    }
 }

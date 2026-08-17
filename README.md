@@ -157,12 +157,15 @@ starts the CQ over — and an ordinary letter still lands in the call field.
 Shortcuts are the exception: changing speed with `⌘=`, stepping spots, opening
 the band map or the spot sheet, `⌘R`, `F12` — none of them is answering anyone,
 so the CQ keeps going (only `⌘Esc` and a `⌘F-key` still stop it). Repeat CQ is a
-*mode*, the way N1MM's Alt+R is: pausing leaves it armed (the button turns
-orange, `Repeat CQ ⏸`), so after the QSO `F1`, the CQ button or ESM's `Return`
-start it repeating again from the top — no click on the toggle between
-contacts. Only the toggle itself, a mode change or a disconnect turn the mode
-off. With repeat off nothing is cut short: typing the next call while an `F2`
-exchange goes out lets the exchange finish.
+*mode*, the way N1MM's Alt+R is: clicking it on arms it and keys nothing —
+`F1`, the CQ button or ESM's `Return` start the loop — and pausing leaves it
+armed (the button turns orange, `Repeat CQ ⏸`), so after the QSO `F1` starts it
+repeating again from the top — no click on the toggle between contacts.
+Leaving Run (`⌘R`, or the knob), a CW ⇄ phone change and a disconnect pause
+the loop the same way and leave the mode on, so back in Run the toggle is where
+you left it. Only the toggle itself turns the mode off. With repeat off nothing
+is cut short: typing the next call while an `F2` exchange goes out lets the
+exchange finish.
 
 These keys belong to the log window with focus. While a sheet is open it owns
 the keyboard — `F1`–`F8` do not transmit, so revising F2 and pressing it never
@@ -616,7 +619,8 @@ stays on screen when another app takes focus, so it can sit beside a panadapter.
   your CQ frequency (1 kHz on CW and digital, 3 kHz on phone) and the mode goes
   to S&P — a QRM dodge inside it keeps you in Run; tune back within the
   tolerance and you're in Run again, F1 ready to CQ. Only a *change* of zone
-  acts, so ⌘R is never fought. Leaving Run stops Repeat CQ. Both halves are
+  acts, so ⌘R is never fought. Leaving Run pauses Repeat CQ and leaves the mode
+  armed, so tuning back finds it ready for F1. Both halves are
   N1MM's ("QSYing will switch to S&P mode"; back "within the tuning tolerance
   of the marker, the program will switch automatically to Run mode"), each
   with its own switch under the funnel's **Tuning** section.

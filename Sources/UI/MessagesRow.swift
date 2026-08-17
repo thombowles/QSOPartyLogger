@@ -25,8 +25,9 @@ struct MessagesRow: View {
     let pendingIndex: Int?
 
     @Binding var repeatEnabled: Bool
-    /// Armed but not running: a keystroke paused the loop, and F1 or the CQ
-    /// button starts it again. Drawn in orange so the state is visible.
+    /// Armed but not running: just armed, or a keystroke paused the loop —
+    /// either way F1 or the CQ button starts it. Drawn in orange so the state
+    /// is visible.
     var repeatPaused: Bool = false
     @Binding var repeatInterval: Double
     @Binding var esmEnabled: Bool
@@ -114,9 +115,9 @@ struct MessagesRow: View {
             .toggleStyle(.button)
             .tint(repeatPaused ? .orange : .accentColor)
             .disabled(!enabled || operatingMode != .run)
-            .help("Re-send F1 after each interval. Typing or Esc pauses the loop and leaves the mode on "
-                  + "— F1, the CQ button or ESM's Return start it again from the top. "
-                  + "Click to turn the mode off.")
+            .help("Repeat F1 after each interval. Arming keys nothing — F1, the CQ button or ESM's "
+                  + "Return start the loop. Typing or Esc pauses it and the mode stays on, as does "
+                  + "leaving Run; shortcuts leave it running. Click again to turn the mode off.")
 
             Stepper(value: $repeatInterval, in: 0.5...15, step: 0.5) {
                 Text(String(format: "%.1fs", repeatInterval))
