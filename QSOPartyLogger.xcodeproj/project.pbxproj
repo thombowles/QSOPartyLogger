@@ -41,6 +41,7 @@
 		0DEA3D34B4EF4162D9FC21D9 /* SpotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65578A775A74FB103913C439 /* SpotStore.swift */; };
 		0E122728DD4F2CC234B5E788 /* BandPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1075185DDB395E700E24AA /* BandPlan.swift */; };
 		0E19768900F9E623A792FE9A /* NoCountyPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D31512FA359BD9954ADF23 /* NoCountyPartyTests.swift */; };
+		0EA6BB49A0618812ABF95FD6 /* Side.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3F79006BDBC80469A60B23 /* Side.swift */; };
 		0EDE7ED8045380184EDE1D4F /* WorkedBeforeTableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB1E6038FE703DDB36B5F0 /* WorkedBeforeTableTests.swift */; };
 		0F00A97387F4348F6AD34EDA /* QSOPostureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA4A841592D4E7DF22124AB /* QSOPostureTests.swift */; };
 		0F87B0740AE33C79FF082253 /* TennesseeQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */; };
@@ -276,6 +277,7 @@
 		ABDD0E4BC39F882357AA73DC /* IndianaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0676CB4B55B41FD7B226CA31 /* IndianaQSOPartyTests.swift */; };
 		AC51CD88CDF9CBFA21C5C25F /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD300005CA528B8CA373476 /* Spot.swift */; };
 		AC7BABF01C4A1A0F06D46D0F /* RadioControllerRecordingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F470675F687ABB38604249 /* RadioControllerRecordingTests.swift */; };
+		AD2610CB527C183EDC0A785B /* SideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA0566542371D92D0E9CB82 /* SideTests.swift */; };
 		AE2D036E6F83E9F0F1141634 /* QSOPartyLoggerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C2D0EBC8E5FC6F24E96A7A /* QSOPartyLoggerApp.swift */; };
 		AE3930DE09489C6F2B7CC827 /* HubSelfSpotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112CC71F65B097523B39BC9B /* HubSelfSpotTests.swift */; };
 		AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A15E4511652305732261EE /* SetupSheet.swift */; };
@@ -534,6 +536,7 @@
 		3BD6F1CD9E4B5D9387123E6C /* SpotFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFrequency.swift; sourceTree = "<group>"; };
 		3C2E3EC3370FBB8DDF642B43 /* VoiceLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceLibraryTests.swift; sourceTree = "<group>"; };
 		3CAE6A6F0991A97405ABD310 /* DXCCLabelClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCLabelClient.swift; sourceTree = "<group>"; };
+		3DA0566542371D92D0E9CB82 /* SideTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideTests.swift; sourceTree = "<group>"; };
 		3E3270C8AA34DCB8481F768F /* PartyModeInferenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyModeInferenceTests.swift; sourceTree = "<group>"; };
 		3EF36ECEA568E47C2F9D6778 /* ClusterHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterHistoryTests.swift; sourceTree = "<group>"; };
 		3F5C24707F61E7C6C6E1122F /* HubSpotSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotSource.swift; sourceTree = "<group>"; };
@@ -791,6 +794,7 @@
 		DD16E7B08B6FA679CE465107 /* KeyerTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyerTiming.swift; sourceTree = "<group>"; };
 		DDBD8EEE61C2BDCD7E1BE736 /* PhoneMessageSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneMessageSource.swift; sourceTree = "<group>"; };
 		DEC0C13AC06A91C6F85B83E4 /* AdvisorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisorSection.swift; sourceTree = "<group>"; };
+		DF3F79006BDBC80469A60B23 /* Side.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Side.swift; sourceTree = "<group>"; };
 		DFC488FDCD9B9458276688D9 /* ContestArchiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestArchiveTests.swift; sourceTree = "<group>"; };
 		E0173AC4FD078C2202756941 /* NameExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameExchangeTests.swift; sourceTree = "<group>"; };
 		E0A02DEF03C814CF8D2DD737 /* NewMexicoQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMexicoQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -921,6 +925,7 @@
 				3F5C24707F61E7C6C6E1122F /* HubSpotSource.swift */,
 				826129C440B9A8E8EC836802 /* MultiplierRoster.swift */,
 				FA4FF8B1FB9896DDBD544CB6 /* ScoreFactor.swift */,
+				DF3F79006BDBC80469A60B23 /* Side.swift */,
 				91991260BB14DFD37004DF3B /* TokenSet.swift */,
 			);
 			path = Contests;
@@ -1124,6 +1129,7 @@
 				9B143A6F4360839CB52EFA48 /* SectionMultiplierTests.swift */,
 				14E0D2F939C4189D19EC3C7C /* SerialExchangeTests.swift */,
 				B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */,
+				3DA0566542371D92D0E9CB82 /* SideTests.swift */,
 				369C26C343E2C414BF592CC6 /* SkeeterHuntTests.swift */,
 				A2959051AC941DA30C8B6439 /* SkeeterRosterParserTests.swift */,
 				AD7B9510D707A5A3BC7B61F8 /* SolarGeometryTests.swift */,
@@ -1825,6 +1831,7 @@
 				00C7117A6FF2B28F0F627443 /* SerialExchangeTests.swift in Sources */,
 				8E0C9BB5C8132A2F521070E4 /* SeventhCallAreaQSOPartyTests.swift in Sources */,
 				87AD486F5C657AAD4829B8C3 /* ShortcutHintsTests.swift in Sources */,
+				AD2610CB527C183EDC0A785B /* SideTests.swift in Sources */,
 				F238FDC861C993F998E5890A /* SkeeterHuntTests.swift in Sources */,
 				05D024CA40AEFFD979414EC2 /* SkeeterRosterParserTests.swift in Sources */,
 				5239F5814162D5488E6AE4EF /* SmokeTests.swift in Sources */,
@@ -2011,6 +2018,7 @@
 				698B227926FB01BE3C96A295 /* SerialTransport.swift in Sources */,
 				AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */,
 				1624124967BDF5F81DF0762A /* ShortcutHint.swift in Sources */,
+				0EA6BB49A0618812ABF95FD6 /* Side.swift in Sources */,
 				C3CDE006A150B8867C4B7794 /* SkeeterRosterParser.swift in Sources */,
 				94CC96D5AAA83B99FB0896CB /* SolarGeometry.swift in Sources */,
 				122FB6190515703980A91D42 /* SpaceWeather.swift in Sources */,
