@@ -3413,12 +3413,16 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 
 Run the full-suite command. Expected: `Executed 2947 tests, with 0 failures` — the 2,875 baseline plus the 72 added here (7 + 1 + 3 + 4 + 3 + 3 + 6 + 4 + 13 + 4 + 7 + 5 + 3 + 5 + 4). Record the exact line; if the number differs, count the new `func test` declarations and reconcile before proceeding.
 
-- [ ] **Step 2: README test count** — in `README.md`, replace `**2875 unit tests**` with the suite's figure: `**2947 unit tests**`, or whatever Step 1 reported.
+- [ ] **Step 2: README test count** — in `README.md`, replace `**2875 unit tests**` with the suite's figure: `**2947 unit tests**`, or whatever Step 1 reported. Also replace the `CLAUDE.md` `Sources/Core/Contests/` layout row (which lists only the seven moved files today) with:
+
+```markdown
+| `Sources/Core/Contests/` | The general contest model — `ContestDefinition`, `TokenSet`, `Side`, `ExchangeElement`, `MultiplierClass`/`Resolver`, `PointRule`, `ContestRules` (dupe, op-time, categories, Cabrillo, factors) — plus `PartyLowering`, `ContestCatalog`, `CTYTable`, `WPXPrefix`, `ExchangeValidator`, `OperatingTime`, and the shared `HubSpotSource`, `CallHistorySource`, `DXCCTable` (+ label refresh/store), `MultiplierRoster`, `ScoreFactor` |
+```
 
 - [ ] **Step 3: Commit**
 
 ```bash
-git add README.md && git commit -m "docs: foundations landed — test count
+git add README.md CLAUDE.md && git commit -m "docs: foundations landed — test count, Contests layout row
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
