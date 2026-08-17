@@ -7,6 +7,8 @@ final class ArrlSectionsTests: XCTestCase {
         XCTAssertEqual(sections.id, "sections")
         XCTAssertEqual(sections.tokens.count, 85)
         XCTAssertEqual(sections.abbrs.count, 85)
+        XCTAssertNoThrow(try sections.validate())
+        XCTAssertEqual(Set(sections.tokens.compactMap(\.name)).count, 85)
         // Irregular ones (Article 18's habit): not the obvious two-letter states.
         XCTAssertEqual(sections.token(for: "NTX")?.name, "North Texas")
         XCTAssertEqual(sections.token(for: "TER")?.name, "Territories")
