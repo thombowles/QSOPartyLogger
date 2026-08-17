@@ -351,6 +351,7 @@
 		D92268C1083B39CB08B32393 /* SpotFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04053E0272A2391F55417D60 /* SpotFilterTests.swift */; };
 		D93349F1F1FCDEE1780D766C /* AppIntegrityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBCFF429B5A8DE4663100EF /* AppIntegrityTests.swift */; };
 		D9CBAA91D8BCAD19385482BA /* PartyCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDA62C0033DE71F4781CC89 /* PartyCatalog.swift */; };
+		DA1C748640209773737D2202 /* TokenSetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF1A3E5A619F09371EECA1 /* TokenSetTests.swift */; };
 		DB19FFDDAB4DEBA1EECE1961 /* NeededMult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FA71DAF8382C38A0B3569D /* NeededMult.swift */; };
 		DB32F376EC8DA6665E9ED5A2 /* MarylandDCQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5892A4EA032BA925FA66EA70 /* MarylandDCQSOPartyTests.swift */; };
 		DB8DC9D842C0716CD047B3F4 /* HubSpotPrefill.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50EF7423E88A0338CAF3332 /* HubSpotPrefill.swift */; };
@@ -406,6 +407,7 @@
 		F661778B3A6DD283F372E249 /* fobb-roster-page-2026-07.html in Resources */ = {isa = PBXBuildFile; fileRef = 782905999AE900BBDBBE6D2C /* fobb-roster-page-2026-07.html */; };
 		F7B80C3393265B922409D10C /* MessageMemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039CBD24DAEF64BCB1269D67 /* MessageMemoryTests.swift */; };
 		F8230055988666CE68A087CF /* CWKeyerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E1360204AB093D08447987 /* CWKeyerTests.swift */; };
+		F8EA538325E986713ED66813 /* TokenSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91991260BB14DFD37004DF3B /* TokenSet.swift */; };
 		FA255DF473A40C79961107EF /* HubSpotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D590A3128E841A331486E328 /* HubSpotClient.swift */; };
 		FAB198B74CB4E5D2C52222BB /* MaidenheadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369E1591F09C47EEADB9A4D7 /* MaidenheadTests.swift */; };
 		FAC8245A7DA9F69C112C6610 /* paqp-table-empty.html in Resources */ = {isa = PBXBuildFile; fileRef = 6E86BE307CD4BC40C6036C06 /* paqp-table-empty.html */; };
@@ -447,6 +449,7 @@
 		067FE6B0EB648263DEECAC66 /* OperatorAlertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatorAlertTests.swift; sourceTree = "<group>"; };
 		0691A2D1B7E5003BCEEE96F4 /* PotaSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaSpot.swift; sourceTree = "<group>"; };
 		075DC2D7011F9E054C8826A8 /* HubSpotPrefillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotPrefillTests.swift; sourceTree = "<group>"; };
+		08CF1A3E5A619F09371EECA1 /* TokenSetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenSetTests.swift; sourceTree = "<group>"; };
 		08FF41186D203AD847CB46B4 /* PotaParkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkStore.swift; sourceTree = "<group>"; };
 		093C918A35B84A46D9369272 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		09DA0DF56D3346FEB3B3B11C /* PartyCaveatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCaveatTests.swift; sourceTree = "<group>"; };
@@ -666,6 +669,7 @@
 		909A650EB49961812900CFD5 /* HubSelfSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSelfSpot.swift; sourceTree = "<group>"; };
 		90D56FC1028278EEC43767DE /* PotaParkDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkDirectory.swift; sourceTree = "<group>"; };
 		9183D3107E206A940C2DCDCB /* HubSpotSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotSourceTests.swift; sourceTree = "<group>"; };
+		91991260BB14DFD37004DF3B /* TokenSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenSet.swift; sourceTree = "<group>"; };
 		91AE54A60C33CC8614CCB97C /* RadioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioController.swift; sourceTree = "<group>"; };
 		92BF3A3E0D2A190DDA4A0941 /* PotaParkStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkStoreTests.swift; sourceTree = "<group>"; };
 		9382E762282D91D8950B0F07 /* WorkedSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedSpot.swift; sourceTree = "<group>"; };
@@ -913,6 +917,7 @@
 				3F5C24707F61E7C6C6E1122F /* HubSpotSource.swift */,
 				826129C440B9A8E8EC836802 /* MultiplierRoster.swift */,
 				FA4FF8B1FB9896DDBD544CB6 /* ScoreFactor.swift */,
+				91991260BB14DFD37004DF3B /* TokenSet.swift */,
 			);
 			path = Contests;
 			sourceTree = "<group>";
@@ -1135,6 +1140,7 @@
 				71E49449BB9A7AE6DB367D27 /* StationProfileNormalizationTests.swift */,
 				56703F612637DAECE11B2661 /* SuperCheckTests.swift */,
 				FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */,
+				08CF1A3E5A619F09371EECA1 /* TokenSetTests.swift */,
 				A73361DBD51B22D648CB7B35 /* TuningPolicyTests.swift */,
 				B49AC8D775ABBA76B9D43CD0 /* UpcomingContestsTests.swift */,
 				28981F0AB9338C01CB01D910 /* VermontQSOPartyTests.swift */,
@@ -1839,6 +1845,7 @@
 				711C59041490CC39A6027902 /* SuperCheckTests.swift in Sources */,
 				0F87B0740AE33C79FF082253 /* TennesseeQSOPartyTests.swift in Sources */,
 				EEFDEF1FDBA0BAC08E4F5BA7 /* TestBundleSetup.swift in Sources */,
+				DA1C748640209773737D2202 /* TokenSetTests.swift in Sources */,
 				B0A27BE21DD4642BE3BB7351 /* TuningPolicyTests.swift in Sources */,
 				718965D97870A40FA7844B38 /* TuningPreferenceTests.swift in Sources */,
 				57D6E95483FBA88DE48DE602 /* UpcomingContestsTests.swift in Sources */,
@@ -2024,6 +2031,7 @@
 				6B571AFEC1B753E010B0EEEB /* SuperCheck.swift in Sources */,
 				53FEBDB98064D255C6C453A1 /* SuperCheckRow.swift in Sources */,
 				2AAD513E3761DAD300741555 /* TCPTransport.swift in Sources */,
+				F8EA538325E986713ED66813 /* TokenSet.swift in Sources */,
 				55426B8A22C8DC82ED37968B /* TuningPolicy.swift in Sources */,
 				B8ED97D3A42E09EB0DDEC028 /* UDPSender.swift in Sources */,
 				DEEA1D77A5CEF8E4E60D2BEC /* UTCTime.swift in Sources */,
