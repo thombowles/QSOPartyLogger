@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 2, "id": "cqwwcw", "name": "CQ World Wide DX Contest, CW", "family": "dx",
+  "cabrillo": { "contest": "CQ-WW-CW", "location": "state", "transmitterColumn": true },
+  "schedule": [{ "start": "2026-11-28T00:00:00Z", "end": "2026-11-29T23:59:59Z" }],
+  "bands": ["160m", "80m", "40m", "20m", "15m", "10m"], "modeClasses": ["cw"],
+  "tokenSets": [],
+  "sides": [{ "id": "all", "label": "Everyone", "predicate": { "kind": "always" }, "workedPredicate": { "kind": "always" } }],
+  "exchange": [
+    { "id": "rst", "kind": "rst", "sentBy": { "all": {} } },
+    { "id": "zone", "kind": "cqZone", "label": "Zone", "sentBy": { "all": {} }, "fixed": true, "prefill": ["cty"], "cabrilloWidth": 6 }
+  ],
+  "multipliers": [
+    { "id": "zone", "term": "zone", "resolvers": [{ "kind": "cqZone", "from": "received" }],
+      "counting": { "all": "perBand" }, "roster": "cqZones", "layout": "zoneGrid" },
+    { "id": "country", "term": "country", "termPlural": "countries",
+      "resolvers": [{ "kind": "dxccEntity", "from": "callsign", "list": "arrlPlusWAE", "unlessSuffix": ["MM"] }],
+      "counting": { "all": "perBand" }, "layout": "workedOnly" }
+  ],
+  "points": [
+    { "when": [{ "relation": "sameEntity" }], "points": 0 },
+    { "when": [{ "bothInContinent": "NA" }], "points": 2 },
+    { "when": [{ "relation": "sameContinent" }], "points": 1 },
+    { "points": 3 }
+  ],
+  "dupe": { "scope": "band" },
+  "categories": { "operator": ["SINGLE-OP", "MULTI-OP", "CHECKLOG"], "assisted": ["NON-ASSISTED", "ASSISTED"],
+                  "power": ["HIGH", "LOW", "QRP"], "band": ["ALL", "160M", "80M", "40M", "20M", "15M", "10M"],
+                  "transmitter": ["ONE", "TWO", "UNLIMITED"], "overlay": ["CLASSIC", "ROOKIE", "YOUTH"],
+                  "station": ["FIXED", "DISTRIBUTED"] },
+  "operatingTime": { "maxMinutes": 1440, "minOffMinutes": 60, "appliesTo": { "overlay": "CLASSIC" } },
+  "notes": "FIXTURE for tests — not a bundled contest. Shape from docs/superpowers/specs/2026-08-17-general-contest-logger-design.md §1.2; rules per docs/research/cqww_rules_2026.txt.",
+  "caveats": []
+}
