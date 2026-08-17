@@ -266,7 +266,10 @@ private struct EntryRowHost: View {
         VStack(alignment: .leading) {
             EntryBar(entry: entry, party: nil, showsP2P: false, onLog: {}, focus: $focus)
             SuperCheckRow(
-                matches: .init(calls: [entry.callNormalized], total: 1),
+                matches: .init(
+                    calls: [.init(call: entry.callNormalized, inHistory: false)],
+                    total: 1, scpTotal: 1, historyTotal: 0
+                ),
                 typedCall: entry.callNormalized
             )
         }

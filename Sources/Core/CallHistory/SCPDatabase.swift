@@ -71,23 +71,15 @@ struct SCPDatabase: Equatable, Sendable {
     /// Containment match over the whole database, ranked: the exact call
     /// first (the eye's "known call" confirmation), then calls starting
     /// with the fragment, then the rest containing it — alphabetical
-    /// within each tier, because `calls` is sorted.
+    /// within each tier, because `calls` is sorted. `SuperCheck` is the one
+    /// ranking; this is it with no history file alongside.
     ///
     /// A linear scan of ~50k short strings is single-digit milliseconds
     /// and runs once per call-field change, never per render.
     func matches(for fragment: String, limit: Int) -> Matches {
-        let needle = fragment.trimmingCharacters(in: .whitespaces).uppercased()
-        guard needle.count >= Self.minimumFragmentLength else { return .none }
-        var exact: [String] = []
-        var starts: [String] = []
-        var contains: [String] = []
-        for call in calls where call.contains(needle) {
-            if call == needle { exact.append(call) }
-            else if call.hasPrefix(needle) { starts.append(call) }
-            else { contains.append(call) }
-        }
-        let ranked = exact + starts + contains
-        return Matches(calls: Array(ranked.prefix(max(0, limit))),
-                       total: ranked.count)
+        let merged = SuperCheck.matches(
+            for: fragment, scpCalls: calls, historyCalls: [], limit: limit
+        )
+        return Matches(calls: merged.calls.map(\.call), total: merged.total)
     }
 }

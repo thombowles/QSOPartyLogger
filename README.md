@@ -768,10 +768,17 @@ Cached files live in `~/Library/Application Support/QSOPartyLogger/CallHistory/`
 The community's **MASTER.SCP** — ~50,000 calls distilled from submitted
 contest logs — feeds a quiet strip under the entry row: type three or more
 characters of a call and every known call containing that fragment appears,
-the exact call tinted green once it's complete. A busted copy shows itself
+the exact call in bold once it's complete. A busted copy shows itself
 as a call the database has never heard of. Purely for the eye — nothing
 from it validates, scores, or fills anything.
 
+- **The party's call history joins it.** When the active party has a call
+  history file (for the Skeeter Hunt, the roster of Skeeter numbers), its
+  calls appear in the same strip **in teal** — first inside each tier, so a
+  roster call is never buried behind the database's — and the label counts
+  each source (`SCP 12 · HIST 3`). A call in both shows once, teal. The strip
+  is live for a cached roster before MASTER.SCP has landed. What N1MM's Check
+  window does with panes, one line does with a colour.
 - **Zero setup.** The file downloads itself on first launch and is
   re-checked at launch and contest load, at most once a day, by a
   Last-Modified HEAD — the ~360 KB body only moves when a new release is

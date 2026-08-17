@@ -563,13 +563,14 @@ struct MainView: View {
         }
     }
 
-    /// Reserved height while the feature is live (option on and a database
-    /// loaded), so the strip filling and emptying under a 35 WPM exchange
-    /// never reflows the window. Absent entirely otherwise.
+    /// Reserved height while the feature is live (option on, and a database
+    /// or the party's call history loaded), so the strip filling and emptying
+    /// under a 35 WPM exchange never reflows the window. Absent entirely
+    /// otherwise.
     @ViewBuilder
     private var superCheckStrip: some View {
-        if settings.superCheckEnabled, flow.scpDatabase != nil {
-            SuperCheckRow(matches: flow.scpMatches, typedCall: entry.callNormalized)
+        if settings.superCheckEnabled, flow.superCheckLive {
+            SuperCheckRow(matches: flow.superCheckMatches, typedCall: entry.callNormalized)
                 .padding(.horizontal, 14)
         }
     }

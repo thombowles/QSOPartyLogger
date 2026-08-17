@@ -60,7 +60,24 @@ final class EntryFlow {
     /// tagged with the party it was parsed for, because the download lands
     /// asynchronously and the operator may have changed parties while it was
     /// in flight. A mismatched tag is simply not consulted.
-    var callHistoryIndex: (partyID: String, parsed: CallHistoryFile.Parsed)?
+    ///
+    /// Its calls also feed the super check strip, so setting it re-sorts them
+    /// once (`historyCalls`) and refreshes the strip for whatever fragment is
+    /// already typed — the roster lands after the operator starts typing as
+    /// often as before.
+    var callHistoryIndex: (partyID: String, parsed: CallHistoryFile.Parsed)? {
+        didSet {
+            historyCalls = callHistoryIndex.map {
+                ($0.partyID, $0.parsed.entriesByCall.keys.sorted())
+            }
+            scpFragment = nil
+            refreshSCPMatches()
+        }
+    }
+
+    /// The history file's calls, sorted once per download rather than per
+    /// keystroke, under the party tag they belong to.
+    @ObservationIgnored private var historyCalls: (partyID: String, calls: [String])?
 
     /// The active party's recordings on this Mac, memory number → rendered
     /// audio — set by the view from `VoiceStore`, like `callHistoryIndex`.
@@ -69,19 +86,27 @@ final class EntryFlow {
 
     /// The super check partial database, when the option is on and a
     /// MASTER.SCP is cached or downloaded. Nil (option off, nothing
-    /// downloaded yet) empties the strip immediately.
+    /// downloaded yet) empties its half of the strip immediately.
     private(set) var scpDatabase: SCPDatabase?
 
     /// What the strip under the entry bar shows for the fragment in the
-    /// call field right now. Recomputed once per call-field change — the
-    /// view only reads it.
-    private(set) var scpMatches: SCPDatabase.Matches = .none
+    /// call field right now: the database's calls and the party's call
+    /// history calls, merged and ranked by `SuperCheck`. Recomputed once per
+    /// call-field change — the view only reads it.
+    private(set) var superCheckMatches: SuperCheck.Matches = .none
+
+    /// Whether the strip has a source to draw from — the database, or the
+    /// active party's history file — so a cached roster shows before
+    /// MASTER.SCP has landed.
+    var superCheckLive: Bool {
+        scpDatabase != nil || !historyCallsForParty.isEmpty
+    }
 
     /// The most calls the strip offers; past this it says "+N more".
     static let scpDisplayCap = 24
 
-    /// The fragment `scpMatches` was computed for — the memo that lets the
-    /// refresh ride `revalidate` (which also runs on exchange keystrokes)
+    /// The fragment `superCheckMatches` was computed for — the memo that lets
+    /// the refresh ride `revalidate` (which also runs on exchange keystrokes)
     /// without rescanning 50k calls for a fragment that has not moved.
     @ObservationIgnored private var scpFragment: String?
 
@@ -91,13 +116,24 @@ final class EntryFlow {
         refreshSCPMatches()
     }
 
+    /// The history calls the strip may use: the downloaded file's, and only
+    /// while its tag is this party's.
+    private var historyCallsForParty: [String] {
+        guard let historyCalls, historyCalls.partyID == party?.id else { return [] }
+        return historyCalls.calls
+    }
+
     private func refreshSCPMatches() {
         let fragment = entry.callNormalized
         guard fragment != scpFragment else { return }
         scpFragment = fragment
-        let fresh = scpDatabase?.matches(for: fragment, limit: Self.scpDisplayCap)
-            ?? .none
-        if fresh != scpMatches { scpMatches = fresh }
+        let fresh = SuperCheck.matches(
+            for: fragment,
+            scpCalls: scpDatabase?.calls ?? [],
+            historyCalls: historyCallsForParty,
+            limit: Self.scpDisplayCap
+        )
+        if fresh != superCheckMatches { superCheckMatches = fresh }
     }
 
     /// Everything that changes between one Return and the next and is owned by
