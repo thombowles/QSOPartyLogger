@@ -1875,6 +1875,17 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
                     throw ContestValidationError.unknownElement(element)
                 }
                 for side in r.sides ?? [] where !sideIDs.contains(side) { throw ContestValidationError.unknownSide(side) }
+                // Each kind's required fields — a flat resolver has nothing else to enforce them.
+                let bad = ContestValidationError.badResolver(m.id, r.kind.rawValue)
+                switch r.kind {
+                case .receivedToken: guard r.element != nil, r.set != nil else { throw bad }
+                case .grid, .workedStation: guard r.element != nil else { throw bad }
+                case .dxccEntity:
+                    guard let from = r.from else { throw bad }
+                    if from != .callsign { guard r.element != nil else { throw bad } }
+                case .cqZone, .ituZone: guard r.from != nil else { throw bad }
+                case .wpxPrefix: break
+                }
             }
             if let roster = m.roster, !isKnownSet(roster) { throw ContestValidationError.unknownTokenSet(roster) }
         }
@@ -1908,7 +1919,7 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
 enum ContestValidationError: Error, Equatable, LocalizedError {
     case noSides, noExchange, pointsWithoutDefault, noCabrilloContest
     case unknownSide(String), unknownTokenSet(String), unknownElement(String), badPredicate(String)
-    case badTokenSet(String, String), elementSentByNobody(String), badDerivation(String)
+    case badTokenSet(String, String), elementSentByNobody(String), badDerivation(String), badResolver(String, String)
 
     var errorDescription: String? {
         switch self {
@@ -1923,6 +1934,7 @@ enum ContestValidationError: Error, Equatable, LocalizedError {
         case .badTokenSet(let id, let why): "Token set '\(id)': \(why)"
         case .elementSentByNobody(let e): "Exchange element '\(e)' is sent by no side."
         case .badDerivation(let e): "Exchange element '\(e)' has a derivation that is not a non-empty categoryTable."
+        case .badResolver(let cls, let kind): "Multiplier class '\(cls)': a \(kind) resolver is missing a required field."
         }
     }
 }
@@ -2276,12 +2288,12 @@ enum PartyLowering {
                 let entitySides = sideIDs.filter { rule(p, $0).dxCountsEntities }
                 let tokenSides = sideIDs.filter { !rule(p, $0).dxCountsEntities }
                 if !tokenSides.isEmpty {
-                    resolvers.append(Resolver(kind: .dxccEntity, from: .receivedTokenOrCallsign, list: .arrl, countEntities: false,
-                                              sides: tokenSides.count == sideIDs.count ? nil : tokenSides))
+                    resolvers.append(Resolver(kind: .dxccEntity, element: "location", from: .receivedTokenOrCallsign, list: .arrl,
+                                              countEntities: false, sides: tokenSides.count == sideIDs.count ? nil : tokenSides))
                 }
                 if !entitySides.isEmpty {
-                    resolvers.append(Resolver(kind: .dxccEntity, from: .receivedTokenOrCallsign, list: .arrl, countEntities: true,
-                                              sides: entitySides.count == sideIDs.count ? nil : entitySides))
+                    resolvers.append(Resolver(kind: .dxccEntity, element: "location", from: .receivedTokenOrCallsign, list: .arrl,
+                                              countEntities: true, sides: entitySides.count == sideIDs.count ? nil : entitySides))
                 }
                 var caps: [String: Int] = [:]
                 for s in sideIDs { if let cap = rule(p, s).dxMultCap { caps[s] = cap } }

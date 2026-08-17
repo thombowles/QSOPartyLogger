@@ -138,7 +138,7 @@ The log **stores** `sideID`. The entrant predicate only *defaults* the choice in
 | `cqZone` / `ituZone` | `from: received` | the zone |
 | `wpxPrefix` | — | `WPXPrefix.of(call)` |
 | `grid` | `element`, `precision` | the grid |
-| `workedStation` | `whenMemberElement` | the worked call (FOBB) |
+| `workedStation` | `element` (the member-or-power element; the call counts when it parses as a member number) | the worked call (FOBB) |
 
 Well-known class ids keep today's raw values — `county`, `state`, `province`, `dx`, `section`, `member` — so `ScoreSnapshot.multsByClass` and the sidebar's UserDefaults keys read unchanged. New: `zone`, `ituZone`, `country`, `prefix`, `grid`.
 
