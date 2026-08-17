@@ -14,7 +14,7 @@ import SwiftUI
 /// Splitting the decision out of the view is what makes that testable: a
 /// SwiftUI body cannot be asserted on, but "every group the sheet draws
 /// announces itself" can.
-struct PartyNotice: Equatable {
+struct ContestNotice: Equatable {
 
     /// How loud a group is, and the only thing colour is allowed to encode.
     ///
@@ -130,7 +130,7 @@ struct PartyNotice: Equatable {
     }
 }
 
-extension PartyNotice.Tone {
+extension ContestNotice.Tone {
 
     /// **Orange is reserved for `blockingCaveats`.** It is not keyed on
     /// `isPartiallyVerified`, which fired on 39 of 46 parties and so said

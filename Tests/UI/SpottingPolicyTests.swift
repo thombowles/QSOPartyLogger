@@ -16,7 +16,7 @@ import XCTest
 /// condition.)
 ///
 /// A SwiftUI body cannot be asserted on, so every rule and every string lives
-/// in `SpottingPolicy` — the `PartyNotice` / `KeyMonitorGate` pattern.
+/// in `SpottingPolicy` — the `ContestNotice` / `KeyMonitorGate` pattern.
 final class SpottingPolicyTests: XCTestCase {
 
     // MARK: Prevention

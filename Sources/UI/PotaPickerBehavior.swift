@@ -2,7 +2,7 @@ import Foundation
 
 /// The park picker's keyboard and disclosure rules, independent of SwiftUI.
 /// A `body` cannot be asserted on, so the decisions live here and
-/// `PotaPickerBehaviorTests` pins them — the split `PartyNotice` uses.
+/// `PotaPickerBehaviorTests` pins them — the split `ContestNotice` uses.
 enum PotaPickerBehavior {
 
     /// What Escape does in the search field.

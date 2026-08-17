@@ -24,7 +24,7 @@ import Foundation
 /// other than the station operator", so they survive the sweep.
 ///
 /// Every rule and every string lives here rather than in a view body, so the
-/// contract is assertable — the `PartyNotice` / `KeyMonitorGate` pattern.
+/// contract is assertable — the `ContestNotice` / `KeyMonitorGate` pattern.
 enum SpottingPolicy {
 
     // MARK: Prevention

@@ -3,7 +3,7 @@ import XCTest
 
 /// The park picker's keyboard and disclosure rules. A SwiftUI body cannot be
 /// asserted on, so the decisions live in `PotaPickerBehavior` and the
-/// contract is pinned here — the same split `PartyNotice` uses.
+/// contract is pinned here — the same split `ContestNotice` uses.
 ///
 /// These are KE5CW's four complaints from the first build, each turned into
 /// a rule: the list must not stay open once the search is cleared, arrows

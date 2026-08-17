@@ -437,18 +437,18 @@ struct SetupSheet: View {
     /// keep the informational tone; the full provenance paragraph stays behind
     /// the disclosure, and is offered for every party.
     ///
-    /// Which group a line belongs to is decided by `PartyNotice`, and **every
+    /// Which group a line belongs to is decided by `ContestNotice`, and **every
     /// group it hands back is drawn with its own heading** — colour on its own
     /// never has to explain why one bullet is orange and the next is grey.
     ///
-    /// **One `ForEach`, over `PartyNotice.rows`.** Drawing the two groups from
+    /// **One `ForEach`, over `ContestNotice.rows`.** Drawing the two groups from
     /// two sibling `ForEach`es gave this section two rows identified `0`, and
     /// on a re-diff — opening *Rules provenance* — the first orange bullet
     /// came back carrying the grey line's text and colour. `Row.id` is
     /// namespaced by tone; there is nothing left for a row to collide with.
     @ViewBuilder
     private func verificationNotice(_ party: PartyDefinition) -> some View {
-        ForEach(PartyNotice(party: party).rows) { row in
+        ForEach(ContestNotice(party: party).rows) { row in
             noticeRow(row)
         }
 
@@ -569,7 +569,7 @@ struct SetupSheet: View {
     /// A heading or a bullet — never both for one `Row.id`, so the branch a row
     /// takes is fixed for the life of its identity.
     @ViewBuilder
-    private func noticeRow(_ row: PartyNotice.Row) -> some View {
+    private func noticeRow(_ row: ContestNotice.Row) -> some View {
         if let systemImage = row.systemImage {
             Label(row.text, systemImage: systemImage)
                 .font(.caption.weight(.semibold))

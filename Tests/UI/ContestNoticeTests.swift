@@ -2,14 +2,14 @@ import XCTest
 @testable import QSOPartyLogger
 
 /// The setup sheet's party notice. A SwiftUI body cannot be asserted on, so the
-/// grouping decision lives in `PartyNotice` and the contract is pinned here.
+/// grouping decision lives in `ContestNotice` and the contract is pinned here.
 ///
 /// The regression these guard: the sheet drew the blocking caveats in orange,
 /// then ran straight on into the advisory ones in grey with the same bullet and
 /// the same size, and suppressed the second group's heading exactly when the
 /// first was present. The alerts changed colour part-way down the list with
 /// nothing to say why.
-final class PartyNoticeTests: XCTestCase {
+final class ContestNoticeTests: XCTestCase {
 
     private var parties: [PartyDefinition] { PartyCatalog.loadBundled() }
 
@@ -21,7 +21,7 @@ final class PartyNoticeTests: XCTestCase {
     /// always says so too.
     func testEveryDrawnGroupCarriesItsOwnHeading() {
         for party in parties {
-            for group in PartyNotice(party: party).groups {
+            for group in ContestNotice(party: party).groups {
                 XCTAssertFalse(
                     group.header.isEmpty,
                     "\(party.id): the \(group.tone) group is drawn in its own colour with no "
@@ -47,7 +47,7 @@ final class PartyNoticeTests: XCTestCase {
     /// grey. Every row the sheet draws must be distinguishable from every other.
     func testEveryRowIdIsUniqueAcrossTheWholeNotice() {
         for party in parties {
-            let ids = PartyNotice(party: party).rows.map(\.id)
+            let ids = ContestNotice(party: party).rows.map(\.id)
             XCTAssertEqual(
                 Set(ids).count, ids.count,
                 "\(party.id): two rows share an identity — \(ids.sorted())"
@@ -64,7 +64,7 @@ final class PartyNoticeTests: XCTestCase {
     /// second advisory. Two and two now — still both groups, still the same
     /// identity contract.
     func testMissouriDrawsEveryLineOnceInOrder() throws {
-        let rows = PartyNotice(party: try party("moqp")).rows
+        let rows = ContestNotice(party: try party("moqp")).rows
 
         XCTAssertEqual(rows.count, 5)
         XCTAssertEqual(rows.map(\.tone), [
@@ -88,7 +88,7 @@ final class PartyNoticeTests: XCTestCase {
     /// Only headings carry an icon, and every group contributes exactly one.
     func testHeadingRowsAreExactlyTheGroupHeadings() {
         for party in parties {
-            let notice = PartyNotice(party: party)
+            let notice = ContestNotice(party: party)
             let headings = notice.rows.filter { $0.systemImage != nil }
             XCTAssertEqual(headings.map(\.text), notice.groups.map(\.header))
             XCTAssertEqual(headings.map(\.tone), notice.groups.map(\.tone))
@@ -108,7 +108,7 @@ final class PartyNoticeTests: XCTestCase {
     /// left 2026-08-04 when the activation multiplier closed its only scoring
     /// gap, leaving one advisory group).
     func testTheTwoGroupCaseIsCommon() {
-        let mixed = parties.filter { PartyNotice(party: $0).groups.count == 2 }.map(\.id)
+        let mixed = parties.filter { ContestNotice(party: $0).groups.count == 2 }.map(\.id)
         XCTAssertEqual(mixed.count, 17, "got: \(mixed)")
     }
 
@@ -116,7 +116,7 @@ final class PartyNoticeTests: XCTestCase {
     /// quieter notes. Both groups are headed, and each heading counts only its
     /// own lines.
     func testMixedPartyDrawsTwoHeadedGroups() throws {
-        let notice = PartyNotice(party: try party("deqp"))
+        let notice = ContestNotice(party: try party("deqp"))
 
         XCTAssertEqual(notice.groups.count, 2)
         XCTAssertEqual(notice.warning?.tone, .warning)
@@ -134,7 +134,7 @@ final class PartyNoticeTests: XCTestCase {
     /// group exactly the rest — no line is dropped, none is drawn twice.
     func testEveryCaveatReachesExactlyOneGroup() {
         for party in parties where !party.caveats.isEmpty {
-            let notice = PartyNotice(party: party)
+            let notice = ContestNotice(party: party)
             let drawn = notice.groups.flatMap(\.lines)
             XCTAssertEqual(
                 drawn.sorted(), party.caveats.map(\.summary).sorted(),
@@ -165,7 +165,7 @@ final class PartyNoticeTests: XCTestCase {
         ]}
         """
         let blocked = try PartyCatalog.decode(Data(json.utf8))
-        let notice = PartyNotice(party: blocked)
+        let notice = ContestNotice(party: blocked)
 
         XCTAssertEqual(notice.warning?.header, "This log needs checking before you submit it.")
         XCTAssertEqual(notice.informational?.header, "1 note on how this app handles this party.")
@@ -174,7 +174,7 @@ final class PartyNoticeTests: XCTestCase {
     /// A party with only quiet notes keeps the informational heading it has
     /// always had, and raises no orange at all.
     func testAdvisoryOnlyPartyDrawsOneQuietGroup() throws {
-        let notice = PartyNotice(party: try party("okqp"))
+        let notice = ContestNotice(party: try party("okqp"))
 
         XCTAssertNil(notice.warning)
         XCTAssertEqual(notice.informational?.header, "3 notes on how this app handles this party.")
@@ -183,7 +183,7 @@ final class PartyNoticeTests: XCTestCase {
 
     /// Nothing to say draws nothing — no empty heading, no stray bullet.
     func testFullyModelledPartyDrawsNoGroups() throws {
-        let notice = PartyNotice(party: try party("ksqp"))
+        let notice = ContestNotice(party: try party("ksqp"))
 
         XCTAssertNil(notice.warning)
         XCTAssertNil(notice.informational)
@@ -201,7 +201,7 @@ final class PartyNoticeTests: XCTestCase {
         XCTAssertTrue(unclassified.caveats.isEmpty)
         XCTAssertEqual(unclassified.operatorAlerts.count, 2, "fixture needs marked notes")
 
-        let notice = PartyNotice(party: unclassified)
+        let notice = ContestNotice(party: unclassified)
         XCTAssertNil(notice.warning)
         XCTAssertEqual(notice.informational?.lines, unclassified.operatorAlerts)
         XCTAssertEqual(
@@ -225,19 +225,19 @@ final class PartyNoticeTests: XCTestCase {
     /// the club-station points and the activation bonus.
     func testHeadingsAgreeInNumber() throws {
         XCTAssertEqual(
-            PartyNotice(party: try party("arqp")).warning?.header,
+            ContestNotice(party: try party("arqp")).warning?.header,
             "1 thing this app cannot score for you here."
         )
         XCTAssertNil(
-            PartyNotice(party: try party("ncqp")).warning,
+            ContestNotice(party: try party("ncqp")).warning,
             "every scoring rule of NCQP is expressed; its one caveat is provenance"
         )
         XCTAssertEqual(
-            PartyNotice(party: try party("oqp")).warning?.header,
+            ContestNotice(party: try party("oqp")).warning?.header,
             "2 things this app cannot score for you here."
         )
         XCTAssertEqual(
-            PartyNotice(party: try party("hqp")).informational?.header,
+            ContestNotice(party: try party("hqp")).informational?.header,
             "1 note on how this app handles this party."
         )
     }
