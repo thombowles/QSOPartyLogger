@@ -338,6 +338,7 @@
 		CD619D2916CB1A7385A1F423 /* CombinedBreakdownSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02590141050CF40EEF90B0C1 /* CombinedBreakdownSection.swift */; };
 		CDF617D869D5238FAB9DB3BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1B2185C4DCD353FBC522D1A /* Assets.xcassets */; };
 		CEACC3EEBBF6A962A00C0F48 /* LogDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27158AAEFAD7C21DD3D17B0 /* LogDocument.swift */; };
+		CF5C83CCA0BCA6C4A70F9E25 /* PointRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928D9406BEDF52EBC3DD925C /* PointRule.swift */; };
 		D0D1F31090A7D5B23D094EAD /* SpotDraftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47B5C2B4B0E3D55FBFEA997 /* SpotDraftTests.swift */; };
 		D3877536C753E23BBA86DEE4 /* ClusterHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF36ECEA568E47C2F9D6778 /* ClusterHistoryTests.swift */; };
 		D3C262F0AB8FAFD31D1B4EB6 /* ScoreFactorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEF6EE3217F107C7332AC6D /* ScoreFactorTests.swift */; };
@@ -418,6 +419,7 @@
 		FA255DF473A40C79961107EF /* HubSpotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D590A3128E841A331486E328 /* HubSpotClient.swift */; };
 		FAB198B74CB4E5D2C52222BB /* MaidenheadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369E1591F09C47EEADB9A4D7 /* MaidenheadTests.swift */; };
 		FAC8245A7DA9F69C112C6610 /* paqp-table-empty.html in Resources */ = {isa = PBXBuildFile; fileRef = 6E86BE307CD4BC40C6036C06 /* paqp-table-empty.html */; };
+		FB7B5F2219E5A36D5DF20B1F /* PointRuleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A90EE110A2B4A357D33313 /* PointRuleTests.swift */; };
 		FBD66968904E12B522405DA0 /* ESM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB6B05C56CE99064611E6B6 /* ESM.swift */; };
 		FBF94AC519A65928C7634BA7 /* AlabamaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F208CF00E5CDC47B602583B8 /* AlabamaQSOPartyTests.swift */; };
 		FC37B43A2A6DB0FAEA5E94CA /* NorthDakotaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53EC04A80BE35768462933D /* NorthDakotaQSOPartyTests.swift */; };
@@ -444,6 +446,7 @@
 		009080AA1C81D0A7D94FA410 /* ModeClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeClass.swift; sourceTree = "<group>"; };
 		0114485946B808B02EBF704A /* VoiceStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceStoreTests.swift; sourceTree = "<group>"; };
 		019DA95DE2A4D5A20E63D7B0 /* KeyDiagnosticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyDiagnosticsTests.swift; sourceTree = "<group>"; };
+		01A90EE110A2B4A357D33313 /* PointRuleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointRuleTests.swift; sourceTree = "<group>"; };
 		01C6419D10E7C381AE554C1B /* MessagesEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesEditor.swift; sourceTree = "<group>"; };
 		02590141050CF40EEF90B0C1 /* CombinedBreakdownSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedBreakdownSection.swift; sourceTree = "<group>"; };
 		02641FE9618E6D9A40BCF583 /* UpcomingContests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingContests.swift; sourceTree = "<group>"; };
@@ -684,6 +687,7 @@
 		9183D3107E206A940C2DCDCB /* HubSpotSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotSourceTests.swift; sourceTree = "<group>"; };
 		91991260BB14DFD37004DF3B /* TokenSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenSet.swift; sourceTree = "<group>"; };
 		91AE54A60C33CC8614CCB97C /* RadioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioController.swift; sourceTree = "<group>"; };
+		928D9406BEDF52EBC3DD925C /* PointRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointRule.swift; sourceTree = "<group>"; };
 		92BF3A3E0D2A190DDA4A0941 /* PotaParkStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkStoreTests.swift; sourceTree = "<group>"; };
 		9382E762282D91D8950B0F07 /* WorkedSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedSpot.swift; sourceTree = "<group>"; };
 		9392F2187275B71B5789F836 /* CallHistoryPageParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryPageParser.swift; sourceTree = "<group>"; };
@@ -934,6 +938,7 @@
 				3F5C24707F61E7C6C6E1122F /* HubSpotSource.swift */,
 				861DB04574AAEACF21FD47A6 /* MultiplierClass.swift */,
 				826129C440B9A8E8EC836802 /* MultiplierRoster.swift */,
+				928D9406BEDF52EBC3DD925C /* PointRule.swift */,
 				FA4FF8B1FB9896DDBD544CB6 /* ScoreFactor.swift */,
 				DF3F79006BDBC80469A60B23 /* Side.swift */,
 				91991260BB14DFD37004DF3B /* TokenSet.swift */,
@@ -1123,6 +1128,7 @@
 				09DA0DF56D3346FEB3B3B11C /* PartyCaveatTests.swift */,
 				3E3270C8AA34DCB8481F768F /* PartyModeInferenceTests.swift */,
 				033F9D044AD7BFDEE8B6D181 /* PennsylvaniaQSOPartyTests.swift */,
+				01A90EE110A2B4A357D33313 /* PointRuleTests.swift */,
 				EA2D9B1FCC05FCBCC978861F /* PotaParkDirectoryTests.swift */,
 				92BF3A3E0D2A190DDA4A0941 /* PotaParkStoreTests.swift */,
 				6494352FEF3C42EC27F6120C /* PotaRefTests.swift */,
@@ -1811,6 +1817,7 @@
 				E6A1CF88C19C7DADF81B78DE /* PartyCaveatTests.swift in Sources */,
 				E9827B06A176CDDB8E3D8770 /* PartyModeInferenceTests.swift in Sources */,
 				FF1D72B5F974B4BC4D6C3A5A /* PennsylvaniaQSOPartyTests.swift in Sources */,
+				FB7B5F2219E5A36D5DF20B1F /* PointRuleTests.swift in Sources */,
 				935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */,
 				C538ACCF93B5DCFFFE15C1B3 /* PotaParkDirectoryTests.swift in Sources */,
 				ED6D904A680FE4DA2B03DA38 /* PotaParkStoreTests.swift in Sources */,
@@ -1998,6 +2005,7 @@
 				D9CBAA91D8BCAD19385482BA /* PartyCatalog.swift in Sources */,
 				1DAC9D9495B4F17E4872E359 /* PartyDefinition.swift in Sources */,
 				A41CA85D7E69A9F5C55A2824 /* PhoneMessageSource.swift in Sources */,
+				CF5C83CCA0BCA6C4A70F9E25 /* PointRule.swift in Sources */,
 				EADC3E655DA027365F53814C /* PotaPark.swift in Sources */,
 				1A8FD3F2B88A84E0BEA99DF1 /* PotaParkClient.swift in Sources */,
 				1F03EEA369072913AD9AACE8 /* PotaParkDirectory.swift in Sources */,
