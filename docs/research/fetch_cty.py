@@ -81,5 +81,7 @@ assert m, "no =VERyyyymmdd release marker in the file"
     f"records: {len(records)}\nbytes: {len(data)}\nsha256: {hashlib.sha256(data).hexdigest()}\n"
     "format: primary prefix, name, ADIF entity code, continent, CQ zone, ITU zone, lat, lon, tz, prefix list ending ';'\n"
     "        (a leading * on the primary prefix marks a WAE-only entity; =CALL is an exact callsign; (n) CQ and [n] ITU overrides)\n"
-    "see: docs/research/cty_dat_format.txt\n")
+    "see: docs/research/cty_dat_format.txt\n"
+    "written by: python3 docs/research/fetch_cty.py\n"
+    "checked by: python3 docs/research/fetch_cty.py --check\n")
 print(f"wrote {len(data)} bytes, {len(records)} records, release VER{m.group(1)}")
