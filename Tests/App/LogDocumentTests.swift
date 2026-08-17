@@ -604,4 +604,47 @@ final class LogDocumentTests: XCTestCase {
         undo.undo()
         XCTAssertEqual(doc.log.myPotaRefs, [])
     }
+
+    // MARK: The save path stamps the score into the file
+
+    /// What the document writes — to its own file and to the iCloud mirror
+    /// alike — carries the score as computed at that save, so the dashboard
+    /// reads a frozen figure from the log itself. The document's own model
+    /// is not touched.
+    func testDataForSavingCarriesTheScoreSnapshot() throws {
+        let party = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        var log = ContestLog(partyID: "ksqp")
+        log.station.callsign = "KE5CW"
+        log.myLocation = .inState(counties: [party.counties[0].abbr])
+        log.setupCompleted = true
+        log.qsos = [
+            QSO(
+                timestampUTC: Date(timeIntervalSince1970: 1_770_000_000), call: "W0BH", band: .m20,
+                modeClass: .cw, rawMode: "CW", rstSent: "599", rstRcvd: "599",
+                myLoc: party.counties[0].abbr, theirLoc: "MO"
+            )
+        ]
+
+        let written = try ContestLog.decode(from: try LogDocument.dataForSaving(log))
+        let snapshot = try XCTUnwrap(written.scoreSnapshot)
+        XCTAssertEqual(snapshot.validQSOs, 1)
+        XCTAssertNotNil(snapshot.figures)
+        var unstamped = written
+        unstamped.scoreSnapshot = nil
+        XCTAssertEqual(unstamped, log)
+    }
+
+    /// A draft — Contest Setup not finished — is written without a score.
+    func testDataForSavingLeavesADraftUnscored() throws {
+        var log = ContestLog(partyID: "ksqp")
+        log.station.callsign = "KE5CW"
+        log.qsos = [
+            QSO(
+                timestampUTC: Date(timeIntervalSince1970: 1_770_000_000), call: "W0BH", band: .m20,
+                modeClass: .cw, rawMode: "CW", rstSent: "599", rstRcvd: "599",
+                myLoc: "TX", theirLoc: "MO"
+            )
+        ]
+        XCTAssertNil(try ContestLog.decode(from: try LogDocument.dataForSaving(log)).scoreSnapshot)
+    }
 }

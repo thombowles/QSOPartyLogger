@@ -111,6 +111,15 @@ struct DashboardContestsSection: View {
         var bonus: Int { record.snapshot.figures?.bonusPoints ?? 0 }
         var score: Int { record.snapshot.figures?.total ?? 0 }
         var scored: Bool { record.snapshot.figures != nil }
+        /// The score cell's tooltip: where the figure came from.
+        var scoreOriginText: String {
+            switch record.scoreOrigin {
+            case .savedWithLog:
+                "As saved with the log — the score computed at its last save, frozen against later rule updates"
+            case .computedNow:
+                "Computed now with the rules installed here (the log was saved before scores rode along, or on a Mac without this party's rules); saving the log again stamps it"
+            }
+        }
         var minutes: Int { record.snapshot.operatingMinutes }
     }
 
@@ -185,6 +194,7 @@ struct DashboardContestsSection: View {
                     .monospacedDigit()
                     .fontWeight(row.scored ? .semibold : .regular)
                     .foregroundStyle(row.scored ? .primary : .secondary)
+                    .help(row.scored ? row.scoreOriginText : "Install this party's rules to score the log")
             }
             .width(100)
         }

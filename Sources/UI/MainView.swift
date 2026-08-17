@@ -1233,16 +1233,17 @@ struct MainView: View {
         Task { await spaceWeatherClient.refreshIfStale() }
     }
 
-    /// Previous contests, read once and indexed by call — what a prefill falls
-    /// back on when this log has never worked the station. Off the main actor
-    /// because the archive holds every QSO of every contest ever logged, and a
-    /// failure is silent: this is a convenience, not a correctness path.
+    /// Previous contests — the `.qplog` files in the logs folder — read once
+    /// and indexed by call: what a prefill falls back on when this log has
+    /// never worked the station. Off the main actor because that is every
+    /// QSO of every contest ever logged, and a failure is silent: this is a
+    /// convenience, not a correctness path. No logs folder chosen, no memory.
     private func loadArchiveIndex() {
         Task {
             let index = await Task.detached(priority: .userInitiated) {
                 () -> StationMemory.Index in
-                let folder = ContestHistorian.resolveFolder()
-                guard let archive = try? ArchiveStore(folder: folder).load() else {
+                guard let folder = CloudMirror.activeFolder(),
+                      let archive = try? LogFolder(url: folder).history().archive else {
                     return .empty
                 }
                 var counties: [String: Set<String>] = [:]

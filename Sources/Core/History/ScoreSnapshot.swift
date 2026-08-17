@@ -1,11 +1,11 @@
 import Foundation
 
 /// A contest's scoring figures as computed when the log was saved — the
-/// "what I claimed" record the dashboard shows for past seasons. Snapshots
-/// deliberately do not chase later rule-file edits: party JSON is updated
-/// every season (schedules are annual), and a 2026 score must not drift when
-/// the 2027 rules land. They are recomputed only when the QSO set itself
-/// changes (a two-Mac merge).
+/// "what I claimed" record the dashboard shows for past seasons, carried in
+/// the log file itself (`ContestLog.scoreSnapshot`). Snapshots deliberately
+/// do not chase later rule-file edits: party JSON is updated every season
+/// (schedules are annual), and a 2026 score must not drift when the 2027
+/// rules land. Every save re-stamps the log with the score of what it holds.
 struct ScoreSnapshot: Codable, Equatable, Sendable {
 
     /// Engine-derived score figures. Absent when the party definition wasn't
@@ -124,6 +124,19 @@ struct ScoreSnapshot: Codable, Equatable, Sendable {
                 )
             )
         )
+    }
+
+    /// The best snapshot this Mac can make of a log right now: the engine's
+    /// when the party's rules are installed (`rules`), counts only otherwise.
+    static func best(
+        for log: ContestLog,
+        rules: (String) -> PartyDefinition? = { PartyCatalog.party(id: $0) }
+    ) -> ScoreSnapshot {
+        if let party = rules(log.partyID) {
+            make(log: log, party: party)
+        } else {
+            countsOnly(log: log)
+        }
     }
 
     /// Counts without rules: every row is tallied as-is (dupes and validity

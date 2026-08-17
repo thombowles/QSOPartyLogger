@@ -2,7 +2,8 @@ import SwiftUI
 
 /// The Contest Dashboard window (⌘⇧D): season summary, per-contest scores,
 /// State QSO Party Challenge standing, trends, and the upcoming calendar —
-/// all read from the one-file history archive in the synced logs folder.
+/// all read straight from the `.qplog` files in the synced logs folder,
+/// which are the history.
 struct DashboardView: View {
     @State private var model = DashboardModel()
 
@@ -16,7 +17,7 @@ struct DashboardView: View {
         }
         .frame(minWidth: 1000, minHeight: 680)
         .navigationTitle("Contest Dashboard")
-        .navigationSubtitle(model.historyFolderPath ?? "local history — no iCloud folder chosen")
+        .navigationSubtitle(model.historyFolderPath ?? "no logs folder chosen")
         .toolbar { toolbarContent }
         .task { await model.refresh() }
         .onReceive(
@@ -81,18 +82,12 @@ struct DashboardView: View {
             Spacer()
 
             Button {
-                Task { await model.importFromLogsFolder() }
+                model.revealLogsFolder()
             } label: {
-                Label("Import Logs", systemImage: "square.and.arrow.down.on.square")
+                Label("Reveal Logs Folder", systemImage: "folder")
             }
-            .help("Scan the logs folder for .qplog files and add them to the history")
-
-            Button {
-                model.revealHistoryFile()
-            } label: {
-                Label("Reveal History File", systemImage: "doc.badge.gearshape")
-            }
-            .help("Show 'Contest History.qphistory' in Finder")
+            .disabled(model.logsFolderURL == nil)
+            .help("Open the logs folder in Finder — its .qplog files are this history; delete a log to drop it")
 
             Button {
                 Task { await model.refresh() }
@@ -104,7 +99,7 @@ struct DashboardView: View {
                 }
             }
             .keyboardShortcut("r", modifiers: .command)
-            .help("Re-read the history file (⌘R)")
+            .help("Re-read the logs folder (⌘R)")
             .shortcutHint("⌘R")
         }
     }
@@ -163,10 +158,31 @@ struct DashboardView: View {
             : "\(unscored) contest\(unscored == 1 ? "" : "s") without installed rules not included"
     }
 
+    /// The facts that make an incomplete or untidy folder look like what it
+    /// is: logs still downloading from iCloud, two files for one contest,
+    /// and files that couldn't be read (skipped, never touched).
     private var footer: some View {
-        HStack {
-            if let summary = model.importSummary {
-                Label(summary, systemImage: "square.and.arrow.down")
+        HStack(spacing: 14) {
+            if model.downloading > 0 {
+                Label(
+                    "\(model.downloading) log\(model.downloading == 1 ? "" : "s") still downloading from iCloud — refresh in a moment",
+                    systemImage: "icloud.and.arrow.down"
+                )
+            }
+            ForEach(model.duplicates, id: \.shown) { duplicate in
+                Label(
+                    "Two files for one contest — showing \(duplicate.shown); also \(duplicate.others.joined(separator: ", "))",
+                    systemImage: "doc.on.doc"
+                )
+                .help("The later-modified file is shown. Delete or move the other if it is a stale copy.")
+            }
+            if !model.unreadable.isEmpty {
+                Label(
+                    "Couldn't read: \(model.unreadable.joined(separator: ", ")) (left untouched)",
+                    systemImage: "exclamationmark.triangle"
+                )
+                .foregroundStyle(.orange)
+                .help("These files in the logs folder don't decode as logs. They were skipped and never overwritten.")
             }
             Spacer()
             if let refreshed = model.lastRefreshed {
@@ -194,8 +210,8 @@ struct DashboardView: View {
             } else {
                 Text(
                     model.historyFolderPath == nil
-                        ? "Pick your iCloud Drive logs folder so every contest — and this dashboard — syncs across your Macs. Then import the logs you already have."
-                        : "Log a contest, or import the .qplog files already in your logs folder."
+                        ? "Pick your iCloud Drive logs folder. The .qplog files saved there are your contest history, on every Mac."
+                        : "The .qplog files in your logs folder are your history — log a contest, or drop the logs you already have into the folder."
                 )
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
@@ -211,18 +227,26 @@ struct DashboardView: View {
                     }
                     .buttonStyle(.borderedProminent)
                 }
-                Button("Import Existing Logs…") {
-                    Task { await model.importFromLogsFolder() }
-                }
                 Button("Refresh") {
                     Task { await model.refresh() }
                 }
                 .keyboardShortcut("r", modifiers: .command)
             }
-            if let summary = model.importSummary {
-                Text(summary)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            if model.downloading > 0 {
+                Label(
+                    "\(model.downloading) log\(model.downloading == 1 ? "" : "s") still downloading from iCloud — refresh in a moment",
+                    systemImage: "icloud.and.arrow.down"
+                )
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
+            if !model.unreadable.isEmpty {
+                Label(
+                    "Couldn't read: \(model.unreadable.joined(separator: ", ")) (left untouched)",
+                    systemImage: "exclamationmark.triangle"
+                )
+                .font(.caption)
+                .foregroundStyle(.orange)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

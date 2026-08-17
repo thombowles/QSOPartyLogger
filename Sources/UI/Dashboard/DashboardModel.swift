@@ -2,21 +2,34 @@ import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// State for the Contest Dashboard window: loads the archive (merging any
-/// iCloud conflict versions and a pre-iCloud local archive first), selects a
-/// year, and derives stats/standing/upcoming from Core.
+/// State for the Contest Dashboard window: reads the logs folder as the
+/// history (the `.qplog` files *are* the history — see `LogFolder`), selects
+/// a year, and derives stats/standing/upcoming from Core.
 @Observable @MainActor
 final class DashboardModel {
     var archive: ContestArchive = .empty
     var selectedYear = Date().utcYear
     var loadError: String?
-    var importSummary: String?
     var isLoading = false
     var lastRefreshed: Date?
+    /// Two files for one contest — the later-modified is shown, the rest named.
+    var duplicates: [LogFolder.Duplicate] = []
+    /// Logs that didn't decode, by name — skipped, never touched.
+    var unreadable: [String] = []
+    /// Logs iCloud has not downloaded to this Mac yet.
+    var downloading = 0
 
     private(set) var parties: [PartyDefinition] = []
     let challengeCalendar = ChallengeCalendar.loadBundled()
-    private var didAutoImport = false
+
+    /// Where the logs are — the iCloud logs folder setting in the app, read
+    /// at every use so a folder chosen mid-session is followed at once; a
+    /// temp folder in tests, so nothing here can reach the real one.
+    private let logsFolder: @Sendable () -> URL?
+
+    init(logsFolder: @escaping @Sendable () -> URL? = { CloudMirror.activeFolder() }) {
+        self.logsFolder = logsFolder
+    }
 
     // MARK: Derived
 
@@ -72,12 +85,13 @@ final class DashboardModel {
         )
     }
 
-    var historyFolderPath: String? {
-        CloudMirror.isConfigured ? CloudMirror.folderDisplayPath : nil
+    /// The logs folder in use, or nil when none is chosen.
+    var logsFolderURL: URL? {
+        logsFolder()
     }
 
-    var historyFileURL: URL {
-        ArchiveStore(folder: ContestHistorian.resolveFolder()).fileURL
+    var historyFolderPath: String? {
+        logsFolderURL?.path(percentEncoded: false)
     }
 
     func stepYear(_ delta: Int) {
@@ -94,6 +108,9 @@ final class DashboardModel {
 
     // MARK: Loading
 
+    /// Read every log in the logs folder. Off the main actor — the folder
+    /// holds every QSO of every contest — and a missing folder is simply
+    /// empty: the empty state offers the chooser.
     func refresh() async {
         isLoading = true
         defer {
@@ -102,24 +119,24 @@ final class DashboardModel {
         }
         parties = PartyCatalog.allParties()
 
-        let outcome = await Task.detached(priority: .userInitiated) { () -> Result<ContestArchive, Error> in
-            // Fold a pre-iCloud local archive in once a folder is chosen…
-            let folder = ContestHistorian.resolveFolder()
-            _ = try? ContestHistorian.migrate(
-                localFolder: ContestHistorian.applicationSupportFolder, into: folder
-            )
-            // …and any iCloud conflict versions (merge is commutative).
-            _ = await ContestHistorian.shared.resolveCloudConflicts()
-            do {
-                return .success(try ArchiveStore(folder: folder).load())
-            } catch {
-                return .failure(error)
-            }
+        guard let folder = logsFolder() else {
+            archive = .empty
+            duplicates = []
+            unreadable = []
+            downloading = 0
+            loadError = nil
+            return
+        }
+        let outcome = await Task.detached(priority: .userInitiated) { () -> Result<LogFolder.History, Error> in
+            Result { try LogFolder(url: folder).history() }
         }.value
 
         switch outcome {
-        case .success(let loaded):
-            archive = loaded
+        case .success(let history):
+            archive = history.archive
+            duplicates = history.duplicates
+            unreadable = history.unreadable
+            downloading = history.downloading
             loadError = nil
             if !archive.records.isEmpty, !archive.years.contains(selectedYear) {
                 selectedYear = archive.years.first ?? selectedYear
@@ -127,31 +144,6 @@ final class DashboardModel {
         case .failure(let error):
             loadError = error.localizedDescription
         }
-
-        // Born populated: with a synced folder configured and no archive yet,
-        // pull in whatever .qplog files are already there — once.
-        if archive.records.isEmpty, loadError == nil, !didAutoImport,
-           CloudMirror.isConfigured,
-           !FileManager.default.fileExists(atPath: historyFileURL.path(percentEncoded: false)) {
-            didAutoImport = true
-            await importFromLogsFolder()
-        }
-    }
-
-    func importFromLogsFolder() async {
-        guard let folder = CloudMirror.activeFolder() else {
-            importSummary = "Choose your iCloud logs folder first."
-            return
-        }
-        isLoading = true
-        let result = await ContestHistorian.shared.importLogs(from: folder)
-        isLoading = false
-        var summary = "Imported \(result.imported) log\(result.imported == 1 ? "" : "s")."
-        if !result.failed.isEmpty {
-            summary += " Couldn't read: \(result.failed.joined(separator: ", "))."
-        }
-        importSummary = summary
-        await refresh()
     }
 
     // MARK: Actions
@@ -174,7 +166,7 @@ final class DashboardModel {
         do {
             stagedExportType = .adi
             stagedExport = try ArchivedLogExport.adif(
-                record: record, folder: CloudMirror.activeFolder()
+                record: record, folder: logsFolder()
             )
         } catch {
             NSLog("Dashboard: ADIF export failed: \(error)")
@@ -185,7 +177,7 @@ final class DashboardModel {
         do {
             stagedExportType = .plainText
             stagedExport = try ArchivedLogExport.cabrillo(
-                record: record, folder: CloudMirror.activeFolder()
+                record: record, folder: logsFolder()
             )
         } catch {
             NSLog("Dashboard: Cabrillo export failed: \(error)")
@@ -194,7 +186,7 @@ final class DashboardModel {
 
     func openLog(_ record: ContestRecord) {
         guard let name = record.sourceFileName,
-              let folder = CloudMirror.activeFolder() else { return }
+              let folder = logsFolder() else { return }
         let url = folder.appendingPathComponent(name)
         guard FileManager.default.fileExists(atPath: url.path(percentEncoded: false)) else { return }
         NSDocumentController.shared.openDocument(
@@ -208,14 +200,17 @@ final class DashboardModel {
 
     func logFileExists(_ record: ContestRecord) -> Bool {
         guard let name = record.sourceFileName,
-              let folder = CloudMirror.activeFolder() else { return false }
+              let folder = logsFolder() else { return false }
         return FileManager.default.fileExists(
             atPath: folder.appendingPathComponent(name).path(percentEncoded: false)
         )
     }
 
-    func revealHistoryFile() {
-        NSWorkspace.shared.activateFileViewerSelecting([historyFileURL])
+    /// Open the logs folder — the history — in Finder, the way the toolbar's
+    /// iCloud folder button does.
+    func revealLogsFolder() {
+        guard let folder = logsFolder() else { return }
+        NSWorkspace.shared.open(folder)
     }
 }
 

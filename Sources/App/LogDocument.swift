@@ -97,7 +97,7 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     }
 
     func fileWrapper(snapshot: ContestLog, configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = try snapshot.encoded()
+        let data = try LogDocument.dataForSaving(snapshot)
         // Best-effort iCloud mirror on every save; never blocks or fails the
         // primary write. Documents that already live in the logs folder ARE
         // the synced copy — mirroring them would trigger "file changed by
@@ -108,14 +108,16 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
                 CloudMirror.mirror(data: data, fileName: name)
             }
         }
-        // Keep the contest history archive current on every save (debounced
-        // per contest inside the historian; value snapshot, so safe here).
-        ContestHistorian.shared.noteSaved(
-            log: snapshot,
-            sourceFileName: knownFileURL?.lastPathComponent
-                ?? LogDocument.mirrorFileName(for: snapshot) + ".qplog"
-        )
         return FileWrapper(regularFileWithContents: data)
+    }
+
+    /// The bytes every save writes — to the document's own file and to the
+    /// iCloud mirror alike: the log with its score as of this save stamped
+    /// in (`ContestLog.stampingScoreSnapshot`), so the file itself is the
+    /// contest history the dashboard reads. The document's model is not
+    /// touched; the stamp lives in the file.
+    nonisolated static func dataForSaving(_ log: ContestLog) throws -> Data {
+        try log.stampingScoreSnapshot().encoded()
     }
 
     /// The stem the export save panel offers: the log's own name — the file's

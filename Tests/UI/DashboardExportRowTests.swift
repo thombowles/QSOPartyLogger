@@ -15,6 +15,7 @@ final class DashboardExportRowTests: XCTestCase {
             myLocation: .inState(counties: ["SED"]),
             qsos: [],
             snapshot: ScoreSnapshot.countsOnly(log: ContestLog(partyID: "ksqp")),
+            scoreOrigin: .computedNow,
             updatedAt: Date(timeIntervalSince1970: 1_788_013_920),
             sourceFileName: fileAvailable ? "2026-08-29 KSQP KE5CW.qplog" : nil
         )

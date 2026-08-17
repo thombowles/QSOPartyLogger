@@ -50,6 +50,15 @@ struct ContestLog: Codable, Equatable, Sendable {
     /// profile claims ASSISTED, so flipping the claim afterwards changes
     /// the warning, not the fact.
     var usedSpots: Bool = false
+    /// The score as computed when this log was last saved, with the rules
+    /// installed then — the frozen "what I claimed" figure the Contest
+    /// Dashboard shows for past seasons, so next year's rule updates never
+    /// rewrite this year's history. Stamped by the save path
+    /// (`stampingScoreSnapshot`) and read back from the *file* by the
+    /// dashboard; the running document never reads it. Nil for a draft, and
+    /// for logs written by builds before it existed (the dashboard then
+    /// scores the log with today's rules and says so).
+    var scoreSnapshot: ScoreSnapshot? = nil
 
     /// The assisted-category warning's one predicate: spotting information
     /// reached this log while Contest Setup claims NON-ASSISTED. Universal
@@ -112,7 +121,7 @@ struct ContestLog: Codable, Equatable, Sendable {
 
     private enum CodingKeys: String, CodingKey {
         case schemaVersion, partyID, station, myLocation, qsos, messages, operatingMode, setupCompleted
-        case exchangeName, exchangeMember, entryClassID, usedSpots, myPotaRefs
+        case exchangeName, exchangeMember, entryClassID, usedSpots, myPotaRefs, scoreSnapshot
     }
 
     init(from decoder: Decoder) throws {
@@ -141,6 +150,23 @@ struct ContestLog: Codable, Equatable, Sendable {
         usedSpots = try c.decodeIfPresent(Bool.self, forKey: .usedSpots) ?? false
         // Documents written before POTA support carry no parks.
         myPotaRefs = try c.decodeIfPresent([String].self, forKey: .myPotaRefs) ?? []
+        // Documents written before the score rode along carry none.
+        scoreSnapshot = try c.decodeIfPresent(ScoreSnapshot.self, forKey: .scoreSnapshot)
+    }
+
+    /// The copy the save path writes: `scoreSnapshot` set to this log's
+    /// score as of now — the engine's figures when the party's rules are
+    /// installed (`rules`), counts only when they are not — or nil for a
+    /// draft (Contest Setup unfinished, or nothing logged yet). Everything
+    /// else is untouched.
+    func stampingScoreSnapshot(
+        rules: (String) -> PartyDefinition? = { PartyCatalog.party(id: $0) }
+    ) -> ContestLog {
+        var stamped = self
+        stamped.scoreSnapshot = setupCompleted && !qsos.isEmpty
+            ? ScoreSnapshot.best(for: self, rules: rules)
+            : nil
+        return stamped
     }
 
     static func decode(from data: Data) throws -> ContestLog {
