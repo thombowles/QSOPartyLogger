@@ -1854,6 +1854,9 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
         guard !exchange.isEmpty else { throw ContestValidationError.noExchange }
         guard let last = points.last, last.when.isEmpty else { throw ContestValidationError.pointsWithoutDefault }
         guard !cabrillo.contest.isEmpty else { throw ContestValidationError.noCabrilloContest }
+        for set in tokenSets {
+            do { try set.validate() } catch { throw ContestValidationError.badTokenSet(set.id, error.localizedDescription) }
+        }
         for e in exchange {
             for side in e.sentBy.keys where !sideIDs.contains(side) { throw ContestValidationError.unknownSide(side) }
             for set in e.sentBy.values.flatMap({ $0.sets ?? [] }) where !isKnownSet(set) {
@@ -1901,6 +1904,7 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
 enum ContestValidationError: Error, Equatable, LocalizedError {
     case noSides, noExchange, pointsWithoutDefault, noCabrilloContest
     case unknownSide(String), unknownTokenSet(String), unknownElement(String), badPredicate(String)
+    case badTokenSet(String, String)
 
     var errorDescription: String? {
         switch self {
@@ -1912,6 +1916,7 @@ enum ContestValidationError: Error, Equatable, LocalizedError {
         case .unknownTokenSet(let s): "Unknown token set '\(s)'."
         case .unknownElement(let e): "Unknown exchange element '\(e)'."
         case .badPredicate(let s): "Side '\(s)' has a predicate missing its fields."
+        case .badTokenSet(let id, let why): "Token set '\(id)': \(why)"
         }
     }
 }
