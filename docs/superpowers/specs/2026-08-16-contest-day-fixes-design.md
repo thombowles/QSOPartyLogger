@@ -95,17 +95,29 @@ preference that made every F1 after launch a loop would be a surprise.
 Messages are stored per document (`ContestLog.messages`), so a new log for a
 party the operator has already customised starts from the party defaults, and
 the work is redone every year. Voice recordings already solved this per party
-on disk (`VoiceLibrary`); CW text is small, so it goes where every other small
-per-machine memory goes — `Preferences.store`.
+on disk (`VoiceLibrary`), in the iCloud logs folder when one is chosen. The
+message sets go the same way — Tom, same day: "save those in the icloud
+folder, same as the voice macros, so I can use them across computers". (A
+first cut kept them in `Preferences.store`; it never shipped.)
 
-- `MessageMemory` (App layer, `UserDefaults`-backed like `AppSettings`): one
-  JSON dictionary `messagesByParty: [partyID: MessageSets]`, with
-  `messages(for:)`, `remember(_:for:)`, `forget(_:)`. Injectable
-  (`init(defaults:)`) so tests use a scratch suite.
+- `MessageMemory` (App layer): files, one per party — `Messages/<party>.json`,
+  pretty-printed and sorted so iCloud syncs and resolves each party on its
+  own and a person can read it — in the iCloud folder's `Messages` subfolder
+  beside `Voice` when a folder is chosen (`CloudMirror.activeFolder()`,
+  re-evaluated at every use), else `~/Library/Application Support/
+  QSOPartyLogger/Messages`. `messages(for:)`, `remember(_:for:)` (throws),
+  `forget(_:)`, and `adoptSets(from:)` — the recordings' rule: sets saved on
+  this Mac before a folder was chosen move into it once, whole, never
+  overwriting a set the folder has. Adoption is an explicit step
+  (`adoptThisMacsSetsIfNeeded`, called by `MainView` on appear and right after
+  the folder is chosen), never a side effect of reading the folder, so no
+  test can move real files. `init(folder:)` for tests; a not-yet-downloaded
+  iCloud placeholder is asked for on read.
 - `LogDocument.messageMemory: MessageMemory?` — `@ObservationIgnored`, nil by
   default so a document built in a test remembers nothing and no test can
-  pollute another; `MainView` wires the real store on appear, before Contest
-  Setup can run.
+  pollute another; `MainView` wires `.standard` on appear, before Contest
+  Setup can run. A write failure is logged, never blocking the Save (the set
+  is in the log file regardless).
 - **Write:** `LogDocument.updateMessages` (the editor's Save, and its undo)
   remembers the set under the log's party. Restore Defaults + Save therefore
   remembers the defaults, which is the same as forgetting.

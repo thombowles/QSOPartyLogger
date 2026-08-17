@@ -52,8 +52,8 @@ struct MessagesEditor: View {
     /// nothing could see it: a `Text` literal inside a view body is not
     /// reachable from a test.
     static let macroHelp =
-        "Stored in this log file, and remembered for this party — a new log for it starts "
-        + "from the set you saved last. "
+        "Stored in this log file, and remembered for this party in your iCloud folder — a new "
+        + "log for it, on any of your Macs, starts from the set you saved last. "
         + "Macros: \(MacroToken.helpList) — prosigns: ( KN + AR = BT * SK"
 
     /// The cut-number toggle's tooltip. A `String` constant rather than an

@@ -869,9 +869,13 @@ struct MainView: View {
                     Text(path)
                 }
                 Button(CloudMirror.isConfigured ? "Change iCloud Folder…" : "Choose iCloud Folder…") {
-                    // The recordings follow the folder: reload moves this
-                    // Mac's sets into it and reads from there.
-                    if CloudMirror.chooseFolder() { voiceStore.reload() }
+                    // The recordings and the message sets follow the folder:
+                    // reload moves this Mac's recordings into it and reads
+                    // from there, and the messages go the same way.
+                    if CloudMirror.chooseFolder() {
+                        voiceStore.reload()
+                        adoptMessageSetsIntoCloudFolder()
+                    }
                 }
                 if CloudMirror.isConfigured {
                     Toggle("Auto-Save Copies to iCloud", isOn: Binding(
@@ -1087,8 +1091,11 @@ struct MainView: View {
 
     private func onAppear() {
         // The per-party message memory, before Contest Setup can read it: a
-        // new Skeeter Hunt log starts from last year's Skeeter Hunt messages.
-        document.messageMemory = MessageMemory()
+        // new Skeeter Hunt log starts from last year's Skeeter Hunt messages
+        // — from the iCloud logs folder when one is chosen, so the other Macs
+        // start from the same set.
+        document.messageMemory = .standard
+        adoptMessageSetsIntoCloudFolder()
         // New (or never-configured) contests go straight to Contest Setup.
         if !document.log.setupCompleted {
             showSetup = true
@@ -1956,6 +1963,24 @@ struct MainView: View {
         }
     }
 
+    // MARK: Message sets in the iCloud folder
+
+    /// The iCloud logs folder is chosen (now, or before this launch): the
+    /// message sets this Mac saved on its own follow it, once, the way the
+    /// recordings do on `voiceStore.reload()`. Best effort — a failure leaves
+    /// the local files for the next look and says so in the log; nothing on
+    /// screen depends on it, since the sets are also in every log file.
+    private func adoptMessageSetsIntoCloudFolder() {
+        do {
+            let moved = try MessageMemory.standard.adoptThisMacsSetsIfNeeded()
+            if !moved.isEmpty {
+                NSLog("MessageMemory: moved message sets to the iCloud folder: \(moved.joined(separator: ", "))")
+            }
+        } catch {
+            NSLog("MessageMemory: could not move this Mac's message sets to the iCloud folder: \(error)")
+        }
+    }
+
     // MARK: Document naming + automatic first save
 
     /// Give unsaved logs a useful default name: "2026-07-25 ALQP KE5CW".
@@ -1986,6 +2011,7 @@ struct MainView: View {
         // Drive). Declining leaves the classic ⌘S flow.
         if !CloudMirror.isConfigured {
             guard CloudMirror.chooseFolder() else { return }
+            adoptMessageSetsIntoCloudFolder()
         }
 
         let baseName = LogDocument.defaultDisplayName(

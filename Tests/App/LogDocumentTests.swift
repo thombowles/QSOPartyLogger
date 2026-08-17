@@ -216,10 +216,10 @@ final class LogDocumentTests: XCTestCase {
     /// A scratch memory per test — nil by default on a document, so none of
     /// the tests above can be reached by what these remember.
     private func scratchMemory() throws -> MessageMemory {
-        let suiteName = "org.b5n.QSOPartyLogger.tests.logdocument.messages"
-        UserDefaults().removePersistentDomain(forName: suiteName)
-        addTeardownBlock { UserDefaults().removePersistentDomain(forName: suiteName) }
-        return MessageMemory(defaults: try XCTUnwrap(UserDefaults(suiteName: suiteName)))
+        let folder = FileManager.default.temporaryDirectory
+            .appendingPathComponent("LogDocumentTests-messages-\(UUID().uuidString)", isDirectory: true)
+        addTeardownBlock { try? FileManager.default.removeItem(at: folder) }
+        return MessageMemory(folder: folder)
     }
 
     private var customCQP: MessageSets {
@@ -254,7 +254,7 @@ final class LogDocumentTests: XCTestCase {
     @MainActor
     func testANewLogForARememberedPartyStartsFromTheRememberedSet() throws {
         let memory = try scratchMemory()
-        memory.remember(customCQP, for: "cqp")
+        try memory.remember(customCQP, for: "cqp")
         let doc = LogDocument()
         doc.messageMemory = memory
         doc.updateStation(
@@ -269,7 +269,7 @@ final class LogDocumentTests: XCTestCase {
     @MainActor
     func testANewLogForTheDefaultPartyStartsFromTheRememberedSetToo() throws {
         let memory = try scratchMemory()
-        memory.remember(customKS, for: "ksqp")
+        try memory.remember(customKS, for: "ksqp")
         let doc = LogDocument()
         doc.messageMemory = memory
         doc.updateStation(
@@ -285,7 +285,7 @@ final class LogDocumentTests: XCTestCase {
     @MainActor
     func testSwitchingPartyBanksThisLogsEditsAndTakesTheNewPartysSet() throws {
         let memory = try scratchMemory()
-        memory.remember(customKS, for: "ksqp")
+        try memory.remember(customKS, for: "ksqp")
         let doc = LogDocument()
         doc.messageMemory = memory
         doc.updateStation(
@@ -314,7 +314,7 @@ final class LogDocumentTests: XCTestCase {
     @MainActor
     func testAnUnbankedEditSurvivesAPartyChange() throws {
         let memory = try scratchMemory()
-        memory.remember(customKS, for: "ksqp")
+        try memory.remember(customKS, for: "ksqp")
         let doc = LogDocument()
         doc.messageMemory = memory
         var edited = MessageSets.standard

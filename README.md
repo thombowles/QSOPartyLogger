@@ -424,7 +424,11 @@ exchange. Optional cut numbers (599 → 5NN, 40 → 4T). **Esc aborts instantly.
 Messages are stored in the log file *and* remembered per party: save a set for
 the Skeeter Hunt and next year's Skeeter Hunt log starts from it, while a NAQP
 log gets NAQP's — a set you never touched follows whichever party Contest Setup
-picks, and one you edited in that log is left alone.
+picks, and one you edited in that log is left alone. The remembered sets are
+files, one per party, in your iCloud folder's `Messages` subfolder — beside
+the recordings' `Voice`, once you have chosen a folder — so your other Macs
+start from the same set; sets saved before the folder was chosen move there by
+themselves, and with no folder they stay in this Mac's Application Support.
 
 **Phone keys play voice messages you record on the Mac.** Open Messages →
 Phone (⇧⌘V) and record eight memories — `M1 CQ`, `M2 Exch`, `M3 TU`, `M4
@@ -449,7 +453,8 @@ party — so your other Macs see the same messages once iCloud has synced them,
 and next year's Texas QSO Party finds this year's. Recordings made before a
 folder was chosen move there by themselves the next time the tab loads. With
 no folder chosen they stay in this Mac's Application Support, and the tab says
-so.
+so. The CW message sets remembered per party live beside them, in the folder's
+`Messages` subfolder, under the same rules.
 
 On the air the F-keys, ESM, `Esc` and Repeat CQ behave exactly as on CW: the TX
 badge shows the caption while the clip plays and clears at the real end, `Esc`
@@ -987,7 +992,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2863 unit tests**, none of which need hardware, a network or a microphone —
+**2871 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
 (driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank

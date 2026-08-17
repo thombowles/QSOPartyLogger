@@ -239,7 +239,14 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     func updateMessages(_ sets: MessageSets, undoManager: UndoManager?) {
         let old = log.messages
         log.messages = sets
-        messageMemory?.remember(sets, for: log.partyID)
+        // Best effort, like the iCloud mirror: the set is safe in the log
+        // file whatever happens to the memory, and a failure here must never
+        // block the Save that already succeeded.
+        do {
+            try messageMemory?.remember(sets, for: log.partyID)
+        } catch {
+            NSLog("MessageMemory: could not remember \(log.partyID)'s messages: \(error)")
+        }
         undoManager?.registerUndo(withTarget: self) { doc in
             MainActor.assumeIsolated {
                 doc.updateMessages(old, undoManager: undoManager)
