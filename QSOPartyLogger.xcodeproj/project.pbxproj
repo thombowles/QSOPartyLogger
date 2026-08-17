@@ -185,6 +185,7 @@
 		67A80A778F35F15BE390F382 /* BulkEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64840D9ACF7A45698878A84 /* BulkEditSheet.swift */; };
 		688F883E10245C3D0543C4F7 /* NewHampshireQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3451A53ECE9C61AD37E8E16C /* NewHampshireQSOPartyTests.swift */; };
 		68A357B0FC6E4E8AC3AC8F13 /* SolarGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7B9510D707A5A3BC7B61F8 /* SolarGeometryTests.swift */; };
+		68C20FC187E08643437E5DB3 /* MultiplierClassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB7B062BC4516A40F1D2E2 /* MultiplierClassTests.swift */; };
 		698B227926FB01BE3C96A295 /* SerialTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE87C8AFF4402D21D499C37A /* SerialTransport.swift */; };
 		69C27FF9CA35A238F328CAD7 /* SpotParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731055DFF68E6AF98B5FD807 /* SpotParser.swift */; };
 		6A3CA6D517471AE74A517ECA /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245471C16B083B398057F4A0 /* ModelTests.swift */; };
@@ -235,6 +236,7 @@
 		8E0C9BB5C8132A2F521070E4 /* SeventhCallAreaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */; };
 		90DAE79AC35B65DAAA867D13 /* PotaSpotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C863BBF18FD8954F42F9CBEE /* PotaSpotTests.swift */; };
 		91DA1EA18F0FDE9613ED6B68 /* RadioRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F435A4BFCDEA86D0D8F785C4 /* RadioRegistry.swift */; };
+		91E29909EA0D6171547CAB2D /* MultiplierClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861DB04574AAEACF21FD47A6 /* MultiplierClass.swift */; };
 		92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009080AA1C81D0A7D94FA410 /* ModeClass.swift */; };
 		935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A13C34B4765F4AE9FB37456 /* PotaParkClientTests.swift */; };
 		94CC96D5AAA83B99FB0896CB /* SolarGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828CCCA6AC98404000B6406 /* SolarGeometry.swift */; };
@@ -665,6 +667,7 @@
 		826129C440B9A8E8EC836802 /* MultiplierRoster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplierRoster.swift; sourceTree = "<group>"; };
 		82A15E4511652305732261EE /* SetupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupSheet.swift; sourceTree = "<group>"; };
 		831C1B0D852691D58AD871CC /* BandMapLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapLayout.swift; sourceTree = "<group>"; };
+		861DB04574AAEACF21FD47A6 /* MultiplierClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplierClass.swift; sourceTree = "<group>"; };
 		862F0943C96CE6E802D95471 /* AudioFileIOTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileIOTests.swift; sourceTree = "<group>"; };
 		86B06BAA5938A3F067E0DC2D /* VoiceClip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceClip.swift; sourceTree = "<group>"; };
 		88071FA213332081C725A066 /* FlightOfTheBumblebeesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightOfTheBumblebeesTests.swift; sourceTree = "<group>"; };
@@ -847,6 +850,7 @@
 		FA412B8BE898C741ABE51422 /* SCPDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCPDatabaseTests.swift; sourceTree = "<group>"; };
 		FA4FF8B1FB9896DDBD544CB6 /* ScoreFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreFactor.swift; sourceTree = "<group>"; };
 		FAD4C206FC5AF9C6256574CC /* caqp-table-stub.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "caqp-table-stub.html"; sourceTree = "<group>"; };
+		FADB7B062BC4516A40F1D2E2 /* MultiplierClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplierClassTests.swift; sourceTree = "<group>"; };
 		FAEEA567ED7931AA58B6885D /* DashboardUpcomingSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardUpcomingSection.swift; sourceTree = "<group>"; };
 		FB3B5E5F871969EC7046D82E /* SeasonStatsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonStatsTests.swift; sourceTree = "<group>"; };
 		FBFCB0433B452F01266FC7AC /* CountyGroupingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountyGroupingTests.swift; sourceTree = "<group>"; };
@@ -928,6 +932,7 @@
 				E4212B5C5FFD5CE16B88D78B /* DXCCTable.swift */,
 				0472BDED0E13FBBD670B36ED /* ExchangeElement.swift */,
 				3F5C24707F61E7C6C6E1122F /* HubSpotSource.swift */,
+				861DB04574AAEACF21FD47A6 /* MultiplierClass.swift */,
 				826129C440B9A8E8EC836802 /* MultiplierRoster.swift */,
 				FA4FF8B1FB9896DDBD544CB6 /* ScoreFactor.swift */,
 				DF3F79006BDBC80469A60B23 /* Side.swift */,
@@ -1090,6 +1095,7 @@
 				44F85963D8820FBCA6986965 /* MississippiQSOPartyTests.swift */,
 				7A13480F81C3AAAF48E260E3 /* MissouriQSOPartyTests.swift */,
 				245471C16B083B398057F4A0 /* ModelTests.swift */,
+				FADB7B062BC4516A40F1D2E2 /* MultiplierClassTests.swift */,
 				7E59AE5F347D2C4F33144EA3 /* MultiplierFloorTests.swift */,
 				8AACC54DA31CF56398BD99B6 /* MultiplierRosterTests.swift */,
 				7E2F19912CD8C3334A165D73 /* MultiplierTermTests.swift */,
@@ -1778,6 +1784,7 @@
 				6A3CA6D517471AE74A517ECA /* ModelTests.swift in Sources */,
 				ED5F3D5F6931292ADBF3E385 /* MorseCodeTests.swift in Sources */,
 				AB9A54854A5FB453F503C85E /* MultiStatePartyTests.swift in Sources */,
+				68C20FC187E08643437E5DB3 /* MultiplierClassTests.swift in Sources */,
 				B1D00F1C5357D0F96BD9160A /* MultiplierFloorTests.swift in Sources */,
 				7AE3D4F81276D6F42E895941 /* MultiplierRosterTests.swift in Sources */,
 				5D99EF910C46F58428506244 /* MultiplierTermTests.swift in Sources */,
@@ -1983,6 +1990,7 @@
 				92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */,
 				1A483EEB4F78C27DB1D7EC6D /* MorseCode.swift in Sources */,
 				FEFDD64CFF603D6BBD4A5EAC /* MultClass.swift in Sources */,
+				91E29909EA0D6171547CAB2D /* MultiplierClass.swift in Sources */,
 				4F9B60F77662D8EAC7FA788C /* MultiplierRoster.swift in Sources */,
 				D7F2318518DBD917270727B9 /* MyLocation.swift in Sources */,
 				DB19FFDDAB4DEBA1EECE1961 /* NeededMult.swift in Sources */,
