@@ -80,6 +80,7 @@
 		25593919ADA400E0D07798E1 /* SpotLabelSizePreferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A83B90871BA86343AB446AA /* SpotLabelSizePreferenceTests.swift */; };
 		260384C6FA2DE3A3F0FFFFF1 /* filepage-qsop_al-2026-002-2026-07-28.html in Resources */ = {isa = PBXBuildFile; fileRef = 5B18159B62CE889DC2FCBD5B /* filepage-qsop_al-2026-002-2026-07-28.html */; };
 		26FC34A04F0CFA278D31BBBF /* SpotReceiptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97EF2AB5A2A5FEE5AB97122 /* SpotReceiptTests.swift */; };
+		271256506953E3BF0B624994 /* PartyLoweringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068E0A2C3FB191CED57DB7F /* PartyLoweringTests.swift */; };
 		27ABE895F4B03CAC726437C0 /* SpotNetworkAvailabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF9FA80F46B3FCDDEB440A0 /* SpotNetworkAvailabilityTests.swift */; };
 		27B19A152DE00AAC7DE72A7E /* AdifExportTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E158548019775B5706D58253 /* AdifExportTypeTests.swift */; };
 		2972D77BFB792F27EE319AAD /* DashboardUpcomingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEEA567ED7931AA58B6885D /* DashboardUpcomingSection.swift */; };
@@ -304,6 +305,7 @@
 		B6FBE02A952C1AE6A69D169F /* StationMemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8199BE77C57911CB47B7B016 /* StationMemoryTests.swift */; };
 		B7243633E4D07A80F69479B0 /* VoiceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB06A54AB9ED4AF93B2C146 /* VoiceStore.swift */; };
 		B7A10BA679D25B2381EEEDFF /* SpotFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD6F1CD9E4B5D9387123E6C /* SpotFrequency.swift */; };
+		B7C12F0924DA71B2046CD562 /* PartyLowering.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B8D7D8A84BD8C7C8B17E58 /* PartyLowering.swift */; };
 		B8ED97D3A42E09EB0DDEC028 /* UDPSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58069D9D23507626D1E3C0D9 /* UDPSender.swift */; };
 		B99DE9236CC16993B455BC8E /* SpottingPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C881733E52B4CD62D43604 /* SpottingPolicyTests.swift */; };
 		BA29F9177B9172AD408E813B /* OneByOneTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */; };
@@ -766,6 +768,7 @@
 		BEFD29B68C87E0D24267605B /* BonusScopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusScopeTests.swift; sourceTree = "<group>"; };
 		BF00103007CE54AA22F0DCF9 /* RadioDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioDriver.swift; sourceTree = "<group>"; };
 		BFC328E9BE6A3A09A977CCEB /* ContestDefinitionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestDefinitionTests.swift; sourceTree = "<group>"; };
+		C0B8D7D8A84BD8C7C8B17E58 /* PartyLowering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyLowering.swift; sourceTree = "<group>"; };
 		C14CC6B4E7BDDAAC1CFC5962 /* ContestDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestDefinition.swift; sourceTree = "<group>"; };
 		C2811B1BB0F44782A35E7B4E /* ChallengeCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeCalendar.swift; sourceTree = "<group>"; };
 		C2DD03F2A0464D759CD172A8 /* KeyerTimingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyerTimingTests.swift; sourceTree = "<group>"; };
@@ -790,6 +793,7 @@
 		CDFB83A71484799D6871283B /* DXCC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DXCC; path = Resources/DXCC; sourceTree = SOURCE_ROOT; };
 		CF6D999640AF4FF7CB86AF56 /* VirginiaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirginiaQSOPartyTests.swift; sourceTree = "<group>"; };
 		CF967F6F4FA8B5D87F123A2C /* ContestNoticeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestNoticeTests.swift; sourceTree = "<group>"; };
+		D068E0A2C3FB191CED57DB7F /* PartyLoweringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyLoweringTests.swift; sourceTree = "<group>"; };
 		D1E1360204AB093D08447987 /* CWKeyerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CWKeyerTests.swift; sourceTree = "<group>"; };
 		D2052FF6C863AA0209875C20 /* DelawareQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelawareQSOPartyTests.swift; sourceTree = "<group>"; };
 		D2CF4BED2C6300C03D09888A /* VoiceAudioTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceAudioTests.swift; sourceTree = "<group>"; };
@@ -950,6 +954,7 @@
 				3F5C24707F61E7C6C6E1122F /* HubSpotSource.swift */,
 				861DB04574AAEACF21FD47A6 /* MultiplierClass.swift */,
 				826129C440B9A8E8EC836802 /* MultiplierRoster.swift */,
+				C0B8D7D8A84BD8C7C8B17E58 /* PartyLowering.swift */,
 				928D9406BEDF52EBC3DD925C /* PointRule.swift */,
 				FA4FF8B1FB9896DDBD544CB6 /* ScoreFactor.swift */,
 				DF3F79006BDBC80469A60B23 /* Side.swift */,
@@ -1140,6 +1145,7 @@
 				067FE6B0EB648263DEECAC66 /* OperatorAlertTests.swift */,
 				6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */,
 				09DA0DF56D3346FEB3B3B11C /* PartyCaveatTests.swift */,
+				D068E0A2C3FB191CED57DB7F /* PartyLoweringTests.swift */,
 				3E3270C8AA34DCB8481F768F /* PartyModeInferenceTests.swift */,
 				033F9D044AD7BFDEE8B6D181 /* PennsylvaniaQSOPartyTests.swift */,
 				01A90EE110A2B4A357D33313 /* PointRuleTests.swift */,
@@ -1841,6 +1847,7 @@
 				178BB230D59AA574DBF19D29 /* OperatorAlertTests.swift in Sources */,
 				632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */,
 				E6A1CF88C19C7DADF81B78DE /* PartyCaveatTests.swift in Sources */,
+				271256506953E3BF0B624994 /* PartyLoweringTests.swift in Sources */,
 				E9827B06A176CDDB8E3D8770 /* PartyModeInferenceTests.swift in Sources */,
 				FF1D72B5F974B4BC4D6C3A5A /* PennsylvaniaQSOPartyTests.swift in Sources */,
 				FB7B5F2219E5A36D5DF20B1F /* PointRuleTests.swift in Sources */,
@@ -2032,6 +2039,7 @@
 				F068DB1B3C0A793714CC7745 /* OneByOneTracker.swift in Sources */,
 				D9CBAA91D8BCAD19385482BA /* PartyCatalog.swift in Sources */,
 				1DAC9D9495B4F17E4872E359 /* PartyDefinition.swift in Sources */,
+				B7C12F0924DA71B2046CD562 /* PartyLowering.swift in Sources */,
 				A41CA85D7E69A9F5C55A2824 /* PhoneMessageSource.swift in Sources */,
 				CF5C83CCA0BCA6C4A70F9E25 /* PointRule.swift in Sources */,
 				EADC3E655DA027365F53814C /* PotaPark.swift in Sources */,
