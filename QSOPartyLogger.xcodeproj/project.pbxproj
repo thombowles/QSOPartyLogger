@@ -170,6 +170,7 @@
 		59B51CAFE068550206BAAD55 /* PotaSpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0691A2D1B7E5003BCEEE96F4 /* PotaSpot.swift */; };
 		59F0F94BA72533398057FAF7 /* MacroTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B909EF1868C1BAA122BC10E6 /* MacroTokenTests.swift */; };
 		59F2A53F43A55D2BBCA3330A /* VoiceStatusTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACC3C74F70765598FFE57A5 /* VoiceStatusTextTests.swift */; };
+		5AB0A34A5A5F1D3D57E1A4B6 /* WPXPrefixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD99402A6E0B2B31626ECAD5 /* WPXPrefixTests.swift */; };
 		5BB4EA06E9D31340FE8BDBE5 /* MemberExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD2185248112D1AF977D2F2 /* MemberExchange.swift */; };
 		5D99EF910C46F58428506244 /* MultiplierTermTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2F19912CD8C3334A165D73 /* MultiplierTermTests.swift */; };
 		5DA8E578367D0F336A8218E6 /* NewYorkQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734E327D94C25EFA4A5DCBA4 /* NewYorkQSOPartyTests.swift */; };
@@ -288,6 +289,7 @@
 		AC51CD88CDF9CBFA21C5C25F /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD300005CA528B8CA373476 /* Spot.swift */; };
 		AC7BABF01C4A1A0F06D46D0F /* RadioControllerRecordingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F470675F687ABB38604249 /* RadioControllerRecordingTests.swift */; };
 		AD2610CB527C183EDC0A785B /* SideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA0566542371D92D0E9CB82 /* SideTests.swift */; };
+		ADC7CA8D8CF7B4A95C046095 /* WPXPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193334E7C1EFCC4A10170AB /* WPXPrefix.swift */; };
 		AE2D036E6F83E9F0F1141634 /* QSOPartyLoggerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C2D0EBC8E5FC6F24E96A7A /* QSOPartyLoggerApp.swift */; };
 		AE3930DE09489C6F2B7CC827 /* HubSelfSpotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112CC71F65B097523B39BC9B /* HubSelfSpotTests.swift */; };
 		AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A15E4511652305732261EE /* SetupSheet.swift */; };
@@ -588,6 +590,7 @@
 		4E346D3641AA9C7153747275 /* NewJerseyQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewJerseyQSOPartyTests.swift; sourceTree = "<group>"; };
 		4F6C7056708ECE6573BF5FF3 /* GridLocateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridLocateTests.swift; sourceTree = "<group>"; };
 		4FFB1E6038FE703DDB36B5F0 /* WorkedBeforeTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedBeforeTableTests.swift; sourceTree = "<group>"; };
+		5193334E7C1EFCC4A10170AB /* WPXPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WPXPrefix.swift; sourceTree = "<group>"; };
 		51C881733E52B4CD62D43604 /* SpottingPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpottingPolicyTests.swift; sourceTree = "<group>"; };
 		51CE38D4FB00F99FA2C6D973 /* QMXProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QMXProtocolTests.swift; sourceTree = "<group>"; };
 		522A7E3D7B2C6485763680DB /* TCPTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPTransport.swift; sourceTree = "<group>"; };
@@ -739,6 +742,7 @@
 		AB030727FF0C38B6B3944150 /* SpotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotClient.swift; sourceTree = "<group>"; };
 		AD6591008A672F612DB9FA26 /* SpotDispatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotDispatcherTests.swift; sourceTree = "<group>"; };
 		AD7B9510D707A5A3BC7B61F8 /* SolarGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarGeometryTests.swift; sourceTree = "<group>"; };
+		AD99402A6E0B2B31626ECAD5 /* WPXPrefixTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WPXPrefixTests.swift; sourceTree = "<group>"; };
 		AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabrilloExporterTests.swift; sourceTree = "<group>"; };
 		AEA4A841592D4E7DF22124AB /* QSOPostureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSOPostureTests.swift; sourceTree = "<group>"; };
 		AF67E920BF8D84C9C94C101E /* AudioResampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioResampler.swift; sourceTree = "<group>"; };
@@ -966,6 +970,7 @@
 				FA4FF8B1FB9896DDBD544CB6 /* ScoreFactor.swift */,
 				DF3F79006BDBC80469A60B23 /* Side.swift */,
 				91991260BB14DFD37004DF3B /* TokenSet.swift */,
+				5193334E7C1EFCC4A10170AB /* WPXPrefix.swift */,
 			);
 			path = Contests;
 			sourceTree = "<group>";
@@ -1207,6 +1212,7 @@
 				9FAEBB7A441C9608FDD951FB /* WisconsinQSOPartyTests.swift */,
 				4FFB1E6038FE703DDB36B5F0 /* WorkedBeforeTableTests.swift */,
 				62CD3096B56AD7C6DE79D6B9 /* WorkedStationSpotTests.swift */,
+				AD99402A6E0B2B31626ECAD5 /* WPXPrefixTests.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1940,6 +1946,7 @@
 				798F6A8BFA533CDE10FB3072 /* VoiceSettingsTests.swift in Sources */,
 				59F2A53F43A55D2BBCA3330A /* VoiceStatusTextTests.swift in Sources */,
 				B518E5100263F27EB5EE9A8A /* VoiceStoreTests.swift in Sources */,
+				5AB0A34A5A5F1D3D57E1A4B6 /* WPXPrefixTests.swift in Sources */,
 				A42E6B812AB3926365054BE2 /* WisconsinQSOPartyTests.swift in Sources */,
 				0EDE7ED8045380184EDE1D4F /* WorkedBeforeTableTests.swift in Sources */,
 				EEAC967D1FF111C0098BA700 /* WorkedStationSpotTests.swift in Sources */,
@@ -2135,6 +2142,7 @@
 				B7243633E4D07A80F69479B0 /* VoiceStore.swift in Sources */,
 				171E6C1DC757589BA9E99552 /* VoiceTransports.swift in Sources */,
 				094D398E1F04F8796EA930FA /* VoiceTrimPopover.swift in Sources */,
+				ADC7CA8D8CF7B4A95C046095 /* WPXPrefix.swift in Sources */,
 				820C4377EA5B9A172E10F6F3 /* WorkedBeforeTable.swift in Sources */,
 				FD9C2EB6C5010F7BB499DE43 /* WorkedSpot.swift in Sources */,
 			);
