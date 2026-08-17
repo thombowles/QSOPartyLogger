@@ -1,0 +1,1131 @@
+CTY.DAT (AD1C COUNTRY FILES) — FORMAT, BIG CTY, CADENCE, VERSION MARKER, DOWNLOAD URLS — RAW RESEARCH FILE
+Fetched 2026-08-17 by curl (pages need a browser User-Agent; with a bare UA the .dat/.zip URLs 301 to the
+format page or 404). HTML converted with html2txt.py; the .dat/.csv/.zip files were downloaded and
+inspected directly (facts marked [file] below come from the downloaded files, not the web pages).
+
+##############################################################################
+# 1. country-files.com — 'CTY.DAT Format' page (verbatim)
+# SOURCE: https://www.country-files.com/cty-dat-format/
+# FETCHED: 2026-08-17
+##############################################################################
+CTY.DAT is the format for CT Version 9. It includes more information than the .CTY files for previous versions of CT. This allows CT to calculate, in real time, beam heading and sun times. It also means that a single file can be used for all DX contests. The format is as follows. Note that the fields are aligned in columns and spaced out for readability only. It is the “:” at the end of each field that acts as a delimiter for that field:
+
+  | Column  | Length  | Description  |
+
+  | 1  | 26  | Country Name  |
+
+  | 27  | 5  | CQ Zone  |
+
+  | 32  | 5  | ITU Zone  |
+
+  | 37  | 5  | 2-letter continent abbreviation  |
+
+  | 42  | 9  | Latitude in degrees, + for North  |
+
+  | 51  | 10  | Longitude in degrees, + for West  |
+
+  | 61  | 9  | Local time offset from GMT  |
+
+  | 70  | 6  | Primary DXCC Prefix (A “*” preceding this prefix indicates that the country is on the DARC WAEDC list, and counts in CQ-sponsored contests, but not ARRL-sponsored contests).  |
+
+Alias DXCC prefixes (including the primary one) follow on consecutive lines, separated by commas (,). Multiple lines are OK; a line to be continued should end with comma (,) though it’s not required. A semi-colon (;) terminates the last alias prefix in the list.
+
+If an alias prefix is preceded by ‘=’, this indicates that the prefix is to be treated as a full callsign, i.e. must be an exact match.
+
+The following special characters can be applied after an alias prefix:
+
+  | (#)  | Override CQ Zone  |
+
+  | [#]  | Override ITU Zone  |
+
+  | <#/#>  | Override latitude/longitude  |
+
+  | {aa}  | Override Continent  |
+
+  | ~#~  | Override local time offset from GMT  |
+
+See the examples on page 27 in the CT9 manual.
+
+----
+
+## Important Information
+
+A callsign can be associated with more than one entity in the file. 4U1VIC is one example. In the ARRL DX contests, for example, it counts for Austria, OE. In the CQWW contests, it counts as a unique multiplier, separate from Austria. See the information about “Primary DXCC Prefix” above. Software is expected to parse the file from top to bottom. If a duplicate callsign is found, simply ignore it the second time.
+
+----
+
+## Known Limitations
+
+- CT8 can override zones on a prefix basis, but can only override continents on a country basis. This doesn’t work in a few cases, notably IG9/IH9, which are in CQ Zone 33, and hence in Africa, but will be logged as Europe. Neither does it work for the part of Turkey that is in Europe – there is no way to just override the continent for the TA0 and TA1 prefixes. This is really only a problem for the IARU HF World Championship. In CQWW, the European part counts as a separate multiplier, hence CT gets the continent correct. In ARRL, contacts from W/VE are the same number of points whether Turkey is in Europe or Asia.This is not a problem in CT9, because you can now override the continent for a given prefix.
+
+- CT doesn’t handle prefixes such as FR5ZQ/J correctly. Listing FR/J as a prefix for Juan de Nova in the country file doesn’t work unless a station signs “FR/J” as his callsign. If you work one of these islands, you’ll have to add it to the country file manually. Otherwise “/J” will be logged as Japan, “/G” as England, “/T” as Reunion, and “/E” as an unknown prefix.
+##############################################################################
+# 2. country-files.com — 'Contest' page: download instructions, version information (VERyyyymmdd), USA callsign exceptions (verbatim)
+# SOURCE: https://www.country-files.com/contest/
+# FETCHED: 2026-08-17
+##############################################################################
+# Contest
+
+Version History [https://www.country-files.com/category/contest/]
+
+[ Download Instructions [#Download] | Version Information [#Version] | USA Callsign Exceptions [#Exception] ]
+
+----
+
+This is the home of the contest country files. These files are used by amateur radio contest logging software (and other related programs) to help determine country multipliers from a callsign. The files are updated regularly throughout the year and changes are announced on the various contest and logging software [http://lists.contesting.com/] reflectors.
+
+To download the file(s) you need, hover your mouse pointer over the word Contest in the menu bar above, and wait until the drop-down lists appears. Then click on the link that corresponds to the software you are using. Also read “Download Instructions [#Download]” in the next section below.
+
+----
+
+## Download Instructions
+
+Clicking on any of the “Pingback” links at the bottom of this page will take you to the release announcement for that version of the country file. For a given release announcement, click on on any of the highlighted hyperlinks to the right of the word “Download:” to download the files associated with that release. You web browser should prompt you to save (download) the file. If the file is displayed in the browser window instead, return to this page (using your browser’s Back button) and follow these instructions to save it:
+
+Chrome: Right-click on the file name and choose “Save link as…”
+
+Firefox: Right-click on the file name and choose “Save Link As…”
+
+Internet Explorer: Right-click on the file name and choose “Save Target As…”
+
+Netscape Navigator: Hold the SHIFT key down while clicking on the hyperlink (file name) and your browser will prompt you to save the file.
+
+Safari: Hold the CTRL key down while clicking on the hyperlink (file name) and choose “Download Linked File As…”
+
+NOTE: To download a ZIP file containing all the files for older versions of the country files, follow this link [https://www.country-files.com/cty/backup/history.htm]. To download all the files associated with that release, click on the hyperlink containing the date and version, for example:
+
+10 May 2013 (CTY-2306)
+
+NOTE: There are two different versions of CTY.DAT, CTY_WT.DAT, CTY_WT_MOD.DAT and WL_CTY.DAT. Beginning with CTY-1805 [https://www.country-files.com/cty/backup/history.htm#CTY-1805], full callsigns in the file are prefixed with the ‘=’ character. Some older logging programs will ignore these callsigns, so “old” format versions of the files (without the ‘=’) are available. If you click on the appropriate link below for your software, you will get the correct version of country file.
+
+----
+
+## Version Information
+
+To see the country file change (revision) history, follow this link [https://www.country-files.com/category/contest/], then click on the “Continue Reading ->” link underneath heading for any of the releases.
+
+Once the file is downloaded and installed, there are several ways to tell what version of the country file you have:
+
+- In your logging program, try to log the callsign “VERSION” (on a DX cluster node, use the SH/H VERSION or SH/SUN VERSION command). Each version of the country files will return a different country (except for Win-Test, see #3 below). That country will be indicated in the release notes for that version.
+
+- Open the country file using a text editor like Notepad. Find the entry for Canada, VE. In the list of prefixes/callsigns, you’ll find a “callsign” that looks like:VERyyyymmdd where “yyyymmdd” is the date of the release. For example, CTY-1812 was released on 10 November, 2008 so the version string in this case is “VER20081110”.
+
+- The Win-Test files (cty_wt.dat and cty_wt_mod.dat) have their own version information at the top of the file. You can see the version number only by going to Options | Data Files | Country Files. You can not log the callsign VERSION, it will just come up as Canada, regardless of the country file version.
+
+Except for Win-Test, the CTY file name (i.e. CTY-1812) can not be found in the file.
+
+----
+
+## A Note about USA Callsign Exceptions
+
+Many USA callsigns are not in the CQ or ITU zone indicated by the number in the callsign. For example, AD1C is in CQ Zone 4, not Zone 5. The country files do list a number of these callsigns with the correct zone. However, because there are tens of thousands of such callsigns, only the most active contesters are included. Here’s how the list is created:
+
+- Using the  Super Check Partial Database [http://www.supercheckpartial.com/] of active contesters, build a list of callsigns that are found in 100 or more logs. 100 is an arbitrary number, but it tends to limit the number of callsign/zone exceptions to around 500, which seems like a reasonable number of active contesters (as compared to the total size of the country file).
+
+- For each callsign that met the criteria in #1 above, predict the CQ and ITU zones based on the number in the callsign. For example, ‘1’ is CQ zone 5, ‘5’ is ITU zone 7, etc.
+
+- For each callsign that met the criteria in #1 above, look up the callsign in the current FCC database, and determine the CQ and ITU zones based on the state (as listed). For example, Wyoming is CQ Zone 4, California is ITU zone 3. The ITU zone is determined from the state only for states that reside entirely within a single ITU zone (like Indiana, not Illinois). When a state contains multiple ITU zones, a ZIP code database is used to estimate a more precise location relative to the ITU zone border.
+
+- If the CQ or ITU zone from step #2 does NOT match the CQ or ITU zone from step #3, add an exception to the country file, showing the actual CQ and/or ITU zones.
+
+That’s the process, plain and simple. It’s fully automated, and rewards the most active contesters. If you want to “get on the list”, then “get on the air”!
+
+If you do not live in or operate from the state listed as your callbook address, let me know if it would result in a change to your CQ or ITU zone. Many states cross ITU zone boundaries, so it’s harder to get the ITU zone exceptions correct. If your ITU (or CQ) zone is incorrect, let me know and it will be fixed in the next release.
+
+  Proudly powered by WordPress  [https://wordpress.org/]
+##############################################################################
+# 3. country-files.com — 'Big CTY' page (verbatim)
+# SOURCE: https://www.country-files.com/big-cty/
+# FETCHED: 2026-08-17
+##############################################################################
+# Big CTY
+
+This is a special version of CTY.DAT which is more tailored to everyday logging. For more information on what CTY.DAT is, go HERE [https://www.country-files.com/contest/]
+
+Version History [https://www.country-files.com/category/big-cty/]
+
+This version of CTY.DAT has callsign data starting with 1 January 2000. This is useful for people who are using contest logging software to log their everyday QSOs, and want somewhat accurate country tracking. Here are the features of this file:
+
+- Exception callsigns go back to the starting date shown above. If a callsign was used multiple times, then only the most recent entity is used. For example, TO5M was used from Martinique (FM) in 1993, St. Pierre & Miquelon (FP) in 1995, and Reunion (FR) in 2004. Thus, if you log TO5M using this file, you will get Reunion (FR)
+
+- Prefixes do not go back, they are current as of the day the file was released. For example, Montenegro (4O) was added to the DXCC list effective 28 June 2006. If you try to log a QSO with 4O1T in Yugoslavia from 2003, it will come up as Montenegro, because that’s the current entity associated with the 4O prefix. Here is a list of known problems [https://www.country-files.com/bigcty/backup/exceptions.htm].
+
+- This is a complete file, meaning all prefixes that require CQ and/or ITU zone overrides are listed. This is primarily for BY, K, UA9, VE and VK – these entities all span multiple CQ zones. Remember that the normal CTY.DAT has only a subset of these prefixes; many have been implemented in software and therefore don’t need to be listed.
+
+- Some software like CT by K1EA doesn’t save the country information in the log with the QSOs. Instead, the country for each QSO is determined when the program is started, based on whatever country file is in use. Thus, it may not be possible to “fix” a QSO that is associated with the wrong country. You could use the override method, like “FO8XYZ=FO0” to assign it to Clipperton Island. However, if/when you over-write your country file with a new one, those customizations will be lost. One known case of this problem is a certain well-known IARU HQ station that uses the same callsign from different DXCC countries, on different bands, at the same time. It’s very hard to get these cases right.
+
+- This file comes in only one format: using ‘=’ to distinguish full callsigns from prefixes.
+
+----
+
+## Installation Instructions
+
+The instructions for installing the CTY.DAT file are specific to each logging program. However, the instructions for installing this file are the same as the normal contest country files, so start HERE [https://www.country-files.com/cty/index.htm]. Follow the written instructions on that page, but don’t download the file from those links.
+
+Here are some logging experiments to try to see if the larger file is installed in the right place, and is working:
+
+- VERSION – should match the VERSION entity in the revision history
+
+- OR4TN – should be Antarctica (not Belgium)
+
+- MR6TMS – should be Scotland (not England)
+
+- LW7DQQ/Y – should be Argentina in ITU Zone 16
+
+- UI9XA – should be European Russia (not Asiatic)
+
+- ZS85SARL – should be South Africa (not Marion Island)
+
+----
+
+## Compatibility
+
+Because of its size, this file may cause problems with your logging software. Here are some programs that are known to work:
+
+CT [http://www.k1ea.com/]
+
+CT 9.92 (DOS) and CT 10.04 (Windows) both work. Once can therefore assume that CT 9.92 (Windows) and CT 10.x (DOS) also work. It’s unknown how old a CT9 version can be and still work.
+
+fldigi [http://www.w1hkj.com/Fldigi.html]
+
+version 3.2.38 (Linux)
+
+KLog [https://www.klog.xyz/]
+
+version 0.9.0 and later (Linux, Windows and macOS)
+
+LM [http://contestsoftware.com/e/home.htm]
+
+DL8WAA reports no problems.
+
+MixW [http://www.mixw.net/]
+
+version 3.1.1h and later
+
+Xlog [http://xlog.nongnu.org/]
+
+version 2.0.5 (Linux)
+
+----
+
+## Areas for Improvement
+
+Here are some changes that may be coming – stay tuned for details!
+
+- The file contains all possible prefix mappings to determine the correct CQ and ITU zones. If people are only tracking countries, this may not be necessary, and would substantially reduce the number of prefixes in the file.
+
+  Proudly powered by WordPress  [https://wordpress.org/]
+##############################################################################
+# 4. country-files.com — home page release announcements (verbatim, first page)
+# SOURCE: https://www.country-files.com/
+# FETCHED: 2026-08-17
+##############################################################################
+Skip to primary content [#content]
+
+Skip to secondary content [#secondary]
+
+# Amateur Radio Country Files [https://www.country-files.com/]
+
+## Jim Reisert AD1C
+   Search
+
+### Main menu
+
+- Home [https://www.country-files.com/]
+
+- Big CTY [https://www.country-files.com/big-cty/]
+
+- Contest [https://www.country-files.com/contest/]
+
+- Aether [https://www.country-files.com/contest/aether/]
+
+- CQPWin [https://www.country-files.com/contest/cqpwin/]
+
+- CT [https://www.country-files.com/contest/ct/]
+
+- DL4RCK [https://www.country-files.com/contest/dl4rck/]
+
+- DXLog [https://www.country-files.com/contest/dxlog/]
+
+- Fldigi [https://www.country-files.com/contest/fldigi/]
+
+- JL [https://www.country-files.com/contest/jl/]
+
+- KLog [https://www.country-files.com/contest/klog/]
+
+- MixW [https://www.country-files.com/contest/mixw/]
+
+- N1MM [https://www.country-files.com/contest/n1mm/]
+
+- NA [https://www.country-files.com/contest/na/]
+
+- QARTest [https://www.ik3qar.it/software/qartest/en/#new_tab]
+
+- SD [https://www.country-files.com/contest/sd/]
+
+- SkookumLogger [https://www.country-files.com/contest/skookumlogger/]
+
+- TLF [https://www.country-files.com/contest/tlf/]
+
+- TR (all versions) [https://www.country-files.com/contest/tr-log/]
+
+- WF1B [https://www.country-files.com/contest/wf1b/]
+
+- Win-Test [https://www.country-files.com/contest/win-test/]
+
+- WriteLog [http://writelog.com/downloads/writelog-versions#MULTIPLIER#new_tab]
+
+- WSJT-X [https://www.country-files.com/contest/wsjt-x/]
+
+- CTY.DAT Format [https://www.country-files.com/cty-dat-format/]
+
+- DX Cluster [https://www.country-files.com/dx-cluster/]
+
+- AR-Cluster [https://www.country-files.com/dx-cluster/ar-cluster/]
+
+- CC Cluster [https://www.country-files.com/dx-cluster/cc-cluster/]
+
+- CC User [https://www.country-files.com/dx-cluster/cc-user/]
+
+- DX Spider [https://www.country-files.com/dx-cluster/dx-spider/]
+
+- VE3SUN DX Monitor [https://www.country-files.com/dx-cluster/ve3sun-dx-monitor/]
+
+- WPXLOC [https://www.country-files.com/dx-cluster/wpxloc/]
+
+- Xdx DX Cluster client [https://www.country-files.com/dx-cluster/xdx-dx-cluster-client/]
+
+- DX4WIN [https://www.country-files.com/dx4win-info/]
+
+- DXLAB [https://www.country-files.com/dxlab/]
+
+- Live MUF [https://www.g7rau.co.uk/default.aspx?menu=5000#new_tab]
+
+- N3FJP [https://www.country-files.com/n3fjp-info/]
+
+- Copyright [https://www.country-files.com/copyright/]
+
+- Reflector [https://mail.country-files.com/mailman/listinfo/announce_country-files.com#new_tab]
+
+- RSS [https://www.country-files.com/feed/]
+
+### Post navigation
+
+← Older posts [https://www.country-files.com/page/2/]
+
+# CTY-3627 – 14 August 2026 [https://www.country-files.com/cty-3627-14-august-2026/]
+
+ Posted on August 13, 2026 [https://www.country-files.com/cty-3627-14-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ VER20260814, Version entity [https://www.country-files.com/contest/#Version] is Fiji, 3D2
+ Download: [ CTY-3627 [https://www.country-files.com/cty/download/3627/cty-3627.zip] | CT8 [https://www.country-files.com/cty/download/3627/ct8-3627.zip] | Win-Test [https://www.country-files.com/cty/download/3627/cty_wt-3627.zip] | WriteLog [https://www.country-files.com/cty/download/3627/wl_cty-3627.zip] | XML [https://www.country-files.com/cty/download/3627/cty_plist-3627.zip] ]
+
+ Continue reading → [https://www.country-files.com/cty-3627-14-august-2026/#more-2768]
+
+  Posted in Contest [https://www.country-files.com/category/contest/], DX Cluster [https://www.country-files.com/category/dx-cluster/]
+
+# N3FJP – 14 August 2026 [https://www.country-files.com/n3fjp-14-august-2026/]
+
+ Posted on August 13, 2026 [https://www.country-files.com/n3fjp-14-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ Version entity [https://www.country-files.com/contest/#Version] is Fiji, 3D2
+
+ADIFCnt.txt  has 340 DXCC entities and 62 deleted DXCC entities.
+
+arrlpre3.txt has 26781 prefix+callsign mappings.
+ cqwwpre3.txt has 26941 prefix+callsign mappings.
+
+[download] [https://www.country-files.com/n3fjp/download/2026/n3fjp-20260814.zip]
+
+ Continue reading → [https://www.country-files.com/n3fjp-14-august-2026/#more-2767]
+
+  Posted in N3FJP [https://www.country-files.com/category/n3fjp/]
+
+# Big CTY – 14 August 2026 [https://www.country-files.com/big-cty-14-august-2026/]
+
+ Posted on August 13, 2026 [https://www.country-files.com/big-cty-14-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ Version entity [https://www.country-files.com/contest/#Version] is Fiji, 3D2
+
+[download] [https://www.country-files.com/bigcty/download/2026/bigcty-20260814.zip]
+
+ Continue reading → [https://www.country-files.com/big-cty-14-august-2026/#more-2766]
+
+  Posted in Big CTY [https://www.country-files.com/category/big-cty/]
+
+# DX4WIN.CTY #26.26 – 14 August 2026 [https://www.country-files.com/dx4win-cty-26-26-14-august-2026/]
+
+ Posted on August 13, 2026 [https://www.country-files.com/dx4win-cty-26-26-14-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ Version entity [https://www.country-files.com/dx4win-info/#Version] is Ogasawara, JD1/O
+ Entities:      402
+ Prefixes:    4,716
+ Callsigns:  34,820
+ Managers:  111,366
+ Addresses:  14,730
+[download] [https://www.country-files.com/dx4win/download/2026/DX4WCTY_20260814.zip] DX4WIN 8.05 and earlier
+ [download] [https://www.country-files.com/dx4win/download/2026/DX4WCTY9_20260814.zip] DX4WIN 9.01 and later
+
+ Continue reading → [https://www.country-files.com/dx4win-cty-26-26-14-august-2026/#more-2765]
+
+  Posted in DX4WIN [https://www.country-files.com/category/dx4win/]
+
+# CTY-3626 – 03 August 2026 [https://www.country-files.com/cty-3626-03-august-2026/]
+
+ Posted on August 2, 2026 [https://www.country-files.com/cty-3626-03-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ VER20260803, Version entity [https://www.country-files.com/contest/#Version] is Somalia, T5
+ Download: [ CTY-3626 [https://www.country-files.com/cty/download/3626/cty-3626.zip] | CT8 [https://www.country-files.com/cty/download/3626/ct8-3626.zip] | Win-Test [https://www.country-files.com/cty/download/3626/cty_wt-3626.zip] | WriteLog [https://www.country-files.com/cty/download/3626/wl_cty-3626.zip] | XML [https://www.country-files.com/cty/download/3626/cty_plist-3626.zip] ]
+
+ Continue reading → [https://www.country-files.com/cty-3626-03-august-2026/#more-2763]
+
+  Posted in Contest [https://www.country-files.com/category/contest/], DX Cluster [https://www.country-files.com/category/dx-cluster/]
+
+# N3FJP – 03 August 2026 [https://www.country-files.com/n3fjp-03-august-2026/]
+
+ Posted on August 2, 2026 [https://www.country-files.com/n3fjp-03-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ Version entity [https://www.country-files.com/contest/#Version] is Somalia, T5
+
+ADIFCnt.txt  has 340 DXCC entities and 62 deleted DXCC entities.
+
+arrlpre3.txt has 26763 prefix+callsign mappings.
+ cqwwpre3.txt has 26923 prefix+callsign mappings.
+
+[download] [https://www.country-files.com/n3fjp/download/2026/n3fjp-20260803.zip]
+
+ Continue reading → [https://www.country-files.com/n3fjp-03-august-2026/#more-2762]
+
+  Posted in N3FJP [https://www.country-files.com/category/n3fjp/]
+
+# Big CTY – 03 August 2026 [https://www.country-files.com/big-cty-03-august-2026/]
+
+ Posted on August 2, 2026 [https://www.country-files.com/big-cty-03-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ Version entity [https://www.country-files.com/contest/#Version] is Somalia, T5
+
+[download] [https://www.country-files.com/bigcty/download/2026/bigcty-20260803.zip]
+
+ Continue reading → [https://www.country-files.com/big-cty-03-august-2026/#more-2761]
+
+  Posted in Big CTY [https://www.country-files.com/category/big-cty/]
+
+# CTY-3625 – 01 August 2026 [https://www.country-files.com/cty-3625-01-august-2026/]
+
+ Posted on August 1, 2026 [https://www.country-files.com/cty-3625-01-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ VER20260801, Version entity [https://www.country-files.com/contest/#Version] is South Orkney Islands, VP8/o
+ Download: [ CTY-3625 [https://www.country-files.com/cty/download/3625/cty-3625.zip] | CT8 [https://www.country-files.com/cty/download/3625/ct8-3625.zip] | Win-Test [https://www.country-files.com/cty/download/3625/cty_wt-3625.zip] | WriteLog [https://www.country-files.com/cty/download/3625/wl_cty-3625.zip] | XML [https://www.country-files.com/cty/download/3625/cty_plist-3625.zip] ]
+
+ Continue reading → [https://www.country-files.com/cty-3625-01-august-2026/#more-2760]
+
+  Posted in Contest [https://www.country-files.com/category/contest/], DX Cluster [https://www.country-files.com/category/dx-cluster/]
+
+# N3FJP – 01 August 2026 [https://www.country-files.com/n3fjp-01-august-2026/]
+
+ Posted on August 1, 2026 [https://www.country-files.com/n3fjp-01-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ Version entity [https://www.country-files.com/contest/#Version] is South Orkney Is., VP8/O
+
+ADIFCnt.txt  has 340 DXCC entities and 62 deleted DXCC entities.
+
+arrlpre3.txt has 26476 prefix+callsign mappings.
+ cqwwpre3.txt has 26636 prefix+callsign mappings.
+
+[download] [https://www.country-files.com/n3fjp/download/2026/n3fjp-20260801.zip]
+
+ Continue reading → [https://www.country-files.com/n3fjp-01-august-2026/#more-2759]
+
+  Posted in N3FJP [https://www.country-files.com/category/n3fjp/]
+
+# Big CTY – 01 August 2026 [https://www.country-files.com/big-cty-01-august-2026/]
+
+ Posted on August 1, 2026 [https://www.country-files.com/big-cty-01-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ Version entity [https://www.country-files.com/contest/#Version] is South Orkney Islands, VP8/o
+
+[download] [https://www.country-files.com/bigcty/download/2026/bigcty-20260801.zip]
+
+ Continue reading → [https://www.country-files.com/big-cty-01-august-2026/#more-2758]
+
+  Posted in Big CTY [https://www.country-files.com/category/big-cty/]
+
+### Post navigation
+
+← Older posts [https://www.country-files.com/page/2/]
+
+   Search
+
+### Categories
+
+- Big CTY [https://www.country-files.com/category/big-cty/]
+
+- Contest [https://www.country-files.com/category/contest/]
+
+- DX Cluster [https://www.country-files.com/category/dx-cluster/]
+
+- DX4WIN [https://www.country-files.com/category/dx4win/]
+
+- General [https://www.country-files.com/category/general/]
+
+- N3FJP [https://www.country-files.com/category/n3fjp/]
+
+### Archives
+
+- 2026 [https://www.country-files.com/2026/]
+
+- 2025 [https://www.country-files.com/2025/]
+
+- 2024 [https://www.country-files.com/2024/]
+
+- 2023 [https://www.country-files.com/2023/]
+
+- 2022 [https://www.country-files.com/2022/]
+
+- 2021 [https://www.country-files.com/2021/]
+
+- 2020 [https://www.country-files.com/2020/]
+
+- 2019 [https://www.country-files.com/2019/]
+
+- 2018 [https://www.country-files.com/2018/]
+
+- 2017 [https://www.country-files.com/2017/]
+
+- 2016 [https://www.country-files.com/2016/]
+
+- 2015 [https://www.country-files.com/2015/]
+
+- 2014 [https://www.country-files.com/2014/]
+
+- 2013 [https://www.country-files.com/2013/]
+
+- 2012 [https://www.country-files.com/2012/]
+
+### Site Navigation
+
+- Big CTY [https://www.country-files.com/big-cty/]
+
+- Contest [https://www.country-files.com/contest/]
+
+- Aether [https://www.country-files.com/contest/aether/]
+
+- CQPWin [https://www.country-files.com/contest/cqpwin/]
+
+- CT [https://www.country-files.com/contest/ct/]
+
+- DL4RCK [https://www.country-files.com/contest/dl4rck/]
+
+- DXLog [https://www.country-files.com/contest/dxlog/]
+
+- Fldigi [https://www.country-files.com/contest/fldigi/]
+
+- JL [https://www.country-files.com/contest/jl/]
+
+- KLog [https://www.country-files.com/contest/klog/]
+
+- MixW [https://www.country-files.com/contest/mixw/]
+
+- N1MM [https://www.country-files.com/contest/n1mm/]
+
+- NA [https://www.country-files.com/contest/na/]
+
+- QARTest [https://www.ik3qar.it/software/qartest/en/#new_tab]
+
+- SD [https://www.country-files.com/contest/sd/]
+
+- SkookumLogger [https://www.country-files.com/contest/skookumlogger/]
+
+- TLF [https://www.country-files.com/contest/tlf/]
+
+- TR (all versions) [https://www.country-files.com/contest/tr-log/]
+
+- WF1B [https://www.country-files.com/contest/wf1b/]
+
+- Win-Test [https://www.country-files.com/contest/win-test/]
+
+- WriteLog [http://writelog.com/downloads/writelog-versions#MULTIPLIER#new_tab]
+
+- WSJT-X [https://www.country-files.com/contest/wsjt-x/]
+
+- Copyright [https://www.country-files.com/copyright/]
+
+- CTY.DAT Format [https://www.country-files.com/cty-dat-format/]
+
+- DX Cluster [https://www.country-files.com/dx-cluster/]
+
+- AR-Cluster [https://www.country-files.com/dx-cluster/ar-cluster/]
+
+- CC Cluster [https://www.country-files.com/dx-cluster/cc-cluster/]
+
+- CC User [https://www.country-files.com/dx-cluster/cc-user/]
+
+- DX Spider [https://www.country-files.com/dx-cluster/dx-spider/]
+
+- VE3SUN DX Monitor [https://www.country-files.com/dx-cluster/ve3sun-dx-monitor/]
+
+- WPXLOC [https://www.country-files.com/dx-cluster/wpxloc/]
+
+- Xdx DX Cluster client [https://www.country-files.com/dx-cluster/xdx-dx-cluster-client/]
+
+- DX4WIN [https://www.country-files.com/dx4win-info/]
+
+- DXLAB [https://www.country-files.com/dxlab/]
+
+- Live MUF [https://www.g7rau.co.uk/default.aspx?menu=5000#new_tab]
+
+- N3FJP [https://www.country-files.com/n3fjp-info/]
+
+- Reflector [https://mail.country-files.com/mailman/listinfo/announce_country-files.com#new_tab]
+
+- RSS [https://www.country-files.com/feed/]
+
+  Proudly powered by WordPress  [https://wordpress.org/]
+##############################################################################
+# 5. country-files.com — release post CTY-3627 (verbatim)
+# SOURCE: https://www.country-files.com/cty-3627-14-august-2026/
+# FETCHED: 2026-08-17
+##############################################################################
+### Post navigation
+ ← Previous [https://www.country-files.com/n3fjp-14-august-2026/]
+
+# CTY-3627 – 14 August 2026
+
+ Posted on August 13, 2026 [https://www.country-files.com/cty-3627-14-august-2026/]  by  AD1C [https://www.country-files.com/author/ad1c/]
+
+ VER20260814, Version entity [https://www.country-files.com/contest/#Version] is Fiji, 3D2
+ Download: [ CTY-3627 [https://www.country-files.com/cty/download/3627/cty-3627.zip] | CT8 [https://www.country-files.com/cty/download/3627/ct8-3627.zip] | Win-Test [https://www.country-files.com/cty/download/3627/cty_wt-3627.zip] | WriteLog [https://www.country-files.com/cty/download/3627/wl_cty-3627.zip] | XML [https://www.country-files.com/cty/download/3627/cty_plist-3627.zip] ]
+
+## Added/changed Entities/Prefixes/Callsigns:
+
+- 9M4GKS and 9M4LHD are both East Malaysia, 9M6
+
+- EA6XQ/P is Spain, EA
+
+- EA8RM/P is Canary Islands, EA8
+
+- GB1RP, GB2EL, GB2WL and GB5BL are all Northern Ireland, GI
+
+- GB0CSL, GB0NHL, GB0TNL, GB2CCN, GB2CCS, GB2KLI, GB2LG, GB2MUC, GB2SLH, GB2TAY, GB2THL, GB2TNL, GB2TPL and GB8VJ are all Scotland, GM
+
+- G0X, GB0WLH and GB1BPL are all Wales, GW
+
+- W5LE is United States, K in CQ zone 3, ITU zone 6
+
+- KJ4M is United States, K in CQ zone 4, ITU zone 8
+
+- AE8EM is United States, K in CQ zone 5, ITU zone 8
+
+- KE2EYU is Guam, KH2
+
+- KF0FMQ and N8USA are both Hawaii, KH6
+
+- KK7RSM is American Samoa, KH8
+
+- AK6VK and KC5FTM are both Alaska, KL
+
+- KG5NSU is US Virgin Islands, KP2
+
+- K1PT is Puerto Rico, KP4
+
+- LU1EAF/F and LU5SDL/S are both Argentina, LU
+
+- LU1VOF/V is Argentina, LU in ITU zone 16
+
+- R0IAH/6, R35ARDF, R3HW/P, R9LAR/3 and RT25KS are all European Russia, UA
+
+- R4HNX/8 is in ITU zone 20, not ITU zone 30
+
+- R440L is Asiatic Russia, UA9
+
+- R8JG/4, R8JG/P, UA4HAZ/P and UG4I/P are all Asiatic Russia, UA9 in CQ zone 16
+
+- RW0LD/P is Asiatic Russia, UA9 in CQ zone 19, ITU zone 34
+
+- VK7PAK/4 is Australia, VK in ITU zone 55
+
+## Removed Entities/Prefixes/Callsigns:
+
+- EG60BRILAT in Spain, EA
+
+- GB071RE, GB198END, GB198KHZ, GB26KDR and GB9AC in Scotland, GM
+
+- GB0AC, GB0ATM, GB1BAF, GB1HMM and GB26HOG in Wales, GW
+
+- IQ8TJ/DX80 in Italy, I
+
+- IR0RCAG in Sardinia, IS
+
+- AK8E, KD4FJ, KE5ABB, KR4AFM, W6NCB, WB8PKK and WX9U in United States, K
+
+- KB0TBA in Hawaii, KH6
+
+- N6EMP and WB1BR in Alaska, KL
+
+- K4V in Puerto Rico, KP4
+
+- LU1AAS/XP, LU1DXG/D and LU2IKP/I in Argentina, LU
+
+- R390TB, R50AVS, RT25VR and UG4I/P in European Russia, UA
+
+- R310SL, R3CI/0, R44RFF, RX0TX/P, RY0AAN/P and UB8FDO/9/P in Asiatic Russia, UA9
+
+ This entry was posted in Contest [https://www.country-files.com/category/contest/], DX Cluster [https://www.country-files.com/category/dx-cluster/] by AD1C [https://www.country-files.com/author/ad1c/]. Bookmark the permalink [https://www.country-files.com/cty-3627-14-august-2026/].
+
+  Proudly powered by WordPress  [https://wordpress.org/]
+##############################################################################
+# 6. country-files.com — per-software pages giving the DIRECT (always-current) file URLs (verbatim excerpts)
+# SOURCE: https://www.country-files.com/contest/ct/ , /contest/n1mm/ , /contest/klog/ , /contest/aether/ , /contest/tlf/ , /contest/skookumlogger/
+# FETCHED: 2026-08-17
+##############################################################################
+--- cty_ct.txt ---
+# CT
+
+## CT Win
+
+Save CTY.DAT [https://www.country-files.com/cty/cty.dat] to your CT Win directory, which by default is C:\Program Files\K1EA Software\CtWin
+ If you did not install CT in the default location, save CTY.DAT in the same directory as CTWIN.EXE
+
+## CT 10 (DOS)
+
+Save CTY.DAT [https://www.country-files.com/cty/cty.dat] to your CT directory (the same directory where CT.EXE is found)
+
+## CT 9.91 and later
+
+Save CTY.DAT [https://www.country-files.com/cty/cty.dat] to your CT directory (the same directory where CT.EXE is found)
+
+## CT 9.90 and earlier
+
+Save CTY.DAT [https://www.country-files.com/cty/old/cty.dat] to your CT directory (the same directory where CT.EXE is found)
+
+## CT 8 and earlier
+
+Save ARRL.CTY [https://www.country-files.com/cty/arrl.cty], CQWW.CTY [https://www.country-files.com/cty/cqww.cty] and IARU.CTY [https://www.country-files.com/cty/iaru.cty] to your CT directory (the same directory where CT86.EXE, CT286.EXE and/or CT386.EXE is found)
+
+----
+
+CT by K1EA [http://www.k1ea.com/]
+
+  Proudly powered by WordPress  [https://wordpress.org/]
+--- cty_n1mm.txt ---
+# N1MM
+
+## N1MM 8.6.2 and later
+
+Save WL_CTY.DAT [https://www.country-files.com/cty/wl_cty.dat] to your N1MM Logger directory and run Tools | Import Country List from downloaded file into the database you plan to use.
+
+## N1MM 8.6.1 and earlier
+
+Save WL_CTY.DAT [https://www.country-files.com/cty/old/wl_cty.dat] to your N1MM Logger directory and run Tools | Import Country List from downloaded file into the database you plan to use.
+
+----
+
+N1MM Logger [http://www.n1mm.com/]
+
+  Proudly powered by WordPress  [https://wordpress.org/]
+--- cty_klog.txt ---
+# KLog
+
+KLog works with CTY.CSV [https://www.country-files.com/bigcty/cty.csv] since version 0.7.0.
+
+Installation Instructions:
+
+- Linux & macOS: save CTY.CSV [https://www.country-files.com/bigcty/cty.csv] in the following folder:
+
+<<<PRE>>>
+ ~/klog
+<<<END PRE>>>
+
+- Windows save: CTY.CSV [https://www.country-files.com/bigcty/cty.csv] in the following folder:
+
+<<<PRE>>>
+ C:\Users\$USER\klog
+<<<END PRE>>>
+
+----
+
+KLog – the free Ham radio logging program for Linux, macOS and Windows [https://www.klog.xyz/]
+
+  Proudly powered by WordPress  [https://wordpress.org/]
+--- cty_aether.txt ---
+# Aether
+
+Save CTY.CSV [https://www.country-files.com/cty/cty.csv] to the following folder:
+
+<<<PRE>>>
+ Library/Application Support/Aether
+<<<END PRE>>>
+
+Safari may to add a .TXT extension to the file that it downloads. Aether will only see the country file if it is named exactly CTY.CSV
+
+----
+
+Aether – Ham Radio Logging for Mac OS X [http://www.aetherlog.com/]
+
+  Proudly powered by WordPress  [https://wordpress.org/]
+--- cty_tlf.txt ---
+# TLF
+
+TLF-1.3.0 or older: save CTY.DAT [https://www.country-files.com/cty/old/cty.dat] to the following directory:
+
+<<<PRE>>>
+/usr/local/share/tlf
+<<<END PRE>>>
+
+TLF-1.3.1 or newer: save CTY.DAT [https://www.country-files.com/cty/cty.dat] to following directory:
+
+<<<PRE>>>
+ /usr/local/share/tlf
+<<<END PRE>>>
+
+----
+
+TLF [https://tlf.github.io/], a console mode (ip-) networked -logging and -contest program for hamradio under LINUX
+
+  Proudly powered by WordPress  [https://wordpress.org/]
+--- cty_skookumlogger.txt ---
+# SkookumLogger
+
+To update cty_wt_mod.dat [https://www.country-files.com/cty/cty_wt_mod.dat], Choose File > Download Countries Database
+
+----
+
+SkookumLogger [http://www.k1gq.net/SkookumLogger/]
+
+  Proudly powered by WordPress  [https://wordpress.org/]
+
+##############################################################################
+# 7. Release cadence — CTY release headings scraped from the Contest category listing (pages 1-3)
+# SOURCE: https://www.country-files.com/category/contest/ (+ /page/2/, /page/3/)
+# FETCHED: 2026-08-17
+##############################################################################
+CTY-3627 – 14 August 2026
+CTY-3626 – 03 August 2026
+CTY-3625 – 01 August 2026
+CTY-3624 – 14 July 2026
+CTY-3623 – 29 June 2026
+CTY-3622 – 27 June 2026
+CTY-3621 – 11 June 2026
+CTY-3620 – 03 June 2026
+CTY-3619 – 30 May 2026
+CTY-3618 – 13 May 2026
+CTY-3617 – 10 May 2026
+CTY-3616 – 30 April 2026
+CTY-3615 – 14 April 2026
+CTY-3614 – 04 April 2026
+CTY-3613 – 25 March 2026
+CTY-3612 – 17 March 2026
+CTY-3611 – 11 March 2026
+CTY-3610 – 25 February 2026
+CTY-3609 – 20 February 2026
+CTY-3608 – 13 February 2026
+CTY-3607 – 31 January 2026
+CTY-3606 – 29 January 2026
+CTY-3605 – 23 January 2026
+CTY-3604 – 17 January 2026
+CTY-3603 – 15 January 2026
+CTY-3602 – 14 January 2026
+CTY-3601 – 03 January 2026
+CTY-3541 – 31 December 2025
+CTY-3540 – 18 December 2025
+CTY-3539 – 12 December 2025
+
+Observed: 27 releases between 03 Jan 2026 (CTY-3601) and 14 Aug 2026 (CTY-3627), i.e. roughly
+every 8 days, irregular (sometimes 2 days apart, sometimes 3 weeks). Numbering: CTY-yyNN where
+yy = 36 for 2026 (35 for 2025: CTY-3541 was 31 Dec 2025) and NN counts releases within the year.
+Big CTY, N3FJP and DX4WIN files are released the same day under their own posts.
+
+##############################################################################
+# 8. [file] What the CTY-3627 release zip contains (unzip -l), and its README/HISTORY/copyright
+# SOURCE: https://www.country-files.com/cty/download/3627/cty-3627.zip (1,401,573 bytes, application/zip)
+# FETCHED: 2026-08-17
+##############################################################################
+Archive:  /private/tmp/claude-501/-Users-tom-AppDev-Apple-QSOPartyLogger/a6e7d164-ad72-45ae-b5e8-be6e4239214e/scratchpad/research/cty_dl/cty_download_3627_cty-3627.zip
+CTY-3627 Country Files by Jim Reisert AD1C - 14 August 2026
+See HISTORY.TXT for revision history
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+    39237  08-13-2026 20:27   arrl.dat
+    76171  08-13-2026 20:27   cqww.dat
+   104157  08-13-2026 20:27   cty.csv
+    31345  08-13-2026 20:27   arrl.cty
+    92018  08-13-2026 20:27   cqww.cty
+   142546  08-13-2026 20:27   iaru.cty
+    65992  08-13-2026 20:27   mwl.csv
+    30538  08-13-2026 20:27   country.dat
+    32979  08-13-2026 20:27   wf1b.dat
+   133201  08-13-2026 20:27   cty_wt.dat
+   688847  08-13-2026 20:27   cty_wt_mod.dat
+   133201  08-13-2026 20:27   cty_wt_foc.dat
+   102229  08-13-2026 20:27   cty.dat
+   272058  08-13-2026 20:27   wpxloc.dat
+   561198  08-13-2026 20:27   wpxloc.raw
+    74650  08-13-2026 20:27   wl_cty.dat
+     2937  08-13-2026 20:27   AF_cty.dat
+    15410  08-13-2026 20:27   AS_cty.dat
+    31269  08-13-2026 20:27   BY_cty.dat
+    28490  08-13-2026 20:27   EU_cty.dat
+    19746  08-13-2026 20:27   NA_cty.dat
+    48163  08-13-2026 20:27   cty_rus.dat
+    41609  08-13-2026 20:27   SA_cty.dat
+     4495  08-13-2026 20:27   VK_cty.dat
+     2169  08-13-2026 20:27   AF_cty.bin
+     5981  08-13-2026 20:27   AS_cty.bin
+     2404  08-13-2026 20:27   BY_cty.bin
+    12573  08-13-2026 20:27   EU_cty.bin
+    54825  08-13-2026 20:27   NA_cty.bin
+    21021  08-13-2026 20:27   cty_rus.bin
+    17383  08-13-2026 20:27   SA_cty.bin
+     3497  08-13-2026 20:27   VK_cty.bin
+    84828  08-13-2026 20:27   DXCCDOS.DAT
+    96524  08-13-2026 20:27   DXCCWAE.DAT
+    84978  08-13-2026 20:27   DXCCDOSMM.DAT
+    88357  08-13-2026 20:27   DXCCWAEMM.DAT
+    85088  08-13-2026 20:27   CQZONE.DAT
+    87936  08-13-2026 20:27   ITUZONE.DAT
+ 14383688  08-13-2026 20:27   cty.plist
+    99542  08-13-2026 20:32   old/cty.dat
+   130501  08-13-2026 20:32   old/cty_wt.dat
+   686147  08-13-2026 20:32   old/cty_wt_mod.dat
+    71956  08-13-2026 20:32   old/wl_cty.dat
+     2936  08-13-2026 20:32   old/AF_cty.dat
+    15407  08-13-2026 20:32   old/AS_cty.dat
+    31268  08-13-2026 20:32   old/BY_cty.dat
+    28454  08-13-2026 20:32   old/EU_cty.dat
+    18341  08-13-2026 20:32   old/NA_cty.dat
+    48031  08-13-2026 20:32   old/cty_rus.dat
+    41522  08-13-2026 20:32   old/SA_cty.dat
+     4479  08-13-2026 20:32   old/VK_cty.dat
+     4536  05-06-2017 13:48   ctyhdg.doc
+    33364  01-21-2011 22:46   CTYHDG.EXE
+    20228  08-13-2026 20:27   ctyhdg.pre
+     6811  08-13-2026 20:32   README.TXT
+     1916  08-13-2026 20:27   HISTORY.TXT
+     1192  08-13-2026 20:32   copyright.txt
+---------                     -------
+ 19050369                     57 files
+--- HISTORY.TXT ---
+    14 August 2026 (CTY-3627)
+    VER20260814, Version entity is Fiji, 3D2
+
+    Added/changed Entities/Prefixes/Callsigns:
+
+	* 9M4GKS and 9M4LHD are both East Malaysia, 9M6
+	* EA6XQ/P is Spain, EA
+	* EA8RM/P is Canary Islands, EA8
+	* GB1RP, GB2EL, GB2WL and GB5BL are all Northern Ireland, GI
+	* GB0CSL, GB0NHL, GB0TNL, GB2CCN, GB2CCS, GB2KLI, GB2LG, GB2MUC, GB2SLH,
+	  GB2TAY, GB2THL, GB2TNL, GB2TPL and GB8VJ are all Scotland, GM
+	* G0X, GB0WLH and GB1BPL are all Wales, GW
+	* W5LE is United States, K in CQ zone 3, ITU zone 6
+	* KJ4M is United States, K in CQ zone 4, ITU zone 8
+	* AE8EM is United States, K in CQ zone 5, ITU zone 8
+	* KE2EYU is Guam, KH2
+	* KF0FMQ and N8USA are both Hawaii, KH6
+	* KK7RSM is American Samoa, KH8
+	* AK6VK and KC5FTM are both Alaska, KL
+	* KG5NSU is US Virgin Islands, KP2
+	* K1PT is Puerto Rico, KP4
+	* LU1EAF/F and LU5SDL/S are both Argentina, LU
+	* LU1VOF/V is Argentina, LU in ITU zone 16
+	* R0IAH/6, R35ARDF, R3HW/P, R9LAR/3 and RT25KS are all European Russia, UA
+	* R4HNX/8 is in ITU zone 20, not ITU zone 30
+	* R440L is Asiatic Russia, UA9
+	* R8JG/4, R8JG/P, UA4HAZ/P and UG4I/P are all Asiatic Russia, UA9 in CQ zone 16
+	* RW0LD/P is Asiatic Russia, UA9 in CQ zone 19, ITU zone 34
+	* VK7PAK/4 is Australia, VK in ITU zone 55
+
+    Removed Entities/Prefixes/Callsigns:
+
+	* EG60BRILAT in Spain, EA
+	* GB071RE, GB198END, GB198KHZ, GB26KDR and GB9AC in Scotland, GM
+	* GB0AC, GB0ATM, GB1BAF, GB1HMM and GB26HOG in Wales, GW
+	* IQ8TJ/DX80 in Italy, I
+	* IR0RCAG in Sardinia, IS
+	* AK8E, KD4FJ, KE5ABB, KR4AFM, W6NCB, WB8PKK and WX9U in United States, K
+	* KB0TBA in Hawaii, KH6
+	* N6EMP and WB1BR in Alaska, KL
+	* K4V in Puerto Rico, KP4
+	* LU1AAS/XP, LU1DXG/D and LU2IKP/I in Argentina, LU
+	* R390TB, R50AVS, RT25VR and UG4I/P in European Russia, UA
+	* R310SL, R3CI/0, R44RFF, RX0TX/P, RY0AAN/P and UB8FDO/9/P in Asiatic Russia, UA9
+--- copyright.txt ---
+The Contest Country Files #3627 were released on 14 August 2026.
+
+   Copyright © 1994-
+
+   Permission is hereby granted, free of charge, to any person obtaining a
+   copy of this software and associated documentation files (the
+   “Software”), to deal in the Software without restriction, including
+   without limitation the rights to use, copy, modify, merge, publish,
+   distribute, sublicense, and/or sell copies of the Software, and to
+   permit persons to whom the Software is furnished to do so, subject to
+   the following conditions:
+
+   The above copyright notice and this permission notice shall be included
+   in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+##############################################################################
+# 9. [file] What the Big CTY zip contains, and its HISTORY
+# SOURCE: https://www.country-files.com/bigcty/download/2026/bigcty-20260814.zip (334,961 bytes)
+# FETCHED: 2026-08-17
+##############################################################################
+Archive:  /private/tmp/claude-501/-Users-tom-AppDev-Apple-QSOPartyLogger/a6e7d164-ad72-45ae-b5e8-be6e4239214e/scratchpad/research/cty_dl/bigcty_download_2026_bigcty-20260814.zip
+Big CTY.DAT by Jim Reisert AD1C - 14 August 2026
+See HISTORY.TXT for revision history
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+   301678  08-13-2026 20:26   cty.csv
+   349649  08-13-2026 20:32   cty.dat
+   351777  08-13-2026 20:32   swiftlog_cty.dat
+     4672  08-13-2026 20:32   README.TXT
+     1261  08-13-2026 20:32   HISTORY.TXT
+     1171  08-13-2026 20:32   copyright.txt
+---------                     -------
+  1010208                     6 files
+--- HISTORY.TXT ---
+    Big CTY - 14 August 2026
+    Version entity is Fiji, 3D2
+
+    Added/changed Entities/Prefixes/Callsigns:
+
+	* 9M4GKS is East Malaysia, 9M6
+	* VP8CM and VP8CP are both Antarctica, CE9 in ITU zone 73
+	* GB2CCN and GB2CCS are both Scotland, GM
+	* G0X is Wales, GW
+	* WH6END is in CQ zone 5, not CQ zone 4
+	* AH6A, KH6OM and W5LE are all United States, K in CQ zone 3, ITU zone 6
+	* KL5PT and KL5YO are both United States, K in CQ zone 4, ITU zone 7
+	* KJ4M is United States, K in CQ zone 4, ITU zone 8
+	* AE8EM and WH6HDF are both United States, K in CQ zone 5, ITU zone 8
+	* KE2EYU is Guam, KH2
+	* N8USA is Hawaii, KH6
+	* KK7RSM is American Samoa, KH8
+	* AK6VK and KC5FTM are both Alaska, KL
+	* KG5NSU is US Virgin Islands, KP2
+	* K1PT is Puerto Rico, KP4
+	* LU1EAF/F is Argentina, LU
+	* R0IAH/6 is European Russia, UA
+	* R4HNX/8 is in ITU zone 20, not ITU zone 30
+	* R440L is Asiatic Russia, UA9
+	* R8JG/4, R8JG/P and UG4I/P are all Asiatic Russia, UA9 in CQ zone 16
+	* VK2LHW is Lord Howe Island, VK9L
+
+    Removed Entities/Prefixes/Callsigns:
+
+	* GB2SLH in Shetland Islands, *GM/s
+	* VP8AL in Antarctica, CE9
+	* AK8E, KD4FJ, KE5ABB, KL7WG, KR4AFM, W6NCB, WB8PKK and WX9U in United States, K
+	* UG4I/P in European Russia, UA
+
+##############################################################################
+# 10. [file] Sample records from the downloaded cty.dat (VER20260814) and bigcty cty.dat
+# SOURCE: https://www.country-files.com/cty/cty.dat (102,229 bytes, CRLF) and https://www.country-files.com/bigcty/cty.dat (349,649 bytes, CRLF)
+# FETCHED: 2026-08-17
+##############################################################################
+cty.dat: 346 entity records; bigcty cty.dat: 346 entity records (lines starting with a letter).
+'=' exact-callsign entries: cty.dat 2679, bigcty 22913.
+Override markers actually present: '(n)' CQ-zone and '[n]' ITU-zone — yes in both files; '<lat/lon>', '{cont}', '~tz~' — absent in cty.dat, absent in bigcty (grep).
+--- first 8 lines of cty.dat ---
+Sov Mil Order of Malta:   15:  28:  EU:   41.90:   -12.43:    -1.0:  1A:
+    1A;
+Spratly Islands:          26:  50:  AS:    9.88:  -114.23:    -8.0:  1S:
+    9M0,BM9S,BN9S,BO9S,BP9S,BQ9S,BU9S,BV9S,BW9S,BX9S;
+Monaco:                   14:  27:  EU:   43.73:    -7.40:    -1.0:  3A:
+    3A;
+Agalega & St. Brandon:    39:  53:  AF:  -10.45:   -56.67:    -4.0:  3B6:
+    3B6,3B7;
+--- Fiji record (carries the =VERSION marker: 'VERSION' logs as the Version entity of the release) ---
+Fiji:                     32:  56:  OC:  -17.78:  -177.92:   -12.0:  3D2:
+    3D2,=VERSION;
+--- Canada record head (carries =VERyyyymmdd; zone overrides (n)=CQ [n]=ITU) ---
+Canada:                   05:  09:  NA:   44.35:    78.75:     5.0:  VE:
+    CF,CG,CJ,CK,VA,VB,VC,VE,VG,VX,VY9,XL,XM,CF2[4],CG2[4],CH1,CH2(2),
+    CI0(2)[4],CI1(1)[2],CI2,CJ2[4],CK2[4],CY1,CY2(2),CZ0(2)[4],CZ1(1)[2],CZ2,
+    VA2[4],VB2[4],VC2[4],VD1,VD2(2),VE2[4],VF1(1)[2],VF2,VG2[4],VO1,VO2(2),
+    VX2[4],VY0(2)[4],VY1(1)[2],VY2,XJ1,XJ2(2),XK0(2)[4],XK1(1)[2],XK2,XL2[4],
+    XM2[4],XN1,XN2(2),XO0(2)[4],XO1(1)[2],XO2,=VER20260814,=VA2VVV(2)[4],
+    ...
+--- the =VER line ---
+    XM2[4],XN1,XN2(2),XO0(2)[4],XO1(1)[2],XO2,=VER20260814,=VA2VVV(2)[4],
+--- United States record head (primary prefix K; many =CALL(cq)[itu] exceptions) ---
+United States:            05:  08:  NA:   37.60:    91.87:     5.0:  K:
+    AA,AB,AC,AD,AE,AF,AG,AI,AJ,AK,K,N,W,=4U1WB(5)[8],=AA0BY(3)[6],
+    =AA0IZ(3)[6],=AA0O(5)[8],=AA0Y(3)[6],=AA1JM(4)[8],=AA2F(4)[8],
+    =AA2HJ(3)[6],=AA2IL(3)[6],=AA2MA(4)[8],=AA3C(4)[7],=AA4CS(4)[8],
+    ...
+--- entities whose primary prefix carries the '*' WAE marker in cty.dat ---
+Vienna Intl Ctr:          15:  28:  EU:   48.20:   -16.30:    -1.0:  *4U1V:
+Shetland Islands:         14:  27:  EU:   60.50:     1.50:     0.0:  *GM/s:
+African Italy:            33:  37:  AF:   35.67:   -12.67:    -1.0:  *IG9:
+Sicily:                   15:  28:  EU:   37.50:   -14.00:    -1.0:  *IT9:
+Bear Island:              40:  18:  EU:   74.43:   -19.08:    -1.0:  *JW/b:
+European Turkey:          20:  39:  EU:   41.02:   -28.97:    -2.0:  *TA1:
+--- one full WAE record ---
+European Turkey:          20:  39:  EU:   41.02:   -28.97:    -2.0:  *TA1:
+    TA1,TB1,TC1,YM1,=TA3AC/1,=TA6CQ/1,=TA7H/1;
+--- bigcty first 4 lines (same layout; far more =callsigns) ---
+Sov Mil Order of Malta:   15:  28:  EU:   41.90:   -12.43:    -1.0:  1A:
+    1A;
+Spratly Islands:          26:  50:  AS:    9.88:  -114.23:    -8.0:  1S:
+    9M0,BM9S,BN9S,BO9S,BP9S,BQ9S,BU9S,BV9S,BW9S,BX9S,=9M2/PG5M,=9M4SDX,=9M4SLL,=9M6/LA6VM,=9M6/LA7XK,
+
+##############################################################################
+# 11. [file] cty.csv (also shipped) — first 3 lines of each; fields: primary prefix, name, ADIF/DXCC entity code, continent, CQ zone, ITU zone, lat, lon, tz, space-separated prefix/callsign list terminated by ';'
+# SOURCE: https://www.country-files.com/cty/cty.csv (104,157 bytes) and https://www.country-files.com/bigcty/cty.csv (301,678 bytes)
+# FETCHED: 2026-08-17
+# NOTE: no field-description page for cty.csv was found on country-files.com; field meaning inferred from the file against cty.dat (e.g. 1A,Sov Mil Order of Malta,246,EU,15,28,41.90,-12.43,-1.0,1A;)
+##############################################################################
+--- cty.csv ---
+1A,Sov Mil Order of Malta,246,EU,15,28,41.90,-12.43,-1.0,1A;
+1S,Spratly Islands,247,AS,26,50,9.88,-114.23,-8.0,9M0 BM9S BN9S BO9S BP9S BQ9S BU9S BV9S BW9S BX9S;
+3A,Monaco,260,EU,14,27,43.73,-7.40,-1.0,3A;
+--- bigcty cty.csv ---
+1A,Sov Mil Order of Malta,246,EU,15,28,41.90,-12.43,-1.0,1A;
+1S,Spratly Islands,247,AS,26,50,9.88,-114.23,-8.0,9M0 BM9S BN9S BO9S BP9S BQ9S BU9S BV9S BW9S BX9S =9M2/PG5M =9M4SDX =9M4SLL =9M6/LA6VM =9M6/LA7XK =9M6/N1UR =9M6/OH2YY =DX0JP =DX0K =DX0NE =DX0P;
+3A,Monaco,260,EU,14,27,43.73,-7.40,-1.0,3A =3A/4Z5KJ/LH;
+
+##############################################################################
+# 12. Direct download URLs (all verified 200 on 2026-08-17 with a browser UA)
+# SOURCE: (collected from sections 4-6)
+# FETCHED: 2026-08-17
+##############################################################################
+
+Always-current (no version in the path):
+  cty.dat (contest, '=' format, CT 9.91+/TLF 1.3.1+): https://www.country-files.com/cty/cty.dat
+  cty.dat (old format, no '='):                        https://www.country-files.com/cty/old/cty.dat
+  cty.csv (contest, Aether):                           https://www.country-files.com/cty/cty.csv
+  wl_cty.dat (WriteLog/N1MM 8.6.2+):                   https://www.country-files.com/cty/wl_cty.dat
+  wl_cty.dat old:                                      https://www.country-files.com/cty/old/wl_cty.dat
+  cty_wt_mod.dat (SkookumLogger):                      https://www.country-files.com/cty/cty_wt_mod.dat
+  arrl.cty / cqww.cty / iaru.cty (CT8):                https://www.country-files.com/cty/arrl.cty  etc.
+  Big CTY cty.dat:                                     https://www.country-files.com/bigcty/cty.dat
+  Big CTY cty.csv (KLog):                              https://www.country-files.com/bigcty/cty.csv
+Versioned release archives (from the release posts):
+  https://www.country-files.com/cty/download/3627/cty-3627.zip        (57 files, see section 8)
+  https://www.country-files.com/cty/download/3627/ct8-3627.zip
+  https://www.country-files.com/cty/download/3627/cty_wt-3627.zip
+  https://www.country-files.com/cty/download/3627/wl_cty-3627.zip
+  https://www.country-files.com/cty/download/3627/cty_plist-3627.zip
+  https://www.country-files.com/bigcty/download/2026/bigcty-20260814.zip (6 files, see section 9)
+  History of all releases: https://www.country-files.com/cty/backup/history.htm
+Announcement channels: https://www.country-files.com/feed/ (RSS) and the announce reflector
+  https://mail.country-files.com/mailman/listinfo/announce_country-files.com
+
+Verification detail (2026-08-17): every URL above answered HTTP 200 to a GET with a Chrome User-Agent
+(+Referer country-files.com). With curl's default UA the always-current file URLs answer 301 ->
+/cty-dat-format/ (then 403) and the zips 404 — the server keys on the User-Agent. Byte sizes served
+by the always-current URLs (cty.dat 102,229; old/cty.dat 99,542; wl_cty.dat 74,650; cty_wt_mod.dat
+688,847; arrl.cty 31,345; cty.csv 104,157) equal the member sizes inside cty-3627.zip, i.e. the
+always-current URLs serve the latest release (CTY-3627, VER20260814) with no version in the path.
+Entity count cross-check: cty.dat has 346 records = the 340 current DXCC entities reported in the
+N3FJP post of the same day + the 6 '*'-marked WAE-only entities (4U1V, GM/s, IG9, IT9, JW/b, TA1).

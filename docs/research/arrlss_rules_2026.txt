@@ -1,0 +1,3075 @@
+ARRL NOVEMBER SWEEPSTAKES — RAW SOURCE TEXT BANK FOR THE 2026 RUNNING
+Compiled 2026-08-17 (all fetches made 2026-08-17 between 15:12 and 15:40 UTC, with curl -A "Mozilla/5.0"; PDFs converted with pdftotext -layout).
+Sponsor: ARRL (American Radio Relay League), 225 Main St, Newington CT 06111; contests@arrl.org; 860-594-0232.
+
+DOCUMENTS IN THIS FILE (in order):
+ [1] https://contests.arrl.org/ContestRules/SS-Rules.pdf  — "ARRL November Sweepstakes Rules", document footer "Version 2.1"; PDF metadata Title "ARRL November Sweepstakes Rules v 2.1", CreationDate 2024-01-04, ModDate 2024-01-04; HTTP Last-Modified Thu, 22 Aug 2024 15:13:05 GMT; 238654 bytes, 10 pages. Embedded component versions: "Entry Categories for ARRL November Sweepstakes Version 1.6 – 20 Sep 2023"; "Rules for Entry Version 1.3 – 29 Nov 2023"; "Log Submission Rules Version 1.01 – 30 April 2020"; "Definitions and Glossary Version 1.06 – 15 Jul 2022". This is the document the sponsor's Sweepstakes page links as "the complete ARRL November Sweepstakes rules (PDF)" on 2026-08-17, and is therefore the current rules for the 2026 running (the page adds: "NOTE: There will be no Changes to Sweepstakes Multipliers for 2026.").
+ [2] https://www.arrl.org/sweepstakes — sponsor's Sweepstakes web page (HTML, HTTP 200, no Last-Modified header; page copyright 2026). Text-converted from raw HTML.
+ [3] https://contests.arrl.org/sscw/ and https://contests.arrl.org/ssph/ — sponsor's per-contest pages giving the 2026 UTC start/end and log deadline (page "Version: 1.5.1, Revised: August 16, 2023").
+ [4] https://contests.arrl.org/calendar.php — ARRL Contest Calendar 2026–2031 (page "Version: 1.5.2, Revised: July 9, 2025").
+ [5] https://www.arrl.org/files/file/Contest%20Rules%20PDFs/2025/2025%20ARRL%20November%20Sweepstakes%20Package.pdf — "2025 ARRL November Sweepstakes Package" (Author Paul Bourque N1SFE, ARRL Contest Program Manager; PDF CreationDate 2025-10-17; HTTP Last-Modified Fri, 17 Oct 2025 16:10:54 GMT; 401125 bytes, 15 pages). The Sweepstakes page (2026-08-17) calls it "The current November Sweepstakes Information Package". Contains the sponsor's Cabrillo header templates and QSO-line template.
+ [6] https://wwrof.org/cabrillo/cabrillo-v3-header/ ("Last update: 5 June 2025") and https://wwrof.org/cabrillo/cabrillo-qso-data/ ("Last update: 15 March 2021") — the Cabrillo specification, which the sponsor's rules name as the official log format ("ELOG.1. The official ARRL format for electronic logs is the Cabrillo format (wwrof.org/cabrillo)"). NOT sponsor rules; included only for the token vocabulary and the OFFTIME note. Server answered HTTP 403 but delivered the full page body.
+ [7] https://www.arrl.org/cabrillo-format-tutorial — ARRL "Cabrillo Format & Tutorial" page with November Sweepstakes templates. LEGACY/STALE: its category captions still say Low Power = "150 watts or less" and its sample dates are 2009; superseded by [1] and [5] on power limits. Included because it is a sponsor page showing the QSO line format.
+ NOT FETCHABLE / REDIRECTED (recorded for provenance): https://www.arrl.org/general-rules-for-all-arrl-contests -> HTTP 302 to https://contests.arrl.org (no general-rules document there; the general rules are embedded in each contest's rules PDF, see [1] "Rules for Entry", "Entry Categories", "Log Submission Rules", "Definitions and Glossary"). https://www.arrl.org/hf-contest-rules -> HTTP 302 to https://www.arrl.org/pages/display/error404.
+ The section list is banked separately in arrl_sections_2026.txt (https://contests.arrl.org/contestmultipliers.php?a=wve, https://www.arrl.org/section-abbreviations, and the list inside [5]).
+
+====================================================================================================
+[1] https://contests.arrl.org/ContestRules/SS-Rules.pdf  (fetched 2026-08-17 15:34 UTC; HTTP 200; Last-Modified Thu, 22 Aug 2024 15:13:05 GMT; PDF Title 'ARRL November Sweepstakes Rules v 2.1'; CreationDate 2024-01-04)
+====================================================================================================
+ARRL November Sweepstakes Rules
+Introduction and How to Operate
+Contest Objective: To support amateur self-training in radiocommunications, including improving
+amateur operating skills, conducting technical investigations, and intercommunicating with other
+amateurs. Stations in the United States and Canada (including territories and possessions) exchange
+information with as many other US and Canadian stations as possible.
+
+
+   Your ARRL membership helps support the ARRL Contest Program – the world’s largest with
+   many different events from HF through microwave. Along with your membership, you’ll get
+  free access to the National Contest Journal, the ARRL’s online archive of QST articles, and the
+  Technical Information Service. Contesting builds skills and understanding – come join the fun!
+
+
+For more information about Sweepstakes and operating in the contest, visit the ARRL’s Sweepstakes
+web page.
+
+Contest Period (All dates are maintained in the ARRL contest calendar)
+       CW: First full weekend in November
+       Phone: Third full weekend in November
+       Contest Period: Begins 2100 UTC Saturday and runs through 0259 UTC Monday. Operate for a
+       maximum of 24 hours out of the 30-hour period. See the Special Rules for information about off
+       times.
+
+Log Deadline: Upload your log at contest-log-submission.arrl.org no later than SEVEN (7) days after the
+contest is over at 0259 UTC. Paper log forms are available on the Sweepstakes web page.
+
+Bands and Modes: Use only the 1.8, 3.5, 7, 14, 21, and 28 MHz bands. Use only CW during the CW
+weekend and Phone during the Phone weekend.
+
+Categories: Single Operator and Single Operator Unlimited (all power sub-categories); Multioperator,
+Single-Transmitter (High or Low Power); and School Club (no sub-categories). There are no limitations on
+band changes in any category. See the Special Rules and HF Categories sections for details.
+
+Limited Antennas Overlay: Any Single Operator or Single Operator Unlimited entrant can enter using
+the Limited Antennas Overlay. Operation is limited to the use of single-element antennas such as a
+single vertical, end-fed wire, or a single dipole antenna no more than 50 feet above ground at its highest
+point. The antenna(s) may cover multiple bands, as in the case of multiband verticals and dipoles with
+fan or trap constructions.
+
+Contacts: W/VE stations may only contact other W/VE stations for contest credit. Each station may be
+contacted only once, regardless of band.
+
+
+
+
+November Sweepstakes Rules                               Version 2.1                         Page 1 of 10
+Exchange: The following six pieces of information must be sent in each contact: the sequential serial
+number of the contact, your precedence (type of station – A, B, Q, M, S, or U – see the Special Rules),
+your call sign, your check (the last two digits of the year the operator or station was first licensed), and
+the abbreviation for your ARRL or RAC section. It is highly recommended that you send the information
+in this order to avoid confusion. Your call sign must be included in the exchange transmitted to the other
+station.
+
+
+This is a typical contest contact:
+         CQing Station: CQ Sweepstakes from W9JJ
+         Answering Station: W1AW
+         CQer: W1AW 123 A W9JJ 79 CT
+         Answer: 43 M W1AW 31 CT
+         CQer: Thanks, CQ Sweepstakes from W9JJ
+
+As the answering station, it is not necessary to send the CQing station's call before the exchange unless
+you think there might be some confusion about which station you are responding to.
+
+Scoring: Each contact counts for 2 QSO points. To calculate your final score, multiply the total QSO
+points by the number of ARRL and RAC sections you contacted. Use the abbreviations in the ARRL
+Contest Multipliers List which also lists the total number of multipliers.
+
+Club Competition: You can contribute your score to your ARRL Affiliated Club by selecting the club name
+when you upload your log. Club Competition rules are available here: Affiliated Club Competition Rules.
+
+Participation Awards:
+
+        Clean Sweep Mugs: “Clean Sweep” mugs are available to stations that contact all of the
+        ARRL/RAC sections in either the CW or Phone November Sweepstakes. Mug eligibility is based
+        on claimed scores.
+
+        Participation Pins: Anyone completing 100 contacts during either the CW or Phone Sweepstakes
+        is eligible for a Participation Pin. Pin eligibility is based on claimed scores.
+
+        Information on purchasing the mugs and pins is available on the ARRL’s Sweepstakes web page.
+
+Feedback about the contest:
+Send us your stories and photos! Tell us what fun you had, how you did, and what challenges you faced
+at the ARRL Contest Program’s “Soapbox” page.
+
+Additional Resources:
+ARRL Section Map
+
+All contest queries should be directed to contests@arrl.org or 860-594-0232.
+
+
+
+
+November Sweepstakes Rules                               Version 2.1                           Page 2 of 10
+Special Sweepstakes Rules
+   1. Operating Period: 2100 UTC Saturday through 0259 UTC Monday.
+       1.1 All stations may operate no more than 24 of the 30 hours, including listening and
+           transmitting. Off times must be at least 30 minutes long. The operating period begins with
+           the first contact, after which each off time must be at least 30 minutes long until 24 hours
+           have been completed.
+       1.2 Contacts logged after 24 hours of operation will not be counted toward the final score,
+           there is no penalty for including those contacts in a submitted log, and the station
+           contacted is eligible to receive credit for the contact.
+   2. Contacts
+       2.1 W/VE stations may only contact other W/VE stations for contest credit.
+       2.2 Each station may be contacted only once, regardless of band.
+       2.3 Use only the 1.8, 3.5, 7, 14, 21, and 28 MHz bands.
+       2.4 Use only CW during the CW weekend and Phone during the Phone weekend.
+   3. Categories
+       3.1 See the HF Categories section for power sub-categories.
+       3.2 Single Operator (all power subcategories)
+       3.3 Single Operator Unlimited (all power subcategories)
+       3.4 Multioperator, Single Transmitter (High and Low Power)
+       3.5 School Club
+   4. Contest Exchange - the required exchange consists of:
+      4.1 Serial Number - a consecutive contact number starting with 1
+      4.2 Precedence
+          “Q” for Single Operator, QRP
+          “A” for Single Operator, Low Power
+          “B” for Single Operator, High Power
+          “U” for Single Operator Unlimited, High Power, Single Operator Unlimited, Low Power and
+          Single Operator Unlimited, QRP
+          “M” for Multioperator, High Power or Multioperator, Low Power
+          “S” for School Club
+       4.3 Your call sign (the call sign must be included during the exchange)
+       4.4 Check
+           4.4.1 The last two digits of the year the operator or the station was first licensed
+           4.4.2 The same Check must be sent throughout the contest.
+       4.5 Section – send and log the abbreviations in the ARRL Contest Multipliers List.
+   5. Scoring
+       5.1 QSO points: Each contact counts for two (2) points.
+       5.2 Multipliers: ARRL/RAC Sections plus Northern Territories. (See the ARRL Contest
+           Multipliers List.)
+       5.3 Final score equals the total QSO points times the total multipliers contacted.
+   6. Operating Restrictions
+       6.1 There are no limitations on band changes in any category.
+   7. Awards
+       7.1 Online certificates will be available to all eligible participants, including the top CW and
+           Phone scores in each category in each ARRL/RAC Section and Division.
+       7.2 Plaques are available for top performance in a number of categories. See the ARRL
+           Sweepstakes page for a list of plaques and instructions for sponsoring them.
+
+November Sweepstakes Rules                             Version 2.1                         Page 3 of 10
+   8. Log Submission
+       8.1 Logs are due SEVEN (7) days after the event is over at 0259 UTC. If an extension of the log
+           deadline is needed, contact the ARRL Contest Program Manager. All entries received are
+           displayed on the Logs Received page.
+       8.2 Send paper logs to the ARRL, addressed to November SS CW or November SS Phone.
+
+
+
+
+November Sweepstakes Rules                            Version 2.1                          Page 4 of 10
+Entry Categories for ARRL November Sweepstakes
+Version 1.6 – 20 Sep 2023
+
+
+                        Categories          QRP1    Low High Power         Spotting
+                                                   Power   (HP)3          Assistance
+                                                    (LP) 2
+
+
+                 Single Operator (SO)4       Yes     Yes        Yes           No
+
+                 Single Operator             Yes     Yes        Yes           Yes
+                 Unlimited (SOU)4
+
+                 Multioperator, Single       No      Yes        Yes           Yes
+                 Transmitter
+
+                 School Club (S)            No power sub-categories           Yes
+
+                 Checklog                              n/a                    n/a
+
+                1 — 5 watts PEP output or less
+                2 — 100 watts PEP output or less
+                3 — 1500 watts PEP output or the maximum allowable power level established by the
+                national licensing authority issuing the operator and/or station license, whichever is
+                less.
+                4 — Limited Antennas Overlay available (see description below)
+
+HCAT.1. Single Operator (SO)
+       HCAT.1.1. Use of spotting assistance is not permitted.
+       HCAT.1.2. Only one transmitted signal is permitted at any time
+       HCAT.1.3. Power sub-categories include QRP (SOQRP), Low Power (SOLP), and High Power
+       (SOHP).
+       HCAT.1.4. Any Single Operator entrant who meets the requirements may enter the following
+       Category Overlay:
+                Limited Antennas Overlay – Operation is limited to the use of single-element antennas
+                such as a single vertical, end-fed wire, or a single dipole antenna no more than 50 feet
+                above ground at its highest point. The antenna(s) may cover multiple bands, as in the
+                case of multiband verticals and dipoles with fan or trap constructions.
+
+HCAT.2. Single Operator Unlimited (SOU)
+       HCAT.2.1. Use of spotting assistance is permitted. Spotting information must be derived from
+       sources within the station’s circle or sources open to the general public.
+       HCAT.2.2. Entrants are permitted to use social media, video live streaming, and internet chat
+       rooms.
+       HCAT.2.3. Only one transmitted signal is permitted at any time.
+
+
+November Sweepstakes Rules                              Version 2.1                          Page 5 of 10
+        HCAT.2.4. Power sub-categories include QRP (SOUQRP), Low Power (SOULP), and High Power
+        (SOUHP).
+        HCAT.2.5. Any Single Operator Unlimited entrant who meets the requirements may enter the
+        following Category Overlay:
+                Limited Antennas Overlay – Operation is limited to the use of single-element antennas
+                such as a single vertical, end-fed wire, or a single dipole antenna no more than 50 feet
+                above ground at its highest point. The antenna(s) may cover multiple bands, as in the
+                case of multiband verticals and dipoles with fan or trap constructions.
+
+HCAT.3. Multioperator, Single Transmitter
+       HCAT.3.1. Use of spotting assistance is permitted. Spotting information must be derived from
+       sources within the station’s circle or sources open to the general public.
+       HCAT.3.2. Entrants are permitted to use social media, video live streaming, and internet chat
+       rooms.
+       HCAT.3.3. Only one transmitted signal is allowed at any time.
+       HCAT.3.4. Power sub-categories include Low Power (MSLP) and High Power (MSHP).
+
+HCAT.4. School Club
+       HCAT.4.1. School Club stations may be grouped by the type of institution:
+               HCAT.4.1.1. College and University
+               HCAT.4.1.2. Technical School
+               HCAT.4.1.3. Secondary and other school
+       HCAT.4.2. Only currently enrolled students and faculty/staff of the institution are eligible to
+       operate a School Club station. Alumni may participate on the air with students. It is not,
+       however, in the spirit of the category for alumni exclusively to use the club station. Alumni
+       should make every effort to act in a mentoring role to current student club members.
+       HCAT.4.3. There are no sub-categories for School Club entries.
+       HCAT.4.4. School Club stations must operate from stations located on-campus. A club may
+       operate from an off-campus station only if no on-campus station exists.
+       HCAT.4.5. Spotting assistance may be used by School Club stations. Spotting information must
+       be derived from sources within the station’s circle or sources open to the general public.
+       HCAT.4.6. Entrants are permitted to use social media, video live streaming, and internet chat
+       rooms.
+
+
+
+
+Rules for Entry
+Version 1.3 – 29 Nov 2023
+
+Conditions of Entry
+COND.1. By submitting a log, entrants agree to be bound by the contest rules. Violation of the contest
+rules or engaging in prohibited conduct may result in disciplinary action at the discretion of the ARRL
+Awards Committee up to and including disqualification.
+COND.2 Multiple entries
+
+November Sweepstakes Rules                              Version 2.1                          Page 6 of 10
+       COND.2.1 Individuals and stations may submit multiple entries per contest under different call
+       signs from different locations, see OPRG.2 and STTN.1. Using a call sign modifier does NOT make
+       the call sign unique. (Example- W1AW and W1AW/7 are treated as the same call sign.)
+COND.3. Log contents used to determine final score and awards will be available to the public.
+COND.4. Entrants agree to follow the regulations of their operating licenses and station licenses at all
+times.
+COND.5. Entrants agree to be bound by the decisions of the ARRL Awards Committee.
+COND.6. All entries become the property of the ARRL and are not returnable.
+
+Operating and Entry Restrictions
+OPRG.1. Call signs and exchange information must be sent, received, acknowledged and logged correctly
+for a complete contact.
+OPRG.2. An operator may not use more than one call sign from any given location during the contest
+period.
+OPRG.3. Alternating CQs on two or more frequencies using the same band and mode is prohibited.
+OPRG.4. Each contact must include contemporaneous direct initiation by both operators making a
+contact. Initiation of a contact may be by either local or remote control.
+OPRG.5. Only one transmitted signal is permitted at any time.
+
+
+Station and Equipment Restrictions
+STTN.1. A transmitter used to contact one or more stations may not be subsequently used under any
+other call sign during the contest period, except
+    a) for family stations where more than one call sign has been issued, and then only if the second
+         call sign is used by a different operator.
+    b) for remote stations used by individual amateurs that have limited or no access to their own
+         stations.
+This rule does not permit any operator to use multiple call signs at the same station to manufacture
+contacts to another station in the contest.
+STTN.2. All transmitters and receivers must be located within a 500-meter diameter circle, excluding
+antennas.
+STTN.3. Remote receiving installations outside the 500-meter circle are prohibited. Stations remotely
+controlled by radio link may use necessary equipment at the control point. This does not allow using the
+control point as another receiving location.
+
+Prohibited Conduct
+Examples of prohibited conduct include, but are not limited to:
+PROH.1. Claiming cross-band contacts.
+PROH.2. Use of systems such as repeaters, gateways, or digipeaters to relay on-the-air signals. Satellites
+may be used only if permitted by the contest rules. This does not apply to the remote control of a
+station.
+PROH.3. Arranging, soliciting, or confirming any contacts during or after the contest by use of any non-
+amateur radio means. All required elements of a contact must be exchanged via amateur radio.
+PROH.4. Misrepresenting contact times (“rubber clocking”) to meet band change or off time rules.
+
+
+November Sweepstakes Rules                               Version 2.1                          Page 7 of 10
+PROH.5. Claiming excessive unverifiable contacts or multipliers (“log padding”).
+PROH.6. Transmitting signals with excessive bandwidth (e.g., spurious emissions) or harmonics.
+PROH.7. Failure to identify transmissions in a timely manner (i.e., for longer periods than 1 minute).
+PROH.8. Repeater input or output frequencies may not be used without the permission of the repeater
+owner.
+
+Log Checking Penalties
+Logs are cross-checked using custom software and human judgment.
+LGCK.1. Duplicate contacts are removed with no additional scoring penalty.
+LGCK.2. Contacts with call sign errors ("Busted") or that are not found in the corresponding log ("NIL")
+are removed from the log and an additional scoring penalty of the QSO point value of that contact is
+assessed.
+LGCK.3. Contacts with an incorrectly received exchange are removed with no additional scoring penalty.
+
+Disciplinary Actions
+DSCP.1. Disqualified entries will be listed in the published results, are not eligible for an award, and are
+not eligible to submit an entry in the next running of that contest.
+DSCP.2. Notification of Award Committee actions will be sent by email to the address provided with the
+log submission. The entrant has five days to appeal the decision to the Contest Program Manager. If
+there is no response, after that time the decision is final.
+DSCP.3. The Awards Committee reserves the right to change the category of any entry based on its
+examination of the log or other information.
+
+
+
+Log Submission Rules
+Version 1.01 – 30 April 2020
+
+Electronic Log Submission
+ELOG.1. The official ARRL format for electronic logs is the Cabrillo format (wwrof.org/cabrillo).
+        ELOG 1.1. A paper printout of an electronic log file is not an acceptable substitute. A utility for
+        converting log files in non-Cabrillo format to Cabrillo is available at www.b4h.net/cabforms.
+ELOG.2. Electronic logs must be submitted via contest-log-submission.arrl.org with the exception of
+Field Day, Straight Key Night, 10 GHz and Up, ARRL EME, Rookie Roundup, and School Club Roundup.
+ELOG.3. Electronic logs are assumed to be signed as complying with all contest rules and conditions
+when they are submitted.
+ELOG.4. Multioperator logs must include the complete list of operators in the Cabrillo OPERATORS: field.
+
+Paper Log Submission
+PLOG.1. Entrants must use the most current official contest forms or an acceptable facsimile, as scoring
+rules, ARRL sections, etc., do change periodically. See the ARRL website for downloadable forms.
+PLOG.2 Paper logs may be mailed to ARRL, 225 Main St, Newington CT 06111, USA. Each paper log entry
+must be accompanied by a Summary Sheet listing all scoring information, the category of competition,
+and the entrant’s name.
+
+November Sweepstakes Rules                                Version 2.1                           Page 8 of 10
+PLOG.3. Paper entries with 500 or more contacts must include an official dupe sheet for the contest.
+
+Log Submission Deadline
+LGDL.1. Entries must be sent to the ARRL by the log deadline published in the rules for each contest. For
+electronic submissions, the submission date and time is determined by the app confirmation. For paper
+entries submitted by mail, submission date and time is determined from the postmark.
+LGDL.2. Submitted entries will be listed on the Logs Received page until final results are published.
+LGDL.3. Logs not submitted or postmarked by the contest deadline are not eligible for awards.
+LGDL.4. Entries received at the ARRL after the contest submission deadline may not be included in the
+contest results.
+
+
+
+
+Definitions and Glossary
+Version 1.06 – 15 Jul 2022
+
+Automated Multi-Channel Decoder: Device such as CW Skimmer software that provides information
+about the identity and frequency of contest station transmissions while functioning independently of
+the operator’s direct control and participation. Software that displays multiple decoded signals at the
+same time is considered to be a multi-channel decoder.
+
+Band Changes: A band change consists of two consecutive contacts on different bands. For example,
+making a contact on 20 meters then on 40 meters and then on 20 meters counts as two band changes.
+
+Clock Hour: A clock hour is from zero to 59 minutes on the clock, not any 60 consecutive minutes.
+
+Digital (mode): Any mode defined as “data” in the FCC Part 97 rules (§97.3(c)(2)).
+
+Dupe Sheet: An alphanumerically sorted list of all contacts made during the contest, sorted by band and
+mode as appropriate. A list of duplicate contacts does not meet this requirement.
+
+DX Stations: Any non-W/VE station. This includes US possessions and territories in the Caribbean and
+Pacific and St. Paul Island (CY9) and Sable Island (CYØ). Exceptions such as the status of Hawaii (KH6)
+and Alaska (KL7) are stated in the Special Rules for each contest.
+
+DXCC Entities: defined by ARRL DXCC List
+
+Electronic Log or Entry: consists of any log submitted by electronic means.
+
+High Power (HP): 1500 watts PEP output or the maximum allowable power level established by the
+national licensing authority issuing the operator and/or station license, whichever is less.
+
+Low Power (LP):
+Below 30 MHz- 100 watts PEP output or less
+
+
+
+November Sweepstakes Rules                               Version 2.1                          Page 9 of 10
+Maritime Mobile: For the purposes of ARRL contests, maritime mobile is defined as shipboard
+operation, outside of the territorial waters of the country (defined for these purposes as 12 miles
+offshore).
+
+Maximum Number of Signals: This Maximum Number does not include a signal necessary to provide
+spotting assistance, i.e. 2m packet connection. Other than that exception, it is the maximum number of
+signals that a station may emit at any time.
+
+Multioperator: More than one person performs all transmitting, receiving, and logging functions as well
+as equipment and antenna adjustments.
+
+Off Time: A period during which no contacts are logged. Unless otherwise specified, to count as off time,
+there must be at least 30 consecutive minutes in the log without a contact. During off time, operators
+may not listen to contest activity.
+
+QRP: 5 watts PEP output or less
+
+RTTY (mode): Any mode defined as “RTTY” in the FCC Part 97 rules (§97.3(c)(7)).
+
+Single Operator: One person performs all transmitting, receiving, and logging functions as well as
+equipment and antenna adjustments.
+
+Spotting/QSO Finding Assistance: Use of any technology that provides call sign or multiplier
+identification of a signal to the operator. This includes PSKReporter, Telnet, DX spotting websites or
+bulletin board systems, automated multi-channel decoders, etc. This also includes operating
+arrangements with other individuals, DX alerting nets, chat rooms, social media, live video streaming,
+etc. Such assistance may NOT be used to convey receipt or non-receipt of any required element of a
+contact or to request a repeat of any required element of a contact. Generating spotting information for
+use by other stations is not considered to be spotting assistance.
+
+W/VE stations: stations operating in the United States and District of Columbia with the exception of
+Alaska and Hawaii, and stations operating within the Canadian provinces and territories with the
+exception of the DXCC entities St. Paul Island and Sable Island. (Exception – See the Special Rules for
+Sweepstakes and the 160 Meter Contest regarding US possessions and territories.)
+
+
+
+
+November Sweepstakes Rules                             Version 2.1                           Page 10 of 10
+
+====================================================================================================
+[2] https://www.arrl.org/sweepstakes  (fetched 2026-08-17 15:12–15:38 UTC; HTTP 200; text converted from raw HTML; site chrome retained)
+====================================================================================================
+
+Sweepstakes
+*
+*
+
+*
+*
+*
+* * *
+
+ARRL
+
+Website Search
+
+Category
+Clubs
+Contests
+Exam Sessions
+Hamfest/Conventions
+Licensing Classes
+Member Directory
+News
+Special Events
+ARECC Field Class/Exam
+
+Call Sign / Name Search
+
+Login
+Register Account
+
+Login Help
+
+* Home
+
+* On The Air
+
+* Licensing, Education & Training
+
+* Membership
+
+* Regulatory & Advocacy
+
+* Public Service
+
+* Technology
+
+* Get Involved
+
+* ARRL Store
+
+* About ARRL
+
+* News & Features
+
+Sweepstakes
+
+ARRL November Sweepstakes
+
+Contest Objective: To support amateur self-training in radiocommunications, including improving amateur operating skills, conducting technical investigations, and intercommunicating with other amateurs. Stations in the United States and Canada (including territories and possessions) exchange information with as many other US and Canadian stations as possible on the 160, 80, 40, 20, 15 and 10 meter bands.
+
+Dates:
+
+CW: First full weekend in November (GO HERE for date{s})
+
+Phone: Third full weekend in November (GO HERE for date{s})
+
+Contest Period: Begins 2100 UTC Saturday and runs through 0259 UTC Monday.
+
+NOTE: There will be no Changes to Sweepstakes Multipliers for 2026.
+
+There are 85 Section Multipliers in this event. Canadian stations located in Yukon, Northwest Territories and Nunavut should continue to send TER (Territories) as their section.
+
+Click here for the complete ARRL November Sweepstakes rules (PDF)
+
+Click here for information on the Affiliated Club Competion program
+
+For contest information contact contests@arrl.org or (860) 594-0232
+
+Operating Guidelines:
+
+The current November Sweepstakes Information Package is available as a downloadable PDF below,
+
+2025 ARRL November Sweepstakes Package
+
+Contest Exchange- the required exchange consists of:
+
+Serial Number: A consecutive contact number starting with 1.
+
+Precedence:
+
+* “Q” for Single Operator, QRP (5 watts or less)
+
+* “A” for Single Operator, Low Power (more than 5 watts, but no greater than 100 watts)
+
+* “B” for Single Operator, High Power (more than 100 watts, but no greater than legal limit)
+
+* “U” for Any Single Operator Unlimited Power Category (High, Low, or QRP)
+
+* “M” for Multioperator, High Power or Multioperator, Low Power
+
+* “S” for School Club
+
+Your Call Sign: The call sign must be included as part of the exchange.
+
+Check: The last two digits of the year the operator or the station was first licensed. The same Check must be sent throughout the contest.
+
+ARRL/RAC Section: Send and log the 85 abbreviations in the ARRL Contest Multipliers List
+
+The following is a typical Sweepstakes contact:
+
+CQing Station: CQ Sweepstakes from W9JJ
+
+Answering Station: W1AW
+
+CQer: W1AW 123 A W9JJ 79 CT
+
+Ans: 43 M W1AW 31 CT
+
+CQer: Thanks, CQ Sweepstakes from W9JJ
+
+As the answering station, it is not necessary to send the CQing station's call before the exchange unless you think there might be some confusion about what station you are responding to.
+
+Operating Time
+
+All stations may operate no more than 24 of the 30 hours. Scores will be calculated from contacts logged during the first 24 hours of operation.
+
+This rule limits operating time (listening or transmitting) to 24 hours. Contacts logged after 24 hours of operation will not be counted toward the final score, but there is no penalty for including those contacts in a submitted log, and the station contacted is eligible to receive credit for the contact.
+
+Off-times must consist of a minimum of 30 consecutive minutes without operating. Listening time counts as operating time.
+
+Log Submission Deadline
+
+Logs are due within SEVEN (7) days after the event is over. Logs may only be submitted electronically, online, via our web app at contest-log-submission.arrl.org/
+
+Entries for the CW and Phone portions of the competition must be submitted separately and must be postmarked before their respective 7-day deadline.
+
+Logs that have been submitted electronically are listed on the Logs Received page. Click the contest name to see a list of submitted logs sorted by call sign or club name.
+
+Online Log Submission is required - Cabrillo formatted logs must be uploaded via our web app at contest-log-submission.arrl.org . See note that follows:
+
+For all ARRL/IARU HF Contests, beginning September 30, 2026, Only Online Log Submission Will Be Accepted. For Cabrillo file assistance see https://www.b4h.net/cabforms/
+
+If you intend to transcribe then upload paper logs in to an electronic cabrillo file, possibly using Cabforms assistance described above, here are the historical forms used in the past:
+CW Sweepstakes Summary Sheet
+Phone Sweepstakes Summary Sheet
+Sweepstakes Paper Logging Form
+
+Awards
+
+Certificates will be awarded in the top operator CW and Phone scores in each category in each ARRL/RAC Section and Division. Printable certificates will be downloadable from contests.arrl.org/certificates.php .
+
+All Overall and Division winners will be awarded a plaque recognizing their efforts. Plaques are sponsored by individuals, groups or clubs, or by the Principal Awards Sponsor, Icom America. For details on plaque sponsorship, contact the ARRL Contest Program at contests@arrl.org or 860-594-0232
+
+Participation pins and Clean Sweep coffee mugs are available for purchase from the ARRL Store by qualifying stations.
+
+Club Competition:
+
+There are ten ARRL-sponsored contests that are designated as Affiliated Club Competitions (ACC) for ARRL and RAC affiliated clubs:
+
+- RTTY Roundup
+
+- January VHF Contest
+
+- International DX Contest
+
+- International Digital Contest
+
+- June VHF Contest
+
+- 222 MHz and Up Distance Contest
+
+- September VHF Contest
+
+- November Sweepstakes
+
+- 160-Meter Contest
+
+- 10-Meter Contest
+
+For full club competition rules, please see the link below:
+
+ARRL Affilliated Club Competition Rules
+
+Additional Information
+
+*
+ARRL Section Map + Ontario Sections Info
+
+ARRL Section Map
+
+Description of the VE3 RAC Sections (Courtesy Radio Amateurs of Canada) effective January 1, 2023:
+
+Ontario North (ONN)
+
+* All of Northwest Ontario, including Manitoulin Island, Northeastern Manitoulin and the Islands, Killarney, the cities of Greater Sudbury and North Bay and Nipissing District.
+
+Ontario East (ONE)
+
+* Algonquin Park, Renfrew, Hastings, Prince Edward, Haliburton, Peterborough and Northhumberland Counties, and the cities and counties to the east.
+
+Golden Horseshoe (GH) (formerly GTA)
+
+* The City of Toronto and the Regions of Halton (including the City of Burlington), Peel, York, Durham, the City of Hamilton, and the Regional Municipality of Niagara.
+
+Ontario South (ONS)
+
+* Parry Sound District, the counties of Simcoe, Grey, Bruce, Dufferin, Wellington and the remainder of Southwestern Ontario.
+
+*
+Clean Sweep Keepsake Coffee Mugs
+
+Clean Sweep Mugs
+
+Commemorate working your “clean sweep” by purchasing your November Sweepstakes mug. To earn your mug, work all ARRL/RAC sections during the CW or Phone November Sweepstakes.
+
+November Sweepstakes Mugs will be available for purchase at the ARRL Store, and not through the Contest Program as has been done in the past. Mugs can be ordered by visiting the ARRL Store athttps://home.arrl.org/action/Store/Product-Details/productId/2019824596 .
+
+*
+Sweepstakes Participation Pins
+
+Participation Pins
+
+Proudly display your participation in the CW or Phone Sweepstakes with an attractive Sweepstakes Participation Pin. Each pin includes the year and mode and has become a popular tradition in the November Sweepstakes event.
+
+Participation Pins will be available for purchase at the ARRL Store, and not through the Contest Program as has been done in the past. Pins can be ordered by visiting the ARRL Store at home.arrl.org/action/Shop/Store .
+
+CW Pin:
+
+https://home.arrl.org/action/Store/Product-Details/productId/2019824597
+
+SSB Pin:
+
+https://home.arrl.org/action/Store/Product-Details/productId/2019824600
+
+*
+Feedback
+
+Tell us how you did! Send us feedback and photos! Tell us what fun you had, and how you did, what challenges you faced, via our contest Soapobx pages:
+
+November Sweepstakes CW
+
+November Sweepstakes Phone
+
+Send us your photos! Please, send us your high-resolution photos – especially youth! Kids (and us adults wanting to regain our youth!) We love to see activity photos – Kids and adults having fun, operating, setting up antennas! For higher resolution, please send your photos as 500kb to 3mb in size. ARRL is always looking for youth activity photos for Write-Ups, Strays and Upfront in QST!
+
+Please be sure to send a Photo Release for each person shown when submitting youth photos - found at www.arrl.org/photo-video-release-form .
+
+*
+Past Results
+
+Results from previous November Sweepstakes
+
+Full Contest Rules
+
+Click here for the complete ARRL November Sweepstakes rules (PDF)
+
+Back to Top
+
+Having Trouble?
+
+On The Air >> Contests >> Contest Rules >> Sweepstakes
+
+* Straight Key Night
+
+* RTTY Roundup
+
+* School Club Roundup
+
+* January VHF
+
+* ARRL DX
+
+* Rookie Roundup
+
+* ARRL Digital Contest
+
+* June VHF
+
+* Field Day
+
+* IARU HF World Championship
+
+* 222 MHz and Up Distance Contest
+
+* 10 GHz & Up
+
+* September VHF
+
+* Sweepstakes
+
+* EME Contest
+
+* 160 Meter
+
+* 10 Meter
+
+Join ARRL
+
+Donate Now
+
+QST Get it here
+
+Soapbox
+How did you do in this year's November Sweepstakes? Tell us your story!
+
+Go Now
+
+W1AW
+Get on the air using the W1AW call sign at the Hiram Percy Maxim memorial station!
+
+Learn More
+
+Join ARRL
+
+Donate Now
+
+*
+
+Field Day 2022 T-Shirt
+
+Continue Shopping
+
+EXPLORE ARRL
+
+*
+On The Air
+
+DXCC Program , W100AW & W1AW QSLs via Bureau , Centennial QSO Party , Operating Specialties , International Grid Chase 2018 , Hiram Percy Maxim 150th Birthday Celebration , Cycle 25 , Transatlantic , Special Event Stations , Operating Resources , QSL Service , NPOTA , Contests , Logbook of The World , Amateur Code , IARU - Centennial QSO Party , Volunteers On the Air , Amateur Radio Direction Finding , Awards , W1AW
+
+Licensing, Education & Training
+
+Courses & Training , What is Ham Radio , FCC License Info and Forms , License Certificates , Learning Center Help , Getting Licensed , Newly licensed? Learn More , Volunteer Instructors/Mentors , Amateur Radio in the Classroom , Edu Dept Home , Youth Licensing Grant Program , Learning Programs , STEM , Volunteer Examiners , Gordon West , Question Pools , Withdrawn Questions
+
+Membership
+
+Member Directory , myARRL , Blind Membership , Join ARRL/Renew Membership , member feedback , Dues Increase FAQ , Techquestion , Students , Please Confirm Your Information , Member Bulletin , QST Reissue , Membership Certificate , Member Support , Connecticut Member Social , Login Instructions , Dues Survey , Gift Membership , 3-Year Special Offer , 2024 Dues Rates , ARRL Groups , By-Laws Update , Student , ARRL Sweepstakes , Silent Key Submission Guidelines , Member Bulletin , Register , Member Discounts
+
+*
+Regulatory & Advocacy
+
+State and Local , Volunteer Consulting Engineer Program , Volunteer Counsel Program , CCR Study Information , International , Technical Relations Office , Federal , Volunteer Monitor Resources , Federal RFI Preemption , Antenna Regulation and Zoning , Volunteer Monitor Program , HOA Alternatives
+
+Public Service
+
+NTS Manual , Public Service Resources , Volunteer Form for Deployment Consideration , 2018 Hurricanes , Hurricane Maria - 2017 , Hurricane Irma - 2017 , Hurricane Harvey Response , Ham Aid , Public Service Honor Roll , 2019 Hurricanes , 2020 Hurricanes , 2021 Hurricanes , Puerto Rico - Caribbean Recovery 2017 , Kentucky ARES Summit and Survey , Hurricanes , Served Agencies and Partners , 2024 Hurricanes , SKYWARN Recognition Day , NTS , ARES
+
+Technology
+
+ARRL References , Tech Portal , Radio Technology Topics , Technical Information Service , Radio Frequency Interference (RFI) , Larson , ARRL Clean Signal Initiative , ARRL Lab
+
+*
+Get Involved
+
+Clubs , Volunteer Opportunities , Recruiting & Outreach , The ARRL Foundation , Youth , Donate to ARRL , Amateur Radio Activity Report , Collegiate Amateur Radio , Happy , America250 , Hamfests and Conventions Calendar
+
+Publications & Online Store
+
+ARRL Publication Dealers , ARRL Store , List all Products , Return Policy , Shipping and Tax , Handbook , Customer Service/Support , Holiday Deals , Product Notes , ARRL Handbook Reserve 2
+
+About ARRL
+
+Site Index , Centennial , ARRL Strategic Plan , Advertising and Other Business Opportunities , ARRL on the Purpose of Amateur Radio , Library , Ideas , Privacy Policy , ARRL Social Media , ARRL Heritage Museum , Organization Structure , Media and Public Relations , ARRL Museum and Research Library , Contact ARRL , Copyright , Strategic Plan , General Information , Visit Us , Employment Opportunities
+
+ARRL
+
+The National Association for Amateur Radio®
+
+225 Main Street
+
+Newington, CT, 06111-1400 USA
+
+Tel: 1-860-594-0200 | Fax: 1-860-594-0259
+
+Toll-free: 1-888-277-5289
+
+hq@arrl.org
+
+ARRL
+
+* Donate Now
+
+* Join / Renew Your Membership
+
+* Advertise With Us
+
+* Contact ARRL
+
+* Terms of Use / Privacy Policy
+
+* E-mail to a Friend
+
+* Sign Up for Our Newsletter
+
+Copyright © 2026 The American Radio Relay League, Inc. All rights reserved. Reproduction of material from any ARRL web page without written permission is strictly prohibited.
+
+--- hyperlinks on the page relevant to rules (href -> anchor text) ---
+/files/file/Contest-Operating-Guides/2015/2015%20ARRL%20November%20Sweepstakes%20Package%20-%2025%20Sep%202015.pdf  ->  
+https://contests.arrl.org/calendar.php  ->  GO HERE
+https://contests.arrl.org/calendar.php  ->  GO HERE
+https://contests.arrl.org/ContestRules/SS-Rules.pdf  ->  
+/contest-club-tools/  ->  
+/files/file/Contest%20Rules%20PDFs/2025/2025%20ARRL%20November%20Sweepstakes%20Package.pdf  ->  
+http://contests.arrl.org/contestmultipliers.php  ->  
+http://contest-log-submission.arrl.org/  ->  
+/files/file/Contest-Operating-Guides/2012/2012-ARRL-SS-OpGuide.pdf  ->  
+http://contest-log-submission.arrl.org/  ->  contest-log-submission.arrl.org
+https://www.b4h.net/cabforms/  ->  https://www.b4h.net/cabforms/
+/files/file/Contest%20Forms/SSCW-Sum-2023.pdf  ->  
+/files/file/Contest%20Forms/SSPH-Sum-2023.pdf  ->  
+/files/file/Contest%20Logs/novsslog.pdf  ->  Sweepstakes Paper Logging Form
+https://contests.arrl.org/ContestRules/ClubComp-Rules.pdf  ->  
+#  ->  ARRL Section Map + Ontario Sections Info
+/files/file/Awards%20Application%20Forms/WASmap_Color.pdf  ->  ARRL Section Map
+http://www.arrl.org/files/file/Model%20Release%20/ModelReleaseForm.pdf  ->  
+#  ->  Past Results
+http://www.arrl.org/contest-results-articles  ->  
+https://contests.arrl.org/ContestRules/SS-Rules.pdf  ->  
+/contest-rules  ->  Contest Rules
+/school-club-roundup  ->  School Club Roundup
+/soapbox  ->  
+/clubs  ->  Clubs
+/hamfests-and-conventions-calendar  ->  Hamfests and Conventions Calendar
+
+====================================================================================================
+[3] https://contests.arrl.org/sscw/ and https://contests.arrl.org/ssph/  (fetched 2026-08-17 15:38 UTC; HTTP 200)
+====================================================================================================
+--- https://contests.arrl.org/sscw/ ---
+ARRL November CW Sweepstakes
+
+* ARRL Home
+
+* Contests Home
+
+* Calendar
+
+* Log Submission
+
+* Logs Received
+
+* Scores
+
+* Certificates
+
+* Clubs
+
+* Non-Contest Events
+
+Contests - November CW Sweepstakes
+
+* Rules
+
+* Club Competition
+
+* Calendar
+
+* Logs Received
+
+* Raw Scores
+
+* Soapbox
+
+* Articles/Line Scores
+
+* Scores
+
+* Club Scores
+
+* Records
+
+* LCRs
+
+* Public Logs
+
+* Other Contests
+
+| 2026: 2100Z, Nov 7 - 0259Z, Nov 9 | Logs due: 0259Z Nov 16
+
+For stations in the United States and Canada (including territories and possessions) to exchange information with as many other US and Canadian stations as possible on 160, 80, 40, 20, 15 and 10 meter bands.
+
+Send comments or questions about this page to ARRL Contest Manager .
+
+Version: 1.5.1, Revised: August 16, 2023
+
+Copyright © 2026 American Radio Relay League, Inc., All Rights Reserved
+--- https://contests.arrl.org/ssph/ ---
+ARRL November Phone Sweepstakes
+
+* ARRL Home
+
+* Contests Home
+
+* Calendar
+
+* Log Submission
+
+* Logs Received
+
+* Scores
+
+* Certificates
+
+* Clubs
+
+* Non-Contest Events
+
+Contests - November Phone Sweepstakes
+
+* Rules
+
+* Club Competition
+
+* Calendar
+
+* Logs Received
+
+* Raw Scores
+
+* Soapbox
+
+* Articles/Line Scores
+
+* Scores
+
+* Club Scores
+
+* Records
+
+* LCRs
+
+* Public Logs
+
+* Other Contests
+
+| 2026: 2100Z, Nov 21 - 0259Z, Nov 23 | Logs due: 0259Z Nov 30
+
+For stations in the United States and Canada (including territories and possessions) to exchange information with as many other US and Canadian stations as possible on 160, 80, 40, 20, 15 and 10 meter bands.
+
+Send comments or questions about this page to ARRL Contest Manager .
+
+Version: 1.5.1, Revised: August 16, 2023
+
+Copyright © 2026 American Radio Relay League, Inc., All Rights Reserved
+
+====================================================================================================
+[4] https://contests.arrl.org/calendar.php  (fetched 2026-08-17 15:35 UTC; HTTP 200)
+====================================================================================================
+ARRL Contest Calendar
+
+* ARRL Home
+
+* Contests Home
+
+* Calendar
+
+* Log Submission
+
+* Logs Received
+
+* Scores
+
+* Certificates
+
+* Clubs
+
+* Non-Contest Events
+
+Contests - Calendar
+
+* 10 GHz
+
+* 10 Meter
+
+* 160 Meter
+
+* 222 MHz
+
+* Digital
+
+* DX CW
+
+* DX Phone
+
+* EME
+
+* Field Day
+
+* IARU HF
+
+* Jan VHF
+
+* Jun VHF
+
+* Rookie Roundup, CW
+
+* Rookie Roundup, RTTY
+
+* Rookie Roundup, SSB
+
+* RTTY Roundup
+
+* School Club Roundup, February
+
+* School Club Roundup, October
+
+* Sep VHF
+
+* Straight Key Night
+
+* Sweepstakes CW
+
+* Sweepstakes Phone
+
+*
+
+* Legacy Contests
+
+The calendar below shows the dates of ARRL contests for the current and next five years.
+
+| Contest | 2026 | 2027 | 2028 | 2029 | 2030 | 2031
+
+| 10 GHz | Aug 15-17
+Sep 19-21 | Aug 21-23
+Sep 18-20 | Aug 19-21
+Sep 16-18 | Aug 18-20
+Sep 15-17 | Aug 17-19
+Sep 21-23 | Aug 16-18
+Sep 20-22
+
+| 10M | Dec 12-13 | Dec 11-12 | Dec 9-10 | Dec 8-9 | Dec 14-15 | Dec 13-14
+
+| 160M | Dec 4-6 | Dec 3-5 | Dec 1-3 -Dec 2 | Nov 30 | Dec 6-8 | Dec 5-7
+
+| 222 MHz | Aug 1-2 | Aug 7-8 | Aug 5-6 | Aug 4-5 | Aug 3-4 | Aug 2-3
+
+| Digital | Jun 6-7 | Jun 5-6 | Jun 3-4 | Jun 2-3 | Jun 1-2 | Jun 7-8
+
+| DX CW | Feb 21-22 | Feb 20-21 | Feb 19-20 | Feb 17-18 | Feb 16-17 | Feb 15-16
+
+| DX Phone | Mar 7-8 | Mar 6-7 | Mar 4-5 | Mar 3-4 | Mar 2-3 | Mar 1-2
+
+| EME | Aug 8-9
+Sep 5-6
+Oct 31-Nov 1
+Nov 28-29 | tbd | tbd | tbd | tbd | tbd
+
+| Field Day | Jun 27-28 | Jun 26-27 | Jun 24-25 | Jun 23-24 | Jun 22-23 | Jun 28-29
+
+| IARU HF | Jul 11-12 | Jul 10-11 | Jul 8-9 | Jul 14-15 | Jul 13-14 | Jul 12-13
+
+| Jan VHF | Jan 17-19 | Jan 16-18 | Jan 15-17 | Jan 20-22 | Jan 19-21 | Jan 18-20
+
+| Jun VHF | Jun 13-15 | Jun 12-14 | Jun 10-12 | Jun 9-11 | Jun 8-10 | Jun 14-16
+
+| Kids Day January | Jan 3 | Jan 2 | Jan 8 | Jan 6 | Jan 5 | Jan 4
+
+| Kids Day June | Jun 20 | Jun 19 | Jun 17 | Jun 16 | Jun 15 | Jun 21
+
+| Rookie RU CW | Dec 20 | Dec 19 | Dec 17 | Dec 16 | Dec 22 | Dec 21
+
+| Rookie RU RTTY | Aug 16 | Aug 22 | Aug 20 | Aug 19 | Aug 18 | Aug 17
+
+| Rookie RU SSB | Apr 19 | Apr 18 | Apr 9 | Apr 22 | Apr 14 | Apr 20
+
+| RTTY RU | Jan 3-4 | Jan 2-3 | Jan 8-9 | Jan 6-7 | Jan 5-6 | Jan 4-5
+
+| SCR February | Feb 9-13 | Feb 8-12 | Feb 14-18 | Feb 12-16 | Feb 11-15 | Feb 10-14
+
+| SCR October | Oct 19-23 | Oct 18-22 | Oct 16-20 | Oct 15-19 | Oct 21-25 | Oct 20-24
+
+| Sep VHF | Sep 12-14 | Sep 11-13 | Sep 9-11 | Sep 8-10 | Sep 14-16 | Sep 13-15
+
+| SKN | Jan 1 | Jan 1 | Jan 1 | Jan 1 | Jan 1 | Jan 1
+
+| SS CW | Nov 7-9 | Nov 6-8 | Nov 4-6 | Nov 3-5 | Nov 2-4 | Nov 1-3
+
+| SS Phone | Nov 21-23 | Nov 20-22 | Nov 18-20 | Nov 17-19 | Nov 16-18 | Nov 15-17
+
+Send comments or questions about this page to ARRL Contest Manager .
+
+Version: 1.5.2, Revised: July 9, 2025
+
+Copyright © 2026 American Radio Relay League, Inc., All Rights Reserved
+
+====================================================================================================
+[5] https://www.arrl.org/files/file/Contest%20Rules%20PDFs/2025/2025%20ARRL%20November%20Sweepstakes%20Package.pdf  (fetched 2026-08-17 15:35 UTC; HTTP 200; Last-Modified Fri, 17 Oct 2025 16:10:54 GMT; PDF Title '2025 ARRL November Sweepstakes Package', Author Paul Bourque N1SFE, CreationDate 2025-10-17)
+====================================================================================================
+                        2025 ARRL November Sweepstakes
+                               arrl.org/sweepstakes
+                  CW: First full weekend in November (November 1-3, 2025).
+
+               Phone: Third full weekend in November (November 15-17, 2025).
+
+      Contest Period: Begins 2100 UTC Saturday and runs through 0259 UTC Monday.
+
+The ARRL’s annual November Sweepstakes is the oldest domestic contest, beginning in 1930.
+Sweepstakes paused during World War II but came back stronger than ever. It’s a competition
+between North American stations – individuals, teams, and clubs. For many US and Canadian
+hams, it is their first contest operation and remains a regular event on their yearly schedule for a
+lifetime. The contest is somewhat unique in that each station may only be contacted once and the
+number of different recognized locations (“multipliers”) is limited to the ARRL and RAC
+sections. Working all of the sections is called a “Clean Sweep” and allows the station to claim
+one of the coveted Clean Sweep coffee mugs – there are other awards, as well.
+This package of information about Sweepstakes contains an overview of the contest and how to
+participate, including complete rules or the contest. Please submit your log by using the online
+web uploading service at contest-log-submission.arrl.org. Paper log sheets and summary sheets
+are also available on the Sweepstakes web page.
+
+We hope you’ll participate in the 2025 ARRL Sweepstakes – thanks for your interest!
+
+73,
+
+
+Paul Bourque, N1SFE
+ARRL Contest Program Manager
+
+
+
+
+2025 ARRL November Sweepstakes Information Package                                       Page 1 of 16
+    Sweepstakes Overview and Introduction
+    When is the contest?
+
+    Sweepstakes consists of two separate contests – CW and Phone – each held on a separate
+    weekend. CW Sweepstakes is the first full weekend in November. Phone Sweepstakes is the
+    third full weekend in November. Each contest begins at 2100 UTC Saturday and runs through
+    0259 UTC Monday (Sunday evening local time in the US and Canada).
+
+    How can I participate and what information do I exchange?
+
+    The object of the contest is to contact stations in the United States and Canada (including territories
+    and possessions). You can make contest contacts on 160, 80, 40, 20, 15, and 10 meters. Work as
+    many ARRL and RAC sections as possible – there are 85 sections in total. See the “ARRL/RAC
+    Section Abbreviation List” later in this document for a list. New Sweepstakes operators may want to
+    print out the page and keep it handy as a reference during the contest.
+
+    Note: for 2025 Sweepstakes, the Canadian Yukon Section still counts as part of the Territories
+    (TER) multiplier for scoring purposes (Northwest, Yukon and Nunavut territories all count as a
+    singular multiplier.) ARRL is in the process of reviewing the Canadian multipliers list for contests
+    after 2025.
+
+    Start by choosing one of the eight operating categories. The column labeled “Precedence” shows
+    what you’ll send as part of the contest exchange to indicate your category. Single Operator and
+    Single Operator Unlimited entrants can choose to enter in the “Limited Antennas” overlay. See rules
+    below for details.
+
+                                CATEGORY
+        CATEGORY                                PRECEDENCE                         DESCRIPTION
+                              ABBREVIATION
+                                                               One Operator, 5 W output or less, no use of
+Single Operator, QRP              SOQRP              Q         social media or spotting networks.
+
+Single Operator, Low Power         SOLP              A         One operator, 100W output or less, no use of
+                                                               social media or spotting networks.
+Single Operator, High Power       SOHP               B         One operator, greater than 100W output, no use
+                                                               of social media or spotting networks.
+Single Operator Unlimited,                                     One Operator, 5 W output or less, use of social
+                                 SOUQRP              U
+QRP                                                            media & spotting networks permitted.
+Single Operator Unlimited,                                     One operator, up to 100W output, use of social
+                                  SOULP              U
+Low Power                                                      media & spotting networks permitted.
+Single Operator Unlimited,                                     One operator, greater than 100W output, use
+                                  SOUHP              U
+High Power                                                     of social media & spotting networks permitted.
+                                                               More than one operator, only one transmitted signal
+Multioperator, Single
+                                  MSLP               M         allowed at any given time, up to 100W output, use of
+Transmitter, Low Power                                         social media & spotting networks is permitted.
+                                                               More than one operator, only one transmitted signal
+Multioperator, Single                                          allowed at any given time, greater than 100W output,
+                                  MSHP               M
+Transmitter, High Power                                        use of social media & spotting networks is permitted.
+    2025 ARRL November Sweepstakes Information Package                                          Page 2 of 16
+                                                         Students and participating alumni in a college, university,
+                                                         technical, secondary or other school club station. More
+School Club                       S               S      than one operator encouraged and use of Social Media &
+                                                         spotting networks is permitted.
+
+
+
+
+    2025 ARRL November Sweepstakes Information Package                                      Page 3 of 16
+The specific requirements for each category are described in the rules. For example, if you are
+operating by yourself without an amplifier, then you are probably a SOLP category station – the
+most popular – and SOHP if you use an amplifier. If you use information from a spotting
+network to locate stations to work, you are a Single Operator Unlimited category station and can
+enter as High Power, Low Power or QRP.
+
+Your exchange format is based on an ARRL radiogram header and has five parts:
+
+       Serial number – the number of this contact in the contest (1st, 10th, 121st, etc.)
+       Precedence – your category designator as described above (Q, A, B, U, M, or S)
+       Your call sign
+       Check – the last two digits of the year in which you were licensed (i.e. – ‘02’ for 2002)
+       ARRL Section – the abbreviation for your ARRL and RAC sections
+
+                            Exchange example: 123 B K5OT 65 STX
+
+How do I contact a station in the contest?
+
+Start by tuning around the HF bands (160, 80, 40, 20, 15, and 10 meters) for stations calling “CQ
+SS” on CW or “CQ Sweepstakes” on Phone. Listen for a contact or two to get an idea of the
+rhythm and style. When you are ready to call, just give your call sign one time, using phonetics
+on phone. If the station answers you, be ready to copy down their exchange. When it’s time to
+send your exchange, send it in the same order given above. You can give their call sign first if
+you want and maybe “R” or “QSL” to let them know you received their information OK. There’s
+no need to send anything else like “Please copy…” or “Your number is…” – they are ready and
+waiting as soon as they stop transmitting! Read the eham.net article “An Enticement for Contest
+Newbies” (www.eham.net/article/35581) for more information about effective operating in the
+Sweepstakes contest.
+
+How long may I operate and what is “off time”?
+
+You may operate for a maximum of 24 hours during each weekend (CW or Phone) and your off-
+time periods must be at least 30 minutes long. (Listening time counts as operating time.) To
+count as off time, the log must show a minimum of 30 consecutive minutes without operating
+(seconds are ignored) or that period will not be counted as off time. For example, the period in a
+log without contacts in minutes 0115 through 0144 (30 consecutive “empty” minutes) counts as
+off time. The period of 0115 to 0143 is 29 empty minutes and will not count as off time at all –
+off time must be at least 30 minutes long. Let’s say it another way: If your last QSO before the
+break is at 0114, then the next QSO should not resume until 0145 or later.
+
+The intent of this rule is to limit operating time (listening or transmitting) to 24 hours. Contacts
+logged after 24 hours of operation will not be counted toward your final score. However, there is
+no penalty for including those contacts in a submitted log and the stations you contact beyond 24
+hours are eligible to receive credit for the contact, even if those contacts don’t count for you.
+
+
+
+
+2025 ARRL November Sweepstakes Information Package                                       Page 4 of 16
+How do I calculate my score?
+
+Your score is two points for each contact times the number of ARRL and RAC sections you
+contact. The score will be calculated from the contacts you logged during the first 24 hours of
+operation. (See the previous discussion of off time.)
+
+How can I make sure my club gets credit for my score?
+
+If you are a member of an ARRL or RAC affiliated club, your Sweepstakes score will help the
+total club effort. Please note that the rules for club competition have changed. First, see the
+“Affiliated Club Competition Rules” (see link below). You must be a member in good standing
+of the club, and both reside and operate within the designated club territory for the contest. Next:
+Are you on the club’s eligibility list? Contact your Club Secretary (or designated Club
+Scorekeeper) to make sure you are ‘on the list’ for the contest, as just being on the club roster is
+not enough! You’ll need to know the 6-character grid locator for your residence and/or station
+from which you’ll operate.
+
+Your Cabrillo log will have a header line-item called CLUB: which is where you should enter
+the correct club name. Exact wording of your club name is critical, so do not abbreviate. For
+example, spell out ‘Society of Midwest Contesters’ and not ‘SMC.’ If you are not certain, check
+the official list of club names for ARRL affiliated clubs or RAC affiliated clubs.
+
+Finally, submit your log to the ARRL, as discussed in the next section. Pay attention to the log
+submission deadline, too, which is SEVEN (7) days after the end of each Sweepstakes contest.
+
+The full rules for the ARRL Affiliated Club Competition are available on the web at
+contests.arrl.org/ContestRules/ClubComp-Rules.pdf.
+
+How do submit my entry to the ARRL?
+
+If you used a logging program, export your contacts to a Cabrillo-format file, creating an
+“electronic log.” Your logging software user’s manual will show you how to do that. Open your
+web browser and navigate to contest-log-submission.arrl.org. Enter the required information and
+browse to your log file. You can also copy-and-paste the entire log into the text window. Press
+the Submit button and your log’s formatting will be checked, then sent to the ARRL. If there are
+any formatting problems, you’ll be notified so you can edit and resubmit the log. Your contacts
+are not cross-checked, just reviewed so that they are correctly formatted in the log file. A set of
+Cabrillo-format headers for your electronic log are provided at the end of this document
+
+
+The preferred method for log submission is via electronic Cabrillo logs. If you logged on a paper
+log sheet, visit WA7BNM’s site at b4h.net/cabforms for tools to convert your paper log to a
+Cabrillo formatted electronic log. Select the appropriate event from the menu, enter your data,
+and the system will generate a Cabrillo log file for submission. The ARRL will still accept paper
+logs, but please try submitting via the web service. If you do submit your paper logs, you’ll need
+to complete a paper entry form from the Sweepstakes web page as well.
+
+
+2025 ARRL November Sweepstakes Information Package                                      Page 5 of 16
+                       Sweepstakes Results and Resources
+                            ARRL November Sweepstakes web page
+                                Previous Year’s Results – CW
+                                Previous Year’s Results – Phone
+                         November CW Sweepstakes All-Time Records
+                        November Phone Sweepstakes All-Time Records
+
+
+Articles about Sweepstakes and contest operating:
+
+“How to Operate Sweepstakes (and Other Contests)”, NØAX, Oct 2008 QST Radiosport section
+“My First Solo Sweepstakes at Age 12” KØADX, Nov/Dec 2009 NCJ
+“Gear Up for November Sweepstakes”, Oct 2008 QST
+“A Contest Primer” NØAX, Oct 2003 QST
+“Ontario Times Four” NØAX, Oct 2012 QST
+
+ARRL Contest Resources:
+
+ARRL Contest Tutorial web page: www.arrl.org/contest-toolbox-tutorials
+ARRL Contest Update newsletter: www.arrl.org/contests/update
+ARRL Contest Branch: contests.arrl.org
+ARRL Contest Glossary: www.arrl.org/contest-glossary
+
+Magazines, Newsletters, Web sites, and E-Mail Reflectors:
+
+National Contest Journal: www.ncjweb.com
+Contesting.com: www.contesting.com
+CQ-contest reflector: lists.contesting.com/mailman/listinfo/cq-contest
+3830 Claimed Score and Soapbox reporting: 3830scores.com
+
+Contest Calendars and Events:
+
+ARRL Contest Corral: www.arrl.org/contests
+WA7BNM Contest Calendar: contestcalendar.com
+
+
+
+
+2025 ARRL November Sweepstakes Information Package                             Page 6 of 16
+                             Sweepstakes Rules Summary
+ The rules are now presented as one complete document (see link below). Most participants will
+ only need to refer to these basic rules which are summarized below:
+ Select the appropriate category for your operation:
+            •   SOQRP – Single Operator, QRP*
+            •   SOLP – Single Operator, Low Power*
+            •   SOHP – Single Operator, High Power*
+            •   SOUQRP – Single Operator Unlimited, QRP*
+            •   SOULP – Single Operator Unlimited, Low Power*
+            •   SOUHP – Single Operator Unlimited, High Power*
+            •   MSLP – Multioperator, Single Transmitter, Low Power
+            •   MSHP – Multioperator, Single Transmitter, High Power
+            •   S – School Club
+
+            Any Single Operator or Single Operator Unlimited entrant can enter using the Limited
+            Antennas Overlay. Operation is limited to the use of single-element antennas such as a
+            single vertical, end-fed wire, or a single dipole antenna no more than 50 feet above
+            ground at its highest point. The antenna(s) may cover multiple bands, as in the case of
+            multiband verticals and dipoles with fan or trap constructions.
+
+       Verify the proper Precedence to be used for your selected category.
+       Be sure to use the right abbreviation for logging or transmitting sections.
+       Operate for a maximum of 24 hours during each weekend’s contest.
+       When taking some off-time, be sure it lasts for at least 30 continuous minutes.
+       If you use information from any spotting networks, or participate in Social Media,
+        you must enter in one of the Unlimited, Multioperator or School Club categories.
+       Give your exchange in the recommended order to avoid confusion.
+ Full ARRL November Sweepstakes rules are available as a PDF file at
+ contests.arrl.org/ContestRules/SS-Rules.pdf
+
+For more information on ARRL Affiliated Club Competition, Click Here
+
+Participation Pins:
+ The ARRL is again pleased to offer Participation Pins and for purchase. 2025 Sweepstakes pins
+ and mugs will be available for purchase through the ARRL store at
+ https://home.arrl.org/action/Shop/Store, and not through the Contest Program as has been done
+ in the past.
+
+
+
+
+ 2025 ARRL November Sweepstakes Information Package                                    Page 7 of 16
+Clean Sweep Mugs:
+Commemorate working your “clean sweep” by purchasing your 2025 November Sweepstakes
+mug. To earn your mug, work all 85 ARRL/RAC sections during the CW or Phone November
+Sweepstakes. 2025 Sweepstakes Mugs will be available for purchase through the ARRL store at
+https://home.arrl.org/action/Shop/Store.
+
+
+
+
+2025 ARRL November Sweepstakes Information Package                              Page 8 of 16
+                        Submitting a Cabrillo-Formatted Log
+If your logging software can export your contest log as a Cabrillo-formatted file, submit your
+contest QSO information using our log submission web page at contest-log-submission.arrl.org/
+However, if you want to create a Cabrillo-formatted log yourself or just check what your
+software has generated, examples of headers for each Sweepstakes category follow this page.
+Here’s an example of a Cabrillo header for the popular Single-Operator, Low Power category
+(you would have sent A as your exchange precedence during the contest).
+START-OF-LOG: 3.0
+CALLSIGN: W1AW [Replace with your information]
+LOCATION: CT [Replace with your information]
+CONTEST: ARRL-SS-CW [or ARRL-SS-SSB for Phone Sweepstakes]
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-BAND: ALL
+CATEGORY-POWER: LOW
+CATEGORY-MODE: CW [or SSB for Phone Sweepstakes]
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-STATION: FIXED
+CLUB: [Enter the full name of your club if your club takes part in Club Competition or leave blank]
+NAME: Hiram Percy Maxim [Replace with your information]
+ADDRESS: 225 Main Street [Replace with your information]
+ADDRESS: Newington, CT 06111 [Replace with your information]
+ADDRESS: [Use as many lines as you need, repeating the ADDRESS: at the beginning of each address
+line.]
+SOAPBOX: [Enter your comments on the contest, repeating the SOAPBOX: at the beginning of each line,
+for as many lines as you want.]
+The header will then be followed by lines of QSO data from your log, starting with: QSO: [see below for
+QSO line examples]
+
+QSO DATA TEMPLATE
+(key on next page):
+
+Guide: A    B      C          D     E            FGH I J                KLMN
+QSO: 14000 CW 2024-11-03 2100 W1AW               1 M 38 CT K8MM         1 Q 92 MI
+QSO: 14000 CW 2024-11-03 2101 W1AW               2 M 38 CT K3TX        1 A 59 EPA
+QSO: 14000 CW 2024-11-03 2104 W1AW               3 M 38 CT W4DAN 1 A 77 TN
+QSO: 14000 CW 2024-11-03 2106 W1AW               4 M 38 CT K1BG         2 U 68 WMA
+QSO: 14000 CW 2024-11-03 2106 W1AW               5 M 38 CT K5AF        10 A 60 STX
+END-OF-LOG: [this will always be the last line in the log- including the colon at the end.]
+
+
+
+2025 ARRL November Sweepstakes Information Package                                            Page 9 of 16
+A= Operating frequency. Use the following generic abbreviations:
+1800
+3500
+7000
+14000
+21000
+28000
+
+B= Mode. In the CW Sweepstakes, use CW; in the Phone Sweepstakes, use PH.
+C= Date, in YYYY-MM-DD format. November 4, 2024 is typed as 2024-11-04.
+D= Time, in UTC format.
+E= Your call.
+F= Your QSO #.
+G= Your precedence.
+H= Your check (the last two numbers of the year you were first licensed).
+I= Your ARRL Section
+J= The call of the station you worked.
+K= Their QSO number to you.
+L= Their precedence.
+M= Their check.
+N = Their ARRL Section.
+
+
+
+            Cabrillo Headers for ARRL November Sweepstakes
+Single Operator, Low Power (Category: SOLP)
+START-OF-LOG: 3.0
+CALLSIGN: W1AW               [CHANGE TO YOUR CALLSIGN]
+LOCATION: CT                 [CHANGE TO YOUR ARRL/RAC SECTION, or DX for DX]
+CONTEST: ARRL-SS-CW          [or ARRL-SS-SSB]
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-BAND: ALL
+CATEGORY-POWER: LOW
+CATEGORY-MODE: CW            [or SSB]
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-STATION: FIXED
+CLUB: [Type the full name of your club if your club takes part in Club Competition or leave blank]
+NAME: Hiram Percy Maxim              [CHANGE TO YOUR NAME]
+ADDRESS: 225 Main Street             [CHANGE TO YOUR ADDRESS]
+ADDRESS: Newington, CT 06111 [CHANGE TO YOUR ADDRESS]
+ADDRESS:                             [CHANGE TO YOUR ADDRESS]
+SOAPBOX:
+Single Operator, High Power (Category: SOHP)
+START-OF-LOG: 3.0
+CALLSIGN: W1AW                  [CHANGE TO YOUR CALLSIGN]
+
+
+
+2025 ARRL November Sweepstakes Information Package                                      Page 10 of
+LOCATION: CT                 [CHANGE TO YOUR ARRL/RAC SECTION, or DX for DX]
+CONTEST: ARRL-SS-CW          [or ARRL-SS-SSB]
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: CW            [or SSB]
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-STATION: FIXED
+CLUB: [Type the full name of your club if your club takes part in Club Competition or leave blank]
+NAME: Hiram Percy Maxim              [CHANGE TO YOUR NAME]
+ADDRESS: 225 Main Street             [CHANGE TO YOUR ADDRESS]
+ADDRESS: Newington, CT 06111 [CHANGE TO YOUR ADDRESS]
+ADDRESS:                             [CHANGE TO YOUR ADDRESS]
+SOAPBOX:
+Single Operator, QRP (Category: SOQRP)
+
+START-OF-LOG: 3.0
+CALLSIGN: W1AW               [CHANGE TO YOUR CALLSIGN]
+LOCATION: CT                 [CHANGE TO YOUR ARRL/RAC SECTION, or DX for DX]
+CONTEST: ARRL-SS-CW          [or ARRL-SS-SSB]
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-BAND: ALL
+CATEGORY-POWER: QRP
+CATEGORY-MODE: CW            [or SSB]
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-STATION: FIXED
+CLUB: [Type the full name of your club if your club takes part in Club Competition or leave blank]
+NAME: Hiram Percy Maxim              [CHANGE TO YOUR NAME]
+ADDRESS: 225 Main Street             [CHANGE TO YOUR ADDRESS]
+ADDRESS: Newington, CT 06111 [CHANGE TO YOUR ADDRESS]
+ADDRESS:                             [CHANGE TO YOUR ADDRESS]
+SOAPBOX:
+Single Operator Unlimited, Low Power (Category: SOULP)
+
+START-OF-LOG: 3.0
+CALLSIGN: W1AW        [CHANGE TO YOUR CALLSIGN]
+LOCATION: CT          [CHANGE TO YOUR ARRL/RAC SECTION, or DX for DX]
+CONTEST: ARRL-SS-CW   [or ARRL-SS-SSB]
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-BAND: ALL
+CATEGORY-POWER: LOW
+CATEGORY-MODE: CW     [or SSB]
+CATEGORY-ASSISTED: ASSISTED
+CATEGORY-STATION: FIXED
+
+
+2022 ARRL November Sweepstakes Information Package                                     Page 10 of 16
+CLUB: [Type the full name of your club if your club takes part in Club Competition or leave blank]
+NAME: Hiram Percy Maxim              [CHANGE TO YOUR NAME]
+ADDRESS: 225 Main Street             [CHANGE TO YOUR ADDRESS]
+ADDRESS: Newington, CT 06111 [CHANGE TO YOUR ADDRESS]
+ADDRESS:                             [CHANGE TO YOUR ADDRESS]
+SOAPBOX:
+Single Operator Unlimited, High Power (Category: SOUHP)
+
+START-OF-LOG: 3.0
+CALLSIGN: W1AW               [CHANGE TO YOUR CALLSIGN]
+LOCATION: CT                 [CHANGE TO YOUR ARRL/RAC SECTION, or DX for DX]
+CONTEST: ARRL-SS-CW          [or ARRL-SS-SSB]
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: CW            [or SSB]
+CATEGORY-ASSISTED: ASSISTED
+CATEGORY-STATION: FIXED
+CLUB: [Type the full name of your club if your club takes part in Club Competition or leave blank]
+NAME: Hiram Percy Maxim              [CHANGE TO YOUR NAME]
+ADDRESS: 225 Main Street             [CHANGE TO YOUR ADDRESS]
+ADDRESS: Newington, CT 06111 [CHANGE TO YOUR ADDRESS]
+ADDRESS:                             [CHANGE TO YOUR ADDRESS]
+SOAPBOX:
+Single Operator Unlimited, QRP (Category: SOUQRP)
+
+START-OF-LOG: 3.0
+CALLSIGN: W1AW               [CHANGE TO YOUR CALLSIGN]
+LOCATION: CT                 [CHANGE TO YOUR ARRL/RAC SECTION, or DX for DX]
+CONTEST: ARRL-SS-CW          [or ARRL-SS-SSB]
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-BAND: ALL
+CATEGORY-POWER: QRP
+CATEGORY-MODE: CW            [or SSB]
+CATEGORY-ASSISTED: ASSISTED
+CATEGORY-STATION: FIXED
+CLUB: [Type the full name of your club if your club takes part in Club Competition or leave blank]
+NAME: Hiram Percy Maxim              [CHANGE TO YOUR NAME]
+ADDRESS: 225 Main Street             [CHANGE TO YOUR ADDRESS]
+ADDRESS: Newington, CT 06111 [CHANGE TO YOUR ADDRESS]
+ADDRESS:                             [CHANGE TO YOUR ADDRESS]
+SOAPBOX:
+Multioperator, Single Transmitter, Low Power (Category: MSLP)
+
+
+
+
+2025 ARRL November Sweepstakes Information Package                                     Page 11 of 14
+START-OF-LOG: 3.0
+CALLSIGN: W1AW               [CHANGE TO YOUR CALLSIGN]
+LOCATION: CT                 [CHANGE TO YOUR ARRL/RAC SECTION, or DX for DX]
+CONTEST: ARRL-SS-CW [or ARRL-SS-SSB]
+CATEGORY-OPERATOR: MULTI-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-BAND: ALL
+CATEGORY-POWER: LOW
+CATEGORY-MODE: CW            [or SSB]
+CATEGORY-ASSISTED: ASSISTED
+CATEGORY-STATION: FIXED
+CLUB: [Type the full name of your club if your club takes part in Club Competition or leave blank]
+OPERATORS: W1AW,W1HQ,W1INF [LIST CALLSIGNS OF ALL OPERATORS HERE]
+NAME: Hiram Percy Maxim              [CHANGE TO YOUR NAME]
+ADDRESS: 225 Main Street             [CHANGE TO YOUR ADDRESS]
+ADDRESS: Newington, CT 06111         [CHANGE TO YOUR ADDRESS]
+ADDRESS:                             [CHANGE TO YOUR ADDRESS]
+SOAPBOX:
+
+Multioperator, Single Transmitter, High Power (Category: MSHP)
+
+START-OF-LOG: 3.0
+CALLSIGN: W1AW               [CHANGE TO YOUR CALLSIGN]
+LOCATION: CT                 [CHANGE TO YOUR ARRL/RAC SECTION, or DX for DX]
+CONTEST: ARRL-SS-CW [or ARRL-SS-SSB]
+CATEGORY-OPERATOR: MULTI-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: CW            [or SSB]
+CATEGORY-ASSISTED: ASSISTED
+CATEGORY-STATION: FIXED
+CLUB: [Type the full name of your club if your club takes part in Club Competition or leave blank]
+OPERATORS: W1AW,W1HQ, W1INF [LIST CALLSIGNS OF ALL OPERATORS HERE]
+NAME: Hiram Percy Maxim              [CHANGE TO YOUR NAME]
+ADDRESS: 225 Main Street             [CHANGE TO YOUR ADDRESS]
+ADDRESS: Newington, CT 06111         [CHANGE TO YOUR ADDRESS]
+ADDRESS:                             [CHANGE TO YOUR ADDRESS]
+SOAPBOX:
+School Club (Category: S)
+
+START-OF-LOG: 3.0
+CALLSIGN: W1AW         [CHANGE TO YOUR CALLSIGN]
+LOCATION: CT           [CHANGE TO YOUR ARRL/RAC SECTION, or DX for DX]
+CONTEST: ARRL-SS-CW [or ARRL-SS-SSB]
+CATEGORY-OPERATOR: MULTI-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-BAND: ALL
+
+
+
+2025 ARRL November Sweepstakes Information Package                                     Page 12 of 14
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: CW            [or SSB]
+CATEGORY-ASSISTED: ASSISTED
+CATEGORY-STATION: SCHOOL
+CLUB: [Type the full name of your club if your club takes part in Club Competition or leave blank]
+OPERATORS: W1AW,W1HQ,W1INF [LIST CALLSIGNS OF ALL OPERATORS HERE]
+NAME: Hiram Percy Maxim              [CHANGE TO YOUR NAME]
+ADDRESS: 225 Main Street             [CHANGE TO YOUR ADDRESS]
+ADDRESS: Newington, CT 06111         [CHANGE TO YOUR ADDRESS]
+ADDRESS:                             [CHANGE TO YOUR ADDRESS]
+SOAPBOX:
+
+
+If you have questions that aren’t answered in this how-to article, please contact the ARRL
+Contest Program Manager at contests@arrl.org
+You can also find more information about the Cabrillo log format at wwrof.org/cabrillo/ and at
+arrl.org/cabrillo-format-tutorial
+
+
+
+
+2025 ARRL November Sweepstakes Information Package                                     Page 13 of 14
+ARRL / RAC Section Abbreviation List
+Call Area 1
+Connecticut             CT                        Rhode Island                 RI
+Eastern Massachusetts   EMA                       Vermont                      VT
+Maine                   ME                        Western Massachusetts        WMA
+New Hampshire           NH
+
+Call Area 2
+Eastern New York        ENY                       Northern New York             NNY
+NYC / Long Island       NLI                       Southern New Jersey           SNJ
+Northern New Jersey     NNJ                       Western New York              WNY
+
+Call Area 3
+Delaware                DE                        Maryland – DC                 MDC
+Eastern Pennsylvania    EPA                       Western Pennsylvania          WPA
+
+Call Area 4
+Alabama                 AL                        Southern Florida             SFL
+Georgia                 GA                        Tennessee                    TN
+Kentucky                KY                        Virginia                     VA
+North Carolina          NC                        West Central Florida         WCF
+Northern Florida        NFL                       Puerto Rico                  PR
+South Carolina          SC                        US Virgin Islands            VI
+
+Call Area 5
+Arkansas                AR                        North Texas                  NTX
+Louisiana               LA                        Oklahoma                     OK
+Mississippi             MS                        South Texas                  STX
+New Mexico              NM                        West Texas                   WTX
+
+Call Area 6
+East Bay                EB                        San Diego                    SDG
+Los Angeles             LAX                       San Francisco                SF
+Orange                  ORG                       San Joaquin Valley           SJV
+Santa Barbara           SB                        Sacramento Valley            SV
+Santa Clara Valley      SCV                       Pacific                      PAC
+
+Call Area 7
+Alaska                  AK                        Nevada                        NV
+Arizona                 AZ                        Oregon                        OR
+Eastern Washington      EWA                       Utah                          UT
+Idaho                   ID                        Western Washington            WWA
+Montana                 MT                        Wyoming                       WY
+
+Call Area 8
+Michigan                MI                        West Virginia                 WV
+Ohio                    OH
+
+Call Area 9
+Illinois                IL                        Wisconsin                    WI
+Indiana                 IN
+
+  Call Area Ø
+Colorado                CO                        Missouri                      MO
+Iowa                    IA                        Nebraska                      NE
+Kansas                  KS                        North Dakota                  ND
+Minnesota               MN                        South Dakota                  SD
+
+ Canada
+Alberta                 AB                        Ontario East                  ONE
+British Columbia        BC                        Ontario North                 ONN
+Golden Horseshoe        GH (formerly GTA)         Ontario South                 ONS
+Manitoba                MB                        Prince Edward Island          PE
+New Brunswick           NB                        Quebec                        QC
+Newfoundland/Labrador   NL                        Saskatchewan                  SK
+Nova Scotia             NS                        Territories                   TER
+                                                    (Includes the Northwest, Yukon, and Nunavut Territories)
+
+                                                                               Revised 2025
+
+ 2025 ARRL November Sweepstakes Information Package                                           Page 14 of 14
+
+====================================================================================================
+[6a] https://wwrof.org/cabrillo/cabrillo-v3-header/  (fetched 2026-08-17 15:39 UTC; HTTP 403 with full body; page 'Last update: 5 June 2025') — Cabrillo spec referenced by sponsor rule ELOG.1; NOT sponsor rules
+====================================================================================================
+Cabrillo Specification – Header
+
+* Cabrillo Specification – QSO Data
+
+* Cabrillo Specification Notes
+
+* Cabrillo Change Log
+
+* Cabrillo FAQ
+
+* Blog & News
+
+* Blog Archive
+
+* Donate
+
+* Donate
+
+* Supporters
+
+* Leadership
+
+* Contact Us
+
+Cabrillo Specification – Header
+
+Last update: 5 June 2025
+
+This page details the header tags supported by the Cabrillo Specification V3. The format for each line is <TAG>: followed by a space. The tags may be listed in any order in the log file.
+
+Required Tags
+
+START-OF-LOG:version-number
+Must be the first line of the log submission. The current version-number is 3.0.
+
+END-OF-LOG:
+Must be the last line of the log submission.
+
+Common Tags
+
+CALLSIGN:callsign
+The callsign used during the contest.
+
+CONTEST:text
+String to identify the contest. Valid characters are A-Z, 0-9, and hyphen (-). Maximum length is 32 characters. Contest text values are not an official part of the specification. Contest sponsors may define their own contest values that are consistent with the above limitations. Some examples listed below for convenience.
+
+* ARRL-10
+
+* ARRL-10-GHZ
+
+* ARRL-160
+
+* ARRL-DIGI
+
+* ARRL-DX-CW
+
+* ARRL-DX-SSB
+
+* ARRL-EME
+
+* ARRL-SS-CW
+
+* ARRL-SS-SSB
+
+* BARTG-RTTY
+
+* CQ-160-CW
+
+* CQ-160-SSB
+
+* CQ-WPX-CW
+
+* CQ-WPX-RTTY
+
+* CQ-WPX-SSB
+
+* CQ-VHF-SSBCW
+
+* CQ-VHF-DIGI
+
+* CQ-WW-CW
+
+* CQ-WW-RTTY
+
+* CQ-WW-SSB
+
+* IARU-HF
+
+* NAQP-CW
+
+* NAQP-SSB
+
+* NAQP-RTTY
+
+* RDXC
+
+* RSGB-IOTA
+
+* SPDXC
+
+* SPDXC-RTTY
+
+* TARA-RTTY
+
+* WAG
+
+* WW-DIGI
+
+Additional contest name examples can be seen here .
+
+CATEGORY-ASSISTED:
+The category-assisted must be one of the following.
+
+* ASSISTED
+
+* NON-ASSISTED
+
+CATEGORY-BAND:
+The category-band must be one of the following. If you are entering an all band category, use ALL, otherwise select one of the individual bands shown.
+
+* ALL
+
+* 160M
+
+* 80M
+
+* 40M
+
+* 20M
+
+* 15M
+
+* 10M
+
+* 6M
+
+* 4M
+
+* 2M
+
+* 222
+
+* 432
+
+* 902
+
+* 1.2G
+
+* 2.3G
+
+* 3.4G
+
+* 5.7G
+
+* 10G
+
+* 24G
+
+* 47G
+
+* 75G
+
+* 122G
+
+* 134G
+
+* 241G
+
+* Light
+
+* VHF-3-BAND and VHF-FM-ONLY (ARRL VHF Contests only)
+
+CATEGORY-MODE:
+The category-mode must be one of the following.
+
+* CW
+
+* DIGI
+
+* FM
+
+* RTTY
+
+* SSB
+
+* MIXED
+
+CATEGORY-OPERATOR:
+The category-operator must be one of the following.
+
+* SINGLE-OP
+
+* MULTI-OP
+
+* CHECKLOG
+
+CATEGORY-POWER:
+The category-power must be one of the following.
+
+* HIGH
+
+* LOW
+
+* QRP
+
+CATEGORY-STATION:
+Type of station
+
+* DISTRIBUTED
+
+* FIXED
+
+* MOBILE
+
+* PORTABLE
+
+* ROVER
+
+* ROVER-LIMITED
+
+* ROVER-UNLIMITED
+
+* EXPEDITION
+
+* HQ
+
+* SCHOOL
+
+* EXPLORER
+
+CATEGORY-TIME:
+
+* 6-HOURS
+
+* 8-HOURS
+
+* 12-HOURS
+
+* 24-HOURS
+
+CATEGORY-TRANSMITTER:
+The category-transmitter is required for multi-operator entries and must be one of the following.
+
+* ONE
+
+* TWO
+
+* LIMITED
+
+* UNLIMITED
+
+* SWL
+
+CATEGORY-OVERLAY:
+
+* CLASSIC
+
+* ROOKIE
+
+* TB-WIRES
+
+* YOUTH
+
+* NOVICE-TECH
+
+* YL
+
+CERTIFICATE: YES | NO
+Indicate if you wish to receive, if eligible, a paper certificate sent via postal mail by the contest sponsor. The contest sponsor may or may not honor this tag, and if so may or may not use opt-in or opt-out as the default. YES is the default.
+
+CLAIMED-SCORE: nnnnn
+The claimed-score of the log submission, in integer form such as 1217315 or 19113 or 12. Do not include commas, decimals, or other text.
+
+CLUB: text
+Name of the radio club to which the score should be applied.
+
+CREATED-BY: text
+Name and version of the logging program used to create the Cabrillo file.
+
+EMAIL: text
+Contact email address for the entrant. Must be valid email or blank.
+
+GRID-LOCATOR: text
+Used to indicate the Maidenhead Grid Square where the station was operating from. E.g., FN42, JO44EB
+
+LOCATION:
+Used to indicate the location where the station was operating from.
+
+| ARRL/RAC Sections
+| For USA and Canada stations LOCATION must be the ARRL section abbreviation. For foreign stations LOCATION must be ‘DX’. This information is required for IARU-HF and for all ARRL and CQ contests.
+
+| IOTA Island Name
+| This information is required for RSGB-IOTA contest and includes Island Name (not IOTA reference number).
+
+| RDA Number
+| This information is required for RDXC contest.
+
+NAME: text
+Name. Maximum of 75 characters long.
+
+ADDRESS: text
+Mailing address. Each line should be a maximum of 45 characters long. Up to 6 address lines are permitted.
+
+ADDRESS-CITY: text
+ADDRESS-STATE-PROVINCE: text
+ADDRESS-POSTALCODE: text
+ADDRESS-COUNTRY: text
+Optional fields for providing mailing address details.
+
+OPERATORS: callsign1 [callsign2 callsign3…]
+A space or comma-delimited list of operator callsign(s). You may also list the callsign of the host station by placing an “@” character in front of the callsign within the operator list, such as
+
+OPERATORS: K1ABC N5XYZ @N6IJ
+OPERATORS: K1ABC, N5XYZ, @N6IJ
+
+The OPERATOR line is a maximum of 75 characters long and must begin with OPERATORS: followed by a space. Use multiple OPERATOR lines if needed.
+
+OFFTIME: begin-time end-time
+This tag is used to indicate off-time.
+
+OFFTIME: 2002-03-22 0300 2002-03-22 0743
+
+yyyy-mm-dd nnnn yyyy-mm-dd nnnn
+-----begin----- ------end------
+
+Note: About on-time and off-time:
+
+QSOs in Cabrillo are logged with a granularity of one minute. The use of one second granularity would lead to the question “during which exact second did the QSO take place?”
+
+The ARRL has taken the very sensible interpretation that on-time and off-time also should be considered with a granularity of one minute. In other words, during any given minute you can either be on or off. Therefore 1801Z-1830Z would be a 30 minute off-time, with 1800Z being your last minute on before the break and 1831Z being the minute you resume operation.
+
+If you make a QSO at 1800Z, take a break, and resume operating at 1830Z, then you have completed a 29 minute off-time.
+
+SOAPBOX: text
+Soapbox comments. Enter as many lines of soapbox text as you wish. Each line is a maximum of 75 characters long and must begin with SOAPBOX: followed by a space.
+
+QSO: qso-data
+QSO data as specified by the Cabrillo QSO data format. All QSO lines must appear in chronological order. See QSO data specification .
+
+X-<anything>: text
+Lines beginning with X- are ignored by the rlog checking software. Use this for adding comment lines to your log. Exception: See X-QSO.
+
+Developer Tags
+
+DEBUG: n
+
+The DEBUG: tag is intended for software developers. If an ARRL or CQ email robot receives a log with the DEBUG: tag set, then it will do all its regular processing and generate an auto-reply message, but it will not save the log into data set provided to the log checking team.
+
+* Sponsors
+
+*
+
+World Wide Radio Operators Foundation
+
+Proudly powered by WordPress.
+
+====================================================================================================
+[6b] https://wwrof.org/cabrillo/cabrillo-qso-data/  (fetched 2026-08-17 15:39 UTC; HTTP 403 with full body; page 'Last update: 15 March 2021') — Cabrillo spec referenced by sponsor rule ELOG.1; NOT sponsor rules
+====================================================================================================
+Cabrillo Specification – QSO Data
+
+* Cabrillo Specification Notes
+
+* Cabrillo Change Log
+
+* Cabrillo FAQ
+
+* Blog & News
+
+* Blog Archive
+
+* Donate
+
+* Donate
+
+* Supporters
+
+* Leadership
+
+* Contact Us
+
+Cabrillo Specification – QSO Data
+
+Last update: 15 March 2021
+
+Each contact in the log is reported using the QSO tag. Some items on this line will be different for each contest depending on the exchange information.
+
+QSO Data Example
+
+--------info sent------- -------info rcvd--------
+QSO: freq mo date time call rst exch call rst exch t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO: 3799 PH 1999-03-06 0711 HC8N 59 700 W1AW 59 CT 0
+QSO: 3799 PH 1999-03-06 0712 HC8N 59 700 N5KO 59 CA 0
+
+QSO Tag
+
+QSO: qso-data
+
+Each line must begin with “QSO:” followed by a space. The QSO templates show each item at a specific column. All of the major contest sponsors will also accept the fields in any column as long as there is a space between each item.
+
+X-QSO: qso-data
+Any QSO marked with this tag will be ignored in your log. Some contests may use this information during log checking.
+
+Explanation of Fields
+
+freq is frequency or band:
+
+* 1800 or actual frequency in kHz
+
+* 3500 or actual frequency in kHz
+
+* 7000 or actual frequency in kHz
+
+* 14000 or actual frequency in kHz
+
+* 21000 or actual frequency in kHz
+
+* 28000 or actual frequency in kHz
+
+* 50
+
+* 70
+
+* 144
+
+* 222
+
+* 432
+
+* 902
+
+* 1.2G
+
+* 2.3G
+
+* 3.4G
+
+* 5.7G
+
+* 10G
+
+* 24G
+
+* 47G
+
+* 75G
+
+* 122G
+
+* 134G
+
+* 241G
+
+* LIGHT
+
+mo is mode:
+
+*
+
+* CW
+
+* PH
+
+* FM
+
+* RY
+
+* DG
+
+(in the case of cross-mode QSOs, indicate the transmitting mode)
+
+date is UTC date in yyyy-mm-dd form
+
+time is UTC time in nnnn form (0000 – 2359)
+
+call is callsign
+
+only A-Z, 0-9 and / permitted
+
+exch is contest exchange. Each contest will have its own exchange elements. Check with the contest sponsor for their requirements and formatting.
+
+t is transmitter id. Used to identify RUN/MULT, RUN1/RUN2 stations in one- or two-transmitter categories (M/2, and CQWW M/S). Not used in single-op or M/M. It is a single digit of 0 or 1.
+
+QSO Template and Log Examples
+
+Contest sponsors are encouraged to include template and log file examples on their web page along with the rules. This will help entrants to format the log correctly for that contest.
+
+| Contest
+| Link to Cabrillo Template
+
+| CQ WW DX Contest
+| http://www.cqww.com/cabrillo.htm
+
+| CQ WPX Contest
+| http://www.cqwpx.com/cabrillo.htm
+
+| CQ WPX RTTY Contest
+| http://www.cqwpxrtty.com/cabrillo.htm
+
+| CQ WW VHF Contest
+| http://www.cqww-vhf.com/cabrillo.htm
+
+| ARRL
+| http://www.arrl.org/cabrillo-format-tutorial
+
+| RSGB
+| http://www.rsgbcc.org/hf/formats/templates.shtml
+
+| Russian DX Contest (RDXC)
+| http://www.rdxc.org/asp/pages/logtip.asp
+
+| NCJ North American QSO Party
+| http://ncjweb.com/NAQP_Cabrillo_Template.txt
+
+| New England QSO Party
+| https://neqp.org/cabrillo.html
+
+| UBA DX Contest
+| http://www.uba.be/sites/default/files/uploads/hf_contests/uba_contest_cabrillo_template.pdf
+
+* Sponsors
+
+*
+
+World Wide Radio Operators Foundation
+
+Proudly powered by WordPress.
+
+====================================================================================================
+[7] https://www.arrl.org/cabrillo-format-tutorial  (fetched 2026-08-17 15:39 UTC; HTTP 200) — LEGACY sponsor page: power captions ('150 watts or less') and 2009 dates are stale; use only for QSO-line layout
+====================================================================================================
+Cabrillo Format & Tutorial
+*
+*
+
+*
+*
+*
+* * *
+
+ARRL
+
+Website Search
+
+Category
+Clubs
+Contests
+Exam Sessions
+Hamfest/Conventions
+Licensing Classes
+Member Directory
+News
+Special Events
+ARECC Field Class/Exam
+
+Call Sign / Name Search
+
+Login
+Register Account
+
+Login Help
+
+* Home
+
+* On The Air
+
+* Licensing, Education & Training
+
+* Membership
+
+* Regulatory & Advocacy
+
+* Public Service
+
+* Technology
+
+* Get Involved
+
+* ARRL Store
+
+* About ARRL
+
+* News & Features
+
+Cabrillo Format & Tutorial
+
+Cabrillo Tutorials
+
+Not sure what Cabrillo is or how to format an electronic contest log? Use these resources to get a better idea.
+
+Submitting An Electronic Contest Log by Sean Kutzko KX9X, ARRL Contest Branch Manager (PDF). Includes an introduction to Cabrillo.
+
+Cabrillo Definitions and Standards by Trey Garlough N5KO, Cabrillo's creator
+
+Cabrillo Templates
+
+*
+About Cabrillo Templates and the new Web App
+
+Use these templates to ensure your log files are correct.
+
+If you are working from paper logs, or notepad or a word-processor, you can use these tools by event to generate a Cabrillo Format Log - Go Here
+
+----------
+
+If you already have a complete Cabrillo log, and are ready to file it online, this new Web App is available to upload your Cabrillo Format logs. To read about this new tool Go Here
+
+*
+November Sweepstakes Templates
+
+Cabrillo 3.0 Templates for ARRL November Sweepstakes
+
+The following Cabrillo header templates are designed for use in the ARRL November Sweepstakes. An example of how QSO information should be presented is at the bottom of this page.
+
+Note: These templates are pre-loaded with W1AW's call, address and other information as an example.
+
+Be sure to enter your own call sign, contest exchange and name/address when using these templates.
+
+CW TEMPLATES
+
+Single Op Low Power CW (Precedence “A”: 150 watts or less)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-CW
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW
+
+CATEGORY-OPERATOR: SINGLE-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: NON-ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: LOW
+
+CATEGORY-MODE: CW
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+Single Op High Power CW (Precedence “B”: 1500 watts or less)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-CW
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW
+
+CATEGORY-OPERATOR: SINGLE-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: NON-ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: HIGH
+
+CATEGORY-MODE: CW
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+Single Op QRP CW (Precedence “Q”: 5 watts or less)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-CW
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW
+
+CATEGORY-OPERATOR: SINGLE-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: NON-ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: QRP
+
+CATEGORY-MODE: CW
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+Single Op Unlimited CW (Precedence “U”: 1500 watts or less, spotting assistance allowed)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-CW
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW
+
+CATEGORY-OPERATOR: SINGLE-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: HIGH
+
+CATEGORY-MODE: CW
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+Multioperator CW (Precedence “M”: 1500 watts or less, spotting assistance allowed)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-CW
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW, W1HQ
+
+CATEGORY-OPERATOR: MULTI-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: HIGH
+
+CATEGORY-MODE: CW
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+School Club CW (Precedence “S”: 1500 watts or less, must operate from school club, spotting allowed – see rules for complete details.)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-CW
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW, W1HQ
+
+CATEGORY-OPERATOR: MULTI-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: HIGH
+
+CATEGORY-MODE: CW
+
+CATEGORY-STATION: SCHOOL
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+PHONE TEMPLATES
+
+Single Op Low Power Phone (Precedence “A”: 150 watts or less)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-SSB
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW
+
+CATEGORY-OPERATOR: SINGLE-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: NON-ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: LOW
+
+CATEGORY-MODE: SSB
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+Single Op High Power Phone (Precedence “B”: 1500 watts or less)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-SSB
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW
+
+CATEGORY-OPERATOR: SINGLE-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: NON-ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: HIGH
+
+CATEGORY-MODE: SSB
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+Single Op QRP Phone (Precedence “Q”: 5 watts or less)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-SSB
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW
+
+CATEGORY-OPERATOR: SINGLE-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: NON-ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: QRP
+
+CATEGORY-MODE: SSB
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+Single Op Unlimited Phone (Precedence “U”: 1500 watts or less, spotting assistance allowed)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-SSB
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW
+
+CATEGORY-OPERATOR: SINGLE-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: HIGH
+
+CATEGORY-MODE: SSB
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+Multioperator Phone (Precedence “M”: 1500 watts or less, spotting assistance allowed)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-SSB
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW, W1HQ
+
+CATEGORY-OPERATOR: MULTI-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: HIGH
+
+CATEGORY-MODE: SSB
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+School Club Phone (Precedence “S”: 1500 watts or less, must operate from school club, spotting allowed – see rules for complete details.)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-SSB
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW, W1HQ
+
+CATEGORY-OPERATOR: MULTI-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: HIGH
+
+CATEGORY-MODE: SSB
+
+CATEGORY-STATION: SCHOOL
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+QSO DATA TEMPLATE:
+
+Guide:A B C D E F G H I J K L M N
+
+QSO: 14000 CW 2009-11-07 2100 W1AW 1 M 38 CT K8MM 1 Q 92 MI
+
+QSO: 14000 CW 2009-11-07 2101 W1AW 2 M 38 CT K3TX 1 A 59 EPA
+
+QSO: 14000 CW 2009-11-07 2104 W1AW 3 M 38 CT W4DAN 1 A 77 TN
+
+QSO: 14000 CW 2009-11-07 2106 W1AW 4 M 38 CT K1BG 2 U 68 WMA
+
+QSO: 14000 CW 2009-11-07 2106 W1AW 5 M 38 CT K5AF 10 A 60 STX
+
+END-OF-LOG:
+
+A= Operating frequency. Use the following generic abbreviations:
+
+1800
+
+3500
+
+7000
+
+14000
+
+21000
+
+28000
+
+B= Mode. In the CW Sweepstakes, use CW; in the Phone Sweepstakes, use PH.
+
+C= Date, in YYYY-MM-DD format. November 7, 2009 is typed as 2009-11-07.
+
+D= Time, in UTC format.
+
+E= Your call.
+
+F= Your QSO #.
+
+G= Your precedence.
+
+H= Your check (the last two numbers of the year you were first licensed).
+
+I= Your ARRL Section
+
+J= The call of the station you worked.
+
+K= Their QSO number to you.
+
+L= Their precedence.
+
+M= Their check.
+
+N = Their ARRL Section.
+
+Back to Top
+
+====================================================================================================
+[8] https://www.arrl.org/news/2023-arrl-november-sweepstakes-continues  (fetched 2026-08-17 15:39 UTC; HTTP 200) — ARRL news item dated 11/17/2023; provenance for the 2023 RAC section changes (MAR removed, GTA->GH, Northern Territories->TER; 85 sections)
+====================================================================================================
+2023 ARRL November Sweepstakes Continues
+*
+*
+
+*
+*
+*
+* * *
+
+ARRL
+
+Website Search
+
+Category
+Clubs
+Contests
+Exam Sessions
+Hamfest/Conventions
+Licensing Classes
+Member Directory
+News
+Special Events
+ARECC Field Class/Exam
+
+Call Sign / Name Search
+
+Login
+Register Account
+
+Login Help
+
+* Home
+
+* On The Air
+
+* Licensing, Education & Training
+
+* Membership
+
+* Regulatory & Advocacy
+
+* Public Service
+
+* Technology
+
+* Get Involved
+
+* ARRL Store
+
+* About ARRL
+
+* News & Features
+
+News
+
+2023 ARRL November Sweepstakes Continues
+
+11/17/2023
+The second part of the ARRL November Sweepstakes is for phone contacts, and it begins Saturday, November 18 at 2100 UTC, and runs through Monday, November 20 at 0259 UTC.
+
+The contest objective is to support amateur self-training in radiocommunications, including improving amateur operating skills, conducting technical investigations, and intercommunicating with other amateurs. Amateur stations in the US and Canada (including territories and possessions) exchange information with as many other US and Canadian stations as possible on the 160-, 80-, 40-, 20-, 15-, and 10-meter bands. All stations may operate for no more than 24 of the 30 hours, and scores will be calculated from contacts logged during the first 24 hours of operation.
+
+This year's Sweepstakes includes some updates:
+
+The Radio Amateurs of Canada (RAC) updated several of their Sections, which means there are now 85 Sections participating. RAC replaced Maritime (MAR) by making New Brunswick (NB) and Nova Scotia (NS) individual Sections, Greater Toronto Area (GTA) was renamed Golden Horseshoe (GH), and Northern Territories was renamed as Territories (TER). These changes impact the Sections lists for RAC events, as well as ARRL Field Day and ARRL Sweepstakes.
+
+Single Operator and Single Operator Unlimited entrants can participate using the Limited Antennas Overlay. With this overlay, operation is limited to the use of single-element antennas, such as a single vertical, an end-fed wire, or a single dipole antenna no more than 50 feet above ground at its highest point. The antenna(s) may cover multiple bands, as in the case of multiband verticals and dipoles with fan or trap constructions.
+
+There were 262 plaques awarded for 2022 November Sweepstakes. What's it take to earn a high score or win a plaque? Check out the scores and winners from previous years at contests.arrl.org for the phone and CW results.
+
+A complete list of rules can be found www.arrl.org/sweepstakes
+
+====================================================================================================
+[9] https://contest-log-submission.arrl.org/  and  https://contest-log-submission.arrl.org/index.php?eid=17  (fetched 2026-08-17 15:39 UTC; HTTP 200; page 'Version: 3.12.0, Revised: July 30, 2026') — the sponsor's log upload web app; its 'Location During Contest' selector lists 'Outside US/Canada' plus the ARRL/RAC sections; the Sweepstakes form exposes no separate overlay/category control (category comes from the Cabrillo header)
+====================================================================================================
+Use this form to submit your Cabrillo-formatted log to the ARRL for log checking. It will briefly check your log for proper formatting and completeness before uploading to the log-checking database. All fields are required. Click on the Submit Log button after completing the form.
+
+Submitter's E-mail Address: Call Sign Used During Contest:
+
+Location During Contest:Select ARRL/RAC sections or DX
+
+Outside US/Canada
+
+Connecticut
+Eastern Massachusetts
+Maine
+New Hampshire
+Rhode Island
+Vermont
+Western Massachusetts
+
+Eastern New York
+New York City-Long Island
+Northern New Jersey
+Northern New York
+Southern New Jersey
+Western New York
+
+Delaware
+Eastern Pennsylvania
+Maryland-DC
+Western Pennsylvania
+
+Alabama
+Georgia
+Kentucky
+North Carolina
+Northern Florida
+South Carolina
+Southern Florida
+West Central Florida
+Tennessee
+Virginia
+Puerto Rico
+Virgin Islands
+
+Arkansas
+Louisiana
+Mississippi
+New Mexico
+North Texas
+Oklahoma
+South Texas
+West Texas
+
+East Bay
+Los Angeles
+Orange
+Santa Barbara
+Santa Clara Valley
+San Diego
+San Francisco
+San Joaquin Valley
+Sacramento Valley
+Pacific
+
+Arizona
+Eastern Washington
+Idaho
+Montana
+Nevada
+Oregon
+Utah
+Western Washington
+Wyoming
+Alaska
+
+Michigan
+Ohio
+West Virginia
+
+Illinois
+Indiana
+Wisconsin
+
+Colorado
+Iowa
+Kansas
+Minnesota
+Missouri
+Nebraska
+North Dakota
+South Dakota
+
+Nova Scotia
+New Brunswick
+Prince Edward Island
+Newfoundland/Labrador
+Quebec
+Ontario Golden Horseshoe
+Ontario East
+Ontario North
+Ontario South
+Manitoba
+Saskatchewan
+Alberta
+British Columbia
+Territories (YT,NT,NU)
+
+ARRL-Affiliated Contest Club:
+[... club dropdown omitted ...]
+Select Log File on Your Computer: OR Paste your Cabrillo-formatted log into the text area below:
+
+By submitting a log, I certify that I have observed all competition rules, as well as all regulations for Amateur Radio in my country. My report is correct and true to the best of my knowledge. I agree to be bound by the decisions of the ARRL Awards Committee. All contest rules are available at www.arrl.org/contest-rules/
+
+Send comments or questions about this page to ARRL Contest Manager .
+
+Version: 3.12.0, Revised: July 30, 2026
+
+====================================================================================================
+SECTION LIST: see arrl_sections_2026.txt in this folder (https://contests.arrl.org/contestmultipliers.php?a=wve, https://www.arrl.org/section-abbreviations, and the 2025 Package list; all 85, identical sets).
+====================================================================================================

@@ -1,0 +1,1741 @@
+CABRILLO V3 QSO: LINE TEMPLATES — RAW RESEARCH FILE
+Fetched 2026-08-17 by curl (User-Agent Chrome/120), converted with html2txt.py; <pre>
+blocks are byte-exact between <<<PRE>>> / <<<END PRE>>> markers. Nothing here
+was retyped; every template block was copied programmatically from the file
+named in its header.
+
+REQUESTED URL: https://wwrof.org/cabrillo/cabrillo-qso-templates/
+  -> HTTP 404 on 2026-08-17. Wayback CDX shows the URL alive 2014-11-04 .. 2020-04-17
+     and 404 from 2021-01-25 on. WWROF replaced it (15 March 2021) with
+     https://wwrof.org/cabrillo/cabrillo-qso-data/ , which carries ONE generic
+     template and a table of links to each SPONSOR's own template page. WWROF has
+     not published per-contest templates itself since 2016 (the per-contest
+     posts under wwrof.org/cabrillo-template/... are 404 live; captured below).
+
+WHAT IS IN THIS FILE
+  1. WWROF current QSO-data page (generic template, field definitions, sponsor
+     link table) — verbatim.
+  2. WWROF archived per-contest template posts (Wayback): CQ WW SSB/CW, CQ WW
+     RTTY, ARRL Sweepstakes, NAQP, NA Sprint, ARRL VHF — verbatim.
+  3. N5KO's original kkn.net "Cabrillo QSO templates" page (Wayback 2014-11-16,
+     the page WWROF took over in Aug 2014) — verbatim, plus its example logs
+     for ARRL-DX, IARU-HF, ARRL-10, ARRL-160, CQ-WW-RTTY, CQ-WPX-RTTY, ARRL-SS,
+     ARRL-VHF, CQ-VHF, STEW-PERRY, NEQP.
+  4. Sponsor pages that WWROF's table points to (live today): CQ WW, CQ WPX,
+     CQ WPX RTTY, CQ WW RTTY, CQ 160, CQ WW VHF, WW Digi, ARRL (Sweepstakes),
+     NCJ NAQP template file, NEQP (Wayback), plus a WFD note.
+  5. Field-order convention and how variable-width exchange fields are shown.
+
+##############################################################################
+# 1. WWROF — Cabrillo QSO Data (current page, 'Last update: 15 March 2021')
+# SOURCE: https://wwrof.org/cabrillo/cabrillo-qso-data/
+# FETCHED: 2026-08-17
+##############################################################################
+Last update: 15 March 2021
+
+Each contact in the log is reported using the QSO tag. Some items on this line will be different for each contest depending on the exchange information.
+
+QSO Data Example
+
+<<<PRE>>>
+                              --------info sent------- -------info rcvd--------
+QSO:  freq mo date       time call          rst exch   call          rst exch   t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO:  3799 PH 1999-03-06 0711 HC8N           59 700    W1AW           59 CT     0
+QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     0
+
+<<<END PRE>>>
+
+QSO Tag
+
+QSO: qso-data
+
+Each line must begin with “QSO:” followed by a space. The QSO templates show each item at a specific column. All of the major contest sponsors will also accept the fields in any column as long as there is a space between each item.
+
+X-QSO: qso-data
+Any QSO marked with this tag will be ignored in your log. Some contests may use this information during log checking.
+
+Explanation of Fields
+
+freq is frequency or band:
+
+- 1800 or actual frequency in kHz
+
+- 3500 or actual frequency in kHz
+
+- 7000 or actual frequency in kHz
+
+- 14000 or actual frequency in kHz
+
+- 21000 or actual frequency in kHz
+
+- 28000 or actual frequency in kHz
+
+- 50
+
+- 70
+
+- 144
+
+- 222
+
+- 432
+
+- 902
+
+- 1.2G
+
+- 2.3G
+
+- 3.4G
+
+- 5.7G
+
+- 10G
+
+- 24G
+
+- 47G
+
+- 75G
+
+- 122G
+
+- 134G
+
+- 241G
+
+- LIGHT
+
+mo is mode:
+
+-
+
+- CW
+
+- PH
+
+- FM
+
+- RY
+
+- DG
+
+(in the case of cross-mode QSOs, indicate the transmitting mode)
+
+date is UTC date in yyyy-mm-dd form
+
+time is UTC time in nnnn form (0000 – 2359)
+
+call is callsign
+
+only A-Z, 0-9 and / permitted
+
+exch is contest exchange. Each contest will have its own exchange elements. Check with the contest sponsor for their requirements and formatting.
+
+t is transmitter id. Used to identify RUN/MULT, RUN1/RUN2 stations in one- or two-transmitter categories (M/2, and CQWW M/S). Not used in single-op or M/M. It is a single digit of 0 or 1.
+
+## QSO Template and Log Examples
+
+Contest sponsors are encouraged to include template and log file examples on their web page along with the rules. This will help entrants to format the log correctly for that contest.
+
+  | Contest  | Link to Cabrillo Template  |
+
+  | CQ WW DX Contest  | http://www.cqww.com/cabrillo.htm [http://www.cqww.com/cabrillo.htm]  |
+
+  | CQ WPX Contest  | http://www.cqwpx.com/cabrillo.htm [http://www.cqwpx.com/cabrillo.htm]  |
+
+  | CQ WPX RTTY Contest  | http://www.cqwpxrtty.com/cabrillo.htm [http://www.cqwpxrtty.com/cabrillo.htm]  |
+
+  | CQ WW VHF Contest  | http://www.cqww-vhf.com/cabrillo.htm [http://www.cqww-vhf.com/cabrillo.htm]  |
+
+  | ARRL  | http://www.arrl.org/cabrillo-format-tutorial [http://www.arrl.org/cabrillo-format-tutorial]  |
+
+  | RSGB  | http://www.rsgbcc.org/hf/formats/templates.shtml [http://www.rsgbcc.org/hf/formats/templates.shtml]  |
+
+  | Russian DX Contest (RDXC)  | http://www.rdxc.org/asp/pages/logtip.asp [http://www.rdxc.org/asp/pages/logtip.asp]  |
+
+  | NCJ North American QSO Party  | http://ncjweb.com/NAQP_Cabrillo_Template.txt [http://ncjweb.com/NAQP_Cabrillo_Template.txt]  |
+
+  | New England QSO Party  | https://neqp.org/cabrillo.html [https://neqp.org/cabrillo.html]  |
+
+  | UBA DX Contest  | http://www.uba.be/sites/default/files/uploads/hf_contests/uba_contest_cabrillo_template.pdf [http://www.uba.be/sites/default/files/uploads/hf_contests/uba_contest_cabrillo_template.pdf]  |
+##############################################################################
+# 2a. WWROF archived post — Cabrillo QSO template for CQ WW DX Contest (SSB/CW)
+# SOURCE: https://web.archive.org/web/20160330203612id_/http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-cq-ww-dx-contest-ssbcw/
+# FETCHED: 2026-08-17
+# NOTE: live http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-cq-ww-dx-contest-ssbcw/ is 404
+##############################################################################
+<<<PRE>>>
+ 
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call          rst exch   call          rst exch   t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO:  3799 PH 2000-11-26 0711 N6TW          59  03     JT1Z          59  23     0
+
+<<<END PRE>>>
+
+Full details on the CQ WW DX Contest log submission format is available at http://www.cqww.com/cabrillo.htm [http://www.cqww.com/cabrillo.htm]
+
+ This entry was posted in Cabrillo-Template [http://wwrof.org/category/cabrillo-template/]. Bookmark the permalink [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-cq-ww-dx-contest-ssbcw/].
+
+← Cabrillo QSO template for BARTG RTTY Contest [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-bartg-rtty-contest/]
+
+Cabrillo QSO template for CQ WW DX Contest (RTTY) → [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-cq-ww-dx-contest-rtty/]
+##############################################################################
+# 2b. WWROF archived post — Cabrillo QSO template for CQ WW DX Contest (RTTY)
+# SOURCE: https://web.archive.org/web/20160331063909id_/http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-cq-ww-dx-contest-rtty/
+# FETCHED: 2026-08-17
+# NOTE: live URL is 404
+##############################################################################
+<<<PRE>>>
+  
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call          rst exch   call          rst exch   t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO:  3595 RY 1999-03-06 0711 HC8N          599 13 DX  W1AW          599 05 CT  0
+
+<<<END PRE>>>
+
+ This entry was posted in Cabrillo-Template [http://wwrof.org/category/cabrillo-template/]. Bookmark the permalink [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-cq-ww-dx-contest-rtty/].
+
+← Cabrillo QSO template for CQ WW DX Contest (SSB/CW) [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-cq-ww-dx-contest-ssbcw/]
+
+WRTC 2014 – European Team Reviews → [http://wwrof.org/webinar-archive/wrtc-2014-european-team-reviews/]
+##############################################################################
+# 2c. WWROF archived post — Template for ARRL Sweepstakes
+# SOURCE: https://web.archive.org/web/20160330165706id_/http://wwrof.org/cabrillo-template/template-for-arrl-sweepstakes/
+# FETCHED: 2026-08-17
+# NOTE: live URL is 404. The sample line in this post is NOT column-aligned (the kkn.net original in section 3 is).
+##############################################################################
+nnnn: serial number
+ prec: precedence (A, B, M, Q, S or U)
+ ck: two digit check
+ sec: ARRL Section abbreviation
+
+<<<PRE>>>
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call       nr   p ck sec call       nr   p ck sec
+QSO: ***** ** yyyy-mm-dd nnnn ********** nnnn a nn aaa ********** nnnn a nn aaa
+QSO: 21042 CW 1997-11-01 2102 N5KO 3 B 74 STX K9ZO 2 A 69 IL
+
+<<<END PRE>>>
+
+Example Sweepstakes Log
+
+<<<PRE>>>
+START-OF-LOG: 3.0
+CONTEST: ARRL-SS-CW
+CALLSIGN: N5KO
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-OPERATOR: MULTI-OP
+CATEGORY-POWER: HIGH
+LOCATION: SCV
+CATEGORY-TRANSMITTER: ONE
+CLAIMED-SCORE: 160
+OPERATORS: N5KO K6AW
+CLUB: Northern California Contest Club
+NAME: Trey Garlough
+ADDRESS: 7375 Oak Ridge Road
+ADDRESS-CITY: Aptos
+ADDRESS-STATE: CA
+ADDRESS-POSTALCODE: 95003
+ADDRESS-COUNTRY: USA
+SOAPBOX: The ARRL November Sweepstakes is my favorite contest. It really
+SOAPBOX: is fun to get on and try to make a clean sweep.
+QSO: 21042 CW 1997-11-01 2101 N5KO 1 B 74 SCV WA2VRR 1 A 74 VA
+QSO: 21042 CW 1997-11-01 2102 N5KO 2 B 74 SCV NJ2L 2 B 81 WNY
+QSO: 21042 CW 1997-11-01 2102 N5KO 3 B 74 SCV K9ZO 2 A 69 IL
+QSO: 21042 CW 1997-11-01 2103 N5KO 4 B 74 SCV K7QQ 3 A 62 IL
+QSO: 21042 CW 1997-11-01 2103 N5KO 5 B 74 SCV W4YE 5 A 74 VA
+QSO: 21042 CW 1997-11-01 2104 N5KO 6 B 74 SCV K3SV 3 B 71 EPA
+QSO: 21042 CW 1997-11-01 2105 N5KO 7 B 74 SCV K2GS 3 A 89 ENY
+END-OF-LOG:
+
+<<<END PRE>>>
+
+ This entry was posted in Cabrillo-Template [http://wwrof.org/category/cabrillo-template/]. Bookmark the permalink [http://wwrof.org/cabrillo-template/template-for-arrl-sweepstakes/].
+
+← WRTC 2014 North American Team Reviews [http://wwrof.org/webinar-archive/wrtc-2014-north-american-team-reviews/]
+
+Cabrillo QSO template for ARRL VHF Contests → [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-arrl-vhf-contests/]
+##############################################################################
+# 2d. WWROF archived post — Cabrillo QSO template for NA QSO Party (post-2015-07-21 revision)
+# SOURCE: https://web.archive.org/web/20160313005809id_/http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-na-qso-party/
+# FETCHED: 2026-08-17
+# NOTE: live URL is 404. Change log 2015-07-21: 'NAQP template changed by request of NAQP manager to show ex2: Two letter QTH designation for W/VE, DX prefix for non-W/VE in NA, DX for outside NA'
+##############################################################################
+name: Name
+ qth: state/province for W/VE, country for North America outside W/VE, DX for others
+
+<<<PRE>>>
+                              ----------my info------------- -----other station's info-----
+QSO: freq  mo date       time call       name           qth call        name            qth t
+QSO: ***** ** yyyy-mm-dd nnnn ********** aaaaaaaaaaaaaaa aaa ********** aaaaaaaaaaaaaaa aaa n
+QSO: 14042 CW 2014-09-07 0000 N5KO/KP4   TREY            DX  N6TR       TREE            OR
+
+<<<END PRE>>>
+
+Example NAQP Log
+
+<<<PRE>>>
+START-OF-LOG: 3.0
+CONTEST: NAQP-CW
+LOCATION: DX
+CALLSIGN: N5KO
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-BAND: ALL
+CATEGORY-POWER: LOW
+CATEGORY-MODE: CW
+CATEGORY-STATION: FIXED
+CLAIMED-SCORE: 404670
+NAME: Trey Garlough
+SOAPBOX:
+QSO: 28048 CW 2014-01-11 1800 N5KO/KP4   TREY            DX  N4PN       PAUL            GA
+QSO: 28048 CW 2014-01-11 1800 N5KO/KP4   TREY            DX  VE3N       BEN             ON
+QSO: 28048 CW 2014-01-11 1801 N5KO/KP4   TREY            DX  K6DG       SKIP            CA
+QSO: 28048 CW 2014-01-11 1801 N5KO/KP4   TREY            DX  AA4L       BILL            GA
+QSO: 28048 CW 2014-01-11 1802 N5KO/KP4   TREY            DX  K6RB       ROB             CA
+QSO: 28048 CW 2014-01-11 1802 N5KO/KP4   TREY            DX  WA1S       ANN             GA
+QSO: 28048 CW 2014-01-11 1802 N5KO/KP4   TREY            DX  AF8A       GARY            OH
+QSO: 28048 CW 2014-01-11 1804 N5KO/KP4   TREY            DX  NE8J       HOWARD          MI
+QSO: 21048 CW 2014-01-11 1804 N5KO/KP4   TREY            DX  HA1A       ZOLI            DX
+QSO: 28048 CW 2014-01-11 1804 N5KO/KP4   TREY            DX  K8JQ       STEVE           WV
+END-OF-LOG:
+
+<<<END PRE>>>
+
+ This entry was posted in Cabrillo-Template [http://wwrof.org/category/cabrillo-template/]. Bookmark the permalink [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-na-qso-party/].
+
+← VHF Contesting Optimize Your Station Experience! by Joel Harrison W5ZN [http://wwrof.org/webinar-archive/vhf-contesting-optimize-your-station-experience-by-joel-harrison-w5zn/]
+
+WWROF Provides Grant for Log Checking Server → [http://wwrof.org/wwrof-blog/wwrof-provides-grant-for-log-checking-server/]
+##############################################################################
+# 2e. WWROF archived post — Cabrillo QSO template for NA Sprint
+# SOURCE: https://web.archive.org/web/20160517111736id_/http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-na-sprint/
+# FETCHED: 2026-08-17
+# NOTE: live URL is 404
+##############################################################################
+nr: Serial number
+ ex1: Name
+ ex2: Two letter QTH designation for W/VE, DX for non-W/VE
+
+<<<PRE>>>
+
+                              ----------info sent----------- ----------info rcvd----------- 
+QSO: freq  mo date       time call       nr   ex1        ex2 call       nr   ex1        ex2 t
+QSO: ***** ** yyyy-mm-dd nnnn ********** nnnn aaaaaaaaaa aaa ********** nnnn aaaaaaaaaa aaa n
+QSO: 14042 CW 2014-09-07 0000 N5KO          1 TREY       CA  N6TR          1 TREE       OR
+
+<<<END PRE>>>
+
+Example Sprint Log
+
+<<<PRE>>>
+
+START-OF-LOG: 3.0
+CONTEST: NA-SPRINT-CW
+CALLSIGN: N5KO
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: CW
+CATEGORY-STATION: FIXED
+OPERATORS: N5KO
+LOCATION: CA
+CLUB: Northern California Contest Club
+NAME: Trey Garlough
+SOAPBOX:
+QSO: 14040 CW 2012-02-05 0000 N5KO          1 TREY       CA  N6TV          1 BOB        CA
+QSO: 14047 CW 2012-02-05 0000 N5KO          2 TREY       CA  NO3M          2 TY         PA
+QSO: 14047 CW 2012-02-05 0000 N5KO          3 TREY       CA  N6RT          2 DOUG       CA
+QSO: 14040 CW 2012-02-05 0001 N5KO          4 TREY       CA  N2IC          3 STEVE      NM
+QSO: 14040 CW 2012-02-05 0001 N5KO          5 TREY       CA  KW8N          3 BOB        OH
+END-OF-LOG:
+
+<<<END PRE>>>
+
+ This entry was posted in Cabrillo-Template [http://wwrof.org/category/cabrillo-template/]. Bookmark the permalink [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-na-sprint/].
+
+← Cabrillo QSO template for CQ VHF Contest [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-cq-vhf-contest/]
+
+Cabrillo QSO and QTC templates for DARC Worked All Europe → [http://wwrof.org/cabrillo-template/cabrillo-qso-and-qtc-templates-for-darc-worked-all-europe/]
+##############################################################################
+# 2f. WWROF archived post — Cabrillo QSO template for ARRL VHF Contests
+# SOURCE: https://web.archive.org/web/20160330165649id_/http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-arrl-vhf-contests/
+# FETCHED: 2026-08-17
+# NOTE: live URL is 404. Posts for CQ VHF, BARTG RTTY, RSGB IOTA and DARC WAE existed too but every Wayback capture tried (2016-06) is 404; their templates are in the kkn.net page below.
+##############################################################################
+no signal report
+ grid: 4 or 6 character grid square
+
+<<<PRE>>>
+
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call              grid   call              grid 
+QSO: ***** ** yyyy-mm-dd nnnn *************     ****** *************     ******
+QSO:    50 PH 1997-09-13 1804 NJ2L              FN12fr KB2DMK            FN12
+
+<<<END PRE>>>
+
+Example ARRL VHF Contest Log
+
+<<<PRE>>>
+
+START-OF-LOG: 3.0
+CONTEST: ARRL-VHF-SEP
+CALLSIGN: NJ2L
+CATEGORY-OPERATOR: SINGLE-OP 
+CATEGORY-POWER: HIGH
+CATEGORY-ASSISTED: NON-ASSISTED
+LOCATION: WNY
+CLAIMED-SCORE: 20805
+CLUB: Rochester VHF Group
+NAME: Rus Healy
+ADDRESS: 5960 Canadice Hill Road
+ADDRESS-CITY: Springwater
+ADDRESS-STATE-PROVINCE: NY
+ADDRESS-POSTALCODE: 14560
+SOAPBOX: What a great contest!
+QSO:    50 PH 1997-09-13 1804 NJ2L              FN12fr KB2DMK            FN12
+QSO:   144 PH 1997-09-13 2014 NJ2L              FN12fr VE3VRQ            FN13
+QSO:   144 PH 1997-09-13 2019 NJ2L              FN12fr KF2TV             FN13
+END-OF-LOG:
+
+<<<END PRE>>>
+
+ This entry was posted in Cabrillo-Template [http://wwrof.org/category/cabrillo-template/]. Bookmark the permalink [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-arrl-vhf-contests/].
+
+← Cabrillo QSO template for ARRL Sweepstakes [http://wwrof.org/cabrillo-template/template-for-arrl-sweepstakes/]
+
+Cabrillo QSO template for CQ VHF Contest → [http://wwrof.org/cabrillo-template/cabrillo-qso-template-for-cq-vhf-contest/]
+##############################################################################
+# 3. N5KO original — 'Cabrillo QSO templates' (kkn.net), raw HTML of the Wayback capture 2014-11-16
+# SOURCE: https://web.archive.org/web/20141116133037id_/http://www.kkn.net/~trey/cabrillo/qso-template.html
+# FETCHED: 2026-08-17
+# NOTE: This is the page WWROF inherited (change log 2014-08-21). kkn.net now redirects to wwrof.org. Raw HTML kept so the <pre> blocks are exactly as published.
+##############################################################################
+<html>
+<head>
+<title>Cabrillo QSO templates</title>
+</head>
+<body bgcolor=#ffffff text=#000000>
+<h2>Cabrillo QSO templates</h2>
+
+<ul>
+<li>freq is frequency/band:
+<ul>
+<li>1800 or actual frequency in KHz
+<li>3500 or actual frequency in KHz
+<li>7000 or actual frequency in KHz
+<li>14000 or actual frequency in KHz
+<li>21000 or actual frequency in KHz
+<li>28000 or actual frequency in KHz
+<li>50 
+<li>144
+<li>222
+<li>432
+<li>902
+<li>1.2G
+<li>2.3G
+<li>3.4G
+<li>5.7G
+<li>10G
+<li>24G
+<li>47G
+<li>75G
+<li>119G
+<li>142G
+<li>241G
+<li>300G
+</ul>
+
+<br>
+<li>
+mo is mode:
+<ul>
+<li>CW
+<li>PH
+<li>FM
+<li>RY 
+<li>(in the case of cross-mode QSOs, indicate the transmitting mode)
+</ul>
+<br>
+<li>date is UTC date in <i>yyyy-mm-dd</i> form
+<p>
+<li>time is UTC time in <i>nnnn</i> form
+<p>
+<li>call is callsign<ul><li>only A-Z, 0-9 and / permitted</ul>
+
+<p>
+<li>exch is contest exchange
+<p>
+
+<li>
+t is transmiter id
+<ul><li>0<li>1 </ul>
+<p>
+
+<h3>Cabrillo QSO template for Sweepstakes</h3>
+<pre>
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call       nr   p ck sec call       nr   p ck sec
+QSO: ***** ** yyyy-mm-dd nnnn ********** nnnn a nn aaa ********** nnnn a nn aaa
+QSO: 21042 CW 1997-11-01 2102 N5KO          3 B 74 STX K9ZO          2 A 69 IL
+</pre>
+
+<ul>
+<li>nnnn: serial number
+<li>prec: precedence (A, B, M, Q, S or U)
+<li>ck: two digit check 
+<li>sec: ARRL Section abbreviation
+<p>
+</ul>
+<a href="sweepstakes.txt">Example Sweepstakes log</a>
+
+<p>
+<h3>Cabrillo QSO template for ARRL VHF contests & CQ VHF Contest</h3>
+<pre>
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call              grid   call              grid 
+QSO: ***** ** yyyy-mm-dd nnnn *************     ****** *************     ******
+QSO:    50 PH 1997-09-13 1804 NJ2L              FN12fr KB2DMK            FN12
+</pre>
+<ul>
+<li>no signal report 
+<li>grid: 4 or 6 character grid square
+</ul>
+<p>
+<a href="arrl-vhf.txt">Example ARRL VHF Contest log</a>
+<br>
+<a href="cq-vhf.txt">Example CQ VHF Contest log</a>
+
+<h3>Cabrillo QSO template for other ARRL and CQ contests, RDXC, Oceania DX Contest & AP Sprint</h3>
+<pre>
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call          rst exch   call          rst exch   t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO:  3799 PH 1999-03-06 0711 HC8N          59  700    W1AW          59  CT     0
+</pre>
+<p>
+<a href="cqww-rtty.txt">Example CQ/RJ RTTY Contest log</a>
+<br>
+<a href="wpx-rtty.txt">Example WPX RTTY Contest log</a>
+<br>
+<a href="arrl-dx.txt">Example ARRL DX Contest log</a>
+<br>
+<a href="iaru.txt">Example IARU Contest log</a>
+<br>
+<a href="arrl-10.txt">Example 10 Meter Contest log</a>
+<br>
+<a href="arrl-160.txt">Example 160 Meter Contest log</a>
+<br>
+<a href="jidx-cw.txt">Example JIDX CW log</a>
+<br>
+<a href="stew.txt">Example Stew Perry Contest log</a>
+<br>
+<a href="http://www.nzart.org.nz/nzart/update/contests/Oceania/oceania_cabrillo_format.pdf">Example Oceania DX Contest log</a>
+<br>
+<a href="apsprint.txt">Example AP Sprint log</a>
+<br>
+<a href="neqp.txt">Example New England QSO Party log</a>
+
+<h3>Cabrillo QSO and QTC templates for DARC Worked All Europe</h3>
+<pre>
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call          rst exch   call          rst exch  
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ******
+QSO:  3799 PH 2003-03-23 0711 YB1AQS        59  700    DL8WPX        59  001   
+
+                             -qtc rcvd by - --------------qtc info received-----------------
+QTC: freq  mo date       time call          qserial    qtc sent by   qtim qcall         qexc
+QTC: ***** ** yyyy-mm-dd nnnn ************* nnn/nn     ************* nnnn ************* nnnn
+QTC:  3799 PH 2003-03-23 0711 YB1AQS        001/10     DL8WPX        0330 DL6RAI        1021
+</pre>
+<p>
+<a href="wae-rtty.txt">Example WAE RTTY Log of a non-European Multi-Transmitter station</a>
+<br>
+<a href="wae-ssb.txt">Example WAE SSB Log of an European Single-Transmitter station, < 100W, unassisted</a>
+<br>
+<a href="wae-swl.txt">Example WAEDC CW European SWL Log</a>
+<br>
+
+<a id="naqp">
+<h3>Cabrillo QSO template for NAQP</h3>
+</a>
+<pre>
+                              ----------info sent----------- ----------info rcvd----------- 
+QSO: freq  mo date       time call            ex1        ex2 call            ex1        ex2 t
+QSO: ***** ** yyyy-mm-dd nnnn **********      aaaaaaaaaa aaa **********      aaaaaaaaaa aaa n
+QSO: 14042 CW 1999-09-05 0000 N5KO            TREY       CA  N6TR          1 TREE       OR
+</pre>
+<ul>
+<li>ex1: Name
+<li>ex2: Two letter QTH designation for W/VE, DX for non-W/VE
+</ul>
+<p>
+<a href="naqp.txt">Example NAQP log</a>
+
+<h3>Cabrillo QSO template for NA Sprint</h3>
+<pre>
+                              ----------info sent----------- ----------info rcvd----------- 
+QSO: freq  mo date       time call       nr   ex1        ex2 call       nr   ex1        ex2 t
+QSO: ***** ** yyyy-mm-dd nnnn ********** nnnn aaaaaaaaaa aaa ********** nnnn aaaaaaaaaa aaa n
+QSO: 14042 CW 2014-09-07 0000 N5KO          1 TREY       CA  N6TR          1 TREE       OR
+</pre>
+<ul>
+<li>nr: Serial number
+<li>ex1: Name
+<li>ex2: Two letter QTH designation for W/VE, DX for non-W/VE
+</ul>
+<p>
+<a href="na-sprint.txt">Example NA Sprint log</a>
+<h3>Cabrillo QSO template for RSGB IOTA Contest</h3>
+<pre>
+                              -----------info sent--------- ----------info rcvd----------
+QSO: freq  mo date       time call          rst ex1  ex2    call          rst ex1  ex2    t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn nnnn aa-nnn ************* nnn nnnn aa-nnn n
+QSO:  3799 PH 2002-07-28 0359 HC8N          59  0901 SA-004 G3XTT         59  0031 EU-005 0
+QSO:  3799 PH 2002-07-28 0359 HC8N          59  0902 SA-004 HA1AG         59  0399 ------ 0
+</pre>
+<ul>
+<li>aa-nnn is IOTA designator, such as SA-004
+<li>non-island stations use IOTA designator of '------'
+</ul>
+<p>
+<a href="iota.txt">Example RSGB IOTA log</a>
+<h3>Cabrillo QSO template for BARTG RTTY Contest</h3>
+<pre>
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call       rst  nr  time call       rst  nr  time
+QSO: ***** ** yyyy-mm-dd nnnn ********** nnn nnnn nnnn ********** nnn nnnn nnnn
+QSO:  3580 RY 2001-03-17 0204 MI9AB      599 0001 0203 DF4OR      599 0003 0203
+QSO:  3580 RY 2001-03-17 0205 MI9AB      599 0002 0205 DM5GI      599 0002 0205
+</pre>
+
+
+</html>
+
+
+</ul>
+
+<hr>
+<a href="index.html">Return to Cabrillo Home</a> 
+</html>
+##############################################################################
+# 3. kkn.net example log — arrl-dx.txt
+# SOURCE: https://web.archive.org/web/20111223114927id_/http://www.kkn.net/~trey/cabrillo/arrl-dx.txt
+# FETCHED: 2026-08-17
+# NOTE: Example ARRL DX Contest log (linked from the kkn.net template page)
+##############################################################################
+START-OF-LOG: 3.0
+LOCATION: DX
+CONTEST: ARRL-DX-SSB
+CALLSIGN: HC8N
+CATEGORY-OPERATOR: MULTI-OP
+CATEGORY-TRANSMITTER: TWO
+CATEGORY-POWER: HIGH
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-BAND: ALL
+CLAIMED-SCORE: 8123171
+OPERATORS: N5KO K6AW W4ZV
+CLUB: Northern California Contest Club
+NAME: Trey Garlough
+ADDRESS: 7375 Oak Ridge Road
+ADDRESS-CITY: Aptos
+ADDRESS-STATE: CA
+ADDRESS-POSTALCODE: 95003
+ADDRESS-COUNTRY: USA
+SOAPBOX: New QTH is working great!
+QSO: 21303 PH 1999-03-06 0000 HC8N          59  700    K9NS          59  IL     1
+QSO: 21303 PH 1999-03-06 0000 HC8N          59  700    W3EEE         59  PA     1
+QSO: 21303 PH 1999-03-06 0000 HC8N          59  700    K3LR          59  PA     1 
+QSO: 28495 PH 1999-03-06 0000 HC8N          59  700    W8QZA         59  CA     0
+QSO: 21303 PH 1999-03-06 0000 HC8N          59  700    N8II          59  WV     1
+QSO: 21303 PH 1999-03-06 0000 HC8N          59  700    K1XM          59  MA     1
+QSO: 21303 PH 1999-03-06 0001 HC8N          59  700    K1AO          59  KY     1
+QSO: 21303 PH 1999-03-06 0001 HC8N          59  700    KM0O          59  MN     1
+QSO: 28495 PH 1999-03-06 0001 HC8N          59  700    KQ6ES         59  CA     0 
+QSO: 21303 PH 1999-03-06 0001 HC8N          59  700    WA2DES        59  NY     1
+QSO: 28495 PH 1999-03-06 0001 HC8N          59  700    N7MAL         59  AZ     0
+QSO: 21303 PH 1999-03-06 0001 HC8N          59  700    N0YY          59  IA     1
+QSO: 21303 PH 1999-03-06 0002 HC8N          59  700    W1GD          59  NJ     1
+END-OF-LOG:
+
+
+##############################################################################
+# 3. kkn.net example log — iaru.txt
+# SOURCE: https://web.archive.org/web/20111224020814id_/http://www.kkn.net/~trey/cabrillo/iaru.txt
+# FETCHED: 2026-08-17
+# NOTE: Example IARU Contest log
+##############################################################################
+START-OF-LOG: 3.0
+LOCATION: STX
+CONTEST: IARU-HF
+CALLSIGN: K5TR
+CATEGORY-OPERATOR: SINGLE-OP 
+CATEGORY-POWER: HIGH 
+CATEGORY-MODE: SSB
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-TRANSMITTER: TWO
+CLAIMED-SCORE: 12112177
+OPERATORS: K5TR
+NAME: George Fremin III
+ADDRESS: RR 1 Box 322
+ADDRESS-CITY: Johnson City
+ADDRESS-STATE-PROVINCE: TX 
+ADDRESS-POSTALCODE: 78636
+ADDRESS: USA 
+CLUB: Central Texas DX & Contest Club
+QSO: 21303 PH 1999-07-10 1202 K5TR          59  07     NU1AW         59  IARU
+QSO: 14199 PH 1999-07-10 1202 K5TR          59  07     K1JN          59  08
+QSO: 14199 PH 1999-07-10 1202 K5TR          59  07     WP4Q          59  11
+QSO: 14199 PH 1999-07-10 1202 K5TR          59  07     W9RE          59  08
+QSO: 14199 PH 1999-07-10 1203 K5TR          59  07     JA1KTR        59  45
+QSO: 14199 PH 1999-07-10 1203 K5TR          59  07     VA3SWG        59  04
+QSO: 14199 PH 1999-07-10 1204 K5TR          59  07     WE8P/KH6      59  61
+QSO: 14199 PH 1999-07-10 1204 K5TR          59  07     N7FL/KH6      59  61
+QSO: 14199 PH 1999-07-10 1205 K5TR          59  07     JA2SYJ        59  45
+QSO: 14199 PH 1999-07-10 1205 K5TR          59  07     JA8LNR        59  45
+QSO: 21224 PH 1999-07-10 1206 K5TR          59  07     CF3EJ         59  04
+END-OF-LOG:
+
+##############################################################################
+# 3. kkn.net example log — arrl-10.txt
+# SOURCE: https://web.archive.org/web/20111212083508id_/http://www.kkn.net/~trey/cabrillo/arrl-10.txt
+# FETCHED: 2026-08-17
+# NOTE: Example 10 Meter Contest log
+##############################################################################
+START-OF-LOG: 3.0
+LOCATION: DX
+CONTEST: ARRL-10
+CALLSIGN: LU6ETB
+CATEGORY-OPERATOR: SINGLE-OP 
+CATEGORY-POWER: HIGH 
+CATEGORY-MODE: MIXED
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-TRANSMITTER: ONE
+CLAIMED-SCORE: 2812199
+OPERATORS: N5KO 
+CLUB: Radio Club Quilmes
+NAME: Trey Garlough
+ADDRESS: 7375 Oak Ridge Road
+ADDRESS-CITY: Aptos
+ADDRESS-STATE: CA
+ADDRESS-POSTALCODE: 95003
+ADDRESS-COUNTRY: USA
+SOAPBOX: Highlight of the weekend was the post-contest asado
+SOAPBOX: prepared by Arturo.
+QSO: 28497 PH 1997-12-13 0000 LU6ETB        59       1 NN7NN         59      NV
+QSO: 28497 PH 1997-12-13 0000 LU6ETB        59       2 N7TR          59      NV
+QSO: 28497 PH 1997-12-13 0000 LU6ETB        59       3 W6WVK         59      CA
+QSO: 28497 PH 1997-12-13 0000 LU6ETB        59       4 K3EST         59      CA
+QSO: 28497 PH 1997-12-13 0000 LU6ETB        59       5 KF4NRH        59      FL
+QSO: 28497 PH 1997-12-13 0001 LU6ETB        59       6 N6BLS         59      CA
+QSO: 28497 PH 1997-12-13 0001 LU6ETB        59       7 K4SN          59      FL
+QSO: 28497 PH 1997-12-13 0001 LU6ETB        59       8 JR1PIK        59       1
+QSO: 28497 PH 1997-12-13 0002 LU6ETB        59       9 K7SS/KH6      59      HI
+QSO: 28013 CW 1997-12-13 0003 LU6ETB        599     10 HS0ZCR        599      4
+QSO: 28013 CW 1997-12-13 0003 LU6ETB        599     11 WA5VGI        599     CA
+QSO: 28013 CW 1997-12-13 0004 LU6ETB        599     12 W6GNX         599     CA
+QSO: 28013 CW 1997-12-13 0004 LU6ETB        599     13 KN6YD         599     CA
+END-OF-LOG:
+
+##############################################################################
+# 3. kkn.net example log — arrl-160.txt
+# SOURCE: https://web.archive.org/web/20111223114458id_/http://www.kkn.net/~trey/cabrillo/arrl-160.txt
+# FETCHED: 2026-08-17
+# NOTE: Example 160 Meter Contest log
+##############################################################################
+START-OF-LOG: 3.0
+LOCATION: STX
+CONTEST: ARRL-160
+CALLSIGN: W5KFT
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-POWER: QRP
+CATEGORY-ASSISTED: NON-ASSISTED
+CLAIMED-SCORE: 12112
+OPERATORS: K5TR
+NAME: George Fremin III
+ADDRESS: RR 1 Box 322
+ADDRESS-CITY: Johnson City
+ADDRESS-STATE-PROVINCE: TX 
+ADDRESS-POSTALCODE: 78636
+ADDRESS: USA 
+CLUB: Central Texas DX & Contest Club
+SOAPBOX: 
+SOAPBOX: 
+SOAPBOX: 
+QSO:  1832 CW 1997-12-07 0521 W5KFT         599 STX    W6FSJ         599 EB 
+QSO:  1832 CW 1997-12-07 0521 W5KFT         599 STX    W7OM          599 WWA
+QSO:  1832 CW 1997-12-07 0522 W5KFT         599 STX    N6TW          599 LAX
+QSO:  1832 CW 1997-12-07 0522 W5KFT         599 STX    W7CB          599 SB
+QSO:  1832 CW 1997-12-07 0523 W5KFT         599 STX    W7HS          599 UT
+QSO:  1832 CW 1997-12-07 0523 W5KFT         599 STX    W6IA          599 SDG
+QSO:  1832 CW 1997-12-07 0524 W5KFT         599 STX    HC8N          599 DX
+END-OF-LOG:
+
+##############################################################################
+# 3. kkn.net example log — cqww-rtty.txt
+# SOURCE: https://web.archive.org/web/20120122182851id_/http://www.kkn.net/~trey/cabrillo/cqww-rtty.txt
+# FETCHED: 2026-08-17
+# NOTE: Example CQ/RJ RTTY Contest log
+##############################################################################
+START-OF-LOG: 3.0
+CONTEST: CQ-WW-RTTY
+CALLSIGN: LU6ETB
+CATEGORY-OPERATOR: SINGLE-OP 
+CATEGORY-BAND: 10M 
+CATEGORY-POWER: HIGH 
+CATEGORY-ASSISTED: NON-ASSISTED
+CLAIMED-SCORE: 1410
+OPERATORS: N5KO 
+CLUB: Radio Club Quilmes
+NAME: Trey Garlough
+ADDRESS: 7375 Oak Ridge Road
+ADDRESS-CITY: Aptos
+ADDRESS-STATE: CA
+ADDRESS-POSTALCODE: 95003
+ADDRESS-COUNTRY: USA
+QSO: 28087 RY 2001-09-29 0000 LU6ETB        599 13 DX  NN7NN         599 03 NV
+QSO: 28087 RY 2001-09-29 0000 LU6ETB        599 13 DX  N7TR          599 03 NV
+QSO: 28087 RY 2001-09-29 0000 LU6ETB        599 13 DX  W6WVK         599 03 CA
+QSO: 28087 RY 2001-09-29 0000 LU6ETB        599 13 DX  K3EST         599 03 CA
+QSO: 28087 RY 2001-09-29 0000 LU6ETB        599 13 DX  KF4NRH        599 05 FL
+QSO: 28087 RY 2001-09-29 0001 LU6ETB        599 13 DX  N6BLS         599 03 CA
+QSO: 28087 RY 2001-09-29 0001 LU6ETB        599 13 DX  K4SN          599 05 FL
+QSO: 28087 RY 2001-09-29 0001 LU6ETB        599 13 DX  JR1PIK        599 25 DX
+QSO: 28087 RY 2001-09-29 0002 LU6ETB        599 13 DX  K7SS/KH6      599 31 DX
+QSO: 28087 RY 2001-09-29 0003 LU6ETB        599 13 DX  HS0ZCR        599 26 DX
+QSO: 28087 RY 2001-09-29 0003 LU6ETB        599 13 DX  WA5VGI        599 03 CA
+QSO: 28087 RY 2001-09-29 0004 LU6ETB        599 13 DX  W6GNX         599 03 CA
+QSO: 28087 RY 2001-09-29 0004 LU6ETB        599 13 DX  KN6YD         599 03 CA
+END-OF-LOG:
+
+##############################################################################
+# 3. kkn.net example log — wpx-rtty.txt
+# SOURCE: https://web.archive.org/web/20130712083128id_/http://www.kkn.net/~trey/cabrillo/wpx-rtty.txt
+# FETCHED: 2026-08-17
+# NOTE: Example WPX RTTY Contest log
+##############################################################################
+START-OF-LOG: 3.0
+CALLSIGN: LU/N5KO
+CONTEST: CQ-WPX-RTTY
+CATEGORY-OPERATOR: SINGLE-OP 
+CATEGORY-BAND: 10M 
+CATEGORY-POWER: HIGH 
+CATEGORY-ASSISTED: NON-ASSISTED
+CLAIMED-SCORE: 19112
+NAME: Trey Garlough
+ADDRESS: 7375 Oak Ridge Road
+ADDRESS-CITY: Aptos
+ADDRESS-STATE: CA
+ADDRESS-POSTALCODE: 95003
+ADDRESS-COUNTRY: USA
+QSO: 28000 RY 2002-02-10 2126 LU/N5KO       599 0001   KA4RRU        599 0530  
+QSO: 28000 RY 2002-02-10 2130 LU/N5KO       599 0002   KF2XF         599 0283 
+QSO: 28000 RY 2002-02-10 2130 LU/N5KO       599 0003   LU8EKC        599 0616  
+QSO: 28000 RY 2002-02-10 2131 LU/N5KO       599 0004   N4CW          599 0274  
+QSO: 28000 RY 2002-02-10 2132 LU/N5KO       599 0005   W2YC          599 1025  
+QSO: 28000 RY 2002-02-10 2133 LU/N5KO       599 0006   N4TJ          599 0082  
+QSO: 28000 RY 2002-02-10 2135 LU/N5KO       599 0007   AD1C          599 0488  
+QSO: 28000 RY 2002-02-10 2136 LU/N5KO       599 0008   LW2DLZ        599 0060  
+QSO: 28000 RY 2002-02-10 2138 LU/N5KO       599 0009   K6TA          599 0320  
+QSO: 28000 RY 2002-02-10 2138 LU/N5KO       599 0010   K0BJ          599 0250  
+QSO: 28000 RY 2002-02-10 2139 LU/N5KO       599 0011   N4VV          599 0259  
+QSO: 28000 RY 2002-02-10 2140 LU/N5KO       599 0012   NT1N          599 0126  
+QSO: 28000 RY 2002-02-10 2141 LU/N5KO       599 0013   W3YX          599 0017  
+QSO: 28000 RY 2002-02-10 2141 LU/N5KO       599 0014   NT6K          599 0716  
+QSO: 28000 RY 2002-02-10 2141 LU/N5KO       599 0015   AA5AU         599 1416  
+QSO: 28000 RY 2002-02-10 2142 LU/N5KO       599 0016   N9CK          599 0836  
+QSO: 28000 RY 2002-02-10 2143 LU/N5KO       599 0017   VE3WQ         599 0657  
+QSO: 28000 RY 2002-02-10 2143 LU/N5KO       599 0018   W0LSD         599 0588  
+QSO: 28000 RY 2002-02-10 2144 LU/N5KO       599 0019   N6OJ          599 0838  
+QSO: 28000 RY 2002-02-10 2146 LU/N5KO       599 0020   VE4COZ        599 0975  
+QSO: 28000 RY 2002-02-10 2147 LU/N5KO       599 0021   OA4AHW        599 0085  
+QSO: 28000 RY 2002-02-10 2149 LU/N5KO       599 0022   WM9L          599 0421  
+QSO: 28000 RY 2002-02-10 2150 LU/N5KO       599 0023   WA2AUZ        599 0123  
+QSO: 28000 RY 2002-02-10 2150 LU/N5KO       599 0024   N1NB          599 0534  
+QSO: 28000 RY 2002-02-10 2151 LU/N5KO       599 0025   LU6DAT        599 0077  
+QSO: 28000 RY 2002-02-10 2152 LU/N5KO       599 0026   YV5AAX        599 0332  
+QSO: 28000 RY 2002-02-10 2153 LU/N5KO       599 0027   AC6JT         599 0637  
+QSO: 28000 RY 2002-02-10 2153 LU/N5KO       599 0028   K9ER/5        599 0104  
+QSO: 28000 RY 2002-02-10 2154 LU/N5KO       599 0029   W7GTO         599 0193  
+QSO: 28000 RY 2002-02-10 2155 LU/N5KO       599 0030   N5ZM          599 0225  
+QSO: 28000 RY 2002-02-10 2155 LU/N5KO       599 0031   N7GVV         599 0257  
+QSO: 28000 RY 2002-02-10 2158 LU/N5KO       599 0032   JE1HWY        599 0016  
+QSO: 28000 RY 2002-02-10 2159 LU/N5KO       599 0033   K5NRC         599 0268  
+QSO: 28000 RY 2002-02-10 2200 LU/N5KO       599 0034   LW8EXF        599 0587  
+QSO: 28000 RY 2002-02-10 2237 LU/N5KO       599 0035   KH6ND         599 0788  
+QSO: 28000 RY 2002-02-10 2242 LU/N5KO       599 0036   JH4UYB        599 1170  
+QSO: 28000 RY 2002-02-10 2246 LU/N5KO       599 0037   VE5CPU        599 0754  
+QSO: 28000 RY 2002-02-10 2247 LU/N5KO       599 0038   N2BJ          599 0798  
+QSO: 28000 RY 2002-02-10 2248 LU/N5KO       599 0039   JK1OLT        599 0496  
+QSO: 28000 RY 2002-02-10 2253 LU/N5KO       599 0040   JS1OYN        599 0652  
+QSO: 28000 RY 2002-02-10 2254 LU/N5KO       599 0041   KE7NT         599 0717  
+QSO: 28000 RY 2002-02-10 2256 LU/N5KO       599 0042   JA7IC         599 0701  
+QSO: 28000 RY 2002-02-10 2301 LU/N5KO       599 0043   JA6WFM/HR3    599 0364  
+QSO: 28000 RY 2002-02-10 2310 LU/N5KO       599 0044   KL7AC         599 0605  
+QSO: 28000 RY 2002-02-10 2312 LU/N5KO       599 0045   W6JOX         599 0365  
+QSO: 28000 RY 2002-02-10 2315 LU/N5KO       599 0046   JA3AUQ        599 0046  
+QSO: 28000 RY 2002-02-10 2316 LU/N5KO       599 0047   JE6KYA        599 0125  
+QSO: 28000 RY 2002-02-10 2318 LU/N5KO       599 0048   JA1BUI        599 0164  
+QSO: 28000 RY 2002-02-10 2319 LU/N5KO       599 0049   W0TY          599 0429  
+QSO: 28000 RY 2002-02-10 2320 LU/N5KO       599 0050   K8VT          599 0601  
+QSO: 28000 RY 2002-02-10 2320 LU/N5KO       599 0051   N0PL          599 0107  
+QSO: 28000 RY 2002-02-10 2321 LU/N5KO       599 0052   W1TO          599 0465  
+QSO: 28000 RY 2002-02-10 2322 LU/N5KO       599 0053   W4AUI         599 0419  
+QSO: 28000 RY 2002-02-10 2323 LU/N5KO       599 0054   JA2XYO        599 0116  
+QSO: 28000 RY 2002-02-10 2324 LU/N5KO       599 0055   AE5RM         599 0001  
+QSO: 28000 RY 2002-02-10 2324 LU/N5KO       599 0056   K8PYD         599 0053  
+QSO: 28000 RY 2002-02-10 2325 LU/N5KO       599 0057   VX6RAJ        599 0714  
+QSO: 28000 RY 2002-02-10 2328 LU/N5KO       599 0058   AA6TY         599 0268  
+QSO: 28000 RY 2002-02-10 2329 LU/N5KO       599 0059   JA1XRH        599 0078  
+QSO: 28000 RY 2002-02-10 2329 LU/N5KO       599 0060   JR1NHD        599 0278  
+QSO: 28000 RY 2002-02-10 2330 LU/N5KO       599 0061   JA1KNS        599 0021  
+QSO: 28000 RY 2002-02-10 2330 LU/N5KO       599 0062   JM1GHT        599 0211  
+QSO: 28000 RY 2002-02-10 2331 LU/N5KO       599 0063   K7DBU         599 0267  
+QSO: 28000 RY 2002-02-10 2332 LU/N5KO       599 0064   AB0FX         599 0160  
+QSO: 28000 RY 2002-02-10 2333 LU/N5KO       599 0065   N8BJQ         599 0267  
+QSO: 28000 RY 2002-02-10 2334 LU/N5KO       599 0066   JA5ATN        599 0207  
+QSO: 28000 RY 2002-02-10 2336 LU/N5KO       599 0067   K6RIM         599 0198  
+QSO: 28000 RY 2002-02-10 2337 LU/N5KO       599 0068   KB9JD         599 0225  
+QSO: 28000 RY 2002-02-10 2338 LU/N5KO       599 0069   W8DD          599 0005  
+QSO: 28000 RY 2002-02-10 2338 LU/N5KO       599 0070   JH5HDA        599 0198  
+QSO: 28000 RY 2002-02-10 2341 LU/N5KO       599 0071   LW5DIQ        599 0001  
+QSO: 28000 RY 2002-02-10 2342 LU/N5KO       599 0072   JA6WJL        599 0207  
+QSO: 28000 RY 2002-02-10 2342 LU/N5KO       599 0073   K8UT          599 0151  
+QSO: 28000 RY 2002-02-10 2343 LU/N5KO       599 0074   NN6NN         599 1598  
+QSO: 28000 RY 2002-02-10 2344 LU/N5KO       599 0075   ND6E          599 0497  
+QSO: 28000 RY 2002-02-10 2345 LU/N5KO       599 0076   K9UQN         599 0156  
+QSO: 28000 RY 2002-02-10 2346 LU/N5KO       599 0077   JA1XUY        599 0242  
+QSO: 28000 RY 2002-02-10 2347 LU/N5KO       599 0078   JF1GUQ        599 0279  
+QSO: 28000 RY 2002-02-10 2348 LU/N5KO       599 0079   JR6EZE        599 0058  
+QSO: 28000 RY 2002-02-10 2349 LU/N5KO       599 0080   N9TH          599 0108  
+QSO: 28000 RY 2002-02-10 2350 LU/N5KO       599 0081   JI0VIF        599 0120  
+QSO: 28000 RY 2002-02-10 2350 LU/N5KO       599 0082   JA1CKE        599 0241  
+QSO: 28000 RY 2002-02-10 2351 LU/N5KO       599 0083   JG3NKP/1      599 0040  
+QSO: 28000 RY 2002-02-10 2352 LU/N5KO       599 0084   JR3GDY        599 0163  
+QSO: 28000 RY 2002-02-10 2354 LU/N5KO       599 0085   JK1IQK        599 0287  
+QSO: 28000 RY 2002-02-10 2355 LU/N5KO       599 0086   K7EE          599 0031  
+QSO: 28000 RY 2002-02-10 2356 LU/N5KO       599 0087   JA3TYO        599 0005  
+QSO: 28000 RY 2002-02-10 2357 LU/N5KO       599 0088   JE8TGI        599 0204  
+QSO: 28000 RY 2002-02-10 2358 LU/N5KO       599 0089   KK5OQ         599 0779  
+QSO: 28000 RY 2002-02-10 2359 LU/N5KO       599 0090   W1JR          599 0032  
+END-OF-LOG:            
+
+##############################################################################
+# 3. kkn.net example log — sweepstakes.txt
+# SOURCE: https://web.archive.org/web/20111224020858id_/http://www.kkn.net/~trey/cabrillo/sweepstakes.txt
+# FETCHED: 2026-08-17
+# NOTE: Example Sweepstakes log (column-aligned)
+##############################################################################
+START-OF-LOG: 3.0
+CONTEST: ARRL-SS-CW
+CALLSIGN: N5KO
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-OPERATOR: MULTI-OP
+CATEGORY-POWER: HIGH
+LOCATION: SCV
+CATEGORY-TRANSMITTER: ONE
+CLAIMED-SCORE: 160
+OPERATORS: N5KO K6AW
+CLUB: Northern California Contest Club
+NAME: Trey Garlough
+ADDRESS: 7375 Oak Ridge Road
+ADDRESS-CITY: Aptos
+ADDRESS-STATE: CA
+ADDRESS-POSTALCODE: 95003
+ADDRESS-COUNTRY: USA
+SOAPBOX: The ARRL November Sweepstakes is my favorite contest.  It really
+SOAPBOX: is fun to get on and try to make a clean sweep.
+QSO: 21042 CW 1997-11-01 2101 N5KO          1 B 74 SCV WA2VRR        1 A 74 VA
+QSO: 21042 CW 1997-11-01 2102 N5KO          2 B 74 SCV NJ2L          2 B 81 WNY
+QSO: 21042 CW 1997-11-01 2102 N5KO          3 B 74 SCV K9ZO          2 A 69 IL
+QSO: 21042 CW 1997-11-01 2103 N5KO          4 B 74 SCV K7QQ          3 A 62 IL
+QSO: 21042 CW 1997-11-01 2103 N5KO          5 B 74 SCV W4YE          5 A 74 VA
+QSO: 21042 CW 1997-11-01 2104 N5KO          6 B 74 SCV K3SV          3 B 71 EPA
+QSO: 21042 CW 1997-11-01 2105 N5KO          7 B 74 SCV K2GS          3 A 89 ENY
+QSO: 21042 CW 1997-11-01 2106 N5KO          8 B 74 SCV KX1E          3 A 56 ME
+QSO: 21042 CW 1997-11-01 2106 N5KO          9 B 74 SCV N0EID         2 Q 82 MO
+QSO: 21042 CW 1997-11-01 2107 N5KO         10 B 74 SCV N4AF         12 B 58 NC
+END-OF-LOG:
+
+
+
+##############################################################################
+# 3. kkn.net example log — arrl-vhf.txt
+# SOURCE: https://web.archive.org/web/20141221163556id_/http://www.kkn.net/~trey/cabrillo/arrl-vhf.txt
+# FETCHED: 2026-08-17
+# NOTE: Example ARRL VHF Contest log
+##############################################################################
+START-OF-LOG: 3.0
+CONTEST: ARRL-VHF-SEP
+CALLSIGN: NJ2L
+CATEGORY-OPERATOR: SINGLE-OP 
+CATEGORY-POWER: HIGH
+CATEGORY-ASSISTED: NON-ASSISTED
+LOCATION: WNY
+CLAIMED-SCORE: 20805
+CLUB: Rochester VHF Group
+NAME: Rus Healy
+ADDRESS: 5960 Canadice Hill Road
+ADDRESS-CITY: Springwater
+ADDRESS-STATE-PROVINCE: NY
+ADDRESS-POSTALCODE: 14560
+SOAPBOX: What a great contest!
+QSO:    50 PH 1997-09-13 1804 NJ2L              FN12fr KB2DMK            FN12
+QSO:   144 PH 1997-09-13 2014 NJ2L              FN12fr VE3VRQ            FN13
+QSO:   144 PH 1997-09-13 2019 NJ2L              FN12fr KF2TV             FN13
+QSO:   144 PH 1997-09-13 2020 NJ2L              FN12fr NA2X              FN13
+QSO:   144 PH 1997-09-13 2025 NJ2L              FN12fr N2PSH             FN13
+QSO:   144 PH 1997-09-13 2025 NJ2L              FN12fr NT2W              FN24
+QSO:    50 PH 1997-09-13 2027 NJ2L              FN12fr VE3FHU            FN25
+QSO:   144 PH 1997-09-13 2027 NJ2L              FN12fr VE3FHU            FN25
+QSO:   222 PH 1997-09-13 2029 NJ2L              FN12fr VE3FHU            FN25
+QSO:   144 PH 1997-09-13 2036 NJ2L              FN12fr KB3PW             FN13
+QSO:    50 PH 1997-09-13 2037 NJ2L              FN12fr KB3PW             FN13
+QSO:   222 PH 1997-09-13 2038 NJ2L              FN12fr KB3PW             FN13
+QSO:   432 PH 1997-09-13 2039 NJ2L              FN12fr KB3PW             FN13
+QSO:   144 PH 1997-09-13 2044 NJ2L              FN12fr KB2YWU            FN13
+QSO:   144 PH 1997-09-13 2048 NJ2L              FN12fr K2IWR             FN12
+QSO:   144 PH 1997-09-13 2048 NJ2L              FN12fr WA2AEY            FN23
+QSO:    50 PH 1997-09-13 2049 NJ2L              FN12fr WA2AEY            FN23
+QSO:   432 PH 1997-09-13 2050 NJ2L              FN12fr WA2AEY            FN23
+QSO:   144 PH 1997-09-13 2051 NJ2L              FN12fr W2FE              FN13
+QSO:   144 PH 1997-09-13 2051 NJ2L              FN12fr K2OEQ             FN13
+QSO:    50 PH 1997-09-13 2053 NJ2L              FN12fr K2OEQ             FN13
+QSO:   144 PH 1997-09-13 2059 NJ2L              FN12fr KA2CKI/R          FN24
+QSO:   902 PH 1997-09-13 2101 NJ2L              FN12fr K2OEQ             FN13
+QSO:    50 PH 1997-09-13 2107 NJ2L              FN12fr KA2CKI/R          FN24
+QSO:   222 PH 1997-09-13 2108 NJ2L              FN12fr KA2CKI/R          FN24
+QSO:   432 PH 1997-09-13 2110 NJ2L              FN12fr KA2CKI/R          FN24
+QSO:   902 CW 1997-09-13 2115 NJ2L              FN12fr KA2CKI/R          FN24
+QSO:  1.2G CW 1997-09-13 2117 NJ2L              FN12fr KA2CKI/R          FN24
+QSO:   144 PH 1997-09-13 2134 NJ2L              FN12fr W2SAG             FN02
+QSO:    50 PH 1997-09-13 2135 NJ2L              FN12fr W2SAG             FN02
+QSO:   222 PH 1997-09-13 2137 NJ2L              FN12fr W2SAG             FN02
+QSO:   432 PH 1997-09-13 2138 NJ2L              FN12fr W2SAG             FN02
+QSO:   144 PH 1997-09-13 2140 NJ2L              FN12fr VE2QQ/3           FN13
+QSO:   144 PH 1997-09-13 2142 NJ2L              FN12fr N1MU              FN13
+QSO:   144 PH 1997-09-13 2155 NJ2L              FN12fr N2WVK             FN13
+QSO:    50 PH 1997-09-13 2156 NJ2L              FN12fr N2WVK             FN13
+QSO:    50 PH 1997-09-13 2157 NJ2L              FN12fr KB2YWU            FN13
+QSO:   144 PH 1997-09-13 2201 NJ2L              FN12fr N2VBK             FN02
+QSO:   902 PH 1997-09-13 2206 NJ2L              FN12fr N1MU              FN13
+QSO:   144 PH 1997-09-13 2208 NJ2L              FN12fr N2JQR             FN12
+QSO:    50 PH 1997-09-13 2210 NJ2L              FN12fr N2JQR             FN12
+QSO:   222 PH 1997-09-13 2211 NJ2L              FN12fr N2JQR             FN12
+QSO:   432 PH 1997-09-13 2218 NJ2L              FN12fr N2JQR             FN12
+QSO:   144 PH 1997-09-13 2220 NJ2L              FN12fr NC1I              FN32
+QSO:   222 CW 1997-09-13 2225 NJ2L              FN12fr NC1I              FN32
+QSO:   432 PH 1997-09-13 2227 NJ2L              FN12fr NC1I              FN32
+QSO:   432 PH 1997-09-13 2228 NJ2L              FN12fr KB2DMK            FN12
+QSO:   222 PH 1997-09-13 2229 NJ2L              FN12fr KB2DMK            FN12
+QSO:   144 PH 1997-09-13 2229 NJ2L              FN12fr KB2DMK            FN12
+QSO:   144 PH 1997-09-13 2232 NJ2L              FN12fr N2ULL             FN13
+QSO:    50 PH 1997-09-13 2233 NJ2L              FN12fr N2ULL             FN13
+QSO:   222 PH 1997-09-13 2234 NJ2L              FN12fr N2ULL             FN13
+QSO:   432 PH 1997-09-13 2234 NJ2L              FN12fr N2ULL             FN13
+QSO:   902 PH 1997-09-13 2240 NJ2L              FN12fr N2ULL             FN13
+QSO:  1.2G PH 1997-09-13 2241 NJ2L              FN12fr N2ULL             FN13
+QSO:   902 PH 1997-09-14 0130 NJ2L              FN12fr N2JQR             FN12
+QSO:  1.2G PH 1997-09-14 0131 NJ2L              FN12fr N2JQR             FN12
+QSO:  2.3G CW 1997-09-14 0134 NJ2L              FN12fr N2JQR             FN12
+QSO:   432 CW 1997-09-14 0137 NJ2L              FN12fr WA2BPE            FN12
+QSO:  3.4G CW 1997-09-14 0139 NJ2L              FN12fr N2JQR             FN12
+QSO:    50 CW 1997-09-14 0202 NJ2L              FN12fr K5MA/1            FN41
+QSO:   144 PH 1997-09-14 0207 NJ2L              FN12fr W2VO              FN23
+QSO:   222 PH 1997-09-14 0215 NJ2L              FN12fr VE2QQ/3           FN13
+QSO:   432 PH 1997-09-14 0216 NJ2L              FN12fr VE2QQ/3           FN13
+QSO:    50 PH 1997-09-14 0216 NJ2L              FN12fr VE2QQ/3           FN13
+QSO:   432 PH 1997-09-14 0220 NJ2L              FN12fr K2OS              FN13
+QSO:  1.2G PH 1997-09-14 0223 NJ2L              FN12fr K2OS              FN13
+QSO:  1.2G PH 1997-09-14 0224 NJ2L              FN12fr K2AN              FN02
+QSO:   902 PH 1997-09-14 0226 NJ2L              FN12fr K2AN              FN02
+QSO:   432 PH 1997-09-14 0227 NJ2L              FN12fr K2AN              FN02
+QSO:   222 PH 1997-09-14 0228 NJ2L              FN12fr K2AN              FN02
+QSO:   144 PH 1997-09-14 0229 NJ2L              FN12fr K2AN              FN02
+QSO:    50 PH 1997-09-14 0231 NJ2L              FN12fr K2AN              FN02
+QSO:   144 PH 1997-09-14 0250 NJ2L              FN12fr W6XR              FN12
+QSO:    50 PH 1997-09-14 0250 NJ2L              FN12fr W6XR              FN12
+[many QSO's omitted]
+END-OF-LOG:
+
+##############################################################################
+# 3. kkn.net example log — cq-vhf.txt
+# SOURCE: https://web.archive.org/web/20111223114424id_/http://www.kkn.net/~trey/cabrillo/cq-vhf.txt
+# FETCHED: 2026-08-17
+# NOTE: Example CQ VHF Contest log
+##############################################################################
+START-OF-LOG: 3.0
+CONTEST: CQ-VHF
+CALLSIGN: W1XX
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-POWER: QRP
+CATEGORY-BAND: ALL
+CATEGORY-STATION: PORTABLE
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-TIME: 6-HOURS
+LOCATION: CT
+CLAIMED-SCORE: 6
+NAME: John Lindholm
+ADDRESS: 44 Longlane Rd
+ADDRESS-CITY: W Hartford
+ADDRESS-STATE-PROVINCE: CT 
+ADDRESS-POSTALCODE: 06117
+QSO:    50 PH 2002-07-20 2220 W1XX              FN31   NC1I              FN32
+QSO:   144 PH 2002-07-20 2220 W1XX              FN31   NC1I              FN32
+END-OF-LOG:
+
+##############################################################################
+# 3. kkn.net example log — stew.txt
+# SOURCE: https://web.archive.org/web/20111223114932id_/http://www.kkn.net/~trey/cabrillo/stew.txt
+# FETCHED: 2026-08-17
+# NOTE: Example Stew Perry Contest log (160 m, grid exchange)
+##############################################################################
+START-OF-LOG: 3.0
+CREATED-BY: TR Log POST Version 6.71
+CALLSIGN: K7RAT
+CONTEST: STEW-PERRY
+CATEGORY: MULTI-OP
+CATEGORY-POWER: HIGH
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-TRANSMITTER: ONE
+CLAIMED-SCORE: 7
+CLUB: Boring ARC
+NAME: Larry "Tree" Tyree
+ADDRESS: 15125 SE Bartell Rd
+ADDRESS-CITY: Boring
+ADDRESS-STATE: OR
+ADDRESS-POSTALCODE: 97009
+ADDRESS-COUNTRY: USA
+OPERATORS: N5KO, K6AW, N6TR, S1LKY
+QSO:  1800 CW 2002-12-28 1500 K7RAT         599 CN85   W2VJN         599 CN82
+QSO:  1800 CW 2002-12-28 1500 K7RAT         599 CN85   W7TTT         599 DM09
+QSO:  1800 CW 2002-12-28 1501 K7RAT         599 CN85   W7GG          599 CN94
+QSO:  1800 CW 2002-12-28 1502 K7RAT         599 CN85   W6EU          599 CM99
+QSO:  1800 CW 2002-12-28 1503 K7RAT         599 CN85   N0AX          599 CN87
+END-OF-LOG: 
+
+##############################################################################
+# 3. kkn.net example log — neqp.txt
+# SOURCE: https://web.archive.org/web/20111224020839id_/http://www.kkn.net/~trey/cabrillo/neqp.txt
+# FETCHED: 2026-08-17
+# NOTE: Example New England QSO Party log (a QSO-party log using the generic template)
+##############################################################################
+START-OF-LOG: 3.0
+CONTEST: NEQP
+CALLSIGN: W9IOP
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: MIXED
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-TRANSMITTER: ONE
+LOCATION: IL
+CLAIMED-SCORE: 123456
+NAME: Wally B. Smith
+ADDRESS: 123 Anywhere Street
+ADDRESS-CITY: Suburb
+ADDRESS-STATE: IL
+ADDRESS-POSTALCODE: 23456
+ADDRESS-COUNTRY: USA
+CLUB:
+SOAPBOX: Only missed two counties, see you next year.
+QSO: 14280 PH 2002-05-05 1202 W9IOP         59  IL     W1AW          59  HARCT
+QSO: 14282 PH 2002-05-05 1202 W9IOP         59  IL     K1ABC/M       59  PISME
+QSO: 14275 PH 2002-05-05 1202 W9IOP         59  IL     W1BD          59  BENVT
+QSO: 14290 PH 2002-05-05 1202 W9IOP         59  IL     WC1M          59  WNDNH
+QSO: 21380 PH 2002-05-05 1203 W9IOP         59  IL     K1ABC/M       59  SOMME
+QSO: 28385 PH 2002-05-05 1203 W9IOP         59  IL     K2KQ/1        59  DUKMA
+QSO: 28390 PH 2002-05-05 1204 W9IOP         59  IL     K2RD          59  NHNCT
+QSO: 14282 PH 2002-05-05 1204 W9IOP         59  IL     WB1BRE        59  ORAVT
+QSO: 14282 PH 2002-05-05 1205 W9IOP         59  IL     K1ABC/M       59  PENME
+QSO: 14282 PH 2002-05-05 1205 W9IOP         59  IL     W1KK          59  HMPMA
+QSO: 21289 PH 2002-05-05 1206 W9IOP         59  IL     W1OP          59  PRORI
+END-OF-LOG:
+
+# (naqp.txt and na-sprint.txt on kkn.net were 404 in every Wayback capture tried (2011, 2014); the WWROF posts in 2d/2e carry those examples.)
+
+##############################################################################
+# 4a. CQ WW DX Contest — 'Cabrillo Log Format for the CQ WW DX Contest' (v3 example log; QSO template with column ruler)
+# SOURCE: https://cqww.com/cabrillo.htm
+# FETCHED: 2026-08-17
+# NOTE: linked from WWROF's table as http://www.cqww.com/cabrillo.htm. Page text: 'Note for Column 81 (transmitter number): For the MULTI-ONE and MULTI-TWO categories, the last column in the log indicates which transmitter made the QSO. It must be a 0 or a 1. This column is not required for other categories.' and 'The CQ WW log checking software uses spaces for delimiters between fields. It is not necessary for all columns to line up in the columns shown above.' CONTEST names: CQ-WW-CW, CQ-WW-SSB.
+##############################################################################
+--- verbatim <pre> block 1 of cqww_cabrillo.txt ---
+
+START-OF-LOG: 3.0
+CONTEST: CQ-WW-SSB
+CALLSIGN: AA1ZZZ
+LOCATION: WMA
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: SSB
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-OVERLAY: 
+GRID-LOCATOR: 
+CLAIMED-SCORE: 9447852
+CLUB: Yankee Clipper Contest Club
+CREATED-BY: WriteLog V10.72C
+NAME: Randy Thompson
+ADDRESS: 1 Main St
+ADDRESS-CITY: Uxbridge
+ADDRESS-STATE-PROVINCE: MA
+ADDRESS-POSTALCODE: 01569
+ADDRESS-COUNTRY: USA
+OPERATORS: K5ZD
+SOAPBOX: Put your comments here.
+SOAPBOX: Use multiple lines if needed.   
+QSO:  3799 PH 2000-10-26 0711 AA1ZZZ          59  05     K9QZO         59  04     0
+QSO: 14256 PH 2000-10-26 0711 AA1ZZZ          59  05     P29AS         59  28     0
+QSO: 21250 PH 2000-10-26 0711 AA1ZZZ          59  05     4S7TWG        59  22     0
+QSO: 28530 PH 2000-10-26 0711 AA1ZZZ          59  05     JT1FAX        59  23     0
+QSO:  7250 PH 2000-10-26 0711 AA1ZZZ          59  05     WA6MIC        59  03     0
+END-OF-LOG:
+
+--- verbatim <pre> block 2 of cqww_cabrillo.txt ---
+
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call          rst exch   call          rst exch   t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO:  3799 PH 2000-11-26 0711 N6TW          59  03     JT1Z          59  23     0
+
+000000000111111111122222222223333333333444444444455555555556666666666777777777788
+123456789012345678901234567890123456789012345678901234567890123456789012345678901
+
+
+##############################################################################
+# 4b. CQ WPX Contest — 'Cabrillo Log Format for the CQ WPX Contest' (v3 example log; QSO template with column ruler)
+# SOURCE: https://cqwpx.com/cabrillo.htm
+# FETCHED: 2026-08-17
+# NOTE: linked from WWROF's table. Note the example log's QSO lines are single-space delimited (QSO: 7005 CW 2009-05-30 0002 AA1ZZZ 599 1 S50A 599 4) while the template shows the fixed columns. 'Note for Column 81 (transmitter number): For the MULTI-TWO category ... It must be a 0 or a 1.' CONTEST names: CQ-WPX-CW, CQ-WPX-SSB.
+##############################################################################
+--- verbatim <pre> block 1 of cqwpx_cabrillo.txt ---
+
+START-OF-LOG: 3.0
+CONTEST: CQ-WPX-CW
+CALLSIGN: AA1ZZZ
+LOCATION: WMA
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: CW
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-OVERLAY: TB-WIRES
+GRID-LOCATOR: 
+CLAIMED-SCORE: 9447852
+CLUB: Yankee Clipper Contest Club
+CREATED-BY: WriteLog V10.72C
+NAME: Randy Thompson
+ADDRESS: 1 Main St
+ADDRESS-CITY: Uxbridge
+ADDRESS-STATE-PROVINCE: MA
+ADDRESS-POSTALCODE: 01569
+ADDRESS-COUNTRY: USA
+OPERATORS: K5ZD
+SOAPBOX: Put your comments here.
+SOAPBOX: Use multiple lines if needed.
+QSO: 7005 CW 2009-05-30 0002 AA1ZZZ 599 1 S50A 599 4
+QSO: 7006 CW 2009-05-30 0015 AA1ZZZ 599 2 EF8M 599 34
+END-OF-LOG:
+
+--- verbatim <pre> block 2 of cqwpx_cabrillo.txt ---
+
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call          rst exch   call          rst exch   t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO:  3799 PH 1999-03-06 0711 HC8N          59  001    W1AW          59  001    0
+000000000111111111122222222223333333333444444444455555555556666666666777777777788
+123456789012345678901234567890123456789012345678901234567890123456789012345678901
+
+
+##############################################################################
+# 4c. CQ WPX RTTY Contest — 'Cabrillo Log Format for the CQ WPX RTTY Contest'
+# SOURCE: https://cqwpxrtty.com/cabrillo.htm
+# FETCHED: 2026-08-17
+# NOTE: linked from WWROF's table. The sponsor's own <pre> has COLLAPSED whitespace in the header and sample lines (verified in raw HTML, lines 303-306); only the ***** row keeps the widths. Page text: 'All logs, including Multi-Op, must include both sent and received serial numbers. ... For the Multi-Two category, the last column in the log indicates which transmitter made the QSO, a 0 or a 1.' CONTEST: CQ-WPX-RTTY.
+##############################################################################
+--- verbatim <pre> block 1 of cqwpxrtty_cabrillo.txt ---
+
+START-OF-LOG: 3.0
+CONTEST: CQ-WPX-RTTY
+CALLSIGN: NP3U
+LOCATION: PR
+CATEGORY-OPERATOR: MULTI-OP
+CATEGORY-TRANSMITTER: TWO
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: RTTY
+CATEGORY-ASSISTED: ASSISTED
+CATEGORY-STATION: FIXED
+CLAIMED-SCORE: 10418000
+CLUB: Yankee Clipper Contest Club
+CREATED-BY: WriteLog V10.72C
+NAME: Randy Thompson
+ADDRESS: 1 Main St
+ADDRESS-CITY: Uxbridge
+ADDRESS-STATE-PROVINCE: MA
+ADDRESS-POSTALCODE: 01569
+ADDRESS-COUNTRY: USA
+OPERATORS: W1AN K3IU AJ1M N1HRA WP4U WP4N
+SOAPBOX: Put your comments here.
+SOAPBOX: Use multiple lines if needed.   
+QSO:  7044 RY 2009-02-14 0002 NP3U      599 1    VE1SK      599 001 0
+QSO:  7044 RY 2009-02-14 0003 NP3U      599 2    HB9DHG     599 002 0
+QSO:  7044 RY 2009-02-14 0003 NP3U      599 3    SI4G       599 001 0
+QSO:  7044 RY 2009-02-14 0004 NP3U      599 4    IW1AYD     599 001 0
+QSO:  7044 RY 2009-02-14 0006 NP3U      599 5    UZ2I       599   1 0
+QSO:  7044 RY 2009-02-14 0007 NP3U      599 6    I4HRH      599   1 0
+QSO: 14081 RY 2009-02-14 0007 NP3U      599 1    UA0ZAM     599 002 1
+QSO: 14081 RY 2009-02-14 0007 NP3U      599 2    K7RE       599 004 1
+QSO: 14081 RY 2009-02-14 0008 NP3U      599 3    AB0YM      599 002 1
+QSO:  7044 RY 2009-02-14 0008 NP3U      599 7    G4WGE      599 004 0
+QSO:  7044 RY 2009-02-14 0009 NP3U      599 8    LY6A       599 011 0
+QSO:  7044 RY 2009-02-14 0009 NP3U      599 9    I1OQI      599 004 0
+QSO:  7044 RY 2009-02-14 0010 NP3U      599 10   W1GSH      599 003 0
+QSO: 14081 RY 2009-02-14 0010 NP3U      599 4    K0SR       599 011 1
+QSO:  7044 RY 2009-02-14 0011 NP3U      599 11   OM3KWZ     599 007 0
+QSO: 14081 RY 2009-02-14 0013 NP3U      599 5    K7IA       599 002 1
+END-OF-LOG:
+
+--- verbatim <pre> block 3 of cqwpxrtty_cabrillo.txt ---
+ --------info sent------- -------info rcvd--------
+QSO: freq mo date time call rst exch call rst exch t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO: 28000 RY 2002-02-10 2126 LU/N5KO 599 0001 KA4RRU 599 0530 
+000000000111111111122222222223333333333444444444455555555556666666666777777777788
+123456789012345678901234567890123456789012345678901234567890123456789012345678901
+
+
+##############################################################################
+# 4d. CQ WW RTTY Contest — 'Cabrillo Log Format for the CQ WW RTTY Contest' (RST + zone + location; 84-column ruler)
+# SOURCE: https://cqwwrtty.com/cabrillo.htm
+# FETCHED: 2026-08-17
+# NOTE: not in WWROF's table; sibling CQ site. Page text: 'CQ WW RTTY requires RST plus two exchange fields. One is for the CQ zone and the second is for the location. USA and Canada stations will have state or province. All others use DX as a placeholder.' CONTEST: CQ-WW-RTTY.
+##############################################################################
+--- verbatim <pre> block 1 of cqwwrtty_cabrillo.txt ---
+
+
+START-OF-LOG: 3.0
+CONTEST: CQ-WW-RTTY
+CALLSIGN: HC8N
+LOCATION: DX
+CATEGORY-OPERATOR: MULTI-OP
+CATEGORY-TRANSMITTER: TWO
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: RTTY
+CATEGORY-ASSISTED: ASSISTED
+CATEGORY-STATION: FIXED
+CLAIMED-SCORE: 8686317
+CLUB: NORTHERN CALIFORNIA CONTEST CLUB
+CREATED-BY: WT4I Contest Tools
+EMAIL: bob@mydomain.com
+NAME: BOB SMITH
+ADDRESS: 1759 POLE RIDGE RD
+ADDRESS: OXFORD, TX 65003
+OPERATORS: K6AW, W6OTC, XE1KK
+QSO: 14073 RY 2008-09-27 0005 HC8N 599 10 DX WC2C   599 05 NY 0
+QSO: 21087 RY 2008-09-27 0005 HC8N 599 10 DX CX4AAJ 599 13 DX 1
+QSO: 14073 RY 2008-09-27 0006 HC8N 599 10 DX W8JX   599 04 MI 0
+QSO: 14073 RY 2008-09-27 0006 HC8N 599 10 DX VA3PC  599 04 ON 0
+QSO: 21087 RY 2008-09-27 0006 HC8N 599 10 DX K7JA   599 03 CA 1
+QSO: 21087 RY 2008-09-27 0006 HC8N 599 10 DX PY7ZZ  599 11 DX 1
+QSO: 14073 RY 2008-09-27 0007 HC8N 599 10 DX W1ZK   599 05 VT 0
+QSO: 14073 RY 2008-09-27 0007 HC8N 599 10 DX AB8K   599 04 OH 0
+QSO: 14073 RY 2008-09-27 0009 HC8N 599 10 DX KK0M   599 03 CA 0
+QSO: 14073 RY 2008-09-27 0010 HC8N 599 10 DX AB4IQ  599 04 KY 0
+QSO: 21087 RY 2008-09-27 0010 HC8N 599 10 DX PT9IA  599 11 DX 1
+QSO: 21087 RY 2008-09-27 0010 HC8N 599 10 DX JM1XCW 599 25 DX 1
+QSO: 21087 RY 2008-09-27 0011 HC8N 599 10 DX N6VH   599 03 CA 1
+END-OF-LOG:
+
+--- verbatim <pre> block 2 of cqwwrtty_cabrillo.txt ---
+
+                              --------info sent-------   -------info rcvd--------
+QSO: freq  mo date       time call          rst Zn exch   call        rst Zn exch  t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ** **** ************* nnn ** ****  n
+QSO: 14073 RY 2008-09-27 0006 HC8N          599 10 DX   VA3PC         599 04 ON    0
+QSO: 14073 RY 2008-09-27 0007 HC8N          599 10 DX   G3FXB         599 14 DX    0
+
+000000000111111111122222222223333333333444444444455555555556666666666777777777788888
+123456789012345678901234567890123456789012345678901234567890123456789012345678901234
+
+
+##############################################################################
+# 4e. CQ 160-Meter Contest — 'Cabrillo Log Format for the CQ 160M Contest'
+# SOURCE: https://cq160.com/cabrillo.htm
+# FETCHED: 2026-08-17
+# NOTE: not in WWROF's table; sibling CQ site. 'Note for Column 81 (transmitter number): Must be a 0 or a 1. This column is not used for the CQ 160M contest.' CONTEST names: CQ-160-CW, CQ-160-SSB. Exchange: RS(T) + state/province for W/VE, RS(T) + CQ zone for others (see sample lines).
+##############################################################################
+--- verbatim <pre> block 1 of cq160_cabrillo.txt ---
+START-OF-LOG: 3.0
+CALLSIGN: AA1ZZZ
+CONTEST: CQ-160-SSB
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-BAND: 160M
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: CW
+CATEGORY-TRANSMITTER: ONE
+CLAIMED-SCORE: 47852
+CERTIFICATE: YES
+CLUB: My Contest Club
+LOCATION: WMA
+CREATED-BY: SuperLogger v1.0
+NAME: John Smith
+ADDRESS: 100 Main St
+ADDRESS-CITY: Uxbridge
+ADDRESS-STATE-PROVINCE: MA
+ADDRESS-POSTALCODE: 01569
+ADDRESS-COUNTRY: USA
+OPERATORS: K5ZD
+SOAPBOX: Put your comments here.
+SOAPBOX: Use multiple lines if needed.
+QSO:  1810 PH 2000-10-26 0711 AA1ZZZ          59  MA     K9QZO         59  IL     0
+QSO:  1815 PH 2000-10-26 0711 AA1ZZZ          59  MA     P29AS         59  28     0
+QSO:  1833 PH 2000-10-26 0711 AA1ZZZ          59  MA     4S7TWG        59  22     0
+QSO:  1841 PH 2000-10-26 0711 AA1ZZZ          59  MA     JT1FAX        59  23     0
+QSO:  1822 PH 2000-10-26 0711 AA1ZZZ          59  MA     WA6MIC        59  CA     0
+END-OF-LOG:
+
+
+--- verbatim <pre> block 2 of cq160_cabrillo.txt ---
+
+                              --------info sent------- -------info rcvd--------
+QSO: freq  mo date       time call          rst exch   call          rst exch   t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO:  1861 CW 2009-01-24 0310 K5ZD          599     MA N2NT          599    NJ  0
+QSO:  1861 CW 2009-01-24 0313 K5ZD          599     MA HA6NL         599    15  0 
+000000000111111111122222222223333333333444444444455555555556666666666777777777788
+123456789012345678901234567890123456789012345678901234567890123456789012345678901
+
+
+##############################################################################
+# 4f. CQ WW VHF Contest — 'Cabrillo Log Format for the CQ WW VHF Contest' (grid exchange, no RST)
+# SOURCE: https://cqww-vhf.com/cabrillo.htm
+# FETCHED: 2026-08-17
+# NOTE: linked from WWROF's table. CONTEST names: CQ-VHF-SSBCW, CQ-VHF-DIGI (changed 2025-06-05 from CQ-VHF). 'Valid entries in the mode field for the SSB/CW contest are CW, FM and PH. Valid entry in the mode field for the DIGITAL contest is DG.'
+##############################################################################
+--- verbatim <pre> block 1 of cqwwvhf_cabrillo.txt ---
+
+START-OF-LOG: 3.0
+CONTEST: CQ-VHF-SSBCW
+CALLSIGN: AA1ZZZ
+LOCATION: WMA
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: SSB
+CATEGORY-TRANSMITTER: ONE
+CLAIMED-SCORE: 9447
+CLUB: My Contest Club
+CREATED-BY: SuperLogger v1.0
+NAME: John Smith
+ADDRESS: 100 Main St
+ADDRESS-CITY: Uxbridge
+ADDRESS-STATE-PROVINCE: MA
+ADDRESS-POSTALCODE: 01569
+ADDRESS-COUNTRY: USA
+OPERATORS: K5ZD
+SOAPBOX: Put your comments here.
+SOAPBOX: Use multiple lines if needed.
+QSO:  50  CW  2001-07-17 1817 AA1ZZZ  FN31    W2AJM  FN21
+QSO:  50  PH  2001-07-17 1819 AA1ZZZ  FN31    N1DMJ  FN32
+QSO: 144  PH  2001-07-17 1826 AA1ZZZ  FN31    W1XX   FN31
+END-OF-LOG:
+
+--- verbatim <pre> block 2 of cqwwvhf_cabrillo.txt ---
+
+		--------info sent------- -------info rcvd--------
+QSO: band  mo date       time sent call  sent QRA rcvd call  rcvd QRA 
+QSO: ***** ** yyyy-mm-dd nnnn *********  ****     *********  ****
+QSO:  144  PH 2000-11-26 0711 W1XX       FN41     JT1Z/P     IN56
+000000000111111111122222222223333333333444444444455555555556666666666777777777788
+123456789012345678901234567890123456789012345678901234567890123456789012345678901
+
+
+##############################################################################
+# 4g. World Wide Digi DX Contest — 'Cabrillo File Format' (grid exchange, mode DG)
+# SOURCE: https://ww-digi.com/cabrillo.htm
+# FETCHED: 2026-08-17
+# NOTE: not in WWROF's table; sibling site. CONTEST: WW-DIGI; CATEGORY-MODE: DIGI; QSO mode DG.
+##############################################################################
+--- verbatim <pre> block 1 of wwdigi_cabrillo.txt ---
+
+START-OF-LOG: 3.0
+CONTEST: WW-DIGI
+CALLSIGN: HC8N
+LOCATION: DX
+CATEGORY-OPERATOR: MULTI-OP
+CATEGORY-TRANSMITTER: TWO
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: DIGI
+CATEGORY-STATION: FIXED
+CLAIMED-SCORE: 8686317
+CLUB: NORTHERN CALIFORNIA CONTEST CLUB
+CREATED-BY: WT4I Contest Tools
+NAME: BOB SMITH
+ADDRESS: 100 Main St
+ADDRESS: OXFORD, TX 65003
+OPERATORS: K6AW, W6OTC, W0YK
+SOAPBOX: Fun contest!
+QSO:  3595 DG 2019-08-31 1711 HC8N             EI00   W1AW             FN32   0
+END-OF-LOG:
+
+--- verbatim <pre> block 2 of wwdigi_cabrillo.txt ---
+
+                              ------info sent------- ------info rcvd-------
+QSO: freq  mo date       time call          exch     call          exch        t
+QSO: ***** ** yyyy-mm-dd nnnn ************* ******** ************* ********    n
+QSO:  3595 DG 2019-08-31 1711 HC8N          EI00     W1AW          FN32        0
+000000000111111111122222222223333333333444444444455555555556666666666777777777788
+123456789012345678901234567890123456789012345678901234567890123456789012345678901
+
+
+##############################################################################
+# 4h. ARRL — 'Cabrillo Format & Tutorial' (only Sweepstakes templates are on this page today)
+# SOURCE: http://www.arrl.org/cabrillo-format-tutorial
+# FETCHED: 2026-08-17
+# NOTE: linked from WWROF's table. The page has header templates per SS category and one QSO DATA TEMPLATE (single-space delimited, with a lettered field guide). No ARRL-DX / ARRL-10 / ARRL-160 / ARRL-RTTY / IARU / FD template is on this page; ARRL points paper loggers to https://www.b4h.net/cabforms/ (WA7BNM) which has forms for ARRL 10-Meter, ARRL 160-Meter, ARRL Field Day, ARRL RTTY Roundup, ARRL Sweepstakes CW/SSB, IARU HF, Winter Field Day, CQ 160 etc. — the forms do not display a column template.
+##############################################################################
+--- excerpt (the QSO DATA TEMPLATE section; the page is not <pre>-formatted, whitespace as rendered by the converter) ---
+QSO DATA TEMPLATE:
+
+Guide:A  B C  D E   F G H I J K L M N
+
+QSO: 14000 CW 2009-11-07 2100 W1AW 1 M 38 CT K8MM 1 Q 92 MI
+
+QSO: 14000 CW 2009-11-07 2101 W1AW 2 M 38 CT K3TX 1 A 59 EPA
+
+QSO: 14000 CW 2009-11-07 2104 W1AW 3 M 38 CT W4DAN 1 A 77 TN
+
+QSO: 14000 CW 2009-11-07 2106 W1AW 4 M 38 CT K1BG 2 U 68 WMA
+
+QSO: 14000 CW 2009-11-07 2106 W1AW 5 M 38 CT K5AF 10 A 60 STX
+
+END-OF-LOG:
+
+A= Operating frequency. Use the following generic abbreviations:
+
+ 1800
+
+ 3500
+
+ 7000
+
+ 14000
+
+ 21000
+
+ 28000
+
+B= Mode. In the CW Sweepstakes, use CW; in the Phone Sweepstakes, use PH.
+
+C= Date, in YYYY-MM-DD format. November 7, 2009 is typed as 2009-11-07.
+
+D= Time, in UTC format.
+
+E= Your call.
+
+F= Your QSO #.
+
+G= Your precedence.
+
+H= Your check (the last two numbers of the year you were first licensed).
+
+I= Your ARRL Section
+
+J= The call of the station you worked.
+
+K= Their QSO number to you.
+
+L= Their precedence.
+
+M= Their check.
+
+N = Their ARRL Section.
+--- Header template example from the same page (first of twelve; W1AW placeholder values) ---
+Single Op Low Power CW (Precedence “A”: 150 watts or less)
+
+START-OF-LOG: 3.0
+
+CONTEST: ARRL-SS-CW
+
+CALLSIGN: W1AW
+
+LOCATION: CT
+
+CLUB: ARRL
+
+OPERATORS: W1AW
+
+CATEGORY-OPERATOR: SINGLE-OP
+
+CATEGORY-TRANSMITTER: ONE
+
+CATEGORY-ASSISTED: NON-ASSISTED
+
+CATEGORY-BAND: ALL
+
+CATEGORY-POWER: LOW
+
+CATEGORY-MODE: CW
+
+CATEGORY-STATION: FIXED
+
+CLUB: ARRL
+
+NAME: Hiram Maxim
+
+ADDRESS: 225 Main St.
+
+ADDRESS: Newington, CT 06111
+
+##############################################################################
+# 4i. NCJ — North American QSO Party Cabrillo template file (plain text file, byte-exact)
+# SOURCE: http://ncjweb.com/NAQP_Cabrillo_Template.txt
+# FETCHED: 2026-08-17
+# NOTE: linked from WWROF's table. Same layout as the WWROF/kkn NAQP template: call(10) name(15 in the WWROF post / 10 here) qth(2-3), no RST, no serial; DX stations show DX; the t column is absent in this file.
+##############################################################################
+START-OF-LOG: 3.0
+CONTEST: NAQP-CW
+LOCATION: CA
+CALLSIGN: N5KO
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-BAND: ALL
+CATEGORY-POWER: LOW
+CATEGORY-MODE: CW
+CATEGORY-STATION: FIXED
+CLAIMED-SCORE: 404670
+NAME: Trey Garlough
+SOAPBOX:
+QSO: 28048 CW 2014-01-11 1800 N5KO            TREY       CA  N4PN            PAUL       GA
+QSO: 28048 CW 2014-01-11 1800 N5KO            TREY       CA  VE3NZ           BEN        ON
+QSO: 28048 CW 2014-01-11 1801 N5KO            TREY       CA  K6DGW           SKIP       CA
+QSO: 28048 CW 2014-01-11 1801 N5KO            TREY       CA  AA4LR           BILL       GA
+QSO: 28048 CW 2014-01-11 1802 N5KO            TREY       CA  K6RB            ROB        CA
+QSO: 28048 CW 2014-01-11 1802 N5KO            TREY       CA  WA1S            ANN        GA
+QSO: 28048 CW 2014-01-11 1802 N5KO            TREY       CA  AF8A            GARY       OH
+QSO: 28048 CW 2014-01-11 1802 N5KO            TREY       CA  W6CT            SCOTT      CA
+QSO: 28048 CW 2014-01-11 1803 N5KO            TREY       CA  K6GHA           DON        CA
+QSO: 28048 CW 2014-01-11 1803 N5KO            TREY       CA  HI8A            AKI        DX
+QSO: 28048 CW 2014-01-11 1803 N5KO            TREY       CA  W2CDO           PETER      MD
+QSO: 28048 CW 2014-01-11 1804 N5KO            TREY       CA  NE8J            HOWARD     MI
+QSO: 21048 CW 2014-01-11 1804 N5KO            TREY       CA  KH6LC           LLOYD      HI
+QSO: 28048 CW 2014-01-11 1804 N5KO            TREY       CA  K8JQ            STEVE      WV
+END-OF-LOG:
+
+
+##############################################################################
+# 4j. New England QSO Party — 'Generating Cabrillo Format Files' (a QSO-party template using the generic layout)
+# SOURCE: https://web.archive.org/web/20160427085433id_/http://neqp.org/cabrillo.html
+# FETCHED: 2026-08-17
+# NOTE: WWROF's table links https://neqp.org/cabrillo.html which is 404 live (2026-08-17) and 404 in Wayback captures from 2024-2025; this is the last good capture (2016-04-27). The template used <tt> + &nbsp; instead of <pre>; NBSP normalised to spaces below.
+##############################################################################
+Template for NEQP:
+                               --------INFO SENT------- -------INFO RCVD--------
+ QSO: FREQ  MO DATE       TIME CALL          RST EXCH   CALL          RST EXCH
+ QSO: ***** ** YYYY-MM-DD NNNN ************* NNN ****** ************* NNN ******
+ QSO:  3799 PH 1999-03-06 0711 WA1AAA/M      599 ESSVT  W1AW          599 HARCT
+ 0000000001111111111222222222233333333334444444444555555555566666666667777777777
+ 1234567890123456789012345678901234567890123456789012345678901234567890123456789
+
+ Sample NEQP Cabrillo file:
+
+ START-OF-LOG: 2.0
+ ARRL-SECTION: IL
+ CONTEST: NEQP
+ CALLSIGN: W9IOP
+ CATEGORY: SINGLE-OP ALL HIGH MIXED
+ CATEGORY-ASSISTED: NON-ASSISTED
+ CLAIMED-SCORE: 123456
+ NAME: Wally B. Smith
+ ADDRESS: 123 Anywhere Street
+ ADDRESS: Suburb, IL 23456
+ ADDRESS: USA
+ CLUB:
+ SOAPBOX: Only missed two counties, see you next year.
+ QSO: 14280 PH 2002-05-05 1202 W9IOP         59  IL     W1AW          59  HARCT
+ QSO: 14282 PH 2002-05-05 1202 W9IOP         59  IL     K1ABC/M       59  PISME
+ QSO: 14275 PH 2002-05-05 1202 W9IOP         59  IL     W1BD          59  BENVT
+ QSO: 14290 PH 2002-05-05 1202 W9IOP         59  IL     WC1M          59  WNDNH
+ QSO: 21380 PH 2002-05-05 1203 W9IOP         59  IL     K1ABC/M       59  SOMME
+ QSO: 28385 PH 2002-05-05 1203 W9IOP         59  IL     K2KQ/1        59  DUKMA
+ QSO: 28390 PH 2002-05-05 1204 W9IOP         59  IL     K2RD          59  NHNCT
+ QSO: 14282 PH 2002-05-05 1204 W9IOP         59  IL     WB1BRE        59  ORAVT
+ QSO: 14282 PH 2002-05-05 1205 W9IOP         59  IL     K1ABC/M       59  PENME
+ QSO: 14282 PH 2002-05-05 1205 W9IOP         59  IL     W1KK          59  HMPMA
+ QSO: 21289 PH 2002-05-05 1206 W9IOP         59  IL     W1OP          59  PRORI
+ END-OF-LOG:
+
+ Copyright © 2016; New England QSO Party. All Rights Reserved.   Contact us at info@neqp.org [mailto:info@neqp.org]
+
+##############################################################################
+# 4k. Winter Field Day / ARRL Field Day — NOT on the WWROF site
+# SOURCE: (none on wwrof.org)
+# FETCHED: 2026-08-17
+# NOTE: WWROF publishes no WFD or ARRL-FD template. contestcalendar.com's Cabrillo-name list gives CONTEST: WFD and CONTEST: ARRL-FD. ARRL FD rules 8.7 (2026): 'Cabrillo format log files are NOT required for Field Day entries, but they will be accepted in lieu of the dupe sheets'. The WFD 2026 rules packet (V3 9.8.25, winterfieldday.org) shows two sample lines: 'QSO: 3750 PH 2025-01-25 1911 N8LOG 1O OH WB9X 2H IL' and 'QSO: 14070 DG 2025-01-25 2131 N8LOG 1O OH K6XXX 14I LA' with 'There MUST be at LEAST one space between fields' — that packet text sits in this scratchpad as wfd_rules_pdf_raw.txt (fetched 2026-08-17 by a sibling session, not by this one).
+##############################################################################
+
+##############################################################################
+# 5. Field-order convention and variable-width fields (facts read off the templates above)
+# SOURCE: (synthesis of sections 1-4; no new source)
+# FETCHED: 2026-08-17
+##############################################################################
+
+* Every QSO line: 'QSO:' + one space, then in this order:
+    freq (5 wide, right-aligned: kHz for HF e.g. ' 3799', '14042', or the band
+          token for VHF+: 50, 70, 144, 222, 432, 902, 1.2G ... 241G, LIGHT)
+    mo   (2: CW PH FM RY DG)
+    date (10: yyyy-mm-dd, UTC)
+    time (4: nnnn UTC, 0000-2359)
+    --- info sent ---   call, then the sent exchange fields
+    --- info rcvd ---   call, then the received exchange fields
+    t    (1: transmitter id 0 or 1, optional; 'Not used in single-op or M/M')
+  Sent and received halves have identical field structure ('--------info sent-------
+  -------info rcvd--------' banner).
+* Generic (CQ WW / WPX / ARRL DX / ARRL 10 / ARRL 160 / IARU / CQ 160 / RDXC / Oceania /
+  AP Sprint / NEQP ...) column layout, from the WWROF page and cqww.com ruler:
+    cols  1-4  'QSO:'      col 5 space
+    cols  6-10 freq        col 11 space
+    cols 12-13 mo          col 14 space
+    cols 15-24 date        col 25 space
+    cols 26-29 time        col 30 space
+    cols 31-43 sent call   (13 wide, '*************')  col 44 space
+    cols 45-47 sent rst    (3, 'nnn'; RS '59' left-aligned leaves col 47 blank)  col 48 space
+    cols 49-54 sent exch   (6, '******')  col 55 space
+    cols 56-68 rcvd call   (13)  col 69 space
+    cols 70-72 rcvd rst    (3)   col 73 space
+    cols 74-79 rcvd exch   (6)   col 80 space
+    col  81    t
+* Column positions computed from the '*****' rows of the other templates (1-based):
+    ARRL SS  (kkn/WWROF):  call 31-40 | nr 42-45 | prec 47 | ck 49-50 | sec 52-54 |
+                           call 56-65 | nr 67-70 | prec 72 | ck 74-75 | sec 77-79   (no t)
+    ARRL VHF (kkn/WWROF):  call 31-43 | (blank 44-48) | grid 49-54 | call 56-68 | grid 74-79 (no RST, no t)
+    NAQP (WWROF 2015 post): call 31-40 | name 42-56 | qth 58-60 | call 62-71 | name 73-87 | qth 89-91 | t 93
+    NAQP (kkn 2014 / NCJ file): call 31-40 | blank 41-46 | name 47-56 | qth 58-60 | call 62-71 | blank | name 78-87 | qth 89-91 | t 93
+    NA Sprint:             call 31-40 | nr 42-45 | name 47-56 | qth 58-60 | call 62-71 | nr 73-76 | name 78-87 | qth 89-91 | t 93
+    CQ WW RTTY:            call 31-43 | rst 45-47 | zone 49-50 | exch 52-55 | call 57-69 | rst 71-73 | zone 75-76 | exch 78-81 | t 84
+* Templates express widths with runs of '*' (any text), 'n' (digit), 'a' (letter),
+  'yyyy-mm-dd', 'nnnn'; a longer field simply gets more '*'/'a' characters (NAQP name is
+  'aaaaaaaaaaaaaaa' = 15 in the WWROF post, 10 in the kkn/NCJ version; CQ WW RTTY splits the
+  6-char exch into 'Zn' 2 + 'exch' 4; SS uses 'nnnn a nn aaa' = serial 4, precedence 1,
+  check 2, section 3; VHF uses '******' grid 4-6 with no RST; IOTA 'nnnn aa-nnn';
+  BARTG 'nnn nnnn nnnn' RST serial time; WAE adds a QTC: line type).
+* Both WWROF and every CQ/ARRL sponsor page say the fixed columns are for readability
+  only: 'All of the major contest sponsors will also accept the fields in any column as long
+  as there is a space between each item.'  Spec notes: field overflow should be truncated to
+  fit its column so other columns are not disturbed (KA5WSS/ARRL-JUBILEE -> KA5WSS/ARR).

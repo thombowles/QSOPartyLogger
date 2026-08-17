@@ -1,0 +1,926 @@
+################################################################################
+WINTER FIELD DAY (Winter Field Day Association) -- OFFICIAL RULES, RAW FETCHED TEXT
+################################################################################
+Fetched: 2026-08-17 (UTC date of fetch) by curl/WebFetch + pdftotext (poppler).
+
+PRIMARY SOURCE (rules, HTML):
+  URL: https://winterfieldday.org/sop.php   ("Rules" link on https://winterfieldday.org/ ; the
+       https://winterfieldday.org/rules.php URL named in the task returns HTTP 404;
+       https://www.winterfieldday.org/ 301-redirects to http://winterfieldday.org/)
+  Mechanism: sop.php is an empty Quill viewer; /js/rules.js loads the rules as a Quill delta JSON from
+       https://winterfieldday.org/queries/query_rules.php (fetched directly, HTTP 200, 42,286 bytes) and the
+       delta was converted to plain text below (links rendered as "text <url>", list/indent markers kept).
+  Edition markers: opening letter "Winter Field Day is back for 2026"; heading "WFDA Presents the 2026 Winter
+       Field Day Event!"; "Download the complete WFD rules by clicking here </downloads/2026-rules-v3.pdf>";
+       "Notable changes for Winter Field Day 2026". No version/date string in the HTML itself.
+
+PRIMARY SOURCE (rules, PDF -- same text, plus Event Summary sheet, FAQ, map instructions, flyer):
+  URL: https://winterfieldday.org/downloads/2026-rules-v3.pdf  (15 pp, 2,249,722 bytes; page footers "V3 9.8.25";
+       PDF has no Title/CreationDate metadata). WebFetch returned binary; converted locally with `pdftotext -layout`.
+  Probed and NOT present (HTTP 404) on 2026-08-17: /downloads/2027-rules-v1.pdf, /downloads/2027-rules.pdf,
+       /downloads/2026-rules-v4.pdf, /downloads/2026-bulletin-schedule.pdf.
+  => The 2027 rules are not yet published; the sop.php page still carries the 2026 rules.
+
+SECONDARY SOURCES (same site, same fetch date):
+  https://winterfieldday.org/  (home page: next event "January 23rd & 24th, 2027"; "taking place on the 4th full
+       weekend of January"; "Download the WFD Bulletin Schedule" -> /downloads/2025-bulletin-schedule.pdf)
+  https://winterfieldday.org/resources.php  (General/Logging Programs/Operating Aids/Downloads/FAQ; links the
+       ARRL section list https://contests.arrl.org/contestmultipliers.php?a=wve with the note "Note new RAC section
+       YT, valid since July 2025"; "2026 Bulletin Announcement" -> https://bit.ly/2026WFDBulletin -> Google Drive)
+
+KNOWN INTERNAL INCONSISTENCIES (verbatim, both from WFDA):
+  * weekend formula: sop.php says "the 4th full weekend in January"; 2026-rules-v3.pdf and resources.php say
+    "the last full weekend in January".
+  * log deadline: rules say "Logs must be submitted by 23:59 UTC on March 1st"; the FAQ (in the PDF and on
+    resources.php) says "You can only change your log until 11:59 UTC on March 1st"; resources.php General says
+    "before 11:59 UTC on March 1st".
+  * bands: rules say "All Amateur bands may be used except 12, 17, 30, and 60 meters"; resources.php General says
+    "You can operate on the 160, 80, 40, 20, 15, and 10 meter HF bands and all bands above 50 MHz."
+  * (derived, not sponsor text) In January 2027 the two formulas diverge: Saturdays fall on Jan 2/9/16/23/30, so the
+    4th full weekend is Jan 23-24 and the LAST full weekend is Jan 30-31. The home page announces "January 23rd &
+    24th, 2027", i.e. the 4th-full-weekend reading. In 2026 both formulas gave Jan 24-25.
+################################################################################
+
+
+===== [1] https://winterfieldday.org/sop.php via /queries/query_rules.php (Quill delta -> text) =====
+Greetings, Winter Field Day is back for 2026, and we couldn’t be more excited! Every year, hams from across the country brave the cold, string up antennas in the snow, and put their skills to the test— and we invite you to join in the adventure.
+
+At its heart, Winter Field Day is all about sharpening your emergency communication abilities, but it’s also about fun. Winter throws curveballs that summer never does—short days, freezing temperatures, icy winds, and sudden weather surprises. It’s the perfect chance to challenge yourself, push your station to new limits, and prove that you can stay on the air no matter what Mother Nature sends your way.
+
+This isn’t a contest—it’s an experience. We call it an Operating Event. Whether you’re operating from the warmth of a cabin, a heated tent, or bundled up outside in the snow, you’ll gain practical skills while making lasting memories. You’ll also meet other operators, make plenty of QSOs, and maybe even discover new ways to enjoy the hobby. 
+
+Of course, safety always comes first. We encourage everyone to plan ahead, keep an eye on the weather, and know when to pack it up if conditions become unsafe. That said, the challenges of Winter Field Day are exactly what make it so rewarding—because if you can set up and operate in January, you’ll be more than ready for any real emergency. 
+
+Please carefully review the event guidelines in this packet, and feel free to reach out via our website if you have any questions. As we embark on another year of the Winter Field Day exercise, we encourage you to use this event to hone your skills as an amateur radio operator. We wish you the best of luck and eagerly anticipate hearing you on the air during this exciting event. 
+
+On behalf of the Winter Field Day Association, we thank you for joining us in 2026—stay warm, stay safe, and above all, enjoy the spirit of Winter Field Day!
+
+Sincerely,
+
+[EMBED: {"image": "/img/wfda_signature.png"}] [H1]
+
+WFDA Presents the 2026 Winter Field Day Event!
+Download the complete WFD rules by clicking here </downloads/2026-rules-v3.pdf>. 
+
+
+Notable changes for Winter Field Day 2026
+Several objectives have been added. [LIST:bullet]
+Alternative Power objective has changed; pay attention to the laptop and HVAC Requirements [LIST:bullet]
+An additional 12 Band objective was added. [LIST:bullet]
+Additional clarification has been added to the appendix [LIST:bullet]
+
+Objective: WFD is a multi-objective event. The primary objective is to set up an amateur radio field station and successfully make multiple contacts. Successful participants are those who can set up their equipment and correctly log the designated exchange during the operational period explained below. All participants are encouraged to complete as many additional objectives as possible. After the event, submit a log of stations worked and any additional documentation. 
+
+Eligibility: All licensed amateur radio operators are encouraged to participate in the emergency communications exercise known as Winter Field Day. 
+
+Operational Period: Winter Field Day is held the 4th full weekend in January. For 2026, it will be held on January 24th and 25th. The 30-hour operational period starts at 1600 UTC on Saturday (11 am EST), the 24th, and ends at 21:59 UTC on Sunday, the 25th (4:59 pm EST). Stations may begin setting up no earlier than 16:00 UTC (11 am EST) on the Friday before. However, cumulative set-up time shall not exceed 12 hours. 
+
+Location Restraints: A WFD operation must ensure all stations operating under a single call sign are located in the same physical area. All operators and station equipment, including antennas, feed lines, and accessories used, must be located within a circular area whose diameter does not exceed 1,000 feet (300m). This 1,000 ft area does not have to remain constant throughout the event1. 
+
+Exchange: The designated Winter Field Day exchange includes your call sign, a category number, a class identifier, and a location identifier. 
+
+Category: A number designated by the number of transceivers (stations) at your location that are capable of transmitting simultaneously. 1, 2, 3, etc. This means you have the people needed to operate the number of transmitters you choose. Don’t count a station if it must be left unattended while you make contacts on another. If you decide to operate a satellite station, the satellite station does not increase your category number. 
+
+Class: You must choose which class you will operate in. If you are operating as a group under one call sign, choose the class that applies to the majority of the stations at your field day site. 
+
+	Class Options:
+
+H - Home station: is any station located inside a permanent livable residence.
+
+I - Indoor station: is any station operating away from Home but from inside an insulated, weather-protected building (or structure) on a permanent foundation. Indoor stations typically have plumbing, heating/cooling, and running water. Church, EOCs, a club shack, a cabin, and community centers are all examples of an Indoor station.
+
+O - Outdoor station: Outdoor stations operate from a partly or fully exposed building or shelter that does not typically have plumbing, heating/cooling, or running water available. Operating from a picnic table, park pavilion, tents, or under pop-up canopies are all places that could be considered Outdoor. These are locations where you may have to provide your own heat source and/or protection from the elements. 
+
+M - Mobile / Mobile Stationary:  These stations are operations from a mobile or potentially mobile structure like an RV, car, van, sailboat, cargo trailer, mobile EOC, bus, plane, ETC. These are operating positions that may offer some sort of built-in heating/cooling. Mobile stations do not have to be mobile during the event. They must have the ability to be mobile, should it be necessary to move during the event. RVs and cargo trailers with external antennas set up are still considered Mobile. 
+
+Location Identifier: US and Canadian stations will use the ARRL / RAC Section as designated by those organizations. Mexico stations will use MX, and all other stations outside of the US will use DX. 
+
+Exchange examples: If you have two stations and you are mobile in East Pennsylvania, you are 2M EPA. One station at home in Georgia would be 1H GA. Four stations outdoors in West Texas would be 4O WTX. Six stations indoors in Minnesota would be 6I MN.
+
+Additional Information: The goal is to copy and record the full exchange accurately. Your Category, Class, and Location Identifiers must remain the same throughout the whole event. If your location changes sections during the event, such as a long-haul trucker, your section is the first section you made a contact from. For example, if you are operating with two people using two transmitters from an RV in Arizona, your exchange would be 2M Arizona. 
+
+Signal reports and other additional information are not a required part of the exchange; however, it is encouraged to practice exchanging additional information, which may include- signal reports, county location, grid square, temperature, weather conditions, antenna configurations, etc. In an emergency, you may be asked to relay anything from a list of supplies to GPS coordinates. Collecting and correctly copying down this information is an important skill that should be practiced during Winter Field Day. 
+
+Bands: All Amateur bands may be used except 12, 17, 30, and 60 meters. To qualify as a band worked, at least one valid, two-way QSO must have taken place on the said band during the event.
+
+
+
+Modes: All modes, except WSJT modes3, may be used. Modes are combined into three groups: CW, Phone, and Digital, may be used. Phone includes SSB, AM, FM, DMR, C4FM, etc. If the end result is voice, it’s Phone. Digital includes PSK, RTTY, Olivia, Packet, SSTV, ATV, JS8Call, and other soundcard modes. If the end result is text or a picture, it’s Digital.
+
+QSO Points: Phone contacts count as one point each, and all CW and digital modes count as two points each. You may only contact other field day stations once per band-mode combination, for a maximum of three times per band. So K4FUN may be contacted on 20m using Phone, CW, and Digital for a total of five Points (one point for Phone, two points for CW, and two points for Digital). Any additional contact with K4FUN on 20m would be considered a duplicate and would not give any additional points. 
+
+Objective & Multipliers: More than points, achieving objectives should be your primary goal during WFD, these objectives, combined with your own, should be your main focus during the exercise. As an incentive to focus on objectives, an Objective Multiplier (OM) has been assigned to each objective. We will add 1 to your objective multiplier, so you still get your QSO points if you do not complete any objectives. To calculate your overall score, we will take your OM+1 and multiply that number by your total QSO points.
+We will also record and track the percentage of objectives completed -  great way to see overall how you did from year to year. 
+
+Operate 100% on alternative power: Operate exclusively on alternative power, defined as any power source not connected to the commercial power grid. You may use generators, batteries, solar power, wind power, or anything else. All batteries, whether in use or charging, should only be recharged using alternative power. WFD stations should run all station equipment, including all laptops and other accessories, from an alternative power source. Lights and HVAC are exceptions and may be connected to the power grid or any power source available. OM x1 [INDENT:1]
+
+Operate away from home: Operating away from home is one of the main reasons for “Winter Field Day.” Do you have the ability to walk into any shelter, parking garage, hospital, or community center and set up a portable Amateur radio station?  Now is the time to start planning what you will do if your home location is destroyed during an emergency. For this objective, set up your field station more than ½ mile from your home. OM x3
+
+Deploy and make at least one contact on multiple antennas: Deploy two or more antennas that have not been previously installed and make at least one contact on each. Previously installed antennas are any antennas that were deployed or installed before the WFD set-up time. Previously installed antennas do not count. You must deploy the antennas during the WFD set-up time or event to achieve this OM. This could be a dipole and a hex beam or an EFHW and a 2-meter J-pole. Any combination of antennas works. Multi-band antennas do not count as separate antennas. OM x1 [INDENT:1]
+
+Make an FM satellite contact2: Make at least 1 FM satellite contact during the operating period. Dedicated satellite transmitters do not count toward your Category number. Satellite contacts do not count towards your total QSO points. Only the multiplier applies. See the appendix below for more information on satellite contacts. OM x2 [INDENT:1]
+
+Make a SSB or CW satellite contact2:  Make at least one contact using SSB or CW. Dedicated satellite transmitters do not count toward your Category number. Satellite contacts do not count towards your total QSO points. Only the multiplier applies. See the appendix below for more information on satellite contacts. OM x3 [INDENT:1]
+
+Send and receive at least one Winlink email: Winlink has proven useful during emergencies and is considered a digital mode. Successfully send and receive at least one email from a winlink.org email address to any Winlink or commercial email address via amateur RF. All time stamps on Winlink contacts must fall within the operational period. OM x1 [INDENT:1]
+
+Copy the Winter Field Day Special Bulletin:  Accurately copy the WFD Special Bulletin message and submit your copy with your log submission to achieve this objective. The frequencies and times are published on our website prior to the event. OM x1 [INDENT:1]
+ 
+Make three contacts on at least six (6) different bands: Conditions may change throughout an event. Log operations on at least six different bands by making a minimum of three contacts per band. You should be able to accomplish this objective by utilizing HF, VHF, and UHF frequencies. Don’t forget about 1.25 meters (220)!  It’s an excellent band for local emergencies. OM x6 [INDENT:1]
+
+Make three contacts on at least twelve (12) different bands: Was six too easy?  You may have to pull out your microwave equipment to achieve this one. Log operations on at least twelve different bands by making a minimum of three contacts per band. The six bands from the previous objective count toward this one. OM x6 [INDENT:1]
+
+Use multiple modes: Increase your versatility by using multiple modes during the event, such as Phone and CW, CW and Digital, or Phone and Digital. Using all three modes does not increase this OM. OM x2 [INDENT:1]
+
+Operate the event QRP: Operating on QRP means every station in your Winter Field Day operation is using 10 watts or less on Phone or 5 watts or less on CW or Digital for the entire time you choose to operate during the event. OM x4 [INDENT:1]
+
+Operate six continuous hours during the event: Emergencies may last days or even weeks. You may be expected to man a radio station between 4-12 hours if you are operating alone or in shifts. Can you sit and operate for extended periods of time with enough backup power? This does not necessarily mean you are making contacts the whole time, but you are in front of the radio, monitoring, and ready to pick up a microphone if you are called. OM x2 [INDENT:1]
+
+When you submit your log, we will ask you to select your completed objectives. For those who like to track your points, the total points formula is: Total score =  (total QSO points) x (OM+1)
+
+Miscellaneous Statements:
+
+All stations are limited to a maximum of 100 Watts PEP. [LIST:bullet]
+All rules governing amateur radio at your location must be observed throughout the event. [LIST:bullet]
+All participants submitting a single entry must be using one callsign.  [LIST:bullet]
+Entrants may not count for QSO credit any contact with anyone who is or was a participant in their WFD operation or is present at their WFD location.  [LIST:bullet]
+Spotting: During the event, spotting clusters, the RBN, APRS, and Winlink may be used to spot yourself and other stations as long as the originating transmission leaves your WFD site via amateur RF. [LIST:bullet]
+QSO credit: Any mode/modem/software normally used in a cross-band, relayed, meshed, or internet-linked manner (APRS, Winlink, Meshtastic, Packet, etc.) can only be used directly from one station to another (not across a mesh or relay), over amateur RF, and without cross-banding to receive QSO credit. This may require significant configuration changes from their standard uses. [LIST:bullet]
+QSOs may be solicited during the event only over amateur RF.  [LIST:bullet]
+Cross-band contacts are not permitted (satellite QSOs are exempted for the objectives). [LIST:bullet]
+No repeater contacts are allowed, including DMR or YSF-type modes that may be transmitted through a repeater or hotspot on the receiving end.  [LIST:bullet]
+Multiple transmitters are not allowed to operate on the same band-mode simultaneously. [LIST:bullet]
+Any mode used must be able to fully transmit the exchange intact and must be able to pass additional information.  [LIST:bullet]
+
+Certificates & Log Submission: A downloadable certificate will be available after the event. To receive a certificate, all logs must be submitted on our website by filling in the form and uploading a Cabrillo4 log or ADIF file containing the proper exchange data. Logs must be submitted by 23:59 UTC on March 1st to be considered. Late entries cannot be accepted. If you find an error in your log after submitting, correct your log and resubmit. The corrected version will replace the original you submitted.
+
+You must submit your entries, which will include your log and any supporting documents, at www.winterfieldday.org <http://www.winterfieldday.org>
+
+Once you click "submit a log," you will receive a confirmation email containing a link to download your certificate. If you participated as a club, only the call sign used during the event and submitted on the form will appear on the certificate.
+
+
+
+
+Appendix
+
+1 Safety, weather, or other elements may require you to relocate during an emergency. We allow this during the WFD activity as well. You could, in theory, operate from one location for a set amount of time, then tear down and move the whole operation to another location, say from a state park to a school parking lot across town. Just note that your exchange must remain the same even if you are located in different ARRL/RAC sections or states. You must use the same exchange throughout the entire event!
+  
+2 Satellite QSOs do not count as a regular QSOs credit. Adding a satellite transmitter station does not increase or count toward the number of transmitters used to decide your category. A simple CQ is sufficient. The designated WFD exchange does not and should not be used. Satellite QSOs follow a different protocol. You should be prepared to give a signal report and your Grid Square to the other station. The other station will likely not be a WFD participant and will want a confirmation of the contact afterward. Please be considerate and comply.
+
+3 WSJT modes include FST4, FT4, FT8, JT4, JT9, JT65, Q65, MSK144, WSPR, FST4W, and Echo. These modes do not support passing emergency traffic effectively and therefore are not appropriate for Winter Field Day.
+
+4 Most logging software will allow you to export a Cabrillo or ADIF file. However, because we ask several questions before you upload your log, we ignore most of the data in the Cabrillo export. We have included an example of the currently accepted format for Cabrillo. Note that all the CATEGORY items are ignored, and it does not matter what text you place in there. The ADDRESS and SOAP box items are also ignored. Your confirmation email will include a link to allow you to comment on the event. We read all comments and take all ideas and suggestions into consideration. 
+
+QSO Examples: Let’s say you are K4SCO, and you have three stations operating outdoors in Alabama. You are operating a Phone mode. You are contacted by KY4LV, who has one station operating mobile in Missouri. It could look like this:
+
+You: CQ Winter FIeld Day, this is Kilo Four Sierra Charlie Oscar
+KY4LV: Kilo Yankee Four Lima Victor
+You: Kilo Yankee Four Lima Victor, we are three oscar, alpha lima
+KY4LV: I copy three oscar alpha lima, I am one mike, mike oscar
+You: I copy one mike, mike oscar, thanks for the contact, seventy-three
+
+On CW, the exchange could look like this:
+
+You: CQ WFD K4SCO
+KY4LV: KY4LV
+You: KY4LV 3O AL 3O AL
+KY4LV: RR 1M MO 1M MO
+You: RR 73
+
+On Digital, the exchange could look like this:
+
+You: CQ WFD K4SCO 3O AL
+KY4LV: KY4LV 1M MO
+You: QSL TNX 73
+KY4LV: 73
+
+Exchanges can go many ways. These examples are not mandates. As long as you both exchange call signs, class/categories, and sections, it is up to you and the other station how the contact goes.
+
+The following format is provided as an example of a Cabrillo log. We do not use most of the information in the Cabrillo log; we only pull the actual log out of that file. Therefore, we can also accept a simple ADIF file. Just answer the questions on the website and upload the ADIF file. 
+
+Cabrillo Formatting Example
+
+Notes: There MUST be at LEAST one space between fields. Each line in the log must end with a carriage return and line feed. There must be at least one space following a colon in a line. The frequency for HF must be in kilohertz rounded to the nearest kilohertz. 3753 is fine, 3753.20 is not. Frequencies above 50 MHz are specified as the band. Examples: 50, 70, 144, 222, 432, 902, 1.2G, 2.3G, 3.4G, 5.7G, 10G, 24G, etc. 
+
+The mode should be one of the valid Cabrillo modes. CW, PH, FM, RY, DG. It is preferred that you use RY or DG.
+
+If your logging software is NOT connected to your radio, any in-band frequency is fine. The dates and times need to be in UTC and do not need to be exactly accurate.
+
+Additional notes in the soapbox area are unnecessary and can be left blank. We will send you a link where you can leave comments. All comments are reviewed by the team after the event and used to improve the event for next year.
+
+The callsign in the file name for the log MUST be the same as the callsign USED in the event. If your event call is N8LOG, make sure your file name is N8LOG.log or N8LOG.txt 
+
+The main body must follow this format. However, we do not use many of these fields:
+ 
+START-OF-LOG: 3.0 
+LOCATION: WTX (Section) or MX or DX 
+CALLSIGN: N8LOG 
+CLUB: K4ARC - Riverdale ARC 
+CONTEST: WFD 
+CATEGORY-OPERATOR: SINGLE-OP or MULTI-OP (can be either; we do not use this data for WFD) 
+CATEGORY-ASSISTED: ASSISTED or NON-ASSITED (can be either; we do not use this data for WFD) 
+CATEGORY-BAND: ALL (can be either; we do not use this data for WFD) 
+CATEGORY-MODE: MIXED (can be either; we do not use this data for WFD) 
+CATEGORY-POWER: HIGH or LOW (can be either; we do not use this data for WFD) 
+CATEGORY-STATION: FIXED or MOBILE (can be either; we do not use this data for WFD)
+CATEGORY-TRANSMITTER: ONE or TWO or UNLIMTED (can be either; we do not use this data for WFD) 
+CLAIMED-SCORE: xxxx (we do not use this data for WFD) 
+OPERATORS: W1CALL (we do not use this data for WFD) 
+NAME: Mike Smith (we do not use this data for WFD) 
+ADDRESS : 123 Main Street (we do not use this data for WFD) 
+ADDRESS-CITY: Anytown (we do not use this data for WFD) 
+ADDRESS-STATE: TN (we do not use this data for WFD) 
+ADDRESS-POSTALCODE: 13791 (we do not use this data for WFD) 
+ADDRESS-COUNTRY: USA (we do not use this data for WFD) 
+X-EXCHANGE: 2M (we do not use this data for WFD) 
+SOAPBOX: (we do not use this data for WFD) 
+EMAIL: (we do not use this data for WFD) 
+QSO: 3750 PH 2025-01-25 1911 N8LOG 1O OH WB9X 2H IL 
+QSO: 14070 DG 2025-01-25 2131 N8LOG 1O OH K6XXX 14I LA 
+END-OF-LOG: (add a space after the colon)
+
+
+===== [2] https://winterfieldday.org/downloads/2026-rules-v3.pdf (pdftotext -layout; footers 'V3 9.8.25') =====
+                      The Winter Field Association Presents
+
+                Winter Field Day 2026
+
+                                             January 24th - 25th
+                          Starts 1600 UTC Saturday January 24th
+                          Ends 21:59 UTC Sunday January 25th
+
+
+
+
+Winter Field Day is brought to you by the Winter Field Day Association, a nonprofit 501(C)(3) organization with support from the following:
+
+            HamStuffOnline.com is a graphic design company specializing in ham radio-related products, including band plan
+               charts, clothing, and gifts. HamStuffOnline.com is the largest designer of Parks On The Air merchandise.
+
+                       AJKservices.com is the website designer for Winter Field Day. AJK Consulting Services are
+                            technology problem solvers providing IT, electronics, and engineering services.
+Greetings,
+
+Winter Field Day is back for 2026, and we couldn’t be more excited! Every year, hams from
+across the country brave the cold, string up antennas in the snow, and put their skills to the test—
+and we invite you to join in the adventure.
+
+At its heart, Winter Field Day is all about sharpening your emergency communication abilities,
+but it’s also about fun. Winter throws curveballs that summer never does—short days, freezing
+temperatures, icy winds, and sudden weather surprises. It’s the perfect chance to challenge
+yourself, push your station to new limits, and prove that you can stay on the air no matter what
+Mother Nature sends your way.
+
+This isn’t a contest—it’s an experience. We call it an Operating Event. Whether you’re operating
+from the warmth of a cabin, a heated tent, or bundled up outside in the snow, you’ll gain
+practical skills while making lasting memories. You’ll also meet other operators, make plenty of
+QSOs, and maybe even discover new ways to enjoy the hobby.
+
+Of course, safety always comes first. We encourage everyone to plan ahead, keep an eye on the
+weather, and know when to pack it up if conditions become unsafe. That said, the challenges of
+Winter Field Day are exactly what make it so rewarding—because if you can set up and operate
+in January, you’ll be more than ready for any real emergency.
+
+Please carefully review the event guidelines in this packet, and feel free to reach out via our
+website if you have any questions. As we embark on another year of the Winter Field Day
+exercise, we encourage you to use this event to hone your skills as an amateur radio operator. We
+wish you the best of luck and eagerly anticipate hearing you on the air during this exciting event.
+
+On behalf of the Winter Field Day Association, we thank you for joining us in 2026—stay warm,
+stay safe, and above all, enjoy the spirit of Winter Field Day!
+
+Sincerely,
+WFDA
+Notable changes for Winter Field Day 2026
+  • Several objectives have been added.
+  • Alternative Power objective has changed; pay attention to the laptop and HVAC
+      Requirements
+  • An additional 12 Band objective was added.
+  • Additional clarification has been added to the appendix
+
+Objective: WFD is a multi-objective event. The primary objective is to set up an amateur radio
+field station and successfully make multiple contacts. Successful participants are those who can
+set up their equipment and correctly log the designated exchange during the operational period
+explained below. All participants are encouraged to complete as many additional objectives as
+possible. After the event, submit a log of stations worked and any additional documentation.
+
+Eligibility: All licensed amateur radio operators are encouraged to participate in the emergency
+communications exercise known as Winter Field Day.
+
+Operational Period: Winter Field Day is held the last full weekend in January. For 2026, it will
+be held on January 24th and 25th. The 30-hour operational period starts at 1600 UTC on
+Saturday (11 am EST), the 24th, and ends at 21:59 UTC on Sunday, the 25th (4:59 pm EST).
+Stations may begin setting up no earlier than 16:00 UTC (11 am EST) on the Friday before.
+However, cumulative set-up time shall not exceed 12 hours.
+
+Location Restraints: A WFD operation must ensure all stations operating under a single call
+sign are located in the same physical area. All operators and station equipment, including
+antennas, feed lines, and accessories used, must be located within a circular area whose
+diameter does not exceed 1,000 feet (300m). This 1,000 ft area does not have to remain
+constant throughout the event1.
+
+Exchange: The designated Winter Field Day exchange includes your call sign, a category
+number, a class identifier, and a location identifier.
+
+    Category: A number designated by the number of transceivers (stations) at your location
+    that are capable of transmitting simultaneously. 1, 2, 3, etc. This means you have the
+    people needed to operate the number of transmitters you choose. Don’t count a station if it
+    must be left unattended while you make contacts on another. If you decide to operate a
+    satellite station, the satellite station does not increase your category number.
+
+    Class: You must choose which class you will operate in. If you are operating as a group
+    under one call sign, choose the class that applies to the majority of the stations at your field
+    day site.
+
+      Class Options:
+
+      H - Home station: is any station located inside a permanent livable residence.
+
+       I - Indoor station: is any station operating away from Home but from inside an insulated,
+       weather-protected building (or structure) on a permanent foundation. Indoor stations
+       typically have plumbing, heating/cooling, and running water. Church, EOCs, a club shack,
+       a cabin, and community centers are all examples of an Indoor station.
+                                                                                                 3
+V3 9.8.25
+      O - Outdoor station: Outdoor stations operate from a partly or fully exposed building or
+      shelter that does not typically have plumbing, heating/cooling, or running water available.
+      Operating from a picnic table, park pavilion, tents, or under pop-up canopies are all
+      places that could be considered Outdoor. These are locations where you may have to
+      provide your own heat source and/or protection from the elements.
+
+      M - Mobile / Mobile Stationary: These stations are operations from a mobile or potentially
+      mobile structure like an RV, car, van, sailboat, cargo trailer, mobile EOC, bus, plane,
+      ETC. These are operating positions that may offer some sort of built-in heating/cooling.
+      Mobile stations do not have to be mobile during the event. They must have the ability to
+      be mobile, should it be necessary to move during the event. RVs and cargo trailers with
+      external antennas set up are still considered Mobile.
+
+    Location Identifier: US and Canadian stations will use the ARRL / RAC Section as
+    designated by those organizations. Mexico stations will use MX, and all other stations
+    outside of the US will use DX.
+
+    Exchange examples: If you have two stations and you are mobile in East Pennsylvania,
+    you are 2M EPA. One station at home in Georgia would be 1H GA. Four stations outdoors
+    in West Texas would be 4O WTX. Six stations indoors in Minnesota would be 6I MN.
+
+    Additional Information: The goal is to copy and record the full exchange accurately. Your
+    Category, Class, and Location Identifiers must remain the same throughout the whole
+    event. If your location changes sections during the event, such as a long-haul trucker, your
+    section is the first section you made a contact from. For example, if you are operating with
+    two people using two transmitters from an RV in Arizona, your exchange would be 2M
+    Arizona.
+
+    Signal reports and other additional information are not a required part of the exchange;
+    however, it is encouraged to practice exchanging additional information, which may include-
+    signal reports, county location, grid square, temperature, weather conditions, antenna
+    configurations, etc. In an emergency, you may be asked to relay anything from a list of
+    supplies to GPS coordinates. Collecting and correctly copying down this information is an
+    important skill that should be practiced during Winter Field Day.
+
+Bands: All Amateur bands may be used except 12, 17, 30, and 60 meters. To qualify as a band
+worked, at least one valid, two-way QSO must have taken place on the said band during the
+event.
+
+Modes: All modes, except WSJT modes3, may be used. Modes are combined into three groups:
+CW, Phone, and Digital, may be used. Phone includes SSB, AM, FM, DMR, C4FM, etc. If the
+end result is voice, it’s Phone. Digital includes PSK, RTTY, Olivia, Packet, SSTV, ATV, JS8Call,
+and other soundcard modes. If the end result is text or a picture, it’s Digital.
+
+QSO Points: Phone contacts count as one point each, and all CW and digital modes count as
+two points each. You may only contact other field day stations once per band-mode
+combination, for a maximum of three times per band. So K4FUN may be contacted on 20m
+using Phone, CW, and Digital for a total of five Points (one point for Phone, two points for CW,
+
+                                                                                                   4
+V3 9.8.25
+and two points for Digital). Any additional contact with K4FUN on 20m would be considered a
+duplicate and would not give any additional points.
+
+Objective & Multipliers: More than points, achieving objectives should be your primary goal
+during WFD, these objectives, combined with your own, should be your main focus during the
+exercise. As an incentive to focus on objectives, an Objective Multiplier (OM) has been assigned
+to each objective. We will add 1 to your objective multiplier, so you still get your QSO points if
+you do not complete any objectives. To calculate your overall score, we will take your OM+1
+and multiply that number by your total QSO points.
+
+We will also record and track the percentage of objectives completed - great way to see overall
+how you did from year to year.
+
+    Operate 100% on alternative power: Operate exclusively on alternative power, defined as
+    any power source not connected to the commercial power grid. You may use generators,
+    batteries, solar power, wind power, or anything else. All batteries, whether in use or
+    charging, should only be recharged using alternative power. WFD stations should run all
+    station equipment, including all laptops and other accessories, from an alterna power
+    source. Lights and HVAC are exceptions and may be connected to the power grid or any
+    power source available. OM x1
+
+    Operate away from home: Operating away from home is one of the main reasons for
+    “Winter Field Day.” Do you have the ability to walk into any shelter, parking garage, hospital,
+    or community center and set up a portable Amateur radio station? Now is the time to start
+    planning what you will do if your home location is destroyed during an emergency. For this
+    objective, set up your field station more than ½ mile from your home. OM x3
+
+    Deploy and make at least one contact on multiple antennas: Deploy two or more
+    antennas that have not been previously installed and make at least one contact on each.
+    Previously installed antennas are any antennas that were deployed or installed before the
+    WFD set-up time. Previously installed antennas do not count. You must deploy the
+    antennas during the WFD set-up time or event to achieve this OM. This could be a dipole
+    and a hex beam or an EFHW and a 2-meter J-pole. Any combination of antennas works.
+    Multi-band antennas do not count as separate antennas. OM x1
+
+    Make an FM satellite contact2: Make at least 1 FM satellite contact during the operating
+    period. Dedicated satellite transmitters do not count toward your Category number. Satellite
+    contacts do not count towards your total QSO points. Only the multiplier applies. See the
+    appendix below for more information on satellite contacts. OM x2
+
+    Make a SSB or CW satellite contact2: Make at least one contact using SSB or CW.
+    Dedicated satellite transmitters do not count toward your Category number. Satellite
+    contacts do not count towards your total QSO points. Only the multiplier applies. See the
+    appendix below for more information on satellite contacts. OM x3
+
+
+
+
+                                                                                                 5
+V3 9.8.25
+    Send and receive at least one Winlink email: Winlink has proven useful during
+    emergencies and is considered a digital mode. Successfully send and receive at least one
+    email from a winlink.org email address to any Winlink or commercial email address via
+    amateur RF. All time stamps on Winlink contacts must fall within the operational period. OM
+    x1
+
+    Copy the Winter Field Day Special Bulletin: Accurately copy the WFD Special Bulletin
+    message and submit your copy with your log submission to achieve this objective. The
+    frequencies and times are published on our website prior to the event. OM x1
+
+    Make three contacts on at least six (6) different bands: Conditions may change
+    throughout an event. Log operations on at least six different bands by making a minimum of
+    three contacts per band. You should be able to accomplish this objective by utilizing HF,
+    VHF, and UHF frequencies. Don’t forget about 1.25 meters (220)! It’s an excellent band for
+    local emergencies. OM x6
+
+    Make three contacts on at least twelve (12) different bands: Was six too easy? You
+    may have to pull out your microwave equipment to achieve this one. Log operations on at
+    least twelve different bands by making a minimum of three contacts per band. The six
+    bands from the previous objective count toward this one. OM x6
+
+    Use multiple modes: Increase your versatility by using multiple modes during the event,
+    such as Phone and CW, CW and Digital, or Phone and Digital. Using all three modes does
+    not increase this OM. OM x2
+
+    Operate the event QRP: Operating on QRP means every station in your Winter Field Day
+    operation is using 10 watts or less on Phone or 5 watts or less on CW or Digital for the
+    entire time you choose to operate during the event. OM x4
+
+    Operate six continuous hours during the event: Emergencies may last days or even
+    weeks. You may be expected to man a radio station between 4-12 hours if you are
+    operating alone or in shifts. Can you sit and operate for extended periods of time with
+    enough backup power? This does not necessarily mean you are making contacts the whole
+    time, but you are in front of the radio, monitoring, and ready to pick up a microphone if you
+    are called. OM x2
+
+When you submit your log, we will ask you to select your completed objectives. For those who
+like to track your points, the total points formula is: Total score = (total QSO points) x (OM+1)
+
+Miscellaneous Statements:
+
+   •   All stations are limited to a maximum of 100 Watts PEP.
+   •   All rules governing amateur radio at your location must be observed throughout the
+       event.
+   •   All participants submitting a single entry must be using one callsign.
+   •   Entrants may not count for QSO credit any contact with anyone who is or was a
+       participant in their WFD operation or is present at their WFD location.
+
+
+                                                                                                    6
+V3 9.8.25
+   •   Spotting: During the event, spotting clusters, the RBN, APRS, and Winlink may be used
+       to spot yourself and other stations as long as the originating transmission leaves your
+       WFD site via amateur RF.
+   •   QSO credit: Any mode/modem/software normally used in a cross-band, relayed, meshed,
+       or internet-linked manner (APRS, Winlink, Meshtastic, Packet, etc.) can only be used
+       directly from one station to another (not across a mesh or relay), over amateur RF, and
+       without cross-banding to receive QSO credit. This may require significant configuration
+       changes from their standard uses.
+   •   QSOs may be solicited during the event only over amateur RF.
+   •   Cross-band contacts are not permitted (satellite QSOs are exempted for the objectives).
+   •   No repeater contacts are allowed, including DMR or YSF-type modes that may be
+       transmitted through a repeater or hotspot on the receiving end.
+   •   Multiple transmitters are not allowed to operate on the same band-mode simultaneously.
+   •   Any mode used must be able to fully transmit the exchange intact and must be able to
+       pass additional information.
+
+Certificates & Log Submission: A downloadable certificate will be available after the event. To
+receive a certificate, all logs must be submitted on our website by filling in the form and
+uploading a Cabrillo4 log or ADIF file containing the proper exchange data. Logs must be
+submitted by 23:59 UTC on March 1st to be considered. Late entries cannot be accepted. If you
+find an error in your log after submitting, correct your log and resubmit. The corrected version
+will replace the original you submitted.
+
+You must submit your entries, which will include your log and any supporting documents, at
+www.winterfieldday.org
+
+Once you click "submit a log," you will receive a confirmation email containing a link to download
+your certificate. If you participated as a club, only the call sign used during the event and
+submitted on the form will appear on the certificate.
+
+
+
+
+                                                                                                7
+V3 9.8.25
+Appendix
+1
+  Safety, weather, or other elements may require you to relocate during an emergency. We allow
+this during the WFD activity as well. You could, in theory, operate from one location for a set
+amount of time, then tear down and move the whole operation to another location, say from a
+state park to a school parking lot across town. Just note that your exchange must remain the
+same even if you are located in different ARRL/RAC sections or states. You must use the same
+exchange throughout the entire event!
+2
+  Satellite QSOs do not count as a regular QSOs credit. Adding a satellite transmitter station
+does not increase or count toward the number of transmitters used to decide your category. A
+simple CQ is sufficient. The designated WFD exchange does not and should not be used.
+Satellite QSOs follow a different protocol. You should be prepared to give a signal report and
+your Grid Square to the other station. The other station will likely not be a WFD participant and
+will want a confirmation of the contact afterward. Please be considerate and comply.
+3
+ WSJT modes include FST4, FT4, FT8, JT4, JT9, JT65, Q65, MSK144, WSPR, FST4W, and
+Echo. These modes do not support passing emergency traffic effectively and therefore are not
+appropriate for Winter Field Day.
+4
+  Most logging software will allow you to export a Cabrillo or ADIF file. However, because we
+ask several questions before you upload your log, we ignore most of the data in the Cabrillo
+export. We have included an example of the currently accepted format for Cabrillo. Note that all
+the CATEGORY items are ignored, and it does not matter what text you place in there. The
+ADDRESS and SOAP box items are also ignored. Your confirmation email will include a link to
+allow you to comment on the event. We read all comments and take all ideas and suggestions
+into consideration.
+
+
+
+
+                                                                                                    8
+V3 9.8.25
+QSO Examples: Let’s say you are K4SCO, and you have three stations operating outdoors in
+Alabama. You are operating a Phone mode. You are contacted by KY4LV, who has one station
+operating mobile in Missouri. It could look like this:
+
+You: CQ Winter FIeld Day, this is Kilo Four Sierra Charlie Oscar
+KY4LV: Kilo Yankee Four Lima Victor
+You: Kilo Yankee Four Lima Victor, we are three oscar, alpha lima
+KY4LV: I copy three oscar alpha lima, I am one mike, mike oscar
+You: I copy one mike, mike oscar, thanks for the contact, seventy-three
+
+On CW, the exchange could look like this:
+
+You: CQ WFD K4SCO
+KY4LV: KY4LV
+You: KY4LV 3O AL 3O AL
+KY4LV: RR 1M MO 1M MO
+You: RR 73
+
+On Digital, the exchange could look like this:
+
+You: CQ WFD K4SCO 3O AL
+KY4LV: KY4LV 1M MO
+You: QSL TNX 73
+KY4LV: 73
+
+Exchanges can go many ways. These examples are not mandates. As long as you both
+exchange call signs, class/categories, and sections, it is up to you and the other station how the
+contact goes.
+
+
+
+
+                                                                                                 9
+V3 9.8.25
+The following format is provided as an example of a Cabrillo log. We do not use most of the information
+in the Cabrillo log; we only pull the actual log out of that file. Therefore, we can also accept a simple
+ADIF file. Just answer the questions on the website and upload the ADIF file.
+
+Cabrillo Formatting Example
+
+Notes: There MUST be at LEAST one space between fields. Each line in the log must end with a
+carriage return and line feed. There must be at least one space following a colon in a line. The frequency
+for HF must be in kilohertz rounded to the nearest kilohertz. 3753 is fine, 3753.20 is not. Frequencies
+above 50 MHz are specified as the band. Examples: 50, 70, 144, 222, 432, 902, 1.2G, 2.3G, 3.4G, 5.7G,
+10G, 24G, etc.
+
+The mode should be one of the valid Cabrillo modes. CW, PH, FM, RY, DG. It is preferred that you use
+RY or DG.
+
+If your logging software is NOT connected to your radio, any in-band frequency is fine. The dates and
+times need to be in UTC and do not need to be exactly accurate.
+
+Additional notes in the soapbox area are unnecessary and can be left blank. We will send you a link
+where you can leave comments. All comments are reviewed by the team after the event and used to
+improve the event for next year.
+
+The callsign in the file name for the log MUST be the same as the callsign USED in the event. If your
+event call is N8LOG, make sure your file name is N8LOG.log or N8LOG.txt
+
+The main body must follow this format. However, because we do not use most of the data that a
+
+START-OF-LOG: 3.0
+LOCATION: WTX (Section) or MX or DX
+CALLSIGN: N8LOG
+CLUB: K4ARC - Riverdale ARC
+CONTEST: WFD
+CATEGORY-OPERATOR: SINGLE-OP or MULTI-OP (can be either; we do not use this data for WFD)
+CATEGORY-ASSISTED: ASSISTED or NON-ASSITED (can be either; we do not use this data for WFD)
+CATEGORY-BAND: ALL (can be either; we do not use this data for WFD)
+CATEGORY-MODE: MIXED (can be either; we do not use this data for WFD)
+CATEGORY-POWER: HIGH or LOW (can be either; we do not use this data for WFD)
+CATEGORY-STATION: FIXED or MOBILE (can be either; we do not use this data for WFD)
+CATEGORY-TRANSMITTER: ONE or TWO or UNLIMTED (can be either; we do not use this data for WFD)
+CLAIMED-SCORE: xxxx (we do not use this data for WFD)
+OPERATORS: W1CALL (we do not use this data for WFD)
+NAME: Mike Smith (we do not use this data for WFD)
+ADDRESS : 123 Main Street (we do not use this data for WFD)
+ADDRESS-CITY: Anytown (we do not use this data for WFD)
+ADDRESS-STATE: TN (we do not use this data for WFD)
+ADDRESS-POSTALCODE: 13791 (we do not use this data for WFD)
+ADDRESS-COUNTRY: USA (we do not use this data for WFD)
+X-EXCHANGE: 2M (we do not use this data for WFD)
+SOAPBOX: (we do not use this data for WFD)
+EMAIL: (we do not use this data for WFD)
+QSO: 3750 PH 2025-01-25 1911 N8LOG 1O OH WB9X 2H IL
+QSO: 14070 DG 2025-01-25 2131 N8LOG 1O OH K6XXX 14I LA
+END-OF-LOG: (add a space after the colon)
+
+
+
+                                                                                                        10
+V3 9.8.25
+                              Event Summary
+
+Call sign used during WFD _________________ Location identifier _________
+
+
+                               Point Multipliers
+
+       Objective                                                      Multiplier
+      Automatic one multiplier for participating                           1
+      Operate 100% on alternative Power                                    1
+      Operate away from home                                               3
+      Deploy multiple antennas                                             1
+      Make a satellite contact using FM                                    2
+      Make a satellite contact using SSB or CW                             3
+      Send and receive at least one Winlink email                          1
+      Copy the Winter Field Day Special Bulletin                           1
+      Operate on at least six different bands                              6
+      Operate on at least twelve different bands                           6
+      Use multiple modes                                                   2
+      Operate the event QRP                                                4
+      Operate six continuous hours during the event                        2
+
+
+         Your objective multiplier number (OM#)                    ____________
+                                                                  (out of a possible 33)
+         You should have at least the number 1 on the line above
+
+                                     Point Totals
+   Number of phone contacts                _________ x 1=_________ points
+
+   Number of CW & digital contacts         _________ x 2=_________ points
+
+                                                         _________
+                                                        Total QSO Points
+
+
+                                     Final Points
+
+
+                      ______________ x _____ = __________
+                      Total QSO Points x (OM#) = Total Points
+                          Frequently Asked Questions
+
+Q: How do I change my location on the map?
+
+A: When you registered your location on the map, you received an email from
+webmaster@winterfieldday.org. The subject line was [WFDA] Location Submission. The
+last line of the email says click here to edit your entry. You can change or modify any
+field from your original registration using that link.
+
+Q: Why isn't FT8 allowed for WFD?
+
+A: We set our objectives around ensuring that WFD remains an exercise in emergency
+communications. Though we recognize FT8 (and similar modes like FT4, JT9, etc.) is a
+legitimate digital mode, it cannot pass emergency traffic effectively. WFD is not about
+how many contacts you make or the points at the end of the day. It's about whether or
+not you can successfully relay emergency information back and forth in adverse
+conditions. That single concept, along with our core principles, is what we use to
+develop the objectives and guidelines for the WFD event. While many people enjoy
+FT8, and it may help improve your digital skills, we encourage you to use those skills to
+practice passing information back and forth using other digital methods during WFD.
+
+Q: What do I do if I discover an error after I submit my log?
+
+A: When you submit your log, you will receive a confirmation email. If you find an error
+after submitting your log, return to the submission page and resubmit a new log. The
+new log will overwrite the old one. You can only change your log until 11:59 UTC on
+March 1st. We shut down the submission page at that point, and all logs become final.
+
+Q: What category should I use?
+
+A: Which category you use is very discretionary. You will not receive any penalties if
+you use the wrong category. Follow the general guidelines in the rules while keeping in
+mind the spirit of the event. WFD is about pushing yourself to new limits. Suppose you
+are operating in a communications trailer. In that case, that might be considered Mobile,
+but if you are within walking distance of a club member's house. You have all the
+conveniences of home, like nearby heat, running water, appliances to heat up chili, or a
+couch to chill on during your downtime; you really should not consider yourself an
+Outdoor or Mobile station. That same communications trailer could be just as quickly
+parked in a parking lot somewhere, and now you have more obstacles to overcome.
+
+Q: I could not hear the Winter Field Day Bulletin. Can I contact another station and
+request that they send the bulletin to me?
+
+A: Yes, as long as you receive the bulletin entirely over amateur RF.
+                         Register your WFD location.
+          Best practices for adding your WFD location to our map system.
+
+When you know where you will be operating from and what category you will fall under,
+consider adding your location to our map. If you are operating from a public site and the
+general public is invited to stop, this is an excellent way to publicize your location.
+
+Follow these general guidelines to get the most out of the WFD location map.
+
+Get your GPS coordinates: The mapping system will ask you for your GPS coordinates. To
+get your coordinates, go to www.google.com/maps and zoom in on the location you will be
+operating from. Right-click on the map, and it will give you the Latitude and Longitude. Copy
+these down.
+
+Required Questions:
+
+      Email Address: Provide an email you can access. We will send you a confirmation
+      email with a link in it. This link allows you to edit your site in the future if needed.
+
+      Your Name: This is your first and last name. Do not enter your club name in this area.
+
+      Your Call Sign: This is your personal call sign. It does not mean, you are going to be
+      using this call sign for Winter Field Day.
+
+      Category: Select your Category from the list. If you are unsure what category you are
+      in, pick the one you think you might fall under.
+
+      Latitude & Longitude: Add the GPS coordinates for your location. The GPS
+      coordinates tell the mapping system where to place the pin on the map. Try to be as
+      accurate as possible.
+      If you are in the US, your Longitude will be a negative number.
+
+      Is this site for a Club & Open for visitors? If either of these apply, toggle on
+      additional information by sliding them to the right. When filling out additional
+      information, keep in mind some of the points on the next page.
+
+After you have filled out as much information as you can provide, click the blue submit button
+and you will see a Green confirmation message.
+
+                              Location Submission Received
+
+You will also receive a confirmation email.
+Keep this email as it will let you update your information if you need to do so.
+Additional Information for Public Sites
+
+
+To best promote your public site, consider the following.
+
+Directions: Is your location hard to find? Consider adding directions or a description of
+the place. Do they need to know that they have to turn down the 2nd dirt road? Are you at
+the pavilion at the top of the hill? Do you have a campsite number or other identifying
+feature that will let people know they are in the right place? Be sure to add all of these
+details to your page.
+
+Set up and operating times: Let people know when you will arrive and leave. When is
+the best time for people to visit? Are you spending the night? Will you have more people
+available to be ambassadors during the day? Are they welcome to stay for dinner? Would
+you like advanced notice if someone wants to stop by?
+
+Contact information: A talk in frequency is great, but what if an unlicensed person wants
+to visit and see what WFD is all about? Do you have an email or phone number of a
+person they can contact? How good is the cell phone service where you will be operating
+from? Do you have a website or Facebook page with additional information on how they
+can get a hold of you before or during the event?
+
+Two to three paragraphs of what is happening at your WFD location, not only helps the
+public find you, it helps them make an informed decision on when to stop by and what to
+do if they can't find the location. It also helps us here at the Winter Field Day Association.
+We look at the participation levels and use them to set future objectives. Knowing how
+you operate your WFD station helps us promote the event and make improvements each
+year. Thanks for your participation!
+   Amateur Radio
+                        Winter Field Day
+                January 24 th & 25 th 2026
+CQ, CQ, CQ...
+We invite the public to join us as we participate in Winter Field Day.
+Come experience amateur radio.
+
+ Learn more about this amazing hobby
+ See operators make world wide contacts              Local Information:
+
+ Ask questions and see how what it
+ takes to set up a radio and external
+ antenna.
+ Listen to operators us Morse code,
+ digital signals and voice to exchange
+ information
+ Pick up the microphone and make
+ contacts yourself.
+ Learn why ham radio is still considered
+ the last means of communication "when
+ all else fails"
+
+
+
+
+                                   For more information visit
+                                    www.winterfieldday.org
+
+
+===== [3] https://winterfieldday.org/resources.php (rendered HTML text, General .. FAQ) =====
+General
+Logging Programs
+Operating Aids
+Downloads
+FAQ
+WFD in the News
+Newsletter
+Swag
+WFD is always on the last full weekend of January, beginning at 16:00 UTC on Saturday and running through 21:59 on Sunday.
+You can operate on the 160, 80, 40, 20, 15, and 10 meter HF bands and all bands above 50 MHz.
+All participants are asked to submit their log entries before 11:59 UTC on March 1st. Late entries may not be included in results.
+Logging Programs
+N3FJP
+Winter Field Day Contest Log
+World Radio League
+Live logging on the web and mobile devices
+Ham2K Portable Logger
+Excellent logger for mobile devices
+HAMRS
+Mobile, desktop, and web versions
+N1MM Logger Plus
+Free logger for Windows
+DXLog
+Free logger for Windows
+Operating Aids
+Section List
+Note new RAC section YT, valid since July 2025.
+Section Map
+Note new RAC section YT, valid since July 2025.
+CQ Zones
+IARU Regions
+ITU Zones
+US Call Areas
+DXLook
+DXLook is an impressive propagation tool with a forecasting feature for Winter Field Day.
+Downloads
+2026 Flyer (Editable)
+You can edit this file in LibreOffice Impress or Microsoft PowerPoint
+2026 Flyer (PDF)
+PDF version of the 2026 flyer
+Map Location Instructions
+Location Map Best Practices
+2026 Bulletin Announcement
+Copy the bulletin transmission accurately and submit it with your then claim the multiplier.
+We would like to develop a comprehensive FAQ section, but for now if you have any questions or need clarifation on anything, please contact us and let us know.
+Q: How do I change my location on the map?
+A: When you registered your location on the map, you received an email from
+webmaster@winterfieldday.org. The subject line was [WFDA] Location Submission. The
+last line of the email says click here to edit your entry. You can change or modify any
+field from your original registration using that link.
+Q: Why isn't FT8 allowed for WFD?
+A: We set our objectives around ensuring that WFD remains an exercise in emergency
+communications. Though we recognize FT8 (and similar modes like FT4, JT9, etc.) is a
+legitimate digital mode, it cannot pass emergency traffic effectively. WFD is not about
+how many contacts you make or the points at the end of the day. It's about whether or
+not you can successfully relay emergency information back and forth in adverse
+conditions. That single concept, along with our core principles, is what we use to
+develop the objectives and guidelines for the WFD event. While many people enjoy
+FT8, and it may help improve your digital skills, we encourage you to use those skills to
+practice passing information back and forth using other digital methods during WFD.
+Q: What do I do if I discover an error after I submit my log?
+A: When you submit your log, you will receive a confirmation email. If you find an error
+after submitting your log, return to the submission page and resubmit a new log. The
+new log will overwrite the old one. You can only change your log until 11:59 UTC on
+March 1st. We shut down the submission page at that point, and all logs become final.
+Q: What category should I use?
+A: Which category you use is very discretionary. You will not receive any penalties if
+you use the wrong category. Follow the general guidelines in the rules while keeping in
+mind the spirit of the event. WFD is about pushing yourself to new limits. Suppose you
+are operating in a communications trailer. In that case, that might be considered Mobile,
+but if you are within walking distance of a club member's house. You have all the
+conveniences of home, like nearby heat, running water, appliances to heat up chili, or a
+couch to chill on during your downtime; you really should not consider yourself an
+Outdoor or Mobile station. That same communications trailer could be just as quickly
+parked in a parking lot somewhere, and now you have more obstacles to overcome.
+Q: I could not hear the Winter Field Day Bulletin. Can I contact another station and
+request that they send the bulletin to me?
+A: Yes, as long as you receive the bulletin entirely over amateur RF.
+Q: I know nothing about digital modes. How do I decode the Winter Field Day Bulletin?
+A: One of our board members wrote an informative guide on how to install and configure fldigi to decode Olivia transmissions for Winter Field Day: https://jcar.us/olivia
+Q: Can individual ops, using their own call signs from other locations, aggregate their score to the club, as in the ARRL Field Day?
+A: No. Our rules forbid this for two reasons: 1. The log you submit must be for only one call sign, and it must be the one you used during the event. 2. Everyone using the same call sign must have all equipment and operators in the same 300m radius.
+Q: How does my club go about running a GOTA station?
+A: GOTA is an ARRL Field Day activity. We always encourage groups of hams to get new and inexperienced folks on the air, but we do not have a formal process for that. Anyone can set up an additional station that uses the same call sign as the rest of the site and have it be the "GOTA" station on its own band-mode combination. That is in keeping with our rules and limits the potential for dupes.

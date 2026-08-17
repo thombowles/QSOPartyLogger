@@ -1,0 +1,1714 @@
+################################################################################
+ARRL FIELD DAY -- OFFICIAL RULES, RAW FETCHED TEXT
+################################################################################
+Fetched: 2026-08-17 (UTC date of fetch) by curl/WebFetch + pdftotext (poppler); no OCR needed.
+
+PRIMARY SOURCE (rules):
+  URL: https://www.arrl.org/files/file/Field-Day/2026/2026-Field-Day-Rules.pdf
+       (linked from https://www.arrl.org/field-day as "2026 Field Day Rules")
+  Edition markers: title line "ARRL Field Day 2026 Rules"; footer "Revised 4/2026";
+       PDF metadata Title "Microsoft Word - 1.61-2026 Field Day Rules 1.2.docx",
+       CreationDate 2026-04-30 10:50:57 CDT, 7 pages.
+  First line of body: "No changes have been made to the rules in the past year."
+
+SECONDARY SOURCES (all ARRL, same fetch date):
+  https://www.arrl.org/field-day  (HTML landing page; states June 27-28 2026, 1800Z Sat - 2059Z Sun,
+       entry deadline Tuesday July 28 2026, "dupe sheets (or a Cabrillo log file) must be submitted")
+  https://www.arrl.org/files/file/Field-Day/2026/2026-ARRL-FD-Packet.pdf  (41 pp; contains the same rules text
+       plus Recommended Frequencies FAQ, Aggregate Club Scoring FAQ, GOTA Scoring FAQ, checklists, Overview,
+       Summary Sheet "June 2026 - FD Form", Entry Submission Instructions "Revised 4/2026",
+       ARRL/RAC Section Abbreviation List "4/2026", 2026 W1AW Field Day Bulletin Schedule "April 2026";
+       PDF CreationDate 2026-04-30 10:54:32 CDT)
+  https://www.arrl.org/files/file/Field-Day/2026/2026%20FD%20FAQ.pdf  (3 pp; footer "Revised 4/2024";
+       PDF CreationDate 2024-04-17 -- i.e. the FAQ posted for 2026 is the 2024 revision)
+  https://field-day.arrl.org/fdentry.php  (Field Day Web App entry form; "Version: 1.18.3, Revised: July 6, 2025";
+       fetched read-only, nothing submitted; form was closed: "no longer accepting 2026 Field Day entries")
+  https://field-day.arrl.org/fdhelp.php  (entry-form help; "Version: 1.5.0, Revised: May 14, 2024")
+  https://contests.arrl.org/contestmultipliers.php?a=wve  (ARRL W/VE section list, "85 W/VE sections",
+       "Version: 1.2.0, Revised: May 12, 2023")
+  http://www.arrl.org/cabrillo-format-tutorial  (ARRL Cabrillo tutorial: contains NO Field Day template;
+       points to http://wwrof.org/cabrillo/ for "Cabrillo Definitions and Standards")
+
+NOTE ON PDF FETCH: WebFetch could not read the PDFs as text (returned binary); the binaries were saved and
+converted locally with `pdftotext -layout`. Text below is that conversion, unedited except for the section
+banners. Layout artefacts (page footers, wrapped lines) are preserved.
+################################################################################
+
+
+===== [0] https://www.arrl.org/field-day — landing page 'Rules and Resources' block (rendered HTML text, links as 'text <url>') =====
+ARRL Field Day is the most popular on-the-air event held annually in the US and Canada. On the fourth weekend of June, more than 31,000 radio amateurs gather with their clubs, groups or simply with friends to operate from remote locations.
+Field Day Locator!
+Looking for a Field Day site near you? Want to promote your club's Field Day efforts? Use the Field Day Locator to do both! Learn More
+Día de Campo del ARRL 2026
+El Día de Campo del ARRL es el evento al aire más popular que se celebra anualmente en los EE. UU. y Canadá. En el cuarto fin de semana de junio, más de 31.000 radioaficionados se reúnen con sus clubes, grupos o simplemente con amigos para operar desde lugares remotos.
+1 2 3
+2026 ARRL Field Day is June 27 - 28
+Rules & Resources | Facebook Group | T-shirts & Gear | Field Day Locator
+| Join ARRL
+ARRL Field Day is always held on the 4th full weekend in June.
+2026 Full Field Day Packet .   Individual files are below.
+2026 Field Day Rules . Other Field Day resources are available below.
+Follow ARRL Field Day preparations with the news and stories below (stories will be added as they are available, so check back).
+New to Field Day? START HERE!
+Field Day is ham radio's open house. Every June, more than 31,000 hams throughout North America set up temporary transmitting stations in public places to demonstrate ham radio's science, skill and service to our communities and our nation. It combines public service, emergency preparedness, community outreach, and technical skills all in a single event. Field Day has been an annual event since 1933, and remains the most popular event in ham radio.
+We welcome the public to come learn more about ham radio! Use our Field Day Locator to search for a Field Day site near you.
+Field Day on Social Media!
+Click below to join the ARRL Field Day Facebook Group. Share your plans, tips and tricks to a successful Field Day. When posting content from Field Day, use hashtag #ARRLFD on all social media to receive 100 bonus points!
+https://www.facebook.com/groups/arrlfd/
+Rules and Resources
+Objective
+To contact as many stations as possible on the 160-, 80-, 40-, 20-,15- and 10-Meter HF bands, as well as all bands 50 MHz and above, and to learn to operate in abnormal situations in less than optimal conditions.
+Field Day is open to all amateurs in the areas covered by the ARRL/RAC Field Organizations and countries within IARU Region 2. DX stations residing in other regions may be contacted for credit, but are not eligible to submit entries.
+Each claimed contact must include contemporaneous direct initiation by the operator on both sides of the contact. Initiation of a contact may be either locally or by remote.
+Dates (Always the 4th Weekend in June)
+Field Day is always the fourth full weekend of June, beginning at 1800 UTC Saturday and running through 2059 UTC Sunday.
+Field Day 2026 will be held June 27 - 28, 2026
+Bands and modes
+Field Day Bands: 160-, 80-, 40-, 20-,15- and 10-Meter HF bands, as well as all bands 50 MHz and above.
+[No Field Day activity is permitted on the 60-, 30-, 17- or 12- Meter HF Bands.]
+Any mode supporting the Field Day exchange is allowed.
+Field Day Entry/Results Submission Deadline
+Entries must be postmarked or submitted via web app at field-day.arrl.org/fdentry.php by Tuesday, July 28, 2026 .
+Late entries cannot be accepted.
+To see if your entry has been received see field-day.arrl.org/fdentriesrcvd.php . If your entry is missing any required document or bonus point proof, the status will be listed as "pending."  Participants may upload additional documentation to the entry for up to 30 days after the entry deadline.
+-----------
+To submit your Field Day results, see the Field Day Packet (complete) section 8 (REPORTING) for web app and mail options.
+Terms Of Entry
+- Entrants agree to be bound by the provisions and intent of ARRL contest rules.
+- Entrants agree to be bound by the regulations of their national licensing authority.
+- Entrants agree to be bound by the decisions of the ARRL Awards Committee.
+- Entry contents used to determine final score and awards will be available to the public.
+- All entries become the property of the ARRL.
+Contact Information
+For Field Day information contact ARRL: fdinfo@arrl.org or (860) 594-0232.
+No Awards - See Listings on Web and in December QST
+Field Day is not a contest:
+-  no logs are required
+- dupe sheets (or a Cabrillo log file) must be submitted
+- no certificates are awarded
+- full results appear in the December issue of QST magazine.
+Rules, Entry Forms and Information Packets
+2026 Field Day Packet (all files in one PDF)
+2026 Field Day FAQ
+2026 Aggregate Club Scoring FAQ
+2026 Field Day Rules Complete
+2026 GOTA Scoring FAQ
+2026 Control Operator Information
+2026 Safety Officer Checklist
+2026 Field Day Site Responsibilities Checklist
+2026 Educational Faq
+2026 How to Succeed - By Really Trying
+2026 Field Day Summary Sheet
+2026 W1AW Bulletin Schedule
+Field Day Log Sheet (keep for your records - don't send to ARRL)
+Field Day 2-Page Dupe Sheet - best if printed on 11"x17" paper stock (send Dupe Sheet or Cabrillo file along with a completed Summary Sheet  to ARRL with your bonus documents (do not send Log Sheet])
+ARRL and RAC Section List
+ARRL/RAC Section Check List (PDF; great for kids and guests!)
+ARRL/RAC Section List   (PDF; unformatted)
+ARRL World All States Ma p (great for kids and guests!)
+gray scale map (PDF)
+color map (PDF)
+Field Day Site Locator
+Find a Field Day site near you or input your site to share with others.
+Note: If you are entering a new Field Day site, you must be logged into the ARRL website for your Field Day entry to be automatically posted on the Field Day Locator. If you are not logged in, your site will not be listed on the Field Day locator until it is reviewed by ARRL staff.
+If you are searching for Field Day sites but encounter screen errors, be sure you have JavaScript enabled on your browser.  To confirm you have JavaScript enable, go to this web site http://www.enable-javascript.com/
+Go Now to the Locator page
+
+
+===== [1] 2026-Field-Day-Rules.pdf (pdftotext -layout) =====
+                               ARRL Field Day 2026 Rules
+No changes have been made to the rules in the past year.
+
+1. Eligibility: Field Day is open to all amateurs in the areas covered by the ARRL/RAC Field Organizations and
+countries within IARU Region 2. DX stations residing in other regions may be contacted for credit and may submit
+entries as check-logs.
+
+2. Object: To work as many stations as possible on the 160-, 80-, 40-, 20-, 15- and 10-Meter HF bands, as well as
+all bands 50 MHz and above, and in doing so to learn to operate in abnormal situations in less-than-optimal
+conditions. A premium is placed on developing skills to meet the challenges of emergency preparedness as well as
+to acquaint the general public with the capabilities of Amateur Radio. See also recommended frequencies FAQ.
+
+3. Date and Time Period: Field Day 2026 will be held June 27-28. Field Day is ALWAYS the fourth full
+weekend of June, beginning at 1800 UTC Saturday and ending at 2059 UTC Sunday.
+         3.1. Class A and B (see below) stations that do not begin setting up until 1800 UTC on Saturday may
+operate the entire 27-hour Field Day period.
+         3.2. Stations who begin setting up before 1800 UTC Saturday may work only 24 consecutive hours,
+commencing when on-the-air operations begin.
+         3.3. No class A or B station may begin its set-up earlier than 0000 UTC on the Friday (Thursday afternoon
+or evening local time) preceding the Field Day period. Cumulative set-up time shall not exceed a total of 24 hours.
+
+4. Entry Categories: Field Day entries are classified according to the maximum number of simultaneously
+transmitted signals, followed by a designator indicating the nature of their individual or group participation. The
+minimum number of transmitters that must be claimed is one (1). Twenty (20) transmitters maximum are eligible for
+the purpose of calculating bonus points (2,000 points maximum). However, additional transmitters which may
+legitimately be used simultaneously will determine your entry category classification, but will not earn additional
+bonus points (i.e. 22 transmitters = 22A). The use of switching systems that allow for lock-outs in order to use
+multiple transmitters (i.e., an “octopus”) in an attempt to enter a lower-number-of-transmitters class are prohibited
+(i.e. using 2 transmitters that can transmit simultaneously, with two operators, and a lock-out system and entering
+class 1A). The use of simulcasting devices which allow a single operator to key and transmit on more than one
+transmitter at a time, is prohibited. Bonus stations, such as the GOTA station and satellite station do not count
+towards determining the number of transmitters for the class and do not qualify for transmitter bonus points.
+          4.1. (Class A) Club / non-club portable: Club or a non-club group of three or more persons set up
+specifically for Field Day. Such stations must be located in places that are not regular station locations and must not
+use facilities installed for permanent station use, or use any structure installed permanently for Field Day. A single
+licensee or trustee for the entry is responsible for the group entry. All equipment (including antennas) must lie
+within a circle whose diameter does not exceed 300 meters (1000 feet). To be listed as Class A, all contacts must be
+made with transmitter(s) and receiver(s) operating independent of commercial power mains. Entrants whom for any
+reason operate a transmitter or receiver from a commercial main for one or more contacts will be listed separately as
+Class A-Commercial.
+                    4.1.1. Get On The Air (GOTA) Station (updated for 2025): Any Class A or F entry may also
+                    operate one additional station without changing its base entry category, known as the Get On The
+                    Air (GOTA) station. This GOTA station may operate on any Field Day band, HF or VHF, but
+                    is limited to one GOTA station transmitted signal at any time.
+                              4.1.1.1. This station must use a different callsign from the primary Field Day station. The
+                              GOTA station must use the same callsign for the duration of the event regardless if
+                              operators change. The GOTA station uses the same exchange as its parent.
+                              4.1.1.2. The GOTA station may be operated by any person licensed since the previous
+                              year’s Field Day, regardless of license class. It may also be operated by a generally
+                              inactive licensee. Non-licensed persons may participate under the direct supervision of an
+                              appropriate control operator. A list of operators and participants must be included on the
+                              required summary sheet to ARRL HQ.
+                              4.1.1.3. As per FCC rules, this station must have a valid control operator present at the
+                              control point if operating beyond the license privileges of the participant using the
+                              station.
+                              4.1.1.4. The maximum transmitter output power for the GOTA station shall be 100 watts.
+                              If the primary Field Day group is claiming the QRP multiplier level of five (5), the
+                              maximum transmitter output power of the GOTA station may not exceed 5 watts.
+                              4.1.1.5. There is no limit to the number of contacts made by the GOTA station. QSOs
+                              made by this station may be claimed for credit by its primary Field Day operation. In
+                              addition, bonus points may be earned by this station under rule 7.3.13.
+                              4.1.1.6. The GOTA station may operate on any Field Day band. Only one transmitted
+                              signal is allowed from the GOTA station at any time.
+                              4.1.1.7. The GOTA station does not affect the additional VHF/UHF station provided for
+                              under Field Day Rule 4.1.2. for Class A stations.
+                              4.1.1.8. Participants are reminded that non-licensed participants working under the
+                              direction of a valid control operator may only communicate with other W/VE stations or
+                              with stations in countries with which the US has entered a third-party agreement.
+                              4.1.1.9. The GOTA station does not qualify as an additional transmitter when
+                              determining the number of transmitters eligible for the 100-point emergency power bonus
+                              under Rule 7.3.1.
+                    4.1.2. Free VHF Station: All Class A entries may also operate one additional transmitter if it
+                    operates exclusively on any band or combination of bands above 50 MHz (VHF/UHF) without
+                    changing its basic entry classification. This station does not qualify for a 100-point bonus as an
+                    additional transmitter. This station may be operated for the clubs Field Day period and all contacts
+                    count for QSO credit. It is operated using the primary callsign and exchange of the main Field Day
+                    group and is separate and distinct from the GOTA station.
+
+         4.2. (Class A - Battery) Club / non-club portable: Club or non-club group of three or more persons set up
+specifically for Field Day. All contacts must be made using an output power of 5 watts or less and the power source
+must be something other than commercial power mains or motor-driven generator (e.g.: batteries, solar cells, water-
+driven generator). Other provisions are the same for regular Class A. Class AB is eligible for a GOTA station if
+GOTA requirements are met; however, if a GOTA station is used in this class it must meet the 5 watts or less power
+requirement of this category. Class A - Battery entries will be listed separately.
+
+         4.3. (Class B) One or two person portable: A Field Day station set up and operated by no more than two
+persons. Other provisions are the same for Class A except it is not eligible for a GOTA or free VHF station. One-
+and two-person Class B entries will be listed separately.
+           4.4. (Class B - Battery) One or two person portable: A Field Day station set up and operated by no more
+than two persons. All contacts must be made using an output power of 5 watts or less and the power source must be
+something other than commercial mains or motor-driven generator. Other provisions are the same for Class A except
+it is not eligible for a GOTA or free VHF station. One- and two-person Class B - Battery entries will be listed
+separately.
+
+4.5. (Class C) Mobile: Stations in vehicles capable of operating while in motion and normally operated in this
+manner. This includes maritime and aeronautical mobile. If the Class C station is being powered from a car battery
+or alternator, it qualifies for emergency power but does not qualify for the multiplier of 5, as the alternator/battery
+system constitutes a motor-driven generating system.
+
+       4.6. (Class D) Home stations: Stations operating from permanent or licensed station locations using
+commercial power. Class D may work all Field Day stations.
+
+         4.7. (Class E) Home stations - Emergency power: Same as Class D, but using emergency power for
+transmitters and receivers. Class E may work all Field Day stations.
+
+          4.8. (Class F) Emergency Operations Centers (EOC): An amateur radio station at an established EOC
+activated by a club or non-club group. Class F operation must take place at an established EOC site. Stations may
+utilize equipment and antennas temporarily or permanently installed at the EOC for the event. Entries will be
+reported according to number of transmitters in simultaneous operation. Class F stations are eligible for a free VHF
+station.
+
+                  4.8.1. For Field Day purposes, an Emergency Operations Center (EOC) is defined as a facility
+                  established by:
+                            a) a Federal, State, County, City or other Civil Government, agency or administrative
+                            entity; or,
+                            b) a Chapter of a national or international served agency (such as American Red Cross or
+                            Salvation Army) with which your local group has an established operating arrangement;
+                            4.8.1.1. A private company EOC does not qualify for Class F status unless approved by
+                            the ARRL Field Day Manager.
+                  4.8.2. Planning of a Class F operation must take place in conjunction and cooperation with the
+                  staff of the EOC being activated.
+                  4.8.3. Other provisions not covered are the same as Class A.
+                  4.8.4. A Class F station may claim the emergency power bonus if emergency power is available at
+                  the EOC site.
+                            4.8.4.1. The emergency power source must be tested during the Field Day period but
+                            you are not required to run the Class F operation under emergency power.
+
+
+5. Exchange:
+         Stations in ARRL / RAC sections will exchange their Field Day operating Class and ARRL / RAC
+section. Example: a three transmitter Class A station in Connecticut which also has a GOTA station and the extra
+VHF station would send "3A CT" on CW or Digital, or "3 Alpha Connecticut" on Phone.
+         DX stations send operating class and the term DX (i.e. 2A DX).
+
+6. Miscellaneous Rules:
+        6.1. A person may not contact for QSO credit any station from which they also participate.
+        6.2. A transmitter/receiver/transceiver used to contact one or more Field Day stations may not subsequently
+        be used under any other callsign to participate in Field Day. Family stations are exempt provided the
+        subsequent callsign used is issued to and used by a different family member.
+        6.3. Field Day contacts are allowed using Phone, CW and Digital (non-CW) modes. Stations can be worked
+        once per band per mode under this rule.
+        6.4. Each contact must include contemporaneous direct initiation by both operators making a contact.
+        Initiation of a contact may be by either local or remote control. Fully automated contacts are prohibited.
+        6.5. For any of the three event modes (CW, Phone, or Digital), only one transmitted signal (or data stream)
+        per band is permitted at any time. Multi Streaming (eg. using Fox and Hound Mode; Dxpedition Mode, or
+        MSHV) is prohibited.
+         6.6. All voice contacts are equivalent.
+         6.7. All non-CW digital contacts are equivalent.
+         6.8. Cross-band contacts are not permitted (Satellite QSOs cross-band contacts are exempted).
+         6.9. The use of more than one transmitter at the same time on a single band-mode is prohibited. Exception:
+         a dedicated GOTA station may operate as prescribed in Rule 4.1.
+         6.10. No repeater contacts are allowed.
+         6.11. Batteries may be charged while in use. Except for Class D stations, the batteries must be charged
+         from a power source other than commercial power mains. To claim the power multiplier of five, the
+         batteries must be charged from something other than a motor driven generator or commercial mains.
+         6.12. All stations for a single entry must be operated under one callsign, except when a dedicated GOTA
+         station is operated as provided under Field Day Rule 4.1.1. it uses a single, separate callsign.
+
+7. Scoring: Scores are based on the total number of QSO points times the power multiplier corresponding to the
+highest power level under which any contact was made during the Field Day period plus the bonus points.
+
+Aggregate Club Score: An aggregate club score will also be published, which will be the sum of all individual
+entries indicating a specific club (similar to the aggregate score totals used in ARRL affiliated club competitions).
+Participants from any Class can optionally include a single club name with their submitted results following Field
+Day. For example, if Podunk Hollow Radio Club members Becky, W1BXY, and Hiram, W1AW, both participate in
+2023 Field Day – Hiram from his Class D home station, and Becky from her Class C mobile station – both can
+include the radio club’s name when reporting their individual results. The published results listing will include
+individual scores for Hiram and Becky, plus a combined score for all entries identified as Podunk Hollow Radio
+Club.
+
+         7.1. QSO Points:
+                   7.1.1. Phone contacts count one point each.
+                   7.1.2. CW contacts count two points each.
+                   7.1.3. Digital contacts count two points each.
+         7.2. Power multipliers: The power multiplier that applies is determined by the highest power output of any
+         of the transmitters used during the Field Day operation. Power output for classes A, B and C cannot
+         exceed 500 watts Peak Envelope Power (PEP) transmitter output. Power output for classes D, E and
+         F cannot exceed 100 watts Peak Envelope Power (PEP) transmitter output.
+                   7.2.1. If all contacts are made using a power of 5 watts or less and if a power source other than
+                   commercial mains or motor-driven generator is used (batteries, solar cells, water-driven
+                   generator), the power multiplier is five (5).
+                   7.2.2. If all contacts are made using a power of 5 watts or less, but the power source is from a
+                   commercial main or from a motor-driven generator, the power multiplier is 2. If batteries are
+                   charged during the Field Day period using commercial mains or a motor-driven generator the
+                   power multiplier is two (2).
+                   7.2.3. If any or all contacts are made using an output power up to 100 watts or less, the power
+                   multiplier is two (2).
+                   7.2.4. If any or all contacts are made using an output power greater than 100 watts, the power
+                   multiplier is one (1).
+                   7.2.5. The power multiplier for an entry is determined by the maximum output power used by any
+                   transmitter used to complete any contact during the event. (Example: a group has one QRP station
+                   running 3 watts and a second station running 500 watts, the power multiplier of one (1) applies to
+                   all contacts made by the entire operation).
+         7.3. Bonus Points: All stations are eligible for certain bonus points, depending on their entry class.
+         The following bonus points will be added to the score, after the multiplier is applied, to determine the final
+         Field Day score. Bonus points will be applied only when the claim is made on the summary sheet and any
+         proof required accompanies the entry or is received via email or normal mail delivery.
+                   7.3.1. 100% Emergency Power: 100 points per transmitter classification if all contacts are made
+                   only using an emergency power source up to a total of 20 transmitters (maximum 2,000 points.)
+                   GOTA station and free VHF Station for Class A and F entries do not qualify for bonus point
+                   credit and should not be included in the club’s transmitter total. All transmitting equipment at
+                   the site must operate from a power source completely independent of the commercial power mains
+                   to qualify. (Example: a club operating 3 transmitters plus a GOTA station and using 100%
+                   emergency power receives 300 bonus points.) Available to Classes A, B, C, E, and F.
+7.3.2. Media Publicity: 100 bonus points may be earned for obtaining publicity from the local
+media. A copy of the actual media publicity received (newspaper article, etc.) must be submitted
+to claim the points. Any combination of bona fide media hits would qualify for the bonus points.
+For example, details of your upcoming or ongoing Field Day activity, or your Field Day results, as
+posted on a news media site (which could include the media site’s Facebook, Twitter, or
+Instagram) would meet the bonus criteria. Available to all Classes.
+7.3.3. Public Location: 100 bonus points for physically locating the Field Day operation in a
+public place (i.e. shopping center, park, school campus, etc) and actively welcoming the public.
+Person(s) shall be available to greet the public and be identified by some sort of name badge. The
+intent is for amateur radio to not only be on display to the public, but to also engage any visitors
+showing up at your location. Available to Classes A, B and F.
+7.3.4. Public Information Table: 100 bonus points for a Public Information Table at the Field
+Day site. The purpose is to make appropriate handouts and information available to the visiting
+public at the site. Available to Classes A, B and F.
+7.3.5. Message Origination to Section Manager: 100 bonus points for origination of a formal
+message to the ARRL Section Manager or Section Emergency Coordinator by your group from its
+site. You should include the club name, number of participants, Field Day location, and number of
+ARES operators involved with your station. The message must be transmitted during the Field
+Day period and a copy of it must be included in your submission in either standard NTS or
+ICS-213 format (or have the equivalent content) or no credit will be given. The message
+must leave or enter the Field Day operation via amateur radio RF.
+The Section Manager message is separate from the messages handled in Rule 7.3.6. and may not
+be claimed for bonus points under that rule. Available to all Classes.
+7.3.6. Message Handling: 10 points for each formal message originated, relayed, or received and
+delivered during the Field Day period, up to a maximum of 100 points (ten messages). Copies of
+each message must be included with the Field Day report. The message to the ARRL SM or SEC
+under Rule 7.3.5. does not count towards the total of 10 for this bonus. Messages claimed under
+this bonus must be in either standard NTS or ICS-213 format (or have the equivalent
+content). All messages claimed for bonus points must leave or enter the Field Day operation
+via amateur radio RF. Available to all Classes.
+7.3.7. Satellite QSO: 100 bonus points for successfully completing at least one QSO via an
+amateur radio satellite during the Field Day period. Groups are allowed one dedicated satellite
+transmitter station without increasing their entry category. Satellite QSOs also count for regular
+QSO credit. Show them listed separately on the summary sheet as a separate "band." You do not
+receive an additional bonus for contacting different satellites, though the additional QSOs may be
+counted for QSO credit unless prohibited under Rule 7.3.7.1. The QSO must be between two Earth
+stations through a satellite. Available to Classes A, B, and F.
+          7.3.7.1 Stations are limited to one (1) completed QSO on any single channel FM satellite.
+7.3.8. Alternate Power: 100 bonus points for Field Day groups making a minimum of five QSOs
+without using power from commercial mains or petroleum driven generator. This means an
+"alternate" energy source of power, such as solar, wind, methane or water. This includes batteries
+charged by natural means (not dry cells). The natural power transmitter counts as an additional
+transmitter. If you do not wish to increase your operating category, you should take one of your
+other transmitters off the air while the natural power transmitter is in operation. A separate list of
+natural power QSOs should be submitted with your entry. Available to Classes A, B, E, and F.
+7.3.9. W1AW Bulletin: 100 bonus points for copying the special Field Day bulletin transmitted
+by W1AW (or K6KPH) during its operating schedule during the Field Day weekend (listed in this
+rules announcement). An accurate copy of the message is required to be included in your Field
+Day submission. (Note: The Field Day bulletin must be copied via amateur radio. It will not be
+included in Internet bulletins sent out from Headquarters and will not be posted to Internet BBS
+sites.) Available to all Classes.
+7.3.10. Educational activity bonus: One (1) 100-point bonus may be claimed if your Field Day
+operation includes a specific educational-related activity. The activity can be diverse and must be
+related to amateur radio. It must be some type of formal activity. It can be repeated during the Field
+Day period but only one bonus is earned. For more information consult the FAQ in the complete
+Field Day packet. Available to Classes A & F entries and available clubs or groups operating
+from a club station in class D and E with 3 or more participants.
+                7.3.11. Site Visitation by an elected governmental official: One (1) 100-point bonus may be
+                claimed if your Field Day site is visited by an elected government official as the result of an
+                invitation issued by your group. Available to all Classes.
+                7.3.12. Site Visitation by a representative of an agency: One (1) 100-point bonus may be
+                claimed if your Field Day site is visited by a representative of an agency served by ARES in your
+                local community (American Red Cross, Salvation Army, local Emergency Management, law
+                enforcement, etc.) as the result of an invitation issued by your group. ARRL officials (SM, SEC,
+                DEC, EC, etc) do not qualify for this bonus. Available to all Classes.
+                7.3.13. GOTA Bonus: Class A and F stations operating a GOTA station may earn the following
+                bonus points:
+                          7.3.13.1. Any successfully completed contacts made by an operator at the GOTA station
+                          are worth five (5) bonus points, regardless of mode used. There is no limit to the number
+                          of contacts a single GOTA operator can make. The GOTA station bonus points are not
+                          multiplied by the power multiplier (this is a clarification of the rules published in 2023.)
+                          7.3.13.2. If a GOTA station is supervised by a GOTA Coach, a single 100-point bonus will
+                          be earned.
+                                   7.3.13.2.1. The GOTA Coach supervises the operator of the station, doing such
+                                   things as answering questions and talking them through contacts, but may not
+                                   make contacts or perform logging functions.
+                                   7.3.13.2.2. To qualify for this bonus, there must be a designated GOTA Coach
+                                   present and supervising for at least 10 contacts.
+                7.3.14. Web submission: A 50-point bonus may be claimed by a group submitting their Field Day
+                entry via thehttps://field-day.arrl.org/fdentry.php web app. Available to all Classes.
+                7.3.15. Field Day Youth Participation:
+                          7.3.15.1. A 20-point bonus (up to a maximum of 100 points) may be earned by any Class
+                A, C, D, E, or F group for each participant age 18 or younger at your Field Day operation that
+                completes at least one QSO.
+                          7.3.15.2. For a 1-person Class B station, a 20-point bonus is earned if the operator is age
+                18 or younger. For a 2-person Class B station, a 20-point bonus is earned for each operator age 18
+                or younger (maximum of 40 points.) Keep in mind that Class B is only a 1- or 2-person operation.
+                This bonus does not allow the total number of participants in Class B to exceed 1 or 2.
+                7.3.16 Social Media: 100 points for promoting your Field Day activation to the general public via
+                an active, recognized and utilized social media platform (Facebook, Twitter, Instagram, etc). This
+                bonus is available to bona fide Amateur Radio clubs and Field Day groups that welcome visitors
+                to their operation. Individual participants do not qualify for this bonus. Club websites do not
+                qualify for this bonus. Available to all classes.
+                7.3.17 Safety Officer Bonus: A 100-point bonus may be earned by having a person serving as a
+                Safety Officer for those groups setting up Class A stations. This person must verify that all safety
+                concerns on the Safety Officer Check List (found in the ARRL Field Day Packet) have been
+                adequately met. This is an active bonus – simply designating someone as Safety Officer does not
+                automatically earn this bonus. A signed copy of the Safety Officer Check List must be included in
+                the supporting documentation sent to ARRL HQ in order to claim this bonus. Available to Class
+                A entries only.
+                7.3.18. Field Day Site Responsibilities Bonus: A 50-point bonus may be earned by having a
+                person ensure that the Field Day site is free of hazards, and that safety precautions have been taken
+                throughout the entire event, as well as providing a point of contact to the visiting public or served
+                agency officials. A signed copy of the Field Day Responsibilities Check List must be included in
+                the supporting documentation sent to ARRL HQ in order to claim this bonus. Available to Class
+                B, C, D, E, or F entries.
+
+
+8. Reporting:
+        8.1. Entries may be submitted to the ARRL via:
+                 8.1.1. Field Day Web App at https://field-day.arrl.org/fdentry.php or
+                 8.1.2. USPS or other delivery service to (tracking highly recommended):
+                            Field Day Entries, 225 Main St, Newington, CT 06111.
+        8.2. Entries must be postmarked or submitted by Tuesday July 28, 2026. Late entries cannot be
+accepted.
+         8.3. A complete Field Day Web App entry consists of:
+                  8.3.1. An official ARRL summary sheet which is completed via web app at https://field-
+                  day.arrl.org/fdentry.php;
+                  8.3.2. Supporting information uploaded via web app. Supporting information must include:
+                            8.3.2.1. An attached list of stations worked by band/mode during the Field Day period
+                            (dupe sheet or an alpha/numeric list sorted by band and mode – a Cabrillo log can be
+                            submitted in lieu of a Dupe Sheet/Calls list by band/mode); and
+                            8.3.2.2. Proof of bonus points claimed (press releases, NTS messages handled,
+                            photographs, etc.)
+                            8.3.2.3 The web app will display a confirmation number and email a confirmation of your
+                            Field Day entry to the email address entered via the app. Please be sure to record this
+                            confirmation number and/or save the confirmation email.
+         8.4 While the preferred method of submitting entries is via the web app, entries and/or supporting
+         documentation may alternately be submitted via email to fieldday@arrl.org. A complete non-web-app
+         email submission consists of:
+                  8.4.1. An electronic copy of an ARRL summary sheet completely and accurately filled out;
+                  8.4.2. An attached list of stations worked by band/mode during the Field Day period (dupe sheet
+                  or an alpha/numeric list sorted by band and mode); and
+                  8.4.3. Proofs of bonus points claimed (copies of visitor logs, media coverage, NTS messages
+                  handled, photographs, etc.)
+         8.5. A complete land/postal-mail or delivery non-electronic submission consists of:
+                  8.5.1. A complete and accurate ARRL summary sheet;
+                  8.5.2. An accompanying list of stations worked by band/mode during the Field Day period (dupe
+                  sheet or an alpha/numeric list sorted by band and mode); and
+                  8.5.3. Proofs of bonus points claimed (copies of visitor logs, press releases, NTS messages
+                  handled, photographs, etc).
+         8.6. Complete station logs are NOT required for submission, and ARRL does not use the logs. The club
+should maintain log files for one year in case they are requested by ARRL HQ. However, a list of stations worked
+sorted by band and mode (dupe sheet) is required.
+         8.7. Cabrillo format log files are NOT required for Field Day entries, but they will be accepted in lieu
+of the dupe sheets (but do not constitute an entry unless the web app or a corresponding summary sheet with
+complete mailed entry) is also submitted.
+         8.8. Digital images of proof of bonus points are acceptable.
+         8.9. Electronic submissions are considered signed when submitted.
+
+9. Miscellaneous:
+         9.1. The schedule of bulletin times for W1AW is included in this announcement. While W1AW does not
+have regular bulletins on weekends, the Field Day message will be sent according to the schedule included with this
+announcement. The W1AW bulletins will be transmitted on the regular W1AW frequencies listed in QST. The
+PSK31 bulletin will be transmitted on the W1AW teleprinter frequencies. The special Field Day bulletin will be
+transmitted from station K6KPH on the West Coast as included in the bulletin schedule.
+         9.2. Decisions of the ARRL Awards Committee are final in adjudicating Field Day problems.
+
+       9.3. The complete Field Day information package may be obtained via download from the Field Day
+home page at: www.arrl.org/field-day
+
+        9.4. For more Field Day information/questions contact: fdinfo@arrl.org or phone (860) 594-0232.
+
+
+
+                                                                                                    Revised 4/2026
+
+
+===== [2] 2026 FD FAQ.pdf (pdftotext -layout) — footer 'Revised 4/2024' =====
+                             ARRL Field Day Frequently Asked Questions
+Q. My group wants to start setting up in the field before the official start time on Friday. We don’t want to have to rush in the heat.
+What do we do?
+A. The rules allow groups to start setting up at 0000 UTC on Friday (which is Thursday local time: 8:00 PM EDT, 7:00 PM CDT, 6:00 PM
+MDT, 5:00 PDT). Groups may begin set-up, stop for the night, and return the next day. However, you must be aware that you only have a
+cumulative total of 24-hours from when you start to finish your set-up.
+
+Q. I am going to operate my transmitter at the club’s Field Day using solar panels and 2 watts. The rest of the club will be using 100
+watts and power from the generator. May we score my QSOs with the bonus multiplier of 5 and combine it with the rest of the
+group’s multiplier of 2?
+A. The Power multiplier is determined by the highest power output of any transmitter in use at the station, including the GOTA and
+free VHF station. To claim the multiplier of 5, ALL stations must be running 5 watts or less and must be running from a power source
+other than the commercial mains or a generator. The multiplier for all QSOs from the setup described is 2.
+
+Q. Can I help with the group Field Day effort during the day and still operate from home overnight?
+A. Yes, but you may not make a contact for QSO credit with any Field Day group or station from which you participate. For example, if you
+operate one of the W1AW station transmitters during Field Day, you may not also work W1AW from home.
+
+Q. We have some great Field Day photos we would like published in QST. How do we submit them? Where do we get the Release
+Form for youth under age 18?
+A. You may submit photos several ways. Digital photos may be sent via email to fieldday@arrl.org (be sure to include captions that
+identify the activity and all identifiable persons in the picture and the contact information for the photographer, and when images include
+youth under 18 years of age please send in a Photo Release for each young person is image.) You may also upload your photos and Field
+Day story to the Contest Soapbox on the ARRL Website. Regular photos may be sent to Field Day, ARRL, 225 Main St., Newington CT
+06111 along with your paper Field Day entry, or separately showing your Field Day call sign in your note. Make sure to include captions,
+photographer credit and that your photos are as high resolution as possible. We can not use photos with time/date stamps included
+in the image. Please note that we receive thousands of pictures every year for Field Day, and space in QST is very limited. We cannot
+guarantee the publication of any specific photo submission. However, you are encouraged to post them to the ARRL Online Soapbox at
+field-day.arrl.org/fdsoapbox.php where they can be viewed and shared by the thousands of visitors to the site.
+
+Q. We sent a press release to the local TV station, but they didn’t send a crew out to cover our operation. May we still claim
+the Media bonus?
+A. No. In order to claim the media bonus, you must obtain publicity with the media. Proof of the publicity must be provided in
+order to claim the bonus points.
+
+Q. How do we indicate our bonus points in the Cabrillo log file?
+A. While we accept the Cabrillo log file in lieu of the required dupe sheets, it does not accommodate all of the information required
+for reporting a Field Day entry. All entries must either complete the required summary sheet on-line at field-
+day.arrl.org/fdentry.php or submit a paper summary sheet for their entry. Entries submitted via the field-
+day.arrl.org/fdentry.php website must submit their required supporting documentation as attachments. Any submission without a
+completed summary (either paper or electronic) will be classified as a checklog.
+
+Q. My club mailed its Field Day entry last week. Our president phoned this morning to see if it had arrived, but you couldn’t
+tell him. What’s going on?
+AA. If your entry was submitted electronically via the Field Day Web Submission App at field-day.arrl.org/fdentry.php, it will
+appear on the Logs Received list when the entry is submitted and accepted. If you submitted a paper entry, ARRL staff must process
+and enter it into the database. Once it is entered into the database, it will appear on the entries received page. Once the paper entries
+are processed into the database, they will be added to the list of Logs Received on the ARRL Field Day Web page at field-
+day.arrl.org/fdentriesrcvd.php.
+         Many groups will send their entry using one of the US Postal Service’s options for a receipt upon delivery.
+               Once all online and paper entries are processed into the database, they will be added to the list of Logs
+       Received posted on the ARRL Field Day Web page at field-day.arrl.org/fdentriesrcvd.php
+
+Q. How do I determine my ARRL section?
+A. For most states, there is only one ARRL section that encompasses the entire state. Eight states (California, Washington, Texas,
+Florida, New Jersey, Pennsylvania, New York and Massachusetts – and the Canadian province of Ontario) have multiple ARRL
+sections. A list of the US sections is found monthly in QST and in this packet. It is also found on-line at
+https://contests.arrl.org/contestmultipliers.php?a=wve.
+
+Q: We have some members of our group that are new at operating using Morse code. Where should they look for slow speed
+CW operation?
+A: Look for slow speed CW in the center of the Novice and Technician segments of the CW bands on 80, 40, 15 and 10 meters; and
+50 kHz from the lower band edge of 160 and 20 meters. Slow speed CW operators should take care to avoid the digital operation
+“watering holes” where RTTY, FT4/FT8 and other digital modes are commonly found.
+
+Q. I will be driving on vacation during Field Day and going through several sections. What section do I give in my exchange?
+When I change sections, do I count as a new station and am I able to re-work people?
+A. Give the section in which you are currently located. You may work a station only once per band/mode, even if you change sections
+while mobile.
+
+Q. I will be using battery power but running my station at 100 watts. What is my power multiplier?
+Q. I will be running QRP using my emergency generator at home. What is my power multiplier?
+A. To claim the power multiplier of 5, you must be operating QRP (5 watts or less) AND running on a power source other than
+commercial mains or a motor-driven generator. In both of these cases, the power multiplier is 2.
+
+Q. What equipment at our Field Day site must be operated using emergency power in order to claim the 100-point per
+transmitter bonus?
+A. You must operate all transmitting and receiving equipment from emergency power. If you use a computer for digital modes, and/or
+to control or operate the radio, it also must use emergency power. If the computer is used only for logging and is not keying the
+transmitter, it does not need to be emergency powered.
+
+Q. We will be running a generator to power our stations, but will be using commercial power for the lights, coffee pot, etc.
+What power source should we check?
+A. Only check the power source which is used to operate the transmitting/receiving equipment.
+
+Q. My buddy and I will be going to the campground with our families for Field Day. Only he and I will be setting up the
+station and operating. Are we Class A or B?
+A. In this instance, the entry class is B.
+
+Q. I will be camping with my family during Field Day. My three kids will help me set up the antennas and station, but they
+will be busy doing other things while I operate. Am I still Class B?
+A. Class B stations may only have 1 or 2 persons involved in its set-up and operation. In this instance, the entry class is A.
+
+Q. We don’t have an area club, but we do have a small group of area hams (generally two or three of us get together for
+operating events). I have a large-deep property, and we will be setting up in my back yard. What Class would we be?
+Class A, Class B or ?
+A. Class B stations, like Class A are designated as portable stations- the difference between Class A and B is the number of
+participants. Class B stations are limited to 1 or 2 participants, which includes anyone assisting in setup/breakdown, as well as actually
+operating. If you’re setting up at your property and you are not using your normal station, or using any facilities installed for
+permanent station use (including any antennas that you normally use), then you’d qualify as Class B. Other provisions are the same as
+Class A except it is not eligible for a GOTA station. If you’re operating at your normal station location using permanent station
+facilities, then you’d be a Class D or E home station.
+
+Q. How do we sign forms that we send in via the web app at field-day.arrl.org/fdentry.php?
+A. Electronic submissions are considered signed when submitted.
+Q. What kind of “proofs of bonus points” do we need to send?
+A. It depends on which bonuses you claim. For emergency power, public location, public information table, satellite QSO, alternate
+power, and non-traditional modes, a club official signing the entry form is sufficient. Copies of the message to the Section Manager,
+any messages sent or received, the W1AW message, and any copies of news stories that your local media actually runs must be
+included with your entry to claim those bonuses. The Safety Officer must sign the completed Safety Officer checklist and submit it
+with your entry. When submitting an electronic entry, documentation can be uploaded using the “Upload Documentation” link on the
+entry form. If an upload button does not appear next to the bonus point checkbox, no documentation is required for that particular
+bonus point- checking the box is sufficient- no other proof is needed.
+
+Q. What about the 60-meter band? May we use it in Field Day?
+A. Because of the limited scope of the 60-meter band, it is not included in bands eligible for Field Day use. In addition, the 2200, 630-
+, 30-, 17- and 12-meter bands are NOT eligible for use in Field Day.
+
+Q. Can we claim the GOTA station for a 100-point emergency power bonus? What about the free VHF station?
+A. Neither the GOTA station nor the free VHF station are eligible for the per station 100-point emergency power bonus.
+
+Q. I sent the Section Manager (SM) a participation message. Do I also get 10 points for sending it under the NTS bonus?
+A. Sorry, you can’t “double dip.” The SM participation message is not eligible for the formal message bonus.
+
+Q. Why doesn’t our contact with the International Space Station count for the satellite bonus?
+A. While the ISS is by definition a satellite, the purpose of the satellite QSO bonus is to complete an Earth-to-Earth contact via an
+amateur radio satellite. Since the ISS contact doesn’t relay back to Earth, it doesn’t meet that requirement, though it does count for
+regular QSO credit (and is sure to generate excitement at your site)!
+
+Q. I am a member of two clubs. Can I participate in Field Day with more than one group?
+Q. I will be participating with my club Saturday during the day. Can I get on from home and make some Field Day contacts
+afterwards?
+A. The answer in both cases is YES. The only limitation is that you cannot make contacts for score with any group or station from
+which you participate during Field Day. For example, you can’t call the club’s FD 2-meter station while driving to or from the site or
+from home in order for them to “put you in the log” for QSO point credit.
+
+Q. Can I operate FT4/FT8 for Field Day?
+A. All digital modes can be used during Field Day, provided they can accommodate the Field Day exchange.
+
+Q. Our club’s Field Day site has a high noise floor, can we operate a club member’s home station remotely?
+A. Remote operation of a club member’s home station from the Field Day site is not allowed. All transmitters, receivers and antennas
+used during Field Day must lie within a circle whose diameter does not exceed 300 meters (1000 feet). For demonstration purposes as
+an educational activity, you can certainly set up a remote station, but those QSOs will not be counted towards the club’s score, and
+must utilize the callsign of the station operator, not the Field Day call.
+
+
+
+                                                                                                                            Revised 4/2024
+
+
+===== [3] 2026-ARRL-FD-Packet.pdf — cover page (lines 1-19 of pdftotext output) =====
+             Field Day
+          June 27-28, 2026
+         Start: 1800 UTC Saturday
+End: 2059 UTC Sunday (see rules 3.1, 3.2, 3.3)
+
+    Always the fourth full weekend in June
+
+
+                For information contact:
+
+                 Field Day Information
+                         ARRL
+                      225 Main St.
+                 Newington, CT 06111
+                    fdinfo@arrl.org
+
+                    (860) 594-0232
+
+             http://www.arrl.org/field-day
+
+===== [4] 2026-ARRL-FD-Packet.pdf — Recommended Frequencies FAQ, Aggregate Club Scoring FAQ, Who's in Control, GOTA Scoring FAQ (packet pp. 9-13) =====
+Recommended Field Day Frequencies FAQ
+HF: All operations are recommended to stay within the General class operator privileges on the 160-15 Meter HF
+Bands (excluding 60, 30, 17 and 12 meters), or beginning at 28.300 MHz on 10 Meters to include Technician voice
+privileges.
+
+VHF+: All frequencies are open to Technician or higher class licensees.
+
+
+Digital: Remember that Technician’s cannot be control operator on Digital Modes below 10 Meters. Recommended
+FT8 and FT4 subbands follow:
+
+FT-8 Recommended Subbands (these are not the default subbands that WSJT defaults to on for each band,
+but are the frequency subbands used in the ARRL Digital Contest):
+
+1.840-1.844
+3.590-3.600 (No Digital above 3600)
+7.090-7.100
+14.090-14.100
+21.090-21.100
+28.090-28.100
+50.340 to 50.350
+When choosing your operating frequency, set the radio dial at the bottom of the sub-band and QSO with stations on
+audio frequencies within the radio passband typically 2.5-4 kHz wide. If a sub-band becomes crowded, move the
+radio dial frequency up in 2 kHz increments, as needed. (For example: 7,090, 7.092, 7.094, 7.096 and 7.098). All
+contest queries should be directed to contests@arrl.org
+
+FT-4 Recommended Sub-bands:
+
+1.836-1.840
+3.580-3.590
+7.080-7.090
+14.080-14.090
+21.080-21.090
+28.080-28.090
+50.330 to 50.340 When choosing your operating frequency, set the radio dial at the bottom of the sub-band and QSO
+with stations on audio frequencies within the radio passband, typically 2.5-4 kHz wide. If a sub-band becomes
+crowded, move the radio dial frequency up in 2 kHz increments, as needed. (For example: 7.080, 7.082, 7.084,
+7.086 and 7.088).
+
+
+
+
+                                                                                                         4/2026
+                                       Aggregate Club Scoring FAQ
+Below are some frequently asked questions regarding the submission of individual scores to be counted towards a club’s aggregate
+score.
+
+Contact the ARRL Contest Program with any questions that are not covered in this FAQ.
+
+Q: Several of our club members are going to operate independently and wish to attribute their scores to the aggregate club score. What
+call sign should they use?
+A: Participants should use their own call signs. Except for Class C (mobile) entries, all transmitters, receivers, and antennas must be
+located within a 1,000-foot-diameter circle to be able to operate using a single call sign. This prohibits the use of a single call sign
+from more than one location. Those participants operating from home or locations not at the club’s Field Day site must use their own
+station call signs. Multiple stations operating with a club call sign or modified club call sign, such as W1AW-1, W1AW-2, W1AW-3,
+etc, are not allowed.
+
+Q: How does my club submit an aggregate club score? Does the club need to add up each participating member’s scores and submit a
+club entry with the aggregate score under the club call sign?
+A: Each participant will submit their independent entry under their own call sign (NOT the call sign the club is using.)
+ARRL will calculate the aggregate score based upon the club name entered on the official Field Day entry form via the web applet
+(preferred method) or on the paper Field Day entry form. In order for results to be tabulated correctly, all club participants must enter
+the club’s official name exactly the same, avoiding abbreviations or acronyms. This is important!
+
+Q: Our group is still planning to operate at the usual Field Day site, but some members will be operating from their home stations, or
+from other locations. Can we still submit an entry using the club call sign, as well as have members operating using their own call
+signs?
+A: Yes. If your club is hosting a group Field Day effort, it will submit an entry as usual, using the club call sign. Club members
+operating at other locations will submit separate entries with their own call signs and will enter the club name on the entry form for
+club aggregate scoring.
+
+Q: Can a club member operate from home using the club call sign?
+A: Yes, but the call sign may only be used in one location. The member must receive permission from the trustee of the club call sign.
+
+Q: Our club normally enters Field Day in Class A. If we operate from our home stations, in which class should individual members
+enter in order to be included in the aggregate club score?
+A: Each member will operate independently and will submit the entry using whatever class that applies to their operation. Typically,
+home stations running on commercial AC power are Class D, while home stations running on battery, solar, generator, or the like (i.e.,
+not from AC mains) are Class E. When the results are published, each club member will be listed in the results under the class in
+which they operated. Aggregate club scores for clubs with 3 or more entries for the same club will be listed by the club name in a
+separate listing.
+
+Q: Our club will have 10 members operating from home as Class D stations. Should they worry about working the same station on
+the same band and mode (duplicates)?
+A: Because members are operating as separate entries using their own call signs, the contacts are not considered duplicates.
+
+Q: Does the club need to be an ARRL-affiliated club to participate in Field Day?
+A: No. All clubs and groups are welcome to participate in ARRL Field Day.
+
+Q: How will bonus points be calculated for the aggregate club scores? Can individual club members still earn bonus points?
+A: All individual scores, including bonus points, will be added together to determine the aggregate club score. Refer to the complete
+rules to determine eligibility for bonus points.
+
+                                                                                                                              Rev 4/2026
+                     Who's in Control of Your Field Day Station?
+The ARRL is always answering questions about FCC rules as they apply to Field Day. Of course, every station
+must have a control operator (97.103). On Field Day, you often operate using someone else’s callsign, or a club
+callsign. The station licensee or club call trustee is ultimately responsible for all transmissions from their
+station. During Field Day, many amateurs often use a single call sign, so the station licensee must designate a
+control operator(s) who is responsible for the operation of that station when the licensee is not in direct control.
+Both the station licensee and the control operator are equally responsible for all transmissions (97.103(a)
+and (b)). When the station licensee designates others as control operators, they should make a note in the log.
+You are no longer required to carry a photocopy of your license whenever you are the control operator of a
+station, but it’s still a good idea .A third-party is defined as anyone who does not have operating privileges
+on the frequency and mode being used.
+
+Q. Are there any exceptions to the FCC rules for Field Day?
+A. No, FCC Part 97 rules apply 24/7 every day of the year – no exceptions.
+
+Q. The trustee of our club callsign is an Extra. Does this mean our station can operate on any frequency?
+A. No. Many people mistakenly believe that a club callsign automatically carries the operating privileges of the
+callsign trustee. That is not true. A club callsign comes from a station license and carries no operating
+privileges. A station may only operate according to the privileges of the Control Operator at the control
+point for that station. Example, if a control operator is a General, that transmitter may only operate using
+General class privileges.
+
+Q. My call is being used for Field Day, but I can’t be at the station for the duration of the contest. (I like
+sleeping in my air-conditioned house, even during Field Day.) Do we have to take the transmitter off the
+air when I am not present?
+A. No, you may designate a control operator or operators who should fulfill your duties as the station licensee.
+In fact, you don’t have to be there at all, but you are responsible for making sure that the appointed control
+operator(s) is capable of carrying out your wishes (97.103(b) and 97.105). After all, if there is a problem the
+FCC is going to contact you as the licensee or trustee of a club call.
+
+Q. Can KB1ZDZ, a General class licensee, operate at the station of N1ND, an Extra Class licensee, during
+Field Day? Can he operate in the Extra Class segment even though he only holds a General class license?
+A. The answer to the first question is “yes” – he may operate using his license privileges from N1ND’s station.
+However if he wishes to participate on frequencies other than those his license allows, there must be a control
+operator with privileges for the desired operating frequencies continuously monitoring and supervising the
+operation at the control point of the transmitter. FCC rules state that “A control operator must ensure the
+immediate proper operation of the station.” (97.105(a)). The rules go on to say, “A station may only be
+operated in the manner and to the extent permitted by the privileges authorized for the class of operator license
+held by the control operator” (97.105(b)).
+Q. I am an Extra Class licensee, but I am going to use a Technician class operator’s station and call sign
+during Field Day. Can I legally operate her station and use her call outside the Technician subbands?
+A. You, the Extra, can be designated as the control operator. If you are authorized by the licensee, you may use
+the call sign of the Technician class licensee and operate within the Technician class privileges. However, if an
+Extra Class control operator wants to operate outside the Technician class operator privileges, they may do so,
+but must identify by appending their call to that of the Technician, such as signing “KB1ZDZ / N1ND” on CW
+or separating the calls by the word “stroke” on Phone (97.105(a) and (b), 97.119(d)). True, this is a long
+identification procedure, but it is the only way to identify in this case. Why would an Extra want to use a
+Technician call? Well, that may not always be the case, but it clearly illustrates the point.
+
+Q. What is the identification procedure for a club station license during Field Day?
+
+A. A club station license carries no operator privileges. The person designated as control operator for the
+station must use his or her own privileges. If operation takes place in the Extra class part of the band, there
+must be an Extra class control operator present at the control point monitoring and supervising the
+operation. This does not necessitate the use of the supplementary station ID as mentioned in Section 97.119(e).
+
+Q. During Field Day, members of the public wander through as we operate. Many times, these unlicensed
+individuals want to operate. Can they legally operate our Field Day station?
+A. Only a licensed amateur is eligible to be the control operator, and obviously an unlicensed person can’t be
+the control operator of an amateur station. So, an unlicensed person cannot legally operate the Field Day
+station. However they may participate under the immediate supervision and direction of a control operator
+present at the control point. Third parties may only communicate directly with other US stations or with
+countries with which the US has signed third-party agreements (97.115(a) and (b)). Part 97 rules are always in
+effect. There is no “special exception” for Field Day. It is the hope of the ARRL that everyone will do lots of
+operating during Field Day, demonstrate Amateur Radio to the public, practice our emergency communications
+capabilities, eat lots of good Field Day cooking and most of all, have a good time while doing it. However, it
+all must take place in the context of the FCC rules.
+
+Q. During Field Day, there may be DX stations on the air. May they be worked?
+A. In most cases, yes. However, if a person is participating as a third party under the supervision of a control
+operator, there must be a third-party agreement between the DX country’s government and the US. The
+complete list of countries with which the US has Third Party agreements may be found at: www.arrl.org/third-
+party-operating-agreements
+
+Q. We will be using a special 1 by 1 callsign for Field Day. Is there anything special we must do?
+A. Yes, at least once per hour each station using the special call must also ID with the FCC-issued station call.
+(97.119(d)). For more information on 1x1 callsigns see www.1x1callsigns.org/
+
+
+                                                                                                            4/2026
+                                           GOTA Scoring FAQ
+
+Individual operators of a GOTA station can earn points as follows:
+
+• The individual operator of a GOTA station earns 5 GOTA Bonus points for any QSO made from the GOTA Station,
+  regardless of the mode (CW, Phone, or Digital.)
+
+• The QSOs made at the GOTA station will also count toward the total QSO points, but those QSOs will be scored the
+  same as all other QSOs made by the primary Field Day operation.
+
+• There is no limit to the number of QSOs that a GOTA operator can make.
+
+• If the GOTA station is supervised by a designated GOTA Coach for at least 10 QSOs, a single 100-point GOTA Coach
+  Bonus will be earned.
+
+Q. Do you have to be a licensed amateur to operate the GOTA station?
+A. An unlicensed person may never operate an amateur station. As per the FCC rules, they may participate by operating
+the station, but there must always be a licensee at the control point of the GOTA station with an operator’s license class that
+allows them to use the band and mode being used.
+Q: What is the maximum number of QSOs that may be completed and claimed by operators of the GOTA station?
+A: There is no maximum number of QSOs that can be made by operators of the GOTA station.
+Q: How do you earn GOTA bonus points?
+A: As stated above, any QSOs made by operators at the GOTA station are worth 5 GOTA Bonus points, regardless of the
+mode (CW, Phone, or Digital) used. The 5 points per QSO only applies to GOTA Bonus points, and not to the Total QSO
+points.
+Q: How do we claim the GOTA Bonus?
+A: First, mark the appropriate area in Item 15 on the Summary Sheet. Then in Item 19 on the Summary Sheet, you must list
+the name and/or callsign of each operator of the GOTA station and the number of QSOs completed by that operator. Total
+up the number of GOTA QSOs made on each mode and transfer those totals to the GOTA line in Item 18. Enter the total
+number of all GOTA QSOs in Item 19 and multiply by 5 and enter in Total GOTA QSO Bonus points. If claiming the
+GOTA Coach Bonus, check the box and add 100 points to the total GOTA QSO Bonus points. Then transfer the Total
+GOTA Bonus Points to Item 15 of the summary sheet. If you do not complete Item 19, the GOTA bonus may be
+disallowed.
+Q: How is the GOTA Coach Bonus calculated?
+A: A single 100-point bonus can be earned by having a designated GOTA Coach present for at least 10 QSOS made from
+the GOTA Station. The GOTA Coach must be present and actively coaching the operator of the GOTA station to qualify
+for this bonus. If claiming the 100- point GOTA Coach Bonus, check the box below Item 19 on the summary sheet.
+
+Q: Do we still earn QSO points for contacts made at the GOTA station?
+A Yes, but those QSOs will be scored the same as all other QSOs made by the primary Field Day operation and must be
+entered in the Band/Mode QSO breakdown in Item 18 as GOTA QSOs.
+
+
+
+
+                                                                                                                Revised 4/2026
+
+===== [5] 2026-ARRL-FD-Packet.pdf — Overview excerpt on transmitter class (packet p.16) =====
+         There are two criteria that determine your Transmitter class. First, you must be able to transmit a signal
+on the total number of band/modes that you claim simultaneously. For example, if you claim 10A, you must be
+able to transmit 10 different signals at the same time (remember that a band/mode counts as a separate band).
+Changing the band-switch to another band does not count as a “different signal.” If you are claiming 10
+transmitters, you need 10 stations capable of operating at the same time – remember operating means sending
+AND receiving. Second, you must actually have them on the air simultaneously at least once during the event.
+
+===== [6] 2026-ARRL-FD-Packet.pdf — Overview excerpts on Cabrillo / dupe sheets (packet p.20) =====
+         Consider making your submission via the ARRL Field Day web app that is found at field-day.arrl.org
+At this site you can submit your summary sheet information and bonus evidence documents directly to the
+ARRL and it will show receipt of the information within about 24 hours on the ARRL Web. There it is a 50-
+point bonus to submit using this web app. Also, we cannot accept only a Cabrillo format file as your Field
+Day entry. While it contains the QSO data, the header does not include everything necessary to
+completely and accurately report your entry. A Cabrillo-file must either include a completed official
+Summary Sheet by mail or the entrant must submit the required Summary data at the field-day.arrl.org
+website required attachments uploaded to the web app
+
+        The logging requirements for Field Day are different from ARRL contests. Instead of standard log files,
+you are only required to submit a Dupe Sheet, separated by band and mode. For Field Day, paper copies of
+the dupe sheets are acceptable. Keep your logs available, however, in case we need to request you to submit
+them at a later time for clarification.
+
+===== [7] 2026-ARRL-FD-Packet.pdf — 'Field Day's Over... Now What?', Summary Sheet (June 2026 - FD Form), Entry Submission Instructions (packet pp. 24-27) =====
+                                   Field Day’s Over… Now What?
+                          Tips for Submitting Your Field Day Entry
+The last QSO has been logged. The antennas and tents have come down. The site and generator and other equipment have
+been cleaned, and stored until needed again. So, now what do you do with all of the paper forms, logs and files created
+during your Field Day exercise?
+
+Here is a guide to making sure your Field Day entry is correct and included in the results. Remember that all Field Day
+entries must be submitted or postmarked by Tuesday July 28, 2026.
+                             To submit online or by mail – which is best for me?
+The preferred way to send your information to the ARRL is to use the web application found at
+ http://field-day.arrl.org/fdentry.php This excellent web tool allows you to electronically submit your Summary Sheet and
+all bonus documents and other required information to the ARRL, getting your information directly and immediately into a
+database for inclusion.
+And, you earn a 50 point bonus for submitting everything via the http://field-day.arrl.org/fdentry.php web app.
+The web app form follows the information on the official ARRL Field Day Summary Sheet. Just fill in all the blanks and
+attach your supporting files. The web app will prompt you if there is invalid or incomplete information. Once that is done,
+just click <SUBMIT ENTRY> at the bottom of the form and your Field Day summary information will be on its way to the
+ARRL, with confirmation emailed back to you for your records. Again, if you use the web app, you can attach everything
+there (dupe sheets, bonus documents, photos, etc). If you do not receive a confirmation number or confirmation
+email, your entry was not submitted. If you require assistance with submitting an entry, email fieldday@arrl.org, or call
+860-594-0232 and we will be happy to assist you.
+
+
+If you decide to send the entry via the regular mail, there are a few items that you should pay special attention to:
+   A) You MUST include the required Field Day Summary Sheet. And please be sure that it is legible. One of the
+   greatest challenges of paper entries is that ARRL HQ staff is not able to read all information on the form.
+   B) Make sure you complete ALL information on the form. Leaving certain information blank results in delaying the
+   processing of your submission.
+   C) Verify ALL of the information submitted before you mail the entry. For example, the ARRL Section should be the
+   Section you transmitted as your exchange during Field Day (eg, W1AW 3F CONNECTICUT). Review of the
+   information on your summary sheet helps to eliminate inputting bad data into the ARRL Field Day database.
+   D) Don’t forget to include a printed copy of your REQUIRED dupe sheets (we also will accept the Cabrillo file printed
+   out from a computer logging program, in lieu of the dupe sheet).
+   E) Make sure you enclose verification of your claimed bonus points (Eg, Safety Officer certification, W1AW message
+   copied over the air, visitor sign-in sheet, copy of the NTS message to the section manager or messages originated/relayed/
+   delivered, youth bonus, educational bonus detail, media coverage evidence {including copy of the newspaper article},
+   etc.)
+Once your paper Field Day packet is assembled, mail it to: Field Day Submission, ARRL, 225 Main St, Newington CT
+06111 (consider using a method of mailing that gives you a tracking number to verify your documents were delivered to
+ARRL). Entries must be postmarked by July 28, 2026.
+
+To confirm your web app log submission (or paper log submission – after a few giving us a few days to enter your paper
+summary) has been received, see the logs received page at field-day.arrl.org/fdentriesrcvd.php
+
+
+                                                                                                           Revised: 4/2026
+                                            Field Day                                                       Entries must be postmarked within 30 days of
+                                                                                                            the end of the event and mailed to:
+                                                                                                                       Field Day Entries
+                                  Please write legibly. Make certain you have filled out this form                     ARRL
+                              completely and have enclosed any required dupe sheets, photographs and                   225 Main St.
+                                                           bonus claims.                                               Newington, CT 06111 USA
+
+1. Field Day Call Used __________________________________________ GOTA Station Call _______________________________________
+
+2. Club or Group name __________________________________________________________________________________________________
+
+3. Number of Participants ________                                  4. Number of Transmitters in Simultaneous Operation _______
+
+
+
+
+ 6. Power Source: Check all that apply
+ ___ Generator     ___ Commercial mains          ___ Battery         ___ Solar           ___ Other (list) : ______________________________
+
+
+
+ 7. ARRL / RAC Section _________________________ (see http://www.arrl.org/contest-sections-list for a sections list)
+
+
+ 8. Total CW QSOs _____________________________ x 2 =                 Total CW QSO points           _______________________________
+
+ 9. Total Digital QSOs ___________________________ x 2 =              Total Digital QSO points _______________________________
+
+ 10. Total Phone QSOs __________________________ x 1 =                Total Phone QSO points        ________________________________
+
+ 11. Power Multiplier (select only one)
+
+ ___ 5 watts or less and Battery powered = 5
+ ___ 6 – 100 watts = 2
+ ___ 101 – 500 watts = 1 (class A, B, or C only)
+    (Transfer number selected {1, 2, or 5} to line 13)
+
+
+ 15. Bonus points claimed: Check each block as
+ appropriate and include required proof of points with
+ your submission. All bonus points will be verified at
+ ARRL HQ and added to your score.                                      16. ___ Check here if your entry was also made online at:
+                                                                                            field-day.arrl.org
+ ___ 100% Emergency power (Max. 20 transmitters)
+ ___ Media Publicity
+ ___ Set-up in Public Location                                         17. I/We have observed all competition rules as well as all
+ ___ Information Booth                                                 regulations for amateur radio in my/our country. My/Our
+ ___ Message to ARRL SM/SEC                                            report is correct and true to the best of my/our knowledge.
+ ___ W1AW Field Day Message                                            I/We agree to be bound by the decisions of the ARRL
+ ___ NTS/ICS-213 messages handled (# __________)                       Awards Committee.
+ ___ Satellite QSO completed
+ ___ Natural power QSOs completed                                      Date: ____________________________________________
+ ___ Site Visit by invited elected official
+ ___ Site Visit by invited served agency official                      Call: ____________________________________________
+ ___ Educational Activity Bonus
+ ___ Youth Element achieved                                            Signature: _________________________________________
+ ___ GOTA Bonus (total GOTA bonus points: ________)                    (signature/call of club president or authorized club representative)
+ ___ Submitted using the web app field-day.arrl.org
+ ___ Safety Officer Bonus (Class A Only)                               Address: _________________________________________
+ ___ Site Responsibilities Bonus (Class B,C,D,E,F Only)
+ ___ Social Media Bonus                                                Address: _________________________________________
+
+                                                                       E-mail Address: ___________________________________
+ Total Bonus Points Claimed: ___________________
+18.   Field Day Call Used: _______________________
+                                  CW                         Digital                                Phone
+                         QSO           POWER             QSO      POWER                   QSO               Power
+       160 M
+       80 M
+       40 M
+       20 M
+       15 M
+       10 M
+       6M
+       2M
+       1.25 M
+       70 CM
+       Other
+       Satellite
+       GOTA
+       TOTALS                             CW                            Digital                             Phone
+                       Enter on                        Enter on                        Enter on
+                       Line 8 of                       Line 9 of                      Line 10 of
+                       Summary                         Summary                        Summary
+  19. GOTA BONUS: List names/calls of GOTA operators and total number of QSOs completed by each:
+                                            (Use additional sheets if necessary)
+                  Name                           Call            CW        Pwr       Digital    Pwr      Phone      Pwr
+                                                                QSOs       (W)       QSOs       (W)      QSOs       (W)
+
+
+
+
+  Totals (enter on GOTA line in Item 18 above)
+
+  Total number of GOTA QSOs: __________ x 5 =                     Total GOTA QSO Bonus Points: _________
+
+       Check if claiming GOTA Coach bonus (100 Points)                  Total GOTA Bonus Points: _________
+      (Add total GOTA QSO Bonus Points and GOTA Coach Bonus Points to determine
+       total GOTA Bonus points and enter on the line at right. Transfer to GOTA Bonus in Item 15)
+  20. Did your Field Day Group claim the Youth Element Bonus:                  ______ Yes           ______ No
+  If so, how many participants 18 or younger completed at least one QSO? _____
+  Total number of attendees in group age 18 or younger _____
+                                                                                                       June 2026 – FD Form
+
+                                                                                                            Page 2 of 2
+Field Day Entry Submission Instructions:
+
+Please make certain that your required summary sheet is complete with the following fields filled in:
+
+1.  Field Day Call Used: The callsign used by your club/group/entry. If your group used a GOTA station please list that unique
+    callsign in the space provided.
+2. Club or Group Name: The name of the Club or Group to which you’d like your score attributed to.
+3. Number of Participants: Give the number of persons who participated in your Field Day operation. Include operators, loggers,
+    set-up crew, and visitors.
+4. Number of Transmitters in Simultaneous Operation: The maximum number of transmitters that were transmitting at a given
+    moment (if the count varied during the event, list the highest number achieved).
+5. Entry Class: Refer to the Field Day rules for definitions.
+6. Check all power sources used: If you used more than one source, check all that apply.
+7. Your ARRL / RAC section: This is usually your State or Province, but if you live in one of the 8 US states that have multiple
+    ARRL sections (California, Florida, Massachusetts, New Jersey, New York, Pennsylvania, Texas and Washington) refer to the
+    ARRL section list. DX stations use the term “DX”.
+8. Total number of CW QSOs: In the first blank list the number of raw non-dupe CW QSOs. Multiply the CW QSO total by 2 and
+    enter the CW QSO point total in the second blank. Do not add the power multiplier in this field.
+9. Total number of Digital QSOs: On the first blank list the number of raw non-dupe Digital QSOs. Multiply the Digital QSO total
+    by 2 and enter the QSO point total in the second blank. Do not add the power multiplier in this field.
+10. Total number of Phone QSOs: In the first blank list the number of raw non-dupe Phone QSOs. Multiply the Phone QSO total
+    by 1 and enter the Phone QSO point total in the second blank. Do not add the power multiplier in this field.
+11. Power Multiplier: Select the category that corresponds with your power multiplier. (Remember that to use the multiplier of 5,
+    you must be using 5 watts or less AND running battery or solar power.)
+12. Total QSO Points: Add the CW, Digital and Phone QSO points and enter here.
+13. Enter the power multiplier from Item 11 onto this line.
+14. Multiply line 12 times line 13 to calculate your claimed score, exclusive of bonus points.
+15. Bonus Points Claimed: All categories now qualify for certain bonus points. Check each box for which you are claiming the
+    earned Field Day bonus points. You must submit proof of all bonus points claimed or they will be disallowed. Proof for
+    each may be in the form of photographs, copies of press coverage received, marked log excerpts showing Satellite and
+    Natural power QSOs. Submission of this form signed by a club or group official will suffice for the Emergency Power,
+    Public Location, Information Table, Social Media and Site Visit bonuses. A signed Safety Officer Checklist or Site
+    Responsibilities Checklist is required to claim those bonuses. You must provide serviced copies of any messages claimed
+    for bonus credit. A copy of the W1AW bulletin must be included with the entry submission.
+         Special notations:
+              A. If the Field Day operation was 100% emergency powered, you receive 100 points for each transmitter up to 20.
+              B. The Field Day message to the SM or SEC does not also qualify as a 10-point message bonus.
+              C. The Educational Bonus must involve some formal activity in order to qualify for the 100-Point bonus. A
+                   written lessen plan should be developed and submitted.
+              D. If you submitted your entry via the page at field-day.arrl.org you may claim an additional 50 bonus points.
+              E. Youth Element – you must fill in information for question 21 page 2 of the summary if you claim this bonus.
+16. Check this space if you have also submitted the entry via the field-day.arrl.org web app.
+17. A club officer, authorized club representative or individual must date, and sign the Summary Sheet. Please provide a
+    mailing address and e-Mail address (if available) in case questions arise with the entry.
+18. You must include a band and mode breakdown of QSOs on the 2nd page of the summary sheet form as directed. GOTA
+    station contacts should be recorded in the GOTA Bonus section.
+19. The list of GOTA station operators/participants must be shown, and the number of QSOs each made must be listed in
+    order to claim the GOTA Bonus. Also, you must check the box if you are claiming the 100-point bonus for using a
+    designated GOTA coach/mentor.
+20. If your group claims the Youth Element bonus, give the number of youth participants (18 years old or younger) who
+    completed a QSO and the total number of youth attendees.
+
+After completing the Summary Sheet, please enclose it, as well as copies of Dupe Sheets (by band and mode), and all proofs of bonus
+points claimed and mail to:
+                                                   ARRL 2026 Field Day Entry
+                                                       225 Main Street
+                                                     Newington, CT 06111
+All Field Day entries with all attachments must be uploaded to field-day.arrl.org (preferred method), e-mailed to fieldday@arrl.org,
+or postmarked within 30 days after Field Day or they will be ineligible for inclusion in the Field Day results (if mailed, keep a copy of
+your proof of delivery/tracking#).
+                                                                                                                          Revised 4/2026
+
+===== [8] 2026-ARRL-FD-Packet.pdf — ARRL/RAC Section Abbreviation List (4/2026) and 2026 W1AW Field Day Bulletin Schedule (packet pp. 40-41) =====
+ARRL / RAC Section Abbreviation List
+  Call Area 1
+  Connecticut                CT                                  Rhode Island            RI
+  Eastern Massachusetts      EMA                                 Vermont                 VT
+  Maine                      ME                                  Western Massachusetts   WMA
+  New Hampshire              NH
+
+  Call Area 2
+  Eastern New York           ENY                                 Northern New York       NNY
+  NYC / Long Island          NLI                                 Southern New Jersey     SNJ
+  Northern New Jersey        NNJ                                 Western New York        WNY
+
+  Call Area 3
+  Delaware                   DE                                  Maryland – DC           MDC
+  Eastern Pennsylvania       EPA                                 Western Pennsylvania    WPA
+
+  Call Area 4
+  Alabama                    AL                                  Southern Florida        SFL
+  Georgia                    GA                                  Tennessee               TN
+  Kentucky                   KY                                  Virginia                VA
+  North Carolina             NC                                  West Central Florida    WCF
+  Northern Florida           NFL                                 Puerto Rico             PR
+  South Carolina             SC                                  US Virgin Islands       VI
+
+  Call Area 5
+  Arkansas                   AR                                  North Texas             NTX
+  Louisiana                  LA                                  Oklahoma                OK
+  Mississippi                MS                                  South Texas             STX
+  New Mexico                 NM                                  West Texas              WTX
+
+  Call Area 6
+  East Bay                   EB                                  San Diego               SDG
+  Los Angeles                LAX                                 San Francisco           SF
+  Orange                     ORG                                 San Joaquin Valley      SJV
+  Santa Barbara              SB                                  Sacramento Valley       SV
+  Santa Clara Valley         SCV                                 Pacific                 PAC
+
+  Call Area 7
+  Alaska                     AK                                  Nevada                  NV
+  Arizona                    AZ                                  Oregon                  OR
+  Eastern Washington         EWA                                 Utah                    UT
+  Idaho                      ID                                  Western Washington      WWA
+  Montana                    MT                                  Wyoming                 WY
+
+  Call Area 8
+  Michigan                   MI                                  West Virginia           WV
+  Ohio                       OH
+
+  Call Area 9
+  Illinois                   IL                                  Wisconsin               WI
+  Indiana                    IN
+
+  Call Area Ø
+  Colorado                   CO                                  Missouri                MO
+  Iowa                       IA                                  Nebraska                NE
+  Kansas                     KS                                  North Dakota            ND
+  Minnesota                  MN                                  South Dakota            SD
+
+  Canada
+  Alberta                    AB                                  Ontario East            ONE
+  British Columbia           BC                                  Ontario North           ONN
+  Golden Horseshoe           GH (formerly GTA)                   Ontario South           ONS
+  Manitoba                   MB                                  Prince Edward Island    PE
+  New Brunswick              NB                                  Quebec                  QC
+  Newfoundland/Labrador      NL                                  Saskatchewan            SK
+  Nova Scotia                NS                                  Territories             TER (formerly NT)
+
+  Stations located outside of the US and Canada should be logged as DX
+
+
+                                                                                         4/2026
+                                       2026 W1AW Field Day Bulletin Schedule
+
+Day                Mode                 Pacific             Mountain           Central    Eastern    UTC
+
+FRIDAY             CW                   5:00 PM             6:00 PM            7:00 PM    8:00 PM   0000 (Sat)
+                   Digital              6:00 PM             7:00 PM            8:00 PM    9:00 PM   0100
+                   Phone                6:45 PM             7:45 PM            8:45 PM    9:45 PM   0145
+                   CW                   8:00 PM             9:00 PM           10:00 PM   11:00 PM   0300
+
+SATURDAY           CW                   7:00 AM             8:00 AM            9:00 AM   10:00 AM   1400
+                   Phone                8:00 AM             9:00 AM           10:00 AM   11:00 AM   1500
+                   CW                   5:00 PM             6:00 PM            7:00 PM    8:00 PM   0000 (Sun)
+                   Digital              6:00 PM             7:00 PM            8:00 PM    9:00 PM   0100
+                   Phone                6:45 PM             7:45 PM            8:45 PM    9:45 PM   0145
+
+SUNDAY             CW                   7:00 AM            8:00 AM             9:00 AM   10:00 AM   1400
+                   Phone                8:00 AM            9:00 AM            10:00 AM   11:00 AM   1500
+                   Digital              9:00 AM           10:00 AM            11:00 AM   12:00 PM   1600
+
+                                          K6KPH Field Day Bulletin Schedule
+SATURDAY           CW                   7:30 AM             8:30 AM            9:30 AM   10:30 AM   1430
+                   CW                   5:30 PM             6:30 PM            7:30 PM    8:30 PM   0030 (Sun)
+                   Digital              6:30 PM             7:30 PM            8:30 PM    9:30 PM   0130
+
+SUNDAY             CW                   7:30 AM            8:30 AM             9:30 AM   10:30 AM   1430
+                   Digital              9:30 AM           10:30 AM            11:30 AM   12:30 PM   1630
+
+
+W1AW will operate on the regularly published frequencies.
+
+CW frequencies are 1.8025, 3.5815, 7.0475, 14.0475, 18.0775, 21.0675, 28.0675, 50.350 and 147.555 MHz.
+
+Digital frequencies are 3.5975, 7.095, 14.095, 18.1025, 21.095, 28.095, 50.350 and 147.555 MHz.
+
+During Field Day weekend, W1AW will transmit the Field Day Bulletin using 45.45 baud Baudot, PSK31
+(BPSK Mode), and MFSK16 in this mode order. NOTE: On Friday local, the digital version of the Field
+Day bulletin sent from W1AW at 9 PM EDT (0100 UTC Saturday) will be transmitted using BPSK31,
+Baudot, and MFSK16 in this order.
+
+Phone frequencies are 1.855, 3.990, 7.290, 14.290, 18.160, 21.390, 28.590, 50.350 and 147.555 MHz.
+
+---------------------------------------------------------------------------
+
+The Maritime Radio Historical Society's station K6KPH will transmit the "W1AW" Field Day message
+for the benefit of West Coast stations on 3.5815, 7.0475, 14.0475, 18.0775, and 21.0675 MHz (CW). The
+frequencies for K6KPH Teleprinter (RTTY, PSK31 and MFSK16) will be 3.5975, 7.095, and 14.095 MHz
+(in this mode order).
+
+This schedule is correct at the time of publishing this packet, but be sure to check the ARRL Main News
+page (www.arrl.org) in case of any last-minute changes.
+
+                                                                                                           April 2026
+
+===== [9] https://field-day.arrl.org/fdentry.php — intro page (rendered HTML text) =====
+Field Day Entry
+ARRL Home
+Field Day Home
+Field Day Rules and Resources
+Field Day Locator
+Entry Form
+Entries Received
+Results
+Soapbox
+2026 Field Day Entry - Introduction
+To submit your entry for Field Day, you'll need both the data that describes your entry and any required bonus point documentation. Although the bonus point documentation can be submitted at a later time, it's recommended that you submit both at the same time.
+Data Entry. You'll need all of the info that describes your entry:
+Call used and GOTA station call
+Entry class, number of participants, list of operators
+Power source and multiplier
+Claimed bonus points
+QSO totals by band and mode
+GOTA operators and QSO totals
+Upload Documents. If you elect to upload required documents at this time, you'll need files for the following:
+Cabrillo log or list of stations worked by band/mode (dupe sheet)
+Required documentation for bonus points
+___
+___
+Send comments or questions about this page to ARRL Contest Manager .
+Version: 1.18.3, Revised: July 6, 2025
+Copyright © 2026 American Radio Relay League, Inc., All Rights Reserved
+
+===== [10] https://field-day.arrl.org/fdentry.php — data-entry form (rendered HTML text; club-name select omitted; radio/checkbox values shown inline) =====
+2026 Field Day Entry
+Sorry! We're no longer accepting 2026 Field Day entries since it's more than five days after the submission deadline. Please contact contests@arrl.org with any questions.
+Complete this form to submit your Field Day Entry to the ARRL for review and tabulation. You can access a help page by clicking on i next to an item on the form. Note: You can select documentation files for upload as you complete this form, or you can upload the documents at a later time. Each document can not be larger than 6 MB.
+Call Used ___ i
+GOTA Station Call ___ i
+Location Select ARRL/RAC section
+Outside US/Canada/Mexico
+Connecticut
+Eastern Massachusetts
+Maine
+New Hampshire
+Rhode Island
+Vermont
+Western Massachusetts
+Eastern New York
+New York City-Long Island
+Northern New Jersey
+Northern New York
+Southern New Jersey
+Western New York
+Delaware
+Eastern Pennsylvania
+Maryland-DC
+Western Pennsylvania
+Alabama
+Georgia
+Kentucky
+North Carolina
+Northern Florida
+South Carolina
+Southern Florida
+West Central Florida
+Tennessee
+Virginia
+Puerto Rico
+Virgin Islands
+Arkansas
+Louisiana
+Mississippi
+New Mexico
+North Texas
+Oklahoma
+South Texas
+West Texas
+East Bay
+Los Angeles
+Orange
+Santa Barbara
+Santa Clara Valley
+San Diego
+San Francisco
+San Joaquin Valley
+Sacramento Valley
+Pacific
+Arizona
+Eastern Washington
+Idaho
+Montana
+Nevada
+Oregon
+Utah
+Western Washington
+Wyoming
+Alaska
+Michigan
+Ohio
+West Virginia
+Illinois
+Indiana
+Wisconsin
+Colorado
+Iowa
+Kansas
+Minnesota
+Missouri
+Nebraska
+North Dakota
+South Dakota
+Nova Scotia
+New Brunswick
+Prince Edward Island
+Newfoundland/Labrador
+Quebec
+Ontario Golden Horseshoe
+Ontario East
+Ontario North
+Ontario South
+Manitoba
+Saskatchewan
+Alberta
+British Columbia
+Territories (YT,NT,NU)
+Club or Group Name ___
+i (Type name to find and then select in existing list, or type complete name not on list.) Number of Participants ___ i
+Number of Transmitters in simultaneous operation ___ i
+Entry Class (check only one):
+[radio name=fdclass value=A] A. Club or non-club group portable i
+[radio name=fdclass value=B] B. 1 or 2 person non-club group portable i   List of calls of operators: ___
+[radio name=fdclass value=C] C. Mobile i
+[radio name=fdclass value=D] D. Home station commercial power i
+[radio name=fdclass value=E] E. Home station emergency power i
+[radio name=fdclass value=F] F. EOC station i
+Power Source (check all that apply):
+[checkbox name=pwrsource[1] value=1] Generator
+[checkbox name=pwrsource[2] value=1] Commercial mains
+[checkbox name=pwrsource[3] value=1] Battery
+[checkbox name=pwrsource[4] value=1] Solar
+[checkbox name=pwrsource[5] value=1] Other (list)
+___
+Power Multiplier (check only one): i
+[radio name=powermult value=5] 5 watts or less and battery powered = 5x
+[radio name=powermult value=2] 100 watts or less = 2x
+[radio name=powermult value=1] 500 watts or less = 1x (Class A, B or C only)
+[radio name=powermult value=0] More than 500 watts (will not be listed in the results)
+Bonus Points claimed: Check each box as appropriate and include required proof of points with your submission. All bonus points will be verified at ARRL HQ and added to your score.
+[checkbox name=bonus[1] value=1] 100% emergency power i
+[checkbox name=bonus[2] value=1] Media publicity i Upload documentation: [FILE UPLOAD]
+[checkbox name=bonus[3] value=1] Public location i
+[checkbox name=bonus[4] value=1] Public information table i
+[checkbox name=bonus[5] value=1] Formal message to ARRL SM/SEC i Upload documentation: [FILE UPLOAD]
+[checkbox name=bonus[6] value=1] W1AW Field Day message i Upload documentation: [FILE UPLOAD]
+[checkbox name=bonus[7] value=1] Formal messages handled i — No. ___ Upload documentation: [FILE UPLOAD]
+[checkbox name=bonus[8] value=1] Satellite QSO (automatically determined)
+[checkbox name=bonus[9] value=1] Natural power QSOs completed i Upload documentation: [FILE UPLOAD]
+[checkbox name=bonus[10] value=1] Site visit by invited elected official i
+[checkbox name=bonus[11] value=1] Site visit by invited served agency official i
+[checkbox name=bonus[12] value=1] Educational activity i
+[checkbox name=bonus[13] value=1] Youth participation i
+Number of youth participants completing at least 1 QSO: ___
+Total number of youth participants: ___
+[checkbox name=bonus[14] value=1] GOTA bonus (automatically determined)
+[checkbox name=bonus[15] value=1] Submitted entry online (automatically determined)
+[checkbox name=bonus[16] value=1] Safety officer i Upload documentation: [FILE UPLOAD]
+[checkbox name=bonus[17] value=1] Social media i
+[checkbox name=bonus[18] value=1] Site responsibilities i Upload documentation: [FILE UPLOAD]
+Note: Bonus points for satellite QSO, GOTA QSOs and web submission will be automatically determined from info entered elsewhere on this form.
+Attention: Entrants must upload a QSO dupe sheet or Cabrillo log and complete the band/mode QSO breakdown below.
+Upload band/mode calls list (Dupe Sheet or Cabrillo file): [FILE UPLOAD]
+Band/Mode QSO Breakdown: Do not list GOTA QSOs in this section. i
+CW Digital Phone
+Band QSOs Pwr(W) QSOs Pwr(W) QSOs Pwr(W)
+160m ___ ___ ___ ___ ___ ___
+80m ___ ___ ___ ___ ___ ___
+40m ___ ___ ___ ___ ___ ___
+20m ___ ___ ___ ___ ___ ___
+15m ___ ___ ___ ___ ___ ___
+10m ___ ___ ___ ___ ___ ___
+6m ___ ___ ___ ___ ___ ___
+2m ___ ___ ___ ___ ___ ___
+222 ___ ___ ___ ___ ___ ___
+432 ___ ___ ___ ___ ___ ___
+Other ___ ___ ___ ___ ___ ___
+Satellite ___ ___ ___ ___ ___ ___
+For GOTA Bonus , list names, calls and number of QSOs for each GOTA station operator: i
+[checkbox name=gotacoach value=1] Check for GOTA coach bonus i
+CW Digital Phone
+Name Call QSOs Pwr(W) QSOs Pwr(W) QSOs Pwr(W)
+1 ___ ___ ___ ___ ___ ___ ___ ___
+2 ___ ___ ___ ___ ___ ___ ___ ___
+3 ___ ___ ___ ___ ___ ___ ___ ___
+4 ___ ___ ___ ___ ___ ___ ___ ___
+5 ___ ___ ___ ___ ___ ___ ___ ___
+6 ___ ___ ___ ___ ___ ___ ___ ___
+7 ___ ___ ___ ___ ___ ___ ___ ___
+8 ___ ___ ___ ___ ___ ___ ___ ___
+9 ___ ___ ___ ___ ___ ___ ___ ___
+10 ___ ___ ___ ___ ___ ___ ___ ___
+___
+I/We have observed all competition rules as well as all regulations for amateur radio in my/our country. My/our report is correct and true to the best of my/our knowledge. I/We agree to be bound by the decisions of the ARRL Awards Committee. Submission of this form indicates my/our agreement with these statements. i
+Name ___
+Call ___
+E-mail Address ___
+You'll have an opportunity to enter comments using a link on the confirmation page.
+___   ___
+Send comments or questions about this page to ARRL Contest Manager .
+Version: 1.18.3, Revised: July 6, 2025
+Copyright © 2026 American Radio Relay League, Inc., All Rights Reserved
+
+===== [11] https://field-day.arrl.org/fdhelp.php — entry form help (rendered HTML text) =====
+Field Day Entry Form Help
+Call Used
+The call sign used by your club/group/entry.
+GOTA Station Call
+The call sign used by your "get on the air" (GOTA) station. Leave the text box blank if you did not have a GOTA station. Applicable to Classes A and F.
+Club or Group Name
+The name of your club or group.
+Number of Participants
+Enter the number of persons who participated in your Field Day operation, including operators, loggers and set-up crew.
+Number of Transmitters
+Enter the maximum number of transmitters that were active during any 15-minute period of the Field Day event. Do not count the GOTA station operating under rule 4.1.1 and/or the extra VHF station operating under rule 4.1.2 in the transmitters total.
+Entry Classes
+Output Power Limitation
+Field Day stations operating in classes A, B or C are limited to a maximum 500 watts Peak Envelope Power (PEP) transmitter output. Field Day stations operating in classes D, E or F are limited to a maximum 100 watts Peak Envelope Power (PEP) transmitter output.
+Class A. Club or non-club group portable
+4.1-4.2 Club or a non-club group of three or more persons set up specifically for Field Day. Such stations must be located in places that are not regular station locations and must not use facilities installed for permanent station use, or use any structure installed permanently for Field Day use. All equipment (including antennas) must lie within a circle whose diameter does not exceed 300 meters (1000 feet). To be listed as Class A, all contacts must be made with transmitter(s) and receiver(s) operating independent of commercial power mains. Entrants whom for any reason operate a transmitter or receiver from a commercial main for one or more contacts will be listed separately as Class A-Commercial. Class A stations are limited to 500 W Peak Envelope Power (PEP) transmitter output. Clubs or non-club groups of three or more persons set up specifically for Field Day and who make all contacts using an output power of 5 watts or less and a power source that is not commercial or motor-driven generator (e.g. batteries, solar cells, water-driven generator) will be classified as Class A-Battery.
+Class B. 1 or 2 person non-club group portable
+4.3-4.4 Club or non-club station set up and operated for Field Day purposes by no more than two persons. Other provisions are the same as for Class A. Class B stations are limited to 500 W Peak Envelope
+Power (PEP) transmitter output. Class B stations using an output power of 5 watts or less and a power source other than commercial mains or motor-driven generator will be classified as Class B-Battery. Enter the call sign(s) of the operator(s) in the text box, separated by a space or comma.
+Class C. Mobile
+4.5 Stations in vehicles capable of operating while in motion and normally operated in this manner. This includes maritime and aeronautical mobile. If the Class C station is being powered from a car battery or alternator, it qualifies for emergency power but does not qualify for the multiplier of 5, as the alternator/battery system constitutes a motor-driven generating system. Class C stations are limited to 500 W Peak Envelope Power
+(PEP) transmitter output.
+Class D. Home station commercial power
+4.6 Stations operating from permanent or licensed station locations using commercial power. Class D stations may work all Field Day stations. Class D stations are limited to 100
+W Peak Envelope Power (PEP) transmitter output.
+Class E. Home station emergency power
+4.7 Same as Class D, but using emergency power for transmitters and receivers. Class E may work all Field Day stations. Class E stations are limited to 100 W Peak
+Envelope Power (PEP) transmitter output.
+Class F. EOC Station
+4.8 An amateur radio station at an established EOC activated by a club or non-club group. Stations may utilize equipment and antennas temporarily or permanently installed at the EOC for the event. For Field Day purposes, an Emergency Operations Center (EOC) is defined as a facility established by a Federal, State, County, City or other civil government, agency or administrative entity, or a chapter of a national or international served agency (such as Red Cross or Salvation Army) with which your group has an established operating arrangement. Class F stations are limited to 100 W Peak
+Envelope Power (PEP) transmitter output.
+Bonus Points
+100% Emergency power
+7.3.1 100 points per transmitter classification if all contacts are made only using an emergency power source (maximum 2,000 points). All transmitting equipment at the site must operate from a power source completely independent of the commercial power mains. Available to Class A, B, C, E and F.
+Media Publicity
+7.3.2 100 bonus points may be earned for obtaining publicity from the local media. A copy of the actual media publicity received (newspaper article, etc.) must be submitted to claim the points. Available to all classes.
+Public Location
+7.3.3 100 bonus points for physically locating the Field Day operation in a public place (shopping center, park, school campus, etc.). The intent is for amateur radio to be on display to the public. Available to classes A, B and F.
+Public Information Table
+7.3.4 100 bonus points for a Public Information Table at the Field Day site. The purpose is to make appropriate handouts and information available to the visiting public at the site. Available to Classes A, B and F.
+Formal message to ARRL SM/SEC
+7.3.5 100 bonus points for origination of a formal message to the ARRL Section Manager or Section Emergency Coordinator by your group from its site. You should include the club name, number of participants, Field Day location and number of ARES operators involved with your station. The message must be transmitted during the Field Day period and a copy of it must be included in your submission, in standard ARRL radiogram, or no credit will be given. The message must leave or enter the Field Day operation via amateur radio RF. The Section Manager message is separate from the messages addressed in Rule 7.3.6 and may not be claimed for bonus points under that rule. Available to all classes.
+W1AW Field Day Message
+7.3.9 100 bonus points for copying the special Field Day bulletin transmitted by W1AW (or K6KPH) during its operating schedule during the Field Day weekend (listed in rules announcement). An accurate copy of the message is required to be included in your Field Day submission. (Note: The Field Day bulletin must be copied via amateur radio. It will not be included in Internet bulletins sent out from Headquarters and will not be posted to Internet BBS sites.) Available to all classes.
+Formal messages handled
+7.3.6 10 points for each formal message originated, relayed or received and delivered during the Field Day period, up to a maximum of 100 points (ten messages). Copies of each message must be included with the Field Day report. The message to the ARRL SM or SEC under rule 7.3.5 may not be counted in the total of 10 for this bonus. Enter the total number of messages handled in the text box. All messages claimed for bonus points must leave or enter the Field Day operation via amateur radio RF. Available to all classes.
+Natural power QSOs completed
+7.3.8 100 bonus points for Field Day groups making a minimum of five QSOs without using power from commercial mains or a petroleum driven generator. This means an "alternate" energy source of power, such as solar, wind, methane or water. This includes batteries charged by natural means (not dry cells). The natural power transmitter counts as an additional transmitter. If you do not wish to increase your operating category, you should take one of your other transmitters off the air while the natural power transmitter is in operation. A separate list of natural power QSOs should be submitted with your entry. Available to Classes A, B, E and F.
+Site Visit by invited elected official
+7.3.11 A 100-point bonus may be claimed if your Field Day site is visited by an elected government official as the result of an invitation issued by your group. Available to all classes.
+Site Visit by invited served agency official
+7.3.12 A 100-point bonus may be claimed if your Field Day site is visited by a representative of an agency served by ARES in your local community (Red Cross, Salvation Army, local Emergency Management, law enforcement, etc.) as the result of an invitation issued by your group. Available to all classes.
+Youth Participation
+7.3.15 A 20-point bonus (maximum of 100) may be earned for each participant age 18 or younger at your Field Day operation that completes at least one QSO. Enter the number of youth participants who complete at least one QSO in the text box. For a 1-person Class B station, a 20-point bonus is earned if the operator is age 18 or younger. For a 2-person Class B station, a 20-point bonus is earned for each operator age 18 or younger (maximum of 40 points). This bonus does not allow the total number of participants in Class B to exceed 2. Enter the total number of participants (operators, loggers, set-up crew and visitors) 18 years or younger at your Field Day site in the text box. Available to all classes.
+Educational Activity
+7.3.10 One 100-point bonus may be claimed if your Field Day operation includes a specific educational-related activity. The activity can be diverse and must be related to amateur radio. It must be some type of formal activity. It can be repeated frequently during the Field Day period but only one bonus is earned. Available to Classes A & F entries and available clubs or groups operating from a club station in class D and E with 3 or more participants.
+Social Media
+7.3.16 One 100-point bonus for promoting your Field Day activation to the general public via an active, recognized and utilized social media platform (Facebook, Twitter, Instagram, etc.)
+Safety Officer
+7.3.17 One 100-point bonus may be earned by having a person serving as a Safety Officer for those groups setting up Class A stations. This person must verify that all safety concerns on the Safety Check List (found in the ARRL Field Day Packet) have been adequately met.
+Site Responsibilities
+7.3.18 A 50-point bonus may be earned by having a person ensure that the Field Day site is free of hazards, and that other safety precautions have been taken throughout the entire event, as well as providing a point of contact to the visiting public or served agency officials. Available for Class B, C, D, E, or F entries.
+Band/Mode QSO Breakdown
+Enter the total number of QSOs completed for each band and mode combination. Combinations for which no QSOs were completed can be left blank. The maximum power (W) must be entered for any band/mode combination for which you claim QSOs. KW and 1K are recognized abbreviations for 1000 watts. Satellite total QSOs must be listed separately from the other QSOs and are broken down only by mode, not band. Do not enter GOTA station QSOs in this section.
+Operators of the GOTA Station
+In order to receive GOTA station bonus points, list the names, calls and QSOs for each GOTA station operator. 5 GOTA bonus points are awarded for each QSO completed by a GOTA operator. If you need to enter more than 10 operators, click on the Add a row button to add rows to the GOTA operators table.
+GOTA Station Coach
+Click on the check box if you had a GOTA Coach. A single 100-point bonus will be awarded if the GOTA station is supervised by a GOTA Coach. The GOTA Coach supervises the operator of the station, doing such things as answering questions and talking them through contacts, but may not make QSOs or perform logging functions. To qualify for this bonus, there must be a designated GOTA Coach present and supervising for at least 10 contacts.
+Name/Call/Address
+Enter the full name, call sign, e-mail address and mailing address of the club officer, authorized club representative or person authorized to submit this entry. A confirmation of the entry will be automatically sent to the provided e-mail address.
+Send comments or questions about this page to ARRL Contest Manager .
+Version: 1.5.0, Revised: May 14, 2024
+Copyright © 2026 American Radio Relay League, Inc., All Rights Reserved
+
+===== [12] https://contests.arrl.org/contestmultipliers.php?a=wve — ARRL W/VE section list (rendered HTML text) =====
+These are the names of the 85 W/VE sections used in ARRL contests, along with their standard abbreviations.
+U.S. Call Area 0
+Colorado
+CO
+Iowa
+IA
+Kansas
+KS
+Minnesota
+MN
+Missouri
+MO
+North Dakota
+ND
+Nebraska
+NE
+South Dakota
+SD
+U.S. Call Area 1
+Connecticut
+CT
+Eastern Massachusetts
+EMA
+Maine
+ME
+New Hampshire
+NH
+Rhode Island
+RI
+Vermont
+VT
+Western Massachusetts
+WMA
+U.S. Call Area 2
+Eastern New York
+ENY
+New York City-Long Island
+NLI
+Northern New Jersey
+NNJ
+Northern New York
+NNY
+Southern New Jersey
+SNJ
+Western New York
+WNY
+U.S. Call Area 3
+Delaware
+DE
+Eastern Pennsylvania
+EPA
+Maryland-DC
+MDC
+Western Pennsylvania
+WPA
+U.S. Call Area 4
+Alabama
+AL
+Georgia
+GA
+Kentucky
+KY
+North Carolina
+NC
+Northern Florida
+NFL
+Puerto Rico
+PR
+South Carolina
+SC
+Southern Florida
+SFL
+Tennessee
+TN
+Virginia
+VA
+US Virgin Islands
+VI
+West Central Florida
+WCF
+U.S. Call Area 5
+Arkansas
+AR
+Louisiana
+LA
+Mississippi
+MS
+New Mexico
+NM
+North Texas
+NTX
+Oklahoma
+OK
+South Texas
+STX
+West Texas
+WTX
+U.S. Call Area 6
+East Bay
+EB
+Los Angeles
+LAX
+Orange
+ORG
+Pacific
+PAC
+Santa Barbara
+SB
+Santa Clara Valley
+SCV
+San Diego
+SDG
+San Francisco
+SF
+San Joaquin Valley
+SJV
+Sacramento Valley
+SV
+U.S. Call Area 7
+Alaska
+AK
+Arizona
+AZ
+Eastern Washington
+EWA
+Idaho
+ID
+Montana
+MT
+Nevada
+NV
+Oregon
+OR
+Utah
+UT
+Western Washington
+WWA
+Wyoming
+WY
+U.S. Call Area 8
+Michigan
+MI
+Ohio
+OH
+West Virginia
+WV
+U.S. Call Area 9
+Illinois
+IL
+Indiana
+IN
+Wisconsin
+WI
+Canada
+Alberta
+AB
+British Columbia
+BC
+Ontario Golden Horseshoe
+GH
+Manitoba
+MB
+New Brunswick
+NB
+Newfoundland and Labrador
+NL
+Nova Scotia
+NS
+Ontario East
+ONE
+Ontario North
+ONN
+Ontario South
+ONS
+Prince Edward Island
+PE
+Quebec
+QC
+Saskatchewan
+SK
+Territories
+TER
+Send comments or questions about this page to ARRL Contest Manager .
+Version: 1.2.0, Revised: May 12, 2023
+Copyright © 2026 American Radio Relay League, Inc., All Rights Reserved

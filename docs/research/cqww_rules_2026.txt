@@ -1,0 +1,4325 @@
+CQ WORLD WIDE DX CONTEST — RAW FETCHED SOURCE TEXT
+Fetched: 2026-08-17 (UTC date; fetched with curl, User-Agent Mozilla/5.0, from the working Mac)
+Purpose: sponsor-only rules research for QSO Party Logger. Everything below is the sponsor's own text (HTML converted to plain text; PDF via pdftotext). Navigation menus were left in place.
+
+EDITION NOTE: On the fetch date the sponsor's rules page still shows 'The 2025 CQ World-Wide DX Contest' (PDF dated September 9, 2025). The 2026 rules had not been posted. The 2026 contest dates come from the home page (https://www.cqww.com/).
+
+SOURCES IN THIS FILE:
+  [1] https://www.cqww.com/rules.htm (served from https://cqww.com/rules.htm)
+      marker: Page heading: 'The 2025 CQ World-Wide DX Contest' — this is the 2025 edition still posted on 2026-08-17; no 2026 edition posted yet. No 'revised/updated' marker on the HTML page itself; the linked 'Current Rules (pdf)' is /rules/2025_rules_cqww.pdf whose page footers read '2025 CQ WW DX Contest Rules  -n-  September 9, 2025'. Page footer copyright '2008-2026 World Wide Radio Operators Foundation, Inc.'
+  [2] https://www.cqww.com/rules/2025_rules_cqww.pdf (linked from rules.htm as 'Current Rules (pdf)'; text extracted with pdftotext -layout)
+      marker: Footer on every page: '2025 CQ WW DX Contest Rules  -n-  September 9, 2025'. Content is identical in substance to rules.htm (checked sentence-by-sentence; only bullet/numbering formatting differs). This PDF carries the rule numbering (VIII.1/VIII.2, IX.1–IX.11, X.1–X.7, XI.1–XI.3, XII.A.1–6, XII.E.1–3).
+  [3] https://www.cqww.com/ (served as https://cqww.com/index.htm)
+      marker: Prints 'CQ WW Contest Dates  SSB: October 24 - 25, 2026  CW: November 28 - 29, 2026  Starts: 0000 UTC Saturday  Ends: 2359 UTC Sunday' and 'Future Contest Dates' through 2029. No revision marker.
+  [4] https://www.cqww.com/cabrillo.htm
+      marker: 'Cabrillo Log Format for the CQ WW DX Contest'. No revision/date marker on the page (sample QSO lines are dated 2000).
+  [5] https://www.cqww.com/rules_faq.htm
+      marker: 'CQ WW Contest Rules - Frequently Asked Questions'. No revision/date marker. NOTE: FAQ says the NIL penalty is 'three times' the QSO point value while the current rules (XII.E.3) say 'two times' — the rules page governs.
+  [6] https://www.cqww.com/cq_waz_list.htm (linked from resources.htm as 'Written Definitions of CQ Zones')
+      marker: Marker on page: 'Source: CQ WAZ Award Rules from http://www.cq-amateur-radio.com/cq_awards/cq_waz_awards/cq_waz_list.html  Updated and correct as of April 1, 2018'.
+  [7] https://www.cqww.com/resources.htm
+      marker: Links: CQ Zone map small https://cqww.com/images/wazmap1.gif ; large http://www.mapability.com/ei8ic/maps/cq-zone_4000px.gif ; http://www.mapability.com/ei8ic/maps/cqzone.php ; written zone definitions https://cqww.com/cq_waz_list.htm. No cty.dat / country-file reference anywhere on the site pages fetched.
+  [8] https://www.cqww.com/logs.htm
+      marker: 'Submitting Your Log'. No revision marker.
+  [9] https://www.cqww.com/locations.htm
+      marker: 'Location Names' accepted for LOCATION: header. No revision marker.
+  [10] https://www.cqww.com/rules/ (Rules Archive)
+      marker: Archive table: 2025 row links 2025_rules_cqww.pdf with no 'Other' document; 2021–2024 rows also link 'Explorer category rules' PDFs (2021/2022/2023_rules_cqww_explorer.pdf). No 2026 row exists on 2026-08-17.
+  [11] https://www.cqww.com/blog/
+      marker: Newest post February 19, 2026 (records pages). Post 'Rule changes for 2025' dated October 13, 2025 by K1AR lists the 2025 changes (Explorer eliminated, replaced by Multi-op Distributed; audio recordings for Top-5 assisted too; station-information requirement). No 2026 rule-change post as of the fetch date.
+
+====================================================================================================
+[1] URL: https://www.cqww.com/rules.htm (served from https://cqww.com/rules.htm)
+    Fetch date: 2026-08-17
+    Revision/effective marker: Page heading: 'The 2025 CQ World-Wide DX Contest' — this is the 2025 edition still posted on 2026-08-17; no 2026 edition posted yet. No 'revised/updated' marker on the HTML page itself; the linked 'Current Rules (pdf)' is /rules/2025_rules_cqww.pdf whose page footers read '2025 CQ WW DX Contest Rules  -n-  September 9, 2025'. Page footer copyright '2008-2026 World Wide Radio Operators Foundation, Inc.'
+====================================================================================================
+
+CQ WW - Rules
+
+*
+*
+*
+*
+
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+Other Contests:
+CQ WW
+CQ WPX
+CQ WW RTTY
+CQ WPX RTTY
+CQ 160
+CQ VHF
+WW DIGI
+
+CQ World Wide DX Contest
+
+Show navigation
+Hide navigation
+
+* Home
+
+* Rules
+
+* Rules
+
+* Rules FAQ
+
+* Current Rules (pdf)
+
+* Rules Archive
+
+* Plaques
+
+* Results
+
+* Results Articles
+
+* Final Scores SSB
+
+* Final Scores CW
+
+* Overlay Scores
+
+* Club Scores
+
+* Soapbox Comments SSB
+
+* Soapbox Comments CW
+
+* Raw Scores SSB
+
+* Raw Scores CW
+
+* Records
+
+* By Region
+
+* By CQ Zone
+
+* Overlay Categories
+
+* New Records
+
+* New Overlay Records
+
+* Winners by Year
+
+* Highest QSO Rates
+
+* Logs
+
+* Submitting Your Log
+
+* Cabrillo Log Upload
+
+* ADIF Log Converter
+
+* Cabrillo File Format
+
+* Logs Received - SSB
+
+* Logs Received - CW
+
+* Public Logs
+
+* Resources
+
+* Resources
+
+* Public Log Checking Reports
+
+* Entries by Region
+
+* Entries by Category
+
+* History of CQWW
+
+* SSB Signal Quality
+
+* Club Names
+
+* Location Names
+
+* Public Log Checking Reports
+
+* REST API Reference
+
+* Contact Us
+
+* Contact Form
+
+* Organization
+
+* Blog
+
+* Blog
+
+* Archive
+
+Rules
+
+Translations
+
+Čeština [Czech]
+
+中文 [Chinese]
+
+Deutsch [German]
+
+Έλληνες [Greek]
+
+Español [Spanish]
+
+Français [French]
+
+Bahasa Indonesia [Indonesian]
+
+Italiano [Italian]
+
+日本語 [Japanese]
+
+Nederlands [Dutch]
+
+Norsk [Norwegian]
+
+Português [Portuguese]
+
+Română [Romanian]
+
+Русский
+[Russian]
+
+Slovenščina [Slovenian]
+
+Suomeksi [Finnish]
+
+Turkish [Turkish]
+
+Українська [Ukrainian]
+
+Afrikaans [Afrikaans]
+
+العربية [Arabic]
+
+Čeština [Czech]
+
+Norsk [Norwegian]
+
+Slovenščina [Slovenian]
+
+-->
+
+The 2025 CQ World-Wide DX Contest
+
+SSB: October 25-26 CW: November 29-30
+
+Starts 00:00:00 UTC Saturday Ends 23:59:59 UTC Sunday
+
+I. OBJECTIVE: For amateurs around the world to contact as many other amateurs in as
+many CQ zones and countries as possible.
+
+II. BANDS: Six bands only: 1.8, 3.5, 7, 14, 21 and 28 MHz. Observance of established
+band plans is strongly encouraged.
+
+III. CONTEST EXCHANGE: SSB: RS report plus CQ Zone number of the station location (
+e.g., 59 05). CW: RST report plus CQ Zone (e.g., 599 05).
+
+IV. SCORING:
+
+A. Score: The final score is the result of the total QSO points multiplied by
+the sum of zone and country multipliers. Example: 1000 QSO points * (30 Zones + 70
+Countries) = 100,000 (final score).
+
+B. QSO Points: Stations may be contacted once on each band. QSO points are based
+on the location of the station worked.
+
+* Contacts between stations on different continents count three (3) points.
+
+* Contacts between stations on the same continent but in different countries count
+one (1) point. Exception: Contacts between stations in different countries within the
+North American boundaries count two (2) points.
+
+* Contacts between stations in the same country have zero (0) QSO point value, but
+count for zone and country multiplier credit.
+
+C. Multiplier: There are two types of multipliers.
+
+* Zone: A multiplier of one (1) for each different CQ Zone contacted on each band. The CQ Worked All Zones rules are the standard.
+
+* Country: A multiplier of one (1) for each different country contacted on each band. The DXCC entity list, Worked All Europe (WAE) multiplier list plus IG9/IH9, and continental boundaries are the standards for defining country multipliers. Maritime mobile stations count only for a zone multiplier.
+
+V. ENTRY CATEGORIES:
+
+A. Single Operator Categories: One person (the operator) performs all operating and logging functions. There is no limit on operating time or band changes. Only one transmitted signal is permitted at any time.
+
+1. Single Operator: QSO finding assistance of any kind is prohibited (see VIII.2).
+
+a. High Power (All Band or Single Band): Total output power must not exceed 1500 watts.
+
+b. Low Power (All Band or Single Band):
+Total output power must not exceed 100 watts.
+
+c. QRP (All Band or Single Band): Total output power must not exceed 5 watts.
+
+2. Single Operator Assisted: Entrants in this category may use QSO finding assistance (see VIII.2).
+
+a. High Power Assisted (All Band or Single
+Band): Total output power must not exceed 1500 watts.
+
+b. Low Power Assisted (All Band or Single
+Band): Total output power must not exceed 100 watts.
+
+c. QRP Assisted (All Band or Single Band):
+Total output power must not exceed 5 watts.
+
+B. Single Operator Overlay Categories: Any Single Operator entrant who meets the requirements may ALSO enter one of the categories shown below by adding the appropriate CATEGORY-OVERLAY line in the Cabrillo log file header. Overlay
+category entries will be listed separately in the results; scored as All Bands; and grouped by High Power and Low Power (includes QRP).
+
+1. Classic Operator (CLASSIC): The entrant will use only one radio, no QSO finding assistance, and may operate up to 24 of the 48 hours – off times are a minimum of 60 minutes during
+which no QSO is logged. If the log shows more than 24 hours of operation, only the first 24 hours will be counted for the overlay score. Receiving while transmitting is prohibited. Single Operator Assisted entries are not eligible for this category.
+
+2. Rookie (ROOKIE): The operator was first licensed as a radio amateur less than three (3) years before the date of the contest. Indicate the date first licensed in the SOAPBOX field. Previous Rookie winners are not eligible for plaques in this category.
+
+3. Youth (YOUTH): The operator was 25 years old or younger at the start of the contest. Indicate the birth year in the SOAPBOX field.
+
+C. Multi-Operator Categories (all-band operation only): Any number of operators is allowed. QSO finding assistance is allowed. Only one transmitted signal per band is permitted at any time.
+
+1. Multi-Single: Only one transmitted signal on one band permitted during any 10-minute period (run station/signal). Exception: One — and only one — other transmitted signal (multiplier station/signal) may be used during
+any 10-minute period, if — and only if — it is on a different band from the run transmitter and the station worked is a new multiplier. The run and multiplier transmitters are governed by independent 10-minute rules. Ten-minute
+periods begin with the first QSO on a band. The log must indicate which station/signal (run or multiplier) made each QSO. The multiplier station/signal may not call CQ (solicit contacts). Please be sure to read the Multi-Single FAQ section
+at <
+cqww.com/rules_faq.htm>.
+
+a. High Power: Total output power must not exceed 1500 watts on any band at any time.
+
+b. Low Power: Total output power must not exceed 100 watts on any band at any time.
+
+2. Multi-Two: A maximum of two transmitted signals may be used at any time, and they must be on two different bands. The log must indicate which station/signal made each QSO. Logged QSOs are to be used to count band changes. Each station/signal may make a maximum of 8 band changes in any clock hour (00 through 59 minutes). Total output power must not exceed 1500 watts on any band at any time.
+
+3. Multi-Multi: The six contest bands may be activated simultaneously. Only one transmitted signal per band is permitted at any time. Total output power must not exceed 1500 watts on any band at any time.
+
+4. Multi-Distributed: A maximum of six transmitted signals, one per band at any one time, from stations in different locations. All equipment (transmitters, receivers, amplifiers, antennas, etc.) must be in the same DXCC entity and CQ Zone, including remotely controlled equipment. Six bands may be activated simultaneously. Total output power of each transmitted signal must not exceed 1500 watts. The Cabrillo log header must include the following lines: CATEGORY-OPERATOR: MULTI-OP, CATEGORY-STATION: DISTRIBUTED. Rules IX.5 and IX.6 do not apply to this category.
+
+D. Checklog: Entry submitted to assist with the log checking. The entry will not have a score in the results and the log will not be made public.
+
+VI. AWARDS:
+
+A single-band log will be eligible for a single-band award only. A log containing more than one band will be judged as an all-band entry unless specified as a single-band entry.
+
+A. Certificates: Electronic certificates will be made available for download for everyone that submits an entry provided the log is submitted before the deadline.
+
+B. Plaques: Plaques are awarded for top performance in a number of categories. View the current list of plaques and sponsors at <
+cqww.com/plaques.htm>. Only one plaque will be awarded per entry. A station winning a plaque will not be considered for a sub-area award; the plaque will be awarded to the runner-up in that area.
+
+VII. CLUB COMPETITION:
+
+The club score is the total aggregate score from logs submitted by members. There are two separate club competition categories.
+
+A. USA Clubs: Participation is limited to club members residing within a 250-mile radius circle from the center of the club area.
+
+B. DX Clubs: Participation is limited to club members residing within EITHER the DXCC country where the club is located OR within a 400 km radius circle from the center of club.
+
+C. General club rules:
+
+* National organizations (e.g., JARL, REF or DARC) are not eligible for the club competition.
+
+* Single-operator entries may only contribute to one club. Multi-operator scores may be allocated to multiple clubs as a percentage of the number of club members participating in the operation. The log entry must spell out the full club name (and club allocations if multi-op).
+
+* A minimum of four logs must be received for a club to be listed in the results. Checklog entries are not counted for the club score.
+
+* The word “reside” shall be defined as: To dwell permanently or continuously or to occupy a place as a person's fixed, permanent, and principal home for legal purposes.
+
+* Eligible club members may contribute their DXpedition scores to their organization’s club
+entry.
+
+VIII. DEFINITIONS OF TERMS:
+
+* Station location: The area in which all the transmitters, receivers and antennas are located. All transmitters, receivers, and amplifiers must be within a single 500-meter diameter circle. Antennas must be physically connected by
+RF transmission lines to the transmitters and receivers.
+
+* QSO finding assistance: The use of any technology or other source that provides callsign or multiplier identification of a signal to the operator. This includes, but is not limited to, use of a CW decoder, DX cluster, DX spotting Web sites (e.g., DX Summit), local or remote call sign and frequency decoding technology (e.g., CW Skimmer or Reverse Beacon Network), or operating arrangements involving other individuals.
+
+IX. GENERAL RULES FOR ALL ENTRANTS:
+
+* Entrants must operate within the limits of their chosen category when performing any activity that could impact their submitted score.
+
+* A different call sign must be used for each entry. Only the entrant’s call sign may be used to aid the entrant’s score.
+
+* Do not exceed the total output power limitation of the chosen entry category on any band. Total output power on any band at any time is measured at the output of the active amplifier(s).
+
+* Self-spotting or asking to be spotted is not permitted.
+
+* 5. Remote operation is permitted if the physical location of all transmitters, receivers, and antennas are at one station location. A remotely operated station must obey all station license, operator license, and category limitations. The call sign used must be one issued or permitted by the Regulatory Authority of the station location.
+
+* Remote receivers outside of the station location are not permitted.
+
+* Only one signal on a band is allowed at any time. When two or more transmitters are present on the same band, a hardware device MUST be used to prevent more than one signal at any one time. Alternating CQs on two or more frequencies on
+a band is not permitted.
+
+* All requests for contacts, responses to calls, and copying of call signs and contest exchanges must be accomplished during the contest period using the mode and frequencies of the contest.
+
+* Correction of logged call signs and exchanges after the contest, by use of any database, recordings, email or other methods, is not allowed.
+
+* For ITU Region 1 stations: transmitting on the 40m band, above 7200 kHz during the SSB (phone) contest is not permitted.
+
+* For ITU Region 1 stations: transmitting below 1810 kHz during the contest is not permitted.
+
+X. LOG INSTRUCTIONS:
+
+Electronic submission of logs is required for all entrants.
+
+* The log MUST show the following for each contact: correct date and time in UTC, frequency (or band), call sign of the station worked, exchange sent, and exchange received. A log without all required information may be reclassified to Checklog. Contacts should be logged at the time they are completed. Stations competing for World and Continent awards must provide actual frequencies for all contacts in the log.
+
+* Single band entrants are required to include all contacts made during the contest period, even if made on other bands. Only contacts made on the band specified in the Cabrillo header will be considered for scoring purposes. Logs with contacts only on one band will be classified as single band entries.
+
+* The CABRILLO file format is the standard for logs. See <
+cqww.com/cabrillo.htm> for detailed instructions on filling out the CABRILLO file header. Failure to fill out the header correctly may result in the entry being placed
+in the wrong category or reclassified as a Checklog. Note: U.S. stations must indicate the station location in the CABRILLO header (e.g., LOCATION: OH). All other stations indicate DX.
+
+* Web upload is the only method of log submission. Web upload of logs is available at <cqww.com/logcheck/>.
+
+* Instructions for NON-CABRILLO electronic logs: If you are not able to submit a CABRILLO format log, please contact the Contest Director for assistance with submitting another format.
+
+* Entry Confirmation: All logs received will be confirmed via e-mail. A listing of logs received can be found at <cqww.com>.
+
+* Log withdrawal: An entrant may withdraw the submitted log for any reason within 30 days of the log deadline. Contact the Contest Director for instructions.
+
+XI. LOG DEADLINE:
+
+* 1. All entries must be sent WITHIN FIVE (5) DAYS after the end of the contest: no later than 2359 UTC October 31, 2025 for SSB and 2359 UTC December 5, 2025 for CW. Resubmitting an entry after the deadline will result in it being considered as a late log.
+
+* An extension may be requested at <cqww.com/contact>. The request must state a legitimate reason and must be received before the log deadline. Extensions are granted only upon
+confirmation by the Contest Director.
+
+* Logs submitted after the deadline may be listed in the results, but are not eligible for awards.
+
+XII. JUDGING:
+
+The CQ WW DX Contest Committee is responsible for checking and adjudicating the contest entries. Entrants are expected to follow the rules and best amateur radio practices. Violation of the rules of the contest or unsportsmanlike conduct may lead to disciplinary action by the Committee.
+
+A. Unsportsmanlike Conduct: Examples of unsportsmanlike conduct include, but are not limited to:
+
+* Arranging or confirming any contacts during or after the contest by use of ANY non-amateur radio means such as telephones, Internet, instant messaging, chat rooms, VoIP, email, social media, or Web sites.
+
+* Transmissions by the entrant on frequencies outside of license limitations.
+
+* Changing times in the log to meet band change or off time rules.
+
+* Taking credit for excessive unverifiable QSOs or unverifiable multipliers.
+
+* Signals with excessive bandwidth (e.g., splatter, clicks) or harmonics on other bands.
+
+* Running stations making more than three consecutive contacts without sending their callsign.
+
+B. Audio Recordings: Any single operator or single operator assisted entrant (see V.A.) competing for a top five finish at the (a) World, (b) Continent, or (c) USA levels, including Classic Overlay, must record the transmitted and received audio as heard by the operator for the duration of the contest operation. The recording must be in a common format (e.g., mp3) and should include the audio to each ear as a separate channel. The recording must be a continuous recording (not a recording of individual QSOs). Time “off the air” (when not transmitting or receiving) does not have to be recorded. The recording may be requested by the Committee within 90 days after the log deadline to help adjudicate the log. The recording files must be provided by the entrant within 5 days of the request. Failure to submit a requested audio recording may result in the reclassification of a log entry or disqualification.
+
+C. Station Information: Entrants must agree to supply the following information upon request of the Contest Committee:
+
+* Details and photographs of their station equipment, antennas, amplifiers, switching systems, interlocks, etc.
+
+D. Disciplinary Actions: In the event of a violation, the entrant is subject to disqualification at the discretion of the Committee.
+
+* Disqualified entries will be listed at the end of the published results and are not eligible for an award.
+
+* Notification of Committee actions will be sent by email to the address provided with the log submission. The entrant has five days to appeal the decision to the Contest Director. After that time, the decision is final.
+
+* The Committee reserves the right to change the category of any entry based on its examination of the log or other information.
+
+E. Log Checking: All logs are checked using custom software and human judgment.
+
+* Duplicate contacts are removed with no additional penalty.
+
+* Contacts with an incorrectly received exchange are removed with no additional penalty.
+
+* Call sign errors (bust) or call signs not in the other log (NIL) are removed and receive a penalty of two times the QSO point value for that contact.
+
+XIII. DECLARATION:
+
+By submitting a CQ WW DX Contest log, and in consideration of the efforts of the CQ WW DX Contest Committee to review and evaluate that log, an entrant unconditionally and irrevocably agrees that he/she has: 1) read and understood the rules of the contest and agrees to be bound by them, 2) operated according to all rules and regulations that pertain to amateur radio for the station location, 3) agreed the log entry may be made open to the public, and 4) accepted that the issuing of disqualifications and other decisions of the Committee are official and final. If an entrant is unwilling or unable to agree to all of the foregoing, the entrant should not submit the entry or submit the entry as a Checklog only.
+
+Questions pertaining to the CQ WW DX Contest rules may be submitted to <
+cqww.com/contact.htm>. Answers for many frequently asked questions can be found at <
+cqww.com/rules_faq.htm>.
+
+Copyright ©
+2008-2026
+World Wide Radio Operators Foundation, Inc.. All Rights Reserved.
+| Privacy Policy
+
+
+====================================================================================================
+[2] URL: https://www.cqww.com/rules/2025_rules_cqww.pdf (linked from rules.htm as 'Current Rules (pdf)'; text extracted with pdftotext -layout)
+    Fetch date: 2026-08-17
+    Revision/effective marker: Footer on every page: '2025 CQ WW DX Contest Rules  -n-  September 9, 2025'. Content is identical in substance to rules.htm (checked sentence-by-sentence; only bullet/numbering formatting differs). This PDF carries the rule numbering (VIII.1/VIII.2, IX.1–IX.11, X.1–X.7, XI.1–XI.3, XII.A.1–6, XII.E.1–3).
+====================================================================================================
+The 2025 CQ World-Wide DX Contest
+SSB: October 25-26                         CW: November 29-30
+
+Starts 00:00:00 UTC Saturday           Ends 23:59:59 UTC Sunday
+
+I. OBJECTIVE: For amateurs around the world to contact as many other amateurs in as many CQ
+zones and countries as possible.
+
+II. BANDS: Six bands only: 1.8, 3.5, 7, 14, 21 and 28 MHz. Observance of established band plans is
+strongly encouraged.
+
+III. CONTEST EXCHANGE: SSB: RS report plus CQ Zone number of the station location (e.g., 59 05).
+CW: RST report plus CQ Zone (e.g., 599 05).
+
+IV. SCORING:
+
+A. Score: The final score is the result of the total QSO points multiplied by the sum of zone and
+country multipliers. Example: 1000 QSO points * (30 Zones + 70 Countries) = 100,000 (final score).
+
+B. QSO Points: Stations may be contacted once on each band. QSO points are based on the
+location of the station worked.
+
+    1. Contacts between stations on different continents count three (3) points.
+
+    2. Contacts between stations on the same continent but in different countries count one (1)
+       point. Exception: Contacts between stations in different countries within the North
+       American boundaries count two (2) points.
+
+    3. Contacts between stations in the same country have zero (0) QSO point value but count for
+       zone and country multiplier credit.
+
+C. Multiplier: There are two types of multipliers.
+
+    1. Zone: A multiplier of one (1) for each different CQ Zone contacted on each band. The CQ
+       Worked All Zones rules are the standard.
+
+    2. Country: A multiplier of one (1) for each different country contacted on each band. The
+       DXCC entity list, Worked All Europe (WAE) multiplier list plus IG9/IH9, and continental
+       boundaries are the standards for defining country multipliers. Maritime mobile stations
+       count only for a zone multiplier.
+
+V. ENTRY CATEGORIES:
+
+A. Single Operator Categories: One person (the operator) performs all operating and logging
+functions. There is no limit on operating time or band changes. Only one transmitted signal is
+permitted at any time.
+
+1. Single Operator: QSO finding assistance of any kind is prohibited (see VIII.2).
+
+        a. High Power (All Band or Single Band): Total output power must not exceed 1500 watts.
+
+
+
+
+2025 CQ WW DX Contest Rules                          -1-                             September 9, 2025
+        b. Low Power (All Band or Single Band): Total output power must not exceed 100 watts.
+
+        c. QRP (All Band or Single Band): Total output power must not exceed 5 watts.
+
+2. Single Operator Assisted: Entrants in this category may use QSO finding assistance (see VIII.2).
+
+        a. High Power Assisted (All Band or Single Band): Total output power must not exceed
+        1500 watts.
+
+        b. Low Power Assisted (All Band or Single Band): Total output power must not exceed 100
+        watts.
+
+        c. QRP Assisted (All Band or Single Band): Total output power must not exceed 5 watts.
+
+B. Single Operator Overlay Categories: Any Single Operator entrant who meets the requirements
+may ALSO enter one of the categories shown below by adding the appropriate CATEGORY-OVERLAY
+line in the Cabrillo log file header. Overlay category entries will be listed separately in the results;
+scored as All Bands; and grouped by High Power and Low Power (includes QRP).
+
+        1. Classic Operator (CLASSIC): The entrant will use only one radio, no QSO finding
+        assistance, and may operate up to 24 of the 48 hours – off times are a minimum of 60
+        minutes during which no QSO is logged. If the log shows more than 24 hours of operation,
+        only the first 24 hours will be counted for the overlay score. Receiving while transmitting is
+        prohibited. Single Operator Assisted entries are not eligible for this category.
+
+        2. Rookie (ROOKIE): The operator was first licensed as a radio amateur less than three (3)
+        years before the date of the contest. Indicate the date first licensed in the SOAPBOX field.
+        Previous Rookie winners are not eligible for plaques in this category.
+
+        3. Youth (YOUTH): The operator was 25 years old or younger at the start of the contest.
+        Indicate the birth year in the SOAPBOX field.
+
+C. Multi-Operator Categories (all-band operation only): Any number of operators is allowed. QSO
+finding assistance is allowed. Only one transmitted signal per band is permitted at any time.
+
+1. Multi-Single: Only one transmitted signal on one band permitted during any 10-minute period
+(run station/signal). Exception: One — and only one — other transmitted signal (multiplier
+station/signal) may be used during any 10-minute period, if — and only if — it is on a different band
+from the run transmitter and the station worked is a new multiplier. The run and multiplier
+transmitters are governed by independent 10-minute rules. Ten-minute periods begin with the first
+QSO on a band. The log must indicate which station/signal (run or multiplier) made each QSO. The
+multiplier station/signal may not call CQ (solicit contacts). Please be sure to read the Multi-Single
+FAQ section at < cqww.com/rules_faq.htm>.
+
+        a. High Power: Total output power must not exceed 1500 watts on any band at any time.
+
+        b. Low Power: Total output power must not exceed 100 watts on any band at any time.
+
+2. Multi-Two: A maximum of two transmitted signals may be used at any time, and they must be on
+two different bands. The log must indicate which station/signal made each QSO. Logged QSOs are
+to be used to count band changes. Each station/signal may make a maximum of 8 band changes in
+
+
+2025 CQ WW DX Contest Rules                       -2-                                  September 9, 2025
+any clock hour (00 through 59 minutes). Total output power must not exceed 1500 watts on any
+band at any time.
+
+3. Multi-Multi: The six contest bands may be activated simultaneously. Only one transmitted signal
+per band is permitted at any time. Total output power must not exceed 1500 watts on any band at
+any time.
+
+4. Multi-Distributed: A maximum of six transmitted signals, one per band at any one time, from
+stations in different locations. All equipment (transmitters, receivers, amplifiers, antennas, etc.)
+must be in the same DXCC entity and CQ Zone, including remotely controlled equipment. Six bands
+may be activated simultaneously. Total output power of each transmitted signal must not exceed
+1500 watts. The Cabrillo log header must include the following lines: CATEGORY-OPERATOR:
+MULTI-OP, CATEGORY-STATION: DISTRIBUTED. Rules IX.5 and IX.6 do not apply to this category.
+
+D. Checklog: Entry submitted to assist with the log checking. The entry will not have a score in the
+results, and the log will not be made public.
+
+VI. AWARDS:
+
+A single-band log will be eligible for a single-band award only. A log containing more than one band
+will be judged as an all-band entry unless specified as a single-band entry.
+
+A. Certificates: Electronic certificates will be made available for download for everyone that
+submits an entry provided the log is submitted before the deadline.
+
+B. Plaques: Plaques are awarded for top performance in a number of categories. View the current
+list of plaques and sponsors at < cqww.com/plaques.htm>. Only one plaque will be awarded per
+entry. A station winning a plaque will not be considered for a sub-area award; the plaque will be
+awarded to the runner-up in that area.
+
+VII. CLUB COMPETITION:
+
+The club score is the total aggregate score from logs submitted by members. There are two
+separate club competition categories.
+
+A. USA Clubs: Participation is limited to club members residing within a 250 mile radius circle from
+the center of the club area.
+
+B. DX Clubs: Participation is limited to club members residing within EITHER the DXCC country
+where the club is located OR within a 400 km radius circle from the center of club.
+
+C. General club rules:
+
+    1. National organizations (e.g., JARL, REF or DARC) are not eligible for the club competition.
+
+    2. Single-operator entries may only contribute to one club. Multi-operator scores may be
+       allocated to multiple clubs as a percentage of the number of club members participating in
+       the operation. The log entry must spell out the full club name (and club allocations if multi-
+       op).
+
+
+
+
+2025 CQ WW DX Contest Rules                      -3-                                  September 9, 2025
+    3. A minimum of four logs must be received for a club to be listed in the results. Checklog
+       entries are not counted for the club score.
+
+    4. The word “reside” shall be defined as: To dwell permanently or continuously or to occupy a
+       place as a person's fixed, permanent, and principal home for legal purposes.
+
+    5. Eligible club members may contribute their DXpedition scores to their organization’s club
+       entry.
+
+VIII. DEFINITIONS OF TERMS:
+
+    1. Station location: The area in which all the transmitters, receivers and antennas are
+       located. All transmitters, receivers, and amplifiers must be within a single 500-meter
+       diameter circle. Antennas must be physically connected by RF transmission lines to the
+       transmitters and receivers.
+
+    2. QSO finding assistance: The use of any technology or other source that provides callsign
+       or multiplier identification of a signal to the operator. This includes, but is not limited to, use
+       of a CW decoder, DX cluster, DX spotting Web sites (e.g., DX Summit), local or remote call
+       sign and frequency decoding technology (e.g., CW Skimmer or Reverse Beacon Network), or
+       operating arrangements involving other individuals.
+
+IX. GENERAL RULES FOR ALL ENTRANTS:
+
+    1. Entrants must operate within the limits of their chosen category when performing any
+       activity that could impact their submitted score.
+
+    2. A different call sign must be used for each entry. Only the entrant’s call sign may be used to
+       aid the entrant’s score.
+
+    3. Do not exceed the total output power limitation of the chosen entry category on any band.
+       Total output power on any band at any time is measured at the output of the active
+       amplifier(s).
+
+    4. Self-spotting or asking to be spotted is not permitted.
+
+    5. Remote operation is permitted if the physical location of all transmitters, receivers, and
+       antennas are at one station location. A remotely operated station must obey all station
+       license, operator license, and category limitations. The call sign used must be one issued or
+       permitted by the Regulatory Authority of the station location.
+
+    6. Remote receivers outside of the station location are not permitted.
+
+    7. Only one signal on a band is allowed at any time. When two or more transmitters are
+       present on the same band, a hardware device MUST be used to prevent more than one
+       signal at any one time. Alternating CQs on two or more frequencies on a band is not
+       permitted.
+
+    8. All requests for contacts, responses to calls, and copying of call signs and contest
+       exchanges must be accomplished during the contest period using the mode and
+       frequencies of the contest.
+
+
+2025 CQ WW DX Contest Rules                        -4-                                   September 9, 2025
+    9. Correction of logged call signs and exchanges after the contest, by use of any database,
+       recordings, email or other methods, is not allowed.
+
+    10. For ITU Region 1 stations: transmitting on the 40m band, above 7200 kHz during the SSB
+        (phone) contest is not permitted.
+
+    11. For ITU Region 1 stations: transmitting below 1810 kHz during the contest is not permitted.
+
+X. LOG INSTRUCTIONS:
+
+Electronic submission of logs is required for all entrants.
+
+    1. The log MUST show the following for each contact: correct date and time in UTC,
+       frequency (or band), call sign of the station worked, exchange sent, and exchange received.
+       A log without all required information may be reclassified to Checklog. Contacts should be
+       logged at the time they are completed. Stations competing for World and Continent awards
+       must provide actual frequencies for all contacts in the log.
+
+    2. Single band entrants are required to include all contacts made during the contest
+       period, even if made on other bands. Only contacts made on the band specified in the
+       Cabrillo header will be considered for scoring purposes. Logs with contacts only on one
+       band will be classified as single band entries.
+
+    3. The CABRILLO file format is the standard for logs. See < cqww.com/cabrillo.htm> for
+       detailed instructions on filling out the CABRILLO file header. Failure to fill out the header
+       correctly may result in the entry being placed in the wrong category or reclassified as a
+       Checklog. Note: U.S. stations must indicate the station location in the CABRILLO header
+       (e.g., LOCATION: OH). All other stations indicate DX.
+
+    4. Web upload is the only method of log submission. Web upload of logs is available at
+       <cqww.com/logcheck/>.
+
+    5. Instructions for NON-CABRILLO electronic logs: If you are not able to submit a CABRILLO
+       format log, please contact the Contest Director for assistance with submitting another
+       format.
+
+    6. Entry Confirmation: All logs received will be confirmed via e-mail. A listing of logs received
+       can be found at <cqww.com>.
+
+    7. Log withdrawal: An entrant may withdraw the submitted log for any reason within 30 days
+       of the log deadline. Contact the Contest Director for instructions.
+
+XI. LOG DEADLINE:
+
+    1. All entries must be sent WITHIN FIVE (5) DAYS after the end of the contest: no later than
+       2359 UTC October 31, 2025 for SSB and 2359 UTC December 5, 2025 for CW. Resubmitting
+       an entry after the deadline will result in it being considered as a late log.
+
+    2. An extension may be requested at <cqww.com/contact>. The request must state a
+       legitimate reason and must be received before the entry deadline. Extensions are granted
+       only upon confirmation by the Contest Director.
+
+
+2025 CQ WW DX Contest Rules                       -5-                                  September 9, 2025
+    3. Logs submitted after the deadline may be listed in the results but are not eligible for awards.
+
+XII. JUDGING:
+
+The CQ WW DX Contest Committee is responsible for checking and adjudicating the contest
+entries. Entrants are expected to follow the rules and best amateur radio practices. Violation of the
+rules of the contest or unsportsmanlike conduct may lead to disciplinary action by the Committee.
+
+A. Unsportsmanlike Conduct: Examples of unsportsmanlike conduct include, but are not limited
+to:
+
+    1. Arranging or confirming any contacts during or after the contest by use of ANY non-amateur
+       radio means such as telephones, Internet, instant messaging, chat rooms, VoIP, email,
+       social media, or Web sites.
+
+    2. Transmissions by the entrant on frequencies outside of license limitations.
+
+    3. Changing times in the log to meet band change or off time rules.
+
+    4. Taking credit for excessive unverifiable QSOs or unverifiable multipliers.
+
+    5. Signals with excessive bandwidth (e.g., splatter, clicks) or harmonics on other bands.
+
+    6. Running stations making more than three consecutive contacts without sending their
+       callsign.
+
+B. Audio Recordings: Any single operator or single operator assisted entrant (see V.A.) competing
+for a top five finish at the (a) World, (b) Continent, or (c) USA levels, including Classic Overlay, must
+record the transmitted and received audio as heard by the operator for the duration of the contest
+operation. The recording must be in a common format (e.g., mp3) and should include the audio to
+each ear as a separate channel. The recording must be a continuous recording (not a recording of
+individual QSOs). Time “off the air” (when not transmitting or receiving) does not have to be
+recorded. The recording may be requested by the Committee within 90 days after the log deadline
+to help adjudicate the log. The recording files must be provided by the entrant within 5 days of the
+request. Failure to submit a requested audio recording may result in the reclassification of a
+log entry or disqualification.
+
+C. Station Information: Entrants must agree to supply the following information upon request of
+the Contest Committee:
+
+    1. Details and photographs of their station equipment, antennas, amplifiers, switching
+       systems, interlocks, etc.
+
+D. Disciplinary Actions: In the event of a violation, the entrant is subject to disqualification at the
+discretion of the Committee.
+
+    1. Disqualified entries will be listed at the end of the published results and are not eligible for
+       an award.
+
+
+
+
+2025 CQ WW DX Contest Rules                        -6-                                   September 9, 2025
+    2. Notification of Committee actions will be sent by email to the address provided with the log
+       submission. The entrant has five days to appeal the decision to the Contest Director. After
+       that time, the decision is final.
+
+    3. The Committee reserves the right to change the category of any entry based on its
+       examination of the log or other information.
+
+E. Log Checking: All logs are checked using custom software and human judgment.
+
+    1. Duplicate contacts are removed with no additional penalty.
+
+    2. Contacts with an incorrectly received exchange are removed with no additional penalty.
+
+    3. Call sign errors (bust) or call signs not in the other log (NIL) are removed and receive a
+       penalty of two times the QSO point value for that contact.
+
+XIII. DECLARATION:
+
+By submitting a CQ WW DX Contest log, and in consideration of the efforts of the CQ WW DX
+Contest Committee to review and evaluate that log, an entrant unconditionally and irrevocably
+agrees that he/she has: 1) read and understood the rules of the contest and agrees to be bound by
+them, 2) operated according to all rules and regulations that pertain to amateur radio for the station
+location, 3) agreed the log entry may be made open to the public, and 4) accepted that the issuing
+of disqualifications and other decisions of the Committee are official and final. If an entrant is
+unwilling or unable to agree to all of the foregoing, the entrant should not submit the entry or submit
+the entry as a Checklog only.
+
+Questions pertaining to the CQ WW DX Contest rules may be submitted to <
+cqww.com/contact.htm>. Answers for many frequently asked questions can be found at <
+cqww.com/rules_faq.htm>.
+
+
+
+
+2025 CQ WW DX Contest Rules                       -7-                                  September 9, 2025
+
+
+====================================================================================================
+[3] URL: https://www.cqww.com/ (served as https://cqww.com/index.htm)
+    Fetch date: 2026-08-17
+    Revision/effective marker: Prints 'CQ WW Contest Dates  SSB: October 24 - 25, 2026  CW: November 28 - 29, 2026  Starts: 0000 UTC Saturday  Ends: 2359 UTC Sunday' and 'Future Contest Dates' through 2029. No revision marker.
+====================================================================================================
+
+CQ World Wide DX Contest - Home
+
+*
+*
+*
+*
+
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+Other Contests:
+CQ WW
+CQ WPX
+CQ WW RTTY
+CQ WPX RTTY
+CQ 160
+CQ VHF
+WW DIGI
+
+CQ World Wide DX Contest
+
+Show navigation
+Hide navigation
+
+* Home
+
+* Rules
+
+* Rules
+
+* Rules FAQ
+
+* Current Rules (pdf)
+
+* Rules Archive
+
+* Plaques
+
+* Results
+
+* Results Articles
+
+* Final Scores SSB
+
+* Final Scores CW
+
+* Overlay Scores
+
+* Club Scores
+
+* Soapbox Comments SSB
+
+* Soapbox Comments CW
+
+* Raw Scores SSB
+
+* Raw Scores CW
+
+* Records
+
+* By Region
+
+* By CQ Zone
+
+* Overlay Categories
+
+* New Records
+
+* New Overlay Records
+
+* Winners by Year
+
+* Highest QSO Rates
+
+* Logs
+
+* Submitting Your Log
+
+* Cabrillo Log Upload
+
+* ADIF Log Converter
+
+* Cabrillo File Format
+
+* Logs Received - SSB
+
+* Logs Received - CW
+
+* Public Logs
+
+* Resources
+
+* Resources
+
+* Public Log Checking Reports
+
+* Entries by Region
+
+* Entries by Category
+
+* History of CQWW
+
+* SSB Signal Quality
+
+* Club Names
+
+* Location Names
+
+* Public Log Checking Reports
+
+* REST API Reference
+
+* Contact Us
+
+* Contact Form
+
+* Organization
+
+* Blog
+
+* Blog
+
+* Archive
+
+Home
+
+Welcome
+
+The CQ WW is the largest Amateur Radio competition in the world.
+Over 35,000 participants take to the airwaves on the last weekend
+of October (SSB) and November (CW) with the
+goal of making as many contacts with as many different DXCC entities
+and CQ Zones as possible.
+
+CQ WW Contest Dates
+
+SSB: October 24 - 25, 2026
+
+CW: November 28 - 29, 2026
+Starts: 0000 UTC Saturday
+
+Ends: 2359 UTC Sunday
+
+Looking for something?
+
+Rules
+Latest Results
+Submit Log
+
+Logs Received: SSB
+CW
+
+Raw Scores: SSB
+CW
+
+Searchable score database
+
+Latest news? Read the blog.
+
+Search Results
+
+Search the online database for any station or operator call sign:
+
+Callsign
+
+Online Certificates
+
+Online certificates are available for recent CQ WW contests. Use the
+search to find your call in the database. Then click on the [Cert]
+link to view the certificate in pdf format.
+
+Log Checking Reports
+
+Log checking reports are available for all entrants. A link to the report is sent
+by email soon after the release of final results for each mode. If you did not receive yours, please
+contact us through the Contact Form.
+
+Future Contest Dates
+
+SSB is always the last full weekend of October.
+
+2027: October 30 - 31
+
+2028: October 28 - 29
+
+2029: October 27 - 28
+
+CW is always the last full weekend of November.
+
+2027: November 27 - 28
+
+2028: November 25 - 26
+
+2029: November 24 - 25
+
+CQ WW RTTY
+
+CQ WW RTTY contest, held the last full weekend of September each year, is the world's most popular digital mode contest.
+While it has many similarities, there are different scoring and multiplier rules.
+Visit cqwwrtty.com for more information.
+
+Submit Log
+
+Please submit your log using the Cabrillo log upload page . If you only have an adif log file, use
+the adif converter .
+
+Follow CQWW on Twitter, Facebook
+
+|
+
+| CQ WW Fan page
+www.facebook.com/cqwwdx
+
+|
+
+| Follow @cqww
+twitter.com/cqww
+
+Talk about us using #cqww
+
+Copyright ©
+2008-2026
+World Wide Radio Operators Foundation, Inc. . All Rights Reserved.
+| Privacy Policy
+
+
+====================================================================================================
+[4] URL: https://www.cqww.com/cabrillo.htm
+    Fetch date: 2026-08-17
+    Revision/effective marker: 'Cabrillo Log Format for the CQ WW DX Contest'. No revision/date marker on the page (sample QSO lines are dated 2000).
+====================================================================================================
+
+CQ WW - Cabrillo Log Format
+
+*
+*
+*
+*
+
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+Other Contests:
+CQ WW
+CQ WPX
+CQ WW RTTY
+CQ WPX RTTY
+CQ 160
+CQ VHF
+WW DIGI
+
+CQ World Wide DX Contest
+
+Show navigation
+Hide navigation
+
+* Home
+
+* Rules
+
+* Rules
+
+* Rules FAQ
+
+* Current Rules (pdf)
+
+* Rules Archive
+
+* Plaques
+
+* Results
+
+* Results Articles
+
+* Final Scores SSB
+
+* Final Scores CW
+
+* Overlay Scores
+
+* Club Scores
+
+* Soapbox Comments SSB
+
+* Soapbox Comments CW
+
+* Raw Scores SSB
+
+* Raw Scores CW
+
+* Records
+
+* By Region
+
+* By CQ Zone
+
+* Overlay Categories
+
+* New Records
+
+* New Overlay Records
+
+* Winners by Year
+
+* Highest QSO Rates
+
+* Logs
+
+* Submitting Your Log
+
+* Cabrillo Log Upload
+
+* ADIF Log Converter
+
+* Cabrillo File Format
+
+* Logs Received - SSB
+
+* Logs Received - CW
+
+* Public Logs
+
+* Resources
+
+* Resources
+
+* Public Log Checking Reports
+
+* Entries by Region
+
+* Entries by Category
+
+* History of CQWW
+
+* SSB Signal Quality
+
+* Club Names
+
+* Location Names
+
+* Public Log Checking Reports
+
+* REST API Reference
+
+* Contact Us
+
+* Contact Form
+
+* Organization
+
+* Blog
+
+* Blog
+
+* Archive
+
+Cabrillo Log Format for the CQ WW DX Contest
+
+Cabrillo refers to a universal log file format managed by the World Wide Radio Operators Foundation (WWROF). Cabrillo is the required format for CQ WW DX Contest logs.
+
+There are two versions of the Cabrillo log file format. The CQ WW DX
+Contest accepts both Cabrillo v2 and v3 format files. One of the major changes
+from v2 to v3 was in the way categories are specified. We strongly request
+that you submit logs using the Cabrillo v3 format if possible.
+
+[Jump to Cabrillo v2]
+
+Cabrillo Version 3 Header for the CQ WW DX Contest
+
+Below is an example of a Cabrillo v3 file for the CQ WW DX Contest.
+
+START-OF-LOG: 3.0
+CONTEST: CQ-WW-SSB
+CALLSIGN: AA1ZZZ
+LOCATION: WMA
+CATEGORY-OPERATOR: SINGLE-OP
+CATEGORY-ASSISTED: NON-ASSISTED
+CATEGORY-BAND: ALL
+CATEGORY-POWER: HIGH
+CATEGORY-MODE: SSB
+CATEGORY-TRANSMITTER: ONE
+CATEGORY-OVERLAY:
+GRID-LOCATOR:
+CLAIMED-SCORE: 9447852
+CLUB: Yankee Clipper Contest Club
+CREATED-BY: WriteLog V10.72C
+NAME: Randy Thompson
+ADDRESS: 1 Main St
+ADDRESS-CITY: Uxbridge
+ADDRESS-STATE-PROVINCE: MA
+ADDRESS-POSTALCODE: 01569
+ADDRESS-COUNTRY: USA
+OPERATORS: K5ZD
+SOAPBOX: Put your comments here.
+SOAPBOX: Use multiple lines if needed.
+QSO: 3799 PH 2000-10-26 0711 AA1ZZZ 59 05 K9QZO 59 04 0
+QSO: 14256 PH 2000-10-26 0711 AA1ZZZ 59 05 P29AS 59 28 0
+QSO: 21250 PH 2000-10-26 0711 AA1ZZZ 59 05 4S7TWG 59 22 0
+QSO: 28530 PH 2000-10-26 0711 AA1ZZZ 59 05 JT1FAX 59 23 0
+QSO: 7250 PH 2000-10-26 0711 AA1ZZZ 59 05 WA6MIC 59 03 0
+END-OF-LOG:
+
+The format for each line is <KEY>: followed by a space, then data.
+
+START-OF-LOG: version-number X.X
+
+Must be the first line of the log submission. This file is version 3.0.
+
+CALLSIGN: callsign
+
+The callsign used during the contest.
+
+CONTEST: contest-name
+
+The contest-name must be one of the following.
+
+* CQ-WW-CW
+
+* CQ-WW-SSB
+
+Be sure to use hyphens as shown. DO NOT PUT THE YEAR OR USE PH INSTEAD
+OF SSB.
+
+CATEGORY-OPERATOR: text
+
+The category-operator must be one of the following.
+
+* SINGLE-OP
+
+* MULTI-OP
+
+* CHECKLOG
+
+CATEGORY-ASSISTED: text
+
+The category-assisted must be one of the following.
+
+* ASSISTED
+
+* NON-ASSISTED
+
+CATEGORY-MODE: text
+
+The category-mode must be one of the following.
+
+* SSB
+
+* CW
+
+CATEGORY-BAND: text
+
+The category-band must be one of the following. If you are entering an all
+band category, use ALL, otherwise select one of the individual bands shown.
+
+* ALL
+
+* 160M
+
+* 80M
+
+* 40M
+
+* 20M
+
+* 15M
+
+* 10M
+
+CATEGORY-POWER: text
+
+The category-power must be one of the following.
+
+* HIGH
+
+* LOW
+
+* QRP
+
+CATEGORY-TRANSMITTER: text
+
+The category-transmitter is required for multi-operator entries and must
+be one of the following.
+
+* ONE
+
+* TWO
+
+* UNLIMITED
+
+CATEGORY-OVERLAY: text
+
+NOTE: If you are entering an Overlay category,
+you must also provide CATEGORY-OVERLAY information - see below. If you are
+not entering an Overlay category, do not include this line or leave blank.
+
+For CLASSIC, enter:
+
+CATEGORY-OVERLAY: CLASSIC
+
+For ROOKIE, enter:
+
+CATEGORY-OVERLAY: ROOKIE
+
+For YOUTH, enter:
+
+CATEGORY-OVERLAY: YOUTH
+
+CERTIFICATE: text
+
+Indicate whether or not you wish to receive, if eligible, a paper certificate
+sent via postal mail. YES is the default.
+
+* YES
+
+* NO
+
+GRID-LOCATOR: aann or aannbb
+
+Used to indicate the Maidenhead Grid Square of the station location.
+E.g., JO15 or FN42EB (This field is optional.)
+
+CLAIMED-SCORE: integer
+
+The claimed-score of the log submission, in integer form such as 1217315
+or 19113 or 12. Do not include commas or other text.
+
+CLUB: text
+
+Name of the radio club with which the score should be aggregated. PLEASE
+SPELL OUT THE FULL CLUB NAME! (Seelist of club names .)
+
+CREATED-BY: text
+
+Name and version of the logging program used to create the Cabrillo file.
+(This field is optional.)
+
+LOCATION: text
+
+USA and Canada stations please put your State, Province, or ARRL Section.
+All others please put DX. (See list of accepted
+entries .)
+
+EMAIL: text
+
+A place to put an email address where we can contact you if there is a question
+about your log. This field is optional.
+
+NAME: text
+
+Name. Maximum of 75 characters long.
+
+ADDRESS: text
+
+Mailing address, each line should be a maximum of 45 characters long. Up
+to 6 address lines are permitted.
+
+ADDRESS-CITY: text
+
+ADDRESS-STATE-PROVINCE: text
+
+ADDRESS-POSTALCODE: text
+
+Optional fields for providing mailing address details.
+
+ADDRESS-COUNTRY: text
+
+US Postal Service name for the country of your mailing address. Only required
+for mailing addresses outside of the United States. (Seelist of accepted country names .)
+
+OPERATORS: callsign1 [callsign2 callsign3...]
+
+A space-delimited list of operator callsigns for multi operator stations,
+or single operator entries who wish to show they operated at another station.
+If you operated at another station, you may list it by prepending an @ sign,
+e.g., W1ABC, W2DEF, W3GHI @W3BGN. NOTE: If you select a multi-operator
+category and do not enter operator callsigns in this field, the robot will
+reject your log. Please use a space or a comma between the operator
+calls.
+
+SOAPBOX: text
+
+Enter as many lines of soapbox text as you wish. Each line is a maximum
+of 75 characters long and must begin with SOAPBOX: followed by a space.
+
+X-<anything>: text
+
+Lines beginning with X- are ignored by the robot and log checking software.
+Use this for adding comment lines to your log. Exception: See X-QSO
+below.
+
+QSO: qso-data
+
+The qso-data format is shown below.
+
+--------info sent------- -------info rcvd--------
+QSO: freq mo date time call rst exch call rst exch t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO: 3799 PH 2000-11-26 0711 N6TW 59 03 JT1Z 59 23 0
+
+000000000111111111122222222223333333333444444444455555555556666666666777777777788
+123456789012345678901234567890123456789012345678901234567890123456789012345678901
+
+Note for Column 81 (transmitter number): For the MULTI-ONE and MULTI-TWO
+categories, the last column in the log indicates which transmitter made
+the QSO. It must be a 0 or a 1. This column is not required for other categories.
+
+Note: The CQ WW log checking software uses spaces for delimiters
+between fields. It is not necessary for all columns to line up in the
+columns shown above.
+
+X-QSO: qso-data
+
+Any QSO marked with this key will be ignored in your log and credit will
+be given to the other station.
+
+END-OF-LOG:
+
+Must be the last line of the log submission.
+
+Cabrillo File Version 2 Header for the
+CQ CQWW Contest
+
+Here is an example of a Cabrillo v2 file for the WW Contest. Use of
+Cabrillo v2 is deprecated, but still accepted by the log submission robot.
+
+START-OF-LOG: 2.0
+CONTEST: CQ-WW-SSB
+ARRL-SECTION: WMA
+CALLSIGN: AA1ZZZ
+CATEGORY: SINGLE-OP ALL LOW
+CATEGORY-OVERLAY: ROOKIE
+CLAIMED-SCORE: 12345
+CLUB: Yankee Clipper Contest Club
+CREATED-BY: WriteLog V10.72C
+NAME: John Smith
+ADDRESS: 100 Main St
+ADDRESS-CITY: Uxbridge
+ADDRESS-STATE-PROVINCE: MA
+ADDRESS-POSTALCODE: 01569
+ADDRESS-COUNTRY: USA
+OPERATORS: [required for multi-op stations]
+SOAPBOX: Put your comments here.
+SOAPBOX: Use multiple lines if needed.
+QSO: 3799 PH 2000-10-26 0711 AA1ZZZ 59 05 K9QZO 59 04 0
+QSO: 14256 PH 2000-10-26 0711 AA1ZZZ 59 05 P29AS 59 28 0
+QSO: 21250 PH 2000-10-26 0711 AA1ZZZ 59 05 4S7TWG 59 22 0
+QSO: 28530 PH 2000-10-26 0711 AA1ZZZ 59 05 JT1FAX 59 23 0
+QSO: 7250 PH 2000-10-26 0711 AA1ZZZ 59 05 WA6MIC 59 03 0
+END-OF-LOG:
+
+The format for each line is <KEY>: followed by a space, then data.
+
+START-OF-LOG: version-number X.X
+
+Must be the first line of the log submission. This file is version 2.0.
+
+CALLSIGN: call sign
+
+The call sign used during the contest.
+
+CONTEST: contest-name
+
+The contest-name must be one of the following.
+
+* CQ-WW-CW
+
+* CQ-WW-SSB
+
+Be sure to use hyphens as shown. DO NOT PUT THE YEAR OR USE PH INSTEAD
+OF SSB.
+
+CATEGORY: operator-category band-category power-category
+[mode-category]
+
+The operator-category must be one of the following. (If you
+do not want your score included in the listings, you must set this field
+to CHECKLOG.)
+
+* SINGLE-OP
+
+* SINGLE-OP-ASSISTED
+
+* MULTI-ONE
+
+* MULTI-TWO
+
+* MULTI-MULTI
+
+* CHECKLOG
+
+The band-category must be one of the following:
+
+* ALL
+
+* 160M
+
+* 80M
+
+* 40M
+
+* 20M
+
+* 15M
+
+* 10M
+
+The power-category must be one of the following.
+
+* HIGH
+
+* LOW
+
+* QRP
+
+The mode-category must be one of the following.
+
+* SSB
+
+* CW
+
+Examples for CATEGORY:
+
+CATEGORY: SINGLE-OP ALL HIGH CW
+
+This is a single operator, all band, high power, CW entry.
+
+CATEGORY: SINGLE-OP-ASSISTED 80M LOW SSB
+
+This is a single operator assisted, 80 meters single band, low power, SSB
+entry.
+
+This is the list of categories the robot will accept for a Cabrillo v2
+log. This will assure we get your category correct.
+
+CATEGORY: SINGLE-OP ALL HIGH
+CATEGORY: SINGLE-OP 160M HIGH
+CATEGORY: SINGLE-OP 80M HIGH
+CATEGORY: SINGLE-OP 40M HIGH
+CATEGORY: SINGLE-OP 20M HIGH
+CATEGORY: SINGLE-OP 15M HIGH
+CATEGORY: SINGLE-OP 10M HIGH
+CATEGORY: SINGLE-OP ALL LOW
+CATEGORY: SINGLE-OP 160M LOW
+CATEGORY: SINGLE-OP 80M LOW
+CATEGORY: SINGLE-OP 40M LOW
+CATEGORY: SINGLE-OP 20M LOW
+CATEGORY: SINGLE-OP 15M LOW
+CATEGORY: SINGLE-OP 10M LOW
+CATEGORY: SINGLE-OP ALL QRP
+CATEGORY: SINGLE-OP 160M QRP
+CATEGORY: SINGLE-OP 80M QRP
+CATEGORY: SINGLE-OP 40M QRP
+CATEGORY: SINGLE-OP 20M QRP
+CATEGORY: SINGLE-OP 15M QRP
+CATEGORY: SINGLE-OP 10M QRP
+CATEGORY: SINGLE-OP-ASSISTED ALL
+CATEGORY: SINGLE-OP-ASSISTED 160M
+CATEGORY: SINGLE-OP-ASSISTED 80M
+CATEGORY: SINGLE-OP-ASSISTED 40M
+CATEGORY: SINGLE-OP-ASSISTED 20M
+CATEGORY: SINGLE-OP-ASSISTED 15M
+CATEGORY: SINGLE-OP-ASSISTED 10M
+CATEGORY: MULTI-ONE HIGH
+CATEGORY: MULTI-ONE LOW
+CATEGORY: MULTI-TWO
+CATEGORY: MULTI-MULTI
+CATEGORY: CHECKLOG
+
+CATEGORY-OVERLAY: text
+
+NOTE: If you are entering one of the Overlay categories, you must also provide
+CATEGORY-OVERLAY information - see below. If you are not entering an Overlay category,
+do not include this line or leave blank.
+
+For CLASSIC, enter:
+
+CATEGORY-OVERLAY: CLASSIC
+
+For ROOKIE, enter:
+
+CATEGORY-OVERLAY: ROOKIE
+
+For YOUTH, enter:
+
+CATEGORY-OVERLAY: YOUTH
+
+CERTIFICATE: text
+
+Indicate whether or not you wish to receive, if eligible, a paper certificate
+sent via postal mail. YES is the default.
+
+* YES
+
+* NO
+
+GRID-LOCATOR: aann or aannbb
+
+Used to indicate the Maidenhead Grid Square of the station location.
+E.g., JO15 or FN42EB (This field is optional.)
+
+CLAIMED-SCORE: integer
+
+The claimed-score of the log submission, in integer form such as 1217315
+or 19113 or 12. Do not include commas or other text.
+
+CLUB: text
+
+Name of the radio club with which the score should be aggregated. PLEASE
+SPELL OUT THE CLUB NAME! (Seelist of club names .)
+
+CREATED-BY: text
+
+Name and version of the logging program used to create the Cabrillo file.
+(This field is optional.)
+
+ARRL-SECTION: arrl-section
+
+USA and Canada stations please put your State, Province, or ARRL Section.
+All others please put DX. (See list of accepted
+entries .)
+
+EMAIL: text
+
+A place to put an email address, if desired.
+
+NAME: text
+
+Name. Maximum of 75 characters long.
+
+ADDRESS: text
+
+Mailing address, each line should be a maximum of 45 characters long. Up
+to 6 address lines are permitted.
+
+Please put the country name all alone on the last address line using
+the US Postal Service name for the country of your mailing address. Only
+required for mailing addresses outside of the United States. (Seelist of accepted country names .)
+
+OPERATORS: callsign1 [callsign2 callsign3...]
+
+A space-delimited list of operator callsigns for multi operator stations,
+or single operator entries who wish to show they operated at another station.
+If you operated at another station, you may list it by prepending an @ sign,
+e.g., W1ABC, W2DEF, W3GHI @W3BGN. NOTE: If you select a multi-operator
+category and do not enter operator callsigns in this field, the log may be
+rejected. Please use a space or a comma between the operator calls.
+
+SOAPBOX: text
+
+Enter as many lines of soapbox text as you wish. Each line is a maximum
+of 75 characters long and must begin with SOAPBOX: followed by a space.
+
+X-<anything>: text
+
+Lines beginning with X- are ignored by the robot and log checking software.
+Use this for adding comment lines to your log.
+
+Exception: See X-QSO below.
+
+QSO: qso-data
+
+The qso-data format is shown below.
+
+--------info sent------- -------info rcvd--------
+QSO: freq mo date time call rst exch call rst exch t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO: 3799 PH 2000-11-26 0711 N6TW 59 03 JT1Z 59 23 0
+
+000000000111111111122222222223333333333444444444455555555556666666666777777777788
+123456789012345678901234567890123456789012345678901234567890123456789012345678901
+
+Note for Column 81 (transmitter number): For the MULTI-ONE and MULTI-TWO
+categories, the last column in the log indicates which transmitter made
+the QSO. It must be a 0 or a 1. This column is not required for other categories.
+
+X-QSO: qso-data
+
+Any QSO marked with this key will be ignored in your log and credit will
+be given to the other station.
+
+END-OF-LOG:
+
+Must be the last line of the log submission.
+
+More Information about Cabrillo
+
+The CQ WW Contest only recognizes the Cabrillo fields shown on this page.
+The complete Cabrillo specification can be found at
+http://wwrof.org/cabrillo/ .
+
+Copyright ©
+2008-2026
+World Wide Radio Operators Foundation, Inc. . All Rights Reserved.
+| Privacy Policy
+
+
+====================================================================================================
+[5] URL: https://www.cqww.com/rules_faq.htm
+    Fetch date: 2026-08-17
+    Revision/effective marker: 'CQ WW Contest Rules - Frequently Asked Questions'. No revision/date marker. NOTE: FAQ says the NIL penalty is 'three times' the QSO point value while the current rules (XII.E.3) say 'two times' — the rules page governs.
+====================================================================================================
+
+CQ WW - Rules FAQ
+
+*
+*
+*
+*
+
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+Other Contests:
+CQ WW
+CQ WPX
+CQ WW RTTY
+CQ WPX RTTY
+CQ 160
+CQ VHF
+WW DIGI
+
+CQ World Wide DX Contest
+
+Show navigation
+Hide navigation
+
+* Home
+
+* Rules
+
+* Rules
+
+* Rules FAQ
+
+* Current Rules (pdf)
+
+* Rules Archive
+
+* Plaques
+
+* Results
+
+* Results Articles
+
+* Final Scores SSB
+
+* Final Scores CW
+
+* Overlay Scores
+
+* Club Scores
+
+* Soapbox Comments SSB
+
+* Soapbox Comments CW
+
+* Raw Scores SSB
+
+* Raw Scores CW
+
+* Records
+
+* By Region
+
+* By CQ Zone
+
+* Overlay Categories
+
+* New Records
+
+* New Overlay Records
+
+* Winners by Year
+
+* Highest QSO Rates
+
+* Logs
+
+* Submitting Your Log
+
+* Cabrillo Log Upload
+
+* ADIF Log Converter
+
+* Cabrillo File Format
+
+* Logs Received - SSB
+
+* Logs Received - CW
+
+* Public Logs
+
+* Resources
+
+* Resources
+
+* Public Log Checking Reports
+
+* Entries by Region
+
+* Entries by Category
+
+* History of CQWW
+
+* SSB Signal Quality
+
+* Club Names
+
+* Location Names
+
+* Public Log Checking Reports
+
+* REST API Reference
+
+* Contact Us
+
+* Contact Form
+
+* Organization
+
+* Blog
+
+* Blog
+
+* Archive
+
+Rules FAQ
+
+CQ WW Contest Rules - Frequently Asked Questions
+
+The purpose of this page is to answer some of the common questions about
+the rules of the CQ WW DX contests and how some of the rules are interpreted
+by the CQ WW Contest Committee. Please send any questions through the
+Contact Form.
+
+The explanations here apply ONLY to the CQ WW SSB and CW Contests!
+
+General Questions | Logging Questions
+| Single Operator | Multi-Operator |
+Club Entry
+
+Click on the question to show the answer.
+
+General Questions
+
+Q: Rule XII. D.3.
+states "... call-signs not found in the other log..." What does this mean?
+
+This means that your callsign was not found in the other log. I.e.,
+it is Not-in-Log (NIL). The penalty for a NIL is three times the QSO
+point value for that contact.
+
+Q: For a
+single-band entry, is it allowed to be looking for multipliers on other bands to
+request a QSY, sked or even just asking if a multiplier is operating that band?
+
+No, it is not. The rules state: "All entrants must operate within
+the limits of their chosen category when performing any activity
+that could affect their submitted score." Entering single band means
+that all activity to improve your score must be only on that band.
+You are permitted to work stations on other bands, but you are not
+allowed to ask them to QSY or make schedules.
+
+Q: Is there any
+limit on operating time?
+
+There is no limit on operating time for any of the traditional
+categories. Only the CLASSIC Overlay category has a time limit for
+the score calculation, but not the contest participation time. Everyone
+is encouraged to operate as much as they want during the contest
+period.
+
+Q: What
+should I do if I accidentally make a QSO outside my license privileges?
+
+Use X-QSO to mark the contact so it will not count for your score.
+
+If you want to remove a QSO for any reason, use a text editor
+to add "X-" to the beginning of the QSO line in the Cabrillo
+file. For example:
+
+X-QSO: 7023 CW 2009-05-31 0033 AK1W 599 05 XX9XX 599 24
+
+The log checking software will not count this QSO for you, but
+will give credit to the other station.
+
+Q: Can an
+operator of a multi-op station also work the contest from their home station and
+submit an entry?
+
+Yes, it is permitted for an operator to work from home with his
+own callsign and then also from a multi-operator station.
+
+Q: I submitted a
+log but can't find my on-line certificate. What's wrong?
+
+On-line certificates are available after the final results are published for all
+entrants in the CQWW contest. The exception is when your log is submitted AFTER the
+deadline. If you believe we have made an error, reach out to us at
+https://cqww.com/contact/.
+
+Q: What about...?
+
+The web page
+http://www.arrl.org/files/file/Contest%20-%20General/HF-FAQ.pdf
+has some very helpful explanations about common situations encountered
+in HF contesting.
+
+Logging Questions
+
+Q: I would like
+to work on several bands, but only submit a single band entry. Is this allowed? How
+should I submit my log?
+
+Yes, you may work other bands and still submit your log as a
+single band entry. First, please make sure your log includes
+all QSOs made on all bands. This helps us with
+the log checking. Second, make sure the Cabrillo file header has
+your category set for the single band you want to enter. (e.g.,
+CATEGORY-BAND: 20M) Only the QSOs on the single band will be used
+to compute your score.
+
+Please enter only one log containing ALL QSOs! Each log that
+you submit will overwrite the previously submitted log.
+
+Q: I work a
+station and they do not know their CQ zone or they give me a serial number, what
+should I put in the log?
+
+Log the zone based on their location.
+
+Q: A station gives
+me a serial number vs. the correct CQ Zone in their exchange. What should I log?
+
+Log the zone based on their location.
+
+Q: A station
+sends me "cut numbers" on CW. What should I enter in the log?
+
+The log checking software is expecting to see a log with sent
+and received zone numbers. No matter what someone sends you, it
+is your responsibility to convert it into the zone number you thought
+they were trying to communicate.
+
+Q: Should I
+work and log duplicates? How are they counted by the log checking?
+
+Yes! Please log all contacts that you make even if they are duplicates.
+
+For example... XX9XX works K5ZD but logs it as K5ZB. K5ZD logged
+XX9XX correctly. Later XX9XX works K5ZD again. This time he logs
+K5ZD correctly. K5ZD logs the second duplicate QSO and scores it
+as zero points. For this case, the log checking software assigns
+K5ZD with a good qso and a dupe (no penalty). XX9XX gets a busted
+callsign (K5ZB) and a good qso (K5ZD).
+
+Q: I made a
+mistake in logging and do not want a QSO to count. Should I remove it from my log?
+
+No, please do not remove any QSOs from your log! This will cause
+the other station that worked you to lose credit for the contact.
+
+If you want to remove a QSO for any reason, use a text editor
+to add "X-" to the beginning of the QSO line in the Cabrillo
+file. For example:
+
+X-QSO: 7023 CW 2009-05-31 0033 AK1W 599 05 XX9XX 599 24
+
+The log checking software will not count this QSO for you, but
+will give credit to the other station.
+
+Q: I kept some
+paper notes of corrections when I was unable to change the log during the contest.
+May I use my notes to correct the log after the contest?
+
+Yes, but only from your own notes or memory, provided that it
+reflects what was sent over the air. No corrections, additions,
+deletions to what was sent over the air is allowed.
+
+Rule IX.9 says "9. Correction of logged callsigns and exchanges
+after the contest by using any database, recordings, email or other
+methods of confirming QSOs is not allowed." So you may not use a
+recording to listen to a contact and make corrections. You may not
+look up callsigns on the DX Cluster, RBN or DX newsletters after
+the contest. You may not ask via email or telephone for confirmation
+that a contact occured.
+
+Q: Should I submit
+the log in Cabrillo v2 or v3?
+
+The Cabrillo log format standard has changed over time. v3 is
+the preferred format for log submissions. The log robot will accept
+either v2 or v3 format and will automatically convert them to v3.
+View more information on log submission requirements
+here .
+
+Q: What if I am not
+able to submit my log within the 5 day deadline?
+
+Extensions of the log deadline may be requested through the
+Contact Form. The
+request must include the entry callsign, a valid reason for why
+the extension is needed, and a date by which the log will be submitted.
+The request must be submitted before the log deadline. Requests
+can be submitted before the contest. The maximum extension that
+can be granted is 10 days. All requests for extension must be acknowledged
+by the Contest Director to be valid.
+
+Q: I logged on paper. What is the best way to submit my log?
+
+The CQ WW Committee does NOT accept paper logs submitted by mail. All entrants
+are now required to submit their log in electronic form by using the Web upload
+form at https://cqww.com/logcheck/. LM by
+DL8WAA is an excellent free software program that easily makes entering the logs
+into the required Cabrillo format. You can download it from
+http://contestsoftware.com/e/home.htm
+
+In addition to LM software's conversion capabilities, there is also an excellent
+ADIF to Cabrillo conversion tool, which can be found at
+https://cqww.com/adif/.
+
+Q: I've tried to
+submit my log multiple times and have not been successful. Should I just give up?
+
+We place a high value on every log, regardless of its size or category. If you are
+struggling with your submission, reach out to us (before the deadline) at
+https://cqww.com/contact/ for
+a prompt response.
+
+Q: I need to resubmit my log
+to correct an administrative error (e.g., forgetting to include my club name, incomplete list of
+operators, etc.). Can I do this?
+
+Yes. You can always resubmit your log. Each log you submit will replace any previous one.
+Be advised that if you resubmit your log after the deadline, it will be treated as a late log
+submission. In addition, resubmitting logs for the purpose of correcting log entries is not allowed.
+If you want to make changes to your log after the deadline, submit them through the
+Contact Form .
+
+Q: My submitted log was accepted
+but it does not appear on the received logs page at <cqww.com>. Did I do something wrong?
+
+It may take up to 20 minutes for the received logs page to synchronize with the log repository.
+We recommend you wait and see if your log entry correctly appears on the list. If it has been more
+than 30 minutes since you submitted your log, try submitting again.
+
+Single Operator
+
+Q: How can I tell
+if I am Single Operator or Single Operator Assisted?
+
+The rules for Single Operator state "all operating and logging
+functions are performed by one person (the operator)." The
+CQ WW Contest has two classes of entry for stations with only one
+operator: Single Operator and Single Operator Assisted.
+
+You are Single Operator IF you (and only you) *locate AND identify*
+every callsign that you put in your log. Locate means to tune in
+each signal. Identify means to determine the callsign of the station
+you are working. Do not use any outside tools such as the DX Cluster
+or RBN network to locate new contacts.
+
+If you cannot say this, then you should enter the Single Operator
+Assisted category.
+
+Q: As a Single
+Operator (Unassisted), can I post spots to the DX Cluster?
+
+Unassisted entries are permitted to post outbound spots provided they do
+not view or utilize any information received from the DX cluster or other spotting sources.
+
+Q: If I am a Single
+Operator, can I use the Reverse Beacon Network (RBN) or DX Cluster to look for spots of
+my own callsign?
+
+No, this is not permitted. If you do this, you should enter as Single
+Operator Assisted.
+
+Q: My software uses
+the RBN to show where stations are located on the band, but it does not show any callsigns.
+Does this place me in the Assisted category?
+
+Yes. The use of decoding technology to detect where callsigns are
+being transmitted and indicate this to the operator is considered
+assistance in locating stations. This is different from a band scope
+that shows where signals are, but does not apply any intelligence
+to identify the source of the signal.
+
+Q: Does the use of waterfall
+technology, either radio- or logging program-based, violate the single operator unassisted rule?
+
+No, provided there is no callsign and/or exchange information made available when used.
+
+Q: As a Single
+Operator (Unassisted), can I post my scores to a live scoreboard? Can I view the scores of others?
+
+Any entry class may post their scores to a live scoreboard (e.g., cqcontest.net or
+contestonlinescore.com). A single operator may view the scores on a live scoreboard
+site but should not view the band breakdown information.
+
+Q: Can I use a
+code reader to help me work stations on CW and be in the single operator category?
+
+No. Any single operator that uses a code reader must enter the Assisted category.
+This was part of the rule changes for 2015.
+
+Q: How do I know
+if I should record my contest operation to be compliant with the rules?
+
+Recording your contest effort is a good practice for any entry. It provides an
+opportunity to learn from your mistakes (e.g., an RIT that wanders too far from your
+run frequency, unconfirmed QSOs, out-of-band errors, etc.). The rules clearly state
+that a Top-5 entry in any category MAY be subject to a request from the WW Contest
+Committee for an audio recording of your log. If you are unsure of your placement
+before the contest (or surprised by the result), it is prudent to make a recording
+in the event you are asked for one.
+
+Overlay Category
+
+Q: Can I enter an
+Overlay category if I submit a single band entry?
+
+Yes. Your single band score will be used for the traditional
+entry. For the Overlay scoring, all scores will be calculated as
+all band scores. If you work single band and make contacts on other
+bands, all of your QSOs will be counted for your Overlay score.
+
+Q: When does my 24
+hours of operation for the CLASSIC Overlay begin?
+
+Your 24 hours of operating time begins with your first QSO in
+the log.
+
+Q: How is a 60 minute
+operating break determined for the CLASSIC Overlay?
+
+The Classic overlay category specifies that break periods be
+a minimum of 60 minutes. The "60 minutes" means 60 consecutive "empty"
+clock minutes during which no QSO was logged. (Seconds are not included
+in the Cabrillo log QSO: lines and so would not be considered in log checking.)
+
+This is a valid 60-minute off time in a log:
+
+1358Z QSO
+
+1359Z QSO
+
+- first empty minute at 1400
+
+- last empty minute at 1459
+
+1500Z QSO
+
+1501Z QSO
+
+This is NOT a valid 60-minute off time in a log:
+
+1358Z QSO
+
+1359Z QSO
+
+- first empty minute at 1400
+
+- last empty minute at 1458
+
+1459Z QSO
+
+1500Z QSO
+
+There must be 60 consecutive "empty" minutes. The "time
+B minus time A" gap of 1459 - 1359 = 60 does not meet
+the 60-minute test because only 59 consecutive minutes are actually "empty"
+- the last "empty" minute is 1458, not 1459. Leaving a
+gap of the minimum number of "empty" minutes is always
+the safest way to be sure of complying with the off-time minimum-break
+rules. Be safe and don't lose a multiplier or a big chunk of your
+log because you were one minute too quick to make a QSO!
+
+Q: Can I listen
+the radio and fill the band map in my off time period?
+
+No. Spending time to fill your band map during an off time is not within the
+spirit of the category. You are not permitted to make any use of the DX Cluster
+as a Classic operator.
+
+Q: What happens
+if I put both Classic and Rookie Overlay categories in my log?
+
+You are not permitted to enter more than one Overlay category.
+If the log checking software finds entries for both Classic and
+Rookie overlay categories, the last one found in the log will be
+used.
+
+Q: Is the Rookie
+Overlay category based on the operator license or the station license?
+
+The Rookie Overlay category is for operators that have been a licensed amateur
+radio operator for less than 3 years at the time of the contest. The qualification
+period begins when you obtained your first operator license. For those countries
+that allow use of a club station without a full operator license, the 3 year period
+begins when you obtained permission to get on the air.
+
+Q: I was licensed
+many years ago and my license expired. I just got a new license. Can I
+enter the Rookie Overlay category?
+
+No. The 3 year period applies from the time you obtained your first amateur
+radio license.
+
+Q: If I am eligible,
+can I submit my log with both the Rookie and Youth overlays?
+
+No. You can only submit your log with one overlay. If eligible, it is your
+responsibility to choose the appropriate overlay entry.
+
+Multi-Single Category FAQ
+
+This section covers many questions we receive about the Multi-Single
+(MULTI-ONE) category.
+
+EXPLANATION:
+
+This category permits up to two signals (one RUN and one MULTPLIER)
+to be transmitted at the same time, but ONLY if each signal is on a
+different band AND with the following limitations.
+
+The RUN SIGNAL may be transmitted on any band and may contact
+all other stations. The RUN signal must remain on the band for at least
+10 minutes. The ten minute period begins when the first QSO (contact)
+on that band is made. A RUN SIGNAL may not be transmitted on a “new
+band” until the 10 minute period has been met or exceeded. The
+RUN signal will be designated with a “0” in the transmitter
+column of the Cabrillo log.
+
+The MULTIPLIER SIGNAL may be transmitted on any band, but
+may only contact another station if, and only if, it is a
+new multiplier on that band. The MULTIPLIER SIGNAL may only call
+other stations. The MULTIPLIER SIGNAL may not request or attract
+any QSO by calling CQ, QRZ, TEST, etc. The MULTIPLIER SIGNAL must remain
+on one band for at least 10 minutes. The ten minute period begins when
+the first QSO with a new multiplier on that band is made. A MULTIPLIER
+SIGNAL may not be transmitted on a “new band” until the
+10 minute period for the MULTIPLIER SIGNAL has been met or exceeded.
+The MULTIPLIER SIGNAL will be designated with a “1” in the
+transmitter column of the Cabrillo log.
+
+The designation of “0” (runner) or “1”
+(multiplier) is not assigned to an actual physical radio,
+although that is possible. The signal designation of “0”
+and “1” is a functional designation. Rig “A”
+or “B” (or “C,” etc., if more than 2 radios)
+can be assigned either “0” or “1” according
+to its function (role) at the time of the QSO.
+
+All QSOs must be logged immediately upon completion of the
+QSO.
+
+Q: The category
+name is “Multi-Operator, Single Transmitter,” but you are saying that
+we can use more than one transmitter?
+
+Yes, that is correct. The ability to run stations and hunt for
+multipliers at the same time is one of the reasons the CQ WW Multi-Single
+category is so popular.
+
+Q: You have
+talked about the “ten minute rule” in both the RUN SIGNAL and the
+MULTIPLIER SIGNAL sections. Is there one “ten
+minute rule” that applies to both signals?
+
+There are two separate and independent ten minute rules. One
+ten minute rule applies to the RUN SIGNAL and a separate, independent
+ten minute rule applies to the MULTIPLIER SIGNAL.
+
+Q: When does
+the 10 minute clock start when changing to a new band?
+
+The 10 minute clock starts with the first QSO on a new band.
+QSOs must be logged immediately upon completion of the QSO.
+
+Q: What if
+we QSY to a new band to call a needed multiplier but it takes 2 minutes to break
+the pileup? Does the clock start when we first transmit on the new band or when
+we make the QSO?
+
+The clock always starts with the first logged QSO. QSOs
+must be logged immediately upon completion of the QSO.
+
+Q: What if we
+QSY from 20m to 10m, but do not make a QSO on 10m. Does the clock reset when we
+QSY to 10m?
+
+No. The clock starts only when you make a QSO on the new band.
+If you QSY to another band, but do not make a QSO, then the clock
+does not reset.
+
+Q: May we transmit
+on a new band before the 10 minute period, as long as we do not make a QSO on the
+new band before 10 minutes?
+
+No. You may not transmit on the new band until after you are
+allowed to QSY to the new band. You must always follow the 10 minute
+rules.
+
+Q: The clock
+on our logging software only shows whole minutes (no seconds). A QSO logged at
+14:00:01 shows as 14:00. A QSO logged at 14:00:58 also shows as 14:00 in the log.
+Both look to be the same time. How can we accurately determine the timing for the
+10 minute period?
+
+The Cabrillo log format only shows time in whole minutes (no
+seconds). The 10 minute period is calculated based on the time shown
+in the log. If a QSO is made at 1400 to start the period, a QSO
+cannot be made on another band until 1410. We recommend that stations
+use a “count down timer” in their logging software to
+monitor when the 10 minute period has completed.
+
+Q: What should
+we do if we are using more than one computer and the computer clocks are out of sync
+with each other? How can we accurately determine the 10 minute period?
+
+It is the entrant’s responsibility to ensure that his/her
+clocks are in synchronization with a time standard (such as WWV, www.time.gov,
+Winbox tools, etc.) and with each other.
+
+Q: What should we
+do if our RUN SIGNAL moves to a new band and starts to invite contacts (call CQ, QRZ,
+TEST, “my call,” etc.) before the 10 minutes are up?
+
+Any transmission before the 10 minute period is against the
+rules. If you have not yet made a contact on the new band, stop
+immediately and wait for the 10 minute period. If you have made
+some QSOs, those contacts are in violation of the 10 minute rule
+and they will be removed without penalty. Calling CQ “early”
+(before the ten minute period) and intentionally not logging any
+callers (in order to take/hold a frequency) or changing times to be time compliant
+is a violation of the rules and may result in being disqualified. In all cases,
+you should log every QSO that you make regardless of time violation issues.
+
+Q: What should
+we do if our MULTIPLIER SIGNAL moves to a new band and completes the QSO with the
+needed multiplier, but it is before the allowed 10 minute period? We do not want to
+lose the multiplier!
+
+You have violated the 10 minute rule. You may contact the same
+station again, on the same band, when you have complied with the 10 minute rule.
+If you do work them again, be sure to log them again.
+If you work them twice (once in violation and once in compliance
+with the 10 minute rule), be sure to log both of the QSOs. Mark
+the first contact (the one in violation of the 10 minute rule)
+with X-QSO. This will give credit to the other station.
+
+Q: Is there a
+limit on the number of times we can use X-QSO in our log?
+
+X-QSO is intended for correction of occasional mistakes that
+happen during the contest. If the committee decides that X-QSO is
+being used to avoid the 10 minute rule the log will be subject to
+possible reclassification or other committee action, as deemed appropriate.
+For example, CQing on a new band with the intent of X-QSOing
+non-multipliers that call you is not allowed.
+
+Q: Can we use a
+third band to search for possible multipliers and ask them to move to either the RUN
+or MULTIPLIER band?
+
+No. A station in the Multi-Single category may not TRANSMIT on
+more than two bands at any time. The bands in use must be
+in compliance with the RUN and MULTIPLIER 10 minute rules.
+
+Q: Can we use two
+or more radios on the same band to make QSOs?
+
+When two or more transmitters are present on the same band, a
+hardware device MUST be used to prevent more than one signal at
+any one time. It is not permitted to request or solicit QSOs (e.g.,
+call CQ) on more than one frequency at a time. The second interlocked
+station on the band should only be calling stations and must change
+frequencies after each QSO.
+
+Multi-Two Category
+
+Q: The rules for
+Multi-Two state "A maximum of two transmitted signals on two different bands may be
+used at any time." If we are working on two bands, can we transmit on a third band to
+call CQ or call a multiplier?
+
+If you want to start transmitting on a third band, you must stop
+transmitting on one of the other bands. There is no exception.
+
+Q: If we make a
+band change at the top of the hour, which hour is credited with the change?
+
+The Multi-Two category allows each transmitter to make 8 band
+changes per hour. Here is an example log for one of the transmitters:
+
+QSO: 14000 PH 2012-10-27 0052 K5ZD 59 05 ED8W 59 33 1
+QSO: 14000 PH 2012-10-27 0057 K5ZD 59 05 RW1CW 59 16 1
+QSO: 7000 PH 2012-10-27 0103 K5ZD 59 05 SV1ELI 59 20 1
+QSO: 7000 PH 2012-10-27 0108 K5ZD 59 05 LY7A 59 15 1
+
+The band change is counted in the 0100z hour.
+
+Club Entry Questions
+
+Q: Can I enter
+single band, but operate other bands and have the all band score count for my club?
+
+No. Only the score of your stated entry category will be applied
+to the club score.
+
+Q: Does my Overlay
+category score count for the club?
+
+No. Only your traditional category score will count toward your
+club.
+
+Q: Can a score be
+split between more than one club?
+
+Single operator entries must indicate only ONE club that will
+receive their score.
+
+Multi-operator entries may split their score among the clubs
+of the operators. The split will be by a percentage of the number
+of club members participating in the operation. The split is defined
+on the CLUB: line of the log file. Please show the split and then
+the club name. It is not required that all splits add up to 100%.
+Here are some examples of club splits:
+
+CLUB: SPLIT 3/8 WILLAMETTE VALLEY, 1/8 WESTERN WASHINGTON DX CLUB,
+4/8 SOUTHERN CALIFORNIA CONTEST CLUB
+
+CLUB: SPLIT 1/7 NORTHERN CALIFORNIA CONTEST CLUB, 4/7 FRANKFORD RADIO
+CLUB
+
+Please spell out all club names according to the list of names
+at http://www.cqww.com/clubnames.htm.
+
+Entering a split will cause the log submission web page to return
+a warning message that the club name does not match any on the list.
+You may ignore this message.
+
+Q: The rules for DX clubs state "Participation is limited to club
+members living and operating within the DXCC country where the club
+is located OR within a 400 km radius circle from the center of club
+area..." What is meant by "OR"?
+
+OR = Both. The club area is defined as the country where the club
+is located plus the area within a 400 km radius circle around the
+club center. This allows a club that is on the border of two
+countries to have members outside of the club location country.
+
+Q: What is the club center?
+
+Each club may select any location to be the center. Once this place
+is chosen, it must be the same for both modes of the contest. If
+there is a question, the CQWW Committee will ask the club officers
+to specify the location.
+
+Q: Can club members that travel on DXpeditions count their score
+for the club?
+
+Yes. Club members living within the club area that go on DXpeditions
+to other countries can count their score for the club. They must
+specify the club name in the log.
+
+Copyright ©
+2008-2026
+World Wide Radio Operators Foundation, Inc. . All Rights Reserved.
+| Privacy Policy
+
+
+====================================================================================================
+[6] URL: https://www.cqww.com/cq_waz_list.htm (linked from resources.htm as 'Written Definitions of CQ Zones')
+    Fetch date: 2026-08-17
+    Revision/effective marker: Marker on page: 'Source: CQ WAZ Award Rules from http://www.cq-amateur-radio.com/cq_awards/cq_waz_awards/cq_waz_list.html  Updated and correct as of April 1, 2018'.
+====================================================================================================
+
+CQ WW - WAZ Zone Definitions
+
+*
+*
+*
+*
+
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+*
+
+Other Contests:
+CQ WW
+CQ WPX
+CQ WW RTTY
+CQ WPX RTTY
+CQ 160
+CQ VHF
+WW DIGI
+
+CQ World Wide DX Contest
+
+Show navigation
+Hide navigation
+
+* Home
+
+* Rules
+
+* Rules
+
+* Rules FAQ
+
+* Current Rules (pdf)
+
+* Rules Archive
+
+* Plaques
+
+* Results
+
+* Results Articles
+
+* Final Scores SSB
+
+* Final Scores CW
+
+* Overlay Scores
+
+* Club Scores
+
+* Soapbox Comments SSB
+
+* Soapbox Comments CW
+
+* Raw Scores SSB
+
+* Raw Scores CW
+
+* Records
+
+* By Region
+
+* By CQ Zone
+
+* Overlay Categories
+
+* New Records
+
+* New Overlay Records
+
+* Winners by Year
+
+* Highest QSO Rates
+
+* Logs
+
+* Submitting Your Log
+
+* Cabrillo Log Upload
+
+* ADIF Log Converter
+
+* Cabrillo File Format
+
+* Logs Received - SSB
+
+* Logs Received - CW
+
+* Public Logs
+
+* Resources
+
+* Resources
+
+* Public Log Checking Reports
+
+* Entries by Region
+
+* Entries by Category
+
+* History of CQWW
+
+* SSB Signal Quality
+
+* Club Names
+
+* Location Names
+
+* Public Log Checking Reports
+
+* REST API Reference
+
+* Contact Us
+
+* Contact Form
+
+* Organization
+
+* Blog
+
+* Blog
+
+* Archive
+
+CQ WAZ Zone Definitions
+
+Zone 1. Northwestern Zone of North America: KL (Alaska), VY1 Yukon, VE8 the Northwest and VY0 Nunavut Territories west of 102 degrees (Includes the islands of Victoria, Banks, Melville, and Prince Patrick).
+
+Zone 2. Northeastern Zone of North America: VO2 (Labrador), the portion of VE2 Quebec north of the 50th parallel, and Nunavut Territories east of 102 degrees (Includes the islands of King Christian, King William. Prince of Wales, Somerset, Bathurst, Devon, Ellesmere, Baffin and the Melville and Boothia Peninsulas, excluding Akimiski Island, Bear Islands and East Pen Island in Hudson Bay).
+
+Zone 3. Western Zone of North America: VE7 (British Columbia), W6, and the W7 states of Arizona, Idaho, Nevada, Oregon, Utah, and Washington.
+
+Zone 4. Central Zone of North America: VE3 (Ontario), VE4 (Manitoba), VE5 (Saskatchewan), VE6 (Alberta), VY0 Akimiski Island, and Bear Islands, and Fox Island and East Pen Island in Hudson Bay. The W7 states of Montana and Wyoming, W0, W9, W8 (except West Virginia), W5, and the W4 states of Alabama, Tennessee, and Kentucky.
+
+Zone 5. Eastern Zone of North America: 4U1UN, CY9 (St. Paul Is.), CY0 (Sable Is.), FP (St. Pierre Miquelon), VE1 (Nova Scotia) and VE9 (New Brunswick), VY2 (Prince Edward Is.), VO1 (Newfoundland) and the portion of VE2 Quebec south of the 50th parallel. VP9 (Bermuda), W1, W2, W3 and the W4 states of Florida, Georgia, South Carolina, North Carolina, Virginia and the W8 state of West Virginia.
+
+Zone 6. Southern Zone of North America: XE (Mexico), XF4 (Revilla Gigedo).
+
+Zone 7. Central American Zone: FO (Clipperton), HK0 (San Andres Is.), HP (Panama), HR (Honduras), TG (Guatemala), TI (Costa Rica), TI9 (Cocos Is.), V3 (Belize), YN (Nicaragua) and YS (El Salvador).
+
+Zone 8. West Indies Zone: C6 (Bahamas), CO (Cuba), FG (Guadeloupe), FJ (St. Barts), FM (Martinique), FS (Saint Martin), HH (Haiti), HI (Dominican Republic), J3 (Grenada), J6 (St. Lucia), J7 (Dominica), J8 (St. Vincent), KG4 (Guantanamo Base), KP1 (Navassa Is.), KP2 Virgin Islands), KP4 (Puerto Rico), KP5 (Navassa Is.), PJ5 (Eustatius), PJ6 (Saba), PJ7 (Sint Maarten). V2 (Antigua and Barbuda), V4 (St. Kitts and Nevis), VP2E (Anguilla), VP2M (Montserrat), VP2V (British Virgin Is.), VP5 (Turks and Caicos Is.), YV0 (Aves Is.), ZF (Cayman Is.), 6Y (Jamaica), and 8P (Barbados).
+
+Zone 9. Northern Zone of South America: FY (French Guyana), HK (Colombia), HK0 (Malpelo Is.), PJ2 (Curacao), PJ4 (Bonaire), PZ (Surinam), YV (Venezuela), 8R (Guiana),P4 Aruba and 9Y (Trinidad and Tobago Is.).
+
+Zone 10. Western Zone of South America: CP (Bolivia), HC (Ecuador), HC8 (Galapagos Is.), and OA (Peru).
+
+Zone 11. Central Zone of South America: PY (Brazil), PY0 (Fernando de Noronha, PY0 (St. Peter and Paul Rocks) and PY0 Trinidad Martin Vaz, ZP (Paraguay).
+
+Zone 12. Southwest Zone of South America: CE (Chile), CE0 (Easter Is.), CE0(Juan Fernandez Is.), CE0 (San Felix Is.), 3Y (Peter I) and some Antarctic stations (See Notes Below).
+
+Zone 13. Southeast Zone of South America: CX (Uruguay), LU (Argentina),
+
+VP8 Falklands, VP8 South Georgia, VP8 South Orkney, VP8 South Shetlands, VP8 South Sandwich and some Antarctic stations (See Notes Below)
+
+Zone 14. Western Zone of Europe: C3 (Andorra), CT (Portugal), CU (Azores Is.), DL (Germany), EA (Spain), EA6 (Balearic Is.), El (Ireland), F (France), G (England), GD (Isle of Man), GI (Northern Ireland), GJ (Jersey), GM (Scotland), GU (Guernsey), GW (Wales), HB (Switzerland), HB0(Liechtenstein), LA (Norway), LX (Luxembourg), ON (Belgium), OY (Faroe Is.), OZ (Denmark), PA (Netherlands), SM (Sweden), ZB (Gibraltar), 3A (Monaco) and 4U1ITU (ITU, Geneva).
+
+Zone 15. Central European Zone: E7 (Bosnia Herzegovina), ES (Estonia), HA (Hungary), HV (Vatican), I (Italy), IS0 (Sardinia), LY (Lithuania), OE (Austria), OH (Finland), OH0 (Aland Is.), OJ0 (Market Reef), OK (Czech Rep.), OM (Slovakia), S5 (Slovenia), SP (Poland), T7 (San Marino), TK (Corsica), UA2,F,K, RA2,UB2-UI2 (Kaliningrad), YL (Latvia), YU (Serbia), ZA (Albania), Z3 (Macedonia), 1A0 (SMOM), 4O (Montenegro), 9A (Croatia), 9H (Malta).
+
+Zone 16. Eastern Zone of Europe: EW (Belarus), ER (Moldova), UA1, UA2(except for RA2 and UA2-UI2), UA3. UA4, UA5,UA6, UA7,UA9,UA9 (S,T,W), and UR (Ukraine).
+
+Zone 17. Western Zone of Siberia: EX (Kirgizstan), EY (Tajikistan), EZ (Turkmenistan), UA8,9 (A, B,C,D, F, G, J. K, L, M, N, Q,R, X), UK (Uzbekistan), UN (Kazakhstan).
+
+Zone 18. Central Siberian Zone: UA8,9 (H,I,O,P,U, V,Y,Z), and UAO (A, B, H, O,R, S,T, U,V, W)
+
+Zone 19. Eastern Siberian Zone: UA0 (C, D, F, I, J, K, L, Q, X, Z)
+
+Zone 20. Balkan Zone: E4 (Palestine), JY (Jordan), LZ (Bulgaria), OD (Lebanon), SV (Greece), SV/A (Mt. Athos), SV5 (Dodecanese), SV9 (Crete), TA (Turkey), YK (Syria), YO (Romania), ZC4 (UK Sov. Base), 4X (Israel) and 5B (Cyprus).
+
+Zone 21. Southwestern Zone of Asia: A4 (Oman), A6 (United Arab Emirates), A7 (Qatar), A9 (Bahrain), AP (Pakistan), EK (Armenia), EP (Iran), HZ (Saudi Arabia), YA (Afghanistan), YI (Iraq), 4J (Azerbaijan), 4L (Georgia), 7O (excluding Socotra I. and Abd al Kuri Is.) and 9K (Kuwait).
+
+Zone 22. Southern Zone of Asia: A5 (Bhutan), S2 (Bangladesh), VU (India), VU (Lakshadweep Is.), 4S (Sri Lanka), 8Q (Maldives.), and 9N (Nepal).
+
+Zone 23. Central Zone of Asia: JT (Mongolia), UA0Y, BY3G‑L (NeiMenggu), BY9G‑L (GanSu), BY9M‑R (NingXia), BY9S‑Z (QingHai) and BY0.
+
+Zone 24. Eastern Zone of Asia: BV9P (Pratas Is.), BV (Taiwan), BY1, BY2, BY3A‑F (TianJin), BY3M‑R (HeBei), BY3S-X (ShanXi), BY4, BY5, BY6, BY7, BY8, BY9A‑F (ShaanXi), VR (Hong Kong), and XX (Macau).
+
+Zone 25. Japanese Zone: HL (South Korea), JA (Japan), and P5 (North Korea).
+
+Zone 26. Southeastern Zone of Asia: (Paracel Islands1), 3W (Vietnam), E2 (Thailand), VU (Andaman and Nicobar Islands), XU (Cambodia), XW (Laos), XZ (Myanmar), and 1S/9M0 (Spratly Islands)
+
+Zone 27. Philippine Zone: BS7 (Scarborough Reef), DU (Philippines), JD1 (Minami Torishima), JD1 (Ogasawara), T8 (Palau), KH2 (Guam), KH0 (Mariana Is.), V6 (Fed. States of Micronesia).
+
+Zone 28. Indonesian Zone: H4 (Solomon Is.), P2 (Papua New Guinea), V8 (Brunei), YB (Indonesia), 4W (East Timor), 9M (West and East Malaysia) and 9V (Singapore).
+
+Zone 29. Western Zone of Australia: VK6 (Western Australia), VK8 (Northern Territory), VK9X (Christmas Is.), VK9C (Cocos‑Keeling Is.) and some Antarctic stations :(See Notes Below)
+
+Zone 30. Eastern Zone of Australia: FK/C (Chesterfield Is.), VK1 (Capital Territory), VK2 (New South Wales), VK3 (Victoria) and VK4 (Queensland), VK5 (South Australia), VK7 (Tasmania), VK9L (Lord Howe Is.), VK9M (Mellish Reef), VK9 (Willis Is.), VK0M (Macquarie Is.) and some Antarctic stations (See Notes Below).
+
+Zone 31. Central Pacific Zone: C2 (Nauru), FO (Marquesas), KH1 (Baker Howland Is.), KH3 (Johnson Is.), KH4 (Midway Is.), KH5K (Kingman Reef), KH5 (Palmyra Jarvis), KH6 (Hawaii), KH7K(Kure), KH9 (Wake Is), T2 (Tuvalu), T30 (Western Kiribati), T31 (Central Kiribati), and T32 (Eastern Kiribati),T33 (Bananba Is), V7 (Marshall Is.), and ZK3 (Tokelau)
+
+Zone 32. New Zealand Zone: A3 (Tonga), E5 (North and South Cook Is.) FK New Caledonia but NOT Chesterfield Is.), FO (French Polynesia and Austral Is. but NOT Marquesas and Clipperton), FW (Wallis Is.), H40(Temotu), KH8 (American Samoa), KH8S (Swains), VK9N (Norfolk Is.), VP6 (Pitcairn and Ducie), YJ (Vanuatu), ZK2 (Niue Is.), ZL (New Zealand), ZL7 (Chatham Is.), ZL8 (Kermadec Is.), ZL9 (Auckland and Campbell Is.), 3D2 (Fiji, Rotuma, and Conway Reef), 5W (Western Samoa) and some Antarctic stations (See Notes Below).
+
+Zone 33. Northwestern Zone of Africa: CN (Morocco), CT3 (Madeira Is), EA8 (Canary Is.), EA9 (Ceuta and/or Melilla), IG9 (Pelagic Is.), IH9 IG9 (Pantelleria Is. or Pelagic Islands), S0 (Western Sahara), 3V (Tunisia), and 7X (Algeria).
+
+Zone 34. Northeastern Zone of Africa: ST (Sudan), SU (Egypt), Z8 (South Sudan) and 5A (Libya).
+
+Zone 35. Central Zone of Africa: C5 (The Gambia), D4 (Cape Verde Is.), EL (Liberia), J5 (Guinea Bissau), TU (Cote d'Ivoire), TY (Benin), TZ (Mali), XT (Burkina Faso), 3X (Guinea), 5N (Nigeria), 5T (Mauritania), 5U (Niger), 5V (Togo), 6W (Senegal), 9G (Ghana) and 9L (Sierra Leone).
+
+Zone 36. Equatorial Zone of Africa: D2 (Angola), S9 (Sao Tome Principe), TJ (Cameroon), TL (Central African Rep.), TN (Congo), TR (Gabon), TT (Chad), ZD7 (St. Helena Is.), ZD8 (Ascension Is.), 3C (Equatorial Guinea), 3C0 (Annobon Is.), 9J (Zambia), 9Q (Democratic Rep. of Congo), 9U (Burundi) and 9X (Rwanda).
+
+Zone 37. Eastern Zone of Africa: C9 (Mozambique), ET (Ethiopia), E3 (Eritrea), J2 (Djibouti), T5 (Somalia), 5H (Tanzania), 5X (Uganda), 5Z (Kenya), 7O (Socotra and Abd al Kuri islands ONLY) and 7Q (Malawi).
+
+Zone 38. South African Zone: A2 (Botswana), V5 (Namibia), ZD9 (Tristan da Cunha Gough Is.), Z2 (Zimbabwe), ZS (South Africa) and ZS8 (Marion Is), 3DA (Swaziland), 3Y (Bouvet Is.), 7P (Lesotho), and some Antarctic stations (See Notes Below)
+
+Zone 39. Madagascar Zone: D6 (Comoros), FH (Mayotte), FR (Reunion),FT-G (Glorioso), FT-J&E (Juan de Nova and Europa), FT-T (Tromelin), FT‑W (Crozet Is.), FT-X (Kerguelen Is.), FT‑Z (Amsterdam St. Paul Is.), S7 (Seychelles), VK0 (Heard Is.), VQ9 (Chagos), 3B6/7 (Agalega St.Brandon Is.), 3B8 (Mautitius Is.), 3B9 (Rodriguez Is.), 5R (Madagascar) and some Antarctic stations (See Notes Below)
+
+Zone 40. North Atlantic Zone: JW (Svalbard), JX (Jan Mayen), OX (Greenland), RI1FJ (Franz Josef Land), and TF (Iceland).
+
+1 The Paracel Islands have no official or unofficial prefix
+
+Antarctic notes:
+
+* The boundaries of CQ zones 12, 13, 29, 30, 32, 38 and 39 converge at the South Pole.
+
+* Stations KC4AAA and KC4USN are at the South Pole, and will count for any one of the listed zones.
+
+Source: CQ WAZ Award Rules from http://www.cq-amateur-radio.com/cq_awards/cq_waz_awards/cq_waz_list.html
+
+Updated and correct as of April 1, 2018
+
+Click on map for a larger image.
+
+Copyright ©
+2008-2026
+World Wide Radio Operators Foundation, Inc. . All Rights Reserved.
+| Privacy Policy
+
+
+====================================================================================================
+[7] URL: https://www.cqww.com/resources.htm
+    Fetch date: 2026-08-17
+    Revision/effective marker: Links: CQ Zone map small https://cqww.com/images/wazmap1.gif ; large http://www.mapability.com/ei8ic/maps/cq-zone_4000px.gif ; http://www.mapability.com/ei8ic/maps/cqzone.php ; written zone definitions https://cqww.com/cq_waz_list.htm. No cty.dat / country-file reference anywhere on the site pages fetched.
+====================================================================================================
+
+CQ WW - Useful Resources
+
+*
+*
+*
+*
+
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+Other Contests:
+CQ WW
+CQ WPX
+CQ WW RTTY
+CQ WPX RTTY
+CQ 160
+CQ VHF
+WW DIGI
+
+CQ World Wide DX Contest
+
+Show navigation
+Hide navigation
+
+* Home
+
+* Rules
+
+* Rules
+
+* Rules FAQ
+
+* Current Rules (pdf)
+
+* Rules Archive
+
+* Plaques
+
+* Results
+
+* Results Articles
+
+* Final Scores SSB
+
+* Final Scores CW
+
+* Overlay Scores
+
+* Club Scores
+
+* Soapbox Comments SSB
+
+* Soapbox Comments CW
+
+* Raw Scores SSB
+
+* Raw Scores CW
+
+* Records
+
+* By Region
+
+* By CQ Zone
+
+* Overlay Categories
+
+* New Records
+
+* New Overlay Records
+
+* Winners by Year
+
+* Highest QSO Rates
+
+* Logs
+
+* Submitting Your Log
+
+* Cabrillo Log Upload
+
+* ADIF Log Converter
+
+* Cabrillo File Format
+
+* Logs Received - SSB
+
+* Logs Received - CW
+
+* Public Logs
+
+* Resources
+
+* Resources
+
+* Public Log Checking Reports
+
+* Entries by Region
+
+* Entries by Category
+
+* History of CQWW
+
+* SSB Signal Quality
+
+* Club Names
+
+* Location Names
+
+* Public Log Checking Reports
+
+* REST API Reference
+
+* Contact Us
+
+* Contact Form
+
+* Organization
+
+* Blog
+
+* Blog
+
+* Archive
+
+Useful Resources
+
+CQ Zone Map
+
+Written Definitions of CQ Zones
+
+CQ Zone map [ Small
+] (40kb) or [ Large ]
+(120kb)
+
+NG3K's Contest DXpedition Page
+
+The CQ WW is about fun, learning and competition. Contesters love to
+go on DXpeditions to the far reaches of the planet. These DXpeditions make
+the contest more interesting and challenging for all of us.
+
+Check out the planned DXpeditions for the upcoming CW contest on NG3K's
+web site at
+Amateur Radio Contesting Resources and Information .
+
+Hardware Lockout Devices
+
+The CQ WW DX Contest rules prohibit more than one signal on the air at
+a time for Single Operator stations and one signal on a band for Multi-Operator
+stations. The best way to insure meeting these rules is by employing a physical
+interlock between the transmitters. See the links below for some ideas on
+how to do this.
+
+1. Device
+by AD5X
+
+2. Device by LZ2GL for LZ9W
+
+3. Device for K3s by N6TV
+
+4. Lockout
+device by W9ZRX for K3LR
+
+5. Lockout device
+by 4O3A
+
+World Wide Radio Operators Foundation (WWROF)
+
+The World Wide Radio Operators Foundation ("WWROF"), a non-profit donor-supported organization, has committed to cover
+critical infrastructure expenses for the CQ family of contests. These include
+items such as:
+
+* The robot software for log submission
+
+* The server which stores all the logs
+
+* The log-checking software
+
+* Mailing of awards
+
+Unpaid volunteers do all of the work. These individuals will continue to donate their time, but in many cases
+funding is need to cover expenses associated with these activities.
+
+Please consider making a tax-deductible (for U.S. taxpayers) contribution to the
+WWROF at http://www.wwrof.org/content/donate . Please indicate CQWW with your
+donation.
+
+Other Resources
+
+Mapability.com (from Tim EI8IC)
+
+Copyright ©
+2008-2026
+World Wide Radio Operators Foundation, Inc. . All Rights Reserved.
+| Privacy Policy
+
+
+====================================================================================================
+[8] URL: https://www.cqww.com/logs.htm
+    Fetch date: 2026-08-17
+    Revision/effective marker: 'Submitting Your Log'. No revision marker.
+====================================================================================================
+
+CQ WW - Submitting Your Log
+
+*
+*
+*
+*
+
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+Other Contests:
+CQ WW
+CQ WPX
+CQ WW RTTY
+CQ WPX RTTY
+CQ 160
+CQ VHF
+WW DIGI
+
+CQ World Wide DX Contest
+
+Show navigation
+Hide navigation
+
+* Home
+
+* Rules
+
+* Rules
+
+* Rules FAQ
+
+* Current Rules (pdf)
+
+* Rules Archive
+
+* Plaques
+
+* Results
+
+* Results Articles
+
+* Final Scores SSB
+
+* Final Scores CW
+
+* Overlay Scores
+
+* Club Scores
+
+* Soapbox Comments SSB
+
+* Soapbox Comments CW
+
+* Raw Scores SSB
+
+* Raw Scores CW
+
+* Records
+
+* By Region
+
+* By CQ Zone
+
+* Overlay Categories
+
+* New Records
+
+* New Overlay Records
+
+* Winners by Year
+
+* Highest QSO Rates
+
+* Logs
+
+* Submitting Your Log
+
+* Cabrillo Log Upload
+
+* ADIF Log Converter
+
+* Cabrillo File Format
+
+* Logs Received - SSB
+
+* Logs Received - CW
+
+* Public Logs
+
+* Resources
+
+* Resources
+
+* Public Log Checking Reports
+
+* Entries by Region
+
+* Entries by Category
+
+* History of CQWW
+
+* SSB Signal Quality
+
+* Club Names
+
+* Location Names
+
+* Public Log Checking Reports
+
+* REST API Reference
+
+* Contact Us
+
+* Contact Form
+
+* Organization
+
+* Blog
+
+* Blog
+
+* Archive
+
+Submitting Your Log
+
+The CQ WW Contest Committee asks everyone who participates in the contest
+to submit their log in electronic format. Even small logs are very
+helpful in the log checking process and are greatly appreciated.
+
+* RECOMMENDED METHOD. Logs in Cabrillo format can be uploaded, checked and submitted using
+the Log Check page .
+
+* Logs in ADIF format can be submitted through the
+adif conversion page .
+We have created a help file for those who are converting their log from ADIF or
+paper. See ConvertLogToCabrillo.pdf
+
+When your log has been submitted correctly, you will receive an e-mail containing
+a tracking (confirmation) number. Once you receive the tracking number, your log has been accepted.
+
+You can view the current list of logs received:
+SSB Logs Received or
+CW Logs Received .
+
+A Checklist for Submitting Logs
+
+1) Completely fill out the header information in the Cabrillo
+file.
+
+Your contest logging software may do this for you.
+Even so, we recommend that you open the log file with a text editor like
+Notepad or Wordpad and check that all information is entered in the correct
+format. See the Cabrillo format page for an example
+log file with explanations of the fields.
+
+The Web Upload page will give you an opportunity to confirm your
+information. Please review it carefully.
+
+Whatever is recorded in the header of your Cabrillo
+file is how we will process your entry.
+
+Check the Cabrillo file header closely before submitting
+your log. Items may have been omitted or may be incomplete. If you did not
+answer all of the questions correctly when you set up the contest in the
+logging program or have changed your mind about your category, or the operator
+list has changed and you do not correct these items, the wrong information
+WILL get posted to the Cabrillo file.
+
+The only way to change your log entry once the robot
+has accepted it is for you to submit another log.
+
+2) Name the Cabrillo log file with the call you used in the contest
+(e.g., K5ZD.LOG or K5ZD.CBR).
+
+3) Submit your log using the Web Log Upload page
+to confirm that your log contains all required information.
+
+4) You should receive a confirmation email back from the robot
+in a few minutes. Your log has been accepted and the process is complete.
+
+Common Errors
+
+Many logs have simple errors that can be easily corrected. It is always a
+good idea to check the following before submitting your log.
+
+* Confirm your log is in Cabrillo format .
+
+* The log begins with START-OF-LOG: and has both dashes with
+a colon at the end.
+
+* The contest name in the log looks like this (These are the only
+two that are accepted.):
+
+CONTEST: CQ-WW-SSB
+
+CONTEST: CQ-WW-CW
+
+* The category is in the format shown on the
+Cabrillo log format page. Note the differences
+between Cabrillo v3 and v2!
+
+Note: If you are submitting a multi-one or multi-two entry, please make sure the
+transmitter column is included. This column should be set to 0
+or 1 depending on whether the QSO was made by the Run/Tx1 or Mult/Tx2.
+
+* If you are operating from the USA or Canada, you must include the ARRL-SECTION or LOCATION
+field to indicate where you operated from. All others should use LOCATION: DX
+
+* The last line in the log is END-OF-LOG:
+
+* The time and date (UTC) of each QSO must be within the contest period.
+
+* Check the summary area of the log to be sure there are spaces after
+the colons and the Cabrillo tags are properly hyphenated.
+
+* Be sure each line in the summary has a key. If you need more lines
+for your address or for your comments, add as many ADDRESS: and SOAPBOX:
+lines as you need.
+
+* If you want your score to be contributed to a club, please spell
+out the full club name using one of the names from the
+list of club names .
+
+If you have a problem submitting your log or receive an error message that you do not understand,
+please contact us through the Contact Form.
+
+Software for Typing in Paper Logs
+
+You can use almost any software package to create the Cabrillo files. Here are two that we use for typing in paper logs.
+LM
+
+DL8WAA has created a free software application called LM that makes it
+very easy and fast to type in a paper log and convert it into a Cabrillo
+file. The LM software can also read
+ADIF files and convert them to Cabrillo format.
+
+Visit the LM web site at
+http://contestsoftware.com/e/home.htm
+to obtain the free download.
+
+FLE (Fast Log Entry)
+
+DF3CB has created a free software application called FLE that makes it
+very easy and fast to type in a paper log and convert it into a Cabrillo
+file.
+
+Visit the FLE web site at
+http://www.df3cb.com/fle/
+to obtain the free download.
+
+Paper Logs
+
+Paper logs are no longer accepted. Please find someone to help you convert
+your paper log to Cabrillo format for submission.
+
+Copyright ©
+2008-2026
+World Wide Radio Operators Foundation, Inc. . All Rights Reserved.
+| Privacy Policy
+
+
+====================================================================================================
+[9] URL: https://www.cqww.com/locations.htm
+    Fetch date: 2026-08-17
+    Revision/effective marker: 'Location Names' accepted for LOCATION: header. No revision marker.
+====================================================================================================
+
+CQ WW - Location Names
+
+*
+*
+*
+*
+
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+*
+
+Other Contests:
+CQ WW
+CQ WPX
+CQ WW RTTY
+CQ WPX RTTY
+CQ 160
+CQ VHF
+WW DIGI
+
+CQ World Wide DX Contest
+
+Show navigation
+Hide navigation
+
+* Home
+
+* Rules
+
+* Rules
+
+* Rules FAQ
+
+* Current Rules (pdf)
+
+* Rules Archive
+
+* Plaques
+
+* Results
+
+* Results Articles
+
+* Final Scores SSB
+
+* Final Scores CW
+
+* Overlay Scores
+
+* Club Scores
+
+* Soapbox Comments SSB
+
+* Soapbox Comments CW
+
+* Raw Scores SSB
+
+* Raw Scores CW
+
+* Records
+
+* By Region
+
+* By CQ Zone
+
+* Overlay Categories
+
+* New Records
+
+* New Overlay Records
+
+* Winners by Year
+
+* Highest QSO Rates
+
+* Logs
+
+* Submitting Your Log
+
+* Cabrillo Log Upload
+
+* ADIF Log Converter
+
+* Cabrillo File Format
+
+* Logs Received - SSB
+
+* Logs Received - CW
+
+* Public Logs
+
+* Resources
+
+* Resources
+
+* Public Log Checking Reports
+
+* Entries by Region
+
+* Entries by Category
+
+* History of CQWW
+
+* SSB Signal Quality
+
+* Club Names
+
+* Location Names
+
+* Public Log Checking Reports
+
+* REST API Reference
+
+* Contact Us
+
+* Contact Form
+
+* Organization
+
+* Blog
+
+* Blog
+
+* Archive
+
+Location Names
+
+The location field is used by the log checking software to determine the
+USA/Canada call area where your score will be listed. Your location name is specified
+in the header of the Cabrillo file.
+
+LOCATION: text
+
+USA State or ARRL Section where you operated from.
+Entries from within USA/Canada must enter a LOCATION abbreviation from
+the list below. Entries outside the USA/Canada enter DX.
+
+[Note: Cabrillo version 2 uses ARRL-SECTION: instead of LOCATION:.
+The robot will accept either one.]
+
+Below is a list of location names used by the log submission robot.
+Please check that you have the LOCATION: line in your Cabrillo file and confirm
+it has one of the entries from location column below.
+
+Click on the column header to sort the list.
+
+|
+
+| LOCATION
+| Region
+| Description
+
+| DX | DX | Outside USA/Canada
+
+| CT | W1 | Connecticut
+
+| EMA | W1 | Eastern Massachusetts
+
+| WMA | W1 | Western Massachusetts
+
+| MA | W1 | Massachusetts
+
+| VT | W1 | Vermont
+
+| NH | W1 | New Hamsphire
+
+| RI | W1 | Rhode Island
+
+| ME | W1 | Maine
+
+| ENY | W2 | Eastern New York
+
+| WNY | W2 | Western New York
+
+| NLI | W2 | New York Long Island
+
+| NNJ | W2 | Northern New Jersey
+
+| NNY | W2 | Northern New York
+
+| SNJ | W2 | Southern New Jersey
+
+| NY | W2 | New York
+
+| NJ | W2 | New Jersey
+
+| DE | W3 | Delaware
+
+| EPA | W3 | Eastern Pennsylvania
+
+| MDC | W3 | Maryland District of Columbia
+
+| WPA | W3 | Western Pennsylvania
+
+| PA | W3 | Pennsylvania
+
+| MD | W3 | Maryland
+
+| AL | W4 | Alabama
+
+| GA | W4 | Georgia
+
+| KY | W4 | Kentucky
+
+| NC | W4 | North Carolina
+
+| NFL | W4 | Northern Florida
+
+| SC | W4 | South Carolina
+
+| SFL | W4 | South Florida
+
+| WCF | W4 | West Central Florida
+
+| TN | W4 | Tennessee
+
+| VA | W4 | Virginia
+
+| FL | W4 | Florida
+
+| AR | W5 | Arkansas
+
+| LA | W5 | Louisiana
+
+| MS | W5 | Mississippi
+
+| NM | W5 | New Mexico
+
+| NTX | W5 | North Texas
+
+| OK | W5 | Oklahoma
+
+| STX | W5 | South Texas
+
+| WTX | W5 | West Texas
+
+| TX | W5 | Texas
+
+| EB | W6 | East Bay
+
+| LAX | W6 | Los Angeles
+
+| ORG | W6 | Orange
+
+| SB | W6 | Santa Barbara
+
+| SCV | W6 | Santa Clara Valley
+
+| SDG | W6 | San Diego
+
+| SF | W6 | San Francisco
+
+| SJV | W6 | San Joaquin Valley
+
+| SV | W6 | Sacramento Valley
+
+| CA | W6 | California
+
+| AZ | W7 | Arizona
+
+| EWA | W7 | Eastern Washington
+
+| ID | W7 | Idaho
+
+| MT | W7 | Montana
+
+| NV | W7 | Nevada
+
+| OR | W7 | Oregon
+
+| UT | W7 | Utah
+
+| WWA | W7 | Western Washington
+
+| WY | W7 | Wyoming
+
+| WA | W7 | Washington
+
+| MI | W8 | Michigan
+
+| OH | W8 | Ohio
+
+| WV | W8 | West Virginia
+
+| IL | W9 | Illinois
+
+| IN | W9 | Indiana
+
+| WI | W9 | Wisconsin
+
+| CO | W0 | Colorado
+
+| IA | W0 | Iowa
+
+| KS | W0 | Kansas
+
+| MN | W0 | Minnesota
+
+| MO | W0 | Missouri
+
+| NE | W0 | Nebraska
+
+| ND | W0 | North Dakota
+
+| SD | W0 | South Dakota
+
+| NL | VO | Newfoundland and Labrador
+
+| MAR | VE1 | Maritime (NB-NS-PE)
+
+| NS | VE1 | Nova Scotia
+
+| NB | VE9 | New Brunswick
+
+| PE | VY2 | Prince Edward Island
+
+| QC | VE2 | Quebec
+
+| ON | VE3 | Ontario
+
+| ONE | VE3 | Ontario East
+
+| ONN | VE3 | Ontario North
+
+| ONS | VE3 | Ontario South
+
+| GTA | VE3 | Greater Toronto Area
+
+| GH | VE3 | Golden Horsehoe
+
+| MB | VE4 | Manitoba
+
+| SK | VE5 | Saskatchewan
+
+| AB | VE6 | Alberta
+
+| BC | VE7 | British Columbia
+
+| NT | VE8 | Northwest Territories
+
+| NU | VY0 | Nunavut
+
+| YT | VY1 | Yukon Territory
+
+| TER | VY1 | Yukon/NWT/Nunavut
+
+| AK | KL | Alaska
+
+| PAC | KH | Pacific
+
+| PR | KP4 | Puerto Rico
+
+| VI | KP2 | Virgin Islands
+
+Copyright ©
+2008-2026
+World Wide Radio Operators Foundation, Inc. . All Rights Reserved.
+| Privacy Policy
+
+
+====================================================================================================
+[10] URL: https://www.cqww.com/rules/ (Rules Archive)
+    Fetch date: 2026-08-17
+    Revision/effective marker: Archive table: 2025 row links 2025_rules_cqww.pdf with no 'Other' document; 2021–2024 rows also link 'Explorer category rules' PDFs (2021/2022/2023_rules_cqww_explorer.pdf). No 2026 row exists on 2026-08-17.
+====================================================================================================
+
+CQ WW - Rules Archive
+
+*
+*
+*
+*
+
+*
+*
+*
+
+*
+*
+*
+*
+*
+
+Other Contests:
+CQ WW
+CQ WPX
+CQ WW RTTY
+CQ WPX RTTY
+CQ 160
+CQ VHF
+WW DIGI
+
+CQ World Wide DX Contest
+
+Show navigation
+Hide navigation
+
+* Home
+
+* Rules
+
+* Rules
+
+* Rules FAQ
+
+* Current Rules (pdf)
+
+* Rules Archive
+
+* Plaques
+
+* Results
+
+* Results Articles
+
+* Final Scores SSB
+
+* Final Scores CW
+
+* Overlay Scores
+
+* Club Scores
+
+* Soapbox Comments SSB
+
+* Soapbox Comments CW
+
+* Raw Scores SSB
+
+* Raw Scores CW
+
+* Records
+
+* By Region
+
+* By CQ Zone
+
+* Overlay Categories
+
+* New Records
+
+* New Overlay Records
+
+* Winners by Year
+
+* Highest QSO Rates
+
+* Logs
+
+* Submitting Your Log
+
+* Cabrillo Log Upload
+
+* ADIF Log Converter
+
+* Cabrillo File Format
+
+* Logs Received - SSB
+
+* Logs Received - CW
+
+* Public Logs
+
+* Resources
+
+* Resources
+
+* Public Log Checking Reports
+
+* Entries by Region
+
+* Entries by Category
+
+* History of CQWW
+
+* SSB Signal Quality
+
+* Club Names
+
+* Location Names
+
+* Public Log Checking Reports
+
+* REST API Reference
+
+* Contact Us
+
+* Contact Form
+
+* Organization
+
+* Blog
+
+* Blog
+
+* Archive
+
+Rules Archive
+
+Links to rules from prior years (pdf format).
+
+| Year
+| Rules
+| Other
+
+| 2025
+|
+2025
+|
+
+| 2024
+|
+2024
+| Explorer category rules
+
+| 2023
+|
+2023
+| Explorer category rules
+
+| 2022
+|
+2022
+| Explorer category rules
+
+| 2021
+|
+2021
+| Explorer category rules
+
+| 2020
+|
+2020
+|
+
+| 2019
+|
+2019
+|
+
+| 2018
+|
+2018
+|
+
+| 2017
+|
+2017
+|
+
+| 2016
+|
+2016
+|
+
+| 2015
+|
+2015
+|
+
+| 2014
+|
+2014
+|
+
+| 2013
+|
+2013
+|
+
+| 2012
+|
+2012
+|
+2012 rule change explanations ,
+Xtreme category rules
+
+| 2011
+|
+2011
+| Xtreme category rules
+
+| 2010
+|
+2010
+| Xtreme category rules
+
+| 2009
+|
+2009
+| Xtreme category rules
+
+| 2008
+|
+2008
+|
+
+| 2007
+|
+2007
+|
+
+| 2006
+|
+2006
+|
+
+| 2005
+|
+2005
+|
+
+| 2004
+|
+2004
+|
+
+| 2003
+|
+2003
+|
+
+| 2002
+|
+2002
+|
+
+| 2001
+|
+2001
+|
+
+| 2000
+|
+2000
+|
+
+Earlier Years
+
+1999
+1998
+1997
+1996
+1995
+1994
+1993
+1992
+1991
+1990
+
+1989
+1988
+1987
+1986
+1985
+1984
+1983
+1982
+1981
+1980
+
+1989
+1978
+1977
+1976
+1975
+1974
+1973
+1972
+1971
+1970
+
+1969
+1968
+1967
+1966
+1965
+1964
+1963
+1962
+1961
+1960
+
+1959
+1958
+1957
+1956
+1955
+1954
+1953
+1952
+1951
+1950
+
+1949
+1948
+
+Copyright ©
+2008-2026
+World Wide Radio Operators Foundation, Inc. . All Rights Reserved.
+| Privacy Policy
+
+
+====================================================================================================
+[11] URL: https://www.cqww.com/blog/
+    Fetch date: 2026-08-17
+    Revision/effective marker: Newest post February 19, 2026 (records pages). Post 'Rule changes for 2025' dated October 13, 2025 by K1AR lists the 2025 changes (Explorer eliminated, replaced by Multi-op Distributed; audio recordings for Top-5 assisted too; station-information requirement). No 2026 rule-change post as of the fetch date.
+====================================================================================================
+
+*
+*
+
+CQ WW Blog
+
+*
+*
+*
+*
+
+*
+*
+
+*
+*
+*
+*
+* *
+
+*
+
+*
+*
+*
+
+*
+*
+
+*
+
+Other Contests:
+CQ WW
+CQ WPX
+CQ WW RTTY
+CQ WPX RTTY
+CQ 160
+CQ VHF
+WW DIGI
+
+CQ World Wide DX Contest
+
+Show navigation
+Hide navigation
+
+* Home
+
+* Rules
+
+* Rules
+
+* Rules FAQ
+
+* Current Rules (pdf)
+
+* Rules Archive
+
+* Plaques
+
+* Results
+
+* Results Articles
+
+* Final Scores SSB
+
+* Final Scores CW
+
+* Overlay Scores
+
+* Club Scores
+
+* Soapbox Comments SSB
+
+* Soapbox Comments CW
+
+* Raw Scores SSB
+
+* Raw Scores CW
+
+* Records
+
+* By Region
+
+* By CQ Zone
+
+* Overlay Categories
+
+* New Records
+
+* New Overlay Records
+
+* Winners by Year
+
+* Highest QSO Rates
+
+* Logs
+
+* Submitting Your Log
+
+* Cabrillo Log Upload
+
+* ADIF Log Converter
+
+* Cabrillo File Format
+
+* Logs Received - SSB
+
+* Logs Received - CW
+
+* Public Logs
+
+* Resources
+
+* Resources
+
+* Public Log Checking Reports
+
+* Entries by Region
+
+* Entries by Category
+
+* History of CQWW
+
+* SSB Signal Quality
+
+* Club Names
+
+* Location Names
+
+* Public Log Checking Reports
+
+* REST API Reference
+
+* Contact Us
+
+* Contact Form
+
+* Organization
+
+* Blog
+
+* Blog
+
+* Archive
+
+Skip to content
+
+CQ WW Blog
+
+Search for:
+
+February 19, 2026 K5ZD Announcements
+
+Is that score a new record?
+
+Anyone preparing for a competitive CQ WW entry is interested in knowing the record score for their planned category – at the world, continent, zone, or country level. Or perhaps you are doing well in the contest and want to see if you have a chance to set a new record…
+
+You can find out easily by going to the records page. There is one page for the traditional categories and one for the Overlay categories . Both list all category records for the selected region (world, continent, country).
+
+There is also a page that shows all traditional category records listed by CQ Zone .
+
+Sometimes you may wonder what new records were set in any year. We made a page that lets you find the new records for a selected year. There is a new records page for the traditional categories and one for the overlay categories .
+
+If you click on the category for one of the new records, it will show you all the scores for that region and category since the beginning of CQ WW. It’s a great way to see how the new record beats the previous entries. Many times, it is just by a few points!
+
+It can be fun to look back at the winner of a particular category over the years. There is a page that shows the winners for any selected region and category . It is amazing to see how much the winning single-op all-band scores have increased since the 1970s!
+
+Everyone likes high rates. Since 2004, we have been determining the highest 60-minute rate for each entry during the log checking. The rate records for the major categories and both modes are available on the Highest QSO Rates page. If you don’t see your call on the page, there is a search box where you can enter a callsign and see the highest rate for all entries where that was the entry callsign or an operator. It creates your own personal rate record page.
+
+And finally, to complete our fun with data, there is a page for the number of CQ WW entries over the years . There is another page that lists the number of entries for each category . You can filter these by world, continent, or region. It is an interesting way to see how CQ WW has evolved over the years.
+
+If you have questions or find an error in one of the tables, please use the contact form to report it to us.
+
+October 13, 2025 K5ZD Announcements , Rules
+
+Rule changes for 2025
+
+The world’s largest and most popular contesting operating event — the CQ WW — is coming up in less than two weeks! Some traveling operators have already arrived at their stations or will be leaving this week. Based on the 30-day solar cycle, it appears we will have good conditions, which will make for an incredible operating experience for everyone to enjoy!
+
+As a reminder, we made a few changes to the rules for 2025 as follows:
+
+* The Explorer category has been eliminated and replaced with the Multi-op Distributed category, with the same rules as the CQ WPX contest.
+
+* Audio recordings are now required for both Top-5 non-assisted *and* assisted Singe-op entries. There is no change to the audio recording requirement itself.
+
+* Entrants, on request of the contest committee, will be required to supply descriptions of their station layout including equipment, antennas, amplifiers, switching, interlocks, etc.
+
+Please visit https://cqww.com/rules.htm for the complete rules and other great information! Clear your calendars — this is going to be one of the best WW contests ever!
+
+73, John, K1AR
+CQ WW Contest Director
+
+October 11, 2024 K5ZD Announcements
+
+Entries by Category
+
+Every year there is a discussion about what categories are growing in popularity, when assisted will outnumber unassisted, and so on. We have added a new page to cqww.com that can provide some data for those discussions.
+
+https://cqww.com/stats-by-cat.htm
+
+This page shows the number of entries by category and year based on the selected geography (world, continent, country).
+
+September 25, 2024 K5ZD Announcements
+
+Policy Change – Russia/Belarus Participation in all CQ WW Contests
+
+As you may be aware, it has been the policy of CQ magazine for over two years to eliminate awards eligibility for Russian and Belarus entries in all CQ sponsored events. This requirement was never incorporated into the rules for any of the WW contests; it was limited to a simple policy statement.
+
+What is most notable at this time, is that the WW contests are one of the few competitions still maintaining this position (or similar). As a result, and after consultation with our WW Contest Directors and WWROF leadership, we will be changing the current policy, effective immediately, and returning all of our contests to normal operation.
+
+This change will take effect with the WW RTTY contest this weekend (Sept 28-29, 2024) and all other WW contests going forward.
+
+73, John, K1AR
+Director, CQ WW Contest
+
+Posts navigation
+
+Older posts
+
+Recent Posts
+
+*
+Is that score a new record?
+February 19, 2026
+
+*
+Rule changes for 2025
+October 13, 2025
+
+*
+Entries by Category
+October 11, 2024
+
+*
+Policy Change – Russia/Belarus Participation in all CQ WW Contests
+September 25, 2024
+
+*
+Updated CQ Contest Policy for Entries from Russia/Belarus
+August 31, 2022
+
+*
+Visual Look at CQ WW CW 2021 Activity
+March 12, 2022
+
+*
+Raw Scores Enhanced Search
+January 4, 2022
+
+Archives by Date
+Archives by Date
+
+Select Month
+February 2026 (1)
+October 2025 (1)
+October 2024 (1)
+September 2024 (1)
+August 2022 (1)
+March 2022 (1)
+January 2022 (1)
+August 2021 (2)
+May 2021 (1)
+February 2021 (1)
+December 2020 (2)
+November 2020 (1)
+August 2020 (1)
+December 2019 (1)
+March 2019 (1)
+January 2019 (1)
+November 2018 (1)
+June 2018 (1)
+May 2018 (3)
+April 2018 (2)
+March 2018 (1)
+February 2018 (1)
+January 2018 (1)
+December 2017 (1)
+July 2017 (1)
+May 2017 (1)
+April 2017 (2)
+January 2017 (4)
+December 2016 (2)
+November 2016 (1)
+October 2016 (1)
+July 2016 (3)
+June 2016 (1)
+May 2016 (3)
+April 2016 (3)
+March 2016 (1)
+February 2016 (1)
+December 2015 (2)
+November 2015 (5)
+October 2015 (2)
+September 2015 (3)
+August 2015 (1)
+July 2015 (1)
+June 2015 (3)
+May 2015 (2)
+April 2015 (2)
+March 2015 (3)
+February 2015 (1)
+December 2014 (4)
+November 2014 (3)
+October 2014 (3)
+September 2014 (2)
+July 2014 (2)
+June 2014 (1)
+May 2014 (2)
+April 2014 (3)
+February 2014 (1)
+November 2013 (1)
+September 2013 (3)
+July 2013 (3)
+June 2013 (2)
+May 2013 (3)
+April 2013 (3)
+March 2013 (2)
+January 2013 (1)
+December 2012 (1)
+November 2012 (4)
+October 2012 (5)
+
+Archive by Categories
+Archive by Categories
+Select Category
+Announcements (90)
+Commentary (22)
+CW (21)
+Log checking (16)
+Presentations (3)
+Rules (15)
+SSB (31)
+
+Contact Us
+Your comments and suggestions are welcome by by using the contact form .
+
+Contact Us
+Your comments and suggestions are welcome by by using the contact form .
+
+Follow Us
+
+*
+X
+
+*
+Facebook
+
+Copyright ©
+2008-2026
+World Wide Radio Operators Foundation, Inc. . All Rights Reserved.
+| Privacy Policy
+

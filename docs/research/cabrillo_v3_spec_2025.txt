@@ -1,0 +1,1228 @@
+CABRILLO V3 SPECIFICATION (HEADER TAGS, CATEGORY VALUES, CONTEST NAMES) — RAW RESEARCH FILE
+Fetched 2026-08-17 by curl, converted with html2txt.py (<pre> blocks byte-exact between markers).
+
+REQUESTED URLS
+  https://wwrof.org/cabrillo/cabrillo-specification-v3/  -> HTTP 404 on 2026-08-17 (Wayback capture
+      2021-01-16 of that page, 'Last update: 16 November 2020', is included as section 5 for
+      the diff). The site now splits the spec into:
+  https://wwrof.org/cabrillo/cabrillo-v3-header/   (header tags; 'Last update: 5 June 2025') -> section 1
+  https://wwrof.org/cabrillo/cabrillo-qso-data/    (QSO lines; in cabrillo_qso_templates.txt)
+  https://wwrof.org/cabrillo/cabrillo-specification-notes/  -> section 2
+  https://wwrof.org/cabrillo/cabrillo-change-log/           -> section 3
+  https://wwrof.org/cabrillo-frequently-asked-questions-faq/ -> section 4
+  https://wwrof.org/cabrillo/cabrillo-v3-tags/  -> not a URL on the site (index page https://wwrof.org/cabrillo/
+      links only the pages above); the tag list IS the v3-header page.
+  Contest names: WWROF publishes a short example list inside the CONTEST: tag description and
+      links 'Additional contest name examples' to https://www.contestcalendar.com/cabnames.php
+      (WA7BNM master list) -> section 6 (full table).
+
+##############################################################################
+# 1. WWROF — Cabrillo V3 Header (current; 'Last update: 5 June 2025')
+# SOURCE: https://wwrof.org/cabrillo/cabrillo-v3-header/
+# FETCHED: 2026-08-17
+##############################################################################
+Last update: 5 June 2025
+
+This page details the header tags supported by the Cabrillo Specification V3. The format for each line is <TAG>: followed by a space. The tags may be listed in any order in the log file.
+
+## Required Tags
+
+START-OF-LOG:version-number
+Must be the first line of the log submission. The current version-number is 3.0.
+
+END-OF-LOG:
+Must be the last line of the log submission.
+
+## Common Tags
+
+CALLSIGN:callsign
+The callsign used during the contest.
+
+CONTEST:text
+String to identify the contest. Valid characters are A-Z, 0-9, and hyphen (-). Maximum length is 32 characters. Contest text values are not an official part of the specification. Contest sponsors may define their own contest values that are consistent with the above limitations. Some examples listed below for convenience.
+
+- ARRL-10
+
+- ARRL-10-GHZ
+
+- ARRL-160
+
+- ARRL-DIGI
+
+- ARRL-DX-CW
+
+- ARRL-DX-SSB
+
+- ARRL-EME
+
+- ARRL-SS-CW
+
+- ARRL-SS-SSB
+
+- BARTG-RTTY
+
+- CQ-160-CW
+
+- CQ-160-SSB
+
+- CQ-WPX-CW
+
+- CQ-WPX-RTTY
+
+- CQ-WPX-SSB
+
+- CQ-VHF-SSBCW
+
+- CQ-VHF-DIGI
+
+- CQ-WW-CW
+
+- CQ-WW-RTTY
+
+- CQ-WW-SSB
+
+- IARU-HF
+
+- NAQP-CW
+
+- NAQP-SSB
+
+- NAQP-RTTY
+
+- RDXC
+
+- RSGB-IOTA
+
+- SPDXC
+
+- SPDXC-RTTY
+
+- TARA-RTTY
+
+- WAG
+
+- WW-DIGI
+
+Additional contest name examples can be seen here [https://www.contestcalendar.com/cabnames.php].
+
+CATEGORY-ASSISTED:
+The category-assisted must be one of the following.
+
+- ASSISTED
+
+- NON-ASSISTED
+
+CATEGORY-BAND:
+The category-band must be one of the following. If you are entering an all band category, use ALL, otherwise select one of the individual bands shown.
+
+- ALL
+
+- 160M
+
+- 80M
+
+- 40M
+
+- 20M
+
+- 15M
+
+- 10M
+
+- 6M
+
+- 4M
+
+- 2M
+
+- 222
+
+- 432
+
+- 902
+
+- 1.2G
+
+- 2.3G
+
+- 3.4G
+
+- 5.7G
+
+- 10G
+
+- 24G
+
+- 47G
+
+- 75G
+
+- 122G
+
+- 134G
+
+- 241G
+
+- Light
+
+- VHF-3-BAND and VHF-FM-ONLY (ARRL VHF Contests only)
+
+CATEGORY-MODE:
+The category-mode must be one of the following.
+
+- CW
+
+- DIGI
+
+- FM
+
+- RTTY
+
+- SSB
+
+- MIXED
+
+CATEGORY-OPERATOR:
+The category-operator must be one of the following.
+
+- SINGLE-OP
+
+- MULTI-OP
+
+- CHECKLOG
+
+CATEGORY-POWER:
+The category-power must be one of the following.
+
+- HIGH
+
+- LOW
+
+- QRP
+
+CATEGORY-STATION:
+Type of station
+
+- DISTRIBUTED
+
+- FIXED
+
+- MOBILE
+
+- PORTABLE
+
+- ROVER
+
+- ROVER-LIMITED
+
+- ROVER-UNLIMITED
+
+- EXPEDITION
+
+- HQ
+
+- SCHOOL
+
+- EXPLORER
+
+CATEGORY-TIME:
+
+- 6-HOURS
+
+- 8-HOURS
+
+- 12-HOURS
+
+- 24-HOURS
+
+CATEGORY-TRANSMITTER:
+The category-transmitter is required for multi-operator entries and must be one of the following.
+
+- ONE
+
+- TWO
+
+- LIMITED
+
+- UNLIMITED
+
+- SWL
+
+CATEGORY-OVERLAY:
+
+- CLASSIC
+
+- ROOKIE
+
+- TB-WIRES
+
+- YOUTH
+
+- NOVICE-TECH
+
+- YL
+
+CERTIFICATE: YES | NO
+Indicate if you wish to receive, if eligible, a paper certificate sent via postal mail by the contest sponsor. The contest sponsor may or may not honor this tag, and if so may or may not use opt-in or opt-out as the default. YES is the default.
+
+CLAIMED-SCORE: nnnnn
+The claimed-score of the log submission, in integer form such as 1217315 or 19113 or 12. Do not include commas, decimals, or other text.
+
+CLUB: text
+Name of the radio club to which the score should be applied.
+
+CREATED-BY: text
+Name and version of the logging program used to create the Cabrillo file.
+
+EMAIL: text
+Contact email address for the entrant. Must be valid email or blank.
+
+GRID-LOCATOR: text
+Used to indicate the Maidenhead Grid Square where the station was operating from. E.g., FN42, JO44EB
+
+LOCATION:
+Used to indicate the location where the station was operating from.
+
+  | ARRL/RAC Sections [http://www.arrl.org/section-abbreviations]  | For USA and Canada stations LOCATION must be the ARRL section abbreviation. For foreign stations LOCATION must be ‘DX’. This information is required for IARU-HF and for all ARRL and CQ contests.  |
+
+  | IOTA Island Name [http://www.rsgbiota.org/]  | This information is required for RSGB-IOTA contest and includes Island Name (not IOTA reference number).  |
+
+  | RDA Number [http://rdaward.org/rda_eng.txt]  | This information is required for RDXC contest.  |
+
+NAME: text
+Name. Maximum of 75 characters long.
+
+ADDRESS: text
+Mailing address. Each line should be a maximum of 45 characters long. Up to 6 address lines are permitted.
+
+ADDRESS-CITY: text
+ADDRESS-STATE-PROVINCE: text
+ADDRESS-POSTALCODE: text
+ADDRESS-COUNTRY: text
+Optional fields for providing mailing address details.
+
+OPERATORS: callsign1 [callsign2 callsign3…]
+A space or comma-delimited list of operator callsign(s). You may also list the callsign of the host station by placing an “@” character in front of the callsign within the operator list, such as
+
+OPERATORS: K1ABC N5XYZ @N6IJ
+OPERATORS: K1ABC, N5XYZ, @N6IJ
+
+The OPERATOR line is a maximum of 75 characters long and must begin with OPERATORS: followed by a space. Use multiple OPERATOR lines if needed.
+
+OFFTIME: begin-time end-time
+This tag is used to indicate off-time.
+
+<<<PRE>>>
+OFFTIME: 2002-03-22 0300 2002-03-22 0743
+
+         yyyy-mm-dd nnnn yyyy-mm-dd nnnn
+         -----begin----- ------end------
+
+
+<<<END PRE>>>
+
+Note: About on-time and off-time:
+
+QSOs in Cabrillo are logged with a granularity of one minute. The use of one second granularity would lead to the question “during which exact second did the QSO take place?”
+
+The ARRL has taken the very sensible interpretation that on-time and off-time also should be considered with a granularity of one minute. In other words, during any given minute you can either be on or off. Therefore 1801Z-1830Z would be a 30 minute off-time, with 1800Z being your last minute on before the break and 1831Z being the minute you resume operation.
+
+If you make a QSO at 1800Z, take a break, and resume operating at 1830Z, then you have completed a 29 minute off-time.
+
+SOAPBOX: text
+Soapbox comments. Enter as many lines of soapbox text as you wish. Each line is a maximum of 75 characters long and must begin with SOAPBOX: followed by a space.
+
+QSO: qso-data
+QSO data as specified by the Cabrillo QSO data format. All QSO lines must appear in chronological order. See QSO data specification [https://wwrof.org/cabrillo/cabrillo-qso-data/].
+
+X-<anything>: text
+Lines beginning with X- are ignored by the rlog checking software. Use this for adding comment lines to your log. Exception: See X-QSO.
+
+## Developer Tags
+
+DEBUG: n
+
+The DEBUG: tag is intended for software developers. If an ARRL or CQ email robot receives a log with the DEBUG: tag set, then it will do all its regular processing and generate an auto-reply message, but it will not save the log into data set provided to the log checking team.
+##############################################################################
+# 2. WWROF — Cabrillo Specification Notes (current)
+# SOURCE: https://wwrof.org/cabrillo/cabrillo-specification-notes/
+# FETCHED: 2026-08-17
+##############################################################################
+This page is intended to provide information for developers that are creating software to output or read Cabrillo format log files.
+
+The goal of the Cabrillo summary sheet information is for the contest participant to describe the nature of his participation in the contest. It is the responsibility of the contest sponsor to assign a valid contest category based on the attributes of the operation.
+
+Cabrillo V3 is intended to be backward compatible with previous versions of Cabrillo. Therefore if people submit logs that were created by Cabrillo v2-compliant loggers, their logs will still be accepted by Cabrillo v3 email robots.
+
+The Cabrillo format for Sweepstakes looks like this:
+
+<<<PRE>>>
+QSO: 14042 CW 1997-11-03 0101 N5KO       1211 B 74 SCV KA5WSS/VE3 1071 A 74 ON
+QSO: 14042 CW 1997-11-03 0102 N5KO       1212 B 74 SCV NJ2L       1122 B 81 WNY
+QSO: 14042 CW 1997-11-03 0102 N5KO       1213 B 74 SCV K9ZO        902 A 69 IL
+<<<END PRE>>>
+
+You will note the examples use fixed columns and are space delimited. This is to make it both human and robot readable. However, in the case of a field overflow, the information should be truncated so that it fits into the field and doesn’t disrupt data in other columns, so a call like KA5WSS/ARRL-JUBILEE would appear like this:
+
+<<<PRE>>>
+QSO: 14042 CW 1997-11-03 0101 N5KO     1211 B 74 SCV KA5WSS/ARR 1071 A 74 ON 
+QSO: 14042 CW 1997-11-03 0102 N5KO     1212 B 74 SCV NJ2L       1122 B 81 WNY 
+QSO: 14042 CW 1997-11-03 0102 N5KO     1213 B 74 SCV K9ZO        902 A 69 IL 
+<<<END PRE>>>
+
+While the specification implies fixed columns for all data, this is not a requirement.  Most contest sponsors accept any space or tab character as a delimiter between data. The major contest sponsors such as CQ and ARRL do accept space or tab as a delimiter. I.e., data does not need to be in specific columns.
+
+One goal is to make the logs and summary sheets easy to read by both humans and by computers. The most appropriate non-printable characters in a log submission should be SPACE and the appropriate text end-of-line sequence for the platform the logging program runs on, such as CR/LF for DOS.
+
+CLAIMED-SCORE is included so that a High Claimed Scores report may be generated. Line score data such a QSOs, QSO points, multipliers, on-time and off-time will be computed during the log checking process.
+
+CLUB, OPERATORS, SOAPBOX, and ADDRESS lines may appear multiple times with different data, as shown. Please limit the number of ADDRESS: lines to a total count of four so that the name and address may be fit onto a standard mailing label.
+
+<<<PRE>>>
+NAME: Trey Garlough
+ADDRESS: 7375 Oak Ridge Road
+ADDRESS: Aptos, CA 95003
+ADDRESS: USA
+<<<END PRE>>>
+
+Other types of lines may only appear once.
+
+If no soapbox is entered into the logging program, please write out something like
+
+<<<PRE>>>
+SOAPBOX:
+SOAPBOX:
+<<<END PRE>>>
+
+so that people will get the right idea if they decide to edit the file by hand. Same thing applies to NAME, ADDRESS, CLUB, and OPERATORS.
+
+The OPERATORS field is a space-delimited list of operator callsign(s). You may also list the callsign of the host station by placing an “@” character in front of the callsign within the operator list. KH6ND operating from KH7R’s QTH as KH7X could describe this situation in his Cabrillo file like this
+
+<<<PRE>>>
+CALLSIGN: KH7X
+OPERATORS: KH6ND @KH7R
+<<<END PRE>>>
+##############################################################################
+# 3. WWROF — Cabrillo Change Log (current)
+# SOURCE: https://wwrof.org/cabrillo/cabrillo-change-log/
+# FETCHED: 2026-08-17
+##############################################################################
+History of changes made to the Cabrillo specification.
+
+  | Date  | Comments  |
+
+  | 2025-06-05  | Changed CQ-VHF to CQ-VHF-SSBCW and CQ-VHF-DIGI.  |
+
+  | 2023-04-10  | Changes to CATEGORY-OVERLAY. Removed OVER-50 and added YL.  |
+
+  | 2022-05-27  | Added 8-HOURS to CATEGORY-TIME for ARRL Digi contest.  |
+
+  | 2021-08-01  | Added EXPLORER to CATEGORY-STATION.  |
+
+  | 2021-06-22  | Added YOUTH to CATEGORY-OVERLAY.  |
+
+  | 2021-01-23  | Changed CATEGORY-BAND and QSO frequency from 123G to 122G to reduce confusion (tnx N6NB).  |
+
+  | 2020-11-16  | For CATEGORY-STATION, added DISTRIBUTED to support new WPX category.  |
+
+  | 2020-06-29  | Updated specification for CONTEST tag data to specify maximum length of 32 characters.  |
+
+  | 2020-04-26  | Updated specification for CONTEST tag data to specify valid characters.  |
+
+  | 2019-08-11  | For CATEGORY-MODE, changed DG to DIGI
+ DG is still correct for mode in QSO lines.  |
+
+  | 2019-07-04  | Added GRID-LOCATOR tag to header.  |
+
+  | 2019-06-22  | Added contest name: WW-DIGI
+ Added entry mode: DG  |
+
+  | 2019-05-03  | Added contest names:
+ SPDXC
+ SPDXC-RTTY
+ WAG  |
+
+  | 2018-12-26  | Updated description for EMAIL tag.  |
+
+  | 2018-10-06  | Added contest name: MN-QSO-PARTY  |
+
+  | 2018-09-21  | Added new mode: DG
+ Used for digital modes that are not RTTY.  |
+
+  | 2018-08-01  | Added contest names:
+ ARRL-10-GHZ
+ ARRL-EME  |
+
+  | 2018-03-13  | Added contest names:
+ NA-SPRINT-RTTY
+ NAQP-RTTY  |
+
+  | 2016-11-30  | Added contest name: ARRL-222  |
+
+  | 2016-11-18  | Changed bands: 119G to 123G, 142G to 134G  |
+
+  | 2016-06-14  | Added FM to list of modes for CATEGORY-MODE header field.  |
+
+  | 2016-05-09  | Added 4M to list of bands. This is for 70 MHz used by some European contests.  |
+
+  | 2016-03-17  | Added contest names:
+ ARRL-RR-PH
+ ARRL-RR-DIG
+ ARRL-RR-CW
+ ARRL-SCR  |
+
+  | 2015-09-21  | Clarified specification to allow multiple OPERATOR lines.  |
+
+  | 2015-09-17  | Added contest names:
+ DL-DX-RTTY
+ DRCG-WW-RTTY  |
+
+  | 2015-07-21  | NAQP template changed by request of NAQP manager to show ex2: Two letter QTH designation for W/VE, DX prefix for non-W/VE in NA, DX for outside NA  |
+
+  | 2014-08-21  | WWROF assumes administration of Cabrillo specification.  |
+
+  | 2014-06-24  | Added CERTIFICATE: tag.  |
+
+  | 2009-07-08  | Added
+ ADDRESS-CITY:
+ ADDRESS-STATE-PROVINCE:
+ ADDRESS-POSTALCODE:
+ ADDRESS-COUNTRY:
+ tags to help automate contest mailings.Thanks K5ZD, K1EA, W5GN and others.  |
+
+  | 2009-05-29  | Added more UHF bands to CATEGORY-BANDS per KX9X.  |
+
+  | 2006-09-25  | Added EMAIL: tag — by popular demand.  |
+
+  | 2006-02-29  | Support added for RDXC. (Thanks UA9CDC and RW1AC)  |
+
+  | 2006-02-29  | Exploded CATEGORY tag into multiple tags:
+ CATEGORY-ASSISTED,
+ CATEGORY-BAND,
+ CATEGORY-LOCATION,
+ CATEGORY-MODE,
+ CATEGORY-OPERATOR,
+ CATEGORY-POWER,
+ CATEGORY-STATION,
+ CATEGORY-TIME.
+ ARRL-SECTION is now deprecated in favor of LOCATION.
+ Made SCHOOL a station attribute rather than an operator attribute.  |
+
+  | 2006-02-29  | Changed band designations in VHF contest to use G for all GHz bands, such as 75G for 75 GHz, etc.  |
+
+  | 2006-02-29  | Begin support for Cabrillo 3.0.  |
+
+  | 2004-02-26  | Corrected band designations in VHF contest (902 for 902 MHz and 75 for 75 GHz).  |
+
+  | 2003-03-11  | Support added for JIDX Contest. One sample log added. (Thanks JE1CKA)  |
+
+  | 2003-01-08  | Support added for RSGB Islands on the Air Contest. One sample log added. (Thanks G3XTT and EI5DI)  |
+
+  | 2003-01-02  | Support added for KH7X (KH6ND, op) (@KH7R) abstraction —
+ CALLSIGN: KH7X
+ OPERATORS: KH6ND @KH7R  |
+
+  | 2002-10-15  | Support added for DARC Worked All Europe. Three sample logs added. Thanks DL6RAI and DL8WPX/YB1AQS.  |
+
+  | 2002-10-15  | On/off-time support added. Thanks DL6RAI and DL8WPX/YB1AQS.  |
+
+  | 2002-10-10  | Support added for OCEANIA-DX. (Thanks ZL1AZE)  |
+
+  | 2002-08-03  | Letter codes for VHF bands deprecated. Only number codes should be used.  |
+
+  | 2002-06-11  | Clarified ARRL VHF Contest template. RS(T) should not be included in the log.  |
+
+  | 2001-08-20  | Added AP-SPRINT and example log.  |
+
+  | 2000-12-05  | Added CREATED-BY: field so software authors can
+ indicate which version of code generated the file.  |
+
+  | 2000-08-28  | Added ARRL-UHF-AUG.  |
+
+  | 2000-01-31  | Cabrillo FAQ created.
+ ARRL VHF Contest example added.
+ California QSO Party support withdrawn.
+ Added additional designations for VHF/UHF bands.  |
+
+  | 1999-12-07  | Added TARA-RTTY, NAQP-RTTY.  |
+
+  | 1999-10-23  | STEW-PERRY added as supported contest.
+ OVER-50 added as category overlay for STEW-PERRY.
+ HQ added as overlay for IARU. (Thanks N6TR)  |
+
+  | 1999-08-17  | SCHOOL-CLUB added as an operator-category for Sweepstakes.  |
+
+  | 1999-08-16  | Cabrillo V2.0 recognized by ARRL and CQ.  |
+##############################################################################
+# 4. WWROF — Cabrillo FAQ (current)
+# SOURCE: https://wwrof.org/cabrillo-frequently-asked-questions-faq/
+# FETCHED: 2026-08-17
+##############################################################################
+Q: What is the proper pronunciation of “Cabrillo”?
+
+The name was given by Trey N5KO based on the Iberian explorer Juan Rodríguez Cabrillo. In ham radio English, the common pronunciation is like Spanish where the double L is pronounced as a Y. I.e., “Cabriyo”. How to pronounce [https://www.howtopronounce.com/cabrillo#:~:text=Phonetic%20spelling%20of%20Cabrillo,cabril-lo%20C-ab-rillo%20cab-REE-yo%20kuh-bree-oh]
+
+Q: There is no QSO or multiplier data in the summary sheet part of
+Cabrillo. Why not?
+
+The contest sponsor will automatically compute the QSO and multiplier data as part of their log-checking procedure.
+
+Q: There is no way to assign point values to QSOs in Cabrillo. Why not?
+
+The contest sponsor will automatically compute the point value of each QSO as part of their log-checking procedure.
+
+Q: There is no way to indicate new multipliers as worked in Cabrillo.
+ Why not?
+
+The contest sponsor will automatically compute the multiplier status of each QSO as part of their log-checking procedure.
+
+Q: There is no way to indicate duplicate QSOs in Cabrillo. Why not?
+
+The contest sponsor will automatically detect the duplicates and assign a zero point value for each duplicate QSO as part of their log-checking procedure.
+
+Q: I’m a logging program author. Because the Cabrillo format doesn’t provide for indicating duplicate QSOs, new multipliers as worked and various other vestiges of the paper log era, should I create my own set of extensions to Cabrillo and implement them in my logging program?
+
+No. The Cabrillo specification includes all the information the contest sponsor needs. Generating files that are not Cabrillo-compliant undermines the automation process, thus causing extra work and greater potential for human error on the part of contest sponsors.
+
+Q: What should I name the file?
+
+Experience indicates that a filename like CALLSIGN.LOG or CALLSIGN.CBR (where CALLSIGN is the call sign used during the contest) is the most effective name for the contest sponsors.
+##############################################################################
+# 5. WWROF — archived unified 'Cabrillo Specification V3' page ('Last update: 16 November 2020')
+# SOURCE: https://web.archive.org/web/20210116081148id_/https://wwrof.org/cabrillo/cabrillo-specification-v3/
+# FETCHED: 2026-08-17
+# NOTE: live URL 404 on 2026-08-17. Differences vs. section 1 (per the change log): CQ-VHF -> CQ-VHF-SSBCW / CQ-VHF-DIGI (2025-06-05); CATEGORY-OVERLAY lost OVER-50, gained YL (2023-04-10) and YOUTH (2021-06-22); CATEGORY-TIME gained 8-HOURS (2022-05-27); CATEGORY-STATION gained EXPLORER (2021-08-01); band 123G -> 122G (2021-01-23); X-QSO wording changed.
+##############################################################################
+Last update: 16 November 2020
+
+This page details the tags supported by the Cabrillo Specification V3. The format for each line is <TAG>: followed by a space. The tags may be listed in any order in the log file.
+
+## Required Tags
+
+START-OF-LOG:version-number
+Must be the first line of the log submission. The current version-number is 3.0.
+
+END-OF-LOG:
+Must be the last line of the log submission.
+
+## Common Tags
+
+CALLSIGN:callsign
+The callsign used during the contest.
+
+CONTEST:text
+String to identify the contest. Valid characters are A-Z, 0-9, and hyphen (-). Maximum length is 32 characters. Contest text values are not an official part of the specification. Contest sponsors may define their own contest values that are consistent with the above limitations. Some examples listed below for convenience.
+
+- ARRL-10
+
+- ARRL-10-GHZ
+
+- ARRL-160
+
+- ARRL-DX-CW
+
+- ARRL-DX-SSB
+
+- ARRL-EME
+
+- ARRL-SS-CW
+
+- ARRL-SS-SSB
+
+- BARTG-RTTY
+
+- CQ-160-CW
+
+- CQ-160-SSB
+
+- CQ-WPX-CW
+
+- CQ-WPX-RTTY
+
+- CQ-WPX-SSB
+
+- CQ-VHF
+
+- CQ-WW-CW
+
+- CQ-WW-RTTY
+
+- CQ-WW-SSB
+
+- IARU-HF
+
+- NAQP-CW
+
+- NAQP-SSB
+
+- NAQP-RTTY
+
+- RDXC
+
+- RSGB-IOTA
+
+- SPDXC
+
+- SPDXC-RTTY
+
+- TARA-RTTY
+
+- WAG
+
+- WW-DIGI
+
+Additional contest name examples can be seen here [https://www.contestcalendar.com/cabnames.php].
+
+CATEGORY-ASSISTED:
+The category-assisted must be one of the following.
+
+- ASSISTED
+
+- NON-ASSISTED
+
+CATEGORY-BAND:
+The category-band must be one of the following. If you are entering an all band category, use ALL, otherwise select one of the individual bands shown.
+
+- ALL
+
+- 160M
+
+- 80M
+
+- 40M
+
+- 20M
+
+- 15M
+
+- 10M
+
+- 6M
+
+- 4M
+
+- 2M
+
+- 222
+
+- 432
+
+- 902
+
+- 1.2G
+
+- 2.3G
+
+- 3.4G
+
+- 5.7G
+
+- 10G
+
+- 24G
+
+- 47G
+
+- 75G
+
+- 123G
+
+- 134G
+
+- 241G
+
+- Light
+
+- VHF-3-BAND and VHF-FM-ONLY (ARRL VHF Contests only)
+
+CATEGORY-MODE:
+The category-mode must be one of the following.
+
+- CW
+
+- DIGI
+
+- FM
+
+- RTTY
+
+- SSB
+
+- MIXED
+
+CATEGORY-OPERATOR:
+The category-operator must be one of the following.
+
+- SINGLE-OP
+
+- MULTI-OP
+
+- CHECKLOG
+
+CATEGORY-POWER:
+The category-power must be one of the following.
+
+- HIGH
+
+- LOW
+
+- QRP
+
+CATEGORY-STATION:
+Type of station
+
+- DISTRIBUTED
+
+- FIXED
+
+- MOBILE
+
+- PORTABLE
+
+- ROVER
+
+- ROVER-LIMITED
+
+- ROVER-UNLIMITED
+
+- EXPEDITION
+
+- HQ
+
+- SCHOOL
+
+CATEGORY-TIME:
+
+- 6-HOURS
+
+- 12-HOURS
+
+- 24-HOURS
+
+CATEGORY-TRANSMITTER:
+The category-transmitter is required for multi-operator entries and must be one of the following.
+
+- ONE
+
+- TWO
+
+- LIMITED
+
+- UNLIMITED
+
+- SWL
+
+CATEGORY-OVERLAY:
+
+- CLASSIC
+
+- ROOKIE
+
+- TB-WIRES
+
+- NOVICE-TECH
+
+- OVER-50
+
+CERTIFICATE: YES | NO
+Indicate if you wish to receive, if eligible, a paper certificate sent via postal mail by the contest sponsor. The contest sponsor may or may not honor this tag, and if so may or may not use opt-in or opt-out as the default. YES is the default.
+
+CLAIMED-SCORE: nnnnn
+The claimed-score of the log submission, in integer form such as 1217315 or 19113 or 12. Do not include commas, decimals, or other text.
+
+CLUB: text
+Name of the radio club to which the score should be applied.
+
+CREATED-BY: text
+Name and version of the logging program used to create the Cabrillo file.
+
+EMAIL: text
+Contact email address for the entrant. Must be valid email or blank.
+
+GRID-LOCATOR: text
+Used to indicate the Maidenhead Grid Square where the station was operating from. E.g., FN42EB
+
+LOCATION:
+Used to indicate the location where the station was operating from.
+
+  | ARRL/RAC Sections [http://www.arrl.org/section-abbreviations]  | For USA and Canada stations LOCATION must be the ARRL section abbreviation. For foreign stations LOCATION must be ‘DX’. This information is required for IARU-HF and for all ARRL and CQ contests.  |
+
+  | IOTA Island Name [http://www.rsgbiota.org/]  | This information is required for RSGB-IOTA contest and includes Island Name (not IOTA reference number).  |
+
+  | RDA Number [http://rdaward.org/rda_eng.txt]  | This information is required for RDXC contest.  |
+
+NAME: text
+Name. Maximum of 75 characters long.
+
+ADDRESS: text
+Mailing address. Each line should be a maximum of 45 characters long. Up to 6 address lines are permitted.
+
+ADDRESS-CITY: text
+ADDRESS-STATE-PROVINCE: text
+ADDRESS-POSTALCODE: text
+ADDRESS-COUNTRY: text
+Optional fields for providing mailing address details.
+
+OPERATORS: callsign1 [callsign2 callsign3…]
+A space or comma-delimited list of operator callsign(s). You may also list the callsign of the host station by placing an “@” character in front of the callsign within the operator list, such as
+
+OPERATORS: K1ABC N5XYZ @N6IJ
+OPERATORS: K1ABC, N5XYZ, @N6IJ
+
+The OPERATOR line is a maximum of 75 characters long and must begin with OPERATORS: followed by a space. Use multiple OPERATOR lines if needed.
+
+OFFTIME: begin-time end-time
+This tag is used to indicate off-time.
+
+<<<PRE>>>
+OFFTIME: 2002-03-22 0300 2002-03-22 0743
+
+         yyyy-mm-dd nnnn yyyy-mm-dd nnnn
+         -----begin----- ------end------
+
+
+<<<END PRE>>>
+
+Note: About on-time and off-time:
+
+QSOs in Cabrillo are logged with a granularity of one minute. The use of one second granularity would lead to the question “during which exact second did the QSO take place?”
+
+The ARRL has taken the very sensible interpretation that on-time and off-time also should be considered with a granularity of one minute. In other words, during any given minute you can either be on or off. Therefore 1801Z-1830Z would be a 30 minute off-time, with 1800Z being your last minute on before the break and 1831Z being the minute you resume operation.
+
+If you make a QSO at 1800Z, take a break, and resume operating at 1830Z, then you have completed a 29 minute off-time.
+
+SOAPBOX: text
+Soapbox comments. Enter as many lines of soapbox text as you wish. Each line is a maximum of 75 characters long and must begin with SOAPBOX: followed by a space.
+
+QSO: qso-data
+QSO data as specified by the Cabrillo QSO data format. All QSO lines must appear in chronological order. See QSO data specification [https://wwrof.org/cabrillo/cabrillo-qso-data/].
+
+X-<anything>: text
+Lines beginning with X- are ignored by the robot and log checking software.  Use this for adding comment lines to your log. Exception: See X-QSO below.
+
+X-QSO: qso-data
+Any QSO marked with this tag will be ignored in your log. Use to mark QSOs made that you do not want to count toward your score.
+
+## Developer Tags
+
+DEBUG: n
+
+The DEBUG: tag is intended for software developers. If an ARRL or CQ email robot receives a log with the DEBUG: tag set, then it will do all its regular processing and generate an auto-reply message, but it will not save the log into data set provided to the log checking team.
+##############################################################################
+# 6. WA7BNM Contest Calendar — 'Master List of Cabrillo Names' (311 rows; blank Cabrillo Name = none published)
+# SOURCE: https://www.contestcalendar.com/cabnames.php
+# FETCHED: 2026-08-17
+# NOTE: linked from the WWROF v3-header page as 'Additional contest name examples'. Page text: 'Cabrillo Names were determined to be the official Cabrillo name for a contest from the contest sponsor's web site or an e-mail exchange with the contest manager. In a few cases the name was adjusted to adhere to the Cabrillo standard for contest names.'
+##############################################################################
+ContestID | Contest | Cabrillo Name
+Contest ID | Contest | Cabrillo Name
+156 | 10-10 Int. 10-10 Day Sprint | 10-10-SPRINT
+464 | 10-10 Int. Fall Contest, Digital | 10-10-FALL-DIGITAL
+81 | 10-10 Int. Summer Contest, SSB | 10-10-SUMMER-PHONE
+237 | 10-10 Int. Winter Contest, SSB | 10-10-WINTER-PHONE
+404 | 7th Call Area QSO Party | 7QP
+715 | A1Club AWT | A1CLUB-AWT
+578 | Africa All Mode International DX Contest | ALL-AFRICA
+752 | Africa FT4 DX Contest | 
+7 | AGCW QRP/QRP Party | AGCW-QRP
+134 | Alabama QSO Party | AL-QSO-PARTY
+47 | All Asian DX Contest, CW | AADX-CW
+102 | All Asian DX Contest, Phone | AADX-SSB
+719 | ANZAC Day Contest | ANZAC
+686 | ARI 40/80 Contest | 40-80
+9 | ARI International DX Contest | ARI-DX
+482 | Arizona QSO Party | AZ-QSO-PARTY
+132 | Arkansas QSO Party | AR-QSO-PARTY
+88 | ARRL 10 GHz and Up Contest | ARRL-10-GHZ
+199 | ARRL 10-Meter Contest | ARRL-10
+194 | ARRL 160-Meter Contest | ARRL-160
+615 | ARRL 222 MHz and Up Distance Contest | ARRL-222
+417 | ARRL EME Contest | ARRL-EME
+57 | ARRL Field Day | ARRL-FD
+716 | ARRL Inter. Digital Contest | ARRL-DIGI
+256 | ARRL Inter. DX Contest, CW | ARRL-DX-CW
+289 | ARRL Inter. DX Contest, SSB | ARRL-DX-SSB
+231 | ARRL January VHF Contest | ARRL-VHF-JAN
+43 | ARRL June VHF Contest | ARRL-VHF-JUN
+502 | ARRL Rookie Roundup, CW | ARRL-RR-CW
+501 | ARRL Rookie Roundup, RTTY | ARRL-RR-DIG
+500 | ARRL Rookie Roundup, SSB | ARRL-RR-PH
+217 | ARRL RTTY Roundup | ARRL-RTTY
+254 | ARRL School Club Roundup | ARRL-SCR
+113 | ARRL September VHF Contest | ARRL-VHF-SEP
+177 | ARRL Sweepstakes Contest, CW | ARRL-SS-CW
+178 | ARRL Sweepstakes Contest, SSB | ARRL-SS-SSB
+764 | ARSI VU DX Contest | ARSI-VU-DX
+164 | Asia-Pacific Fall Sprint, CW | AP-SPRINT
+42 | Asia-Pacific Sprint, SSB | AP-SPRINT
+773 | Atlantic Canada QSO Party | AC-QSO-PARTY
+714 | Australia Day Contest | WIA-AUSTRALIADAY
+599 | Balkan HF Contest | BALKAN-HF
+28 | Baltic Contest | BALTIC-CONTEST
+309 | BARTG HF RTTY Contest | BARTG-RTTY
+230 | BARTG RTTY Sprint | BARTG-SPRINT
+513 | BARTG Sprint 75 | BARTG-SPRINT
+703 | BARTG Sprint PSK63 Contest | BARTG-SPRINT
+269 | British Columbia QSO Party | BC-QSO-PARTY
+427 | Bucharest Digital Contest | BUCURESTI-DIGITAL
+140 | California QSO Party | CA-QSO-PARTY
+717 | Canadian Prairies QSO Party | CP-QSO-PARTY
+122 | Collegiate QSO Party | CQP
+431 | Colorado QSO Party | COQP
+282 | Commonwealth (BERU) Contest | RSGB-COMMONWEALTH
+673 | COVID-19 Radio Communication Event | STAYHOME
+232 | CQ 160-Meter Contest, CW | CQ-160-CW
+259 | CQ 160-Meter Contest, SSB | CQ-160-SSB
+192 | CQ Worldwide DX Contest, CW | CQ-WW-CW
+130 | CQ Worldwide DX Contest, RTTY | CQ-WW-RTTY
+172 | CQ Worldwide DX Contest, SSB | CQ-WW-SSB
+768 | CQ Worldwide VHF Digital Contest | CQ-VHF-DIGI
+73 | CQ Worldwide VHF SSB/CW Contest | CQ-VHF-SSBCW
+245 | CQ WW RTTY WPX Contest | CQ-WPX-RTTY
+29 | CQ WW WPX Contest, CW | CQ-WPX-CW
+291 | CQ WW WPX Contest, SSB | CQ-WPX-SSB
+14 | CQ-M International DX Contest | CQ-M
+21 | CQMM DX Contest | CQMMDX
+206 | Croatian DX Contest | 9A-DX
+534 | CVA DX Contest, CW | CVA-DX-CW
+535 | CVA DX Contest, SSB | CVA-DX-SSB
+532 | CWOps CW Open | CW-OPEN
+498 | CWops Test (CWT) | CW-OPS
+223 | DARC 10-Meter Contest | DARC-10
+210 | DARC Christmas Contest | XMAS
+776 | DARC CW-Training Contest | DARC-CWA
+668 | DARC Easter Contest | EASTER
+745 | DARC FT4 Contest | FT4
+744 | DARC RTTY Sprint | ShortRY
+240 | Delaware QSO Party | DE-QSO-PARTY
+691 | DIG QSO Party, CW | DIG-QSO-PARTY
+690 | DIG QSO Party, SSB | DIG-QSO-PARTY
+568 | DRCG WW RTTY Contest | DRCG-WW-RTTY
+249 | Dutch PACC Contest | PACC
+693 | Dutch PACCdigi Contest | PACCDIGI
+403 | EA PSK63 Contest | EA-PSK
+313 | EA RTTY Contest | EARTTY
+550 | EANET Sprint | EANET-SPRINT
+27 | EU PSK DX Contest | EU-PSK-DX
+219 | EUCW 160m Contest | EUCW-160M
+660 | EurAsia HF Championship | EURASIA-CHAMP
+82 | European HF Championship | EUHFC
+687 | European Union DX Contest | EUDXC
+488 | F9AA Cup, CW | F9AA-CW
+577 | F9AA Cup, PSK | F9AA-DIGI
+489 | F9AA Cup, SSB | F9AA-SSB
+692 | FIRAC HF Contest | FIRAC-CONTEST
+786 | Flemish Windmill Contest | 
+325 | Florida QSO Party | FCG-FQP
+762 | FRAPR 10M Contest | FRAPR-10M
+766 | FT Challenge | FT-CHALLENGE
+45 | GACW WWSA CW DX Contest | WWSA
+328 | Georgia QSO Party | GA-QSO-PARTY
+732 | Gunung Jati DX Contest | GUNUNGJATI
+449 | HA3NS Sprint Memorial Contest | HA3NS-SPRINT
+729 | Ham Spirit Contest | HAM-SPIRIT
+730 | Ham Spirit Contest, SSB | HAM-SPIRIT-SSB
+742 | HARC Anniversary QSO Party | HARC-QSOP
+96 | Hawaii QSO Party | HI-QSO-PARTY
+326 | Helvetia Contest | HELVETIA
+651 | Hiram Percy Maxim Birthday Celebration | ARRL-HPM-150
+23 | His Maj. King of Spain Contest, CW | EA-MAJESTAD-CW
+59 | His Maj. King of Spain Contest, SSB | EA-MAJESTAD-SSB
+228 | Hungarian DX Contest | HA-DX
+67 | IARU HF World Championship | IARU-HF
+720 | ICWC Medium Speed Test | ICWC-MST
+305 | Idaho QSO Party | ID-QSO-PARTY
+688 | IG-RY World Wide RTTY Contest | IG-WW-RY
+167 | Illinois QSO Party | IL-QSO-PARTY
+743 | INDEXA Worldwide QSO Party | INDEXA-QSOP
+8 | Indiana QSO Party | IN-QSO-PARTY
+484 | Iowa QSO Party | IAQP
+758 | IRTS 2m Counties Contest | IRTS-CONTEST
+757 | IRTS 70cm Counties Contest | IRTS-CONTEST
+756 | IRTS 80m Counties Contest | IRTS-80-CONTEST
+161 | JARL WW RTTY Contest | JARL-WW-RTTY
+314 | JIDX CW Contest | JIDX-CW
+184 | JIDX Phone Contest | JIDX-SSB
+785 | John Moyle Memorial Field Day | WIA-JMMFD
+681 | K1USN Slow Speed Test | K1USNSST
+763 | K1USN SST Open | K1USNSST-OPEN
+734 | Kalbar Contest | KALBAR CONTEST
+675 | KANHAM Contest | KANHAM
+483 | Kansas QSO Party | KS-QSO-PARTY
+781 | Kawanua DX Contest | KAWANUA-DX
+244 | KCJ Topband Contest | KCJ-TOPBAND
+371 | Kentucky QSO Party | KYQP
+761 | LABRE DX Contest | LABRE-DX
+759 | LABRE-RS Digi Contest | CQWW-DIGI
+250 | Louisiana QSO Party | LA-QSO-PARTY
+187 | LZ DX Contest | LZ-DX
+592 | Maine QSO Party | ME-QSO-PARTY
+159 | Makrothen RTTY Contest | MAKROTHEN-RTTY
+658 | Malaysia DX Contest | MYDX-SSB-CONTEST
+710 | Marconi Club ARI Loano QSO Party Day | MCD-QSO-PARTY
+769 | Marconi Club ARI Loano Slow CW QSO Party | SLOW-CW-QSO-PARTY
+56 | Marconi Memorial HF Contest | MMC-HF-CW
+86 | Maryland-DC QSO Party | MDC-QSO-PARTY
+241 | Mexico RTTY International Contest | XE-RTTY
+323 | Michigan QSO Party | MI-QSO-PARTY
+711 | Mini-Test 40 | MINITEST-40
+712 | Mini-Test 80 | MINITEST-80
+238 | Minnesota QSO Party | MN-QSO-PARTY
+308 | Mississippi QSO Party | MS-QSO-PARTY
+327 | Missouri QSO Party | MO-QSO-PARTY
+778 | NCCC 55th Anniversary Fiesta | NCCC-FIESTA
+741 | NCCC FT4 Sprint | NCCC-SPRINT-FT4
+44 | NCCC Sprint | NCCC-SPRINT-CW
+405 | NCCC Sprint Ladder | NCCC-SPRINT-CW
+336 | Nebraska QSO Party | NE-QSO-PARTY
+10 | New England QSO Party | NEQP
+71 | New Hampshire QSO Party | NH-QSO-PARTY
+92 | New Jersey QSO Party | NJQP
+286 | New Mexico QSO Party | NM-QSO-PARTY
+473 | New York QSO Party | NY-QSO-PARTY
+727 | North American Meteor Scatter Sprint | VHF-NAMSS
+218 | North American QSO Party, CW | NAQP-CW
+263 | North American QSO Party, RTTY | NAQP-RTTY
+229 | North American QSO Party, SSB | NAQP-SSB
+253 | North American Sprint, CW | NA-SPRINT-CW
+155 | North American Sprint, RTTY | NA-SPRINT-RTTY
+242 | North American SSB Sprint Contest | NA-SPRINT-SSB
+265 | North Carolina QSO Party | NC-QSO-PARTY
+468 | North Dakota QSO Party | ND-QSO-PARTY
+562 | NRAU 10m Activity Contest | NRAU-10
+220 | NRAU-Baltic Contest, CW | NRAU-CW
+222 | NRAU-Baltic Contest, SSB | NRAU-SSB
+706 | NRRL MGM Weekend Contest | NRRL-MGM
+721 | NZART Memorial Contest | MEMORIAL-CONTEST
+151 | Oceania DX Contest, CW | OCEANIA-DX-CW
+142 | Oceania DX Contest, Phone | OCEANIA-DX-SSB
+100 | Ohio QSO Party | MRRC-OHQP
+204 | OK DX RTTY Contest | OK-DX-RTTY
+185 | OK/OM DX Contest, CW | OK-OM-DX
+567 | OK/OM DX Contest, SSB | OK-OM-DX
+293 | Oklahoma QSO Party | OK-QSO-PARTY
+554 | Old New Year Contest | RADIO-ONY
+357 | Ontario QSO Party | ON-QSO-PARTY
+334 | Open Ukraine RTTY Championship | UKR-CHAMP-RTTY
+722 | Pajajaran Bogor DX Contest | PBDX-CONTEST
+153 | Pennsylvania QSO Party | PA-QSO-PARTY
+775 | Popov Memorial Contest | RADIO-POPOV
+679 | Portable Operations Challenge | POC
+41 | Portugal Day Contest | PORTUGAL-DAY
+723 | PRG CQ Pride Contest | TBD
+53 | Quebec QSO Party | QC-QSO-PARTY
+60 | RAC Canada Day Contest | CANADA-DAY
+205 | RAC Winter Contest | CANADA-WINTER
+209 | RAEM Contest | RAEM
+645 | RCC Cup | RCC-CUP
+782 | Real Time Contest | RTC
+233 | REF Contest, CW | REF-CW
+260 | REF Contest, SSB | REF-SSB
+780 | Romanian Diaspora SSB Contest | DIASPORA-SSB
+252 | RSGB 1.8 MHz Contest | RSGB-160
+458 | RSGB 80m Autumn Series, CW | RSGB-80M-AUT
+617 | RSGB 80m Autumn Series, Data | RSGB-80M-AUT
+459 | RSGB 80m Autumn Series, SSB | RSGB-80M-AUT
+275 | RSGB 80m Club Championship, CW | RSGB-80M-CC
+274 | RSGB 80m Club Championship, Data | RSGB-80M-CC
+273 | RSGB 80m Club Championship, SSB | RSGB-80M-CC
+627 | RSGB AFS Contest, CW | RSGB-AFS-CW
+653 | RSGB FT4 Contest | RSGB-FT4
+718 | RSGB FT4 International Activity Day | RSGB-FT4
+662 | RSGB Hope QSO Party | RSGB-HQP
+74 | RSGB International Low Power Contest | RSGB-LOW-POWER
+75 | RSGB IOTA Contest | RSGB-IOTA
+37 | RSGB National Field Day | RSGB-NFD
+106 | RSGB SSB Field Day | RSGB-NFD
+669 | RTTYOPS Weekend Sprint | RTTYOPS-WEEKEND-SPRINT
+670 | RTTYOPS Weeksprint | RTTYOPS-WEEKSPRINT
+202 | Russian 160-Meter DX Contest | RADIO-160
+94 | Russian District Award Contest | RDAC
+310 | Russian DX Contest | RDXC
+258 | Russian PSK WW Contest | RUS-WW-PSK
+103 | Russian RTTY WW Contest | RADIO-WW-RTTY
+570 | Russian WW Digital Contest | RUS-WW-DIGI
+574 | Russian WW MultiMode Contest | RUS-WW-MM
+774 | Russian YL/OM Contest | RADIO-YL-OM
+787 | Samuel Morse Memorial Contest | SMMC
+101 | SARL HF CW Contest | SARL-HF-CW
+545 | SARL HF Digital Contest | SARL-HF-DIGI
+78 | SARL HF Phone Contest | SARL-HF-SSB
+211 | SARTG New Year RTTY Contest | SARTG-NY-RTTY
+87 | SARTG WW RTTY Contest | SARTG-RTTY
+121 | Scandinavian Activity Contest, CW | SAC-CW
+131 | Scandinavian Activity Contest, SSB | SAC-SSB
+680 | SCRY/RTTYOps WW DX RTTY Contest | RTTYOPS-WW-RTTY
+749 | SEC QSO Party | SEC-QSO-PARTY
+616 | Solar Eclipse QSO Party | ECLIPSE-QSO
+598 | South America 10 Meter Contest | SA10M
+728 | South American Integration Contest CW | SACW
+123 | South Carolina QSO Party | SC-QSO-PARTY
+492 | South Dakota QSO Party | SDQSOP
+312 | SP DX Contest | SPDX
+207 | Stew Perry Topband Challenge | STEW-PERRY
+115 | Tennessee QSO Party | TN-QSO-PARTY
+725 | Tennessee State Parks on the Air | TNPOTA
+566 | TESLA Memorial HF CW Contest | TESLA-HF
+133 | Texas QSO Party | TXQP
+559 | Texas State Parks on the Air | TSPOTA
+777 | Tipalayo DX Contest | TIPALAYO DX CONTEST
+678 | Tisza Cup CW Contest | TISZACUP
+637 | TRC Digi Contest | TRC-DIGI
+536 | TRC DX Contest | TRC-DX
+788 | Tuesday's Telegraphy Contest | TTC-SPCWC
+779 | Turkey HF Contest | TR-HF
+169 | U.S. Islands QSO Party | ISLAND-QSO-PARTY
+697 | UA1DZ Memorial Cup | ALRS-UA1DZ-CUP
+261 | UBA DX Contest, CW | UBA-DX-CW
+235 | UBA DX Contest, SSB | UBA-DX-SSB
+165 | UBA ON Contest, 2m | UBA-ON-2M
+139 | UBA ON Contest, 6m | UBA-ON-6M
+157 | UBA ON Contest, CW | UBA-ON-CW
+144 | UBA ON Contest, SSB | UBA-ON-SSB
+576 | UBA PSK63 Prefix Contest | UBA-PSK63-PREFIX
+297 | UBA Spring Contest, 2m | UBA-SPRING-CONTEST
+298 | UBA Spring Contest, 6m | UBA-SPRING-CONTEST
+295 | UBA Spring Contest, CW | UBA-SPRING-CONTEST
+296 | UBA Spring Contest, SSB | UBA-SPRING-CONTEST
+603 | UFT QRP Contest | UFT-QRP
+597 | UK/EI DX Contest, CW | UKEI-DX
+596 | UK/EI DX Contest, SSB | UKEI-DX
+583 | UKEICC 80m Contest | UKEICC-80M
+542 | Ukrainian DX Classic RTTY Contest | UR-DX-RTTY
+176 | Ukrainian DX Contest | UKRAINIAN-DX
+55 | Ukrainian DX DIGI Contest | UR-DX-DIGI
+480 | UN DX Contest | UN-DX
+765 | URC DX RTTY Contest | URCDX
+236 | Vermont QSO Party | VT-QSO-PARTY
+302 | Virginia QSO Party | VA-QSO-PARTY
+481 | VK Shires Contest | VKSHIRES
+13 | VOLTA WW RTTY Contest | VOLTA-RTTY
+85 | WAE DX Contest, CW | DARC-WAEDC-CW
+183 | WAE DX Contest, RTTY | DARC-WAEDC-RTTY
+111 | WAE DX Contest, SSB | DARC-WAEDC-SSB
+126 | Washington State Salmon Run | WA-SALMON-RUN
+753 | Weekly RTTY Test | WRT
+49 | West Virginia QSO Party | WVQP
+421 | Winter Field Day | WFD
+330 | Wisconsin QSO Party | WIQP
+163 | Worked All Germany Contest | WAG
+546 | Worked All Provinces of China DX Contest | WAPC-DX
+783 | World Time Zone Challenge | WTZC
+755 | World Wide Argentina DX Contest | WWPDX
+650 | World Wide Digi DX Contest | WW-DIGI
+319 | World Wide Holyland Contest | WWHC
+672 | Worldwide Sideband Activity Contest | WWSAC
+471 | WW PMC Contest | WW-PMC
+630 | YARC QSO Party | YARC-QSO-PARTY
+747 | YB Banggai DX Contest | BANGGAI-DX
+746 | YB Bekasi Merdeka Contest | BEKASI-MERDEKA-CONTEST
+621 | YB DX Contest | YB DX CONTEST
+642 | YB DX RTTY Contest | YB-DX-CONTEST
+772 | YB ORARI DX Contest | ORARI-DX
+353 | YLRL YL-OM Contest | YL-OM
+98 | YO DX HF Contest | YO-DX-HF
+696 | YOTA Contest | YOTA
+322 | YU DX Contest | YUDX
+367 | Yuri Gagarin International DX Contest | GC
+737 | ZL Sprint | ZL-SPRINT
