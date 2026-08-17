@@ -147,7 +147,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY, change band, change mode |
 
 In the Contest Dashboard (**⌘⇧D**): `⌘[` / `⌘]` change year, `⌘R` re-reads the
-history file, `Return` opens that contest's log, and `⌘E` / `⇧⌘E` export it.
+logs folder, `Return` opens that contest's log, and `⌘E` / `⇧⌘E` export it.
 
 While repeat-CQ is running, **any key but a shortcut does what `Esc` does**: the
 loop pauses and the CQ on the air comes down mid-character, so the moment you
@@ -209,8 +209,8 @@ the key code, which window had focus, and what the app did with it.
   entry for the band and mode you're on right now is bold and orange: nothing
   left to work here.
 - **Exchange pre-fill.** Work someone on a new band and their county is already
-  in the field, from your last contact with them or from a previous contest in
-  the history archive. Pre-filled text is greyed until you type over it, and it
+  in the field, from your last contact with them or from a previous contest's
+  log in your logs folder. Pre-filled text is greyed until you type over it, and it
   withdraws itself if the call changes. A county only carries over within the
   same sponsor's party, since `JEF` means different things in Colorado and
   Kansas.
@@ -812,13 +812,18 @@ The cached file lives in `~/Library/Application Support/QSOPartyLogger/SCP/`.
 - **Upcoming contests** — everything left this season, soonest first, with an ON
   AIR badge while a window is open, countdowns, and "entered ✓" once you've
   logged it. All 47 Challenge-approved parties are listed.
-- **One history file in iCloud.** Every save archives the full log and score
-  snapshot into `Contest History.qphistory` in your logs folder, so the
-  dashboard follows you to any Mac. Two Macs merge by QSO, iCloud conflict
-  copies fold in automatically, and a corrupt file is never overwritten.
-  "Import Existing Logs" rebuilds the archive from the `.qplog` files you
-  already have. Snapshots freeze each score as computed that season, so next
-  year's rule updates never rewrite history.
+- **The logs are the history.** The dashboard reads the `.qplog` files in
+  your logs folder — nothing is copied anywhere, so it follows you to any Mac
+  with no second store to sync, merge or bloat. Each log carries its own
+  score, stamped at every save with the rules installed then, so next year's
+  rule updates never rewrite this year's history (a log saved by an older
+  version is scored with today's rules and the score cell says so). Delete a
+  log and it is gone from the dashboard; drag one into a subfolder to keep it
+  without counting. Two files for one contest show the later-modified one and
+  name the other; a file that won't decode is named and skipped, never
+  overwritten; logs iCloud hasn't downloaded yet are counted so an incomplete
+  season doesn't read as a small one. (The old `Contest History.qphistory`
+  archive is no longer read or written — delete it when you like.)
 
 ## Files and export
 
@@ -992,7 +997,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2871 unit tests**, none of which need hardware, a network or a microphone —
+**2875 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
 (driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank
@@ -1010,7 +1015,8 @@ the cluster `DX` command byte for byte, pota.app's own form rules and JSON
 body, the fan-out dispatcher and its receipt — the band map scale and column
 stacking, the band plan, typed
 QSY commands, what the radio keys at every step of the entry flow, keyer
-timing, the history archive and its two-Mac merge, season stats, the SQP
+timing, the logs folder read as history (each log's saved score, duplicate
+files, unreadable files, iCloud placeholders), season stats, the SQP
 Challenge formula, the upcoming-contest engine, and the Advisor — solar
 geometry pinned against the US Naval Observatory, the SWPC parsers against
 payloads captured from the live products, and every advisory's own wording.

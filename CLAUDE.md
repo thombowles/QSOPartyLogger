@@ -43,7 +43,7 @@ The non-negotiables, so they are never a surprise:
 | `Sources/Core/Engine/` | `ScoreEngine`, `ExchangeParser`, `DupeChecker`, `CountyLineExpander`, `StationMemory`, ESM |
 | `Sources/Core/CallHistory/` | N1MM call history file parser, site page parsers, on-disk cache |
 | `Sources/Core/Export/` | Cabrillo V3, ADIF 3.1.4 |
-| `Sources/Core/History/` | Contest archive (one iCloud file), score snapshots, season stats, SQP Challenge, upcoming calendar |
+| `Sources/Core/History/` | The logs folder read as history (`LogFolder`; the `.qplog` files are the history, each carrying its saved score), season stats, SQP Challenge, upcoming calendar |
 | `Sources/Core/Spotting/` | Cluster protocol, spot parsing, filters, band map scale; outgoing spots — `SpotNetwork`, `SpotDraft`, `SpotReceipt`, per-network bodies |
 | `Sources/Core/Voice/` | `VoiceAudio` DSP, `VoiceClip`/`VoiceMessageSet`, `VoiceLibrary` (per-party recordings on disk) |
 | `Sources/Hardware/Radio/` | `RadioDriver` protocol, `RadioRegistry`, per-radio drivers |
