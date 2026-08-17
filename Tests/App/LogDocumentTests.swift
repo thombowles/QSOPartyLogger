@@ -211,6 +211,155 @@ final class LogDocumentTests: XCTestCase {
         )
     }
 
+    // MARK: Messages remembered per party (2026-08-16)
+
+    /// A scratch memory per test — nil by default on a document, so none of
+    /// the tests above can be reached by what these remember.
+    private func scratchMemory() throws -> MessageMemory {
+        let suiteName = "org.b5n.QSOPartyLogger.tests.logdocument.messages"
+        UserDefaults().removePersistentDomain(forName: suiteName)
+        addTeardownBlock { UserDefaults().removePersistentDomain(forName: suiteName) }
+        return MessageMemory(defaults: try XCTUnwrap(UserDefaults(suiteName: suiteName)))
+    }
+
+    private var customCQP: MessageSets {
+        var sets = MessageSets.defaults(for: PartyCatalog.party(id: "cqp"))
+        sets.run[0] = "CQ CQP {MYCALL} {MYCALL}"
+        return sets
+    }
+
+    private var customKS: MessageSets {
+        var sets = MessageSets.standard
+        sets.run[0] = "CQ KS {MYCALL}"
+        return sets
+    }
+
+    /// The editor's Save banks the set under the log's party.
+    @MainActor
+    func testSavingMessagesRemembersThemForTheParty() throws {
+        let memory = try scratchMemory()
+        let doc = LogDocument()
+        doc.messageMemory = memory
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: nil
+        )
+        doc.updateMessages(customCQP, undoManager: nil)
+        XCTAssertEqual(memory.messages(for: "cqp"), customCQP)
+        XCTAssertNil(memory.messages(for: "ksqp"), "only the party being edited")
+    }
+
+    /// The report: a new log for a party the operator has already customised
+    /// starts from what they saved last, not from the defaults.
+    @MainActor
+    func testANewLogForARememberedPartyStartsFromTheRememberedSet() throws {
+        let memory = try scratchMemory()
+        memory.remember(customCQP, for: "cqp")
+        let doc = LogDocument()
+        doc.messageMemory = memory
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.messages, customCQP)
+    }
+
+    /// Setup that keeps the new document's own party (ksqp → ksqp) still
+    /// reads the memory — the party did not change, but the log is new.
+    @MainActor
+    func testANewLogForTheDefaultPartyStartsFromTheRememberedSetToo() throws {
+        let memory = try scratchMemory()
+        memory.remember(customKS, for: "ksqp")
+        let doc = LogDocument()
+        doc.messageMemory = memory
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "ksqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.messages, customKS)
+    }
+
+    /// This log's own edits are banked under the old party, so a party change
+    /// can safely take the new party's set — the old habit is one setup away,
+    /// not lost — and undo puts the old set back exactly.
+    @MainActor
+    func testSwitchingPartyBanksThisLogsEditsAndTakesTheNewPartysSet() throws {
+        let memory = try scratchMemory()
+        memory.remember(customKS, for: "ksqp")
+        let doc = LogDocument()
+        doc.messageMemory = memory
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: nil
+        )
+        doc.updateMessages(customCQP, undoManager: nil)
+
+        // Only the party change is undoable here: with no run loop turning,
+        // one manager would fold every registration into a single group.
+        let undo = UndoManager()
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "ksqp", undoManager: undo
+        )
+        XCTAssertEqual(doc.log.messages, customKS, "the new party's remembered set")
+        XCTAssertEqual(memory.messages(for: "cqp"), customCQP, "the old party's is still banked")
+
+        undo.undo()
+        XCTAssertEqual(doc.log.partyID, "cqp")
+        XCTAssertEqual(doc.log.messages, customCQP, "undo is exact")
+    }
+
+    /// A set that matches neither the old party's defaults nor its memory is
+    /// the operator's, and is left alone across a party change — as before.
+    @MainActor
+    func testAnUnbankedEditSurvivesAPartyChange() throws {
+        let memory = try scratchMemory()
+        memory.remember(customKS, for: "ksqp")
+        let doc = LogDocument()
+        doc.messageMemory = memory
+        var edited = MessageSets.standard
+        edited.run[0] = "CQ CQ {MYCALL} K"
+        doc.log.messages = edited  // not through the editor, so never banked
+
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: nil
+        )
+        XCTAssertEqual(doc.log.messages, edited)
+    }
+
+    /// Undoing an edit is an edit: the memory follows the log back.
+    @MainActor
+    func testUndoingAMessageEditRemembersTheOldSet() throws {
+        let memory = try scratchMemory()
+        let doc = LogDocument()
+        doc.messageMemory = memory
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: nil
+        )
+        let undo = UndoManager()
+        let before = doc.log.messages
+        doc.updateMessages(customCQP, undoManager: undo)
+        undo.undo()
+        XCTAssertEqual(doc.log.messages, before)
+        XCTAssertEqual(memory.messages(for: "cqp"), before)
+    }
+
+    /// Without a memory wired — every document a test builds — nothing is
+    /// remembered and setup falls back to the party defaults, as it always did.
+    @MainActor
+    func testWithoutAMemoryNothingIsRememberedOrRead() throws {
+        let doc = LogDocument()
+        XCTAssertNil(doc.messageMemory)
+        doc.updateStation(
+            StationProfile(), location: .outOfState(location: "TX"),
+            partyID: "cqp", undoManager: nil
+        )
+        doc.updateMessages(customCQP, undoManager: nil)
+        XCTAssertEqual(doc.log.messages, customCQP)
+    }
+
     // MARK: Operating mode re-derivation (2026-07-25)
 
     @MainActor

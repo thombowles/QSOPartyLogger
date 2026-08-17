@@ -421,6 +421,10 @@ QRP-sprint party trails the location with `{MEMBER}`, which keys `NR 13` for a
 member number and `5W` verbatim for a power. The editor
 warns you, with a one-key fix (⇧⌘R), when a message contradicts its party's
 exchange. Optional cut numbers (599 → 5NN, 40 → 4T). **Esc aborts instantly.**
+Messages are stored in the log file *and* remembered per party: save a set for
+the Skeeter Hunt and next year's Skeeter Hunt log starts from it, while a NAQP
+log gets NAQP's — a set you never touched follows whichever party Contest Setup
+picks, and one you edited in that log is left alone.
 
 **Phone keys play voice messages you record on the Mac.** Open Messages →
 Phone (⇧⌘V) and record eight memories — `M1 CQ`, `M2 Exch`, `M3 TU`, `M4

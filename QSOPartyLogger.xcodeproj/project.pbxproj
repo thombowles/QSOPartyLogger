@@ -206,6 +206,7 @@
 		7AE3D4F81276D6F42E895941 /* MultiplierRosterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AACC54DA31CF56398BD99B6 /* MultiplierRosterTests.swift */; };
 		7AFC46B00E954C466FB322F6 /* ClusterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F09518732D969C418274DB /* ClusterProtocol.swift */; };
 		7B696E39CC9AA9AAB8B6DB59 /* PotaParkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FF41186D203AD847CB46B4 /* PotaParkStore.swift */; };
+		7B80F91FBFC63B0E63E229F2 /* MessageMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD0B60341F5F0643FF06DF6 /* MessageMemory.swift */; };
 		7BAFE548E15B03441408AB7A /* FlexDAXPacketizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340ED4C605CDF7A0CB74E26C /* FlexDAXPacketizer.swift */; };
 		7BD916C1B52B135ADEA0EB0E /* EntryBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */; };
 		7BE97A35880D3C0C58FBF1FC /* CaveatRosterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132CBF19C2B05E02E5B784A9 /* CaveatRosterTests.swift */; };
@@ -401,6 +402,7 @@
 		F30492FEAB650E4463B28DD7 /* SpotNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E15FB5434A06A93DB1B1FF /* SpotNetworkTests.swift */; };
 		F4295C279970384A66D902F4 /* DXCCLabelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85566CF498A9A0F0AA517175 /* DXCCLabelStore.swift */; };
 		F661778B3A6DD283F372E249 /* fobb-roster-page-2026-07.html in Resources */ = {isa = PBXBuildFile; fileRef = 782905999AE900BBDBBE6D2C /* fobb-roster-page-2026-07.html */; };
+		F7B80C3393265B922409D10C /* MessageMemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039CBD24DAEF64BCB1269D67 /* MessageMemoryTests.swift */; };
 		F8230055988666CE68A087CF /* CWKeyerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E1360204AB093D08447987 /* CWKeyerTests.swift */; };
 		FA255DF473A40C79961107EF /* HubSpotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D590A3128E841A331486E328 /* HubSpotClient.swift */; };
 		FAB198B74CB4E5D2C52222BB /* MaidenheadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369E1591F09C47EEADB9A4D7 /* MaidenheadTests.swift */; };
@@ -436,6 +438,7 @@
 		02641FE9618E6D9A40BCF583 /* UpcomingContests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingContests.swift; sourceTree = "<group>"; };
 		033F9D044AD7BFDEE8B6D181 /* PennsylvaniaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PennsylvaniaQSOPartyTests.swift; sourceTree = "<group>"; };
 		03674EF03D1FFEDC38888A79 /* ExchangeSummaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeSummaryTests.swift; sourceTree = "<group>"; };
+		039CBD24DAEF64BCB1269D67 /* MessageMemoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMemoryTests.swift; sourceTree = "<group>"; };
 		03CE1E1946B617E9A436FD8A /* CallHistoryClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryClient.swift; sourceTree = "<group>"; };
 		04053E0272A2391F55417D60 /* SpotFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFilterTests.swift; sourceTree = "<group>"; };
 		05CA401969F43D5B6B37D7E0 /* SpotRepeatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotRepeatTests.swift; sourceTree = "<group>"; };
@@ -472,6 +475,7 @@
 		1897E0B91EAB87E646FB5A8F /* NAQPCW-004.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "NAQPCW-004.txt"; sourceTree = "<group>"; };
 		198B67F829207C5E6DBB329C /* SpotRepeat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotRepeat.swift; sourceTree = "<group>"; };
 		1A23E3ADEAE3B7F86B2A421E /* LogTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTable.swift; sourceTree = "<group>"; };
+		1AD0B60341F5F0643FF06DF6 /* MessageMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMemory.swift; sourceTree = "<group>"; };
 		1B5620BAC49FB9D14CC47186 /* SCPDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCPDatabase.swift; sourceTree = "<group>"; };
 		1BE324A25B998F570B53C353 /* SouthDakotaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SouthDakotaQSOPartyTests.swift; sourceTree = "<group>"; };
 		1C3AC5AB9FAD96FFE2C6ADA3 /* listing-qsop_al-2026-07-28.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "listing-qsop_al-2026-07-28.html"; sourceTree = "<group>"; };
@@ -1365,6 +1369,7 @@
 				019DA95DE2A4D5A20E63D7B0 /* KeyDiagnosticsTests.swift */,
 				58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */,
 				D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */,
+				039CBD24DAEF64BCB1269D67 /* MessageMemoryTests.swift */,
 				4A13C34B4765F4AE9FB37456 /* PotaParkClientTests.swift */,
 				126046DF54E2EDABBDB36074 /* PotaSpotClientTests.swift */,
 				2FF4DB3C69EF4EB9FFF24B24 /* PreferenceIsolationTests.swift */,
@@ -1467,6 +1472,7 @@
 				D590A3128E841A331486E328 /* HubSpotClient.swift */,
 				0A5F9E99BE569E4E2DFB8FC7 /* LocationProvider.swift */,
 				B27158AAEFAD7C21DD3D17B0 /* LogDocument.swift */,
+				1AD0B60341F5F0643FF06DF6 /* MessageMemory.swift */,
 				7E8ACE1B4AD7A5B0F30AF0BF /* PotaParkClient.swift */,
 				1E41369000406AEFA755AE71 /* PotaSpotClient.swift */,
 				FFF706F28E25C2D9ED40B6E0 /* Preferences.swift */,
@@ -1722,6 +1728,7 @@
 				CD43C2A39B7F73159CA453D9 /* MemberExchangeTests.swift in Sources */,
 				00F64B433E3EC47B0CCEAAD9 /* MemberMultiplierTests.swift in Sources */,
 				035AFCF57A3A41C906E0EC90 /* MessageDefaultsTests.swift in Sources */,
+				F7B80C3393265B922409D10C /* MessageMemoryTests.swift in Sources */,
 				E807AEDC6DD4493748F002F3 /* MessageSetsVoiceTests.swift in Sources */,
 				D8D18E1ACF630156435191F6 /* MessagesDraftTests.swift in Sources */,
 				04860FF18E630448799E4436 /* MichiganQSOPartyTests.swift in Sources */,
@@ -1926,6 +1933,7 @@
 				E846862056468AB1BD3D5FD4 /* Maidenhead.swift in Sources */,
 				C4A0BBE3CA76C438A158B860 /* MainView.swift in Sources */,
 				5BB4EA06E9D31340FE8BDBE5 /* MemberExchange.swift in Sources */,
+				7B80F91FBFC63B0E63E229F2 /* MessageMemory.swift in Sources */,
 				151F7624A914409CC5E9DAA5 /* MessageSets.swift in Sources */,
 				52FDB9188C666E49EBE3DDBE /* MessagesDraft.swift in Sources */,
 				54C22E5CBC85F00E72EBE2E6 /* MessagesEditor.swift in Sources */,

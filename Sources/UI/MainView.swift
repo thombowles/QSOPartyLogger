@@ -1085,6 +1085,9 @@ struct MainView: View {
     // MARK: Actions
 
     private func onAppear() {
+        // The per-party message memory, before Contest Setup can read it: a
+        // new Skeeter Hunt log starts from last year's Skeeter Hunt messages.
+        document.messageMemory = MessageMemory()
         // New (or never-configured) contests go straight to Contest Setup.
         if !document.log.setupCompleted {
             showSetup = true

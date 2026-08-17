@@ -41,6 +41,11 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     /// redundant iCloud mirroring for documents stored in the logs folder.
     @ObservationIgnored var knownFileURL: URL?
 
+    /// Where the operator's per-party message sets live between logs. Nil
+    /// until the window wires the real store, so a document built in a test
+    /// remembers nothing and no test can reach another through the memory.
+    @ObservationIgnored var messageMemory: MessageMemory?
+
     /// Nonisolated on purpose: `DocumentGroup`'s new-document factory runs on a
     /// background dispatch queue, so this must not touch main-actor state.
     /// The last station profile is read straight out of `Preferences.store`
@@ -227,10 +232,14 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         return parts.joined(separator: " ")
     }
 
+    /// The editor's Save. The set is also banked under the log's party, so
+    /// the next new log for that party starts from it (`MessageMemory`) —
+    /// and undo, which comes back through here, banks the old set again.
     @MainActor
     func updateMessages(_ sets: MessageSets, undoManager: UndoManager?) {
         let old = log.messages
         log.messages = sets
+        messageMemory?.remember(sets, for: log.partyID)
         undoManager?.registerUndo(withTarget: self) { doc in
             MainActor.assumeIsolated {
                 doc.updateMessages(old, undoManager: undoManager)
@@ -275,11 +284,20 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
             log.myPotaRefs = myPotaRefs
         }
         log.setupCompleted = true
-        // Macros the operator never edited follow the new party's exchange
-        // shape — this is what gives a CQP log {SERIAL} instead of Kansas's
-        // {RST}. Anything customised is theirs and is left alone.
-        if oldMessages == MessageSets.defaults(for: PartyCatalog.party(id: oldParty)) {
-            log.messages = MessageSets.defaults(for: PartyCatalog.party(id: partyID))
+        // Macros the operator never edited follow the new party: the set they
+        // saved last for it (`MessageMemory`), or its defaults — this is what
+        // gives a CQP log {SERIAL} instead of Kansas's {RST}, and a Skeeter
+        // Hunt log last year's Skeeter Hunt messages. "Never edited" means
+        // equal to the old party's defaults, or to the old party's remembered
+        // set: this log's own edits are banked under the old party the moment
+        // they are saved, so taking the new party's set loses nothing — the
+        // old habit is one setup away. A set matching neither is theirs and
+        // is left alone. Undo restores it exactly, below.
+        let untouched = oldMessages == MessageSets.defaults(for: PartyCatalog.party(id: oldParty))
+            || oldMessages == messageMemory?.messages(for: oldParty)
+        if untouched {
+            log.messages = messageMemory?.messages(for: partyID)
+                ?? MessageSets.defaults(for: PartyCatalog.party(id: partyID))
         }
         // Crossing the state line is the one location change that implies a
         // different operating style — the in-state station is the multiplier
