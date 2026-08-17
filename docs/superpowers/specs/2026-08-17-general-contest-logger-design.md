@@ -146,7 +146,7 @@ Well-known class ids keep today's raw values — `county`, `state`, `province`, 
 
 **`DupeRule`** — `{ scope: contest | band | bandMode, locationSensitive: Bool }`. Parties: `bandMode` + `true` (today's key). CQ WW / WPX / ARRL DX: `band`. SS: `contest`. FD/WFD: `bandMode` (mode *classes* are already the sponsors' three groups).
 
-**`pairing`** — for each side, the worked sides that count; `nil` = everyone. MDC `{outside: [inside]}`; ARRL DX `{wve: [dx], dx: [wve]}`; SS `{wve: [wve]}`. Rows outside the pairing are `outOfScope`, exactly today's MDC handling.
+**`pairing`** — for each side, the worked sides that count; `nil` = everyone. MDC `{outside: [inside]}`; ARRL DX `{wve: [dx], dx: [wve]}`; SS `{wve: [wve]}`. Rows outside the pairing are `outOfScope`, exactly today's MDC handling — and `outStateWorksHomeStationsOnly` is true for 45 of the 46 home-region parties (only MEQP is open), so the outside entrant of nearly every party receives counties only. One deliberate change from today: that entrant can no longer type a bare DX prefix into the location field (the old parser accepted one and then scored it out of scope); the field accepts only what the pairing pays for.
 
 **`SideRules`** — `{ maxScoredMultipliers?, multiplierFloor?, granted: [{class, value}], activated: ActivatedRule? }`; `ActivatedRule` is today's five required fields plus `class` (any enumerated class — VHF rovers later).
 
