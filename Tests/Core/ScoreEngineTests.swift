@@ -86,6 +86,23 @@ final class ScoreEngineTests: XCTestCase {
         XCTAssertTrue(s.dupeRowIDs.contains(b.id))
     }
 
+    /// The engine says what each row paid, so the log table can show it
+    /// instead of recomputing (and, for a member-exchange party, getting it
+    /// wrong — 2026-08-16, Skeeter Hunt). Rows that earned nothing are absent.
+    func testEveryScoredRowKnowsWhatItPaid() {
+        let phone = qso(call: "W0A", mode: .phone, their: "MRN")
+        let cw = qso(call: "W0B", mode: .cw, their: "MRN")
+        var dupe = cw
+        dupe.id = UUID()
+        dupe.timestampUTC = cw.timestampUTC.addingTimeInterval(600)
+        let s = ScoreEngine.score(log: outStateLog([phone, cw, dupe]), party: ksqp)
+        XCTAssertEqual(s.pointsByRowID[phone.id], 2)
+        XCTAssertEqual(s.pointsByRowID[cw.id], 3)
+        XCTAssertNil(s.pointsByRowID[dupe.id], "a dupe earns nothing and is not listed")
+        XCTAssertEqual(s.pointsByRowID.values.reduce(0, +), s.qsoPoints,
+                       "the per-row points are the QSO points, no more and no less")
+    }
+
     func testKS0KSBonusOnceAndCountsForQSOCredit() {
         let log = outStateLog([
             qso(call: "KS0KS", band: .m20, their: "SHA"),

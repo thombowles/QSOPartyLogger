@@ -220,6 +220,21 @@ final class SkeeterHuntTests: XCTestCase {
         XCTAssertEqual(score.otherQSOs, 2, "a stated 100 W and an unstated power")
     }
 
+    /// Regression (2026-08-16, on the air): the score card said 70 points
+    /// while every row in the log list read 1 — the list was recomputing
+    /// from the party's mode table, which knows nothing of the received
+    /// element. Each row must carry what the engine actually paid for it.
+    func testEachRowIsPaidByWhatTheWorkedStationIs() {
+        let rows = [
+            qso(call: "W2LJ", their: "NJ", memberRcvd: "13"),    // Skeeter: 3
+            qso(call: "K1SW", their: "NH", memberRcvd: "5W"),    // QRP: 2
+            qso(call: "W9XYZ", their: "IL", memberRcvd: "100W"), // QRO: 1
+            qso(call: "K4POTA", their: "GA", memberRcvd: nil),   // QRO: 1
+        ]
+        let score = ScoreEngine.score(log: log(rows), party: skeeter)
+        XCTAssertEqual(rows.map { score.pointsByRowID[$0.id] }, [3, 2, 1, 1])
+    }
+
     /// The QRP ceiling is the event's own power rule, per mode and
     /// inclusive: 10 W is QRP on phone and QRO on CW.
     func testQRPBoundaryFollowsTheModePowerLimits() {

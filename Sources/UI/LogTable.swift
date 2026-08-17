@@ -165,16 +165,19 @@ struct LogTable: View {
     }
 
     private func pointsText(_ q: QSO) -> String {
-        guard let party else { return "-" }
-        if score.dupeRowIDs.contains(q.id)
-            || score.invalidRowIDs.contains(q.id)
-            || score.outOfScopeRowIDs.contains(q.id) { return "0" }
-        // Parties that pay by who was worked (MEQP) need the row's location,
-        // not just its mode — otherwise a 2-point Maine QSO displays as 1.
-        let table = party.pointsTable(
-            forTheirLoc: q.theirLoc,
-            countyAbbrs: Set(party.counties.map(\.abbr))
-        )
-        return String(table.points(for: q.modeClass))
+        Self.pointsText(for: q, score: score, party: party)
+    }
+
+    /// What the `Pts` column prints for a row: what the engine paid it, and
+    /// nothing this view works out for itself. Recomputing here from the
+    /// party's mode/location table read every Skeeter Hunt row as 1 while the
+    /// score card said 70 (2026-08-16) — that table cannot see the received
+    /// Skeeter number or power. A row the engine paid nothing for (a dupe, an
+    /// invalid mode, out of scope) is absent from the breakdown and reads 0.
+    nonisolated static func pointsText(
+        for q: QSO, score: ScoreEngine.ScoreBreakdown, party: PartyDefinition?
+    ) -> String {
+        guard party != nil else { return "-" }
+        return String(score.pointsByRowID[q.id] ?? 0)
     }
 }

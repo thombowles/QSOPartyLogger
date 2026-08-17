@@ -239,7 +239,9 @@ rules. Points by mode, multiplier scope (once, per band, per mode, or both),
 bonus stations, mobile activation bonuses, power and station-category
 multipliers, and 1×1 word trackers where the sponsor runs one. Dupes are flagged
 but kept, because sponsors want them in the log. A **NEW MULT** badge appears
-before you log.
+before you log. The log list's **Pts** column is what the engine paid each row —
+the same breakdown the sidebar totals, so a Skeeter Hunt row reads 3, 2 or 1 by
+the number or power it sent, and a dupe reads 0.
 
 Each party names its own multiplier class, so NAQP counts *NA entities*, BCQP
 *districts* and QCQP *regions* — nothing says "county" at a party that doesn't

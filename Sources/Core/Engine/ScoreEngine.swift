@@ -72,6 +72,13 @@ enum ScoreEngine {
         /// reaches the score never drops below it (FOBB's printed "Defaults
         /// to … = 1"). 0 everywhere else, which is inert.
         var multiplierFloor = 0
+        /// What each row was paid, for the log list's `Pts` column — set for
+        /// every row that earned points; a dupe, an invalid-mode row or an
+        /// out-of-scope row is absent. The list prints this and computes
+        /// nothing of its own: recomputing from the party's mode table cannot
+        /// see a member-exchange party's received element, which is how every
+        /// Skeeter Hunt row read 1 while the card said 70 (2026-08-16).
+        var pointsByRowID: [UUID: Int] = [:]
 
         /// Multipliers that reach the score. Every key is still tallied in
         /// `multiplierKeys` — the cap limits what is paid for and the floor
@@ -143,25 +150,28 @@ enum ScoreEngine {
             // regardless of mode. A blank element is a QRO station, not a
             // gap: a POTA activator who sends only a report and a state is
             // exactly the sponsor's "any other QRO station".
+            let rowPoints: Int
             if let member = party.memberExchange {
                 switch member.workedClass(
                     forReceived: row.memberRcvd, modeClass: row.modeClass
                 ) {
                 case .member:
-                    result.qsoPoints += member.memberPoints
+                    rowPoints = member.memberPoints
                     result.memberQSOs += 1
                 case .qrp:
-                    result.qsoPoints += member.qrpPoints
+                    rowPoints = member.qrpPoints
                     result.qrpQSOs += 1
                 case .other:
-                    result.qsoPoints += member.otherPoints
+                    rowPoints = member.otherPoints
                     result.otherQSOs += 1
                 }
             } else {
-                result.qsoPoints += party
+                rowPoints = party
                     .pointsTable(forTheirLoc: row.theirLoc, countyAbbrs: countyAbbrs)
                     .points(for: row.modeClass)
             }
+            result.qsoPoints += rowPoints
+            result.pointsByRowID[row.id] = rowPoints
 
             for contribution in multContributions(
                 theirLoc: row.theirLoc.uppercased(),
