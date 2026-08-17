@@ -83,5 +83,6 @@ final class CTYTableTests: XCTestCase {
         XCTAssertTrue(CTYTable.shared!.hasPrefix("DL"))
         XCTAssertFalse(CTYTable.shared!.hasPrefix("DL1AA"))   // a full call is not a prefix key
         XCTAssertFalse(CTYTable.shared!.hasPrefix(""))
+        XCTAssertTrue(CTYTable.shared!.hasPrefix("CE0Y"))   // Easter Island: primary prefix, not a token in its own list
     }
 }

@@ -65,6 +65,10 @@ final class WPXPrefixTests: XCTestCase {
         // as a prefix token, not just a primary prefix — verified by reading
         // the record in Resources/CTY/cty.csv.
         XCTAssertEqual(WPXPrefix.of("K5ZD/VK9C"), "VK9")
+        // CE0Y (Easter Island) is a primary prefix but not a token in its own
+        // list — CTYTable.hasPrefix recognises it anyway, so the default
+        // closure still picks CE0Y as the designator over K5ZD.
+        XCTAssertEqual(WPXPrefix.of("K5ZD/CE0Y"), "CE0")
     }
 
     func testEmptyAndJunk() {

@@ -39,6 +39,9 @@ struct CTYTable: Sendable {
     }
     private let exact: [String: Rule]
     private let prefixes: [String: Rule]
+    /// Every entity's primary prefix (field 0), independent of whether the
+    /// file also lists it as a token in its own prefix list.
+    private let primaryPrefixes: Set<String>
     private let longestPrefix: Int
 
     // MARK: Loading
@@ -98,6 +101,7 @@ struct CTYTable: Sendable {
         }
         guard !entities.isEmpty else { throw ParseError.noRecords }
         return CTYTable(entities: entities, release: release, exact: exact, prefixes: prefixes,
+                        primaryPrefixes: Set(entities.map(\.primaryPrefix)),
                         longestPrefix: prefixes.keys.map(\.count).max() ?? 0)
     }
 
@@ -107,13 +111,13 @@ struct CTYTable: Sendable {
         entities.first { $0.primaryPrefix == prefix.uppercased() }
     }
 
-    /// Whether `prefix`, uppercased, is exactly one of the file's prefix
-    /// keys (not one of its exact-call `=CALL` keys). A record's own
-    /// primary prefix (field 0) counts only if the file also lists it as a
-    /// token — Easter Island's primary prefix `CE0Y` does not list itself,
-    /// so `hasPrefix("CE0Y")` is false even though `CE0Y` names the entity.
+    /// Whether `prefix`, uppercased, is one of the file's prefix keys (not
+    /// one of its exact-call `=CALL` keys) or some entity's primary prefix
+    /// (field 0) — a record's own primary prefix does not always reappear
+    /// as a token in its own prefix list, so primary prefixes count too.
     func hasPrefix(_ prefix: String) -> Bool {
-        prefixes[prefix.uppercased()] != nil
+        let key = prefix.uppercased()
+        return prefixes[key] != nil || primaryPrefixes.contains(key)
     }
 
     /// The entity and zones for a callsign: an exact `=CALL` entry (with or
