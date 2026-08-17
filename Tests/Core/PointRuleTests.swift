@@ -58,4 +58,17 @@ final class PointRuleTests: XCTestCase {
         XCTAssertEqual(PointRule.points(rules, ctx(mode: .phone)), 1)
         XCTAssertEqual(PointRule.points(rules, ctx(mode: .digital)), 2)
     }
+
+    func testCallsignConditionUppercasesOnDecode() throws {
+        let rules = try JSONDecoder().decode([PointRule].self, from: Data(#"[{"when":[{"callsign":["ve3xyz"]}],"points":10},{"points":1}]"#.utf8))
+        XCTAssertEqual(PointRule.points(rules, ctx(call: "VE3XYZ")), 10)
+        XCTAssertEqual(PointRule.points(rules, ctx(call: "ve3xyz")), 10)
+        XCTAssertEqual(PointRule.points(rules, ctx(call: "K5ZD")), 1)
+    }
+
+    func testEmptyConditionAndNoRules() throws {
+        let rules = try JSONDecoder().decode([PointRule].self, from: Data(#"[{"when":[{}],"points":3}]"#.utf8))
+        XCTAssertEqual(PointRule.points(rules, ctx()), 3)
+        XCTAssertEqual(PointRule.points([], ctx()), 0)
+    }
 }

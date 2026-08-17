@@ -28,7 +28,9 @@ struct PointRule: Codable, Equatable, Sendable {
     }
 }
 
-/// A conjunction of constraints; every present field must hold.
+/// A conjunction of constraints; every present field must hold. A condition
+/// with no fields — `{}` in JSON — matches every row, the same as an absent
+/// `when`.
 struct PointCondition: Codable, Equatable, Sendable {
     enum Relation: String, Codable, Sendable { case sameEntity, sameContinent, differentContinent }
     struct TokenMatch: Codable, Equatable, Sendable {
@@ -60,6 +62,27 @@ struct PointCondition: Codable, Equatable, Sendable {
         self.receivedTokenIn = receivedTokenIn
         self.workedStationKind = workedStationKind
         self.callsign = callsign?.map { $0.uppercased() }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case modeClass, band, relation, bothInContinent, side, workedSide, receivedTokenIn, workedStationKind, callsign
+    }
+
+    /// Decoding funnels through the memberwise init so `callsign` is
+    /// uppercased on this path too (the `TokenSet.Token` lesson).
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            modeClass: try c.decodeIfPresent([ModeClass].self, forKey: .modeClass),
+            band: try c.decodeIfPresent([Band].self, forKey: .band),
+            relation: try c.decodeIfPresent(Relation.self, forKey: .relation),
+            bothInContinent: try c.decodeIfPresent(String.self, forKey: .bothInContinent),
+            side: try c.decodeIfPresent([String].self, forKey: .side),
+            workedSide: try c.decodeIfPresent([String].self, forKey: .workedSide),
+            receivedTokenIn: try c.decodeIfPresent(TokenMatch.self, forKey: .receivedTokenIn),
+            workedStationKind: try c.decodeIfPresent([String].self, forKey: .workedStationKind),
+            callsign: try c.decodeIfPresent([String].self, forKey: .callsign)
+        )
     }
 
     /// Everything a condition can read about one row.
