@@ -987,7 +987,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2820 unit tests**, none of which need hardware, a network or a microphone —
+**2863 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
 (driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank
@@ -996,7 +996,10 @@ voice recorder's model and DSP and its per-party files, the sound-card keying
 sequence (lead, play, tail, unkey — abort at every point, over a fake output),
 what the flow puts on the air from a recording, cluster login and telnet handling, call history
 parsing and its prefill priority chain, super check partial parsing, matching
-and its download client, spot parsing and filtering and navigation, the
+(with the party's call history merged in and marked) and its download client,
+the per-row points the log list prints, the per-party message memory, the
+repeat-CQ rules (the toggle arms, shortcuts leave the loop alone, the mode
+survives Run ⇄ S&P), spot parsing and filtering and navigation, the
 spotting policy, outgoing spots — which networks are on offer and why not,
 the cluster `DX` command byte for byte, pota.app's own form rules and JSON
 body, the fan-out dispatcher and its receipt — the band map scale and column
