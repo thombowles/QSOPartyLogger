@@ -104,12 +104,15 @@ struct TokenSet: Codable, Equatable, Sendable, Identifiable {
         return tokens.first { $0.abbr == canon }
     }
 
-    /// Duplicate token abbreviations, alias targets that aren't tokens, and
-    /// alias keys that shadow a token's `abbr`. Called by
-    /// `ContestDefinition.validate()`; the built-ins pass by construction.
+    /// Empty token abbreviations, duplicate token abbreviations, alias targets
+    /// that aren't tokens, and alias keys that shadow a token's `abbr`. Called
+    /// by `ContestDefinition.validate()`; the built-ins pass by construction.
     func validate() throws {
         var seen = Set<String>()
         for token in tokens {
+            guard !token.abbr.isEmpty else {
+                throw TokenSetError.emptyAbbreviation
+            }
             guard seen.insert(token.abbr).inserted else {
                 throw TokenSetError.duplicateAbbreviation(token.abbr)
             }
@@ -179,12 +182,14 @@ enum TokenSetError: Error, Equatable, LocalizedError {
     case duplicateAbbreviation(String)
     case aliasTargetMissing(String, String)
     case aliasShadowsToken(String)
+    case emptyAbbreviation
 
     var errorDescription: String? {
         switch self {
         case .duplicateAbbreviation(let a): "Token abbreviation '\(a)' appears more than once."
         case .aliasTargetMissing(let key, let target): "Alias '\(key)' points to '\(target)', which is not a token."
         case .aliasShadowsToken(let key): "Alias '\(key)' duplicates a token abbreviation."
+        case .emptyAbbreviation: "A token's abbreviation is empty."
         }
     }
 }

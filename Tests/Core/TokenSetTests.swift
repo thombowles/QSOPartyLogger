@@ -75,6 +75,11 @@ final class TokenSetTests: XCTestCase {
     }
 
     func testValidate() {
+        let emptyAbbr = TokenSet(id: "x", term: "t", termPlural: "ts", tokens: [.init(abbr: "")])
+        XCTAssertThrowsError(try emptyAbbr.validate()) { error in
+            XCTAssertEqual(error as? TokenSetError, .emptyAbbreviation)
+        }
+
         let duplicate = TokenSet(id: "x", term: "t", termPlural: "ts",
                                  tokens: [.init(abbr: "MD"), .init(abbr: "MD")])
         XCTAssertThrowsError(try duplicate.validate()) { error in

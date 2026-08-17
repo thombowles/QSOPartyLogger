@@ -133,7 +133,7 @@ The log **stores** `sideID`. The entrant predicate only *defaults* the choice in
 
 | kind | fields | value |
 | --- | --- | --- |
-| `receivedToken` | `element`, `set`, `mapTo?` (`countyState` maps a county to its state) | the token, or its mapping |
+| `receivedToken` | `element`, `set`, `mapTo?` (`"group"` maps a token to its group — a county to its state) | the token, or its mapping |
 | `dxccEntity` | `from: callsign \| receivedToken \| receivedTokenOrCallsign`, `list: arrl \| arrlPlusWAE`, `exclude: [codes]`, `countEntities: Bool` | entity (label = primary prefix, identity = code / WAE name); when `countEntities` is false the literal `DX` |
 | `cqZone` / `ituZone` | `from: received` | the zone |
 | `wpxPrefix` | — | `WPXPrefix.of(call)` |
@@ -210,7 +210,7 @@ Sketch of `cqwwcw.json` (v2):
 | `points`, `homeStationPoints`, `countyPointFactor` | explicit `points` rules: designated ∧ home → scaled home table; designated → scaled; home (`receivedTokenIn(location, counties)`) → home table; default → `points` |
 | `dupeScope: bandMode` | `dupe: {bandMode, locationSensitive: true}` |
 | `multipliers.inState / .outState` `classes`, `countScope` | one `MultiplierClass` per class named on either side; `counting[side]` per side |
-| `homeStateCountsViaCounty` | a second `state` resolver `receivedToken(location, counties, mapTo: countyState, sides: [that side])` |
+| `homeStateCountsViaCounty` | a second `state` resolver `receivedToken(location, counties, mapTo: "group", sides: [that side])` |
 | `dxCountsEntities` | the `dx` class resolver `dxccEntity(from: receivedTokenOrCallsign, list: arrl, countEntities:, sides:)` |
 | `dxMultCap` | `caps[side]` on `dx` |
 | `maxScoredMultipliers`, `multiplierFloor`, `grantedMultipliers`, `activatedCountyMultiplier` | `sideRules[side]` |
