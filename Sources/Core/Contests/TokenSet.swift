@@ -19,6 +19,17 @@ struct TokenSet: Codable, Equatable, Sendable, Identifiable {
             self.name = name
             self.group = group
         }
+
+        private enum CodingKeys: String, CodingKey { case abbr, name, group }
+
+        init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            self.init(
+                abbr: try c.decode(String.self, forKey: .abbr),
+                name: try c.decodeIfPresent(String.self, forKey: .name),
+                group: try c.decodeIfPresent(String.self, forKey: .group)
+            )
+        }
     }
 
     let id: String
@@ -28,14 +39,22 @@ struct TokenSet: Codable, Equatable, Sendable, Identifiable {
     let tokens: [Token]
     /// Accepted spelling → canonical token ("DC" → "MD" where a party credits
     /// DC as Maryland). Keys are accepted on input; values must be tokens.
+    /// Case-folded; a collision keeps the first. Targets are checked by
+    /// `validate()`, not at init.
     let aliases: [String: String]
+    /// Every token's `abbr`. Precomputed at init from `tokens`.
+    let abbrs: Set<String>
 
     init(id: String, term: String, termPlural: String, tokens: [Token], aliases: [String: String] = [:]) {
         self.id = id
         self.term = term
         self.termPlural = termPlural
         self.tokens = tokens
-        self.aliases = Dictionary(uniqueKeysWithValues: aliases.map { ($0.key.uppercased(), $0.value.uppercased()) })
+        self.abbrs = Set(tokens.map(\.abbr))
+        self.aliases = Dictionary(
+            aliases.map { ($0.key.uppercased(), $0.value.uppercased()) },
+            uniquingKeysWith: { first, _ in first }
+        )
     }
 
     private enum CodingKeys: String, CodingKey { case id, term, termPlural, tokens, aliases }
@@ -51,14 +70,27 @@ struct TokenSet: Codable, Equatable, Sendable, Identifiable {
         )
     }
 
-    var abbrs: Set<String> { Set(tokens.map(\.abbr)) }
+    /// `abbrs` is derived from `tokens` and is not encoded.
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(id, forKey: .id)
+        try c.encode(term, forKey: .term)
+        try c.encode(termPlural, forKey: .termPlural)
+        try c.encode(tokens, forKey: .tokens)
+        try c.encode(aliases, forKey: .aliases)
+    }
 
     /// Every spelling the set accepts: its tokens and its alias keys.
     var acceptedTokens: Set<String> { abbrs.union(aliases.keys) }
 
     func accepts(_ raw: String) -> Bool { canonical(raw) != nil }
 
-    /// The token a spelling credits, or nil. Zone sets fold "05" to "5".
+    /// The token a spelling credits, or nil.
+    ///
+    /// The numeric fold applies to every set: a token spelled with leading
+    /// zeros credits its plain number when the set carries that number
+    /// (`05` → `5` for zones). Sets never mix zero-padded and plain
+    /// spellings of the same number.
     func canonical(_ raw: String) -> String? {
         let t = raw.trimmingCharacters(in: .whitespaces).uppercased()
         if abbrs.contains(t) { return t }
@@ -70,6 +102,26 @@ struct TokenSet: Codable, Equatable, Sendable, Identifiable {
     func token(for abbr: String) -> Token? {
         guard let canon = canonical(abbr) else { return nil }
         return tokens.first { $0.abbr == canon }
+    }
+
+    /// Duplicate token abbreviations, alias targets that aren't tokens, and
+    /// alias keys that shadow a token's `abbr`. Called by
+    /// `ContestDefinition.validate()`; the built-ins pass by construction.
+    func validate() throws {
+        var seen = Set<String>()
+        for token in tokens {
+            guard seen.insert(token.abbr).inserted else {
+                throw TokenSetError.duplicateAbbreviation(token.abbr)
+            }
+        }
+        for (key, target) in aliases {
+            guard !abbrs.contains(key) else {
+                throw TokenSetError.aliasShadowsToken(key)
+            }
+            guard abbrs.contains(target) else {
+                throw TokenSetError.aliasTargetMissing(key, target)
+            }
+        }
     }
 
     // MARK: Built-ins
@@ -100,12 +152,26 @@ struct TokenSet: Codable, Equatable, Sendable, Identifiable {
     /// bundle (see `TokenSet.sections(bundle:)`) and is not in this table.
     static func builtIn(id: String) -> TokenSet? {
         switch id {
-        case usStates.id: usStates
-        case provinces.id: provinces
-        case cqZones.id: cqZones
-        case ituZones.id: ituZones
-        case dxToken.id: dxToken
+        case "usStates": usStates
+        case "provinces": provinces
+        case "cqZones": cqZones
+        case "ituZones": ituZones
+        case "dxToken": dxToken
         default: nil
+        }
+    }
+}
+
+enum TokenSetError: Error, Equatable, LocalizedError {
+    case duplicateAbbreviation(String)
+    case aliasTargetMissing(String, String)
+    case aliasShadowsToken(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .duplicateAbbreviation(let a): "Token abbreviation '\(a)' appears more than once."
+        case .aliasTargetMissing(let key, let target): "Alias '\(key)' points to '\(target)', which is not a token."
+        case .aliasShadowsToken(let key): "Alias '\(key)' duplicates a token abbreviation."
         }
     }
 }
