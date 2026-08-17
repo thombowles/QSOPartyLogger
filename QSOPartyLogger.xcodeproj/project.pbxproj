@@ -295,6 +295,7 @@
 		AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A15E4511652305732261EE /* SetupSheet.swift */; };
 		AFABF3686AB980194F459E40 /* CallAreaSumBonusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC49C26B1FFD6EC5D00830A /* CallAreaSumBonusTests.swift */; };
 		B0A27BE21DD4642BE3BB7351 /* TuningPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73361DBD51B22D648CB7B35 /* TuningPolicyTests.swift */; };
+		B12C6A107C252BD265BD252D /* ExchangeValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39F73FDF156DBED970D3D03 /* ExchangeValidator.swift */; };
 		B17A30C0E305DB27D5D056BB /* ArrlSectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0FC2D8F759F9E6278D2504 /* ArrlSectionsTests.swift */; };
 		B1BC5DA0F131ED077F99FECA /* VoiceLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E3EC3370FBB8DDF642B43 /* VoiceLibraryTests.swift */; };
 		B1D00F1C5357D0F96BD9160A /* MultiplierFloorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E59AE5F347D2C4F33144EA3 /* MultiplierFloorTests.swift */; };
@@ -337,6 +338,7 @@
 		C5D61D94DC78A4138E5ECF68 /* VoiceLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47ACFCA1323BFC4136D84F3 /* VoiceLibrary.swift */; };
 		C60CC51CEC644E079173FDD5 /* NorthCarolinaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3503B1BC8F8AE6F11E4221F7 /* NorthCarolinaQSOPartyTests.swift */; };
 		C6FA714C3CDFA18E1988D2E3 /* CWKeyer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C943C5C616ADB650DA248E /* CWKeyer.swift */; };
+		C741F139BD316A8596431202 /* ExchangeValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA1DE529E1D715FE798A8614 /* ExchangeValidatorTests.swift */; };
 		C8236BF947275FBB57A90FBB /* SpotReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9CE5AB018C465D9E626FBD /* SpotReceiptView.swift */; };
 		C86470C8A36E65E23F364FD5 /* OhioQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F2B4F0F3E08B109AEE12BA /* OhioQSOPartyTests.swift */; };
 		C8D75CDEDA03D6C333F7F36C /* DashboardModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53EE348D4F155F8D1FCC2EF /* DashboardModelTests.swift */; };
@@ -833,6 +835,7 @@
 		E178815CECB3CA7EA9B358A7 /* SCPStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCPStore.swift; sourceTree = "<group>"; };
 		E1E6305A1D5D177F6DF014E0 /* Advisor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advisor.swift; sourceTree = "<group>"; };
 		E3177912A8EE7884EB3A8082 /* cqwwcw.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = cqwwcw.json; sourceTree = "<group>"; };
+		E39F73FDF156DBED970D3D03 /* ExchangeValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeValidator.swift; sourceTree = "<group>"; };
 		E4212B5C5FFD5CE16B88D78B /* DXCCTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCTable.swift; sourceTree = "<group>"; };
 		E4295E1FE334FF3C8606B090 /* VoiceSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSettingsTests.swift; sourceTree = "<group>"; };
 		E47B909CEEA3FE7198C4E005 /* ClusterSpotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterSpotTests.swift; sourceTree = "<group>"; };
@@ -845,6 +848,7 @@
 		E70A4C058DB0BE3BF9AA15BC /* Parties */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Parties; path = Resources/Parties; sourceTree = SOURCE_ROOT; };
 		E77F88B8469172A628005C61 /* ArizonaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArizonaQSOPartyTests.swift; sourceTree = "<group>"; };
 		E9F8E0DD4DFDC0CB0DF3FEF1 /* CallHistoryFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryFileTests.swift; sourceTree = "<group>"; };
+		EA1DE529E1D715FE798A8614 /* ExchangeValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeValidatorTests.swift; sourceTree = "<group>"; };
 		EA2D9B1FCC05FCBCC978861F /* PotaParkDirectoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkDirectoryTests.swift; sourceTree = "<group>"; };
 		EA8FAE342F109F10019D3BA4 /* SuperCheckFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperCheckFlowTests.swift; sourceTree = "<group>"; };
 		EAD2185248112D1AF977D2F2 /* MemberExchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberExchange.swift; sourceTree = "<group>"; };
@@ -962,6 +966,7 @@
 				E6D311DEBD1B5C6AA9730A18 /* DXCCLabelStore.swift */,
 				E4212B5C5FFD5CE16B88D78B /* DXCCTable.swift */,
 				0472BDED0E13FBBD670B36ED /* ExchangeElement.swift */,
+				E39F73FDF156DBED970D3D03 /* ExchangeValidator.swift */,
 				3F5C24707F61E7C6C6E1122F /* HubSpotSource.swift */,
 				861DB04574AAEACF21FD47A6 /* MultiplierClass.swift */,
 				826129C440B9A8E8EC836802 /* MultiplierRoster.swift */,
@@ -1099,6 +1104,7 @@
 				F3A6CD38D36F93D879D6A6C8 /* ExchangeElementTests.swift */,
 				A3EE6994E490B94BF6B0B2F7 /* ExchangeParserTests.swift */,
 				03674EF03D1FFEDC38888A79 /* ExchangeSummaryTests.swift */,
+				EA1DE529E1D715FE798A8614 /* ExchangeValidatorTests.swift */,
 				88071FA213332081C725A066 /* FlightOfTheBumblebeesTests.swift */,
 				E4D8CF7496BE7953659E708C /* FloridaQSOPartyTests.swift */,
 				6A1D7EE32F413444F4A090BF /* FOBBRosterParserTests.swift */,
@@ -1793,6 +1799,7 @@
 				3BC4CAB316F58AE4894DDB41 /* ExchangeElementTests.swift in Sources */,
 				EFF567B7FAA9F043F72398D2 /* ExchangeParserTests.swift in Sources */,
 				30817044B3B8822195ECD6C2 /* ExchangeSummaryTests.swift in Sources */,
+				C741F139BD316A8596431202 /* ExchangeValidatorTests.swift in Sources */,
 				095B26A9DA9174ABA71AF5E0 /* FOBBRosterParserTests.swift in Sources */,
 				EC188E18AF10AC5E1FBE2E85 /* FlexDAXPacketizerTests.swift in Sources */,
 				C0F9C6AFC27E447B1992BEA5 /* FlexDAXStreamerTests.swift in Sources */,
@@ -2020,6 +2027,7 @@
 				F514B49832FCD358FCF5D4AD /* ExchangeElement.swift in Sources */,
 				4BB24860B49D12AC15176471 /* ExchangeParser.swift in Sources */,
 				4C0190EFE7A126C07024FF23 /* ExchangeSummary.swift in Sources */,
+				B12C6A107C252BD265BD252D /* ExchangeValidator.swift in Sources */,
 				3F69F4565E8E564590E34E1F /* FOBBRosterParser.swift in Sources */,
 				7BAFE548E15B03441408AB7A /* FlexDAXPacketizer.swift in Sources */,
 				117D7D394184CA651CF5BBBB /* FlexDAXStreamer.swift in Sources */,
