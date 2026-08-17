@@ -40,6 +40,7 @@ The non-negotiables, so they are never a surprise:
 | Path | Contents |
 | --- | --- |
 | `Sources/Core/Parties/` | `PartyDefinition` (JSON rule schema), `PartyCatalog`, counties, mult classes |
+| `Sources/Core/Contests/` | The general contest model (`ContestDefinition`, token sets, sides, exchange spec, multiplier classes, point rules), `PartyLowering`, `ContestCatalog`, `CTYTable`, `WPXPrefix`, `ExchangeValidator`, `OperatingTime`; shared sources (`HubSpotSource`, `CallHistorySource`, `DXCCTable`, `MultiplierRoster`, `ScoreFactor`) |
 | `Sources/Core/Engine/` | `ScoreEngine`, `ExchangeParser`, `DupeChecker`, `CountyLineExpander`, `StationMemory`, ESM |
 | `Sources/Core/CallHistory/` | N1MM call history file parser, site page parsers, on-disk cache |
 | `Sources/Core/Export/` | Cabrillo V3, ADIF 3.1.4 |
