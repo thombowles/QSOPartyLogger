@@ -1644,7 +1644,7 @@ import XCTest
 
 final class ContestDefinitionTests: XCTestCase {
     private func fixture() throws -> ContestDefinition {
-        let url = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json", subdirectory: "Contests"))
+        let url = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json"))
         return try ContestDefinition.decode(try Data(contentsOf: url))
     }
 
@@ -1683,13 +1683,13 @@ final class ContestDefinitionTests: XCTestCase {
 
     func testValidateRejectsBrokenReferences() throws {
         var json = try JSONSerialization.jsonObject(with: Data(contentsOf: XCTUnwrap(
-            Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json", subdirectory: "Contests")))) as! [String: Any]
+            Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json")))) as! [String: Any]
         json["points"] = [["when": [["relation": "sameEntity"]], "points": 0]]     // no unconditional rule
         XCTAssertThrowsError(try ContestDefinition.decode(JSONSerialization.data(withJSONObject: json))) { error in
             XCTAssertEqual(error as? ContestValidationError, .pointsWithoutDefault)
         }
         json = try JSONSerialization.jsonObject(with: Data(contentsOf: XCTUnwrap(
-            Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json", subdirectory: "Contests")))) as! [String: Any]
+            Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json")))) as! [String: Any]
         var mults = json["multipliers"] as! [[String: Any]]
         mults[0]["counting"] = ["nobody": "perBand"]
         json["multipliers"] = mults
@@ -3328,7 +3328,7 @@ final class ContestCatalogTests: XCTestCase {
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: dir) }
-        let fixture = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json", subdirectory: "Contests"))
+        let fixture = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json"))
         try FileManager.default.copyItem(at: fixture, to: dir.appendingPathComponent("cqwwcw.json"))
         try Data("{ not json".utf8).write(to: dir.appendingPathComponent("broken.json"))
         let loaded = ContestCatalog.loadUserContests(in: dir)
@@ -3342,7 +3342,7 @@ final class ContestCatalogTests: XCTestCase {
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: dir) }
         var json = try JSONSerialization.jsonObject(with: Data(contentsOf: XCTUnwrap(
-            Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json", subdirectory: "Contests")))) as! [String: Any]
+            Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json")))) as! [String: Any]
         json["id"] = "ksqp"; json["name"] = "Kansas, overridden"
         try JSONSerialization.data(withJSONObject: json).write(to: dir.appendingPathComponent("ksqp.json"))
         let all = ContestCatalog.all(userContestsDirectory: dir)
