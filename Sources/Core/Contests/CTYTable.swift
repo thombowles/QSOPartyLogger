@@ -8,7 +8,10 @@ struct CTYTable: Sendable {
     struct Entity: Equatable, Sendable {
         let name: String
         let primaryPrefix: String
-        /// ADIF/DXCC entity code; nil for a WAE-only entity (`*` in the file).
+        /// The ADIF/DXCC entity code the file gives. A WAE-only record (`*`
+        /// in the file) carries its *parent* entity's code — Sicily is 248
+        /// like Italy — so use `waeOnly` to tell them apart; nil only where
+        /// the file leaves the field empty, which no bundled record does.
         let entityCode: Int?
         let continent: String
         let cqZone: Int
@@ -36,6 +39,7 @@ struct CTYTable: Sendable {
     }
     private let exact: [String: Rule]
     private let prefixes: [String: Rule]
+    private let longestPrefix: Int
 
     // MARK: Loading
 
@@ -90,7 +94,8 @@ struct CTYTable: Sendable {
             }
         }
         guard !entities.isEmpty else { throw ParseError.noRecords }
-        return CTYTable(entities: entities, release: release, exact: exact, prefixes: prefixes)
+        return CTYTable(entities: entities, release: release, exact: exact, prefixes: prefixes,
+                        longestPrefix: prefixes.keys.map(\.count).max() ?? 0)
     }
 
     // MARK: Lookup
@@ -108,10 +113,10 @@ struct CTYTable: Sendable {
         if let rule = exact[call] { return make(rule, exact: true) }
         let part = DXCCTable.locationPart(of: call)
         if let rule = exact[part] { return make(rule, exact: true) }
-        var end = part.endIndex
-        while end > part.startIndex {
-            if let rule = prefixes[String(part[..<end])] { return make(rule, exact: false) }
-            end = part.index(before: end)
+        var length = min(part.count, longestPrefix)
+        while length > 0 {
+            if let rule = prefixes[String(part.prefix(length))] { return make(rule, exact: false) }
+            length -= 1
         }
         return nil
     }
