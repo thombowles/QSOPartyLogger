@@ -103,8 +103,8 @@ ContestDefinition
 | kind | fields | who uses it |
 | --- | --- | --- |
 | `always` | — | CQ WW, WPX, SS, FD |
-| `sentTokenIn` / `receivedTokenIn` | `element`, `set` | parties (`location` ∈ `counties` ⇒ inside) |
-| `dxccIn` / `dxccOfCallsignIn` | `codes: [ADIF entity code]` | ARRL DX (W/VE = 291, 1) |
+| `tokenIn` | `element`, `set` — read from the sent exchange in `predicate`, the received exchange in `workedPredicate` | parties (`location` ∈ `counties` ⇒ inside) |
+| `dxccIn` | `codes: [ADIF entity code]` — the entrant's callsign in `predicate`, the worked callsign in `workedPredicate` | ARRL DX (W/VE = 291, 1) |
 | `continentIn` | `continents` | reserved (NAQP's NA rule 12) |
 
 The log **stores** `sideID`. The entrant predicate only *defaults* the choice in Setup: a county code can collide with a state code, so a party operator's Inside/Outside is never inferred from a token.
