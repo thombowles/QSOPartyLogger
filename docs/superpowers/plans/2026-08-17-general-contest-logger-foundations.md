@@ -18,7 +18,7 @@
 - After **adding or moving any Swift or resource file**, run `xcodegen generate` (XcodeGen enumerates files at generation time).
 - Build: `xcodebuild -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger build 2>&1 | tail -5`
 - One test class: `set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' -only-testing:QSOPartyLoggerTests/<ClassName> 2>&1 | grep -E "Test Case|Executed|error:|BUILD" | tail -30`
-- Full suite (end of every task that touches shared code): `set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' 2>&1 | grep -E "Executed [0-9]+ tests|error:|failed" | tail -5` — expected `Executed N tests, with 0 failures` where N ≥ 2875 and grows with each task.
+- Full suite (end of every task that touches shared code): `set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' 2>&1 | grep -E "Executed [0-9]+ tests|error:|failed" | tail -5` — expected `Executed N tests, with 0 failures` where N ≥ 2875 (the measured baseline) and grows with each task.
 - Tests never touch the network or hardware (Article 5). Bundled resources are read through `Bundle.main` (the test bundle is hosted inside the app).
 - Commit after every green step with the message shown; every commit message ends with `Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>`.
 - Constitution Article 4: this plan adds no party and changes no score. Article 6: the README test count is updated in the last task.
@@ -59,7 +59,7 @@ Tests (`Tests/Core/`): `TokenSetTests`, `ArrlSectionsTests`, `SideTests`, `Excha
 ```bash
 xcodegen generate && set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' 2>&1 | grep -E "Executed [0-9]+ tests" | tail -1
 ```
-Expected: `Executed 2876 tests, with 0 failures` (2,875 tests plus `TestBundleSetup`'s observation method, which XCTest counts — the README says 2875).
+Expected: `Executed 2875 tests, with 0 failures` (measured 2026-08-17 in this worktree: 2875 in ~51 s).
 
 - [ ] **Step 2: Nothing to commit** (the tracked `.xcodeproj` should be unchanged; if `git status` shows it modified, commit it alone as `build: regenerate project`).
 
@@ -118,7 +118,7 @@ Insert after the `Sources/Core/Parties/` row:
 
 - [ ] **Step 3: Full suite**
 
-Run the full-suite command. Expected: `Executed 2876 tests, with 0 failures`.
+Run the full-suite command. Expected: `Executed 2875 tests, with 0 failures`.
 
 - [ ] **Step 4: Commit**
 
@@ -3411,9 +3411,9 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 
 - [ ] **Step 1: Full suite in the worktree**
 
-Run the full-suite command. Expected: `Executed 2948 tests, with 0 failures` — 2,876 baseline (2,875 + the observer method) plus the 72 added here (7 + 1 + 3 + 4 + 3 + 3 + 6 + 4 + 13 + 4 + 7 + 5 + 3 + 5 + 4). Record the exact line; if the number differs, count the new `func test` declarations and reconcile before proceeding.
+Run the full-suite command. Expected: `Executed 2947 tests, with 0 failures` — the 2,875 baseline plus the 72 added here (7 + 1 + 3 + 4 + 3 + 3 + 6 + 4 + 13 + 4 + 7 + 5 + 3 + 5 + 4). Record the exact line; if the number differs, count the new `func test` declarations and reconcile before proceeding.
 
-- [ ] **Step 2: README test count** — in `README.md`, replace `**2875 unit tests**` with the suite's figure minus one (the observer method is not a test): `**2947 unit tests**`, or whatever Step 1 reported minus one.
+- [ ] **Step 2: README test count** — in `README.md`, replace `**2875 unit tests**` with the suite's figure: `**2947 unit tests**`, or whatever Step 1 reported.
 
 - [ ] **Step 3: Commit**
 
