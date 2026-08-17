@@ -2099,7 +2099,7 @@ struct MainView: View {
 
     private func perform(_ action: KeyMonitorGate.Action) {
         switch action {
-        // ⌘= / ⌘+ and ⌘- (plus keypad variants): CW speed ±2 WPM.
+        // ⌘= / ⌘- (plus keypad variants): CW speed ±1 WPM; with ⇧, ±2.
         case .adjustWPM(let delta): adjustWPM(by: delta)
         // ⌘↓/⌘↑: previous/next spot on the band. ⌘J: back to CQ.
         case .previousSpot: jumpToSpot(.down)

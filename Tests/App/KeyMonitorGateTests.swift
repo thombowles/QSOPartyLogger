@@ -118,13 +118,26 @@ final class KeyMonitorGateTests: XCTestCase {
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 53, command: true), .abortTransmission)
     }
 
+    /// ⌘= / ⌘- (and the keypad pair) step the speed by one WPM; with ⇧ as
+    /// well, by two — asked for by name on 2026-08-16 ("Cmd + shift +/- to
+    /// change cw speed by 2 wpm, Cmd +/- to change by 1 wpm"). Until then the
+    /// unshifted chord stepped by two.
     func testCommandChords() {
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 24, command: true), .adjustWPM(by: 2))
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 69, command: true), .adjustWPM(by: 2))
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 27, command: true), .adjustWPM(by: -2))
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 78, command: true), .adjustWPM(by: -2))
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 24, command: true), .adjustWPM(by: 1))
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 69, command: true), .adjustWPM(by: 1))
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 27, command: true), .adjustWPM(by: -1))
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 78, command: true), .adjustWPM(by: -1))
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 38, command: true), .jumpToCQFrequency)
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 11, command: true), .toggleBandMap)
+    }
+
+    /// ⇧⌘= is how a '+' actually arrives on the keyboard, and ⇧⌘- is '_':
+    /// the shifted pair is the coarse step, on the keypad too.
+    func testShiftedWPMChordsStepByTwo() {
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 24, command: true, shift: true), .adjustWPM(by: 2))
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 69, command: true, shift: true), .adjustWPM(by: 2))
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 27, command: true, shift: true), .adjustWPM(by: -2))
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 78, command: true, shift: true), .adjustWPM(by: -2))
     }
 
     /// Those same keys unmodified are ordinary typing and must reach the entry
@@ -240,13 +253,12 @@ final class KeyMonitorGateTests: XCTestCase {
         XCTAssertNil(KeyMonitorGate.action(keyCode: 14, command: false, shift: true))
     }
 
-    /// ⇧ must only ever distinguish the E chord: ⌘⇧= is how a '+' actually
-    /// arrives on the keyboard, and it has always meant WPM up.
+    /// ⇧ distinguishes only the E chord and the WPM step: the rest of the
+    /// command table ignores it.
     func testShiftDoesNotDisturbOtherCommandChords() {
-        XCTAssertEqual(
-            KeyMonitorGate.action(keyCode: 24, command: true, shift: true),
-            .adjustWPM(by: 2)
-        )
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 38, command: true, shift: true), .jumpToCQFrequency)
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 11, command: true, shift: true), .toggleBandMap)
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 126, command: true, shift: true), .nextSpot)
     }
 
     // MARK: Response — the whole decision for one key down

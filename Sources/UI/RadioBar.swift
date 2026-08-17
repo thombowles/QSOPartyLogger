@@ -221,7 +221,7 @@ struct RadioBar: View {
         .onChange(of: settings.wpm) {
             radio.syncWPM(settings.wpm, settings: settings)
         }
-        .help("CW speed — ⌘= / ⌘- adjusts by 2 WPM; syncs with the radio's speed knob")
+        .help("CW speed — ⌘= / ⌘- adjusts by 1 WPM, ⇧⌘= / ⇧⌘- by 2; syncs with the radio's speed knob")
         .shortcutHint("⌘= ⌘-")
     }
 

@@ -194,10 +194,16 @@ enum KeyMonitorGate {
         return response
     }
 
+    /// One press of ⌘= / ⌘-, in WPM; ⇧ makes it the coarse step.
+    static let wpmStep = 1
+    static let wpmCoarseStep = 2
+
     private static func commandAction(keyCode: UInt16, shift: Bool) -> Action? {
         switch keyCode {
-        case 24, 69: return .adjustWPM(by: 2)  // '=' / keypad '+' (⇧= is '+' too)
-        case 27, 78: return .adjustWPM(by: -2)  // '-' / keypad '-'
+        // '=' / keypad '+' and '-' / keypad '-': the speed by one, or by two
+        // with ⇧ (⇧= is how '+' arrives) — 2026-08-16, asked for by name.
+        case 24, 69: return .adjustWPM(by: shift ? wpmCoarseStep : wpmStep)
+        case 27, 78: return .adjustWPM(by: shift ? -wpmCoarseStep : -wpmStep)
         // Spot stepping is the vertical axis only: ⌘← / ⌘→ are macOS's own
         // beginning/end-of-line keys and stay with whatever has focus. The map
         // draws high frequency at the top, so up the map is up the band.

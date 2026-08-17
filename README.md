@@ -126,7 +126,8 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⌥⌘1`–`⌥⌘8` | In the Phone tab: play memory M1–M8 back on the Mac (not the radio) |
 | `↑` / `↓` | In the park picker: move through the results; `Return` adds the highlighted park |
 | Any key | While repeat-CQ is running: pause the loop and abort the CQ on the air, then do the key's own job. The mode stays armed (the button turns orange, `Repeat CQ ⏸`) — `F1`, the CQ button or ESM's `Return` start it repeating again |
-| `⌘=` / `⌘-` | CW speed ±2 WPM — takes effect mid-message (syncs to the radio) |
+| `⌘=` / `⌘-` | CW speed ±1 WPM — takes effect mid-message (syncs to the radio) |
+| `⇧⌘=` / `⇧⌘-` | CW speed ±2 WPM (`⇧⌘=` is `⌘+`) |
 | `⌘↓` / `⌘↑` | Tune to the previous / next unworked spot on the band — `⌘↑` goes up the band map |
 | `⇧⌘←` / `⇧⌘→` | Nudge the VFO down / up 100 Hz (a burst of presses adds up; disconnected, the band-map cursor moves instead) |
 | `⌘R` | Toggle Run / Search & Pounce (the knob also switches: off the CQ frequency → S&P, back onto it → Run) |
