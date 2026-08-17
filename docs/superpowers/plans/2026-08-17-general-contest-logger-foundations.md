@@ -1858,9 +1858,13 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
             do { try set.validate() } catch { throw ContestValidationError.badTokenSet(set.id, error.localizedDescription) }
         }
         for e in exchange {
+            guard !e.sentBy.isEmpty else { throw ContestValidationError.elementSentByNobody(e.id) }
             for side in e.sentBy.keys where !sideIDs.contains(side) { throw ContestValidationError.unknownSide(side) }
             for set in e.sentBy.values.flatMap({ $0.sets ?? [] }) where !isKnownSet(set) {
                 throw ContestValidationError.unknownTokenSet(set)
+            }
+            if let d = e.derived {
+                guard d.kind == "categoryTable", !d.table.isEmpty else { throw ContestValidationError.badDerivation(e.id) }
             }
         }
         for m in multipliers {
@@ -1904,7 +1908,7 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
 enum ContestValidationError: Error, Equatable, LocalizedError {
     case noSides, noExchange, pointsWithoutDefault, noCabrilloContest
     case unknownSide(String), unknownTokenSet(String), unknownElement(String), badPredicate(String)
-    case badTokenSet(String, String)
+    case badTokenSet(String, String), elementSentByNobody(String), badDerivation(String)
 
     var errorDescription: String? {
         switch self {
@@ -1917,6 +1921,8 @@ enum ContestValidationError: Error, Equatable, LocalizedError {
         case .unknownElement(let e): "Unknown exchange element '\(e)'."
         case .badPredicate(let s): "Side '\(s)' has a predicate missing its fields."
         case .badTokenSet(let id, let why): "Token set '\(id)': \(why)"
+        case .elementSentByNobody(let e): "Exchange element '\(e)' is sent by no side."
+        case .badDerivation(let e): "Exchange element '\(e)' has a derivation that is not a non-empty categoryTable."
         }
     }
 }
@@ -2990,12 +2996,11 @@ enum ExchangeValidator {
         let workable = contest.workableSides(for: side)
         let sets = element.setsSent(by: workable)
         // Sets a side may send several of at once (a county line), and how many.
-        var multiSets = Set<String>(), maxValues = 1
+        var multiSets = Set<String>()
         for s in workable {
-            if let spec = element.sentBy[s], let multi = spec.multi {
-                multiSets.formUnion(spec.sets ?? []); maxValues = max(maxValues, multi.max)
-            }
+            if let spec = element.sentBy[s], spec.multi != nil { multiSets.formUnion(spec.sets ?? []) }
         }
+        let maxValues = element.maxValues(for: workable)
         // Everything the element accepts, for the dynamic prefix set's exclusions and for suggestions.
         let enumerated = sets.compactMap { contest.tokenSet(id: $0, bundle: bundle) }
         let allAccepted = enumerated.reduce(into: Set<String>()) { $0.formUnion($1.acceptedTokens) }
