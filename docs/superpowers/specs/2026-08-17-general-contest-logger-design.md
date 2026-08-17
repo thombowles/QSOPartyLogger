@@ -305,7 +305,7 @@ One sheet, asking only what the contest needs:
 
 ### 2.9 Naming and layout
 
-- `PartyDefinition` keeps its name (the QSO-party authoring schema). New: `ContestDefinition`, `ContestCatalog` (replaces `PartyCatalog`; loads `Resources/Parties/*.json` lowered and `Resources/Contests/*.json`, user overrides by id from `…/QSOPartyLogger/Parties` and `…/Contests`), `PartyLowering`, `ContestNotice` (was `PartyNotice`). Swift `partyID` → `contestID`; the JSON key stays `partyID`.
+- `PartyDefinition` keeps its name (the QSO-party authoring schema), and `PartyCatalog` stays as the v1 loader the per-party tests use. New: `ContestDefinition`, `ContestCatalog` (what the app reads: `Resources/Parties/*.json` lowered plus `Resources/Contests/*.json`, user overrides by id from `…/QSOPartyLogger/Parties` and `…/Contests`), `PartyLowering`, `ContestNotice` (was `PartyNotice`). `ContestLog.partyID` keeps its Swift name — it is the persisted key, and renaming 662 references buys nothing.
 - `Sources/Core/Contests/` holds the model, catalog, lowering, `CTYTable`, `WPXPrefix`, `HubSpotSource`, `CallHistorySource`, `DXCCTable`; `Sources/Core/Parties/` keeps `PartyDefinition`, `County`, `CountyGrouping`. `MultClass` becomes `MultiplierClassID` constants.
 - User-facing strings say "contest"; a family's own words come from data (`term`, side labels). Persisted keys, paths, UTType, subsystem and User-Agent are unchanged (Decision 2).
 - `MainView` stays under its type-checker budget: contest-dependent panes arrive as data-driven child views behind the existing opaque seams, never as `if` branches in `leftPaneContent`.
