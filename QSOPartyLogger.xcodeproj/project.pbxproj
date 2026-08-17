@@ -281,6 +281,7 @@
 		AF2CE0CFA3F5C8FD7B711730 /* SetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A15E4511652305732261EE /* SetupSheet.swift */; };
 		AFABF3686AB980194F459E40 /* CallAreaSumBonusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC49C26B1FFD6EC5D00830A /* CallAreaSumBonusTests.swift */; };
 		B0A27BE21DD4642BE3BB7351 /* TuningPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73361DBD51B22D648CB7B35 /* TuningPolicyTests.swift */; };
+		B17A30C0E305DB27D5D056BB /* ArrlSectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0FC2D8F759F9E6278D2504 /* ArrlSectionsTests.swift */; };
 		B1BC5DA0F131ED077F99FECA /* VoiceLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E3EC3370FBB8DDF642B43 /* VoiceLibraryTests.swift */; };
 		B1D00F1C5357D0F96BD9160A /* MultiplierFloorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E59AE5F347D2C4F33144EA3 /* MultiplierFloorTests.swift */; };
 		B2061CF1D208ED36F005B869 /* VoicePlayerSequenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF43DDFA3090F565A8328AF /* VoicePlayerSequenceTests.swift */; };
@@ -419,6 +420,7 @@
 		FED0EBDE88307F2AA6D6B6D7 /* RadioControllerVoiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7048B719696E04B4942D1AC /* RadioControllerVoiceTests.swift */; };
 		FEFDD64CFF603D6BBD4A5EAC /* MultClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2559BE76C4D55ED692590BD6 /* MultClass.swift */; };
 		FF1D72B5F974B4BC4D6C3A5A /* PennsylvaniaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F9D044AD7BFDEE8B6D181 /* PennsylvaniaQSOPartyTests.swift */; };
+		FF663300793848D394002C41 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 424DC6064C81D9C189A8A32D /* Data */; };
 		FFD3064295434D0B51A3B18A /* NorthAmericanQSOPartySSBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6909D9B091012C2EC02AD3 /* NorthAmericanQSOPartySSBTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -538,6 +540,7 @@
 		3FD300005CA528B8CA373476 /* Spot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
 		41280766B8E0202F2FCDAE83 /* WorkedBeforeTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedBeforeTable.swift; sourceTree = "<group>"; };
 		42368D9706B3F36B3537C216 /* BritishColumbiaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BritishColumbiaQSOPartyTests.swift; sourceTree = "<group>"; };
+		424DC6064C81D9C189A8A32D /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Data; path = Resources/Data; sourceTree = SOURCE_ROOT; };
 		42866F267E48E55BA7B2A686 /* DXCCLabelClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCLabelClientTests.swift; sourceTree = "<group>"; };
 		433A191B9362FB73554ADEA5 /* RateMeterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateMeterTests.swift; sourceTree = "<group>"; };
 		43C62068D45C7462F9479130 /* DXCCLabelRefreshTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCLabelRefreshTests.swift; sourceTree = "<group>"; };
@@ -558,6 +561,7 @@
 		4D6FF1E17FC5AFF4DE752476 /* CallHistorySource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistorySource.swift; sourceTree = "<group>"; };
 		4DFBB554A5050EEC235AC9E7 /* DashboardExportRowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardExportRowTests.swift; sourceTree = "<group>"; };
 		4E0D658A0E17CBDA57B4F747 /* EntryClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryClassTests.swift; sourceTree = "<group>"; };
+		4E0FC2D8F759F9E6278D2504 /* ArrlSectionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrlSectionsTests.swift; sourceTree = "<group>"; };
 		4E346D3641AA9C7153747275 /* NewJerseyQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewJerseyQSOPartyTests.swift; sourceTree = "<group>"; };
 		4F6C7056708ECE6573BF5FF3 /* GridLocateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridLocateTests.swift; sourceTree = "<group>"; };
 		4FFB1E6038FE703DDB36B5F0 /* WorkedBeforeTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedBeforeTableTests.swift; sourceTree = "<group>"; };
@@ -1006,6 +1010,7 @@
 				4863BAC6A4DFB9BD99769399 /* ArchivedLogExportTests.swift */,
 				E77F88B8469172A628005C61 /* ArizonaQSOPartyTests.swift */,
 				FCD28963E087488CA3722809 /* ArkansasQSOPartyTests.swift */,
+				4E0FC2D8F759F9E6278D2504 /* ArrlSectionsTests.swift */,
 				256735340D033423D4396DBA /* BandMapLayoutTests.swift */,
 				311E0EE90DBA33F96AC71E69 /* BandMapTests.swift */,
 				B8F437B56480EB7F8E109AF5 /* BandPlanTests.swift */,
@@ -1169,6 +1174,7 @@
 			children = (
 				F1B2185C4DCD353FBC522D1A /* Assets.xcassets */,
 				75970653CB7669E2A41577F5 /* Challenge */,
+				424DC6064C81D9C189A8A32D /* Data */,
 				CDFB83A71484799D6871283B /* DXCC */,
 				E70A4C058DB0BE3BF9AA15BC /* Parties */,
 			);
@@ -1615,6 +1621,7 @@
 				CDF617D869D5238FAB9DB3BA /* Assets.xcassets in Resources */,
 				1F398856D0FD6956763806D5 /* Challenge in Resources */,
 				A7DE3EB66CC2A428AEFB4C00 /* DXCC in Resources */,
+				FF663300793848D394002C41 /* Data in Resources */,
 				001422B5EA133D81250B56D7 /* Parties in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1661,6 +1668,7 @@
 				7080C793C13BE40229760869 /* ArchivedLogExportTests.swift in Sources */,
 				D651FE7522402EF4958CD65B /* ArizonaQSOPartyTests.swift in Sources */,
 				6C629DE454B510083A28B07D /* ArkansasQSOPartyTests.swift in Sources */,
+				B17A30C0E305DB27D5D056BB /* ArrlSectionsTests.swift in Sources */,
 				A4E875A7A7F5BDA4EEFB45A3 /* AudioFileIOTests.swift in Sources */,
 				AA298B42C48C6E77E848FD97 /* AudioResamplerTests.swift in Sources */,
 				9ECF4B187A1C5F95F20C0C4C /* BandMapLayoutTests.swift in Sources */,

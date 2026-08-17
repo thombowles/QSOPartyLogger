@@ -1,0 +1,434 @@
+{
+ "id": "sections",
+ "term": "section",
+ "termPlural": "sections",
+ "source": "https://contests.arrl.org/contestmultipliers.php?a=wve (Version 1.2.0, Revised May 12, 2023), fetched 2026-08-17; see docs/research/arrl_sections_2026.txt",
+ "tokens": [
+  {
+   "abbr": "CO",
+   "name": "Colorado",
+   "group": "U.S. Call Area 0"
+  },
+  {
+   "abbr": "IA",
+   "name": "Iowa",
+   "group": "U.S. Call Area 0"
+  },
+  {
+   "abbr": "KS",
+   "name": "Kansas",
+   "group": "U.S. Call Area 0"
+  },
+  {
+   "abbr": "MN",
+   "name": "Minnesota",
+   "group": "U.S. Call Area 0"
+  },
+  {
+   "abbr": "MO",
+   "name": "Missouri",
+   "group": "U.S. Call Area 0"
+  },
+  {
+   "abbr": "ND",
+   "name": "North Dakota",
+   "group": "U.S. Call Area 0"
+  },
+  {
+   "abbr": "NE",
+   "name": "Nebraska",
+   "group": "U.S. Call Area 0"
+  },
+  {
+   "abbr": "SD",
+   "name": "South Dakota",
+   "group": "U.S. Call Area 0"
+  },
+  {
+   "abbr": "CT",
+   "name": "Connecticut",
+   "group": "U.S. Call Area 1"
+  },
+  {
+   "abbr": "EMA",
+   "name": "Eastern Massachusetts",
+   "group": "U.S. Call Area 1"
+  },
+  {
+   "abbr": "ME",
+   "name": "Maine",
+   "group": "U.S. Call Area 1"
+  },
+  {
+   "abbr": "NH",
+   "name": "New Hampshire",
+   "group": "U.S. Call Area 1"
+  },
+  {
+   "abbr": "RI",
+   "name": "Rhode Island",
+   "group": "U.S. Call Area 1"
+  },
+  {
+   "abbr": "VT",
+   "name": "Vermont",
+   "group": "U.S. Call Area 1"
+  },
+  {
+   "abbr": "WMA",
+   "name": "Western Massachusetts",
+   "group": "U.S. Call Area 1"
+  },
+  {
+   "abbr": "ENY",
+   "name": "Eastern New York",
+   "group": "U.S. Call Area 2"
+  },
+  {
+   "abbr": "NLI",
+   "name": "New York City-Long Island",
+   "group": "U.S. Call Area 2"
+  },
+  {
+   "abbr": "NNJ",
+   "name": "Northern New Jersey",
+   "group": "U.S. Call Area 2"
+  },
+  {
+   "abbr": "NNY",
+   "name": "Northern New York",
+   "group": "U.S. Call Area 2"
+  },
+  {
+   "abbr": "SNJ",
+   "name": "Southern New Jersey",
+   "group": "U.S. Call Area 2"
+  },
+  {
+   "abbr": "WNY",
+   "name": "Western New York",
+   "group": "U.S. Call Area 2"
+  },
+  {
+   "abbr": "DE",
+   "name": "Delaware",
+   "group": "U.S. Call Area 3"
+  },
+  {
+   "abbr": "EPA",
+   "name": "Eastern Pennsylvania",
+   "group": "U.S. Call Area 3"
+  },
+  {
+   "abbr": "MDC",
+   "name": "Maryland-DC",
+   "group": "U.S. Call Area 3"
+  },
+  {
+   "abbr": "WPA",
+   "name": "Western Pennsylvania",
+   "group": "U.S. Call Area 3"
+  },
+  {
+   "abbr": "AL",
+   "name": "Alabama",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "GA",
+   "name": "Georgia",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "KY",
+   "name": "Kentucky",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "NC",
+   "name": "North Carolina",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "NFL",
+   "name": "Northern Florida",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "PR",
+   "name": "Puerto Rico",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "SC",
+   "name": "South Carolina",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "SFL",
+   "name": "Southern Florida",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "TN",
+   "name": "Tennessee",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "VA",
+   "name": "Virginia",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "VI",
+   "name": "US Virgin Islands",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "WCF",
+   "name": "West Central Florida",
+   "group": "U.S. Call Area 4"
+  },
+  {
+   "abbr": "AR",
+   "name": "Arkansas",
+   "group": "U.S. Call Area 5"
+  },
+  {
+   "abbr": "LA",
+   "name": "Louisiana",
+   "group": "U.S. Call Area 5"
+  },
+  {
+   "abbr": "MS",
+   "name": "Mississippi",
+   "group": "U.S. Call Area 5"
+  },
+  {
+   "abbr": "NM",
+   "name": "New Mexico",
+   "group": "U.S. Call Area 5"
+  },
+  {
+   "abbr": "NTX",
+   "name": "North Texas",
+   "group": "U.S. Call Area 5"
+  },
+  {
+   "abbr": "OK",
+   "name": "Oklahoma",
+   "group": "U.S. Call Area 5"
+  },
+  {
+   "abbr": "STX",
+   "name": "South Texas",
+   "group": "U.S. Call Area 5"
+  },
+  {
+   "abbr": "WTX",
+   "name": "West Texas",
+   "group": "U.S. Call Area 5"
+  },
+  {
+   "abbr": "EB",
+   "name": "East Bay",
+   "group": "U.S. Call Area 6"
+  },
+  {
+   "abbr": "LAX",
+   "name": "Los Angeles",
+   "group": "U.S. Call Area 6"
+  },
+  {
+   "abbr": "ORG",
+   "name": "Orange",
+   "group": "U.S. Call Area 6"
+  },
+  {
+   "abbr": "PAC",
+   "name": "Pacific",
+   "group": "U.S. Call Area 6"
+  },
+  {
+   "abbr": "SB",
+   "name": "Santa Barbara",
+   "group": "U.S. Call Area 6"
+  },
+  {
+   "abbr": "SCV",
+   "name": "Santa Clara Valley",
+   "group": "U.S. Call Area 6"
+  },
+  {
+   "abbr": "SDG",
+   "name": "San Diego",
+   "group": "U.S. Call Area 6"
+  },
+  {
+   "abbr": "SF",
+   "name": "San Francisco",
+   "group": "U.S. Call Area 6"
+  },
+  {
+   "abbr": "SJV",
+   "name": "San Joaquin Valley",
+   "group": "U.S. Call Area 6"
+  },
+  {
+   "abbr": "SV",
+   "name": "Sacramento Valley",
+   "group": "U.S. Call Area 6"
+  },
+  {
+   "abbr": "AK",
+   "name": "Alaska",
+   "group": "U.S. Call Area 7"
+  },
+  {
+   "abbr": "AZ",
+   "name": "Arizona",
+   "group": "U.S. Call Area 7"
+  },
+  {
+   "abbr": "EWA",
+   "name": "Eastern Washington",
+   "group": "U.S. Call Area 7"
+  },
+  {
+   "abbr": "ID",
+   "name": "Idaho",
+   "group": "U.S. Call Area 7"
+  },
+  {
+   "abbr": "MT",
+   "name": "Montana",
+   "group": "U.S. Call Area 7"
+  },
+  {
+   "abbr": "NV",
+   "name": "Nevada",
+   "group": "U.S. Call Area 7"
+  },
+  {
+   "abbr": "OR",
+   "name": "Oregon",
+   "group": "U.S. Call Area 7"
+  },
+  {
+   "abbr": "UT",
+   "name": "Utah",
+   "group": "U.S. Call Area 7"
+  },
+  {
+   "abbr": "WWA",
+   "name": "Western Washington",
+   "group": "U.S. Call Area 7"
+  },
+  {
+   "abbr": "WY",
+   "name": "Wyoming",
+   "group": "U.S. Call Area 7"
+  },
+  {
+   "abbr": "MI",
+   "name": "Michigan",
+   "group": "U.S. Call Area 8"
+  },
+  {
+   "abbr": "OH",
+   "name": "Ohio",
+   "group": "U.S. Call Area 8"
+  },
+  {
+   "abbr": "WV",
+   "name": "West Virginia",
+   "group": "U.S. Call Area 8"
+  },
+  {
+   "abbr": "IL",
+   "name": "Illinois",
+   "group": "U.S. Call Area 9"
+  },
+  {
+   "abbr": "IN",
+   "name": "Indiana",
+   "group": "U.S. Call Area 9"
+  },
+  {
+   "abbr": "WI",
+   "name": "Wisconsin",
+   "group": "U.S. Call Area 9"
+  },
+  {
+   "abbr": "AB",
+   "name": "Alberta",
+   "group": "Canada"
+  },
+  {
+   "abbr": "BC",
+   "name": "British Columbia",
+   "group": "Canada"
+  },
+  {
+   "abbr": "GH",
+   "name": "Ontario Golden Horseshoe",
+   "group": "Canada"
+  },
+  {
+   "abbr": "MB",
+   "name": "Manitoba",
+   "group": "Canada"
+  },
+  {
+   "abbr": "NB",
+   "name": "New Brunswick",
+   "group": "Canada"
+  },
+  {
+   "abbr": "NL",
+   "name": "Newfoundland and Labrador",
+   "group": "Canada"
+  },
+  {
+   "abbr": "NS",
+   "name": "Nova Scotia",
+   "group": "Canada"
+  },
+  {
+   "abbr": "ONE",
+   "name": "Ontario East",
+   "group": "Canada"
+  },
+  {
+   "abbr": "ONN",
+   "name": "Ontario North",
+   "group": "Canada"
+  },
+  {
+   "abbr": "ONS",
+   "name": "Ontario South",
+   "group": "Canada"
+  },
+  {
+   "abbr": "PE",
+   "name": "Prince Edward Island",
+   "group": "Canada"
+  },
+  {
+   "abbr": "QC",
+   "name": "Quebec",
+   "group": "Canada"
+  },
+  {
+   "abbr": "SK",
+   "name": "Saskatchewan",
+   "group": "Canada"
+  },
+  {
+   "abbr": "TER",
+   "name": "Territories",
+   "group": "Canada"
+  }
+ ],
+ "aliases": {}
+}
