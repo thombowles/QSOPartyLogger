@@ -49,4 +49,18 @@ final class OperatingTimeTests: XCTestCase {
         let r = OperatingTime.compute(rows: [row("2350"), row("0010", day: 2)], rule: rule)
         XCTAssertEqual(r.operatedMinutes, 20)
     }
+
+    func testOffPeriodsAreTheEmptyMinutesBetweenTwoRows() {
+        // SS package: rows at 0114 and 0145 → 0115–0144 is 30 empty minutes and counts as off time.
+        let day = Date(timeIntervalSince1970: 1_793_491_200)   // 2026-11-01 00:00:00Z
+        func at(_ hhmm: Int) -> Date { day.addingTimeInterval(TimeInterval((hhmm / 100) * 3600 + (hhmm % 100) * 60)) }
+        let rows = [QSO(timestampUTC: at(0114), call: "A", band: .m20, modeClass: .cw, rawMode: "CW", rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: "KS"),
+                    QSO(timestampUTC: at(0145), call: "B", band: .m20, modeClass: .cw, rawMode: "CW", rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: "KS"),
+                    QSO(timestampUTC: at(0200), call: "C", band: .m20, modeClass: .cw, rawMode: "CW", rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: "KS")]
+        let r = OperatingTime.compute(rows: rows, rule: OperatingTimeRule(maxMinutes: 1440, minOffMinutes: 30))
+        XCTAssertEqual(r.offMinutes, 30)
+        XCTAssertEqual(r.offPeriods, [OperatingTime.OffPeriod(start: at(0115), end: at(0144))])
+        let short = OperatingTime.compute(rows: rows, rule: OperatingTimeRule(maxMinutes: 1440, minOffMinutes: 31))
+        XCTAssertEqual(short.offPeriods, [], "0115–0144 is 30 minutes; a 31-minute rule does not count it")
+    }
 }

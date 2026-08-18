@@ -7,6 +7,12 @@ final class ContestDefinitionTests: XCTestCase {
         return try ContestDefinition.decode(try Data(contentsOf: url))
     }
 
+    /// The same fixture as a JSON dictionary, for tests that mutate one field.
+    private func fixtureJSON() throws -> [String: Any] {
+        let url = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "cqwwcw", withExtension: "json"))
+        return try XCTUnwrap(try JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any])
+    }
+
     func testDecodesTheCQWWFixture() throws {
         let c = try fixture()
         XCTAssertEqual(c.id, "cqwwcw")
@@ -174,5 +180,91 @@ final class ContestDefinitionTests: XCTestCase {
         XCTAssertEqual(c.sentElements(for: "inside").map(\.id), ["rst", "location", "call"])
         XCTAssertEqual(c.side(id: "outside")?.label, "Outside")
         XCTAssertNil(c.side(id: "nope"))
+    }
+
+    // MARK: Engine-switch additions
+
+    func testResolvedSideID() throws {
+        let c = try fixture()                                   // one side: all
+        XCTAssertEqual(c.resolvedSideID("all"), "all")
+        XCTAssertEqual(c.resolvedSideID("outside"), "all", "a legacy party side maps to the only side")
+        let ks = try PartyLowering.lower(XCTUnwrap(PartyCatalog.party(id: "ksqp")))
+        XCTAssertEqual(ks.resolvedSideID("inside"), "inside")
+        XCTAssertEqual(ks.resolvedSideID("nope"), "outside", "an unknown side on a two-sided contest is the catch-all last side")
+    }
+
+    func testCountyRosterAndReceivedElementsWithCallEcho() throws {
+        let ks = try PartyLowering.lower(XCTUnwrap(PartyCatalog.party(id: "ksqp")))
+        XCTAssertEqual(ks.countyRoster()?.id, "counties")
+        XCTAssertEqual(ks.countyRoster()?.tokens.count, 105)
+        XCTAssertNil(try fixture().countyRoster())
+        let f = try fixture()
+        let withEcho = ContestDefinition(
+            id: "ss", name: "SS", family: .domestic, bands: f.bands, modeClasses: [.cw], sides: f.sides,
+            exchange: [ExchangeElement(id: "serial", kind: .serial, sentBy: ["all": .init()]),
+                       ExchangeElement(id: "call", kind: .callEcho, sentBy: ["all": .init()]),
+                       ExchangeElement(id: "check", kind: .check, sentBy: ["all": .init()])],
+            multipliers: [], points: [PointRule(points: 2)], dupe: DupeRule(scope: .contest), cabrillo: CabrilloSpec(contest: "ARRL-SS-CW", location: .section))
+        XCTAssertEqual(withEcho.receivedElements(for: "all").map(\.id), ["serial", "check"])
+        XCTAssertEqual(withEcho.receivedElements(for: "all", includingCallEcho: true).map(\.id), ["serial", "call", "check"])
+    }
+
+    func testCallsignOverridesDecodeAndValidate() throws {
+        var json = try fixtureJSON()
+        var mults = json["multipliers"] as! [[String: Any]]
+        // A dxccEntity resolver reading a received token may name the sets it takes tokens over from.
+        json["tokenSets"] = [["id": "states", "term": "state", "termPlural": "states", "tokens": [["abbr": "PA"], ["abbr": "TX"]]]]
+        // Keep the fixture's own elements (the zone resolver names `zone`), add a location token element.
+        json["exchange"] = (json["exchange"] as! [[String: Any]])
+            + [["id": "location", "kind": "token", "sentBy": ["all": ["sets": ["states", "dxccPrefix"]]]]]
+        mults[1]["resolvers"] = [["kind": "dxccEntity", "from": "receivedTokenOrCallsign", "element": "location", "list": "arrl",
+                                  "callsignOverrides": ["states"]]]
+        json["multipliers"] = mults
+        let c = try ContestDefinition.decode(try JSONSerialization.data(withJSONObject: json))
+        XCTAssertEqual(c.multipliers[1].resolvers[0].callsignOverrides, ["states"])
+        XCTAssertEqual(try ContestDefinition.decode(try c.encoded()), c)
+        // Only that resolver shape may carry it, and only for sets the element accepts.
+        mults[1]["resolvers"] = [["kind": "dxccEntity", "from": "callsign", "list": "arrl", "callsignOverrides": ["states"]]]
+        json["multipliers"] = mults
+        XCTAssertThrowsError(try ContestDefinition.decode(try JSONSerialization.data(withJSONObject: json)))
+        mults[1]["resolvers"] = [["kind": "dxccEntity", "from": "receivedTokenOrCallsign", "element": "location", "list": "arrl",
+                                  "callsignOverrides": ["provinces"]]]
+        json["multipliers"] = mults
+        XCTAssertThrowsError(try ContestDefinition.decode(try JSONSerialization.data(withJSONObject: json))) { error in
+            XCTAssertEqual(error as? ContestValidationError, .unknownTokenSet("provinces"))
+        }
+    }
+
+    func testReportColumnDecodesWithDefaultFalse() throws {
+        XCTAssertFalse(try fixture().cabrillo.reportColumn)
+        var json = try fixtureJSON()
+        var cab = json["cabrillo"] as! [String: Any]; cab["reportColumn"] = true; json["cabrillo"] = cab
+        XCTAssertTrue(try ContestDefinition.decode(try JSONSerialization.data(withJSONObject: json)).cabrillo.reportColumn)
+    }
+
+    func testCountyKeyedBonusesNeedACountyRoster() throws {
+        var json = try fixtureJSON()
+        json["bonuses"] = [["type": "sweepTiers", "tiers": [["count": 10, "points": 100]]]]
+        XCTAssertThrowsError(try ContestDefinition.decode(try JSONSerialization.data(withJSONObject: json))) { error in
+            XCTAssertEqual(error as? ContestValidationError, .bonusNeedsCountyClass)
+        }
+        // A designated sweep must name tokens of that roster.
+        let ks = try PartyLowering.lower(XCTUnwrap(PartyCatalog.party(id: "ksqp")))
+        let bad = ContestDefinition(id: ks.id, name: ks.name, family: ks.family, bands: ks.bands, modeClasses: ks.modeClasses,
+                                    tokenSets: ks.tokenSets, sides: ks.sides, exchange: ks.exchange, multipliers: ks.multipliers,
+                                    points: ks.points, dupe: ks.dupe, pairing: ks.pairing, sideRules: ks.sideRules,
+                                    bonuses: [.designatedCountySweep(counties: ["MRN", "ZZZ"], need: 1, points: 500)],
+                                    cabrillo: ks.cabrillo)
+        XCTAssertThrowsError(try bad.validate()) { error in
+            XCTAssertEqual(error as? ContestValidationError, .unknownBonusToken("ZZZ"))
+        }
+    }
+
+    func testScoreFactorIdsMustBeUnique() throws {
+        var json = try fixtureJSON()
+        json["scoreFactors"] = ["objectives": [["id": "1o", "label": "a", "om": 1], ["id": "1o", "label": "b", "om": 2]]]
+        XCTAssertThrowsError(try ContestDefinition.decode(try JSONSerialization.data(withJSONObject: json))) { error in
+            XCTAssertEqual(error as? ContestValidationError, .duplicateID("objective", "1o"))
+        }
     }
 }

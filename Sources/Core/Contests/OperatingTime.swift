@@ -4,6 +4,13 @@ import Foundation
 /// granularity, off time only when the empty minutes between two rows reach
 /// the rule's minimum, rows past the maximum marked out of time.
 enum OperatingTime {
+    /// One credited off period: the empty clock minutes strictly between two
+    /// rows, first and last minute inclusive — the SS package's 0115–0144.
+    struct OffPeriod: Equatable, Sendable {
+        let start: Date
+        let end: Date
+    }
+
     struct Result: Equatable, Sendable {
         var operatedMinutes = 0
         var offMinutes = 0
@@ -11,12 +18,17 @@ enum OperatingTime {
         /// reached; nil while the entrant is within the limit.
         var cutoff: Date?
         var outOfTimeRowIDs: Set<UUID> = []
+        /// Every credited off period, in clock order — Cabrillo `OFFTIME:` lines.
+        var offPeriods: [OffPeriod] = []
 
         static let zero = Result()
     }
 
     /// Whole minutes since the epoch, seconds ignored (the sponsors' rule).
     static func minute(_ date: Date) -> Int { Int(floor(date.timeIntervalSince1970 / 60)) }
+
+    /// The first second of a whole minute since the epoch.
+    static func date(minute: Int) -> Date { Date(timeIntervalSince1970: TimeInterval(minute * 60)) }
 
     static func compute(rows: [QSO], rule: OperatingTimeRule) -> Result {
         let ordered = rows.sortedChronologically()
@@ -30,6 +42,7 @@ enum OperatingTime {
             let empty = max(0, now - previous - 1)
             if empty >= rule.minOffMinutes {
                 result.offMinutes += empty
+                result.offPeriods.append(OffPeriod(start: date(minute: previous + 1), end: date(minute: now - 1)))
             } else {
                 operated += now - previous
             }

@@ -143,14 +143,35 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
     /// The sides an entrant on `side` may work for credit: its `pairing` row, else every side.
     func workableSides(for side: String) -> [String] { pairing?[side] ?? sides.map(\.id) }
 
+    /// The side a log's `sideID` names; for an id this contest does not
+    /// declare — a document written before it declared sides, or a lowered
+    /// party whose single side is `all` while the log says `outside` — the
+    /// contest's only side, else its last-listed side (the catch-all: sides
+    /// are evaluated first-match, so the last is the one that takes everyone
+    /// else).
+    func resolvedSideID(_ id: String) -> String {
+        if sides.contains(where: { $0.id == id }) { return id }
+        return sides.count == 1 ? sides[0].id : (sides.last?.id ?? id)
+    }
+
+    /// The token set the `county` class lists — what the county-keyed bonuses
+    /// (`mobileCountyCount`, `activatedCountyCount`, `sweepTiers`,
+    /// `designatedCountySweep`) and the ADIF `cnty` fields read. Nil for a
+    /// contest with no `county` class.
+    func countyRoster(bundle: Bundle = .main) -> TokenSet? {
+        guard let id = multipliers.first(where: { $0.id == MultClass.county.rawValue })?.roster else { return nil }
+        return tokenSet(id: id, bundle: bundle)
+    }
+
     /// The elements an entrant on `side` receives, in spec order: those sent
-    /// by any side it may work, excluding the call echo (which is the call field).
-    /// Excludes the call echo because the call is its own field; the Cabrillo
-    /// exporter, which needs the echoed call inside the received columns, must
-    /// not reuse this.
-    func receivedElements(for side: String) -> [ExchangeElement] {
+    /// by any side it may work. The call echo is the call field itself and is
+    /// excluded unless `includingCallEcho` — the Cabrillo QSO line, which
+    /// writes the echoed call inside the received columns, asks for it.
+    func receivedElements(for side: String, includingCallEcho: Bool = false) -> [ExchangeElement] {
         let workable = Set(workableSides(for: side))
-        return exchange.filter { e in e.kind != .callEcho && e.sentBy.keys.contains(where: workable.contains) }
+        return exchange.filter { e in
+            (includingCallEcho || e.kind != .callEcho) && e.sentBy.keys.contains(where: workable.contains)
+        }
     }
 
     /// The elements an entrant on `side` sends, in spec order.
@@ -233,6 +254,12 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
                 case .cqZone, .ituZone: guard r.from != nil, r.element != nil else { throw bad }
                 case .wpxPrefix: break
                 }
+                if let overrides = r.callsignOverrides {
+                    guard r.kind == .dxccEntity, r.from == .receivedTokenOrCallsign, let element = r.element,
+                          let el = exchange.first(where: { $0.id == element }) else { throw bad }
+                    let accepted = Set(el.sentBy.values.flatMap { $0.sets ?? [] })
+                    for set in overrides where !accepted.contains(set) { throw ContestValidationError.unknownTokenSet(set) }
+                }
             }
             if let roster = m.roster {
                 guard isKnownSet(roster, bundle: bundle) else { throw ContestValidationError.unknownTokenSet(roster) }
@@ -287,6 +314,36 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
                 }
             }
         }
+        // County-keyed bonuses read the county class's roster.
+        let countyKeyed = bonuses.contains { bonus in
+            switch bonus {
+            case .mobileCountyCount, .activatedCountyCount, .sweepTiers, .designatedCountySweep: true
+            case .workStation, .callAreaSum: false
+            }
+        }
+        if countyKeyed {
+            guard let roster = countyRoster(bundle: bundle) else { throw ContestValidationError.bonusNeedsCountyClass }
+            for case .designatedCountySweep(let counties, _, _) in bonuses {
+                for token in counties where !roster.abbrs.contains(token.uppercased()) {
+                    throw ContestValidationError.unknownBonusToken(token)
+                }
+            }
+        }
+        // Self-declared ids are keys the log stores; each must be unique.
+        if let f = scoreFactors {
+            for (what, ids) in [("entry class", f.entryClasses.map(\.id)), ("objective", f.objectives.map(\.id)),
+                                ("declared bonus", f.declaredBonuses.map(\.id))] {
+                var seen = Set<String>()
+                for id in ids where !seen.insert(id).inserted { throw ContestValidationError.duplicateID(what, id) }
+            }
+        }
+        // An activated multiplier is earned by operating from a token of the
+        // class's roster; a class with no roster has nothing to operate from.
+        for (_, rules) in sideRules {
+            if let a = rules.activated, let cls = multipliers.first(where: { $0.id == a.classID }), cls.roster == nil {
+                throw ContestValidationError.activatedNeedsRoster(a.classID)
+            }
+        }
     }
 
     /// The dynamic sets the validator resolves without a `TokenSet` value.
@@ -307,6 +364,7 @@ enum ContestValidationError: Error, Equatable, LocalizedError {
     case unsupportedSchemaVersion(Int), duplicateID(String, String), badElement(String, String)
     case badPointRule(Int, String), unknownMultiplierClass(String), emptyPairing(String)
     case badRoster(String), badOperatingTimeAxis(String)
+    case bonusNeedsCountyClass, unknownBonusToken(String), activatedNeedsRoster(String)
 
     var errorDescription: String? {
         switch self {
@@ -330,6 +388,9 @@ enum ContestValidationError: Error, Equatable, LocalizedError {
         case .emptyPairing(let side): "Side '\(side)': pairing row is empty."
         case .badRoster(let id): "Roster '\(id)' is a dynamic set and cannot be listed."
         case .badOperatingTimeAxis(let key): "Unknown operating-time axis '\(key)'."
+        case .bonusNeedsCountyClass: "A county-keyed bonus needs a 'county' multiplier class with a roster."
+        case .unknownBonusToken(let t): "Bonus names '\(t)', which is not in the county roster."
+        case .activatedNeedsRoster(let id): "Activated multiplier class '\(id)' lists no roster."
         }
     }
 }

@@ -99,10 +99,24 @@ struct Resolver: Codable, Equatable, Sendable {
     /// Callsign suffixes for which the resolver yields nothing (CQ WW: `/MM`
     /// counts only for a zone).
     let unlessSuffix: [String]?
+    /// `dxccEntity` with `from: receivedTokenOrCallsign` only: the ids of the
+    /// enumerated sets whose token this resolver takes over when the worked
+    /// callsign decides the token is a DXCC prefix — a state or province code
+    /// that is also a prefix (`PA` is Pennsylvania and the Netherlands, `ON`
+    /// Ontario and Belgium, `SK` Saskatchewan and Sweden). The engine moves
+    /// the token's ownership to `dxccPrefix` when its owner is one of these
+    /// sets, the callsign is not US/Canadian, and `DXCCTable` resolves the
+    /// callsign to the very entity the token names — N1MM's split: the
+    /// exchange says which location was sent, the callsign which entity sent
+    /// it. `PartyLowering` emits `["states", "provinces"]` on every side that
+    /// counts DXCC entities separately, which is exactly today's
+    /// `dxCountsEntities` gate; nil = the token's owner is never questioned.
+    let callsignOverrides: [String]?
 
     init(kind: Kind, element: String? = nil, set: String? = nil, mapTo: String? = nil,
          from: From? = nil, list: EntityList? = nil, exclude: [Int] = [], countEntities: Bool = true,
-         precision: Int? = nil, sides: [String]? = nil, unlessSuffix: [String]? = nil) {
+         precision: Int? = nil, sides: [String]? = nil, unlessSuffix: [String]? = nil,
+         callsignOverrides: [String]? = nil) {
         self.kind = kind
         self.element = element
         self.set = set
@@ -114,10 +128,12 @@ struct Resolver: Codable, Equatable, Sendable {
         self.precision = precision
         self.sides = sides
         self.unlessSuffix = unlessSuffix
+        self.callsignOverrides = callsignOverrides
     }
 
     private enum CodingKeys: String, CodingKey {
         case kind, element, set, mapTo, from, list, exclude, countEntities, precision, sides, unlessSuffix
+        case callsignOverrides
     }
 
     init(from decoder: Decoder) throws {
@@ -133,7 +149,8 @@ struct Resolver: Codable, Equatable, Sendable {
             countEntities: try c.decodeIfPresent(Bool.self, forKey: .countEntities) ?? true,
             precision: try c.decodeIfPresent(Int.self, forKey: .precision),
             sides: try c.decodeIfPresent([String].self, forKey: .sides),
-            unlessSuffix: try c.decodeIfPresent([String].self, forKey: .unlessSuffix)
+            unlessSuffix: try c.decodeIfPresent([String].self, forKey: .unlessSuffix),
+            callsignOverrides: try c.decodeIfPresent([String].self, forKey: .callsignOverrides)
         )
     }
 

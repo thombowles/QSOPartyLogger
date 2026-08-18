@@ -180,4 +180,34 @@ final class ExchangeValidatorTests: XCTestCase {
             }
         }
     }
+
+    // MARK: Ownership — the one classification validation and scoring share
+
+    func testOwningSetIsTheFirstAcceptingSetInSendOrder() throws {
+        let ks = try PartyLowering.lower(XCTUnwrap(PartyCatalog.party(id: "ksqp")))
+        let loc = try XCTUnwrap(ks.exchange.first { $0.id == "location" })
+        XCTAssertEqual(ExchangeValidator.owningSet(of: "MRN", element: loc, contest: ks, side: "inside"), "counties")
+        XCTAssertEqual(ExchangeValidator.owningSet(of: "tx", element: loc, contest: ks, side: "inside"), "states")
+        XCTAssertEqual(ExchangeValidator.owningSet(of: "ON", element: loc, contest: ks, side: "inside"), "provinces")
+        XCTAssertEqual(ExchangeValidator.owningSet(of: "DX", element: loc, contest: ks, side: "inside"), "dxToken")
+        XCTAssertNil(ExchangeValidator.owningSet(of: "KS", element: loc, contest: ks, side: "inside"), "the excluded home state token belongs to no set")
+        XCTAssertNil(ExchangeValidator.owningSet(of: "DL", element: loc, contest: ks, side: "inside"), "Kansas takes the DX token, not prefixes")
+        // An outside entrant may only receive counties (pairing) — nothing else has an owner.
+        XCTAssertEqual(ExchangeValidator.owningSet(of: "MRN", element: loc, contest: ks, side: "outside"), "counties")
+        XCTAssertNil(ExchangeValidator.owningSet(of: "TX", element: loc, contest: ks, side: "outside"))
+    }
+
+    func testOwningSetKnowsPrefixesAliasesAndDXAliases() throws {
+        let wa = try PartyLowering.lower(XCTUnwrap(PartyCatalog.party(id: "warun")))
+        let loc = try XCTUnwrap(wa.exchange.first { $0.id == "location" })
+        XCTAssertEqual(ExchangeValidator.owningSet(of: "DL", element: loc, contest: wa, side: "inside"), "dxccPrefix")
+        XCTAssertEqual(ExchangeValidator.owningSet(of: "PA", element: loc, contest: wa, side: "inside"), "states", "a state code stays a state here; the callsign override lives in the engine")
+        XCTAssertNil(ExchangeValidator.owningSet(of: "ZZZ", element: loc, contest: wa, side: "inside"))
+        let al = try PartyLowering.lower(XCTUnwrap(PartyCatalog.party(id: "alqp")))
+        let alLoc = try XCTUnwrap(al.exchange.first { $0.id == "location" })
+        XCTAssertEqual(ExchangeValidator.owningSet(of: "DC", element: alLoc, contest: al, side: "inside"), "states", "an alias key belongs to the set that aliases it")
+        let fl = try PartyLowering.lower(XCTUnwrap(PartyCatalog.party(id: "fqp")))
+        let flLoc = try XCTUnwrap(fl.exchange.first { $0.id == "location" })
+        XCTAssertEqual(ExchangeValidator.owningSet(of: "R2", element: flLoc, contest: fl, side: "inside"), "dxAliases")
+    }
 }

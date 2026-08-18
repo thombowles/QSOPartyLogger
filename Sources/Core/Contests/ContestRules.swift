@@ -105,20 +105,28 @@ struct CabrilloSpec: Codable, Equatable, Sendable {
     /// `MyLocation.entrantToken` today). Nil: use the entrant's own sent
     /// location, resolved to its group/state.
     let homeLocation: String?
+    /// Write a report column in the QSO line even where the exchange declares
+    /// no `rst`, `serial` or `name` element — the generic Cabrillo template's
+    /// slot, filled with the row's report or the mode's default (599 / 59).
+    /// `PartyLowering` sets it for the four parties whose exchange has none of
+    /// the three (MDC, IDQP, NCQP, WIQP), which is what their logs have always
+    /// carried; Field Day (class + section) leaves it false. Default false.
+    let reportColumn: Bool
 
     init(contest: String, location: Location, transmitterColumn: Bool = false,
          serialSequence: SerialSequence = .contest, categoryMode: String? = nil,
-         homeLocation: String? = nil) {
+         homeLocation: String? = nil, reportColumn: Bool = false) {
         self.contest = contest
         self.location = location
         self.transmitterColumn = transmitterColumn
         self.serialSequence = serialSequence
         self.categoryMode = categoryMode
         self.homeLocation = homeLocation
+        self.reportColumn = reportColumn
     }
 
     private enum CodingKeys: String, CodingKey {
-        case contest, location, transmitterColumn, serialSequence, categoryMode, homeLocation
+        case contest, location, transmitterColumn, serialSequence, categoryMode, homeLocation, reportColumn
     }
 
     init(from decoder: Decoder) throws {
@@ -128,7 +136,8 @@ struct CabrilloSpec: Codable, Equatable, Sendable {
                   transmitterColumn: try c.decodeIfPresent(Bool.self, forKey: .transmitterColumn) ?? false,
                   serialSequence: try c.decodeIfPresent(SerialSequence.self, forKey: .serialSequence) ?? .contest,
                   categoryMode: try c.decodeIfPresent(String.self, forKey: .categoryMode),
-                  homeLocation: try c.decodeIfPresent(String.self, forKey: .homeLocation))
+                  homeLocation: try c.decodeIfPresent(String.self, forKey: .homeLocation),
+                  reportColumn: try c.decodeIfPresent(Bool.self, forKey: .reportColumn) ?? false)
     }
 }
 
