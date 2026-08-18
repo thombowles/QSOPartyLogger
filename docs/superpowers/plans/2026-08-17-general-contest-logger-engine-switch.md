@@ -2896,9 +2896,24 @@ enum EquivalenceCorpus {
         UUID(uuidString: String(format: "%08llX-0000-4000-8000-%012llX", n >> 32, n & 0xFFFF_FFFF_FFFF))!
     }
 
-    /// Every received token a party can produce, from its own data — plus the
-    /// home state token and a plain typo, both of which the engines must
-    /// ignore rather than credit.
+    /// Every received token a party can produce, from its own data — **the
+    /// domain of its own exchange parser**, plus one plain typo the engines
+    /// must both ignore.
+    ///
+    /// The corpus deliberately stays inside what `ExchangeParser` accepts for
+    /// the party, because outside it the two engines genuinely differ and the
+    /// difference is not a bug: the old engine credits a **bare DXCC prefix in
+    /// a token-style entity-counting party** (`collidesWithDXCC` fires for any
+    /// known prefix whose entity matches the worked callsign — MEQP, NHQP,
+    /// NMQP, 7QP, TQP, New England) and a **literal `DX` in a prefix-style
+    /// party that does not accept the token** (its `theirLoc == "DX"` branch is
+    /// unconditional), and the model refuses both because no side sends them.
+    /// The party's own home-state token is the same case: LAQP excludes `LA`,
+    /// yet the old engine credits Norway for `LA` received from `LA1CCC`. Those
+    /// rows cannot be produced by the entry field, `BulkEdit` (which does not
+    /// edit `theirLoc`) or any import; a hand-edited `.qplog` could, and the
+    /// model's narrowing is the correct reading — the field accepts only what
+    /// the sponsor's exchange carries.
     static func receivedPool(_ p: PartyDefinition) -> [String] {
         var pool: [String] = p.counties.map(\.abbr)
         if p.usesSections {
@@ -2911,7 +2926,7 @@ enum EquivalenceCorpus {
         if p.acceptsDXToken { pool.append(MultClass.dxToken) }
         if p.dxStyle == .prefix { pool += prefixes }
         pool += p.dxTokenAliases.sorted()
-        pool += [p.homeState, "ZZZ"]
+        pool.append("ZZZ")   // a typo: no owner, no credit, in either engine
         return pool
     }
 
