@@ -31,9 +31,11 @@
 		095B26A9DA9174ABA71AF5E0 /* FOBBRosterParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1D7EE32F413444F4A090BF /* FOBBRosterParserTests.swift */; };
 		097E888A0ACA42B4ED11F066 /* K3ProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53DC8597A1A918FA7CB32D4 /* K3ProtocolTests.swift */; };
 		098B5B5D2F15D62548FB7A6B /* County.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE0321C50DA1A9D4AEB58D0 /* County.swift */; };
+		0999DCB8DCD5A2716C70933E /* ContestCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594AE429FF2259B209DB7986 /* ContestCatalogTests.swift */; };
 		09F3976A16C1ED37ED9E5465 /* HubSpotPrefillTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075DC2D7011F9E054C8826A8 /* HubSpotPrefillTests.swift */; };
 		0B13C9686C52A0FFC4FD1016 /* KeyerTimingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DD03F2A0464D759CD172A8 /* KeyerTimingTests.swift */; };
 		0B84F1968593931579E19473 /* EntryCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2436011194157AC1F402566 /* EntryCommand.swift */; };
+		0B99592AE9179CF535CBA65E /* ContestCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B265AA7F78A3F58757A2E0A8 /* ContestCatalog.swift */; };
 		0B9D330021B44D8F26900857 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C918A35B84A46D9369272 /* AppSettings.swift */; };
 		0BDF37DDAEF9B4C38487684E /* DashboardChallengeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325FD0771FF575D22B87A0E4 /* DashboardChallengeSection.swift */; };
 		0C98121EB0A1EFAF11C23781 /* CaliforniaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC2AC0C0FD0301DA7FF0B /* CaliforniaQSOPartyTests.swift */; };
@@ -614,6 +616,7 @@
 		5892A4EA032BA925FA66EA70 /* MarylandDCQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarylandDCQSOPartyTests.swift; sourceTree = "<group>"; };
 		58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyMonitorGateTests.swift; sourceTree = "<group>"; };
 		58F8DCDD9B83142A28657268 /* KeyMonitorGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyMonitorGate.swift; sourceTree = "<group>"; };
+		594AE429FF2259B209DB7986 /* ContestCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestCatalogTests.swift; sourceTree = "<group>"; };
 		59D833FBB1F260E1705F9500 /* Uppercasing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uppercasing.swift; sourceTree = "<group>"; };
 		5A0669133FFDD46BEDBB80A7 /* VoiceMessagesPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessagesPane.swift; sourceTree = "<group>"; };
 		5A4D360EB58E2CF775FCCB15 /* pota_spots_sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pota_spots_sample.json; sourceTree = "<group>"; };
@@ -757,6 +760,7 @@
 		AFA8F0CE885ABA98BA247459 /* HubSpotLifetimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotLifetimeTests.swift; sourceTree = "<group>"; };
 		B03F51B338E67A5CA4B43766 /* w2lj-skeeter-page-2026-08-04.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "w2lj-skeeter-page-2026-08-04.html"; sourceTree = "<group>"; };
 		B2436011194157AC1F402566 /* EntryCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryCommand.swift; sourceTree = "<group>"; };
+		B265AA7F78A3F58757A2E0A8 /* ContestCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestCatalog.swift; sourceTree = "<group>"; };
 		B27158AAEFAD7C21DD3D17B0 /* LogDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDocument.swift; sourceTree = "<group>"; };
 		B311ACDB55F4A18F8A7B3A0F /* CallHistoryClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryClientTests.swift; sourceTree = "<group>"; };
 		B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeventhCallAreaQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -965,6 +969,7 @@
 			isa = PBXGroup;
 			children = (
 				4D6FF1E17FC5AFF4DE752476 /* CallHistorySource.swift */,
+				B265AA7F78A3F58757A2E0A8 /* ContestCatalog.swift */,
 				C14CC6B4E7BDDAAC1CFC5962 /* ContestDefinition.swift */,
 				4488EE3D143E1A73A7B51942 /* ContestRules.swift */,
 				30C3CE8DA89987F517984081 /* CTYTable.swift */,
@@ -1095,6 +1100,7 @@
 				135F472CB9A0491C54F217ED /* CombinedLogSplitTests.swift */,
 				F28E6F3167ACCDDAF4295CAF /* CombinedPartyTests.swift */,
 				DFC488FDCD9B9458276688D9 /* ContestArchiveTests.swift */,
+				594AE429FF2259B209DB7986 /* ContestCatalogTests.swift */,
 				BFC328E9BE6A3A09A977CCEB /* ContestDefinitionTests.swift */,
 				577F1C633E3DFC5695E569C5 /* ContestLogScoreSnapshotTests.swift */,
 				F7FDA83F14632158930C48B9 /* ContestRulesTests.swift */,
@@ -1787,6 +1793,7 @@
 				21A520CE49B99E980AD2828A /* CombinedLogSplitTests.swift in Sources */,
 				2E5F7FF3FE17194DE5E5DC48 /* CombinedPartyTests.swift in Sources */,
 				E19F4F34905150E1AC1CB86F /* ContestArchiveTests.swift in Sources */,
+				0999DCB8DCD5A2716C70933E /* ContestCatalogTests.swift in Sources */,
 				FB9AFC94FEC15A253C4436E6 /* ContestDefinitionTests.swift in Sources */,
 				0FD96A76FF5F57A951D3B1BE /* ContestLogScoreSnapshotTests.swift in Sources */,
 				50C2B2CEDFC0587659FEE59A /* ContestNoticeTests.swift in Sources */,
@@ -2010,6 +2017,7 @@
 				CD619D2916CB1A7385A1F423 /* CombinedBreakdownSection.swift in Sources */,
 				9F68D13D8FE394D52B13DEFB /* CombinedLogSplit.swift in Sources */,
 				BBB53615A635E239E38E29E1 /* ContestArchive.swift in Sources */,
+				0B99592AE9179CF535CBA65E /* ContestCatalog.swift in Sources */,
 				179C27DA5759208E9CC2530D /* ContestDefinition.swift in Sources */,
 				A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */,
 				E5DB66FCFD449DB1E9AB4323 /* ContestNotice.swift in Sources */,
