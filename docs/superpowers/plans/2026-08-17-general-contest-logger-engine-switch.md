@@ -319,7 +319,7 @@ final class ExportByteIdentityTests: XCTestCase {
 - [ ] **Step 3: Record, then copy out of the sandbox container**
 
 ```bash
-xcodegen generate && set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' -only-testing:QSOPartyLoggerTests/ExportByteIdentityTests/testRecordFixturesWhenAsked TEST_RUNNER_QPL_RECORD_EXPORTS=1 2>&1 | grep -E "Test Case|Executed|error:|QPL_RECORD_DIR" | tail -6
+xcodegen generate && set -o pipefail; TEST_RUNNER_QPL_RECORD_EXPORTS=1 xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' -only-testing:QSOPartyLoggerTests/ExportByteIdentityTests/testRecordFixturesWhenAsked 2>&1 | grep -E "Test Case|Executed|error:|QPL_RECORD_DIR" | tail -6
 ```
 Expected: the test passes (not skipped) and prints `QPL_RECORD_DIR=…/Containers/org.b5n.QSOPartyLogger/Data/tmp/QPLRecord/Exports`. Then:
 ```bash
