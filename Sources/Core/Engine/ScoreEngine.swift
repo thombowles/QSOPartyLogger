@@ -14,12 +14,16 @@ enum ScoreEngine {
     /// One counted multiplier. `scope` is "" (once), a mode raw value
     /// (perMode), a band raw value (perBand), or "band/mode" (perBandMode).
     struct MultKey: Hashable, Sendable {
-        let multClass: MultClass
+        /// The multiplier class — `MultiplierClass.id`. The six party classes
+        /// keep `MultClass`'s raw values (`county`, `state`, `province`, `dx`,
+        /// `section`, `member`), so persisted snapshots and sidebar keys read
+        /// unchanged; a general contest adds `zone`, `country`, `prefix`…
+        let classID: String
         let value: String
         let scope: String
-        /// Earned by **operating from** the county rather than by working it
-        /// (`MultRule.activatedCountyMultiplier`). Defaults false, so every key
-        /// built before this existed is unchanged.
+        /// Earned by **operating from** the token rather than by working it
+        /// (`SideRules.activated`). Defaults false, so every key built before
+        /// this existed is unchanged.
         ///
         /// It is part of the key because SCQP 9.2.2 lists "Each South Carolina
         /// county" and "Each SC county activated" as separate numbered
@@ -28,12 +32,21 @@ enum ScoreEngine {
         /// `notOtherwiseWorked` suppresses the activated key instead.
         let activated: Bool
 
-        init(multClass: MultClass, value: String, scope: String, activated: Bool = false) {
-            self.multClass = multClass
+        init(classID: String, value: String, scope: String, activated: Bool = false) {
+            self.classID = classID
             self.value = value
             self.scope = scope
             self.activated = activated
         }
+
+        /// The party classes, by enum.
+        init(multClass: MultClass, value: String, scope: String, activated: Bool = false) {
+            self.init(classID: multClass.rawValue, value: value, scope: scope, activated: activated)
+        }
+
+        /// The class as a `MultClass`, for the party-shaped readers (sidebar,
+        /// roster); nil for a class the parties do not have.
+        var multClass: MultClass? { MultClass(rawValue: classID) }
     }
 
     struct ScoreBreakdown: Equatable {
@@ -79,6 +92,13 @@ enum ScoreEngine {
         /// see a member-exchange party's received element, which is how every
         /// Skeeter Hunt row read 1 while the card said 70 (2026-08-16).
         var pointsByRowID: [UUID: Int] = [:]
+        /// Rows past the contest's operating-time limit — logged and exported,
+        /// unscored (SS 1.2, WPX FAQ). Empty for every contest without a rule.
+        var outOfTimeRowIDs: Set<UUID> = []
+        var outOfTimeCount: Int { outOfTimeRowIDs.count }
+        /// Operating and credited off minutes under the contest's rule; 0 without one.
+        var operatedMinutes = 0
+        var offMinutes = 0
 
         /// Multipliers that reach the score. Every key is still tallied in
         /// `multiplierKeys` — the cap limits what is paid for and the floor
@@ -95,12 +115,23 @@ enum ScoreEngine {
         /// Unique values worked for a class, regardless of scope — for the
         /// sidebar county grid and per-class chips.
         func workedValues(_ multClass: MultClass) -> Set<String> {
-            Set(multiplierKeys.filter { $0.multClass == multClass }.map(\.value))
+            workedValues(classID: multClass.rawValue)
         }
 
-        /// Per-class scoped counts, for the sidebar breakdown.
+        func workedValues(classID: String) -> Set<String> {
+            Set(multiplierKeys.filter { $0.classID == classID }.map(\.value))
+        }
+
+        /// Per-class scoped counts for the party classes, for the sidebar breakdown.
         var classCounts: [MultClass: Int] {
-            Dictionary(grouping: multiplierKeys, by: \.multClass).mapValues(\.count)
+            var out: [MultClass: Int] = [:]
+            for key in multiplierKeys { if let c = key.multClass { out[c, default: 0] += 1 } }
+            return out
+        }
+
+        /// Per-class scoped counts by class id — every class, party or not.
+        var countsByClassID: [String: Int] {
+            Dictionary(grouping: multiplierKeys, by: \.classID).mapValues(\.count)
         }
     }
 
@@ -573,7 +604,7 @@ enum ScoreEngine {
         return designatedCounties(designated, workedIn: rows)
     }
 
-    private static func designatedCounties(_ designated: [String], workedIn rows: [QSO]) -> Set<String> {
+    static func designatedCounties(_ designated: [String], workedIn rows: [QSO]) -> Set<String> {
         Set(rows.map { $0.theirLoc.uppercased() })
             .intersection(designated.map { $0.uppercased() })
     }
@@ -598,7 +629,7 @@ enum ScoreEngine {
         return subsetSumsExactly(values, target: target)
     }
 
-    private static func isRovingCategory(_ category: StationProfile.CategoryStation) -> Bool {
+    static func isRovingCategory(_ category: StationProfile.CategoryStation) -> Bool {
         switch category {
         case .mobile, .rover, .portable, .expedition: true
         case .fixed, .school: false
@@ -672,21 +703,21 @@ enum ScoreEngine {
         return false
     }
 
-    /// Would working `county` at `scope` raise this log's multiplier total?
-    /// Only asked where the entrant's rule forfeits the activation multiplier on
-    /// a worked county — everywhere else a key that is absent is a gain.
-    ///
-    /// Internal for the same reason as `scopeComponent`: the NEW MULT badge,
-    /// the advisor's needed-mult chips and the score itself must agree about
-    /// which counties still pay.
-    static func countyGains(
-        _ county: String, addingScope scope: String, to current: Set<MultKey>
-    ) -> Bool {
-        let keys = current.filter { $0.multClass == .county && $0.value == county }
+    /// Would working `value` of `classID` at `scope` raise this log's
+    /// multiplier total? Only asked where the entrant's rule forfeits the
+    /// activation multiplier on a worked token — everywhere else a key that
+    /// is absent is a gain.
+    static func gains(classID: String, value: String, addingScope scope: String, to current: Set<MultKey>) -> Bool {
+        let keys = current.filter { $0.classID == classID && $0.value == value }
         let worked = Set(keys.filter { !$0.activated }.map(\.scope))
         let activated = keys.filter(\.activated).count
         let before = worked.count + activated
         let after = worked.union([scope]).count      // the forfeited activation goes to zero
         return after > before
+    }
+
+    /// `gains` for the county class — what `NeededMult` asks.
+    static func countyGains(_ county: String, addingScope scope: String, to current: Set<MultKey>) -> Bool {
+        gains(classID: MultClass.county.rawValue, value: county, addingScope: scope, to: current)
     }
 }

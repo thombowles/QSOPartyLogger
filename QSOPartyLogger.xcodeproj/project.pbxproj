@@ -26,6 +26,7 @@
 		05D024CA40AEFFD979414EC2 /* SkeeterRosterParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2959051AC941DA30C8B6439 /* SkeeterRosterParserTests.swift */; };
 		05F3DC9C7B8ABD0AA2745193 /* listing-empty-2026-07-28.html in Resources */ = {isa = PBXBuildFile; fileRef = 2F34B598BE39EC5CEFDC4DA8 /* listing-empty-2026-07-28.html */; };
 		0602550883613668175FA66C /* DXCCTableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11006733B29859B820BF14AE /* DXCCTableTests.swift */; };
+		066BD8AE3523E956A975C025 /* ScoreEngine+Contest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582642170D6BA2554F90100A /* ScoreEngine+Contest.swift */; };
 		07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DA5A46F75BD3EFC70DC50D /* CabrilloExporter.swift */; };
 		08BD9CE48CBF7881C0DA923D /* CallHistorySourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A39D1408949FD95B50D1EFC /* CallHistorySourceTests.swift */; };
 		094D398E1F04F8796EA930FA /* VoiceTrimPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5232484711D14CF24D1446A9 /* VoiceTrimPopover.swift */; };
@@ -286,6 +287,7 @@
 		A05D552978623253F23B4C79 /* CallHistoryFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F8E0DD4DFDC0CB0DF3FEF1 /* CallHistoryFileTests.swift */; };
 		A1A60A0CFC217C5D31753DEE /* pota_parks_sample.json in Resources */ = {isa = PBXBuildFile; fileRef = 3369698E7590F081AF65EB4D /* pota_parks_sample.json */; };
 		A22DEC7FE9FC56961CC6205E /* ContestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC43C19DF629A758F1B4641 /* ContestLog.swift */; };
+		A353F48674542D5C64924659 /* ContestScoreEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BA61887134E69DA998765B /* ContestScoreEngineTests.swift */; };
 		A373657BB6B2233665770B83 /* SpotSendState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4750D73F12A657C4B503D40 /* SpotSendState.swift */; };
 		A41CA85D7E69A9F5C55A2824 /* PhoneMessageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD8EEE61C2BDCD7E1BE736 /* PhoneMessageSource.swift */; };
 		A4276D42A299E140C2F6C501 /* CountyLineExpanderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */; };
@@ -649,6 +651,7 @@
 		5779472576EDDB16AD912D7C /* QSOPartyLoggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QSOPartyLoggerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		577F1C633E3DFC5695E569C5 /* ContestLogScoreSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestLogScoreSnapshotTests.swift; sourceTree = "<group>"; };
 		58069D9D23507626D1E3C0D9 /* UDPSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDPSender.swift; sourceTree = "<group>"; };
+		582642170D6BA2554F90100A /* ScoreEngine+Contest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScoreEngine+Contest.swift"; sourceTree = "<group>"; };
 		5892A4EA032BA925FA66EA70 /* MarylandDCQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarylandDCQSOPartyTests.swift; sourceTree = "<group>"; };
 		58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyMonitorGateTests.swift; sourceTree = "<group>"; };
 		58F8DCDD9B83142A28657268 /* KeyMonitorGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyMonitorGate.swift; sourceTree = "<group>"; };
@@ -848,6 +851,7 @@
 		C547B8C6F97A27863035E7CD /* RepeatCQPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatCQPolicyTests.swift; sourceTree = "<group>"; };
 		C6C60E6C8DA6D7E3E33B0BE0 /* CombinedLogSplit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedLogSplit.swift; sourceTree = "<group>"; };
 		C720BE964388DDAC66979B1B /* QSOP_AL-2026-002.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "QSOP_AL-2026-002.txt"; sourceTree = "<group>"; };
+		C7BA61887134E69DA998765B /* ContestScoreEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestScoreEngineTests.swift; sourceTree = "<group>"; };
 		C7D31512FA359BD9954ADF23 /* NoCountyPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoCountyPartyTests.swift; sourceTree = "<group>"; };
 		C8008DF74BE1374A98273ECC /* IllinoisQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllinoisQSOPartyTests.swift; sourceTree = "<group>"; };
 		C863BBF18FD8954F42F9CBEE /* PotaSpotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaSpotTests.swift; sourceTree = "<group>"; };
@@ -1157,6 +1161,7 @@
 				577F1C633E3DFC5695E569C5 /* ContestLogScoreSnapshotTests.swift */,
 				0011E6F647259AD324816CFB /* ContestLogShapeTests.swift */,
 				F7FDA83F14632158930C48B9 /* ContestRulesTests.swift */,
+				C7BA61887134E69DA998765B /* ContestScoreEngineTests.swift */,
 				FBFCB0433B452F01266FC7AC /* CountyGroupingTests.swift */,
 				F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */,
 				EF05C1549627468A75EA1D1C /* CTYTableTests.swift */,
@@ -1703,6 +1708,7 @@
 				64E7C41D9406F1E08708929F /* OneByOneTracker.swift */,
 				CCE7AD7E3989A66634D0BF7A /* RateMeter.swift */,
 				2B632B0C39468C5E56F37CB5 /* ScoreEngine.swift */,
+				582642170D6BA2554F90100A /* ScoreEngine+Contest.swift */,
 				9DE49DC2D0D154E19ED3E362 /* StationMemory.swift */,
 				CAD8BEE906266E78C4A5B53C /* TuningPolicy.swift */,
 			);
@@ -1907,6 +1913,7 @@
 				943FE69A83BEC05A8731A5E9 /* ContestLogShapeTests.swift in Sources */,
 				50C2B2CEDFC0587659FEE59A /* ContestNoticeTests.swift in Sources */,
 				6E088F38D7D40B9432EBD501 /* ContestRulesTests.swift in Sources */,
+				A353F48674542D5C64924659 /* ContestScoreEngineTests.swift in Sources */,
 				2E637491E59BD85BC0F975E9 /* CountyGroupingTests.swift in Sources */,
 				A4276D42A299E140C2F6C501 /* CountyLineExpanderTests.swift in Sources */,
 				5518F09603FD0BBC880772E8 /* DXCCLabelClientTests.swift in Sources */,
@@ -2226,6 +2233,7 @@
 				B697AC58255763D8708239E5 /* SCPClient.swift in Sources */,
 				962C83188C384DA2D6A8362D /* SCPDatabase.swift in Sources */,
 				87DEFAA494644FF89C542876 /* SCPStore.swift in Sources */,
+				066BD8AE3523E956A975C025 /* ScoreEngine+Contest.swift in Sources */,
 				C939C4DD4B704413B9161F73 /* ScoreEngine.swift in Sources */,
 				03808B5428C097DDB6D048DD /* ScoreFactor.swift in Sources */,
 				12C6DC13CA936881DB5F134C /* ScoreSidebar.swift in Sources */,
