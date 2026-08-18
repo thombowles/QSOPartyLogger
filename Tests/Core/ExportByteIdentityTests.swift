@@ -38,13 +38,19 @@ final class ExportByteIdentityTests: XCTestCase {
     func testCabrilloIsByteIdenticalToTheFixtures() throws {
         for f in try ExportFixtures.all() {
             let score = ScoreEngine.score(log: f.log, party: f.party)
-            XCTAssertEqual(CabrilloExporter.export(log: f.log, party: f.party, score: score), try fixtureText(f.name, "log"), f.name)
+            let actual = CabrilloExporter.export(log: f.log, party: f.party, score: score)
+            let expected = try fixtureText(f.name, "log")
+            XCTAssertEqual(actual, expected, f.name)
+            XCTAssertTrue(actual.utf8.elementsEqual(expected.utf8), "\(f.name): bytes differ")
         }
     }
 
     func testAdifIsByteIdenticalToTheFixtures() throws {
         for f in try ExportFixtures.all() {
-            XCTAssertEqual(AdifExporter.export(log: f.log, party: f.party), try fixtureText(f.name, "adi"), f.name)
+            let actual = AdifExporter.export(log: f.log, party: f.party)
+            let expected = try fixtureText(f.name, "adi")
+            XCTAssertEqual(actual, expected, f.name)
+            XCTAssertTrue(actual.utf8.elementsEqual(expected.utf8), "\(f.name): bytes differ")
         }
     }
 
@@ -52,6 +58,7 @@ final class ExportByteIdentityTests: XCTestCase {
         XCTAssertEqual(try ExportFixtures.all().map(\.name), [
             "ksqp-inside-county-line", "ksqp-outside", "ksqp-outside-dx", "cqp-inside-serials", "naqpcw-name",
             "skeeter-member", "paqp-inside-sections", "sevenqp-inside-multistate", "warun-inside-prefix-dx", "mdc-inside-no-rst",
+            "ksqp-outside-phone",
         ])
     }
 }

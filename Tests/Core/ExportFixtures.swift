@@ -157,6 +157,15 @@ enum ExportFixtures {
                         row(3, call: "VE3ABC", mode: .phone, freq: 14250, my: c[0], their: "ON")]
             out.append(Fixture(name: "mdc-inside-no-rst", party: p, log: log))
         }
+        // 11. KSQP, outside (TX), phone only: CATEGORY-MODE SSB, PH in the mode column.
+        do {
+            let p = try party("ksqp"); let c = p.counties.map(\.abbr)
+            var log = ContestLog(partyID: p.id, station: station(), myLocation: .outOfState(location: "TX"))
+            log.qsos = [row(1, call: "W0BH", mode: .phone, freq: 14250, my: "TX", their: c[5]),
+                        row(2, call: "N0XYZ", mode: .phone, freq: 14260, my: "TX", their: c[7]),
+                        row(3, call: "K0AA", band: .m40, mode: .phone, freq: 7180, my: "TX", their: c[9])]
+            out.append(Fixture(name: "ksqp-outside-phone", party: p, log: log))
+        }
         return out
     }
 }

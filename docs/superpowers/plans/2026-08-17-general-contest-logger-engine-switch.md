@@ -81,7 +81,7 @@ Expected: `Executed 2971 tests, with 0 failures` (measured 2026-08-17 on master 
 
 ### Task 2: Export byte-identity fixtures, recorded from today's exporters
 
-Cabrillo and ADIF for nine fixture logs — one per party shape the spec names (county line + POTA, serial, name, member, section, multi-state, prefix DX with colliding tokens, no-RST, out-of-state and DX entrants) — recorded **now** with the exporters as they are, checked in, and asserted equal from here on. Every token in a fixture comes from the party's own data (`party.counties`, `party.sections`), never typed by hand (Article 2).
+Cabrillo and ADIF for eleven fixture logs (ten shapes plus a phone-only log) — one per party shape the spec names (county line + POTA, serial, name, member, section, multi-state, prefix DX with colliding tokens, no-RST, out-of-state and DX entrants) — recorded **now** with the exporters as they are, checked in, and asserted equal from here on. Every token in a fixture comes from the party's own data (`party.counties`, `party.sections`), never typed by hand (Article 2).
 
 **Files:**
 - Create: `Tests/Core/ExportFixtures.swift`, `Tests/Core/ExportByteIdentityTests.swift`
@@ -325,7 +325,7 @@ Expected: the test passes (not skipped) and prints `QPL_RECORD_DIR=…/Container
 ```bash
 mkdir -p Tests/Fixtures/Exports && cp ~/Library/Containers/org.b5n.QSOPartyLogger/Data/tmp/QPLRecord/Exports/* Tests/Fixtures/Exports/ && ls Tests/Fixtures/Exports | wc -l && ls Tests/Fixtures/Exports
 ```
-Expected: 20 files (`<name>.log` and `<name>.adi` for the ten names). Open one `.log` and one `.adi` and check they read as a real Cabrillo header + QSO lines and a real ADIF (Article 8: look at the artefact you recorded). If the recording test is *skipped*, the environment variable did not reach the test process — try `env TEST_RUNNER_QPL_RECORD_EXPORTS=1 xcodebuild …` and, failing that, report it rather than editing the skip. If the printed directory differs from the container path above, copy from the printed one.
+Expected: 22 files (`<name>.log` and `<name>.adi` for the eleven names). Open one `.log` and one `.adi` and check they read as a real Cabrillo header + QSO lines and a real ADIF (Article 8: look at the artefact you recorded). If the recording test is *skipped*, the environment variable did not reach the test process — try `env TEST_RUNNER_QPL_RECORD_EXPORTS=1 xcodebuild …` and, failing that, report it rather than editing the skip. If the printed directory differs from the container path above, copy from the printed one.
 
 - [ ] **Step 4: Regenerate (new fixture files) and run the class**
 
