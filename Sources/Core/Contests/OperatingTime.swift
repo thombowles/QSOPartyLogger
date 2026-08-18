@@ -42,7 +42,10 @@ enum OperatingTime {
             let empty = max(0, now - previous - 1)
             if empty >= rule.minOffMinutes {
                 result.offMinutes += empty
-                result.offPeriods.append(OffPeriod(start: date(minute: previous + 1), end: date(minute: now - 1)))
+                // A rule built in code may say `minOffMinutes: 0` (validation refuses it in a file); no empty minute is no period.
+                if empty > 0 {
+                    result.offPeriods.append(OffPeriod(start: date(minute: previous + 1), end: date(minute: now - 1)))
+                }
             } else {
                 operated += now - previous
             }

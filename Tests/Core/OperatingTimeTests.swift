@@ -63,4 +63,14 @@ final class OperatingTimeTests: XCTestCase {
         let short = OperatingTime.compute(rows: rows, rule: OperatingTimeRule(maxMinutes: 1440, minOffMinutes: 31))
         XCTAssertEqual(short.offPeriods, [], "0115–0144 is 30 minutes; a 31-minute rule does not count it")
     }
+
+    /// `ContestDefinition.validate` refuses a rule with `minOffMinutes` below
+    /// 1, but a rule built in code can still say 0: two rows a minute apart
+    /// have no empty minute between them, and that must not become an
+    /// inverted off period (start after end) — nor any off period at all.
+    func testZeroEmptyMinutesNeverMakeAnOffPeriod() {
+        let r = OperatingTime.compute(rows: [row("0100"), row("0101"), row("0102")], rule: OperatingTimeRule(maxMinutes: 60, minOffMinutes: 0))
+        XCTAssertEqual(r.offPeriods, [])
+        XCTAssertEqual(r.offMinutes, 0)
+    }
 }

@@ -210,4 +210,35 @@ final class ExchangeValidatorTests: XCTestCase {
         let flLoc = try XCTUnwrap(fl.exchange.first { $0.id == "location" })
         XCTAssertEqual(ExchangeValidator.owningSet(of: "R2", element: flLoc, contest: fl, side: "inside"), "dxAliases")
     }
+
+    /// The sets an element accepts are resolved once per (element, side) —
+    /// entries in send order over the workable sides, the accepted union
+    /// pooled — and every classification reads that one value, so the
+    /// per-row overload and the one-off overload cannot disagree.
+    func testResolvedSetsAreBuiltOnceInSendOrderWithTheAcceptedUnion() throws {
+        let ks = try contest("ksqp"), loc = try element(ks, "location")
+        let inside = ExchangeValidator.resolvedSets(for: loc, contest: ks, side: "inside")
+        XCTAssertEqual(inside.entries.map(\.id), ["counties", "states", "provinces", "dxToken"])
+        XCTAssertTrue(inside.entries.allSatisfy { $0.set != nil }, "every enumerated set resolves to a TokenSet")
+        XCTAssertTrue(inside.accepted.isSuperset(of: ["MRN", "TX", "ON", "DX"]))
+        XCTAssertFalse(inside.accepted.contains("KS"), "the excluded home state is nobody's token")
+        // The outside entrant is paired to `inside`: counties only.
+        let outside = ExchangeValidator.resolvedSets(for: loc, contest: ks, side: "outside")
+        XCTAssertEqual(outside.entries.map(\.id), ["counties"])
+        XCTAssertFalse(outside.accepted.contains("TX"))
+        // The dynamic prefix set is an entry with no TokenSet, and it never
+        // claims a spelling an enumerated set accepts.
+        let wa = try contest("warun"), waLoc = try element(wa, "location")
+        let waInside = ExchangeValidator.resolvedSets(for: waLoc, contest: wa, side: "inside")
+        XCTAssertEqual(waInside.entries.last?.id, "dxccPrefix")
+        XCTAssertNil(waInside.entries.last?.set)
+        XCTAssertFalse(waInside.accepted.contains("DL"))
+        for (token, sets, element, contest, side) in [("mrn", inside, loc, ks, "inside"), ("TX", outside, loc, ks, "outside"),
+                                                      ("DL", waInside, waLoc, wa, "inside"), ("PA", waInside, waLoc, wa, "inside")] {
+            XCTAssertEqual(ExchangeValidator.owningSet(of: token, in: sets),
+                           ExchangeValidator.owningSet(of: token, element: element, contest: contest, side: side), token)
+        }
+        XCTAssertEqual(ExchangeValidator.owningSet(of: "DL", in: waInside), "dxccPrefix")
+        XCTAssertNil(ExchangeValidator.owningSet(of: "TX", in: outside))
+    }
 }

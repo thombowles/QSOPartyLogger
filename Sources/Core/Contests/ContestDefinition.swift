@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 /// A contest's complete rule set — the one type the engine, entry flow,
 /// exporters and UI consume. Decoded from a v2 JSON file, or produced by
@@ -140,24 +141,40 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
 
     func rules(for side: String) -> SideRules { sideRules[side] ?? .none }
 
-    /// The sides an entrant on `side` may work for credit: its `pairing` row, else every side.
-    func workableSides(for side: String) -> [String] { pairing?[side] ?? sides.map(\.id) }
+    /// The sides an entrant on `side` may work for credit: its `pairing` row,
+    /// else every side — in side declaration order (the order token ownership
+    /// and the entry hint use), however the pairing row was written.
+    func workableSides(for side: String) -> [String] {
+        pairing?[side].map { row in sides.map(\.id).filter(row.contains) } ?? sides.map(\.id)
+    }
 
     /// The side a log's `sideID` names; for an id this contest does not
     /// declare — a document written before it declared sides, or a lowered
     /// party whose single side is `all` while the log says `outside` — the
     /// contest's only side, else its last-listed side (the catch-all: sides
     /// are evaluated first-match, so the last is the one that takes everyone
-    /// else).
+    /// else). The fallback is noted in the unified log once per (contest,
+    /// side) pair, so a remapped legacy log is visible without a line per
+    /// score pass.
     func resolvedSideID(_ id: String) -> String {
         if sides.contains(where: { $0.id == id }) { return id }
-        return sides.count == 1 ? sides[0].id : (sides.last?.id ?? id)
+        let resolved = sides.last?.id ?? id
+        let key = "\(self.id)\u{1F}\(id)"
+        if Self.reportedSideFallbacks.withLock({ $0.insert(key).inserted }) {
+            Self.log.notice("log names side '\(id, privacy: .public)' which contest '\(self.id, privacy: .public)' does not declare; scoring as '\(resolved, privacy: .public)'")
+        }
+        return resolved
     }
+
+    private static let log = Logger(subsystem: "org.b5n.QSOPartyLogger", category: "contests")
+    private static let reportedSideFallbacks = OSAllocatedUnfairLock<Set<String>>(initialState: [])
 
     /// The token set the `county` class lists — what the county-keyed bonuses
     /// (`mobileCountyCount`, `activatedCountyCount`, `sweepTiers`,
     /// `designatedCountySweep`) and the ADIF `cnty` fields read. Nil for a
-    /// contest with no `county` class.
+    /// contest with no `county` class. A v2 contest with county-keyed bonuses
+    /// but no county multiplier must still declare a `county` class (with
+    /// `counting: [:]`) to carry the roster.
     func countyRoster(bundle: Bundle = .main) -> TokenSet? {
         guard let id = multipliers.first(where: { $0.id == MultClass.county.rawValue })?.roster else { return nil }
         return tokenSet(id: id, bundle: bundle)
@@ -302,6 +319,11 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
             ]
             for key in appliesTo.keys where !knownAxes.contains(key) { throw ContestValidationError.badOperatingTimeAxis(key) }
         }
+        // `OperatingTime.compute` reads both as ≥ 1: a zero minimum would
+        // credit every empty minute as off time.
+        if let rule = operatingTime, rule.maxMinutes < 1 || rule.minOffMinutes < 1 {
+            throw ContestValidationError.badOperatingTime
+        }
         for s in sides {
             for p in [s.predicate, s.workedPredicate] {
                 switch p.kind {
@@ -363,7 +385,7 @@ enum ContestValidationError: Error, Equatable, LocalizedError {
     case badTokenSet(String, String), elementSentByNobody(String), badDerivation(String), badResolver(String, String)
     case unsupportedSchemaVersion(Int), duplicateID(String, String), badElement(String, String)
     case badPointRule(Int, String), unknownMultiplierClass(String), emptyPairing(String)
-    case badRoster(String), badOperatingTimeAxis(String)
+    case badRoster(String), badOperatingTimeAxis(String), badOperatingTime
     case bonusNeedsCountyClass, unknownBonusToken(String), activatedNeedsRoster(String)
 
     var errorDescription: String? {
@@ -388,6 +410,7 @@ enum ContestValidationError: Error, Equatable, LocalizedError {
         case .emptyPairing(let side): "Side '\(side)': pairing row is empty."
         case .badRoster(let id): "Roster '\(id)' is a dynamic set and cannot be listed."
         case .badOperatingTimeAxis(let key): "Unknown operating-time axis '\(key)'."
+        case .badOperatingTime: "An operating-time rule needs maxMinutes ≥ 1 and minOffMinutes ≥ 1."
         case .bonusNeedsCountyClass: "A county-keyed bonus needs a 'county' multiplier class with a roster."
         case .unknownBonusToken(let t): "Bonus names '\(t)', which is not in the county roster."
         case .activatedNeedsRoster(let id): "Activated multiplier class '\(id)' lists no roster."

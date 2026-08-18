@@ -113,32 +113,43 @@ enum ExchangeValidator {
 
     // MARK: Token kinds
 
-    /// The set a received token belongs to, for an entrant on `side`: the
-    /// first of the element's sets — in the order the element sends them,
-    /// over the sides the entrant may work — that accepts it, the dynamic
-    /// `dxccPrefix` accepting a known DXCC prefix that no enumerated set
-    /// claims. Nil when nothing accepts it.
-    ///
-    /// **Validation and scoring classify through this one function**, so a
-    /// token cannot be valid under one reading and counted under another:
-    /// `validateToken` classifies with it, and `ScoreEngine`'s `receivedToken`
-    /// resolver fires only when the token's owner is its set (with the
-    /// callsign override the engine layers on top — `Resolver.callsignOverrides`).
-    static func owningSet(of token: String, element: ExchangeElement, contest: ContestDefinition,
-                          side: String, bundle: Bundle = .main) -> String? {
-        let sets: [(id: String, set: TokenSet?)] = element.setsSent(by: contest.workableSides(for: side)).map {
-            ($0, contest.tokenSet(id: $0, bundle: bundle))
-        }
-        return owningSet(of: token, among: sets)
+    /// The sets an element accepts for an entrant on `side`, resolved once: in
+    /// the order the element sends them over the sides the entrant may work
+    /// (side declaration order, then each side's `sets` order), with the union
+    /// of every enumerated set's accepted spellings — what the dynamic
+    /// `dxccPrefix` set must not claim. Built once per element and side by the
+    /// validator (per field) and by the engine (per `score`), never per token.
+    /// The one value classifies a token, pools what the element accepts,
+    /// orders the suggestions, and names the element in the sponsor's own
+    /// words — `dxccPrefix` is dynamic and has no `TokenSet` to ask, so its
+    /// entry's `set` is nil.
+    struct ResolvedSets: Sendable {
+        let entries: [(id: String, set: TokenSet?)]
+        let accepted: Set<String>
     }
 
-    /// The classification itself, over sets already resolved once.
-    static func owningSet(of token: String, among sets: [(id: String, set: TokenSet?)]) -> String? {
+    static func resolvedSets(for element: ExchangeElement, contest: ContestDefinition,
+                             side: String, bundle: Bundle = .main) -> ResolvedSets {
+        let entries: [(id: String, set: TokenSet?)] = element.setsSent(by: contest.workableSides(for: side)).map {
+            ($0, contest.tokenSet(id: $0, bundle: bundle))
+        }
+        return ResolvedSets(entries: entries, accepted: entries.reduce(into: Set<String>()) { $0.formUnion($1.set?.acceptedTokens ?? []) })
+    }
+
+    /// The set a received token belongs to: the first entry that accepts it —
+    /// the dynamic `dxccPrefix` accepting a known DXCC prefix that no
+    /// enumerated set claims. Nil when nothing accepts it. Validation
+    /// (`validateToken`) and scoring (`ScoreEngine`) classify through this one
+    /// function, so a token cannot be valid under one reading and counted
+    /// under another; the engine layers the callsign override on top
+    /// (`Resolver.callsignOverrides`), moving the row's owner to `dxccPrefix`
+    /// **before any class's resolvers run**, so a colliding token is never
+    /// credited twice.
+    static func owningSet(of token: String, in sets: ResolvedSets) -> String? {
         let t = token.trimmingCharacters(in: .whitespaces).uppercased()
-        let accepted = sets.reduce(into: Set<String>()) { $0.formUnion($1.set?.acceptedTokens ?? []) }
-        for entry in sets {
+        for entry in sets.entries {
             if entry.id == "dxccPrefix" {
-                if isDXPrefix(t, excluding: accepted) { return entry.id }
+                if isDXPrefix(t, excluding: sets.accepted) { return entry.id }
             } else if let set = entry.set, set.accepts(t) {
                 return entry.id
             }
@@ -146,17 +157,18 @@ enum ExchangeValidator {
         return nil
     }
 
+    /// `owningSet(of:in:)` over freshly resolved sets — for one-off questions; per-row callers resolve once.
+    static func owningSet(of token: String, element: ExchangeElement, contest: ContestDefinition,
+                          side: String, bundle: Bundle = .main) -> String? {
+        owningSet(of: token, in: resolvedSets(for: element, contest: contest, side: side, bundle: bundle))
+    }
+
     private static func validateToken(_ text: String, element: ExchangeElement, contest: ContestDefinition,
                                       side: String, bundle: Bundle) -> Result<[String], Failure> {
         let workable = contest.workableSides(for: side)
-        // Every set id resolved once, in the order the element sends them. The
-        // one list classifies a token, pools what the element accepts, orders
-        // the suggestions, and names the element in the sponsor's own words —
-        // `dxccPrefix` is dynamic and has no `TokenSet` to ask.
-        let sets: [(id: String, set: TokenSet?)] = element.setsSent(by: workable).map {
-            ($0, contest.tokenSet(id: $0, bundle: bundle))
-        }
-        let hint = acceptedHint(for: sets)
+        // Every set resolved once for this field (`ResolvedSets`).
+        let resolved = resolvedSets(for: element, contest: contest, side: side, bundle: bundle)
+        let hint = acceptedHint(for: resolved.entries)
         let tokens = ExchangeParser.tokenize(text)
         guard !tokens.isEmpty else { return .failure(.empty(hint: hint)) }
         // Sets a side may send several of at once (a county line), and how
@@ -169,7 +181,7 @@ enum ExchangeValidator {
             }
         }
         let maxValues = element.maxValues(for: workable)
-        let multiTerm = sets.first { multiSets.contains($0.id) }?.set?.termPlural ?? "values"
+        let multiTerm = resolved.entries.first { multiSets.contains($0.id) }?.set?.termPlural ?? "values"
 
         // The value is the token **as sent**, never the set's canonical form:
         // an alias is resolved where it is counted, not where it is received.
@@ -180,13 +192,13 @@ enum ExchangeValidator {
         // lowered model does the same through this set's `aliases`, read by
         // the multiplier's `receivedToken` resolver.
         func classify(_ token: String) -> (set: String, value: String)? {
-            owningSet(of: token, among: sets).map { ($0, token) }
+            owningSet(of: token, in: resolved).map { ($0, token) }
         }
 
         var classified: [(set: String, value: String)] = []
         for token in tokens {
             guard let hit = classify(token) else {
-                return .failure(.invalid(token, suggestions: suggestions(for: token, inSetOrder: sets), hint: hint))
+                return .failure(.invalid(token, suggestions: suggestions(for: token, inSetOrder: resolved.entries), hint: hint))
             }
             classified.append(hit)
         }

@@ -138,6 +138,29 @@ final class ContestDefinitionTests: XCTestCase {
         })) { XCTAssertEqual($0 as? ContestValidationError, .badOperatingTimeAxis("overlays")) }
     }
 
+    /// An operating-time rule with no minimum off period (or no maximum)
+    /// would credit every empty minute — `OperatingTime.compute` reads both
+    /// as ≥ 1, so the file is refused before it can.
+    func testOperatingTimeRuleNeedsPositiveMinutes() throws {
+        func mutated(_ mutate: (inout [String: Any]) -> Void) throws -> Data {
+            var json = try fixtureJSON()
+            mutate(&json)
+            return try JSONSerialization.data(withJSONObject: json)
+        }
+        XCTAssertThrowsError(try ContestDefinition.decode(try mutated { json in
+            var operatingTime = json["operatingTime"] as! [String: Any]
+            operatingTime["minOffMinutes"] = 0
+            json["operatingTime"] = operatingTime
+        })) { XCTAssertEqual($0 as? ContestValidationError, .badOperatingTime) }
+        XCTAssertThrowsError(try ContestDefinition.decode(try mutated { json in
+            var operatingTime = json["operatingTime"] as! [String: Any]
+            operatingTime["maxMinutes"] = 0
+            json["operatingTime"] = operatingTime
+        })) { XCTAssertEqual($0 as? ContestValidationError, .badOperatingTime) }
+        // The fixture's own rule (1440 / 60) still decodes.
+        XCTAssertEqual(try fixture().operatingTime?.minOffMinutes, 60)
+    }
+
     func testEncodedRoundTripsDates() throws {
         let c = try fixture()
         let back = try ContestDefinition.decode(try c.encoded())
@@ -180,6 +203,24 @@ final class ContestDefinitionTests: XCTestCase {
         XCTAssertEqual(c.sentElements(for: "inside").map(\.id), ["rst", "location", "call"])
         XCTAssertEqual(c.side(id: "outside")?.label, "Outside")
         XCTAssertNil(c.side(id: "nope"))
+    }
+
+    /// The workable sides come back in side declaration order — the order
+    /// token ownership and the entry hint use — however the pairing row was
+    /// written, so an author's `["c", "b"]` cannot reorder which set claims a
+    /// token first.
+    func testWorkableSidesFollowDeclarationOrderNotThePairingRow() throws {
+        let sides = ["a", "b", "c"].map { Side(id: $0, label: $0.uppercased(), predicate: .always, workedPredicate: .always) }
+        let rst = ExchangeElement(id: "rst", kind: .rst, sentBy: ["a": .init(), "b": .init(), "c": .init()])
+        let c = ContestDefinition(
+            id: "abc", name: "ABC", family: .domestic, bands: [.m20], modeClasses: [.cw],
+            sides: sides, exchange: [rst], multipliers: [], points: [PointRule(points: 1)],
+            dupe: DupeRule(scope: .band), pairing: ["a": ["c", "b"]],
+            cabrillo: CabrilloSpec(contest: "ABC", location: .entrantToken)
+        )
+        XCTAssertNoThrow(try c.validate())
+        XCTAssertEqual(c.workableSides(for: "a"), ["b", "c"])
+        XCTAssertEqual(c.workableSides(for: "b"), ["a", "b", "c"])
     }
 
     // MARK: Engine-switch additions
@@ -226,7 +267,9 @@ final class ContestDefinitionTests: XCTestCase {
         // Only that resolver shape may carry it, and only for sets the element accepts.
         mults[1]["resolvers"] = [["kind": "dxccEntity", "from": "callsign", "list": "arrl", "callsignOverrides": ["states"]]]
         json["multipliers"] = mults
-        XCTAssertThrowsError(try ContestDefinition.decode(try JSONSerialization.data(withJSONObject: json)))
+        XCTAssertThrowsError(try ContestDefinition.decode(try JSONSerialization.data(withJSONObject: json))) { error in
+            XCTAssertEqual(error as? ContestValidationError, .badResolver("country", "dxccEntity"))
+        }
         mults[1]["resolvers"] = [["kind": "dxccEntity", "from": "receivedTokenOrCallsign", "element": "location", "list": "arrl",
                                   "callsignOverrides": ["provinces"]]]
         json["multipliers"] = mults
@@ -265,6 +308,35 @@ final class ContestDefinitionTests: XCTestCase {
         json["scoreFactors"] = ["objectives": [["id": "1o", "label": "a", "om": 1], ["id": "1o", "label": "b", "om": 2]]]
         XCTAssertThrowsError(try ContestDefinition.decode(try JSONSerialization.data(withJSONObject: json))) { error in
             XCTAssertEqual(error as? ContestValidationError, .duplicateID("objective", "1o"))
+        }
+    }
+
+    /// An activated multiplier is earned by operating from a token of its
+    /// class's roster; the class must list one. Tennessee's inside side has
+    /// the activated-county rule — the same contest with the county class's
+    /// roster dropped is refused for it.
+    func testActivatedRuleNeedsAClassWithARoster() throws {
+        let tn = try PartyLowering.lower(XCTUnwrap(PartyCatalog.party(id: "tnqp")))
+        XCTAssertEqual(tn.sideRules["inside"]?.activated?.classID, "county")
+        let county = try XCTUnwrap(tn.multipliers.first { $0.id == "county" })
+        XCTAssertNotNil(county.roster)
+        let rosterless = MultiplierClass(id: county.id, term: county.term, termPlural: county.termPlural,
+                                         resolvers: county.resolvers, counting: county.counting, caps: county.caps,
+                                         roster: nil, layout: county.layout)
+        // Every other field copied — except the bonuses: Tennessee's
+        // activated-county bonus is county-keyed, and a missing county roster
+        // is reported as that bonus's problem first (`bonusNeedsCountyClass`).
+        // The guard under test is the activated rule's own.
+        let bad = ContestDefinition(
+            schemaVersion: tn.schemaVersion, id: tn.id, name: tn.name, family: tn.family, sponsor: tn.sponsor,
+            notes: tn.notes, caveats: tn.caveats, schedule: tn.schedule, bands: tn.bands, modeClasses: tn.modeClasses,
+            allowedRawModes: tn.allowedRawModes, tokenSets: tn.tokenSets, sides: tn.sides, exchange: tn.exchange,
+            multipliers: tn.multipliers.map { $0.id == "county" ? rosterless : $0 }, points: tn.points, dupe: tn.dupe,
+            pairing: tn.pairing, sideRules: tn.sideRules, bonuses: [], scoreFactors: tn.scoreFactors,
+            operatingTime: tn.operatingTime, categories: tn.categories, cabrillo: tn.cabrillo, sources: tn.sources
+        )
+        XCTAssertThrowsError(try bad.validate()) { error in
+            XCTAssertEqual(error as? ContestValidationError, .activatedNeedsRoster("county"))
         }
     }
 }

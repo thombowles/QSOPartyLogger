@@ -111,6 +111,12 @@ struct Resolver: Codable, Equatable, Sendable {
     /// it. `PartyLowering` emits `["states", "provinces"]` on every side that
     /// counts DXCC entities separately, which is exactly today's
     /// `dxCountsEntities` gate; nil = the token's owner is never questioned.
+    /// The override moves the row's owner to `dxccPrefix` **before any
+    /// class's resolvers run**, so the state or province class's
+    /// `receivedToken` resolver does not also fire — a colliding token is
+    /// never credited twice. It applies wherever this resolver's `sides`
+    /// applies, whether or not that side counts the class (today's
+    /// `dxCountsEntities` is independent of the side's class list).
     let callsignOverrides: [String]?
 
     init(kind: Kind, element: String? = nil, set: String? = nil, mapTo: String? = nil,
