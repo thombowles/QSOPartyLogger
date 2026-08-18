@@ -828,13 +828,20 @@ The cached file lives in `~/Library/Application Support/QSOPartyLogger/SCP/`.
 ## Files and export
 
 Each contest is a `.qplog` file (JSON, with undo). New logs auto-save into your
-logs folder and mirror to iCloud Drive if you've configured one.
+logs folder and mirror to iCloud Drive if you've configured one. Logs are saved
+in the schema-2 shape — each row carries its sent and received exchange as
+element maps, and the document carries the entrant's side and fixed exchange.
+Every earlier `.qplog` opens unchanged; a log saved by this build needs this
+build or later, and a log from a newer build is refused rather than rewritten.
 
 The toolbar **Export** menu offers both formats:
 
 - **Cabrillo V3** — per-county-line QSO rows, claimed score, and the full entry
   declaration: operator, assisted, power, station and transmitter categories, a
-  multi-op `OPERATORS:` list, club, grid locator and address. Contest Setup
+  multi-op `OPERATORS:` list, club, grid locator and address. The QSO line is
+  derived from the contest's own exchange spec — a call echo where the exchange
+  echoes the call, `CATEGORY-BAND`/`-OVERLAY`/`-TIME` where a contest has them,
+  and `OFFTIME:` lines where it has an operating-time limit. Contest Setup
   collects all of it, so a Single Op **Assisted** or Multi-Two entry exports as
   exactly that. Every field there folds to caps as you type — really folds, so
   what the header carries is what the row showed — with one deliberate
@@ -842,7 +849,9 @@ The toolbar **Export** menu offers both formats:
   the one header a sponsor may write back to.
 - **ADIF 3.1.4** — `CNTY`/`MY_CNTY` with full county names,
   `STX_STRING`/`SRX_STRING`, group ids in an `APP_` field, and the POTA
-  fields below when the log is an activation.
+  fields below when the log is an activation; plus `CQZ`/`ITUZ`, `ARRL_SECT`,
+  `PRECEDENCE`, `CHECK`, `CLASS`, `GRIDSQUARE`, `TX_PWR` and `DXCC`/`CONT`
+  where a contest's exchange carries them.
 
 Suggested filenames follow the log ("2026-08-29 KSQP KE5CW.adi"), and the app
 declares the ADIF file type so the save panel keeps `.adi` instead of appending
@@ -997,7 +1006,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**2971 unit tests**, none of which need hardware, a network or a microphone —
+**3049 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
 (driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank
@@ -1024,7 +1033,13 @@ The general contest model — token sets, sides, exchange elements, multiplier
 classes, point rules, the lowering of every bundled party into it, the cty.csv
 table, the WPX prefix rule and the exchange validator — is covered by its own
 test files under `Tests/Core/`, including a parity oracle against the party
-parser on all 50 parties.
+parser on all 50 parties. Since the engine switch, the scoring engine, the
+Cabrillo and ADIF exporters and the saved score snapshots all run on that
+model for every log — a party's rules reach them by being lowered into it —
+and two oracles keep them honest: a golden equivalence corpus (every bundled
+party, seeded logs on both sides, scored by the engine that shipped before the
+switch and reproduced field by field) and byte-identity export fixtures for
+eleven party shapes.
 
 Four notes for anyone working in here:
 

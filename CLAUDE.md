@@ -34,6 +34,13 @@ The non-negotiables, so they are never a surprise:
 8. **Docs ship in the same commit as the behavior** — README features, keyboard
    table, test count, provenance.
 9. **Keyboard-first.** Every feature has a keyboard path.
+10. **The engine is the model.** Scoring, exporting and score snapshots read
+   `ContestDefinition` only; a party's rules reach them through
+   `PartyLowering`. Any change to how a party scores or exports must show up as
+   a diff in the golden corpus (`Tests/Fixtures/Equivalence/engine-golden.json`)
+   or the export fixtures (`Tests/Fixtures/Exports/`) — re-recorded on purpose,
+   with the sponsor's words, in that party's own commit. Never to make a red
+   run green.
 
 ## Layout
 
@@ -41,9 +48,9 @@ The non-negotiables, so they are never a surprise:
 | --- | --- |
 | `Sources/Core/Parties/` | `PartyDefinition` (JSON rule schema), `PartyCatalog`, counties, mult classes |
 | `Sources/Core/Contests/` | The general contest model — `ContestDefinition`, `TokenSet`, `Side`, `ExchangeElement`, `MultiplierClass`/`Resolver`, `PointRule`, `ContestRules` (dupe, op-time, categories, Cabrillo, factors) — plus `PartyLowering`, `ContestCatalog`, `CTYTable`, `WPXPrefix`, `ExchangeValidator`, `OperatingTime`, and the shared `HubSpotSource`, `CallHistorySource`, `DXCCTable` (+ label refresh/store), `MultiplierRoster`, `ScoreFactor` |
-| `Sources/Core/Engine/` | `ScoreEngine`, `ExchangeParser`, `DupeChecker`, `CountyLineExpander`, `StationMemory`, ESM |
+| `Sources/Core/Engine/` | `ScoreEngine` — the general engine on `ContestDefinition` (`ScoreEngine+Contest`), with the `PartyDefinition` overloads as bridges that lower first — plus `ExchangeParser` (the entry row's parser; phase 2 retires it), `DupeChecker`, `CountyLineExpander`, `StationMemory`, ESM |
 | `Sources/Core/CallHistory/` | N1MM call history file parser, site page parsers, on-disk cache |
-| `Sources/Core/Export/` | Cabrillo V3, ADIF 3.1.4 |
+| `Sources/Core/Export/` | Cabrillo V3, ADIF 3.1.4 — both derived from the contest's exchange spec; byte-identity fixtures in `Tests/Fixtures/Exports` |
 | `Sources/Core/History/` | The logs folder read as history (`LogFolder`; the `.qplog` files are the history, each carrying its saved score), season stats, SQP Challenge, upcoming calendar |
 | `Sources/Core/Spotting/` | Cluster protocol, spot parsing, filters, band map scale; outgoing spots — `SpotNetwork`, `SpotDraft`, `SpotReceipt`, per-network bodies |
 | `Sources/Core/Voice/` | `VoiceAudio` DSP, `VoiceClip`/`VoiceMessageSet`, `VoiceLibrary` (per-party recordings on disk) |

@@ -10,6 +10,67 @@
 
 **Spec:** [`docs/superpowers/specs/2026-08-17-general-contest-logger-design.md`](../specs/2026-08-17-general-contest-logger-design.md) — §1.4, §1.5, §1.6, §2.4–2.6, "Testing", "Carried into the engine-switch plan". Plan 1 (done): [`2026-08-17-general-contest-logger-foundations.md`](2026-08-17-general-contest-logger-foundations.md).
 
+> **Status: COMPLETE (2026-08-18)** — all 13 tasks executed on branch
+> `worktree-general-contest-engine` (worktree `.claude/worktrees/general-contest-engine`,
+> base master `1a07949`), subagent-driven with spec + quality reviews per task;
+> final full suite **`Executed 3049 tests, with 2 tests skipped and 0 failures`**
+> (2971 baseline + 78 new; the two skips are the opt-in recording tests).
+> **The code is authoritative over the code blocks below**, which were the
+> starting point. What the reviews and the work changed:
+>
+> - **Task 2**: eleven fixtures, not ten (a phone-only KSQP log pins
+>   `CATEGORY-MODE: SSB` and the `PH` column) → 22 files; the byte-identity
+>   tests compare UTF-8 bytes as well as `String`s. The sandboxed test host
+>   cannot write into the source tree, so recording tests write into the
+>   container's temp folder and the shell copies the files out, with the
+>   `TEST_RUNNER_…=1` variable as a **shell prefix** (a trailing argument does
+>   not reach the test process).
+> - **Task 3**: `QSO` decodes an empty POTA list as nil, like its inits; four
+>   extra decode pins (sent-only v2 row, compaction on decode, v2 keys winning
+>   over stray v1 keys, `keyNotFound(rstRcvd)`).
+> - **Task 4**: a document from a **newer** schema is refused, not rewritten
+>   (`DecodingError.dataCorrupted`); `StationProfile`'s four additions normalise
+>   empty to absent; migration pins for the unfinished-setup locations.
+> - **Task 5**: `ExchangeValidator.ResolvedSets` + `resolvedSets(for:contest:side:)`
+>   + `owningSet(of:in:)` — the sets are resolved once per element and side, not
+>   per token or per row; `workableSides(for:)` returns side **declaration**
+>   order (token ownership must not depend on how a pairing row was written);
+>   `validate()` also refuses an operating-time rule with `maxMinutes`/`minOffMinutes`
+>   below 1 and an activated rule whose class lists no roster; `resolvedSideID`
+>   logs once when it falls back; `OperatingTime` never writes a zero-length off
+>   period.
+> - **Task 7/8**: `Classified` caches the worked side per row (the points
+>   context no longer matches a callsign against cty twice); the callsign
+>   override is decided over **every** class, gated by each resolver's own
+>   `sides` — today's `dxCountsEntities` gate is independent of the class list —
+>   pinned by `testTheCallsignOverrideAppliesEvenWhereTheSideDoesNotCountTheClass`.
+>   That test caught a resolved-sets memo keyed by contest id serving another
+>   contest's sets: an id is **not** a value identity (a user file overrides a
+>   bundled contest under the same id), so the memo was dropped and the
+>   reasoning recorded in `resolvedTokenSets`.
+> - **Task 9**: the corpus stays inside the party parser's own domain. Outside
+>   it the two engines deliberately differ, and the model's reading is the
+>   correct one: the old engine credits a bare DXCC prefix in a token-style
+>   entity-counting party, a literal `DX` in a prefix-style party that does not
+>   accept the token, and the party's own excluded home-state token when the
+>   worked callsign matches it as a prefix (LAQP: `LA` from `LA1CCC` → Norway).
+>   None can be produced by the entry field, `BulkEdit` or any import. **The
+>   corpus then found no divergence at all** — the model engine reproduced the
+>   shipping engine for all 50 parties with no change to the engine or the
+>   lowering.
+> - **Task 10**: nine existing test call sites moved to the new
+>   `qsoLine(_:myCall:contest:side:)` / `record(_:myCall:contest:side:counties:myState:writesEntity:)`
+>   signatures, keeping their pinned expectations; `CabrilloExporter` keeps
+>   `exchangeElement`/`exchangeNumber` for `ExchangeSummary`, which phase 2
+>   generalises.
+> - **Task 12**: `PartyCatalog.loadUserParties` logs a load failure as well as
+>   returning it, and `MultiStatePartyTests` decodes through `PartyCatalog` — so
+>   a party literal that cannot lower throws at the helper instead of tripping
+>   `lowered()`'s precondition mid-run.
+>
+> **Next:** phase 2, the UI generalisation (spec §2.1–2.5) — Plan 3, not yet
+> written. What it inherits is listed in the spec's Progress section.
+
 ---
 
 ## Decisions this plan settles (the "carried" list, resolved)
