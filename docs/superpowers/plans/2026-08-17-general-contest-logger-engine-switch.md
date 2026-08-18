@@ -2404,7 +2404,12 @@ extension ScoreEngine {
     static func multiplierValues(rcvd: [String: String], call: String, side: String, classes: [MultiplierClass],
                                  contest: ContestDefinition,
                                  resolved: [String: ExchangeValidator.ResolvedSets]) -> [(MultiplierClass, String)] {
-        let owners = tokenOwners(rcvd: rcvd, call: call, side: side, classes: classes, resolved: resolved)
+        // The override is decided over every class — gated by each resolver's
+        // own `sides` — not only the classes this side counts: today's
+        // `dxCountsEntities` gate is independent of the class list, so a side
+        // that tells entities apart without counting DX still loses `PA` from
+        // PA0AAA to the Netherlands rather than crediting Pennsylvania.
+        let owners = tokenOwners(rcvd: rcvd, call: call, side: side, classes: contest.multipliers, resolved: resolved)
         var out: [(MultiplierClass, String)] = []
         for cls in classes {
             for r in cls.resolvers where r.applies(side: side, call: call) {
