@@ -1,7 +1,26 @@
 import Foundation
 
+/// The well-known exchange element ids the parties use — the keys of
+/// `QSO.sent` / `QSO.rcvd` and of `ContestLog.sentExchange`, and the ids
+/// `PartyLowering` gives its elements. A general contest names its own.
+enum ExchangeElementID {
+    static let rst = "rst"
+    static let serial = "serial"
+    static let name = "name"
+    static let member = "member"
+    static let location = "location"
+}
+
 /// One logged line. County-line contacts produce multiple `QSO` rows sharing a `groupID`
 /// (N1MM-style: a separate line per county, per KSQP rule 11).
+///
+/// The exchange is two maps, element id → value (`sent`, `rcvd`) — the v2 row
+/// shape (spec §1.5). The typed accessors below (`rstSent`, `theirLoc`,
+/// `serialRcvd`…) are views over the maps, so call sites written for the v1
+/// fields read unchanged. The maps never hold an empty value: an absent
+/// element has exactly one representation, so equality, encoding and export
+/// cannot tell "" from nil. Rows written by earlier builds decode through
+/// `LegacyKeys`; this build writes `sent`/`rcvd` only.
 struct QSO: Identifiable, Codable, Hashable, Sendable {
     var id: UUID
     /// Shared by all rows created from a single on-air contact.
@@ -14,36 +33,12 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
     var rawMode: String
     /// From CAT when connected; nil when logged manually.
     var freqKHz: Int?
-    var rstSent: String
-    var rstRcvd: String
-    /// QSO numbers sent and received, for parties whose exchange carries one
-    /// (CQP: "QSO number = contact serial number starting with 1 for the first
-    /// contact"). `nil` wherever the exchange carries a signal report instead —
-    /// which is every party but CQP, and is why these are optional: logs written
-    /// before serial support decode unchanged.
-    ///
-    /// A county-line contact is **one** contact and carries **one** number,
-    /// shared by every row it expands into (see `CountyLineExpander`).
-    var serialSent: Int?
-    var serialRcvd: Int?
-    /// Operator names sent and received, for parties whose exchange carries
-    /// one (NAQP: "Operator name and station location"; MNQP: "First name &
-    /// county"). `nil` everywhere else, so logs written before name support
-    /// decode unchanged. The sent name is the log's single contest-long name
-    /// (both sponsors require one), stamped per row so the record shows what
-    /// went out.
-    var nameSent: String?
-    var nameRcvd: String?
-    /// Member-number-or-power elements sent and received, for parties whose
-    /// exchange carries one (Skeeter Hunt: "RST, S/P/C, Skeeter number" for
-    /// Skeeters, "RST, S/P/C, Output power" for everyone else). Strings,
-    /// because the element is a number for members and "5W" for the rest —
-    /// see `MemberExchange.parse`. `nil` everywhere else, so logs written
-    /// before member support decode unchanged. The sent value is the log's
-    /// single contest-long element, stamped per row so the record shows what
-    /// went out.
-    var memberSent: String?
-    var memberRcvd: String?
+    /// My exchange for this row, element id → value: `rst`, `serial`, `name`,
+    /// `member`, `location` for the parties; `zone`, `section`, `check`… for
+    /// other contests. A county-line entrant's rows each carry one county.
+    var sent: [String: String] { didSet { sent = Self.compact(sent) } }
+    /// Their exchange for this row, the same keys.
+    var rcvd: [String: String] { didSet { rcvd = Self.compact(rcvd) } }
     /// POTA park references each way, for contests run from a park. Mine are
     /// stamped at logging from Contest Setup's current value
     /// (`ContestLog.myPotaRefs`); theirs is what a park-to-park station
@@ -52,10 +47,6 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
     /// byte-identically.
     var myPotaRefs: [String]?
     var theirPotaRefs: [String]?
-    /// My sent location for this row: county abbreviation (in-state) or state/province.
-    var myLoc: String
-    /// Their location for this row: county abbreviation, state, province, or "DX".
-    var theirLoc: String
     /// Whether this contact was made running or searching, stamped at logging
     /// from the same Run/S&P flag that already picks the message set and
     /// decides what ⇧⌘S means.
@@ -69,6 +60,62 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
     /// obeys.
     var posture: OperatingMode?
 
+    // MARK: Typed views over the maps (the v1 fields)
+
+    var rstSent: String {
+        get { sent[ExchangeElementID.rst] ?? "" }
+        set { sent[ExchangeElementID.rst] = newValue }
+    }
+    var rstRcvd: String {
+        get { rcvd[ExchangeElementID.rst] ?? "" }
+        set { rcvd[ExchangeElementID.rst] = newValue }
+    }
+    /// QSO numbers sent and received, for parties whose exchange carries one
+    /// (CQP). A county-line contact is **one** contact and carries **one**
+    /// number, shared by every row it expands into (see `CountyLineExpander`).
+    var serialSent: Int? {
+        get { sent[ExchangeElementID.serial].flatMap { Int($0) } }
+        set { sent[ExchangeElementID.serial] = newValue.map(String.init) }
+    }
+    var serialRcvd: Int? {
+        get { rcvd[ExchangeElementID.serial].flatMap { Int($0) } }
+        set { rcvd[ExchangeElementID.serial] = newValue.map(String.init) }
+    }
+    /// Operator names sent and received (NAQP, MNQP). The sent name is the
+    /// log's single contest-long name, stamped per row so the record shows
+    /// what went out.
+    var nameSent: String? {
+        get { sent[ExchangeElementID.name] }
+        set { sent[ExchangeElementID.name] = newValue }
+    }
+    var nameRcvd: String? {
+        get { rcvd[ExchangeElementID.name] }
+        set { rcvd[ExchangeElementID.name] = newValue }
+    }
+    /// Member-number-or-power elements sent and received (Skeeter Hunt, FOBB)
+    /// — a number for members and "5W" for the rest, see `MemberExchange.parse`.
+    var memberSent: String? {
+        get { sent[ExchangeElementID.member] }
+        set { sent[ExchangeElementID.member] = newValue }
+    }
+    var memberRcvd: String? {
+        get { rcvd[ExchangeElementID.member] }
+        set { rcvd[ExchangeElementID.member] = newValue }
+    }
+    /// My sent location for this row: county abbreviation (in-state) or state/province.
+    var myLoc: String {
+        get { sent[ExchangeElementID.location] ?? "" }
+        set { sent[ExchangeElementID.location] = newValue }
+    }
+    /// Their location for this row: county abbreviation, state, province, or "DX".
+    var theirLoc: String {
+        get { rcvd[ExchangeElementID.location] ?? "" }
+        set { rcvd[ExchangeElementID.location] = newValue }
+    }
+
+    // MARK: Inits
+
+    /// The v1 shape: typed fields, mapped into `sent`/`rcvd`.
     init(
         id: UUID = UUID(),
         groupID: UUID = UUID(),
@@ -92,6 +139,35 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         theirLoc: String,
         posture: OperatingMode? = nil
     ) {
+        self.init(
+            id: id, groupID: groupID, timestampUTC: timestampUTC, call: call, band: band,
+            modeClass: modeClass, rawMode: rawMode, freqKHz: freqKHz,
+            sent: [ExchangeElementID.rst: rstSent, ExchangeElementID.serial: serialSent.map(String.init) ?? "",
+                   ExchangeElementID.name: nameSent ?? "", ExchangeElementID.member: memberSent ?? "",
+                   ExchangeElementID.location: myLoc],
+            rcvd: [ExchangeElementID.rst: rstRcvd, ExchangeElementID.serial: serialRcvd.map(String.init) ?? "",
+                   ExchangeElementID.name: nameRcvd ?? "", ExchangeElementID.member: memberRcvd ?? "",
+                   ExchangeElementID.location: theirLoc],
+            myPotaRefs: myPotaRefs, theirPotaRefs: theirPotaRefs, posture: posture
+        )
+    }
+
+    /// The v2 shape: the maps themselves.
+    init(
+        id: UUID = UUID(),
+        groupID: UUID = UUID(),
+        timestampUTC: Date = Date(),
+        call: String,
+        band: Band,
+        modeClass: ModeClass,
+        rawMode: String,
+        freqKHz: Int? = nil,
+        sent: [String: String],
+        rcvd: [String: String],
+        myPotaRefs: [String]? = nil,
+        theirPotaRefs: [String]? = nil,
+        posture: OperatingMode? = nil
+    ) {
         self.id = id
         self.groupID = groupID
         self.timestampUTC = timestampUTC
@@ -100,20 +176,67 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         self.modeClass = modeClass
         self.rawMode = rawMode
         self.freqKHz = freqKHz
-        self.rstSent = rstSent
-        self.rstRcvd = rstRcvd
-        self.serialSent = serialSent
-        self.serialRcvd = serialRcvd
-        self.nameSent = nameSent
-        self.nameRcvd = nameRcvd
-        self.memberSent = memberSent
-        self.memberRcvd = memberRcvd
+        self.sent = Self.compact(sent)
+        self.rcvd = Self.compact(rcvd)
         // Empty is stored as absent, so "no parks" has exactly one
         // representation and an ADIF export cannot iterate an empty list.
         self.myPotaRefs = (myPotaRefs?.isEmpty ?? true) ? nil : myPotaRefs
         self.theirPotaRefs = (theirPotaRefs?.isEmpty ?? true) ? nil : theirPotaRefs
-        self.myLoc = myLoc
-        self.theirLoc = theirLoc
         self.posture = posture
     }
+
+    /// Drops empty ids and empty values — the maps' one invariant.
+    static func compact(_ map: [String: String]) -> [String: String] {
+        map.filter { !$0.key.isEmpty && !$0.value.isEmpty }
+    }
+
+    // MARK: Codable — v2 written, v1 read
+
+    private enum CodingKeys: String, CodingKey {
+        case id, groupID, timestampUTC, call, band, modeClass, rawMode, freqKHz, sent, rcvd, myPotaRefs, theirPotaRefs, posture
+    }
+
+    /// The v1 row's own keys. `rstSent`, `rstRcvd`, `myLoc`, `theirLoc` were
+    /// required; the rest optional.
+    private enum LegacyKeys: String, CodingKey {
+        case rstSent, rstRcvd, serialSent, serialRcvd, nameSent, nameRcvd, memberSent, memberRcvd, myLoc, theirLoc
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        groupID = try c.decode(UUID.self, forKey: .groupID)
+        timestampUTC = try c.decode(Date.self, forKey: .timestampUTC)
+        call = try c.decode(String.self, forKey: .call)
+        band = try c.decode(Band.self, forKey: .band)
+        modeClass = try c.decode(ModeClass.self, forKey: .modeClass)
+        rawMode = try c.decode(String.self, forKey: .rawMode)
+        freqKHz = try c.decodeIfPresent(Int.self, forKey: .freqKHz)
+        myPotaRefs = try c.decodeIfPresent([String].self, forKey: .myPotaRefs)
+        theirPotaRefs = try c.decodeIfPresent([String].self, forKey: .theirPotaRefs)
+        posture = try c.decodeIfPresent(OperatingMode.self, forKey: .posture)
+        if c.contains(.sent) || c.contains(.rcvd) {
+            sent = Self.compact(try c.decodeIfPresent([String: String].self, forKey: .sent) ?? [:])
+            rcvd = Self.compact(try c.decodeIfPresent([String: String].self, forKey: .rcvd) ?? [:])
+        } else {
+            let l = try decoder.container(keyedBy: LegacyKeys.self)
+            sent = Self.compact([
+                ExchangeElementID.rst: try l.decode(String.self, forKey: .rstSent),
+                ExchangeElementID.serial: try l.decodeIfPresent(Int.self, forKey: .serialSent).map(String.init) ?? "",
+                ExchangeElementID.name: try l.decodeIfPresent(String.self, forKey: .nameSent) ?? "",
+                ExchangeElementID.member: try l.decodeIfPresent(String.self, forKey: .memberSent) ?? "",
+                ExchangeElementID.location: try l.decode(String.self, forKey: .myLoc),
+            ])
+            rcvd = Self.compact([
+                ExchangeElementID.rst: try l.decode(String.self, forKey: .rstRcvd),
+                ExchangeElementID.serial: try l.decodeIfPresent(Int.self, forKey: .serialRcvd).map(String.init) ?? "",
+                ExchangeElementID.name: try l.decodeIfPresent(String.self, forKey: .nameRcvd) ?? "",
+                ExchangeElementID.member: try l.decodeIfPresent(String.self, forKey: .memberRcvd) ?? "",
+                ExchangeElementID.location: try l.decode(String.self, forKey: .theirLoc),
+            ])
+        }
+    }
+    // `encode(to:)` stays synthesized over `CodingKeys`: the maps, and every
+    // optional only when present — a nil `freqKHz`, parks or `posture` writes
+    // no key, exactly as before.
 }

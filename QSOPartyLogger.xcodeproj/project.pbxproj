@@ -55,6 +55,7 @@
 		122FB6190515703980A91D42 /* SpaceWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E3B88134A7EDA380CC2C2 /* SpaceWeather.swift */; };
 		12C6DC13CA936881DB5F134C /* ScoreSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA812496670164897C4A0447 /* ScoreSidebar.swift */; };
 		12E1FE53CDC81A2F09F47D71 /* CallFrameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94354D23B8B582B72B8FC894 /* CallFrameTests.swift */; };
+		13C1577E42B93612BE314889 /* QSOExchangeShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B3634D83869A7C0F6ED416 /* QSOExchangeShapeTests.swift */; };
 		151F7624A914409CC5E9DAA5 /* MessageSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B4B1D3D7E785B3640D0399 /* MessageSets.swift */; };
 		15589DCB85C1493D1D277EB7 /* PotaSpotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E41369000406AEFA755AE71 /* PotaSpotClient.swift */; };
 		15C3B40327ABFE9DB29B1309 /* HubSelfSpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909A650EB49961812900CFD5 /* HubSelfSpot.swift */; };
@@ -752,6 +753,7 @@
 		92BF3A3E0D2A190DDA4A0941 /* PotaParkStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkStoreTests.swift; sourceTree = "<group>"; };
 		9382E762282D91D8950B0F07 /* WorkedSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkedSpot.swift; sourceTree = "<group>"; };
 		9392F2187275B71B5789F836 /* CallHistoryPageParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryPageParser.swift; sourceTree = "<group>"; };
+		93B3634D83869A7C0F6ED416 /* QSOExchangeShapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSOExchangeShapeTests.swift; sourceTree = "<group>"; };
 		94354D23B8B582B72B8FC894 /* CallFrameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallFrameTests.swift; sourceTree = "<group>"; };
 		944ACFBCB11B916DDD2F8933 /* EntryFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryFlowTests.swift; sourceTree = "<group>"; };
 		946CE99241815D626D18A649 /* ScoreSummaryText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreSummaryText.swift; sourceTree = "<group>"; };
@@ -1237,6 +1239,7 @@
 				92BF3A3E0D2A190DDA4A0941 /* PotaParkStoreTests.swift */,
 				6494352FEF3C42EC27F6120C /* PotaRefTests.swift */,
 				C863BBF18FD8954F42F9CBEE /* PotaSpotTests.swift */,
+				93B3634D83869A7C0F6ED416 /* QSOExchangeShapeTests.swift */,
 				AEA4A841592D4E7DF22124AB /* QSOPostureTests.swift */,
 				EF7194268CC1DFB2953FFDE8 /* QuebecQSOPartyTests.swift */,
 				433A191B9362FB73554ADEA5 /* RateMeterTests.swift */,
@@ -2006,6 +2009,7 @@
 				90DAE79AC35B65DAAA867D13 /* PotaSpotTests.swift in Sources */,
 				C9AAE61B0FC8097BED39445C /* PreferenceIsolationTests.swift in Sources */,
 				1F00CED8C43362316C761617 /* QMXProtocolTests.swift in Sources */,
+				13C1577E42B93612BE314889 /* QSOExchangeShapeTests.swift in Sources */,
 				0F00A97387F4348F6AD34EDA /* QSOPostureTests.swift in Sources */,
 				8B798A3A385449902326AB88 /* QuebecQSOPartyTests.swift in Sources */,
 				02382A492D70F37AA11A029D /* RadioBarStatusTests.swift in Sources */,
