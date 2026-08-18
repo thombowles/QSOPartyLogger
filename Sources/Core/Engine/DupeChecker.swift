@@ -60,6 +60,37 @@ enum DupeChecker {
         return dupes
     }
 
+    /// The general key: call, plus band and/or mode class per `rule.scope`,
+    /// plus both locations when the rule is location-sensitive. With
+    /// `.partyDefault` this is exactly `key(_:)`.
+    struct RuleKey: Hashable {
+        let call: String
+        let band: Band?
+        let modeClass: ModeClass?
+        let myLoc: String?
+        let theirLoc: String?
+    }
+
+    static func key(_ q: QSO, rule: DupeRule) -> RuleKey {
+        RuleKey(
+            call: q.call.uppercased(),
+            band: rule.scope == .contest ? nil : q.band,
+            modeClass: rule.scope == .bandMode ? q.modeClass : nil,
+            myLoc: rule.locationSensitive ? q.myLoc.uppercased() : nil,
+            theirLoc: rule.locationSensitive ? q.theirLoc.uppercased() : nil
+        )
+    }
+
+    /// IDs of the chronologically-first row for each `RuleKey`; later rows are dupes.
+    static func firstOccurrenceIDs(_ log: [QSO], rule: DupeRule) -> Set<UUID> {
+        var seen = Set<RuleKey>()
+        var firsts = Set<UUID>()
+        for q in log.sortedChronologically() where seen.insert(key(q, rule: rule)).inserted {
+            firsts.insert(q.id)
+        }
+        return firsts
+    }
+
     /// One prior on-air contact with a station, for the worked-before table.
     ///
     /// A county-line contact produced several log rows from one contact, so it
