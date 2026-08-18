@@ -119,9 +119,11 @@ final class MultiStatePartyTests: XCTestCase {
           "counties": \(counties)
         }
         """
-        let party = try JSONDecoder().decode(PartyDefinition.self, from: Data(json.utf8))
-        try party.validate()
-        return party
+        // Through `PartyCatalog.decode`, not a bare `JSONDecoder`: it is the
+        // one door that also proves the party lowers into the general model,
+        // and this party is scored and exported through the bridges, which
+        // trust that (`PartyLowering.lowered`).
+        return try PartyCatalog.decode(Data(json.utf8))
     }
 
     func testTheCountysOwnStateResolves() throws {

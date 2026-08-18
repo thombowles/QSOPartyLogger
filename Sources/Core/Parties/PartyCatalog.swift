@@ -57,6 +57,11 @@ enum PartyCatalog {
                     let party = try decode(try Data(contentsOf: url))
                     return (url, .success(party))
                 } catch {
+                    // Logged as well as returned: a file that scored last
+                    // season and now trips the model's stricter checks must
+                    // not vanish from the picker without a word, whether or
+                    // not the caller shows the failure.
+                    log.error("user party \(url.lastPathComponent, privacy: .public) failed to load: \(error.localizedDescription, privacy: .public)")
                     return (url, .failure(error))
                 }
             }
