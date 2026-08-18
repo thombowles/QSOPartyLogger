@@ -420,7 +420,7 @@ final class QSOExchangeShapeTests: XCTestCase {
     func testDecodesAV1Row() throws {
         let v1 = """
         {"schemaVersion":1,"partyID":"ksqp","station":{"callsign":"KE5CW"},"myLocation":{"outOfState":{"location":"TX"}},
-         "operatingMode":"searchPounce","setupCompleted":true,"exchangeName":"","exchangeMember":"","entryClassID":"","usedSpots":false,"myPotaRefs":[],
+         "operatingMode":"S&P","setupCompleted":true,"exchangeName":"","exchangeMember":"","entryClassID":"","usedSpots":false,"myPotaRefs":[],
          "messages":{"run":[],"searchPounce":[]},
          "qsos":[{"id":"00000000-0000-4000-8000-000000000001","groupID":"00000000-0000-4000-8000-000000000001",
                   "timestampUTC":"2026-08-29T14:32:00Z","call":"W0BH","band":"20m","modeClass":"cw","rawMode":"CW","freqKHz":14042,
@@ -437,7 +437,7 @@ final class QSOExchangeShapeTests: XCTestCase {
     func testAV1RowMissingARequiredKeyStillFails() {
         let broken = """
         {"schemaVersion":1,"partyID":"ksqp","station":{"callsign":"KE5CW"},"myLocation":{"outOfState":{"location":"TX"}},
-         "operatingMode":"searchPounce","setupCompleted":true,"messages":{"run":[],"searchPounce":[]},
+         "operatingMode":"S&P","setupCompleted":true,"messages":{"run":[],"searchPounce":[]},
          "qsos":[{"id":"00000000-0000-4000-8000-000000000001","groupID":"00000000-0000-4000-8000-000000000001",
                   "timestampUTC":"2026-08-29T14:32:00Z","call":"W0BH","band":"20m","modeClass":"cw","rawMode":"CW",
                   "rstSent":"599","myLoc":"TX","theirLoc":"MRN"}]}
@@ -777,7 +777,7 @@ final class ContestLogShapeTests: XCTestCase {
         let v1 = """
         {"schemaVersion":1,"partyID":"naqpcw","station":{"callsign":"KE5CW","categoryPower":"LOW"},
          "myLocation":{"outOfState":{"location":"TX"}},"exchangeName":"TOM","exchangeMember":"",
-         "operatingMode":"run","setupCompleted":true,"entryClassID":"","usedSpots":true,"myPotaRefs":["US-3315"],
+         "operatingMode":"Run","setupCompleted":true,"entryClassID":"","usedSpots":true,"myPotaRefs":["US-3315"],
          "qsos":[]}
         """
         let log = try ContestLog.decode(from: Data(v1.utf8))
