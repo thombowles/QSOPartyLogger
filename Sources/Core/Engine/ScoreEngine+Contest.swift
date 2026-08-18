@@ -22,6 +22,10 @@ extension ScoreEngine {
         let invalidRowIDs: Set<UUID>
         let outOfScopeRowIDs: Set<UUID>
         let operatingTime: OperatingTime.Result
+        /// Row id → the side the row's callsign and exchange were worked on,
+        /// for the contest rows — computed once while classifying so the
+        /// points context never matches a callsign against cty twice.
+        let workedSides: [UUID: String]
 
         /// The rows that count: first occurrences among the scored rows.
         var validRows: [QSO] { scoredRows.filter { firstIDs.contains($0.id) } }
@@ -42,8 +46,11 @@ extension ScoreEngine {
         // 10b: non-MDC stations may only work MD/DC) — rows whose worked side
         // is not one this side is paired with.
         let workable = Set(contest.workableSides(for: side))
+        var workedSides: [UUID: String] = [:]
         let contestRows = inAllowedMode.filter { row in
-            workedSideID(of: row, contest: contest).map(workable.contains) ?? false
+            guard let worked = workedSideID(of: row, contest: contest), workable.contains(worked) else { return false }
+            workedSides[row.id] = worked
+            return true
         }
         let outOfScope = Set(inAllowedMode.map(\.id)).subtracting(contestRows.map(\.id))
         // Rows past the operating-time limit are logged and exported but earn
@@ -58,7 +65,8 @@ extension ScoreEngine {
         return Classified(
             side: side, contestRows: contestRows, scoredRows: scored,
             firstIDs: DupeChecker.firstOccurrenceIDs(scored, rule: contest.dupe),
-            invalidRowIDs: invalid, outOfScopeRowIDs: outOfScope, operatingTime: operatingTime
+            invalidRowIDs: invalid, outOfScopeRowIDs: outOfScope, operatingTime: operatingTime,
+            workedSides: workedSides
         )
     }
 
@@ -127,7 +135,8 @@ extension ScoreEngine {
             default: break
             }
             let points = PointRule.points(contest.points, pointsContext(
-                row: row, side: side, contest: contest, workedStationKind: kind, myGeo: myGeo, geoNeeded: geoNeeded))
+                row: row, side: side, contest: contest, workedSide: c.workedSides[row.id] ?? "",
+                workedStationKind: kind, myGeo: myGeo, geoNeeded: geoNeeded))
             result.qsoPoints += points
             result.pointsByRowID[row.id] = points
 
@@ -172,8 +181,11 @@ extension ScoreEngine {
         }
     }
 
-    static func pointsContext(row: QSO, side: String, contest: ContestDefinition, workedStationKind: String?,
-                              myGeo: CTYTable.Match?, geoNeeded: Bool) -> PointCondition.Context {
+    /// `workedSide` is the row's side as `classify` resolved it — passed in
+    /// rather than recomputed, since `workedSideID` matches the callsign
+    /// against cty for a `dxccIn`/`continentIn` contest.
+    static func pointsContext(row: QSO, side: String, contest: ContestDefinition, workedSide: String,
+                              workedStationKind: String?, myGeo: CTYTable.Match?, geoNeeded: Bool) -> PointCondition.Context {
         var relation: PointCondition.Relation?
         var shared: String?
         if geoNeeded, let mine = myGeo, let theirs = CTYTable.shared?.match(callsign: row.call) {
@@ -186,7 +198,7 @@ extension ScoreEngine {
         }
         return PointCondition.Context(
             modeClass: row.modeClass, band: row.band, relation: relation, sharedContinent: shared,
-            side: side, workedSide: workedSideID(of: row, contest: contest) ?? "",
+            side: side, workedSide: workedSide,
             received: row.rcvd.mapValues { $0.uppercased() }, workedStationKind: workedStationKind,
             call: row.call, sets: { contest.tokenSet(id: $0) }
         )
@@ -214,7 +226,12 @@ extension ScoreEngine {
     static func multiplierValues(rcvd: [String: String], call: String, side: String, classes: [MultiplierClass],
                                  contest: ContestDefinition,
                                  resolved: [String: ExchangeValidator.ResolvedSets]) -> [(MultiplierClass, String)] {
-        let owners = tokenOwners(rcvd: rcvd, call: call, side: side, classes: classes, resolved: resolved)
+        // The override is decided over every class — gated by each resolver's
+        // own `sides` — not only the classes this side counts: today's
+        // `dxCountsEntities` gate is independent of the class list, so a side
+        // that tells entities apart without counting DX still loses `PA` from
+        // PA0AAA to the Netherlands rather than crediting Pennsylvania.
+        let owners = tokenOwners(rcvd: rcvd, call: call, side: side, classes: contest.multipliers, resolved: resolved)
         var out: [(MultiplierClass, String)] = []
         for cls in classes {
             for r in cls.resolvers where r.applies(side: side, call: call) {
@@ -471,5 +488,67 @@ extension ScoreEngine {
     /// Was this value earned by working somebody, at any scope?
     static func worked(classID: String, value: String, in result: ScoreBreakdown) -> Bool {
         result.multiplierKeys.contains { !$0.activated && $0.classID == classID && $0.value == value }
+    }
+
+    // MARK: Derived queries
+
+    /// Would logging a contact whose received exchange is one of `received`
+    /// (several for a county line) add a multiplier this log does not hold?
+    /// The NEW MULT badge. Past the side's scored ceiling nothing pays; a
+    /// token whose activation multiplier would merely be traded for the worked
+    /// one does not count as new either. Per-class caps are deliberately not
+    /// consulted, as today.
+    static func wouldAddMultiplier(received: [[String: String]], call: String, band: Band, modeClass: ModeClass,
+                                   log: ContestLog, contest: ContestDefinition) -> Bool {
+        guard contest.modeClasses.contains(modeClass) else { return false }
+        let side = contest.resolvedSideID(log.sideID)
+        let current = score(log: log, contest: contest).multiplierKeys
+        let rules = contest.rules(for: side)
+        // Past the contest's scored ceiling, a further multiplier pays nothing,
+        // so the badge must not send the operator chasing it (CQP: 58 of 63).
+        if let cap = rules.maxScoredMultipliers, current.count >= cap { return false }
+        let classes = contest.multipliers.filter { $0.counting[side] != nil }
+        let resolved = resolvedTokenSets(for: side, contest: contest)
+        for rcvd in received {
+            for (cls, value) in multiplierValues(rcvd: QSO.compact(rcvd), call: call, side: side, classes: classes,
+                                                 contest: contest, resolved: resolved) {
+                guard let scope = cls.counting[side]?.component(band: band, modeClass: modeClass) else { continue }
+                let key = MultKey(classID: cls.id, value: value, scope: scope)
+                guard !current.contains(key) else { continue }
+                // A token the operator has already self-activated under a
+                // forfeiting rule trades one key for another rather than
+                // adding one — the same failure the cap guard exists to prevent.
+                if let act = rules.activated, act.classID == cls.id, act.notOtherwiseWorked,
+                   !gains(classID: cls.id, value: value, addingScope: scope, to: current) {
+                    continue
+                }
+                return true
+            }
+        }
+        return false
+    }
+
+    /// Valid (non-dupe, allowed-mode, in-scope, in-time) QSO counts per band
+    /// and mode class — the sidebar's "QSOs by band" matrix.
+    static func bandModeCounts(log: ContestLog, contest: ContestDefinition) -> [Band: [ModeClass: Int]] {
+        var out: [Band: [ModeClass: Int]] = [:]
+        for row in classify(log: log, contest: contest).validRows {
+            out[row.band, default: [:]][row.modeClass, default: 0] += 1
+        }
+        return out
+    }
+
+    /// Which of a designated county list this log has credit for — the
+    /// predicate behind `.designatedCountySweep`, exposed so the sidebar's
+    /// progress readout is the same set the score pays on.
+    static func designatedCountiesWorked(_ designated: [String], log: ContestLog, contest: ContestDefinition) -> Set<String> {
+        designatedCounties(designated, workedIn: classify(log: log, contest: contest).scoredRows)
+    }
+
+    /// Whether the call-area blackjack target is met by this log's valid rows
+    /// — the predicate behind `.callAreaSum`, exposed for the sidebar's badge.
+    static func callAreaSumAchieved(target: Int, log: ContestLog, contest: ContestDefinition) -> Bool {
+        let values = Set(classify(log: log, contest: contest).validRows.map { $0.call.uppercased() }).compactMap(callAreaValue)
+        return subsetSumsExactly(values, target: target)
     }
 }

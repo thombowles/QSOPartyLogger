@@ -314,4 +314,93 @@ final class ContestScoreEngineTests: XCTestCase {
         mlog.qsos = (0..<lowest.count).map { i in row("W3X\(i)", rcvd: ["rst": "599", "location": mc[i]], sent: ["rst": "599", "location": "TX"]) }
         XCTAssertEqual(ScoreEngine.score(log: mlog, contest: md).bonusPoints, lowest.points)
     }
+
+    /// The `tokenIn` worked predicate is what replaces the old engine's
+    /// county filter for the 45 parties whose outside entrant may work home
+    /// stations only — the commonest log shape in the catalogue.
+    func testAnOutsideEntrantWorksHomeStationsOnly() throws {
+        let wa = try lowered("warun"), p = try XCTUnwrap(PartyCatalog.party(id: "warun"))
+        XCTAssertTrue(p.outStateWorksHomeStationsOnly)
+        let c = p.counties.map(\.abbr)
+        var log = ContestLog(partyID: wa.id, myLocation: .outOfState(location: "TX"))
+        log.station.callsign = "KE5CW"
+        log.qsos = [row("W7ABC", rcvd: ["rst": "599", "location": c[0]], sent: ["rst": "599", "location": "TX"]),
+                    row("W8DEF", rcvd: ["rst": "599", "location": "OH"], sent: ["rst": "599", "location": "TX"]),
+                    row("VE3GHI", rcvd: ["rst": "599", "location": "ON"], sent: ["rst": "599", "location": "TX"])]
+        let s = ScoreEngine.score(log: log, contest: wa)
+        XCTAssertEqual(s.validQSOs, 1, "only the Washington county row is in scope")
+        XCTAssertEqual(s.outOfScopeCount, 2)
+        XCTAssertEqual(s.workedValues(classID: "county"), [c[0]])
+        XCTAssertEqual(s.qsoPoints, ScoreEngine.score(log: log, party: p).qsoPoints, "same as the engine that ships today")
+    }
+
+    // MARK: Derived queries
+
+    func testWouldAddMultiplierOnTheModel() throws {
+        let c = try cqww()
+        let held = log(c, sent: ["rst": ["599"], "zone": ["4"]], rows: [row("DL1AA", rcvd: ["rst": "599", "zone": "14"])])
+        XCTAssertFalse(ScoreEngine.wouldAddMultiplier(received: [["rst": "599", "zone": "14"]], call: "DL2BB", band: .m20, modeClass: .cw, log: held, contest: c),
+                       "zone 14 and DL are both held on 20 m")
+        XCTAssertTrue(ScoreEngine.wouldAddMultiplier(received: [["rst": "599", "zone": "14"]], call: "DL2BB", band: .m40, modeClass: .cw, log: held, contest: c),
+                      "per band: 40 m is new")
+        XCTAssertTrue(ScoreEngine.wouldAddMultiplier(received: [["rst": "599", "zone": "14"]], call: "F5ABC", band: .m20, modeClass: .cw, log: held, contest: c),
+                      "a new country on a held zone")
+        XCTAssertFalse(ScoreEngine.wouldAddMultiplier(received: [["rst": "599", "zone": "14"]], call: "F5ABC", band: .m20, modeClass: .phone, log: held, contest: c),
+                       "a mode the contest does not run")
+        // A county line: any of the received values may be the new one.
+        let ks = try lowered("ksqp"), kc = try XCTUnwrap(PartyCatalog.party(id: "ksqp")).counties.map(\.abbr)
+        var klog = ContestLog(partyID: ks.id, myLocation: .outOfState(location: "TX"))
+        klog.station.callsign = "KE5CW"
+        klog.qsos = [row("W0BH", rcvd: ["rst": "599", "location": kc[0]], sent: ["rst": "599", "location": "TX"])]
+        XCTAssertTrue(ScoreEngine.wouldAddMultiplier(received: [["location": kc[0]], ["location": kc[1]]], call: "N0XYZ", band: .m20, modeClass: .cw, log: klog, contest: ks))
+        XCTAssertFalse(ScoreEngine.wouldAddMultiplier(received: [["location": kc[0]]], call: "N0XYZ", band: .m20, modeClass: .cw, log: klog, contest: ks))
+        // Past CQP's scored ceiling nothing pays.
+        let cq = try lowered("cqp"), cqp = try XCTUnwrap(PartyCatalog.party(id: "cqp"))
+        let cap = try XCTUnwrap(cqp.multipliers.inState.maxScoredMultipliers)
+        var clog = ContestLog(partyID: cq.id, myLocation: .inState(counties: [cqp.counties[0].abbr]))
+        clog.station.callsign = "W6QPL"
+        let tokens = MultClass.acceptedStateTokens.subtracting(cqp.excludedStateTokens).subtracting(cqp.stateAliases.keys).sorted()
+            + cqp.provinces.sorted()                                   // 49 states + DC-less list + 13 provinces > 58
+        clog.qsos = tokens.prefix(cap).enumerated().map { i, s in
+            row("W\(i % 10)A\(i)", rcvd: ["serial": "\(i + 1)", "location": s], sent: ["serial": "\(i + 1)", "location": cqp.counties[0].abbr])
+        }
+        XCTAssertGreaterThanOrEqual(ScoreEngine.score(log: clog, contest: cq).multiplierKeys.count, cap)
+        XCTAssertFalse(ScoreEngine.wouldAddMultiplier(received: [["location": "ON"]], call: "VE3ABC", band: .m20, modeClass: .cw, log: clog, contest: cq))
+    }
+
+    func testWouldAddMultiplierRespectsAForfeitedActivation() throws {
+        let tn = try lowered("tnqp"), p = try XCTUnwrap(PartyCatalog.party(id: "tnqp"))
+        let act = try XCTUnwrap(p.multipliers.inState.activatedCountyMultiplier), c = p.counties.map(\.abbr)
+        var log = ContestLog(partyID: tn.id, myLocation: .inState(counties: [c[0]]))
+        log.station.callsign = "W4QPL"; log.station.categoryStation = .mobile
+        log.qsos = (0..<act.minCount).map { i in row("W\(i)AA", rcvd: ["rst": "599", "location": "TX"], sent: ["rst": "599", "location": c[0]]) }
+        XCTAssertEqual(ScoreEngine.score(log: log, contest: tn).selfActivatedCounties, [c[0]])
+        XCTAssertFalse(ScoreEngine.wouldAddMultiplier(received: [["location": c[0]]], call: "W4XYZ", band: .m20, modeClass: .cw, log: log, contest: tn),
+                       "working the activated county trades one key for another")
+        XCTAssertTrue(ScoreEngine.wouldAddMultiplier(received: [["location": c[1]]], call: "W4XYZ", band: .m20, modeClass: .cw, log: log, contest: tn))
+    }
+
+    func testBandModeCountsDesignatedCountiesAndCallAreaSum() throws {
+        let c = try cqww()
+        let l = log(c, sent: ["rst": ["599"], "zone": ["4"]], rows: [
+            row("DL1AA", rcvd: ["rst": "599", "zone": "14"]), row("DL1AA", rcvd: ["rst": "599", "zone": "14"]),
+            row("F5ABC", band: .m40, rcvd: ["rst": "599", "zone": "14"]), row("G3XYZ", mode: .phone, rcvd: ["rst": "59", "zone": "14"]),
+        ])
+        XCTAssertEqual(ScoreEngine.bandModeCounts(log: l, contest: c), [.m20: [.cw: 1], .m40: [.cw: 1]], "the dupe and the phone row do not count")
+        let nc = try lowered("ncqp"), ncp = try XCTUnwrap(PartyCatalog.party(id: "ncqp"))
+        guard case .designatedCountySweep(let designated, _, _)? = ncp.bonuses.first(where: { if case .designatedCountySweep = $0 { return true } else { return false } })
+        else { return XCTFail("NCQP has a designated sweep") }
+        var nlog = ContestLog(partyID: nc.id, myLocation: .outOfState(location: "TX"))
+        nlog.station.callsign = "KE5CW"
+        nlog.qsos = [row("W4AA", rcvd: ["rst": "599", "location": designated[0]], sent: ["rst": "599", "location": "TX"]),
+                     row("W4BB", rcvd: ["rst": "599", "location": designated[1]], sent: ["rst": "599", "location": "TX"])]
+        XCTAssertEqual(ScoreEngine.designatedCountiesWorked(designated, log: nlog, contest: nc), Set(designated.prefix(2).map { $0.uppercased() }))
+        let sk = try lowered("skeeter")
+        var slog = ContestLog(partyID: sk.id, myLocation: .outOfState(location: "TX"), exchangeMember: "13")
+        slog.station.callsign = "KE5CW"
+        slog.qsos = [row("W1AA", rcvd: ["rst": "599", "location": "CT", "member": "5W"], sent: ["rst": "599", "location": "TX", "member": "13"]),
+                     row("K0BB", rcvd: ["rst": "599", "location": "CO", "member": "5W"], sent: ["rst": "599", "location": "TX", "member": "13"])]
+        XCTAssertTrue(ScoreEngine.callAreaSumAchieved(target: 11, log: slog, contest: sk), "1 + 10")
+        XCTAssertFalse(ScoreEngine.callAreaSumAchieved(target: 12, log: slog, contest: sk))
+    }
 }
