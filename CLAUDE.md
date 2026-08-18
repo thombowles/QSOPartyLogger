@@ -40,7 +40,7 @@ The non-negotiables, so they are never a surprise:
 | Path | Contents |
 | --- | --- |
 | `Sources/Core/Parties/` | `PartyDefinition` (JSON rule schema), `PartyCatalog`, counties, mult classes |
-| `Sources/Core/Contests/` | Contest-general types shared by every contest: `HubSpotSource`, `CallHistorySource`, `DXCCTable` (+ `DXCCLabelRefresh`, `DXCCLabelStore`), `MultiplierRoster`, `ScoreFactor`; the general contest model lands here through the 2026-08-17 general-contest-logger plan |
+| `Sources/Core/Contests/` | The general contest model — `ContestDefinition`, `TokenSet`, `Side`, `ExchangeElement`, `MultiplierClass`/`Resolver`, `PointRule`, `ContestRules` (dupe, op-time, categories, Cabrillo, factors) — plus `PartyLowering`, `ContestCatalog`, `CTYTable`, `WPXPrefix`, `ExchangeValidator`, `OperatingTime`, and the shared `HubSpotSource`, `CallHistorySource`, `DXCCTable` (+ label refresh/store), `MultiplierRoster`, `ScoreFactor` |
 | `Sources/Core/Engine/` | `ScoreEngine`, `ExchangeParser`, `DupeChecker`, `CountyLineExpander`, `StationMemory`, ESM |
 | `Sources/Core/CallHistory/` | N1MM call history file parser, site page parsers, on-disk cache |
 | `Sources/Core/Export/` | Cabrillo V3, ADIF 3.1.4 |
