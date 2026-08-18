@@ -70,6 +70,13 @@ final class ContestDefinitionTests: XCTestCase {
             mults[0]["resolvers"] = [["kind": "cqZone"]]           // no `from`
             json["multipliers"] = mults
         })) { XCTAssertEqual($0 as? ContestValidationError, .badResolver("zone", "cqZone")) }
+        // A zone resolver that names no element — the zone it counts is the
+        // received one, so the element it reads is not optional.
+        XCTAssertThrowsError(try ContestDefinition.decode(try mutated { json in
+            var mults = json["multipliers"] as! [[String: Any]]
+            mults[0]["resolvers"] = [["kind": "cqZone", "from": "received"]]     // no `element`
+            json["multipliers"] = mults
+        })) { XCTAssertEqual($0 as? ContestValidationError, .badResolver("zone", "cqZone")) }
         // An element nobody sends.
         XCTAssertThrowsError(try ContestDefinition.decode(try mutated { json in
             var ex = json["exchange"] as! [[String: Any]]

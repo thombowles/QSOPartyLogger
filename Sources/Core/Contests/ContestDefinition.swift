@@ -230,7 +230,7 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
                 case .dxccEntity:
                     guard let from = r.from else { throw bad }
                     if from != .callsign { guard r.element != nil else { throw bad } }
-                case .cqZone, .ituZone: guard r.from != nil else { throw bad }
+                case .cqZone, .ituZone: guard r.from != nil, r.element != nil else { throw bad }
                 case .wpxPrefix: break
                 }
             }

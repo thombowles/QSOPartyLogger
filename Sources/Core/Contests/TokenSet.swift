@@ -39,8 +39,9 @@ struct TokenSet: Codable, Equatable, Sendable, Identifiable {
     let tokens: [Token]
     /// Accepted spelling → canonical token ("DC" → "MD" where a party credits
     /// DC as Maryland). Keys are accepted on input; values must be tokens.
-    /// Case-folded; a collision keeps the first. Targets are checked by
-    /// `validate()`, not at init.
+    /// Case-folded; a case-folded collision keeps the alphabetically-first
+    /// key's value, so two spellings of one key resolve the same way on every
+    /// launch. Targets are checked by `validate()`, not at init.
     let aliases: [String: String]
     /// Every token's `abbr`. Precomputed at init from `tokens`.
     let abbrs: Set<String>
@@ -51,8 +52,10 @@ struct TokenSet: Codable, Equatable, Sendable, Identifiable {
         self.termPlural = termPlural
         self.tokens = tokens
         self.abbrs = Set(tokens.map(\.abbr))
+        // Sorted before folding: a Dictionary's own order is not stable across
+        // launches, so `"Dc"` and `"DC"` must not race to be the one kept.
         self.aliases = Dictionary(
-            aliases.map { ($0.key.uppercased(), $0.value.uppercased()) },
+            aliases.sorted { $0.key < $1.key }.map { ($0.key.uppercased(), $0.value.uppercased()) },
             uniquingKeysWith: { first, _ in first }
         )
     }

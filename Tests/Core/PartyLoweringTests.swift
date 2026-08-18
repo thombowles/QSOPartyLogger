@@ -269,6 +269,19 @@ final class PartyLoweringTests: XCTestCase {
                 XCTAssertEqual(p.multipliers.inState, p.multipliers.outState,
                                "\(p.id): a party with no home region has one side; its two rules must agree")
             }
+            // A received token belongs to exactly one location class:
+            // `ScoreEngine.locationContributions` credits the county and stops,
+            // and the lowering gives each class its own set on that assumption.
+            // A county abbreviation that is also a state, province or section
+            // token would score as whichever the code reached first.
+            let countyAbbrs = Set(p.counties.map(\.abbr))
+            for (what, other) in [("a state", MultClass.acceptedStateTokens),
+                                  ("a province", p.provinces),
+                                  ("a section", p.sections)] {
+                let clash = countyAbbrs.intersection(other).sorted()
+                XCTAssertTrue(clash.isEmpty,
+                              "\(p.id): county '\(clash.joined(separator: "', '"))' is also \(what) token")
+            }
         }
     }
 

@@ -71,6 +71,8 @@ struct Resolver: Codable, Equatable, Sendable {
         case receivedToken
         /// The DXCC entity of the worked station (`from`), against `list`.
         case dxccEntity
+        /// A zone found via `from`; value = the received `element`'s zone.
+        /// Both fields are required — a zone resolver names its element.
         case cqZone, ituZone
         /// `WPXPrefix.of(call)`.
         case wpxPrefix

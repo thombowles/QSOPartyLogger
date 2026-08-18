@@ -10,7 +10,7 @@
     { "id": "zone", "kind": "cqZone", "label": "Zone", "sentBy": { "all": {} }, "fixed": true, "prefill": ["cty"], "cabrilloWidth": 6 }
   ],
   "multipliers": [
-    { "id": "zone", "term": "zone", "resolvers": [{ "kind": "cqZone", "from": "received" }],
+    { "id": "zone", "term": "zone", "resolvers": [{ "kind": "cqZone", "from": "received", "element": "zone" }],
       "counting": { "all": "perBand" }, "roster": "cqZones", "layout": "zoneGrid" },
     { "id": "country", "term": "country", "termPlural": "countries",
       "resolvers": [{ "kind": "dxccEntity", "from": "callsign", "list": "arrlPlusWAE", "unlessSuffix": ["MM"] }],

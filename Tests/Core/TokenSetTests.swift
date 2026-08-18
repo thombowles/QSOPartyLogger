@@ -68,10 +68,10 @@ final class TokenSetTests: XCTestCase {
                            tokens: [.init(abbr: "MD"), .init(abbr: "VA")],
                            aliases: ["Dc": "MD", "DC": "VA"])
         XCTAssertEqual(set.aliases.count, 1)
-        guard let resolved = set.canonical("DC") else {
-            return XCTFail("DC should resolve to whichever of MD/VA the collision kept")
-        }
-        XCTAssertTrue(["MD", "VA"].contains(resolved))
+        // Deterministic, not arbitrary: the keys fold in sorted order, and
+        // "DC" < "Dc" in ASCII, so the DC → VA pair is the one kept.
+        XCTAssertEqual(set.canonical("DC"), "VA")
+        XCTAssertEqual(set.canonical("dc"), "VA")
     }
 
     func testValidate() {

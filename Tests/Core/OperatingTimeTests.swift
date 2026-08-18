@@ -4,6 +4,7 @@ import XCTest
 final class OperatingTimeTests: XCTestCase {
     private func row(_ hhmm: String, day: Int = 1) -> QSO {
         let f = DateFormatter(); f.dateFormat = "yyyy-MM-dd HHmm"; f.timeZone = TimeZone(identifier: "UTC")
+        f.locale = Locale(identifier: "en_US_POSIX")
         return QSO(timestampUTC: f.date(from: "2026-11-0\(day) \(hhmm)")!, call: "W1AW", band: .m20, modeClass: .cw,
                    rawMode: "CW", rstSent: "599", rstRcvd: "599", myLoc: "NTX", theirLoc: "CT")
     }
