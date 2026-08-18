@@ -1020,6 +1020,11 @@ files, unreadable files, iCloud placeholders), season stats, the SQP
 Challenge formula, the upcoming-contest engine, and the Advisor — solar
 geometry pinned against the US Naval Observatory, the SWPC parsers against
 payloads captured from the live products, and every advisory's own wording.
+The general contest model — token sets, sides, exchange elements, multiplier
+classes, point rules, the lowering of every bundled party into it, the cty.csv
+table, the WPX prefix rule and the exchange validator — is covered by its own
+test files under `Tests/Core/`, including a parity oracle against the party
+parser on all 50 parties.
 
 Four notes for anyone working in here:
 

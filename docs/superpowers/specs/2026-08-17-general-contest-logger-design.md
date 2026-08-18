@@ -76,7 +76,7 @@ A Swift value; **the v2 JSON file is exactly its Codable form.** Every field bel
 
 ```
 ContestDefinition
-├─ schemaVersion: 2, id, name, family, sponsor?, notes, caveats, provenance
+├─ schemaVersion: 2, id, name, family, sponsor?, notes, caveats
 ├─ schedule: [{start, end}]  bands: [Band]  modeClasses: [ModeClass]  allowedRawModes: [String]?
 ├─ tokenSets: [TokenSet]
 ├─ sides: [Side]
@@ -96,7 +96,7 @@ ContestDefinition
 
 **`family`** — `stateQSOParty | dx | domestic | fieldDay | sprint | qrp | vhf`. Picker grouping ("State & provincial QSO parties" holds the Canadian provincial parties too) and dashboard wording only; never read by the engine.
 
-**`TokenSet`** — `{ id, term, termPlural, tokens: [{abbr, name?, group?}], aliases: [String: String] }`. Built-in sets, bundled as data with provenance: `usStates` (50 + DC), `provinces` (13), `sections` (the 85 ARRL/RAC sections, generated from the banked ARRL list), `cqZones` (1–40), `ituZones` (1–90). A contest declares its own (`counties`, `naEntities`, FQP's `ituRegions`). Two dynamic sets exist by name: `dxToken` (the literal `DX`) and `dxccPrefix` (any prefix `DXCCTable` knows, honouring the enumerated aliases FQP needs).
+**`TokenSet`** — `{ id, term, termPlural, tokens: [{abbr, name?, group?}], aliases: [String: String] }`. Built-in sets, bundled as data with provenance: `usStates` (50 + DC), `provinces` (13), `sections` (the 85 ARRL/RAC sections, generated from the banked ARRL list), `cqZones` (1–40), `ituZones` (1–90). A contest declares its own (`counties`, `naEntities`, FQP's `ituRegions`). `dxToken` is a built-in one-token set (the literal `DX`); one dynamic set exists by name, `dxccPrefix` (any prefix `DXCCTable` knows, honouring the enumerated aliases FQP needs).
 
 **`Side`** — `{ id, label, predicate, workedPredicate }`. `predicate` classifies the entrant, `workedPredicate` the worked station; both use the same kinds:
 
@@ -109,13 +109,13 @@ ContestDefinition
 
 The log **stores** `sideID`. The entrant predicate only *defaults* the choice in Setup: a county code can collide with a state code, so a party operator's Inside/Outside is never inferred from a token.
 
-**`ExchangeElement`** — `{ id, kind, label, shortLabel, sentBy: [SideID: SentSpec], fixed: Bool, required: Bool, cabrilloWidth, prefill: [PrefillSource], derived: Derivation? }`. `sentBy` names every side that sends the element and, for `token` kinds, **what that side sends**: `SentSpec = { sets: [setRef]?, multi: {max, sets?}? }` (`multi.sets` names which of the sender's sets may repeat — a no-home-region party lists everything in one spec but only its `counties` may double up) — a party's `location` is `{ inside: {sets: [counties], multi: {max: 2}}, outside: {sets: [usStates, provinces, dxToken, dxccPrefix]} }`; ARRL DX's `state` is sent by `wve` and its `power` by `dx`. `fixed` means the sent value is set once in Setup and stamped per row (`nameSent` idiom); a non-fixed sent element is per-QSO (serial). The received fields a side sees are the elements sent by the sides it may work (per `pairing`), in spec order, and a token field accepts the **union of those sides' sets** — which is how MDC's outside entrant receives counties only, exactly as today.
+**`ExchangeElement`** — `{ id, kind, label, shortLabel, sentBy: [SideID: SentSpec], fixed: Bool, required: Bool, cabrilloWidth, prefill: [PrefillSource], derived: Derivation? }`. `sentBy` names every side that sends the element and, for `token` kinds, **what that side sends**: `SentSpec = { sets: [setRef]?, multi: {max, sets?}? }` (`multi.sets` names which of the sender's sets may repeat — a no-home-region party lists everything in one spec but only its `counties` may double up) — a party's `location` is `{ inside: {sets: [counties], multi: {max: 2}}, outside: {sets: [states, provinces, dxToken, dxccPrefix]} }` (`states` is the party's own set: the US states minus its exclusions, carrying its aliases); ARRL DX's `state` is sent by `wve` and its `power` by `dx`. `fixed` means the sent value is set once in Setup and stamped per row (`nameSent` idiom); a non-fixed sent element is per-QSO (serial). The received fields a side sees are the elements sent by the sides it may work (per `pairing`), in spec order, and a token field accepts the **union of those sides' sets** — which is how MDC's outside entrant receives counties only, exactly as today.
 
 | kind | validation | well-known ids |
 | --- | --- | --- |
-| `rst` | 2–3 digits by mode class; default 59/599 | `rst` |
+| `rst` | 2–3 digits (length is the operator's; not enforced by mode); default 59/599 | `rst` |
 | `serial` | integer ≥ 1; sent value from `cabrillo.serialSequence` | `serial` |
-| `name` | 1–15 letters | `name` |
+| `name` | 1–15 letters, hyphen or apostrophe | `name` |
 | `token` | value ∈ the union of the sending sides' `sets` (aliases folded); `multi` allows `/`- or `,`-separated values (county lines) | `location`, `section`, `state` |
 | `cqZone` / `ituZone` | 1–40 / 1–90, leading zero allowed | `zone`, `ituZone` |
 | `precedence` | `{ letters }` one of | `precedence` |
@@ -148,9 +148,9 @@ Well-known class ids keep today's raw values — `county`, `state`, `province`, 
 
 **`pairing`** — for each side, the worked sides that count; `nil` = everyone. MDC `{outside: [inside]}`; ARRL DX `{wve: [dx], dx: [wve]}`; SS `{wve: [wve]}`. Rows outside the pairing are `outOfScope`, exactly today's MDC handling — and `outStateWorksHomeStationsOnly` is true for 45 of the 46 home-region parties (only MEQP is open), so the outside entrant of nearly every party receives counties only. One deliberate change from today: that entrant can no longer type a bare DX prefix into the location field (the old parser accepted one and then scored it out of scope); the field accepts only what the pairing pays for.
 
-**`SideRules`** — `{ maxScoredMultipliers?, multiplierFloor?, granted: [{class, value}], activated: ActivatedRule? }`; `ActivatedRule` is today's five required fields plus `class` (any enumerated class — VHF rovers later).
+**`SideRules`** — `{ maxScoredMultipliers?, multiplierFloor?, granted: [{classID, value}], activated: ActivatedRule? }`; `ActivatedRule` is today's five required fields plus `classID` (any enumerated class — VHF rovers later).
 
-**`bonuses`** — today's `BonusRule` cases, names and JSON `type` strings unchanged (`workStation`, `mobileCountyCount`, `activatedCountyCount`, `sweepTiers`, `designatedCountySweep`, `callAreaSum`); the county-keyed cases read the `location` element and the `county` class. Each gains an optional `sides` filter (VTQP's W1AW/1 bonus becomes expressible).
+**`bonuses`** — today's `BonusRule` cases, names and JSON `type` strings unchanged (`workStation`, `mobileCountyCount`, `activatedCountyCount`, `sweepTiers`, `designatedCountySweep`, `callAreaSum`); the county-keyed cases read the `location` element and the `county` class. A per-rule `sides` filter (VTQP's W1AW/1 bonus) is planned for the engine-switch plan; not built in the foundations.
 
 **`ScoreFactors`** — `{ power: [String: ScoreFactor]?, station: [String: ScoreFactor]?, entryClasses: [EntryClass], objectives: [{id, label, om: Int}], declaredBonuses: [{id, label, points, perCount: {label, max}?}] }`. Applied as today: `factor(points × mults) + bonuses`, rounded down once. FD's power tiers are `entryClasses` (×5/×2/×1); WFD's factor is `1 + Σ selected objectives`; FD's checklist bonuses are `declaredBonuses`, added after the multiplier and never scaled.
 
@@ -173,7 +173,7 @@ Sketch of `cqwwcw.json` (v2):
                { "id": "zone", "kind": "cqZone", "label": "Zone", "sentBy": { "all": {} },
                  "fixed": true, "prefill": ["cty"], "cabrilloWidth": 6 }],
   "multipliers": [
-    { "id": "zone", "term": "zone", "resolvers": [{ "kind": "cqZone", "from": "received" }],
+    { "id": "zone", "term": "zone", "resolvers": [{ "kind": "cqZone", "from": "received", "element": "zone" }],
       "counting": { "all": "perBand" }, "roster": "cqZones", "layout": "zoneGrid" },
     { "id": "country", "term": "country", "termPlural": "countries",
       "resolvers": [{ "kind": "dxccEntity", "from": "callsign", "list": "arrlPlusWAE", "unlessSuffix": ["MM"] }],
@@ -200,7 +200,7 @@ Sketch of `cqwwcw.json` (v2):
 | --- | --- |
 | `id`, `name`, `cabrilloContest`, `schedule`, `validBands`, `notes`, `caveats` | same; `cabrillo.contest`; `bands` |
 | `allowedModes` | `modeClasses` |
-| `family` (new optional v1 field, default `stateQSOParty`; `domestic` for the two NAQPs, `qrp` for Skeeter and FOBB) | `family` |
+| `family` (new optional v1 field, default `stateQSOParty`; `domestic` for the two NAQPs, `qrp` for Skeeter and FOBB) | `family` — **deferred**: the four non-state files gain the field in the party-family commit of the next plan; the lowering hardcodes `stateQSOParty` until then |
 | `counties`, `countyTerm(Plural)`, `countyAbbrLength(s)` | `tokenSets.counties` (`group` = the county's state for multi-state parties); the term; the length hint is derived from the set |
 | `homeState`, `homeStates`, `inStateLabel`, `hasHomeRegion` | sides `inside` ("Inside \<inStateLabel\>", `sentTokenIn(location, counties)`, worked `receivedTokenIn`) and `outside`; a single side `all` when `hasHomeRegion` is false. `cabrillo.location = state`, `entrantToken` when no home region |
 | `stateAliases`, `excludedStateTokens`, `provinces`, `sections`, `dxStyle`, `acceptsDXToken`, `dxTokenAliases` | the `location` element's `sentBy`: `inside: {sets: [counties]}`; `outside`'s sets are `sections` **instead of** states+provinces when present, else `usStates` minus exclusions with aliases and `provinces` (party override or the 13); plus `dxToken` when accepted, `dxccPrefix` when `dxStyle == prefix`, and an enumerated alias set (FQP's `R1 R2 R3`) that the `dx` class credits as literal tokens |
@@ -219,7 +219,7 @@ Sketch of `cqwwcw.json` (v2):
 | `scoreMultipliers`, `entryClasses` | `scoreFactors.power / .station / .entryClasses` |
 | `oneByOne`, `hubSpots`, `callHistory`, `combines` | `sources` |
 
-`ScoreEngine.score(log:party:)` remains as an overload that lowers first, so every existing test exercises the general engine without edits. `PartyDefinition` gains **one** optional field (`family`); its four non-state files gain it through their generators.
+`ScoreEngine.score(log:party:)` remains as an overload that lowers first, so every existing test exercises the general engine without edits. `PartyDefinition` will gain one optional field (`family`) in the next plan; its four non-state files gain it through their generators.
 
 ### 1.4 The engine on the model
 
@@ -232,7 +232,7 @@ Sketch of `cqwwcw.json` (v2):
 5. **Points** — first matching `PointRule`; `pointsByRowID` as today.
 6. **Multipliers** — every class whose `counting` names this side: the first resolver that yields a value makes a `MultKey(classID, value, scope)`; per-class caps; `sideRules` granted first, activated last (after bonuses, as today).
 7. **Bonuses**, then **factors** (`power × station × entryClass × (1 + Σ objectives)`), then `declaredBonuses` and rule bonuses added.
-8. `ScoreBreakdown` gains `outOfTimeRowIDs`, `operatingMinutes`, `offMinutes`; `MultKey.multClass` becomes `classID: String`; `classCounts` is `[String: Int]`.
+8. `ScoreBreakdown` gains `outOfTimeRowIDs`, `operatedMinutes`, `offMinutes`; `MultKey.multClass` becomes `classID: String`; `classCounts` is `[String: Int]`.
 
 `ExchangeParser` becomes `ExchangeValidator.validate(element, raw, contest, side) -> Result<[String], ExchangeError>` — the same tokeniser, suggestions and edit-distance help for token kinds, one validator per kind otherwise. `NeededMult`, `MultiplierRoster`, `Advisor` and the sidebar read `MultiplierClass` instead of `MultClass`.
 
@@ -248,7 +248,7 @@ Sketch of `cqwwcw.json` (v2):
 
 ### 1.6 `CTYTable`, `DXCCTable`, `WPXPrefix`
 
-- **`CTYTable`** (`Sources/Core/Contests/CTYTable.swift`) parses the bigcty **`cty.csv`** — fields: primary prefix, name, ADIF entity code, continent, CQ zone, ITU zone, lat, lon, tz, prefix/callsign list with `(n)`/`[n]` overrides and `=` exact calls, `*` WAE-only entities. Bundled under `Resources/CTY/cty.csv` with a `VERSION` file naming the CTY release, URL and fetch date; refreshed by the existing label client (renamed `CTYClient`; the download needs a browser User-Agent), validated (≥ 340 non-WAE records, parseable, VERSION entity present) and applied at launch only. API: `match(callsign) -> {entityCode, name, primaryPrefix, waeOnly, cqZone, ituZone, continent}` (longest prefix; exact `=` calls first; a callsign under two entities takes the first).
+- **`CTYTable`** (`Sources/Core/Contests/CTYTable.swift`) parses the bigcty **`cty.csv`** — fields: primary prefix, name, ADIF entity code, continent, CQ zone, ITU zone, lat, lon, tz, prefix/callsign list with `(n)`/`[n]` overrides and `=` exact calls, `*` WAE-only entities. Bundled under `Resources/CTY/cty.csv` with a `VERSION.txt` file naming the CTY release, URL and fetch date; refreshed by the existing label client (renamed `CTYClient`; the download needs a browser User-Agent), validated (≥ 340 non-WAE records, parseable, VERSION entity present) and applied at launch only. API: `match(callsign) -> {entityCode, name, primaryPrefix, waeOnly, cqZone, ituZone, continent}` (longest prefix; exact `=` calls first; a callsign under two entities takes the first).
 - **`DXCCTable`** (ARRL roster) stays for ARRL-list rules — parties' `dxCountsEntities`, ARRL DX's W/VE multipliers, `isDXPrefix`. `DXCCLabelRefresh` is replaced by `CTYTable`'s primary prefixes. A test pins that the ARRL roster and cty's non-WAE entities agree on all 340 codes; CQ WW's `arrlPlusWAE` list adds cty's `*` entities (`4U1V`, `GM/s`, `IG9`, `IT9`, `JW/b`, `TA1`).
 - **`WPXPrefix.of(call)`** implements CQ WPX V.C.1: the letters+digits up to the end of the first digit run; portable designators become the prefix, a designator without a digit gets `0` appended (`PA/N8BJQ → PA0`, `OE/K5ZD → OE0`); a call without a digit gets `0` after two letters (`XEFTJW → XE0`); `/MM /M /A /E /J /P /QRP` and other class identifiers are ignored; `KL7RA/WK9 → WK9`; special prefixes keep their whole digit run (`OL25LP → OL25`, `LY1000CW → LY1000`, `DR2006Q → DR2006`). A bare `/digit` designator (`W1ABC/7`) replaces the digit (`W7`) — NOT STATED by the sponsor, carried as a `ruleInference` caveat on the WPX files.
 
@@ -306,7 +306,7 @@ One sheet, asking only what the contest needs:
 ### 2.9 Naming and layout
 
 - `PartyDefinition` keeps its name (the QSO-party authoring schema), and `PartyCatalog` stays as the v1 loader the per-party tests use. New: `ContestDefinition`, `ContestCatalog` (what the app reads: `Resources/Parties/*.json` lowered plus `Resources/Contests/*.json`, user overrides by id from `…/QSOPartyLogger/Parties` and `…/Contests`), `PartyLowering`, `ContestNotice` (was `PartyNotice`). `ContestLog.partyID` keeps its Swift name — it is the persisted key, and renaming 662 references buys nothing.
-- `Sources/Core/Contests/` holds the model, catalog, lowering, `CTYTable`, `WPXPrefix`, `HubSpotSource`, `CallHistorySource`, `DXCCTable`; `Sources/Core/Parties/` keeps `PartyDefinition`, `County`, `CountyGrouping`. `MultClass` becomes `MultiplierClassID` constants.
+- `Sources/Core/Contests/` holds the model, catalog, lowering, `CTYTable`, `WPXPrefix`, `HubSpotSource`, `CallHistorySource`, `DXCCTable`, `MultiplierRoster`, `ScoreFactor`, `DXCCLabelRefresh`, `DXCCLabelStore`; `Sources/Core/Parties/` keeps `PartyDefinition`, `PartyCatalog`, `County`, `CountyGrouping`, `MemberExchange`, `MultClass`. `MultClass` becomes `MultiplierClassID` constants.
 - User-facing strings say "contest"; a family's own words come from data (`term`, side labels). Persisted keys, paths, UTType, subsystem and User-Agent are unchanged (Decision 2).
 - `MainView` stays under its type-checker budget: contest-dependent panes arrive as data-driven child views behind the existing opaque seams, never as `if` branches in `leftPaneContent`.
 
@@ -327,6 +327,19 @@ Worktree branch `worktree-general-contest-logger`; each phase is a set of commit
 2. **UI generalisation** — spec-driven Setup, entry row, sidebar rosters, op-time meter, macros, call-history map, `NeededMult`, dashboard wording, digital seams (`ExternalQSOSource`, `DigitalTextSender`). Parties look and behave identically.
 3. **The big five, one contest per commit**, in calendar order — CQ WW SSB (Oct 24–25) → SS CW (Nov 7–9) → CQ WW CW → SS SSB → ARRL DX CW/SSB → CQ WPX SSB/CW → ARRL FD → WFD. Each commit: banked research (`docs/research/<id>_rules.md`, DX-contest template), generator, v2 JSON, per-contest tests, README table row, `docs/CONTESTS.md` entry, `PROVENANCE.md`.
 4. **Constitution and docs** — Article 1 (cty as authority), Article 9 ("one contest"), Part III retitled with the party template kept and a general-contest template added, Article 17 mapping table for v2, Article 18 floor for general contests, Article 22 worklist per contest; CLAUDE.md layout rows; README features, keyboard table (unchanged keys), test count.
+
+## Carried into the engine-switch plan (found while building the foundations)
+
+- `ScoreEngine.locationContributions` credits at most one location class per row and resolves a token that is both a state code and a DXCC prefix by the worked callsign (`collidesWithDXCC`); the model evaluates classes independently — needs a resolver flag or class precedence before the engine switch (`SalmonRunTests` pins it).
+- `ExchangeValidator` returns tokens as typed; aliases fold at count time in the `receivedToken` resolver.
+- The single side of a no-home-region party is scored with `outState` (Setup forces out-of-state).
+- `family` on the four non-state parties, and bonus `sides`, are deferred.
+- `OperatingTime.compute` takes pre-filtered rows and does not check `appliesTo`.
+- `ContestCatalog.contest(id:)` reloads everything per call and swallows bundled lowering failures — cache and log before the UI reads it.
+- `validate()` does not yet check `bonuses`/`scoreFactors` references.
+- Zone resolvers name their element (`element: "zone"`).
+- `receivedElements(for:)` omits the call echo — the Cabrillo exporter must add it back.
+- Rosters must add the groups reachable via `mapTo: "group"`.
 
 ## Out of scope
 
