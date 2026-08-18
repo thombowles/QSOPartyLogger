@@ -2298,6 +2298,9 @@ extension ScoreEngine {
         let memberElement = contest.exchange.first { $0.kind == .memberOrPower }
         let geoNeeded = contest.points.contains { $0.when.contains { $0.relation != nil || $0.bothInContinent != nil } }
         let myGeo = geoNeeded ? CTYTable.shared?.match(callsign: log.station.callsign) : nil
+        // The token elements this side receives, their sets resolved once for
+        // the whole fold — never per row (`ExchangeValidator.ResolvedSets`).
+        let resolved = resolvedTokenSets(for: side, contest: contest)
 
         for row in c.scoredRows {
             guard c.firstIDs.contains(row.id) else {
@@ -2318,7 +2321,8 @@ extension ScoreEngine {
             result.qsoPoints += points
             result.pointsByRowID[row.id] = points
 
-            for (cls, value) in multiplierValues(rcvd: row.rcvd, call: row.call, side: side, classes: classes, contest: contest) {
+            for (cls, value) in multiplierValues(rcvd: row.rcvd, call: row.call, side: side, classes: classes,
+                                                 contest: contest, resolved: resolved) {
                 guard let scope = cls.counting[side] else { continue }
                 // A per-side cap on distinct values (WA in-state: 10 DX): a
                 // value already held may still add a new scope key; a new
@@ -2383,12 +2387,24 @@ extension ScoreEngine {
     private static let dxTokenSet = "dxToken"
     private static let dxccPrefixSet = "dxccPrefix"
 
+    /// The token elements an entrant on `side` receives, each with its sets
+    /// resolved once (`ExchangeValidator.resolvedSets`) — built per `score`
+    /// or per NEW MULT question, reused for every row.
+    static func resolvedTokenSets(for side: String, contest: ContestDefinition) -> [String: ExchangeValidator.ResolvedSets] {
+        var out: [String: ExchangeValidator.ResolvedSets] = [:]
+        for element in contest.receivedElements(for: side) where element.kind == .token {
+            out[element.id] = ExchangeValidator.resolvedSets(for: element, contest: contest, side: side)
+        }
+        return out
+    }
+
     /// Every (class, value) a row contributes for an entrant on `side`: for
     /// each class the side counts, the first resolver — in order, among those
     /// that apply to the side and callsign — that yields a value.
-    static func multiplierValues(rcvd: [String: String], call: String, side: String,
-                                 classes: [MultiplierClass], contest: ContestDefinition) -> [(MultiplierClass, String)] {
-        let owners = tokenOwners(rcvd: rcvd, call: call, side: side, classes: classes, contest: contest)
+    static func multiplierValues(rcvd: [String: String], call: String, side: String, classes: [MultiplierClass],
+                                 contest: ContestDefinition,
+                                 resolved: [String: ExchangeValidator.ResolvedSets]) -> [(MultiplierClass, String)] {
+        let owners = tokenOwners(rcvd: rcvd, call: call, side: side, classes: classes, resolved: resolved)
         var out: [(MultiplierClass, String)] = []
         for cls in classes {
             for r in cls.resolvers where r.applies(side: side, call: call) {
@@ -2403,13 +2419,16 @@ extension ScoreEngine {
 
     /// Element id → the set that owns the row's received token, for every
     /// token element the side receives: `ExchangeValidator.owningSet` — the
-    /// classification validation itself uses — plus the callsign override.
+    /// classification validation itself uses — plus the callsign override,
+    /// applied here, before any class's resolvers run, so a colliding token is
+    /// never credited twice.
     static func tokenOwners(rcvd: [String: String], call: String, side: String,
-                            classes: [MultiplierClass], contest: ContestDefinition) -> [String: String] {
+                            classes: [MultiplierClass],
+                            resolved: [String: ExchangeValidator.ResolvedSets]) -> [String: String] {
         var owners: [String: String] = [:]
-        for element in contest.receivedElements(for: side) where element.kind == .token {
-            guard let raw = rcvd[element.id],
-                  var owner = ExchangeValidator.owningSet(of: raw, element: element, contest: contest, side: side)
+        for (elementID, sets) in resolved {
+            guard let raw = rcvd[elementID],
+                  var owner = ExchangeValidator.owningSet(of: raw, in: sets)
             else { continue }
             // A token that is BOTH an enumerated set's token and a real DXCC
             // prefix — PA is Pennsylvania and the Netherlands, ON is Ontario
@@ -2424,7 +2443,7 @@ extension ScoreEngine {
             // sent, the callsign which entity sent it.
             let overrides = classes.flatMap { cls in
                 cls.resolvers
-                    .filter { $0.kind == .dxccEntity && $0.element == element.id && $0.applies(side: side, call: call) }
+                    .filter { $0.kind == .dxccEntity && $0.element == elementID && $0.applies(side: side, call: call) }
                     .flatMap { $0.callsignOverrides ?? [] }
             }
             if overrides.contains(owner),
@@ -2433,7 +2452,7 @@ extension ScoreEngine {
                DXCCTable.shared.entity(forCallsign: call)?.code == prefixEntity.code {
                 owner = dxccPrefixSet
             }
-            owners[element.id] = owner
+            owners[elementID] = owner
         }
         return owners
     }
@@ -2763,8 +2782,10 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
         // so the badge must not send the operator chasing it (CQP: 58 of 63).
         if let cap = rules.maxScoredMultipliers, current.count >= cap { return false }
         let classes = contest.multipliers.filter { $0.counting[side] != nil }
+        let resolved = resolvedTokenSets(for: side, contest: contest)
         for rcvd in received {
-            for (cls, value) in multiplierValues(rcvd: QSO.compact(rcvd), call: call, side: side, classes: classes, contest: contest) {
+            for (cls, value) in multiplierValues(rcvd: QSO.compact(rcvd), call: call, side: side, classes: classes,
+                                                 contest: contest, resolved: resolved) {
                 guard let scope = cls.counting[side]?.component(band: band, modeClass: modeClass) else { continue }
                 let key = MultKey(classID: cls.id, value: value, scope: scope)
                 guard !current.contains(key) else { continue }
