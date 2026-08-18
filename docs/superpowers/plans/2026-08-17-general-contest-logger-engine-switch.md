@@ -4020,6 +4020,11 @@ git commit -m "tests: engine golden breakdowns — the equivalence corpus scored
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
 
+- [ ] **Step 3b: Two guards before the bridges call `PartyLowering.lowered` (from the Task 6 review)**
+
+(a) `Sources/Core/Parties/PartyCatalog.swift`, `loadUserParties()`: in its `catch`, log the failure the way `loadBundled` does — `log.error("user party \(url.lastPathComponent, privacy: .public) failed to load: \(error.localizedDescription, privacy: .public)")` — keeping the returned `.failure(error)`. A user file that scored yesterday and trips the stricter lowering today must leave a trace.
+(b) `Tests/Core/MultiStatePartyTests.swift`, the `twoStateParty` helper (~line 122) decodes with a bare `JSONDecoder()`, bypassing `PartyCatalog.decode`'s lowerability check, and its party is later scored and exported through the party bridges. Make the helper decode through `PartyCatalog.decode(Data(json.utf8))` so a non-lowering literal fails there as a thrown error rather than as a `preconditionFailure` inside `lowered(_:)` that kills the test run. Run `MultiStatePartyTests` — green.
+
 - [ ] **Step 4: Replace `Sources/Core/Engine/ScoreEngine.swift`**
 
 ```swift
