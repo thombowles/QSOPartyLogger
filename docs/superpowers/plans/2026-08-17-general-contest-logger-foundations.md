@@ -10,6 +10,54 @@
 
 **Spec:** [`docs/superpowers/specs/2026-08-17-general-contest-logger-design.md`](../specs/2026-08-17-general-contest-logger-design.md) — sections 1.2, 1.3, 1.6, 2.9 and "Testing".
 
+> **Status: COMPLETE (2026-08-17)** — all 19 tasks executed subagent-driven with
+> spec + quality reviews on branch `worktree-general-contest-logger`; final full
+> suite `Executed 2971 tests, with 0 failures` (2,875 baseline + 96 new). **The
+> code is authoritative over the code blocks below**, which were the starting
+> point; the reviews changed these things (each in its own commit, all tested):
+>
+> - `TokenSet`: `Token` uppercases on decode; alias collisions fold
+>   deterministically (alphabetically-first key wins); `abbrs` precomputed;
+>   `validate()` (empty/duplicate abbrs, alias targets and shadows);
+>   `sections(bundle:)` doc; `builtIn(id:)` on literals — 11 tests, not 7.
+> - `PointCondition`: uppercases `callsign` on decode; `{}` documented — 5 tests.
+> - `ExchangeElement.SentSpec.Multi` gained optional `sets` (which sender sets
+>   may repeat); the validator and lowering use it.
+> - `ContestDefinition.validate(bundle:)` / `decode(_:bundle:)`: schema version,
+>   unique ids, token-set `validate()`, element per-kind fields and non-empty
+>   `sentBy`, derivation shape, per-kind resolver fields (zone resolvers name
+>   their `element`; `dxccEntity` from a received token names it too; `mapTo`
+>   is `nil` or `"group"`), point-rule references, caps sides, roster not
+>   dynamic, pairing non-empty, side-rule class ids, op-time axes; `encoded()`;
+>   sections memoized — 8 tests. Test fixtures are looked up without a
+>   `subdirectory:` (XcodeGen flattens `Tests/Fixtures`).
+> - `CabrilloSpec.homeLocation: String?` (a party's primary state for the
+>   `LOCATION:` header; 7QP's eight states all header `AZ`).
+> - `PartyLowering`: validates its result; the single `all` side of a
+>   no-home-region party takes `outState`; `member` element is not required;
+>   `granted`/`activated` filtered as the engine does; `caps` only for counting
+>   sides; no empty `counties` set for Skeeter/FOBB; `dxccEntity` resolvers carry
+>   `element: "location"`; catalogue guard tests — 22 tests. KSQP `pairing` is
+>   `{outside: [inside]}` (45 of 46 home-region parties set
+>   `outStateWorksHomeStationsOnly`); 7QP has eight member states.
+> - `CTYTable`: WAE records carry the parent entity code (doc + test mirror the
+>   file); `shared`; `hasPrefix` (alias keys and primary prefixes); prefix loop
+>   capped at the longest key; `fetch_cty.py --check` and structural asserts.
+> - `WPXPrefix.of(_:isKnownPrefix:)`: a listed cty prefix is a designator even
+>   when it ends in a letter (`VK9C`, `PY0F`, `CE0Y`); bare digit keeps a
+>   digit-leading prefix (`9A1AA/7 → 9A7`); class-identifier-only calls → nil.
+> - `ExchangeValidator`: returns tokens **as typed** (aliases fold at count time);
+>   duplicate tokens as the legacy parser treats them; `Failure` carries the
+>   element's own terms; county-first suggestions; cut numbers `N/T/A`; names
+>   allow `-`/`'`; the parity skip is `role == .outOfState &&
+>   p.outStateWorksHomeStationsOnly && p.isDXPrefix(raw)` — 7 tests.
+> - `ContestCatalog` forwards `bundle:` to `decode`.
+> - Task 19 count: 2971, not 2947; the CLAUDE.md row was written twice (today's
+>   contents in Task 3, the full row in Task 19).
+>
+> **Next:** Plan 2, the engine switch — not yet written. Start from the spec's
+> "Carried into the engine-switch plan" section and §1.4 / §2.4–2.5.
+
 ---
 
 ## Conventions for every task

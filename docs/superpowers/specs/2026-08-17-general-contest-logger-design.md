@@ -328,6 +328,12 @@ Worktree branch `worktree-general-contest-logger`; each phase is a set of commit
 3. **The big five, one contest per commit**, in calendar order — CQ WW SSB (Oct 24–25) → SS CW (Nov 7–9) → CQ WW CW → SS SSB → ARRL DX CW/SSB → CQ WPX SSB/CW → ARRL FD → WFD. Each commit: banked research (`docs/research/<id>_rules.md`, DX-contest template), generator, v2 JSON, per-contest tests, README table row, `docs/CONTESTS.md` entry, `PROVENANCE.md`.
 4. **Constitution and docs** — Article 1 (cty as authority), Article 9 ("one contest"), Part III retitled with the party template kept and a general-contest template added, Article 17 mapping table for v2, Article 18 floor for general contests, Article 22 worklist per contest; CLAUDE.md layout rows; README features, keyboard table (unchanged keys), test count.
 
+## Progress (2026-08-17)
+
+- **Phase 0 + phase 1a (foundations) — DONE**, per [`plans/2026-08-17-general-contest-logger-foundations.md`](../plans/2026-08-17-general-contest-logger-foundations.md) (its status block lists every reviewed deviation from the plan text; the code is authoritative). Branch `worktree-general-contest-logger`, 44+ commits over master `3043edf`, full suite 2971/2971 green; the app is unchanged (the model is dormant). Kept unmerged at Tom's choice; merge is `git merge --ff-only worktree-general-contest-logger` from the main checkout.
+- **Phase 1b (the engine switch) — Plan 2 not yet written.** Write it from §1.4, §2.4–2.5, "Testing" and the list below; its first tasks are the model gaps in that list.
+- Phases 2–4 — not started.
+
 ## Carried into the engine-switch plan (found while building the foundations)
 
 - `ScoreEngine.locationContributions` credits at most one location class per row and resolves a token that is both a state code and a DXCC prefix by the worked callsign (`collidesWithDXCC`); the model evaluates classes independently — needs a resolver flag or class precedence before the engine switch (`SalmonRunTests` pins it).
