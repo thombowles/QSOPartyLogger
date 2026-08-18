@@ -6,13 +6,16 @@ import Foundation
 /// exchange (`sentExchange`) replace the party-shaped `myLocation` /
 /// `exchangeName` / `exchangeMember`, which remain as computed views so the
 /// party UI and every existing test read unchanged. Documents written by
-/// earlier builds decode through `LegacyKeys`; this build writes schema 2 only,
-/// so a log saved here needs this build or later (Decision 10).
+/// earlier builds decode through `LegacyKeys` and migrate forward; this build
+/// writes schema 2 only, so a log saved here needs this build or later
+/// (Decision 10). A document from a newer schema than this build knows is
+/// refused at decode, never silently rewritten down to fit.
 struct ContestLog: Codable, Equatable, Sendable {
     static let currentSchemaVersion = 2
 
-    /// Always `currentSchemaVersion` in memory: a legacy document is migrated
-    /// on decode and written back in today's shape.
+    /// Always `currentSchemaVersion` in memory: an older document is migrated
+    /// on decode and written back in today's shape; a newer one — saved by a
+    /// later build than this — is refused at decode, not rewritten down to fit.
     var schemaVersion: Int = ContestLog.currentSchemaVersion
     /// The contest id — `PartyDefinition.id` / `ContestDefinition.id`, e.g.
     /// "ksqp". The JSON key and the Swift name are the persisted contract.
@@ -192,7 +195,12 @@ struct ContestLog: Codable, Equatable, Sendable {
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        _ = try c.decode(Int.self, forKey: .schemaVersion)   // present in every document; the shape is read from the keys
+        let version = try c.decode(Int.self, forKey: .schemaVersion)
+        guard version <= Self.currentSchemaVersion else {
+            throw DecodingError.dataCorrupted(.init(
+                codingPath: [CodingKeys.schemaVersion],
+                debugDescription: "This log was saved by a newer build (schema \(version)); this build reads schema \(Self.currentSchemaVersion) or older."))
+        }
         schemaVersion = Self.currentSchemaVersion
         partyID = try c.decode(String.self, forKey: .partyID)
         station = try c.decode(StationProfile.self, forKey: .station)

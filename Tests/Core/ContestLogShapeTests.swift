@@ -73,7 +73,10 @@ final class ContestLogShapeTests: XCTestCase {
     func testADocumentWithNeitherSideNorLocationIsRefused() {
         XCTAssertThrowsError(try ContestLog.decode(from: Data("""
         {"schemaVersion":2,"partyID":"ksqp","station":{},"qsos":[]}
-        """.utf8)))
+        """.utf8))) { error in
+            guard case let DecodingError.keyNotFound(key, _) = error else { return XCTFail("\(error)") }
+            XCTAssertEqual(key.stringValue, "myLocation")
+        }
     }
 
     func testCategoryValues() {
@@ -99,5 +102,45 @@ final class ContestLogShapeTests: XCTestCase {
         XCTAssertEqual(n.categoryOverlay, "CLASSIC"); XCTAssertEqual(n.exchangeDefaults, ["section": "NTX", "zone": "4"])
         let back = try JSONDecoder().decode(StationProfile.self, from: try JSONEncoder().encode(n))
         XCTAssertEqual(back, n)
+    }
+
+    func testANewerSchemaIsRefused() {
+        XCTAssertThrowsError(try ContestLog.decode(from: Data("""
+        {"schemaVersion":3,"partyID":"ksqp","station":{},"sideID":"all","sentExchange":{},"qsos":[]}
+        """.utf8))) { error in
+            guard case DecodingError.dataCorrupted = error else { return XCTFail("\(error)") }
+        }
+    }
+
+    func testUnfinishedV1SetupsRoundTrip() throws {
+        let inside = try ContestLog.decode(from: Data("""
+        {"schemaVersion":1,"partyID":"ksqp","station":{},"myLocation":{"inState":{"counties":[]}},"qsos":[]}
+        """.utf8))
+        XCTAssertEqual(inside.myLocation, .inState(counties: []))
+        XCTAssertEqual(inside.sideID, "inside")
+        XCTAssertEqual(inside.sentExchange, [:])
+        XCTAssertEqual(try ContestLog.decode(from: try inside.encoded()), inside)
+
+        let outside = try ContestLog.decode(from: Data("""
+        {"schemaVersion":1,"partyID":"ksqp","station":{},"myLocation":{"outOfState":{"location":""}},"qsos":[]}
+        """.utf8))
+        XCTAssertEqual(outside.myLocation, .outOfState(location: ""))
+        XCTAssertEqual(outside.sideID, "outside")
+        XCTAssertEqual(outside.sentExchange, [:])
+        XCTAssertEqual(try ContestLog.decode(from: try outside.encoded()), outside)
+    }
+
+    func testStationProfileNormalizesEmptyAdditionsToAbsent() throws {
+        var s = StationProfile()
+        s.categoryOverlay = ""
+        s.categoryBand = " 20m "
+        s.exchangeDefaults = ["section": "", "zone": "4"]
+        let n = s.normalized()
+        XCTAssertNil(n.categoryOverlay)
+        XCTAssertEqual(n.categoryBand, "20M")
+        XCTAssertEqual(n.exchangeDefaults, ["zone": "4"])
+        let json = try XCTUnwrap(try JSONSerialization.jsonObject(with: try JSONEncoder().encode(n)) as? [String: Any])
+        XCTAssertNil(json["categoryOverlay"])
+        XCTAssertEqual(json["categoryBand"] as? String, "20M")
     }
 }

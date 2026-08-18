@@ -105,10 +105,10 @@ extension StationProfile {
         copy.club = Self.folded(club)
         copy.operators = Self.folded(operators)
         copy.gridLocator = Self.folded(gridLocator)
-        copy.categoryBand = categoryBand.map(Self.folded)
-        copy.categoryOverlay = categoryOverlay.map(Self.folded)
-        copy.categoryTime = categoryTime.map(Self.folded)
-        copy.exchangeDefaults = exchangeDefaults.mapValues(Self.folded)
+        copy.categoryBand = categoryBand.map(Self.folded).flatMap { $0.isEmpty ? nil : $0 }
+        copy.categoryOverlay = categoryOverlay.map(Self.folded).flatMap { $0.isEmpty ? nil : $0 }
+        copy.categoryTime = categoryTime.map(Self.folded).flatMap { $0.isEmpty ? nil : $0 }
+        copy.exchangeDefaults = exchangeDefaults.mapValues(Self.folded).filter { !$0.value.isEmpty }
         return copy
     }
 
@@ -120,9 +120,10 @@ extension StationProfile {
     /// `.qplog` documents, the `lastStationProfile` preference, and the
     /// contest archive — so every field decodes with `decodeIfPresent` plus
     /// its default. A profile saved before a field existed must never fail
-    /// the document that carries it. Encoding stays synthesized (new files
-    /// always write every key), and this initializer lives in an extension
-    /// so the memberwise initializer survives.
+    /// the document that carries it. Encoding is custom: every long-standing
+    /// key is always written, the four additions only when set — see
+    /// `encode(to:)`. This initializer lives in an extension so the
+    /// memberwise initializer survives.
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         callsign = try c.decodeIfPresent(String.self, forKey: .callsign) ?? ""
