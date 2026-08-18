@@ -349,10 +349,12 @@ final class SkeeterHuntTests: XCTestCase {
                        ["KE5CW", "599", "TX", "20", "W2LJ", "599", "NJ", "13"])
     }
 
-    func testAdifCarriesTheElementInAppFields() {
+    func testAdifCarriesTheElementInAppFields() throws {
+        let contest = try PartyLowering.lower(skeeter)
         let record = AdifExporter.record(
             qso(call: "W2LJ", their: "NJ", memberRcvd: "13"),
-            myCall: "KE5CW", party: skeeter, countyNames: [:], myState: "TX"
+            myCall: "KE5CW", contest: contest, side: PartyLowering.allID,
+            counties: contest.countyRoster(), myState: "TX", writesEntity: false
         )
         XCTAssertTrue(record.contains("<app_qsopartylogger_member_sent:2>20"), record)
         XCTAssertTrue(record.contains("<app_qsopartylogger_member_rcvd:2>13"), record)

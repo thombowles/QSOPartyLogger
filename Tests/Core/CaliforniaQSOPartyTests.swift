@@ -124,11 +124,13 @@ final class CaliforniaQSOPartyTests: XCTestCase {
 
     /// The numbers reach the Cabrillo exchange columns, which is the whole point
     /// — CQP accepts Cabrillo only, and the log checker reads that element.
-    func testCabrilloCarriesTheQSONumbers() {
+    func testCabrilloCarriesTheQSONumbers() throws {
         var q = qso(call: "W6XYZ", their: "SCLA")
         q.serialSent = 12
         q.serialRcvd = 345
-        let line = CabrilloExporter.qsoLine(q, myCall: "KE5CW")
+        let line = CabrilloExporter.qsoLine(q, myCall: "KE5CW",
+                                            contest: try PartyLowering.lower(cqp),
+                                            side: PartyLowering.insideID)
         let fields = line.split(separator: " ").map(String.init)
         XCTAssertTrue(fields.contains("12"), line)
         XCTAssertTrue(fields.contains("345"), line)

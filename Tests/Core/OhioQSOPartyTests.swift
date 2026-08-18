@@ -276,11 +276,13 @@ final class OhioQSOPartyTests: XCTestCase {
 
     // MARK: Cabrillo — the sponsor is strict about the QSO line
 
-    func testCabrilloQSOLineMatchesSponsorSpec() {
+    func testCabrilloQSOLineMatchesSponsorSpec() throws {
         // "Correct number of fields: 10" and "Mode is CW or PH".
         let line = CabrilloExporter.qsoLine(
             qso(call: "K8ABC", band: .m40, mode: .phone, my: "TX", their: "CUYA"),
-            myCall: "KE5CW"
+            myCall: "KE5CW",
+            contest: try PartyLowering.lower(ohqp),
+            side: PartyLowering.outsideID
         )
         let fields = line.split(separator: " ", omittingEmptySubsequences: true)
         XCTAssertEqual(fields.first, "QSO:")

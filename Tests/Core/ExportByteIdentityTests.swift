@@ -54,6 +54,20 @@ final class ExportByteIdentityTests: XCTestCase {
         }
     }
 
+    func testCabrilloOnTheModelIsByteIdenticalToTheFixtures() throws {
+        for f in try ExportFixtures.all() {
+            let contest = try PartyLowering.lower(f.party)
+            let score = ScoreEngine.score(log: f.log, contest: contest)
+            XCTAssertEqual(CabrilloExporter.export(log: f.log, contest: contest, score: score), try fixtureText(f.name, "log"), f.name)
+        }
+    }
+
+    func testAdifOnTheModelIsByteIdenticalToTheFixtures() throws {
+        for f in try ExportFixtures.all() {
+            XCTAssertEqual(AdifExporter.export(log: f.log, contest: try PartyLowering.lower(f.party)), try fixtureText(f.name, "adi"), f.name)
+        }
+    }
+
     func testFixturesCoverEveryShape() throws {
         XCTAssertEqual(try ExportFixtures.all().map(\.name), [
             "ksqp-inside-county-line", "ksqp-outside", "ksqp-outside-dx", "cqp-inside-serials", "naqpcw-name",

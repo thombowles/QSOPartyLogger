@@ -274,10 +274,11 @@ final class MemberExchangeTests: XCTestCase {
 
     /// The element trails each side's location, the way it is sent
     /// ("559 NJ NR 13" → `... 599 TX 20 ... 599 NJ 13`).
-    func testCabrilloLineCarriesTheElementAfterEachLocation() {
+    func testCabrilloLineCarriesTheElementAfterEachLocation() throws {
         let line = CabrilloExporter.qsoLine(
             qso(call: "W2LJ", their: "NJ", memberSent: "20", memberRcvd: "13"),
-            myCall: "KE5CW"
+            myCall: "KE5CW",
+            contest: try PartyLowering.lower(memberParty()), side: PartyLowering.outsideID
         )
         let fields = line.split(separator: " ").map(String.init)
         XCTAssertEqual(Array(fields.suffix(8)),
@@ -285,8 +286,10 @@ final class MemberExchangeTests: XCTestCase {
     }
 
     /// A row with no element renders exactly as it always has (Article 4).
-    func testCabrilloLineWithoutTheElementIsUnchanged() {
-        let fields = CabrilloExporter.qsoLine(qso(call: "W1AW", their: "CT"), myCall: "KE5CW")
+    func testCabrilloLineWithoutTheElementIsUnchanged() throws {
+        let fields = CabrilloExporter.qsoLine(qso(call: "W1AW", their: "CT"), myCall: "KE5CW",
+                                              contest: try PartyLowering.lower(party()),
+                                              side: PartyLowering.outsideID)
             .split(separator: " ").map(String.init)
         XCTAssertEqual(Array(fields.suffix(6)), ["KE5CW", "599", "TX", "W1AW", "599", "CT"])
     }
@@ -294,15 +297,19 @@ final class MemberExchangeTests: XCTestCase {
     // MARK: ADIF
 
     func testAdifCarriesTheElementOnlyWhenPresent() throws {
+        let memberContest = try PartyLowering.lower(memberParty())
         let carried = AdifExporter.record(
             qso(memberSent: "20", memberRcvd: "5W"),
-            myCall: "KE5CW", party: try memberParty(), countyNames: [:], myState: "TX"
+            myCall: "KE5CW", contest: memberContest, side: PartyLowering.outsideID,
+            counties: memberContest.countyRoster(), myState: "TX", writesEntity: false
         )
         XCTAssertTrue(carried.contains("<app_qsopartylogger_member_sent:2>20"), carried)
         XCTAssertTrue(carried.contains("<app_qsopartylogger_member_rcvd:2>5W"), carried)
 
+        let plainContest = try PartyLowering.lower(party())
         let plain = AdifExporter.record(
-            qso(), myCall: "KE5CW", party: try party(), countyNames: [:], myState: "TX"
+            qso(), myCall: "KE5CW", contest: plainContest, side: PartyLowering.outsideID,
+            counties: plainContest.countyRoster(), myState: "TX", writesEntity: false
         )
         XCTAssertFalse(plain.contains("app_qsopartylogger_member"), plain)
     }

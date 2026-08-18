@@ -136,23 +136,27 @@ final class NameExchangeTests: XCTestCase {
 
     /// The sponsors' own template: `AC0W BILL MOW N2CU TOM NY` — the name
     /// sits in the ex1 slot ahead of each side's location.
-    func testCabrilloLineForANamePartyCarriesNameThenLocation() {
+    func testCabrilloLineForANamePartyCarriesNameThenLocation() throws {
         let line = CabrilloExporter.qsoLine(
             qso(my: "TX", their: "NY", nameSent: "Tom", nameRcvd: "Bill"),
-            myCall: "KE5CW"
+            myCall: "KE5CW",
+            contest: try PartyLowering.lower(party(#","exchangeIncludesName":true"#)),
+            side: PartyLowering.outsideID
         )
         let fields = line.split(separator: " ").map(String.init)
         XCTAssertEqual(Array(fields.suffix(6)), ["KE5CW", "TOM", "TX", "N2CU", "BILL", "NY"])
     }
 
     /// A row with no names renders exactly as it always has (Article 4).
-    func testCabrilloLineWithoutNamesIsUnchanged() {
+    func testCabrilloLineWithoutNamesIsUnchanged() throws {
         let plain = QSO(
             timestampUTC: Date(timeIntervalSince1970: 1_791_000_000),
             call: "W1AW", band: .m20, modeClass: .cw, rawMode: "CW",
             rstSent: "599", rstRcvd: "579", myLoc: "HIL", theirLoc: "CT"
         )
-        let fields = CabrilloExporter.qsoLine(plain, myCall: "KE5CW")
+        let fields = CabrilloExporter.qsoLine(plain, myCall: "KE5CW",
+                                              contest: try PartyLowering.lower(party()),
+                                              side: PartyLowering.insideID)
             .split(separator: " ").map(String.init)
         XCTAssertEqual(Array(fields.suffix(6)), ["KE5CW", "599", "HIL", "W1AW", "579", "CT"])
     }
@@ -160,15 +164,18 @@ final class NameExchangeTests: XCTestCase {
     // MARK: ADIF
 
     func testAdifCarriesNamesOnlyWhenPresent() throws {
+        let contest = try PartyLowering.lower(party(#","exchangeIncludesName":true"#))
         let named = AdifExporter.record(
             qso(nameSent: "TOM", nameRcvd: "BILL"),
-            myCall: "KE5CW", party: try party(), countyNames: [:], myState: "TX"
+            myCall: "KE5CW", contest: contest, side: PartyLowering.outsideID,
+            counties: contest.countyRoster(), myState: "TX", writesEntity: false
         )
         XCTAssertTrue(named.contains("<name:4>BILL"), named)
         XCTAssertTrue(named.contains("<my_name:3>TOM"), named)
 
         let plain = AdifExporter.record(
-            qso(), myCall: "KE5CW", party: try party(), countyNames: [:], myState: "TX"
+            qso(), myCall: "KE5CW", contest: contest, side: PartyLowering.outsideID,
+            counties: contest.countyRoster(), myState: "TX", writesEntity: false
         )
         XCTAssertFalse(plain.contains("<name:"), plain)
         XCTAssertFalse(plain.contains("<my_name:"), plain)

@@ -29,10 +29,10 @@ final class CabrilloExporterTests: XCTestCase {
         return log
     }
 
-    func testGoldenQSOLine() {
+    func testGoldenQSOLine() throws {
         let q = makeLog().qsos[0]
         XCTAssertEqual(
-            CabrilloExporter.qsoLine(q, myCall: "KE5CW"),
+            CabrilloExporter.qsoLine(q, myCall: "KE5CW", contest: try PartyLowering.lower(ksqp), side: "outside"),
             "QSO: 14042 CW 2026-08-29 1432 KE5CW         599 TX     W0BH          599 MRN   "
         )
     }

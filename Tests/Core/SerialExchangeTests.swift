@@ -28,6 +28,12 @@ final class SerialExchangeTests: XCTestCase {
         )
     }
 
+    /// CQP lowered, for the Cabrillo line tests: the exporter derives the line
+    /// from the contest's exchange spec, so it needs the contest and the side.
+    func cqpContest() throws -> ContestDefinition {
+        try PartyLowering.lower(XCTUnwrap(PartyCatalog.party(id: "cqp")))
+    }
+
     // MARK: Defaults — nothing changes for the parties that send a report
 
     func testSerialsDefaultToNilOnTheModel() {
@@ -191,10 +197,10 @@ final class SerialExchangeTests: XCTestCase {
 
     // MARK: Cabrillo — the number goes where the report would
 
-    func testCabrilloWritesTheNumberInTheExchangeSlot() {
+    func testCabrilloWritesTheNumberInTheExchangeSlot() throws {
         let line = CabrilloExporter.qsoLine(
             qso(call: "W6XYZ", their: "SCLA", serialSent: 12, serialRcvd: 345),
-            myCall: "KE5CW"
+            myCall: "KE5CW", contest: try cqpContest(), side: PartyLowering.insideID
         )
         // QSO: freq mode date time mycall <sent> myLoc call <rcvd> theirLoc
         let fields = line.split(separator: " ", omittingEmptySubsequences: true).map(String.init)
@@ -205,8 +211,9 @@ final class SerialExchangeTests: XCTestCase {
         XCTAssertFalse(line.contains("599"), "there is no report in a CQP exchange")
     }
 
-    func testCabrilloDoesNotZeroPadTheNumber() {
-        let line = CabrilloExporter.qsoLine(qso(serialSent: 1, serialRcvd: 2), myCall: "KE5CW")
+    func testCabrilloDoesNotZeroPadTheNumber() throws {
+        let line = CabrilloExporter.qsoLine(qso(serialSent: 1, serialRcvd: 2), myCall: "KE5CW",
+                                            contest: try cqpContest(), side: PartyLowering.insideID)
         XCTAssertFalse(line.contains("001"),
                        "CQP: 'It is unnecessary to send leading zeros in the QSO number'")
         XCTAssertEqual(CabrilloExporter.exchangeNumber(serial: 1, rst: ""), "1")
@@ -216,15 +223,18 @@ final class SerialExchangeTests: XCTestCase {
 
     /// The report is still what gets written wherever there is no number, which
     /// is what keeps every existing party's export byte-identical.
-    func testCabrilloFallsBackToTheReport() {
+    func testCabrilloFallsBackToTheReport() throws {
         XCTAssertEqual(CabrilloExporter.exchangeNumber(serial: nil, rst: "599"), "599")
+        // A party whose exchange is a report, not a number: KSQP.
         let line = CabrilloExporter.qsoLine(
             QSO(
                 timestampUTC: Date(timeIntervalSince1970: 1_791_000_000),
                 call: "W0BH", band: .m20, modeClass: .cw, rawMode: "CW",
                 rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: "MRN"
             ),
-            myCall: "KE5CW"
+            myCall: "KE5CW",
+            contest: try PartyLowering.lower(XCTUnwrap(PartyCatalog.party(id: "ksqp"))),
+            side: PartyLowering.outsideID
         )
         XCTAssertTrue(line.contains("599"))
     }

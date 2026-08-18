@@ -292,10 +292,12 @@ final class FlightOfTheBumblebeesTests: XCTestCase {
                        ["KE5CW", "599", "TX", "5W", "W4KAC/BB", "599", "NC", "7"])
     }
 
-    func testAdifCarriesTheElementInAppFields() {
+    func testAdifCarriesTheElementInAppFields() throws {
+        let contest = try PartyLowering.lower(fobb)
         let record = AdifExporter.record(
             qso(call: "W4KAC/BB", memberRcvd: "7"),
-            myCall: "KE5CW", party: fobb, countyNames: [:], myState: "TX"
+            myCall: "KE5CW", contest: contest, side: PartyLowering.allID,
+            counties: contest.countyRoster(), myState: "TX", writesEntity: false
         )
         XCTAssertTrue(record.contains("<app_qsopartylogger_member_sent:2>5W"), record)
         XCTAssertTrue(record.contains("<app_qsopartylogger_member_rcvd:1>7"), record)

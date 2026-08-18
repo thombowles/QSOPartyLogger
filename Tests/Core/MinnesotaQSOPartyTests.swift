@@ -336,7 +336,9 @@ final class MinnesotaQSOPartyTests: XCTestCase {
             nameSent: "TOM", nameRcvd: "BILL",
             myLoc: "TX", theirLoc: "DAK"
         )
-        let fields = CabrilloExporter.qsoLine(named, myCall: "KE5CW")
+        let fields = CabrilloExporter.qsoLine(named, myCall: "KE5CW",
+                                              contest: try PartyLowering.lower(mnqp),
+                                              side: PartyLowering.outsideID)
             .split(separator: " ").map(String.init)
         XCTAssertEqual(Array(fields.suffix(6)), ["KE5CW", "TOM", "TX", "W0AA", "BILL", "DAK"],
                        "the sponsor's template: name in ex1, ahead of the location")
