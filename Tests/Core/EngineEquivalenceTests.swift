@@ -169,6 +169,42 @@ enum EquivalenceCorpus {
     }
 }
 
+/// A `ScoreBreakdown` as a stable, diffable record: row ids become indices
+/// into the log, keys become sorted strings.
+struct GoldenBreakdown: Codable, Equatable {
+    var validQSOs: Int, dupeCount: Int, invalidModeCount: Int, outOfScopeCount: Int, outOfTimeCount: Int
+    var qsoPoints: Int, bonusPoints: Int, memberQSOs: Int, qrpQSOs: Int, otherQSOs: Int
+    var multiplierCount: Int, multiplierCap: Int?, multiplierFloor: Int, total: Int
+    var categoryFactor: ScoreFactor
+    var multiplierKeys: [String]
+    var dupeRows: [Int], invalidRows: [Int], outOfScopeRows: [Int], newMultRows: [Int]
+    var points: [Int]
+    var selfActivated: [String]
+
+    init(_ s: ScoreEngine.ScoreBreakdown, rows: [QSO]) {
+        let index = Dictionary(uniqueKeysWithValues: rows.enumerated().map { ($1.id, $0) })
+        func indices(_ ids: Set<UUID>) -> [Int] { ids.compactMap { index[$0] }.sorted() }
+        validQSOs = s.validQSOs; dupeCount = s.dupeCount; invalidModeCount = s.invalidModeCount
+        outOfScopeCount = s.outOfScopeCount; outOfTimeCount = s.outOfTimeCount
+        qsoPoints = s.qsoPoints; bonusPoints = s.bonusPoints
+        memberQSOs = s.memberQSOs; qrpQSOs = s.qrpQSOs; otherQSOs = s.otherQSOs
+        multiplierCount = s.multiplierCount; multiplierCap = s.multiplierCap; multiplierFloor = s.multiplierFloor; total = s.total
+        categoryFactor = s.categoryFactor
+        multiplierKeys = s.multiplierKeys.map { "\($0.classID)|\($0.value)|\($0.scope)|\($0.activated ? "A" : "")" }.sorted()
+        dupeRows = indices(s.dupeRowIDs); invalidRows = indices(s.invalidRowIDs)
+        outOfScopeRows = indices(s.outOfScopeRowIDs); newMultRows = indices(s.newMultRowIDs)
+        points = rows.map { s.pointsByRowID[$0.id] ?? -1 }
+        selfActivated = s.selfActivatedCounties.sorted()
+    }
+}
+
+struct GoldenCase: Codable, Equatable {
+    let party: String
+    let seed: UInt64
+    let side: String
+    let breakdown: GoldenBreakdown
+}
+
 final class EngineEquivalenceTests: XCTestCase {
 
     /// The whole corpus, every party, old engine == model engine.
@@ -243,5 +279,52 @@ final class EngineEquivalenceTests: XCTestCase {
         XCTAssertEqual(EquivalenceCorpus.logs(for: p, seed: 11), EquivalenceCorpus.logs(for: p, seed: 11))
         XCTAssertNotEqual(EquivalenceCorpus.logs(for: p, seed: 11), EquivalenceCorpus.logs(for: p, seed: 23))
         XCTAssertGreaterThanOrEqual(EquivalenceCorpus.logs(for: p, seed: 11).map(\.qsos.count).reduce(0, +), 120)
+    }
+
+    /// Where the recording test writes (the sandboxed test host cannot touch
+    /// the source tree); the shell copies it to `Tests/Fixtures/Equivalence/`.
+    static let goldenURL = FileManager.default.temporaryDirectory
+        .appendingPathComponent("QPLRecord/Equivalence/engine-golden.json")
+
+    /// Every corpus log scored through the party overload, in a fixed order.
+    static func corpusCases() throws -> [GoldenCase] {
+        var out: [GoldenCase] = []
+        for p in PartyCatalog.loadBundled() {
+            for seed in EquivalenceCorpus.seeds {
+                for log in EquivalenceCorpus.logs(for: p, seed: seed) {
+                    out.append(GoldenCase(party: p.id, seed: seed, side: log.sideID,
+                                          breakdown: GoldenBreakdown(ScoreEngine.score(log: log, party: p), rows: log.qsos)))
+                }
+            }
+        }
+        return out
+    }
+
+    /// Writes the golden file. Recorded once from the engine as it was before
+    /// the switch (`TEST_RUNNER_QPL_RECORD_GOLDEN=1`); re-record only for a
+    /// deliberate, party-by-party scoring change, never to make a red run green.
+    func testRecordGoldenWhenAsked() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["QPL_RECORD_GOLDEN"] == "1", "recording is opt-in")
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        try FileManager.default.createDirectory(at: Self.goldenURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try encoder.encode(try Self.corpusCases()).write(to: Self.goldenURL, options: .atomic)
+        print("QPL_RECORD_GOLDEN_PATH=\(Self.goldenURL.path)")
+    }
+
+    /// The permanent oracle: the corpus, scored by the engine that shipped
+    /// before the switch, reproduced field by field.
+    func testEveryPartyMatchesTheGoldenBreakdowns() throws {
+        let url = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "engine-golden", withExtension: "json"),
+                                "missing engine-golden.json — record with TEST_RUNNER_QPL_RECORD_GOLDEN=1")
+        let golden = try JSONDecoder().decode([GoldenCase].self, from: Data(contentsOf: url))
+        let now = try Self.corpusCases()
+        XCTAssertEqual(now.count, golden.count)
+        for (g, n) in zip(golden, now) {
+            XCTAssertEqual(n.party, g.party); XCTAssertEqual(n.seed, g.seed); XCTAssertEqual(n.side, g.side)
+            if n.breakdown != g.breakdown {
+                XCTFail("\(g.party) seed \(g.seed) side \(g.side): keys only golden \(Set(g.breakdown.multiplierKeys).subtracting(n.breakdown.multiplierKeys)); only now \(Set(n.breakdown.multiplierKeys).subtracting(g.breakdown.multiplierKeys)); points \(g.breakdown.qsoPoints)/\(n.breakdown.qsoPoints) bonus \(g.breakdown.bonusPoints)/\(n.breakdown.bonusPoints) valid \(g.breakdown.validQSOs)/\(n.breakdown.validQSOs) total \(g.breakdown.total)/\(n.breakdown.total)")
+            }
+        }
     }
 }

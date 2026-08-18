@@ -84,6 +84,7 @@
 		21A520CE49B99E980AD2828A /* CombinedLogSplitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135F472CB9A0491C54F217ED /* CombinedLogSplitTests.swift */; };
 		22153100EBA41351F23D9A99 /* DXCCLabelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D311DEBD1B5C6AA9730A18 /* DXCCLabelStore.swift */; };
 		241A9D98907398CD1DFD522A /* DelawareQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2052FF6C863AA0209875C20 /* DelawareQSOPartyTests.swift */; };
+		251554806373EEDB1B2650BC /* engine-golden.json in Resources */ = {isa = PBXBuildFile; fileRef = EE585D15DF606E21BB3CD741 /* engine-golden.json */; };
 		25593919ADA400E0D07798E1 /* SpotLabelSizePreferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A83B90871BA86343AB446AA /* SpotLabelSizePreferenceTests.swift */; };
 		2578ED1510E927A5172C6573 /* paqp-inside-sections.adi in Resources */ = {isa = PBXBuildFile; fileRef = A745EC869B4408E8F9549AA9 /* paqp-inside-sections.adi */; };
 		260384C6FA2DE3A3F0FFFFF1 /* filepage-qsop_al-2026-002-2026-07-28.html in Resources */ = {isa = PBXBuildFile; fileRef = 5B18159B62CE889DC2FCBD5B /* filepage-qsop_al-2026-002-2026-07-28.html */; };
@@ -926,6 +927,7 @@
 		EC05BC2077B42827CBC8A537 /* HubFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubFrequency.swift; sourceTree = "<group>"; };
 		ED18DA5065D11D03393147E1 /* IdahoQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdahoQSOPartyTests.swift; sourceTree = "<group>"; };
 		EDEF6EE3217F107C7332AC6D /* ScoreFactorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreFactorTests.swift; sourceTree = "<group>"; };
+		EE585D15DF606E21BB3CD741 /* engine-golden.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "engine-golden.json"; sourceTree = "<group>"; };
 		EF05C1549627468A75EA1D1C /* CTYTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTYTableTests.swift; sourceTree = "<group>"; };
 		EF27EC7CAEAE6E71B85FD5E9 /* BandMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMap.swift; sourceTree = "<group>"; };
 		EF6989E84D7AABBEB0B1451F /* MorseCodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCodeTests.swift; sourceTree = "<group>"; };
@@ -1339,6 +1341,14 @@
 			path = Export;
 			sourceTree = "<group>";
 		};
+		77C69B62C5DBE94600E65D1D /* Equivalence */ = {
+			isa = PBXGroup;
+			children = (
+				EE585D15DF606E21BB3CD741 /* engine-golden.json */,
+			);
+			path = Equivalence;
+			sourceTree = "<group>";
+		};
 		7A5406F10A0F95DED45369D3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -1542,6 +1552,7 @@
 				5A4D360EB58E2CF775FCCB15 /* pota_spots_sample.json */,
 				4559E550B5DB4264FEC709A5 /* CallHistory */,
 				F533F31618A9BDF92B8F494F /* Contests */,
+				77C69B62C5DBE94600E65D1D /* Equivalence */,
 				86ED647F5F3A0ED0AB3B93B0 /* Exports */,
 				851542C481A1BB4B3E681069 /* HubSpots */,
 				B80897121036BFD9F76B7920 /* SpaceWeather */,
@@ -1827,6 +1838,7 @@
 				8B19312BCE02BA60190C5266 /* cqp-inside-serials.adi in Resources */,
 				3958454C3C93728DA9D8D307 /* cqp-inside-serials.log in Resources */,
 				03A637852323BBA3ACE4DD50 /* cqwwcw.json in Resources */,
+				251554806373EEDB1B2650BC /* engine-golden.json in Resources */,
 				260384C6FA2DE3A3F0FFFFF1 /* filepage-qsop_al-2026-002-2026-07-28.html in Resources */,
 				F661778B3A6DD283F372E249 /* fobb-roster-page-2026-07.html in Resources */,
 				B415EA0CA6216FB04DD8BEF2 /* ksqp-inside-county-line.adi in Resources */,
