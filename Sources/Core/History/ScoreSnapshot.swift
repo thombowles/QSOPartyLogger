@@ -22,7 +22,9 @@ struct ScoreSnapshot: Codable, Equatable, Sendable {
         /// precisely what they meant, so they decode unchanged.
         var categoryFactor: ScoreFactor
         var total: Int
-        /// Scoped multiplier counts keyed by `MultClass` raw value.
+        /// Scoped multiplier counts keyed by multiplier class id (`county`,
+        /// `state`, … `zone`) — the party classes keep `MultClass`'s raw
+        /// values, so archives written before the general model read unchanged.
         var multsByClass: [String: Int]
 
         init(
@@ -93,11 +95,11 @@ struct ScoreSnapshot: Codable, Equatable, Sendable {
 
     /// Full snapshot via the scoring engine — the same fold the score
     /// sidebar shows, so the dashboard can never disagree with it.
-    static func make(log: ContestLog, party: PartyDefinition) -> ScoreSnapshot {
-        let breakdown = ScoreEngine.score(log: log, party: party)
+    static func make(log: ContestLog, contest: ContestDefinition) -> ScoreSnapshot {
+        let breakdown = ScoreEngine.score(log: log, contest: contest)
         var byMode: [String: Int] = [:]
         var byBand: [String: Int] = [:]
-        for (band, modes) in ScoreEngine.bandModeCounts(log: log, party: party) {
+        for (band, modes) in ScoreEngine.bandModeCounts(log: log, contest: contest) {
             for (mode, count) in modes {
                 byMode[mode.rawValue, default: 0] += count
                 byBand[band.rawValue, default: 0] += count
@@ -110,7 +112,7 @@ struct ScoreSnapshot: Codable, Equatable, Sendable {
             outOfScopeCount: breakdown.outOfScopeCount,
             qsosByMode: byMode,
             qsosByBand: byBand,
-            countiesWorked: breakdown.workedValues(.county).count,
+            countiesWorked: breakdown.workedValues(classID: MultClass.county.rawValue).count,
             operatingMinutes: operatingMinutes(timestamps: log.qsos.map(\.timestampUTC)),
             figures: Figures(
                 qsoPoints: breakdown.qsoPoints,
@@ -119,21 +121,24 @@ struct ScoreSnapshot: Codable, Equatable, Sendable {
                 bonusPoints: breakdown.bonusPoints,
                 categoryFactor: breakdown.categoryFactor,
                 total: breakdown.total,
-                multsByClass: Dictionary(
-                    uniqueKeysWithValues: breakdown.classCounts.map { ($0.key.rawValue, $0.value) }
-                )
+                multsByClass: breakdown.countsByClassID
             )
         )
     }
 
+    /// The `PartyDefinition` overload: lower, then snapshot on the model.
+    static func make(log: ContestLog, party: PartyDefinition) -> ScoreSnapshot {
+        make(log: log, contest: PartyLowering.lowered(party))
+    }
+
     /// The best snapshot this Mac can make of a log right now: the engine's
-    /// when the party's rules are installed (`rules`), counts only otherwise.
+    /// when the contest's rules are installed (`contests`), counts only otherwise.
     static func best(
         for log: ContestLog,
-        rules: (String) -> PartyDefinition? = { PartyCatalog.party(id: $0) }
+        contests: (String) -> ContestDefinition? = { ContestCatalog.contest(id: $0) }
     ) -> ScoreSnapshot {
-        if let party = rules(log.partyID) {
-            make(log: log, party: party)
+        if let contest = contests(log.partyID) {
+            make(log: log, contest: contest)
         } else {
             countsOnly(log: log)
         }

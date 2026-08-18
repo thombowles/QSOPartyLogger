@@ -1,27 +1,37 @@
 import Foundation
+import os
 
 /// Every contest the app knows: the bundled parties, lowered, plus bundled v2
 /// files under `Resources/Contests/`, with user files overriding by id from
 /// `~/Library/Application Support/QSOPartyLogger/{Parties,Contests}`.
 enum ContestCatalog {
+    private static let log = Logger(subsystem: "org.b5n.QSOPartyLogger", category: "catalog")
+    private static let bundledCache = OSAllocatedUnfairLock<[URL: [ContestDefinition]]>(initialState: [:])
+
     static var userContestsDirectory: URL {
         FileManager.default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("QSOPartyLogger/Contests", isDirectory: true)
     }
 
-    /// Bundled parties (lowered) and bundled v2 contests, by name.
+    /// Bundled parties (lowered) and bundled v2 contests, by name — decoded
+    /// once per bundle (its files never change while the app runs). A bundled
+    /// file that fails is logged, once, and skipped: it used to vanish from
+    /// the catalogue without a word.
     static func loadBundled(bundle: Bundle = .main) -> [ContestDefinition] {
+        if let cached = bundledCache.withLock({ $0[bundle.bundleURL] }) { return cached }
         var byID: [String: ContestDefinition] = [:]
         for party in PartyCatalog.loadBundled(bundle: bundle) {
-            if let lowered = try? PartyLowering.lower(party) { byID[lowered.id] = lowered }
+            do { let lowered = try PartyLowering.lower(party); byID[lowered.id] = lowered }
+            catch { log.error("bundled party \(party.id, privacy: .public) does not lower: \(error.localizedDescription, privacy: .public)") }
         }
         for url in bundle.urls(forResourcesWithExtension: "json", subdirectory: "Contests") ?? [] {
-            if let data = try? Data(contentsOf: url), let contest = try? ContestDefinition.decode(data, bundle: bundle) {
-                byID[contest.id] = contest
-            }
+            do { let contest = try ContestDefinition.decode(try Data(contentsOf: url), bundle: bundle); byID[contest.id] = contest }
+            catch { log.error("bundled contest \(url.lastPathComponent, privacy: .public) failed to load: \(error.localizedDescription, privacy: .public)") }
         }
-        return byID.values.sorted { $0.name < $1.name }
+        let contests = byID.values.sorted { $0.name < $1.name }
+        bundledCache.withLock { $0[bundle.bundleURL] = contests }
+        return contests
     }
 
     /// User v2 files in a folder; failures are returned so the UI can explain them.

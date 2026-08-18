@@ -403,4 +403,36 @@ final class ContestScoreEngineTests: XCTestCase {
         XCTAssertTrue(ScoreEngine.callAreaSumAchieved(target: 11, log: slog, contest: sk), "1 + 10")
         XCTAssertFalse(ScoreEngine.callAreaSumAchieved(target: 12, log: slog, contest: sk))
     }
+
+    /// The callsign override is decided over **every** class, gated by each
+    /// resolver's own `sides` — not only the classes this side counts. Today's
+    /// `dxCountsEntities` gate is independent of the class list, so a side that
+    /// tells entities apart without counting them still must not credit
+    /// Pennsylvania for `PA` received from `PA0AAA`.
+    func testTheCallsignOverrideAppliesEvenWhereTheSideDoesNotCountTheClass() throws {
+        let states = TokenSet(id: "states", term: "state", termPlural: "states",
+                              tokens: [.init(abbr: "PA"), .init(abbr: "TX")])
+        let location = ExchangeElement(id: "location", kind: .token,
+                                       sentBy: ["all": .init(sets: ["states", "dxccPrefix"])], fixed: true)
+        let stateClass = MultiplierClass(
+            id: "state", term: "state",
+            resolvers: [Resolver(kind: .receivedToken, element: "location", set: "states")],
+            counting: ["all": .once], roster: "states")
+        // Nobody counts this class — but its resolver still decides ownership.
+        let countryClass = MultiplierClass(
+            id: "country", term: "country", termPlural: "countries",
+            resolvers: [Resolver(kind: .dxccEntity, element: "location", from: .receivedTokenOrCallsign,
+                                 list: .arrl, callsignOverrides: ["states"])],
+            counting: [:], layout: .workedOnly)
+        let c = try contest(exchange: [location], multipliers: [stateClass, countryClass], tokenSets: [states])
+
+        let dx = ScoreEngine.score(log: log(c, sent: ["location": ["TX"]],
+                                            rows: [row("PA0AAA", rcvd: ["location": "PA"])]), contest: c)
+        XCTAssertEqual(dx.workedValues(classID: "state"), [],
+                       "the callsign moved the token to dxccPrefix, and no side counts the country class")
+        XCTAssertEqual(dx.workedValues(classID: "country"), [])
+        let home = ScoreEngine.score(log: log(c, sent: ["location": ["TX"]],
+                                              rows: [row("W3XYZ", rcvd: ["location": "PA"])]), contest: c)
+        XCTAssertEqual(home.workedValues(classID: "state"), ["PA"], "a US callsign never triggers the override")
+    }
 }

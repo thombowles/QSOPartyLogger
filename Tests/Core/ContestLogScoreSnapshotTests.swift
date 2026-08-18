@@ -91,4 +91,18 @@ final class ContestLogScoreSnapshotTests: XCTestCase {
         log.scoreSnapshot = stale
         XCTAssertEqual(log.stampingScoreSnapshot().scoreSnapshot?.validQSOs, 2)
     }
+
+    func testSnapshotIsScoredThroughTheContestCatalogue() throws {
+        var log = ContestLog(partyID: "ksqp", myLocation: .outOfState(location: "TX"))
+        log.station.callsign = "KE5CW"; log.setupCompleted = true
+        log.qsos = [QSO(call: "W0BH", band: .m20, modeClass: .cw, rawMode: "CW", rstSent: "599", rstRcvd: "599",
+                        myLoc: "TX", theirLoc: try XCTUnwrap(PartyCatalog.party(id: "ksqp")).counties[0].abbr)]
+        let stamped = try XCTUnwrap(log.stampingScoreSnapshot().scoreSnapshot)
+        XCTAssertEqual(stamped.figures?.multsByClass, ["county": 1])
+        XCTAssertEqual(stamped, ScoreSnapshot.make(log: log, contest: try XCTUnwrap(ContestCatalog.contest(id: "ksqp"))))
+        XCTAssertEqual(stamped, ScoreSnapshot.make(log: log, party: try XCTUnwrap(PartyCatalog.party(id: "ksqp"))))
+        // A contest this Mac does not know: counts only.
+        XCTAssertNil(ScoreSnapshot.best(for: log, contests: { _ in nil }).figures)
+        XCTAssertNil(log.stampingScoreSnapshot(contests: { _ in nil }).scoreSnapshot?.figures)
+    }
 }

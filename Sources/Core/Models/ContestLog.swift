@@ -257,16 +257,16 @@ struct ContestLog: Codable, Equatable, Sendable {
     }
 
     /// The copy the save path writes: `scoreSnapshot` set to this log's
-    /// score as of now — the engine's figures when the party's rules are
-    /// installed (`rules`), counts only when they are not — or nil for a
+    /// score as of now — the engine's figures when the contest's rules are
+    /// installed (`contests`), counts only when they are not — or nil for a
     /// draft (Contest Setup unfinished, or nothing logged yet). Everything
-    /// else is untouched. (Task 11 moves this onto `ContestCatalog`.)
+    /// else is untouched.
     func stampingScoreSnapshot(
-        rules: (String) -> PartyDefinition? = { PartyCatalog.party(id: $0) }
+        contests: (String) -> ContestDefinition? = { ContestCatalog.contest(id: $0) }
     ) -> ContestLog {
         var stamped = self
         stamped.scoreSnapshot = setupCompleted && !qsos.isEmpty
-            ? ScoreSnapshot.best(for: self, rules: rules)
+            ? ScoreSnapshot.best(for: self, contests: contests)
             : nil
         return stamped
     }

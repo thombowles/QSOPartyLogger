@@ -124,15 +124,15 @@ struct LogFolder: Sendable {
 
     /// The log's own snapshot when it carries figures — the frozen "what I
     /// claimed" — else one computed now with the rules installed here (a
-    /// log from an older build, or one saved on a Mac without this party).
+    /// log from an older build, or one saved on a Mac without this contest).
     static func score(
         for log: ContestLog,
-        rules: (String) -> PartyDefinition? = { PartyCatalog.party(id: $0) }
+        contests: (String) -> ContestDefinition? = { ContestCatalog.contest(id: $0) }
     ) -> (ScoreSnapshot, ContestRecord.ScoreOrigin) {
         if let saved = log.scoreSnapshot, saved.figures != nil {
             return (saved, .savedWithLog)
         }
-        return (ScoreSnapshot.best(for: log, rules: rules), .computedNow)
+        return (ScoreSnapshot.best(for: log, contests: contests), .computedNow)
     }
 
     // MARK: Names

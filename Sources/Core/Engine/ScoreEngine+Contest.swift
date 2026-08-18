@@ -210,8 +210,17 @@ extension ScoreEngine {
     private static let dxccPrefixSet = "dxccPrefix"
 
     /// The token elements an entrant on `side` receives, each with its sets
-    /// resolved once (`ExchangeValidator.resolvedSets`) — built per `score`
-    /// or per NEW MULT question, reused for every row.
+    /// resolved once (`ExchangeValidator.resolvedSets`) — built per fold (or
+    /// per NEW MULT question) and reused for every row.
+    ///
+    /// **Deliberately not memoised across folds.** A cache keyed by contest id
+    /// and side is wrong: an id does not identify a *value* — a user file
+    /// overrides a bundled contest under the same id
+    /// (`ContestCatalog.all`), so the sets can differ while the key does not,
+    /// and a stale entry would silently classify a token under the wrong set.
+    /// The cost this would save is one map per fold, next to a fold over the
+    /// whole log; `wouldAddMultiplier` builds it twice per keystroke and that
+    /// is still far below the re-score it already performs.
     static func resolvedTokenSets(for side: String, contest: ContestDefinition) -> [String: ExchangeValidator.ResolvedSets] {
         var out: [String: ExchangeValidator.ResolvedSets] = [:]
         for element in contest.receivedElements(for: side) where element.kind == .token {

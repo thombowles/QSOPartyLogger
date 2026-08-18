@@ -11,7 +11,8 @@ enum ArchivedLogExport {
         /// No source file recorded, no logs folder configured, or the file
         /// is no longer in the folder.
         case logFileMissing
-        /// `PartyCatalog` has no rules for the record's party id.
+        /// `ContestCatalog` has no rules for the record's contest id. (The
+        /// case keeps its name: the dashboard and its tests read it.)
         case partyNotInstalled
         /// The file is there but does not decode as a contest log.
         case logUnreadable
@@ -28,7 +29,7 @@ enum ArchivedLogExport {
         let loaded = try load(record: record, folder: folder)
         return Export(
             fileName: loaded.baseName + ".adi",
-            text: AdifExporter.export(log: loaded.log, party: loaded.party)
+            text: AdifExporter.export(log: loaded.log, contest: loaded.contest)
         )
     }
 
@@ -43,25 +44,25 @@ enum ArchivedLogExport {
             fileName: loaded.baseName + ".log",
             text: CabrilloExporter.export(
                 log: loaded.log,
-                party: loaded.party,
-                score: ScoreEngine.score(log: loaded.log, party: loaded.party)
+                contest: loaded.contest,
+                score: ScoreEngine.score(log: loaded.log, contest: loaded.contest)
             )
         )
     }
 
     private static func load(
         record: ContestRecord, folder: URL?
-    ) throws -> (log: ContestLog, party: PartyDefinition, baseName: String) {
+    ) throws -> (log: ContestLog, contest: ContestDefinition, baseName: String) {
         guard let name = record.sourceFileName, let folder,
               let data = try? Data(contentsOf: folder.appendingPathComponent(name)) else {
             throw Failure.logFileMissing
         }
-        guard let party = PartyCatalog.party(id: record.partyID) else {
+        guard let contest = ContestCatalog.contest(id: record.partyID) else {
             throw Failure.partyNotInstalled
         }
         guard let log = try? ContestLog.decode(from: data) else {
             throw Failure.logUnreadable
         }
-        return (log, party, (name as NSString).deletingPathExtension)
+        return (log, contest, (name as NSString).deletingPathExtension)
     }
 }

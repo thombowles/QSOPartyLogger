@@ -39,4 +39,12 @@ final class ContestCatalogTests: XCTestCase {
         XCTAssertEqual(all.first { $0.id == "ksqp" }?.name, "Kansas, overridden")
         XCTAssertEqual(all.count, 50)
     }
+
+    func testBundledLoadIsMemoisedAndComplete() {
+        let a = ContestCatalog.loadBundled(), b = ContestCatalog.loadBundled()
+        XCTAssertEqual(a.map(\.id), b.map(\.id))
+        XCTAssertEqual(a.count, 50)
+        XCTAssertEqual(ContestCatalog.contest(id: "ksqp")?.id, "ksqp")
+        XCTAssertEqual(ContestCatalog.contest(id: "ksqp")?.cabrillo.contest, "KS-QSO-PARTY")
+    }
 }
