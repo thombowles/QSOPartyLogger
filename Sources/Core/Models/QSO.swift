@@ -212,8 +212,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         modeClass = try c.decode(ModeClass.self, forKey: .modeClass)
         rawMode = try c.decode(String.self, forKey: .rawMode)
         freqKHz = try c.decodeIfPresent(Int.self, forKey: .freqKHz)
-        myPotaRefs = try c.decodeIfPresent([String].self, forKey: .myPotaRefs)
-        theirPotaRefs = try c.decodeIfPresent([String].self, forKey: .theirPotaRefs)
+        myPotaRefs = try c.decodeIfPresent([String].self, forKey: .myPotaRefs).flatMap { $0.isEmpty ? nil : $0 }
+        theirPotaRefs = try c.decodeIfPresent([String].self, forKey: .theirPotaRefs).flatMap { $0.isEmpty ? nil : $0 }
         posture = try c.decodeIfPresent(OperatingMode.self, forKey: .posture)
         if c.contains(.sent) || c.contains(.rcvd) {
             sent = Self.compact(try c.decodeIfPresent([String: String].self, forKey: .sent) ?? [:])

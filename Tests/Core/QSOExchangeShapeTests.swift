@@ -78,6 +78,47 @@ final class QSOExchangeShapeTests: XCTestCase {
         XCTAssertEqual(q.theirLoc, "MRN"); XCTAssertEqual(q.freqKHz, 14042)
     }
 
+    func testAV2RowWithOnlySentDecodes() throws {
+        let v2 = """
+        {"schemaVersion":1,"partyID":"ksqp","station":{"callsign":"KE5CW"},"myLocation":{"outOfState":{"location":"TX"}},"operatingMode":"S&P","setupCompleted":true,"messages":{"run":[],"searchPounce":[]},
+         "qsos":[{"id":"00000000-0000-4000-8000-000000000001","groupID":"00000000-0000-4000-8000-000000000001",
+                  "timestampUTC":"2026-08-29T14:32:00Z","call":"W0BH","band":"20m","modeClass":"cw","rawMode":"CW",
+                  "sent":{"rst":"599","location":"TX"}}]}
+        """
+        let log = try ContestLog.decode(from: Data(v2.utf8))
+        let q = try XCTUnwrap(log.qsos.first)
+        XCTAssertEqual(q.sent, ["rst": "599", "location": "TX"])
+        XCTAssertEqual(q.rcvd, [:], "no rcvd key at all — the v2 branch still fills it in as empty")
+        XCTAssertEqual(q.theirLoc, "")
+    }
+
+    func testV2ValuesAreCompactedOnDecode() throws {
+        let v2 = """
+        {"schemaVersion":1,"partyID":"ksqp","station":{"callsign":"KE5CW"},"myLocation":{"outOfState":{"location":"TX"}},"operatingMode":"S&P","setupCompleted":true,"messages":{"run":[],"searchPounce":[]},
+         "qsos":[{"id":"00000000-0000-4000-8000-000000000001","groupID":"00000000-0000-4000-8000-000000000001",
+                  "timestampUTC":"2026-08-29T14:32:00Z","call":"W0BH","band":"20m","modeClass":"cw","rawMode":"CW",
+                  "sent":{"rst":"599","name":"","":"x"},"rcvd":{"rst":"","location":"MRN"}}]}
+        """
+        let log = try ContestLog.decode(from: Data(v2.utf8))
+        let q = try XCTUnwrap(log.qsos.first)
+        XCTAssertEqual(q.sent, ["rst": "599"], "empty value, empty id, and empty-value-with-empty-id all drop")
+        XCTAssertEqual(q.rcvd, ["location": "MRN"])
+    }
+
+    func testV2KeysWinOverStrayV1Keys() throws {
+        let v2 = """
+        {"schemaVersion":1,"partyID":"ksqp","station":{"callsign":"KE5CW"},"myLocation":{"outOfState":{"location":"TX"}},"operatingMode":"S&P","setupCompleted":true,"messages":{"run":[],"searchPounce":[]},
+         "qsos":[{"id":"00000000-0000-4000-8000-000000000001","groupID":"00000000-0000-4000-8000-000000000001",
+                  "timestampUTC":"2026-08-29T14:32:00Z","call":"W0BH","band":"20m","modeClass":"cw","rawMode":"CW",
+                  "sent":{"rst":"599","location":"TX"},"rcvd":{"rst":"579","location":"MRN"},
+                  "rstSent":"111","myLoc":"ZZ"}]}
+        """
+        let log = try ContestLog.decode(from: Data(v2.utf8))
+        let q = try XCTUnwrap(log.qsos.first)
+        XCTAssertEqual(q.rstSent, "599", "sent/rcvd present means the legacy container is never consulted")
+        XCTAssertEqual(q.myLoc, "TX")
+    }
+
     func testAV1RowMissingARequiredKeyStillFails() {
         let broken = """
         {"schemaVersion":1,"partyID":"ksqp","station":{"callsign":"KE5CW"},"myLocation":{"outOfState":{"location":"TX"}},
@@ -86,6 +127,23 @@ final class QSOExchangeShapeTests: XCTestCase {
                   "timestampUTC":"2026-08-29T14:32:00Z","call":"W0BH","band":"20m","modeClass":"cw","rawMode":"CW",
                   "rstSent":"599","myLoc":"TX","theirLoc":"MRN"}]}
         """
-        XCTAssertThrowsError(try ContestLog.decode(from: Data(broken.utf8)), "rstRcvd was required in v1 and stays required for a v1 row")
+        XCTAssertThrowsError(try ContestLog.decode(from: Data(broken.utf8)), "rstRcvd was required in v1 and stays required for a v1 row") { error in
+            guard case DecodingError.keyNotFound(let key, _) = error else { return XCTFail("\(error)") }
+            XCTAssertEqual(key.stringValue, "rstRcvd")
+        }
+    }
+
+    func testEmptyParkListsDecodeAsNil() throws {
+        let v2 = """
+        {"schemaVersion":1,"partyID":"ksqp","station":{"callsign":"KE5CW"},"myLocation":{"outOfState":{"location":"TX"}},"operatingMode":"S&P","setupCompleted":true,"messages":{"run":[],"searchPounce":[]},
+         "qsos":[{"id":"00000000-0000-4000-8000-000000000001","groupID":"00000000-0000-4000-8000-000000000001",
+                  "timestampUTC":"2026-08-29T14:32:00Z","call":"W0BH","band":"20m","modeClass":"cw","rawMode":"CW",
+                  "sent":{"rst":"599","location":"TX"},"rcvd":{"rst":"579","location":"MRN"},
+                  "myPotaRefs":[],"theirPotaRefs":[]}]}
+        """
+        let log = try ContestLog.decode(from: Data(v2.utf8))
+        let q = try XCTUnwrap(log.qsos.first)
+        XCTAssertNil(q.myPotaRefs, "the inits treat an empty list as absent; decode must match")
+        XCTAssertNil(q.theirPotaRefs)
     }
 }
