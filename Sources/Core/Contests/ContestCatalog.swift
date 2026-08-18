@@ -17,7 +17,7 @@ enum ContestCatalog {
             if let lowered = try? PartyLowering.lower(party) { byID[lowered.id] = lowered }
         }
         for url in bundle.urls(forResourcesWithExtension: "json", subdirectory: "Contests") ?? [] {
-            if let data = try? Data(contentsOf: url), let contest = try? ContestDefinition.decode(data) {
+            if let data = try? Data(contentsOf: url), let contest = try? ContestDefinition.decode(data, bundle: bundle) {
                 byID[contest.id] = contest
             }
         }
