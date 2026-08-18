@@ -1,12 +1,32 @@
 import Foundation
 
 /// The persisted document payload (`.qplog` = JSON of this).
+///
+/// **Schema 2** (spec §1.5): the entrant's side (`sideID`) and fixed sent
+/// exchange (`sentExchange`) replace the party-shaped `myLocation` /
+/// `exchangeName` / `exchangeMember`, which remain as computed views so the
+/// party UI and every existing test read unchanged. Documents written by
+/// earlier builds decode through `LegacyKeys`; this build writes schema 2 only,
+/// so a log saved here needs this build or later (Decision 10).
 struct ContestLog: Codable, Equatable, Sendable {
-    var schemaVersion: Int = 1
-    /// PartyDefinition id, e.g. "ksqp".
+    static let currentSchemaVersion = 2
+
+    /// Always `currentSchemaVersion` in memory: a legacy document is migrated
+    /// on decode and written back in today's shape.
+    var schemaVersion: Int = ContestLog.currentSchemaVersion
+    /// The contest id — `PartyDefinition.id` / `ContestDefinition.id`, e.g.
+    /// "ksqp". The JSON key and the Swift name are the persisted contract.
     var partyID: String
     var station: StationProfile
-    var myLocation: MyLocation
+    /// The side of the contest this entrant is on: a lowered party's `inside`
+    /// or `outside`, a v2 contest's own side ids. A stored id the contest does
+    /// not declare — a legacy `outside` on a single-side party — is resolved
+    /// at score time by `ContestDefinition.resolvedSideID(_:)`.
+    var sideID: String
+    /// My fixed sent exchange, element id → values: one value per element,
+    /// several for a county-line `location`. Per-row values (`rst`, `serial`)
+    /// never live here. Never holds an empty value or an empty list.
+    var sentExchange: [String: [String]] { didSet { sentExchange = Self.compact(sentExchange) } }
     var qsos: [QSO]
     /// Per-contest CW macros (Run + S&P sets).
     var messages: MessageSets
@@ -17,80 +37,111 @@ struct ContestLog: Codable, Equatable, Sendable {
     /// Whether the operator has been through Contest Setup for this log —
     /// new documents prompt for setup immediately.
     var setupCompleted: Bool
-    /// The operator name sent in every exchange, for parties that carry one
-    /// (NAQP rule 10: "a single name throughout the entire contest period").
-    /// Set in Contest Setup; stamped into each row's `nameSent` at logging.
-    /// Empty for every party that exchanges no name — and for documents
-    /// written before the setting existed, which decode to empty.
-    var exchangeName: String
-    /// The member-number-or-power element sent in every exchange, for parties
-    /// that carry one (Skeeter Hunt: your Skeeter number, or your output
-    /// power if you have none). Set in Contest Setup; stamped into each row's
-    /// `memberSent` at logging. Empty for every party without the element —
-    /// and for documents written before the setting existed.
-    var exchangeMember: String = ""
-    /// The self-declared entry class (`PartyDefinition.entryClasses`) this
-    /// log claims — the Skeeter Hunt's X1–X4. Stored as the class `id`; an
-    /// empty or stale id resolves to the party's first (lowest-factor) class,
-    /// so a log that never chose cannot claim a multiplier the operator did
-    /// not. Empty for every party without classes.
+    /// The self-declared entry class (`ScoreFactors.entryClasses`) this log
+    /// claims — the Skeeter Hunt's X1–X4. Stored as the class `id`; an empty
+    /// or stale id resolves to the contest's first (lowest-factor) class, so a
+    /// log that never chose cannot claim a multiplier the operator did not.
     var entryClassID: String = ""
+    /// Winter Field Day objectives claimed (`ScoreFactors.objectives` ids);
+    /// the score factor is 1 + the sum of their `om`s. Empty everywhere else.
+    var selectedObjectives: [String] = []
+    /// Field Day checklist bonuses claimed, id → count (1 for a plain bonus,
+    /// the transmitter count for a per-count one). Empty everywhere else.
+    var declaredBonuses: [String: Int] = [:]
     /// POTA park reference(s) this contest is being operated from — the
     /// *current* Contest Setup value, normalized park references. Stamped
-    /// into each row's `myPotaRefs` at logging (the `exchangeName` idiom),
-    /// so a mid-contest park change affects later rows only. Empty for
-    /// every log that is not an activation — and for documents written
-    /// before the setting existed.
+    /// into each row's `myPotaRefs` at logging, so a mid-contest park change
+    /// affects later rows only. Empty for every log that is not an activation.
     var myPotaRefs: [String] = []
     /// Whether spotting-network information — cluster or hub — was ever
     /// delivered into this contest's session. Set once and never cleared:
     /// reception is access (NAQP rule 5A(ii)'s word), access is what the
     /// Cabrillo ASSISTED/NON-ASSISTED split turns on everywhere, and a
-    /// restart mid-contest must not launder it. Recorded even while the
-    /// profile claims ASSISTED, so flipping the claim afterwards changes
-    /// the warning, not the fact.
+    /// restart mid-contest must not launder it.
     var usedSpots: Bool = false
     /// The score as computed when this log was last saved, with the rules
     /// installed then — the frozen "what I claimed" figure the Contest
-    /// Dashboard shows for past seasons, so next year's rule updates never
-    /// rewrite this year's history. Stamped by the save path
+    /// Dashboard shows for past seasons. Stamped by the save path
     /// (`stampingScoreSnapshot`) and read back from the *file* by the
-    /// dashboard; the running document never reads it. Nil for a draft, and
-    /// for logs written by builds before it existed (the dashboard then
-    /// scores the log with today's rules and says so).
+    /// dashboard; the running document never reads it. Nil for a draft.
     var scoreSnapshot: ScoreSnapshot? = nil
 
+    // MARK: Views over sideID / sentExchange (the party shape)
+
+    /// The party reading of the side and sent location: `inside` with the sent
+    /// counties, anything else as out-of-state with the first sent token.
+    /// A view: the stored state is `sideID` + `sentExchange`.
+    var myLocation: MyLocation {
+        get {
+            sideID == PartyLowering.insideID
+                ? .inState(counties: sentExchange[ExchangeElementID.location] ?? [])
+                : .outOfState(location: sentExchange[ExchangeElementID.location]?.first ?? "")
+        }
+        set {
+            sideID = Self.sideID(for: newValue)
+            sentExchange[ExchangeElementID.location] = newValue.sentExchanges
+        }
+    }
+    /// The operator name sent in every exchange (NAQP rule 10). Empty where none.
+    var exchangeName: String {
+        get { sentExchange[ExchangeElementID.name]?.first ?? "" }
+        set { sentExchange[ExchangeElementID.name] = [newValue] }
+    }
+    /// The member-number-or-power element sent in every exchange (Skeeter Hunt).
+    var exchangeMember: String {
+        get { sentExchange[ExchangeElementID.member]?.first ?? "" }
+        set { sentExchange[ExchangeElementID.member] = [newValue] }
+    }
+
+    /// The side a party location puts an entrant on. A no-home-region party's
+    /// forced out-of-state reads `outside`, which `resolvedSideID` maps to its
+    /// single `all` side.
+    static func sideID(for location: MyLocation) -> String {
+        location.isInState ? PartyLowering.insideID : PartyLowering.outsideID
+    }
+
     /// The assisted-category warning's one predicate: spotting information
-    /// reached this log while Contest Setup claims NON-ASSISTED. Universal
-    /// Cabrillo, no party involved; everything visible hangs off this.
+    /// reached this log while Contest Setup claims NON-ASSISTED.
     var spotsContradictNonAssistedClaim: Bool {
         usedSpots && station.categoryAssisted == .nonAssisted
     }
 
-    /// The QSO number to send for the next contact, for parties whose exchange
-    /// carries one. Derived from the highest number already sent rather than
-    /// from the row count, because a county-line contact expands into several
-    /// rows that all share one number. Deleting a QSO deliberately does *not*
-    /// renumber the rest: those numbers went out on the air and the other
-    /// station logged them, so a gap in the sequence is the honest record.
+    /// The QSO number to send for the next contact, for contests whose
+    /// exchange carries one. Derived from the highest number already sent
+    /// rather than from the row count, because a county-line contact expands
+    /// into several rows that all share one number. Deleting a QSO deliberately
+    /// does *not* renumber the rest: those numbers went out on the air.
     var nextSerial: Int {
         (qsos.compactMap(\.serialSent).max() ?? 0) + 1
     }
 
-    /// The rule for a log with no stored mode: the in-state station is the
-    /// multiplier everyone is chasing, so it runs; the out-of-state station
-    /// is doing the chasing, so it searches. The single copy of that rule —
-    /// `derivedOperatingMode`, the memberwise init, and `init(from:)` all
-    /// need it, and unlike an instance computed property, a `static func`
-    /// takes no `self`, so it is callable from both inits before `self` is
-    /// fully initialized.
-    private static func deriveOperatingMode(from location: MyLocation) -> OperatingMode {
-        location.isInState ? .run : .searchPounce
+    /// The category axes as an `OperatingTimeRule.appliesTo` /
+    /// `Categories` reads them — Cabrillo raw values, keyed by axis. `mode` is
+    /// derived from the rows exactly as the Cabrillo header derives it.
+    var categoryValues: [String: String] {
+        [
+            "operator": station.categoryOperator.rawValue,
+            "assisted": station.categoryAssisted.rawValue,
+            "power": station.categoryPower.rawValue,
+            "station": station.categoryStation.rawValue,
+            "transmitter": station.categoryTransmitter.rawValue,
+            "band": station.categoryBand ?? "ALL",
+            "mode": CabrilloExporter.categoryMode(qsos),
+            "overlay": station.categoryOverlay ?? "",
+            "time": station.categoryTime ?? "",
+        ]
+    }
+
+    /// The rule for a log with no stored mode: the first-listed side of a
+    /// party — inside, the multiplier everyone is chasing — runs; every other
+    /// side searches. Static so both inits can call it before `self` exists.
+    private static func deriveOperatingMode(sideID: String) -> OperatingMode {
+        sideID == PartyLowering.insideID ? .run : .searchPounce
     }
 
     /// The mode this log should start in when none is stored.
     var derivedOperatingMode: OperatingMode {
-        Self.deriveOperatingMode(from: myLocation)
+        Self.deriveOperatingMode(sideID: sideID)
     }
 
     init(
@@ -108,57 +159,100 @@ struct ContestLog: Codable, Equatable, Sendable {
     ) {
         self.partyID = partyID
         self.station = station
-        self.myLocation = myLocation
+        self.sideID = Self.sideID(for: myLocation)
+        self.sentExchange = Self.compact([
+            ExchangeElementID.location: myLocation.sentExchanges,
+            ExchangeElementID.name: [exchangeName],
+            ExchangeElementID.member: [exchangeMember],
+        ])
         self.qsos = qsos
         self.messages = messages
-        self.operatingMode = operatingMode ?? Self.deriveOperatingMode(from: myLocation)
+        self.operatingMode = operatingMode ?? Self.deriveOperatingMode(sideID: Self.sideID(for: myLocation))
         self.setupCompleted = setupCompleted
-        self.exchangeName = exchangeName
-        self.exchangeMember = exchangeMember
         self.entryClassID = entryClassID
         self.myPotaRefs = myPotaRefs
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case schemaVersion, partyID, station, myLocation, qsos, messages, operatingMode, setupCompleted
-        case exchangeName, exchangeMember, entryClassID, usedSpots, myPotaRefs, scoreSnapshot
+    /// Drops empty values and then empty lists — the map's one invariant.
+    static func compact(_ map: [String: [String]]) -> [String: [String]] {
+        map.compactMapValues { values in
+            let kept = values.filter { !$0.isEmpty }
+            return kept.isEmpty ? nil : kept
+        }.filter { !$0.key.isEmpty }
     }
+
+    // MARK: Codable — schema 2 written, schema 1 read
+
+    private enum CodingKeys: String, CodingKey {
+        case schemaVersion, partyID, station, sideID, sentExchange, qsos, messages, operatingMode, setupCompleted
+        case entryClassID, selectedObjectives, declaredBonuses, usedSpots, myPotaRefs, scoreSnapshot
+    }
+
+    private enum LegacyKeys: String, CodingKey { case myLocation, exchangeName, exchangeMember }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        schemaVersion = try c.decode(Int.self, forKey: .schemaVersion)
+        _ = try c.decode(Int.self, forKey: .schemaVersion)   // present in every document; the shape is read from the keys
+        schemaVersion = Self.currentSchemaVersion
         partyID = try c.decode(String.self, forKey: .partyID)
         station = try c.decode(StationProfile.self, forKey: .station)
-        myLocation = try c.decode(MyLocation.self, forKey: .myLocation)
         qsos = try c.decode([QSO].self, forKey: .qsos)
+        if c.contains(.sideID) {
+            sideID = try c.decode(String.self, forKey: .sideID)
+            sentExchange = Self.compact(try c.decodeIfPresent([String: [String]].self, forKey: .sentExchange) ?? [:])
+        } else {
+            // Schema 1: the party location, name and member element.
+            let l = try decoder.container(keyedBy: LegacyKeys.self)
+            let location = try l.decode(MyLocation.self, forKey: .myLocation)
+            sideID = Self.sideID(for: location)
+            sentExchange = Self.compact([
+                ExchangeElementID.location: location.sentExchanges,
+                ExchangeElementID.name: [try l.decodeIfPresent(String.self, forKey: .exchangeName) ?? ""],
+                ExchangeElementID.member: [try l.decodeIfPresent(String.self, forKey: .exchangeMember) ?? ""],
+            ])
+        }
         // Documents written before per-contest macros existed get the defaults.
         messages = try c.decodeIfPresent(MessageSets.self, forKey: .messages) ?? .standard
-        // Logs written before the mode was persisted derive one from location
+        // Logs written before the mode was persisted derive one from the side
         // rather than defaulting an out-of-state operator into Run.
         operatingMode = try c.decodeIfPresent(OperatingMode.self, forKey: .operatingMode)
-            ?? Self.deriveOperatingMode(from: myLocation)
+            ?? Self.deriveOperatingMode(sideID: sideID)
         // Legacy docs in active use (callsign set) count as already set up.
         setupCompleted = try c.decodeIfPresent(Bool.self, forKey: .setupCompleted)
             ?? !station.callsign.isEmpty
-        // Documents written before name exchanges existed carry no name —
-        // and likewise for the member element and the entry class.
-        exchangeName = try c.decodeIfPresent(String.self, forKey: .exchangeName) ?? ""
-        exchangeMember = try c.decodeIfPresent(String.self, forKey: .exchangeMember) ?? ""
         entryClassID = try c.decodeIfPresent(String.self, forKey: .entryClassID) ?? ""
-        // Documents written before the fact was recorded used no spots —
-        // which is how sponsors read logs that predate the header too.
+        selectedObjectives = try c.decodeIfPresent([String].self, forKey: .selectedObjectives) ?? []
+        declaredBonuses = try c.decodeIfPresent([String: Int].self, forKey: .declaredBonuses) ?? [:]
+        // Documents written before the fact was recorded used no spots.
         usedSpots = try c.decodeIfPresent(Bool.self, forKey: .usedSpots) ?? false
-        // Documents written before POTA support carry no parks.
         myPotaRefs = try c.decodeIfPresent([String].self, forKey: .myPotaRefs) ?? []
-        // Documents written before the score rode along carry none.
         scoreSnapshot = try c.decodeIfPresent(ScoreSnapshot.self, forKey: .scoreSnapshot)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(Self.currentSchemaVersion, forKey: .schemaVersion)
+        try c.encode(partyID, forKey: .partyID)
+        try c.encode(station, forKey: .station)
+        try c.encode(sideID, forKey: .sideID)
+        try c.encode(sentExchange, forKey: .sentExchange)
+        try c.encode(qsos, forKey: .qsos)
+        try c.encode(messages, forKey: .messages)
+        try c.encode(operatingMode, forKey: .operatingMode)
+        try c.encode(setupCompleted, forKey: .setupCompleted)
+        try c.encode(entryClassID, forKey: .entryClassID)
+        if !selectedObjectives.isEmpty { try c.encode(selectedObjectives, forKey: .selectedObjectives) }
+        if !declaredBonuses.isEmpty { try c.encode(declaredBonuses, forKey: .declaredBonuses) }
+        try c.encode(usedSpots, forKey: .usedSpots)
+        try c.encode(myPotaRefs, forKey: .myPotaRefs)
+        try c.encodeIfPresent(scoreSnapshot, forKey: .scoreSnapshot)
     }
 
     /// The copy the save path writes: `scoreSnapshot` set to this log's
     /// score as of now — the engine's figures when the party's rules are
     /// installed (`rules`), counts only when they are not — or nil for a
     /// draft (Contest Setup unfinished, or nothing logged yet). Everything
-    /// else is untouched.
+    /// else is untouched. (Task 11 moves this onto `ContestCatalog`.)
     func stampingScoreSnapshot(
         rules: (String) -> PartyDefinition? = { PartyCatalog.party(id: $0) }
     ) -> ContestLog {

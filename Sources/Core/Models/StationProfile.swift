@@ -20,12 +20,26 @@ struct StationProfile: Codable, Equatable, Hashable, Sendable {
     var categoryTransmitter: CategoryTransmitter = .one
     /// Maidenhead grid square (Cabrillo `GRID-LOCATOR:`), e.g. EM13LE. Optional.
     var gridLocator: String = ""
+    /// Cabrillo `CATEGORY-BAND:` where a contest admits single-band entries
+    /// (`Categories.band`); nil = `ALL`, which is what every party writes.
+    var categoryBand: String? = nil
+    /// Cabrillo `CATEGORY-OVERLAY:` (CQ WW CLASSIC/ROOKIE/YOUTH, WPX TB-WIRES…);
+    /// nil = no overlay line. Nothing bundled sets it yet.
+    var categoryOverlay: String? = nil
+    /// Cabrillo `CATEGORY-TIME:`; nil = no line. Nothing bundled sets it yet.
+    var categoryTime: String? = nil
+    /// The entrant's own fixed exchange values remembered across contests —
+    /// `section`, `zone`, `check`, `state`, `name`, `power`, `grid`… keyed by
+    /// exchange element id (spec §1.5). Setup seeds a contest's sent elements
+    /// from here; the Cabrillo `LOCATION:` header falls back to `state` /
+    /// `section` when a contest has no location element.
+    var exchangeDefaults: [String: String] = [:]
 
     private enum CodingKeys: String, CodingKey {
         case callsign, name, email, address, city, stateProvince, postalCode
         case country, club, operators
         case categoryOperator, categoryAssisted, categoryPower, categoryStation, categoryTransmitter
-        case gridLocator
+        case gridLocator, categoryBand, categoryOverlay, categoryTime, exchangeDefaults
     }
 
     enum CategoryOperator: String, Codable, CaseIterable, Sendable {
@@ -91,6 +105,10 @@ extension StationProfile {
         copy.club = Self.folded(club)
         copy.operators = Self.folded(operators)
         copy.gridLocator = Self.folded(gridLocator)
+        copy.categoryBand = categoryBand.map(Self.folded)
+        copy.categoryOverlay = categoryOverlay.map(Self.folded)
+        copy.categoryTime = categoryTime.map(Self.folded)
+        copy.exchangeDefaults = exchangeDefaults.mapValues(Self.folded)
         return copy
     }
 
@@ -123,5 +141,36 @@ extension StationProfile {
         categoryStation = try c.decodeIfPresent(CategoryStation.self, forKey: .categoryStation) ?? .fixed
         categoryTransmitter = try c.decodeIfPresent(CategoryTransmitter.self, forKey: .categoryTransmitter) ?? .one
         gridLocator = try c.decodeIfPresent(String.self, forKey: .gridLocator) ?? ""
+        categoryBand = try c.decodeIfPresent(String.self, forKey: .categoryBand)
+        categoryOverlay = try c.decodeIfPresent(String.self, forKey: .categoryOverlay)
+        categoryTime = try c.decodeIfPresent(String.self, forKey: .categoryTime)
+        exchangeDefaults = try c.decodeIfPresent([String: String].self, forKey: .exchangeDefaults) ?? [:]
+    }
+
+    /// Every long-standing key is always written (as the synthesized encoder
+    /// did); the four additions only when set, so a profile that never used
+    /// them encodes byte-for-byte as before.
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(callsign, forKey: .callsign)
+        try c.encode(name, forKey: .name)
+        try c.encode(email, forKey: .email)
+        try c.encode(address, forKey: .address)
+        try c.encode(city, forKey: .city)
+        try c.encode(stateProvince, forKey: .stateProvince)
+        try c.encode(postalCode, forKey: .postalCode)
+        try c.encode(country, forKey: .country)
+        try c.encode(club, forKey: .club)
+        try c.encode(operators, forKey: .operators)
+        try c.encode(categoryOperator, forKey: .categoryOperator)
+        try c.encode(categoryAssisted, forKey: .categoryAssisted)
+        try c.encode(categoryPower, forKey: .categoryPower)
+        try c.encode(categoryStation, forKey: .categoryStation)
+        try c.encode(categoryTransmitter, forKey: .categoryTransmitter)
+        try c.encode(gridLocator, forKey: .gridLocator)
+        try c.encodeIfPresent(categoryBand, forKey: .categoryBand)
+        try c.encodeIfPresent(categoryOverlay, forKey: .categoryOverlay)
+        try c.encodeIfPresent(categoryTime, forKey: .categoryTime)
+        if !exchangeDefaults.isEmpty { try c.encode(exchangeDefaults, forKey: .exchangeDefaults) }
     }
 }

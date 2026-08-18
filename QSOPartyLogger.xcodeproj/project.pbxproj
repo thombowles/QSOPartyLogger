@@ -263,6 +263,7 @@
 		91E29909EA0D6171547CAB2D /* MultiplierClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861DB04574AAEACF21FD47A6 /* MultiplierClass.swift */; };
 		92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009080AA1C81D0A7D94FA410 /* ModeClass.swift */; };
 		935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A13C34B4765F4AE9FB37456 /* PotaParkClientTests.swift */; };
+		943FE69A83BEC05A8731A5E9 /* ContestLogShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0011E6F647259AD324816CFB /* ContestLogShapeTests.swift */; };
 		94CC96D5AAA83B99FB0896CB /* SolarGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828CCCA6AC98404000B6406 /* SolarGeometry.swift */; };
 		94D0B869AFD16C6EB5AFD045 /* VoiceClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B06BAA5938A3F067E0DC2D /* VoiceClip.swift */; };
 		95EA505B953FE90BFA90644C /* ContestRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4488EE3D143E1A73A7B51942 /* ContestRules.swift */; };
@@ -487,6 +488,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0011E6F647259AD324816CFB /* ContestLogShapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestLogShapeTests.swift; sourceTree = "<group>"; };
 		009080AA1C81D0A7D94FA410 /* ModeClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeClass.swift; sourceTree = "<group>"; };
 		0114485946B808B02EBF704A /* VoiceStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceStoreTests.swift; sourceTree = "<group>"; };
 		019DA95DE2A4D5A20E63D7B0 /* KeyDiagnosticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyDiagnosticsTests.swift; sourceTree = "<group>"; };
@@ -1153,6 +1155,7 @@
 				594AE429FF2259B209DB7986 /* ContestCatalogTests.swift */,
 				BFC328E9BE6A3A09A977CCEB /* ContestDefinitionTests.swift */,
 				577F1C633E3DFC5695E569C5 /* ContestLogScoreSnapshotTests.swift */,
+				0011E6F647259AD324816CFB /* ContestLogShapeTests.swift */,
 				F7FDA83F14632158930C48B9 /* ContestRulesTests.swift */,
 				FBFCB0433B452F01266FC7AC /* CountyGroupingTests.swift */,
 				F641A75A1AA47DE65ED133B9 /* CountyLineExpanderTests.swift */,
@@ -1901,6 +1904,7 @@
 				0999DCB8DCD5A2716C70933E /* ContestCatalogTests.swift in Sources */,
 				FB9AFC94FEC15A253C4436E6 /* ContestDefinitionTests.swift in Sources */,
 				0FD96A76FF5F57A951D3B1BE /* ContestLogScoreSnapshotTests.swift in Sources */,
+				943FE69A83BEC05A8731A5E9 /* ContestLogShapeTests.swift in Sources */,
 				50C2B2CEDFC0587659FEE59A /* ContestNoticeTests.swift in Sources */,
 				6E088F38D7D40B9432EBD501 /* ContestRulesTests.swift in Sources */,
 				2E637491E59BD85BC0F975E9 /* CountyGroupingTests.swift in Sources */,
