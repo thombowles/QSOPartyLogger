@@ -210,4 +210,28 @@ final class PartyCatalogTests: XCTestCase {
         let decoded = try JSONDecoder().decode([BonusRule].self, from: data)
         XCTAssertEqual(decoded, rules)
     }
+
+    /// A party file that passes the v1 checks but cannot lower into the model
+    /// is refused at load with the model's own error, not scored silently.
+    func testDecodeRefusesAPartyThatDoesNotLower() throws {
+        // An alias that targets a state the party excludes: the v1 schema
+        // allows it, the model's token set cannot express it.
+        let json = """
+        {"schemaVersion":1,"id":"nl","name":"No Lower","cabrilloContest":"NL","homeState":"KS","countyAbbrLength":3,
+         "counties":[{"abbr":"MRN","name":"Marion"}],"excludedStateTokens":["MD"],"stateAliases":{"DC":"MD"},
+         "validBands":["20m"],"allowedModes":["cw"],"points":{"phone":1,"cw":1,"digital":1},"dupeScope":"bandMode",
+         "multipliers":{"inState":{"classes":["state"],"homeStateCountsViaCounty":false,"countScope":"once"},
+                        "outState":{"classes":["county"],"homeStateCountsViaCounty":false,"countScope":"once"}},
+         "bonuses":[]}
+        """
+        XCTAssertThrowsError(try PartyCatalog.decode(Data(json.utf8))) { error in
+            XCTAssertTrue(error is ContestValidationError, "\(error)")
+        }
+    }
+
+    func testBundledLoadIsMemoised() {
+        let a = PartyCatalog.loadBundled(), b = PartyCatalog.loadBundled()
+        XCTAssertEqual(a.map(\.id), b.map(\.id))
+        XCTAssertEqual(a.count, 50)
+    }
 }

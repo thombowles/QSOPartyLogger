@@ -319,4 +319,51 @@ final class PartyLoweringTests: XCTestCase {
             XCTAssertFalse(sets.contains("counties"), id)
         }
     }
+
+    // MARK: Engine-switch additions
+
+    /// Today's `collidesWithDXCC` gate is `rule.dxCountsEntities`; the model
+    /// carries it as `callsignOverrides` on the entity-counting dx resolver.
+    func testCallsignOverridesFollowDXCountsEntitiesPerSide() throws {
+        for p in PartyCatalog.loadBundled() {
+            let c = try PartyLowering.lower(p)
+            let dx = c.multipliers.first { $0.id == "dx" }
+            for side in c.sides.map(\.id) {
+                // The v1 rule that governs the side (`PartyLowering.rule`): only `inside` takes `inState`.
+                let rule = side == "inside" ? p.multipliers.inState : p.multipliers.outState
+                let entityResolvers = (dx?.resolvers ?? []).filter {
+                    $0.kind == .dxccEntity && $0.countEntities && $0.applies(side: side, call: "X")
+                }
+                if rule.dxCountsEntities && !p.usesSections {
+                    XCTAssertEqual(entityResolvers.first?.callsignOverrides, ["states", "provinces"], "\(p.id) \(side)")
+                } else {
+                    XCTAssertTrue(entityResolvers.allSatisfy { $0.callsignOverrides == nil }, "\(p.id) \(side)")
+                }
+            }
+        }
+    }
+
+    func testReportColumnIsSetExactlyForThePartiesWithNoReportNumberOrName() throws {
+        var flagged: [String] = []
+        for p in PartyCatalog.loadBundled() where try PartyLowering.lower(p).cabrillo.reportColumn { flagged.append(p.id) }
+        XCTAssertEqual(flagged.sorted(), ["idqp", "mdc", "ncqp", "wiqp"])
+        for p in PartyCatalog.loadBundled() {
+            XCTAssertEqual(try PartyLowering.lower(p).cabrillo.reportColumn,
+                           !p.exchangeIncludesRST && !p.exchangeIncludesSerial && !p.exchangeIncludesName, p.id)
+        }
+    }
+
+    func testLoweredIsCachedByValue() throws {
+        let p = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        let a = PartyLowering.lowered(p), b = PartyLowering.lowered(p)
+        XCTAssertEqual(a, b)
+        XCTAssertEqual(a, try PartyLowering.lower(p))
+        // A different value under the same id is not served from the cache.
+        let url = try XCTUnwrap(Bundle.main.url(forResource: "ksqp", withExtension: "json", subdirectory: "Parties"))
+        var json = try XCTUnwrap(try JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any])
+        json["name"] = "Kansas, renamed"
+        let renamed = try PartyCatalog.decode(try JSONSerialization.data(withJSONObject: json))
+        XCTAssertEqual(PartyLowering.lowered(renamed).name, "Kansas, renamed")
+        XCTAssertEqual(PartyLowering.lowered(p).name, p.name)
+    }
 }

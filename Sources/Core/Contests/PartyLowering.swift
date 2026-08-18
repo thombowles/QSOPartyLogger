@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 /// Lowers a QSO-party authoring definition (schema v1) into the general model.
 /// Pure and total over the bundled catalogue: `PartyLoweringTests` proves every
@@ -28,11 +29,38 @@ enum PartyLowering {
             sideRules: sideRules(for: p, sideIDs: sideIDs), bonuses: p.bonuses,
             scoreFactors: scoreFactors(for: p),
             cabrillo: CabrilloSpec(contest: p.cabrilloContest, location: p.hasHomeRegion ? .state : .entrantToken,
-                                   homeLocation: p.hasHomeRegion ? p.homeState : nil),
+                                   homeLocation: p.hasHomeRegion ? p.homeState : nil,
+                                   // The generic Cabrillo template's ex1 slot: today's exporter always writes
+                                   // one (name → number → report), so a party with none of the three writes the report.
+                                   reportColumn: !p.exchangeIncludesRST && !p.exchangeIncludesSerial && !p.exchangeIncludesName),
             sources: ContestSources(hubSpots: p.hubSpots, callHistory: p.callHistory, oneByOne: p.oneByOne, combines: p.combines)
         )
         try contest.validate()
         return contest
+    }
+
+    // MARK: Cache
+
+    private static let log = Logger(subsystem: "org.b5n.QSOPartyLogger", category: "contests")
+    private static let cache = OSAllocatedUnfairLock<[String: (party: PartyDefinition, contest: ContestDefinition)]>(initialState: [:])
+
+    /// `lower(_:)`, memoised by party id and checked by value — the score
+    /// sidebar and the NEW MULT badge lower on every keystroke through the
+    /// party overloads, and lowering builds and validates every token set.
+    ///
+    /// Non-throwing on purpose: every `PartyDefinition` the app holds came
+    /// through `PartyCatalog.decode`, which lowers and validates, so a value
+    /// that does not lower here is a programming error, not a data error.
+    static func lowered(_ p: PartyDefinition) -> ContestDefinition {
+        if let hit = cache.withLock({ $0[p.id] }), hit.party == p { return hit.contest }
+        do {
+            let contest = try lower(p)
+            cache.withLock { $0[p.id] = (p, contest) }
+            return contest
+        } catch {
+            log.fault("party \(p.id, privacy: .public) does not lower: \(error.localizedDescription, privacy: .public)")
+            preconditionFailure("party \(p.id) does not lower — PartyCatalog.decode admits only parties that do: \(error)")
+        }
     }
 
     // MARK: Sides
@@ -168,7 +196,10 @@ enum PartyLowering {
                 }
                 if !entitySides.isEmpty {
                     resolvers.append(Resolver(kind: .dxccEntity, element: "location", from: .receivedTokenOrCallsign, list: .arrl,
-                                              countEntities: true, sides: entitySides.count == sideIDs.count ? nil : entitySides))
+                                              countEntities: true, sides: entitySides.count == sideIDs.count ? nil : entitySides,
+                                              // Today's `collidesWithDXCC`: only where entities are told apart, and
+                                              // never in a sections party, whose state/province tables are not consulted.
+                                              callsignOverrides: p.usesSections ? nil : ["states", "provinces"]))
                 }
                 // A cap only means something for a side that counts the class.
                 var caps: [String: Int] = [:]

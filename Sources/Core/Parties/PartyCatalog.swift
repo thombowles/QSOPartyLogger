@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 /// Loads party definitions from the app bundle and the user's party folder.
 enum PartyCatalog {
@@ -9,24 +10,37 @@ enum PartyCatalog {
             .appendingPathComponent("QSOPartyLogger/Parties", isDirectory: true)
     }
 
+    /// Decodes, validates the v1 shape, and proves the party lowers into the
+    /// general model — a file that cannot lower is refused here with the
+    /// model's error, never at scoring time.
     static func decode(_ data: Data) throws -> PartyDefinition {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         let party = try decoder.decode(PartyDefinition.self, from: data)
         try party.validate()
+        _ = try PartyLowering.lower(party)
         return party
     }
 
+    private static let log = Logger(subsystem: "org.b5n.QSOPartyLogger", category: "catalog")
+    private static let bundledCache = OSAllocatedUnfairLock<[URL: [PartyDefinition]]>(initialState: [:])
+
+    /// The bundle's parties, decoded once per bundle (its files never change
+    /// while the app runs). A file that fails is logged — it used to vanish
+    /// from the picker without a word — and skipped.
     static func loadBundled(bundle: Bundle = .main) -> [PartyDefinition] {
-        guard let urls = bundle.urls(forResourcesWithExtension: "json", subdirectory: "Parties") else {
-            return []
-        }
-        return urls
-            .compactMap { url in
-                guard let data = try? Data(contentsOf: url) else { return nil }
-                return try? decode(data)
+        if let cached = bundledCache.withLock({ $0[bundle.bundleURL] }) { return cached }
+        guard let urls = bundle.urls(forResourcesWithExtension: "json", subdirectory: "Parties") else { return [] }
+        let parties = urls
+            .compactMap { url -> PartyDefinition? in
+                do { return try decode(try Data(contentsOf: url)) } catch {
+                    log.error("bundled party \(url.lastPathComponent, privacy: .public) failed to load: \(error.localizedDescription, privacy: .public)")
+                    return nil
+                }
             }
             .sorted { $0.name < $1.name }
+        bundledCache.withLock { $0[bundle.bundleURL] = parties }
+        return parties
     }
 
     /// User-supplied parties; failures are returned so the UI can explain bad files.
