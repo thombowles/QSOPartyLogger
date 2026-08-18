@@ -42,7 +42,13 @@ enum ContestCatalog {
             .sorted { $0.lastPathComponent < $1.lastPathComponent }
             .map { url in
                 do { return (url, .success(try ContestDefinition.decode(try Data(contentsOf: url)))) }
-                catch { return (url, .failure(error)) }
+                catch {
+                    // Logged as well as returned, like the bundled and user
+                    // party loaders: a file that stops loading must never
+                    // vanish from the catalogue without a word.
+                    log.error("user contest \(url.lastPathComponent, privacy: .public) failed to load: \(error.localizedDescription, privacy: .public)")
+                    return (url, .failure(error))
+                }
             }
     }
 

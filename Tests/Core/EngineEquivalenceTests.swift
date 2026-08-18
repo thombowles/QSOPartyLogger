@@ -205,9 +205,26 @@ struct GoldenCase: Codable, Equatable {
     let breakdown: GoldenBreakdown
 }
 
+/// The corpus, scored two ways.
+///
+/// **Read this before trusting a green run.** The engine that shipped before
+/// the switch no longer exists in the code: `score(log:party:)` is now a
+/// bridge that lowers (through `PartyLowering.lowered`'s cache) and calls
+/// `score(log:contest:)`. So the three "agree" tests below no longer compare
+/// two implementations — they compare the **cached lowering** against a fresh
+/// `PartyLowering.lower`, which is a real check (it caught a resolved-sets memo
+/// serving another contest's sets) but not an independent oracle.
+///
+/// The independent oracle is `testEveryPartyMatchesTheGoldenBreakdowns`:
+/// `Tests/Fixtures/Equivalence/engine-golden.json` holds 288 whole
+/// `ScoreBreakdown`s recorded from the pre-switch engine, before it was
+/// deleted. That file is what makes a scoring change show up as a diff, and it
+/// is re-recorded only for a deliberate, sponsor-backed change to one party —
+/// never to make a red run green.
 final class EngineEquivalenceTests: XCTestCase {
 
-    /// The whole corpus, every party, old engine == model engine.
+    /// Every corpus log, scored through the party bridge and through the model
+    /// directly: the cached lowering must equal a fresh one, field for field.
     func testEveryPartyScoresIdenticallyThroughTheModel() throws {
         var compared = 0
         for p in PartyCatalog.loadBundled() {
@@ -229,7 +246,8 @@ final class EngineEquivalenceTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(compared, 250, "50 parties × 3 seeds × 1–2 sides")
     }
 
-    /// The NEW MULT question, asked of every probe token on the first band in every mode.
+    /// The NEW MULT question, asked of every probe token on the first band in
+    /// every mode — the party entry point and the model's must answer alike.
     func testWouldAddMultiplierAgreesOnEveryProbe() throws {
         for p in PartyCatalog.loadBundled() {
             let contest = try PartyLowering.lower(p)
@@ -252,7 +270,7 @@ final class EngineEquivalenceTests: XCTestCase {
         }
     }
 
-    /// The two sidebar predicates the score also pays on.
+    /// The two sidebar predicates the score also pays on, through both entry points.
     func testDesignatedSweepAndCallAreaSumAgree() throws {
         for p in PartyCatalog.loadBundled() {
             let contest = try PartyLowering.lower(p)
