@@ -41,7 +41,7 @@
 - One test class: `set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' -only-testing:QSOPartyLoggerTests/<ClassName> 2>&1 | grep -E "Test Case|Executed|error:|BUILD" | tail -40`
 - Full suite (end of every task that touches shared code): `set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' 2>&1 | grep -E "Executed [0-9]+ tests|error:|failed" | tail -5` — expected `Executed N tests, with 0 failures` where N ≥ 2971 (the measured baseline) and grows with each task. Record the exact N in the commit message.
 - Tests never touch the network or hardware (Article 5). Bundled resources are read through `Bundle.main` (the test bundle is hosted inside the app); test fixtures through `Bundle(for: Self.self)`.
-- Recording steps (fixtures, golden) run one test with an environment variable: `xcodebuild test … -only-testing:QSOPartyLoggerTests/<Class>/<test> TEST_RUNNER_<VAR>=1` (xcodebuild forwards `TEST_RUNNER_`-prefixed variables to the test process). A recording test writes into the source tree at a path derived from `#filePath` and is skipped when the variable is absent.
+- Recording steps (fixtures, golden) run one test with an environment variable: `xcodebuild test … -only-testing:QSOPartyLoggerTests/<Class>/<test> TEST_RUNNER_<VAR>=1` (xcodebuild forwards `TEST_RUNNER_`-prefixed variables to the test process). **The test host is sandboxed** (`com.apple.security.app-sandbox` in `project.yml`), so a test cannot write into the source tree: a recording test writes into `FileManager.default.temporaryDirectory` — under the sandbox that is `~/Library/Containers/org.b5n.QSOPartyLogger/Data/tmp/` — in a `QPLRecord/<what>` folder, and the shell copies the files into `Tests/Fixtures/…` afterwards. A recording test is skipped when the variable is absent.
 - Commit after every green step with the message shown; every commit message ends with `Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>`.
 - Constitution Article 4: this plan adds no party and changes no score, no export byte and no saved figure for any bundled party. Article 6: one commit per task (a task that changes both a model type and its lowering is one structural refactor). Article 8: the README test count is updated in the last task.
 - **Do not touch** `ScoreEngine.score(log:party:)`'s body, `CabrilloExporter.export(log:party:score:)` or `AdifExporter.export(log:party:)` until Task 10/12 says so — Tasks 2 and 9 need today's implementations alive to record and compare against.
@@ -266,9 +266,12 @@ import XCTest
 /// the engine switch. Re-record only with `TEST_RUNNER_QPL_RECORD_EXPORTS=1`,
 /// and only when a sponsor's own template says the bytes should change.
 final class ExportByteIdentityTests: XCTestCase {
-    static let exportsDirectory = URL(fileURLWithPath: #filePath)
-        .deletingLastPathComponent().deletingLastPathComponent()
-        .appendingPathComponent("Fixtures/Exports", isDirectory: true)
+    /// Where the recording test writes: the sandboxed test host cannot touch
+    /// the source tree, so the files land in its container's temp folder
+    /// (`~/Library/Containers/org.b5n.QSOPartyLogger/Data/tmp/QPLRecord/Exports`)
+    /// and the shell copies them into `Tests/Fixtures/Exports`.
+    static let recordDirectory = FileManager.default.temporaryDirectory
+        .appendingPathComponent("QPLRecord/Exports", isDirectory: true)
 
     private func fixtureText(_ name: String, _ ext: String) throws -> String {
         let url = try XCTUnwrap(Bundle(for: Self.self).url(forResource: name, withExtension: ext),
@@ -276,17 +279,19 @@ final class ExportByteIdentityTests: XCTestCase {
         return try String(contentsOf: url, encoding: .utf8)
     }
 
-    /// Writes every fixture's Cabrillo and ADIF into the source tree.
+    /// Writes every fixture's Cabrillo and ADIF into `recordDirectory`.
     func testRecordFixturesWhenAsked() throws {
         try XCTSkipUnless(ProcessInfo.processInfo.environment["QPL_RECORD_EXPORTS"] == "1", "recording is opt-in")
-        try FileManager.default.createDirectory(at: Self.exportsDirectory, withIntermediateDirectories: true)
+        try? FileManager.default.removeItem(at: Self.recordDirectory)
+        try FileManager.default.createDirectory(at: Self.recordDirectory, withIntermediateDirectories: true)
         for f in try ExportFixtures.all() {
             let score = ScoreEngine.score(log: f.log, party: f.party)
             try CabrilloExporter.export(log: f.log, party: f.party, score: score)
-                .write(to: Self.exportsDirectory.appendingPathComponent("\(f.name).log"), atomically: true, encoding: .utf8)
+                .write(to: Self.recordDirectory.appendingPathComponent("\(f.name).log"), atomically: true, encoding: .utf8)
             try AdifExporter.export(log: f.log, party: f.party)
-                .write(to: Self.exportsDirectory.appendingPathComponent("\(f.name).adi"), atomically: true, encoding: .utf8)
+                .write(to: Self.recordDirectory.appendingPathComponent("\(f.name).adi"), atomically: true, encoding: .utf8)
         }
+        print("QPL_RECORD_DIR=\(Self.recordDirectory.path)")
     }
 
     func testCabrilloIsByteIdenticalToTheFixtures() throws {
@@ -311,12 +316,16 @@ final class ExportByteIdentityTests: XCTestCase {
 }
 ```
 
-- [ ] **Step 3: Record**
+- [ ] **Step 3: Record, then copy out of the sandbox container**
 
 ```bash
-mkdir -p Tests/Fixtures/Exports && xcodegen generate && set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' -only-testing:QSOPartyLoggerTests/ExportByteIdentityTests/testRecordFixturesWhenAsked TEST_RUNNER_QPL_RECORD_EXPORTS=1 2>&1 | grep -E "Test Case|Executed|error:" | tail -5 && ls Tests/Fixtures/Exports
+xcodegen generate && set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' -only-testing:QSOPartyLoggerTests/ExportByteIdentityTests/testRecordFixturesWhenAsked TEST_RUNNER_QPL_RECORD_EXPORTS=1 2>&1 | grep -E "Test Case|Executed|error:|QPL_RECORD_DIR" | tail -6
 ```
-Expected: the test passes (not skipped) and `ls` shows 20 files (`<name>.log` and `<name>.adi` for the ten names). Open one `.log` and one `.adi` and check they read as a real Cabrillo header + QSO lines and a real ADIF (Article 8: look at the artefact you recorded). If the recording test is *skipped*, the environment variable did not reach the test process — try `env TEST_RUNNER_QPL_RECORD_EXPORTS=1 xcodebuild …` and, failing that, report it rather than editing the skip.
+Expected: the test passes (not skipped) and prints `QPL_RECORD_DIR=…/Containers/org.b5n.QSOPartyLogger/Data/tmp/QPLRecord/Exports`. Then:
+```bash
+mkdir -p Tests/Fixtures/Exports && cp ~/Library/Containers/org.b5n.QSOPartyLogger/Data/tmp/QPLRecord/Exports/* Tests/Fixtures/Exports/ && ls Tests/Fixtures/Exports | wc -l && ls Tests/Fixtures/Exports
+```
+Expected: 20 files (`<name>.log` and `<name>.adi` for the ten names). Open one `.log` and one `.adi` and check they read as a real Cabrillo header + QSO lines and a real ADIF (Article 8: look at the artefact you recorded). If the recording test is *skipped*, the environment variable did not reach the test process — try `env TEST_RUNNER_QPL_RECORD_EXPORTS=1 xcodebuild …` and, failing that, report it rather than editing the skip. If the printed directory differs from the container path above, copy from the printed one.
 
 - [ ] **Step 4: Regenerate (new fixture files) and run the class**
 
@@ -3921,9 +3930,10 @@ struct GoldenCase: Codable, Equatable {
 ```
 And inside `EngineEquivalenceTests`:
 ```swift
-    static let goldenURL = URL(fileURLWithPath: #filePath)
-        .deletingLastPathComponent().deletingLastPathComponent()
-        .appendingPathComponent("Fixtures/Equivalence/engine-golden.json")
+    /// Where the recording test writes (the sandboxed test host cannot touch
+    /// the source tree); the shell copies it to `Tests/Fixtures/Equivalence/`.
+    static let goldenURL = FileManager.default.temporaryDirectory
+        .appendingPathComponent("QPLRecord/Equivalence/engine-golden.json")
 
     /// Every corpus log scored through the party overload, in a fixed order.
     static func corpusCases() throws -> [GoldenCase] {
@@ -3948,6 +3958,7 @@ And inside `EngineEquivalenceTests`:
         encoder.outputFormatting = [.sortedKeys]
         try FileManager.default.createDirectory(at: Self.goldenURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         try encoder.encode(try Self.corpusCases()).write(to: Self.goldenURL, options: .atomic)
+        print("QPL_RECORD_GOLDEN_PATH=\(Self.goldenURL.path)")
     }
 
     /// The permanent oracle: the corpus, scored by the engine that shipped
@@ -3971,9 +3982,13 @@ And inside `EngineEquivalenceTests`:
 - [ ] **Step 2: Record the golden file from the OLD engine, before touching it**
 
 ```bash
-mkdir -p Tests/Fixtures/Equivalence && xcodegen generate && set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' -only-testing:QSOPartyLoggerTests/EngineEquivalenceTests/testRecordGoldenWhenAsked TEST_RUNNER_QPL_RECORD_GOLDEN=1 2>&1 | grep -E "Test Case|Executed|error:" | tail -4 && ls -la Tests/Fixtures/Equivalence && python3 -c "import json;d=json.load(open('Tests/Fixtures/Equivalence/engine-golden.json'));print(len(d),'cases;',len({c['party'] for c in d}),'parties; first',d[0]['party'],d[0]['breakdown']['total'])"
+xcodegen generate && set -o pipefail; xcodebuild test -project QSOPartyLogger.xcodeproj -scheme QSOPartyLogger -destination 'platform=macOS' -only-testing:QSOPartyLoggerTests/EngineEquivalenceTests/testRecordGoldenWhenAsked TEST_RUNNER_QPL_RECORD_GOLDEN=1 2>&1 | grep -E "Test Case|Executed|error:|QPL_RECORD_GOLDEN_PATH" | tail -5
 ```
-Expected: the recording test passes (not skipped), the file exists (a few hundred KB), ≥ 250 cases over 50 parties. Then `xcodegen generate` again and run `EngineEquivalenceTests` in full — the golden test must pass against the old engine it was recorded from (a sanity check that the projection round-trips).
+Expected: the recording test passes (not skipped) and prints `QPL_RECORD_GOLDEN_PATH=…/Containers/org.b5n.QSOPartyLogger/Data/tmp/QPLRecord/Equivalence/engine-golden.json`. Then copy it out of the sandbox container and look at it:
+```bash
+mkdir -p Tests/Fixtures/Equivalence && cp ~/Library/Containers/org.b5n.QSOPartyLogger/Data/tmp/QPLRecord/Equivalence/engine-golden.json Tests/Fixtures/Equivalence/ && ls -la Tests/Fixtures/Equivalence && python3 -c "import json;d=json.load(open('Tests/Fixtures/Equivalence/engine-golden.json'));print(len(d),'cases;',len({c['party'] for c in d}),'parties; first',d[0]['party'],d[0]['breakdown']['total'])"
+```
+Expected: the file exists (a few hundred KB), ≥ 250 cases over 50 parties. Then `xcodegen generate` again (a new fixture file) and run `EngineEquivalenceTests` in full — the golden test must pass against the old engine it was recorded from (a sanity check that the projection round-trips).
 
 - [ ] **Step 3: Commit the golden file alone**
 
