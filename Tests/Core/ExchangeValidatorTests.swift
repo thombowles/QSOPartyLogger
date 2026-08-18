@@ -23,10 +23,54 @@ final class ExchangeValidatorTests: XCTestCase {
         XCTAssertThrowsError(try ExchangeValidator.validate("ks", element: loc, contest: c, side: "inside").get())    // home state token
         XCTAssertThrowsError(try ExchangeValidator.validate("lin/tx", element: loc, contest: c, side: "inside").get()) // mixed
         XCTAssertThrowsError(try ExchangeValidator.validate("", element: loc, contest: c, side: "inside").get())
-        if case .failure(.invalid(let token, let suggestions)) = ExchangeValidator.validate("LNI", element: loc, contest: c, side: "inside") {
+        if case .failure(.invalid(let token, let suggestions, _)) = ExchangeValidator.validate("LNI", element: loc, contest: c, side: "inside") {
             XCTAssertEqual(token, "LNI")
             XCTAssertTrue(suggestions.contains("LIN"))
         } else { XCTFail("expected a suggestion") }
+        // The empty message names what this element takes, in its sets' own
+        // words — Kansas sends counties, and everyone else states.
+        if case .failure(let f) = ExchangeValidator.validate("", element: loc, contest: c, side: "inside") {
+            let text = try XCTUnwrap(f.errorDescription)
+            XCTAssertTrue(text.contains("county"), text)
+            XCTAssertTrue(text.contains("state"), text)
+        } else { XCTFail("expected empty to fail") }
+    }
+
+    /// `ExchangeParser` counts the tokens as typed and dedupes afterwards: a
+    /// county typed twice is one county, an out-of-state token typed twice is
+    /// two values and so a mix. The validator does the same.
+    func testDuplicateTokensMatchTheLegacyParser() throws {
+        let c = try contest("ksqp"), loc = try element(c, "location")
+        let p = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        XCTAssertEqual(try ExchangeValidator.validate("LIN/LIN", element: loc, contest: c, side: "inside").get(), ["LIN"])
+        XCTAssertThrowsError(try ExchangeValidator.validate("TX/TX", element: loc, contest: c, side: "inside").get())
+        XCTAssertEqual(try ExchangeParser.parse("LIN/LIN", party: p, role: .inState).get().locations, ["LIN"])
+        XCTAssertThrowsError(try ExchangeParser.parse("TX/TX", party: p, role: .inState).get())
+        // NAQP's one side sends its NA-entity list *and* the states, so the
+        // county line has to name the list that repeats: an entity twice is
+        // that entity, a state twice is two values.
+        let n = try contest("naqpcw"), nloc = try element(n, "location")
+        let np = try XCTUnwrap(PartyCatalog.party(id: "naqpcw"))
+        let entity = try XCTUnwrap(np.counties.first?.abbr)
+        XCTAssertEqual(try ExchangeValidator.validate("\(entity)/\(entity)", element: nloc, contest: n, side: "all").get(), [entity])
+        XCTAssertThrowsError(try ExchangeValidator.validate("TX/TX", element: nloc, contest: n, side: "all").get())
+    }
+
+    /// Suggestions come from the sets in the order the element sends them, so
+    /// a county outranks a state — "L" is seven Kansas counties before it is
+    /// Louisiana, exactly as `ExchangeParser.suggestions` had it.
+    func testSuggestionsPreferCounties() throws {
+        let c = try contest("ksqp"), loc = try element(c, "location")
+        let p = try XCTUnwrap(PartyCatalog.party(id: "ksqp"))
+        XCTAssertNoThrow(try ExchangeValidator.validate("LA", element: loc, contest: c, side: "inside").get(), "the state is accepted")
+        guard case .failure(.invalid(_, let suggestions, _)) = ExchangeValidator.validate("L", element: loc, contest: c, side: "inside") else {
+            return XCTFail("expected 'L' to be invalid with suggestions")
+        }
+        let counties = Set(p.counties.map(\.abbr))
+        XCTAssertEqual(suggestions.count, 3)
+        XCTAssertTrue(suggestions.allSatisfy(counties.contains), "expected counties first, got \(suggestions)")
+        XCTAssertFalse(suggestions.contains("LA"))
+        XCTAssertTrue(ExchangeParser.suggestions(for: "L", party: p, role: .inState).allSatisfy(counties.contains))
     }
 
     func testMarylandOutsideEntrantReceivesCountiesOnly() throws {
@@ -50,13 +94,17 @@ final class ExchangeValidatorTests: XCTestCase {
         let serial = try element(c, "serial")
         XCTAssertEqual(try ExchangeValidator.validate("007", element: serial, contest: c, side: "inside").get(), ["7"])
         XCTAssertThrowsError(try ExchangeValidator.validate("7a", element: serial, contest: c, side: "inside").get())
+        XCTAssertThrowsError(try ExchangeValidator.validate("0", element: serial, contest: c, side: "inside").get())  // QSO numbers start at 1
         let rst = ExchangeElement(id: "rst", kind: .rst, sentBy: ["all": .init()])
         XCTAssertEqual(try ExchangeValidator.validate("5nn", element: rst, contest: c, side: "inside").get(), ["599"])
+        XCTAssertEqual(try ExchangeValidator.validate("5nt", element: rst, contest: c, side: "inside").get(), ["590"])
+        XCTAssertEqual(try ExchangeValidator.validate("57a", element: rst, contest: c, side: "inside").get(), ["571"])
         XCTAssertEqual(try ExchangeValidator.validate("59", element: rst, contest: c, side: "inside").get(), ["59"])
         XCTAssertThrowsError(try ExchangeValidator.validate("5", element: rst, contest: c, side: "inside").get())
         let zone = ExchangeElement(id: "zone", kind: .cqZone, sentBy: ["all": .init()])
         XCTAssertEqual(try ExchangeValidator.validate("05", element: zone, contest: c, side: "inside").get(), ["5"])
         XCTAssertThrowsError(try ExchangeValidator.validate("41", element: zone, contest: c, side: "inside").get())
+        XCTAssertThrowsError(try ExchangeValidator.validate("+5", element: zone, contest: c, side: "inside").get())
         let prec = ExchangeElement(id: "precedence", kind: .precedence, sentBy: [:], letters: ["Q", "A", "B", "U", "M", "S"])
         XCTAssertEqual(try ExchangeValidator.validate("a", element: prec, contest: c, side: "inside").get(), ["A"])
         XCTAssertThrowsError(try ExchangeValidator.validate("X", element: prec, contest: c, side: "inside").get())
@@ -77,7 +125,12 @@ final class ExchangeValidatorTests: XCTestCase {
         XCTAssertEqual(try ExchangeValidator.validate("-12", element: report, contest: c, side: "inside").get(), ["-12"])
         let name = ExchangeElement(id: "name", kind: .name, sentBy: [:])
         XCTAssertEqual(try ExchangeValidator.validate("bill", element: name, contest: c, side: "inside").get(), ["BILL"])
+        XCTAssertEqual(try ExchangeValidator.validate("mary-ann", element: name, contest: c, side: "inside").get(), ["MARY-ANN"])
+        XCTAssertEqual(try ExchangeValidator.validate("o'neil", element: name, contest: c, side: "inside").get(), ["O'NEIL"])
         XCTAssertThrowsError(try ExchangeValidator.validate("B1LL", element: name, contest: c, side: "inside").get())
+        let echo = ExchangeElement(id: "call", kind: .callEcho, sentBy: [:])
+        XCTAssertEqual(try ExchangeValidator.validate("ke5cw", element: echo, contest: c, side: "inside").get(), ["KE5CW"])
+        XCTAssertThrowsError(try ExchangeValidator.validate("", element: echo, contest: c, side: "inside").get())
         let member = ExchangeElement(id: "member", kind: .memberOrPower, sentBy: [:])
         XCTAssertEqual(try ExchangeValidator.validate("5 w", element: member, contest: c, side: "inside").get(), ["5W"])
         XCTAssertEqual(try ExchangeValidator.validate("013", element: member, contest: c, side: "inside").get(), ["013"])
@@ -92,7 +145,10 @@ final class ExchangeValidatorTests: XCTestCase {
             let c = try PartyLowering.lower(p)
             let loc = try element(c, "location")
             var corpus = p.counties.map(\.abbr) + p.validOutStateTokens.sorted()
-            corpus += ["ZZZ", "EM32", "SAF", "DL", "JA", "PA", "ON", "OK", "SD", "TN", "R1", "DX", "TX/OK", ""]
+            corpus += ["ZZZ", "EM32", "SAF", "DL", "JA", "PA", "ON", "OK", "SD", "TN", "R1", "DX", "TX/OK", "TX/TX", ""]
+            // A token typed twice, which the parser counts before it dedupes:
+            // one county twice is that county, one state twice is a mix.
+            if let dup = p.counties.first.map({ "\($0.abbr)/\($0.abbr)" }) { corpus.append(dup) }
             if p.counties.count >= 2 { corpus += ["\(p.counties[0].abbr)/\(p.counties[1].abbr)", "\(p.counties[0].abbr)/TX"] }
             if p.counties.count >= 5 { corpus.append(p.counties.prefix(5).map(\.abbr).joined(separator: "/")) }
             for (role, side) in [(ExchangeParser.Role.inState, p.hasHomeRegion ? "inside" : "all"),

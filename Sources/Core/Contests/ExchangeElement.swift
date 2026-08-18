@@ -42,7 +42,20 @@ struct ExchangeElement: Codable, Equatable, Sendable, Identifiable {
     }
 
     struct SentSpec: Codable, Equatable, Sendable {
-        struct Multi: Codable, Equatable, Sendable { let max: Int }
+        struct Multi: Codable, Equatable, Sendable {
+            let max: Int
+            /// Which of the side's sets the several values come from. A county
+            /// line is several *counties* — never a county and a state, and
+            /// never a state twice — so a side that sends its county list
+            /// alongside states and provinces (a party with no home region:
+            /// NAQP) has to say which list repeats. Defaults to every set the
+            /// side sends, which is what a side sending only counties means.
+            let sets: [String]?
+            init(max: Int, sets: [String]? = nil) {
+                self.max = max
+                self.sets = sets
+            }
+        }
         /// Token-set ids this side sends (token kinds only).
         let sets: [String]?
         /// Several values at once — a county-line entrant (token kinds only).

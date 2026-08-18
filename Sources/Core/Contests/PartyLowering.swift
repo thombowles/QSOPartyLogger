@@ -107,9 +107,16 @@ enum PartyLowering {
         let inside = ExchangeElement.SentSpec(sets: ["counties"], multi: .init(max: cap))
         // A party with no counties (Skeeter, FOBB) has no `counties` set to send.
         let single = (p.counties.isEmpty ? [] : ["counties"]) + outsideSets(for: p)
+        // The one side of a party with no home region sends its county list and
+        // the out-of-state tokens together, so its county line has to name the
+        // list that repeats: `4U1/4U1` is one NA entity typed twice, `TX/TX` is
+        // two values and a mistake — which is `ExchangeParser`'s own rule.
+        // Where the party names no counties, nothing repeats at all.
+        let singleMulti: ExchangeElement.SentSpec.Multi? =
+            p.counties.isEmpty ? nil : .init(max: cap, sets: ["counties"])
         let sentBy: [String: ExchangeElement.SentSpec] = p.hasHomeRegion
             ? [insideID: inside, outsideID: .init(sets: outsideSets(for: p))]
-            : [allID: .init(sets: single, multi: .init(max: cap))]
+            : [allID: .init(sets: single, multi: singleMulti)]
         out.append(ExchangeElement(
             id: "location", kind: .token,
             label: p.hasHomeRegion ? "\(p.countyTerm.sentenceCased)/State" : "Location",

@@ -191,7 +191,9 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
         for e in exchange {
             guard !e.sentBy.isEmpty else { throw ContestValidationError.elementSentByNobody(e.id) }
             for side in e.sentBy.keys where !sideIDs.contains(side) { throw ContestValidationError.unknownSide(side) }
-            for set in e.sentBy.values.flatMap({ $0.sets ?? [] }) where !isKnownSet(set, bundle: bundle) {
+            // A county line's own set list is checked too: an id nothing
+            // carries there would silently stop the county line working.
+            for set in e.sentBy.values.flatMap({ ($0.sets ?? []) + ($0.multi?.sets ?? []) }) where !isKnownSet(set, bundle: bundle) {
                 throw ContestValidationError.unknownTokenSet(set)
             }
             if let d = e.derived {

@@ -84,6 +84,9 @@ final class PartyLoweringTests: XCTestCase {
         XCTAssertEqual(c.exchange.map(\.id), ["name", "location"])
         XCTAssertEqual(c.exchange[1].sentBy["all"]?.sets, ["counties", "states", "provinces", "dxToken"])
         XCTAssertEqual(c.exchange[1].sentBy["all"]?.multi?.max, 1)
+        // One side sends the entity list and the states together, so the
+        // repeatable list is named: several entities, never several states.
+        XCTAssertEqual(c.exchange[1].sentBy["all"]?.multi?.sets, ["counties"])
         XCTAssertEqual(c.tokenSet(id: "counties")?.term, "NA entity")
         XCTAssertEqual(c.cabrillo.location, .entrantToken)
         XCTAssertEqual(c.multipliers.first { $0.id == "county" }?.counting, ["all": .perBand])

@@ -4,20 +4,30 @@ import Foundation
 /// kind. Token kinds keep `ExchangeParser`'s tokeniser, suggestions and
 /// edit-distance help; the parity test pins them equal on every party.
 enum ExchangeValidator {
+    /// A rejection in the element's own words.
+    ///
+    /// `hint` is what this element accepts, spelled with the accepted sets'
+    /// own `term`s in the order the element sends them — "county, state,
+    /// province, or DX" for a Kansas entrant, "parish, state, province, or
+    /// DXCC prefix" where the sponsor says parish. `term` is the plural of the
+    /// set a side may send several of at once ("counties"). A fixed-shape kind
+    /// carries its whole sentence in `badFormat`.
     enum Failure: Error, Equatable, LocalizedError {
-        case empty
-        case invalid(String, suggestions: [String])
-        case tooMany(Int, max: Int)
-        case mixed
+        case empty(hint: String)
+        case invalid(String, suggestions: [String], hint: String)
+        case tooMany(Int, max: Int, term: String)
+        /// Several tokens where only one value is allowed. Several of the
+        /// *same* set — a county line — is `tooMany` when it runs past the cap.
+        case mixed(hint: String)
         case badFormat(String)
 
         var errorDescription: String? {
             switch self {
-            case .empty: "Enter the exchange."
-            case .invalid(let t, let s):
-                s.isEmpty ? "'\(t)' is not valid." : "'\(t)' is not valid. Did you mean \(s.joined(separator: ", "))?"
-            case .tooMany(let n, let max): "\(n) values given — at most \(max) allowed."
-            case .mixed: "Mixing counties with states/provinces isn't valid."
+            case .empty(let hint): "Enter a \(hint)."
+            case .invalid(let t, let s, let hint):
+                s.isEmpty ? "'\(t)' is not a valid \(hint)." : "'\(t)' is not valid. Did you mean \(s.joined(separator: ", "))?"
+            case .tooMany(let n, let max, let term): "\(n) \(term) given — at most \(max) allowed."
+            case .mixed(let hint): "Only one \(hint) at a time."
             case .badFormat(let what): what
             }
         }
@@ -36,18 +46,37 @@ enum ExchangeValidator {
         case .token:
             return validateToken(text, element: element, contest: contest, side: side, bundle: bundle)
         case .rst:
-            let cut = text.replacingOccurrences(of: "N", with: "9")
+            // Cut numbers folded back the way this app's own sender writes
+            // them (`AppSettings.applyCutNumbers`): N is 9, T is 0, A is 1, so
+            // a CW operator may type what they copied. Which length a mode
+            // class wants — 59 on phone, 599 on CW — is not enforced here:
+            // the report is the operator's to give, and sponsors' logs carry
+            // both.
+            let cut = String(text.map { c -> Character in
+                switch c {
+                case "N": "9"
+                case "T": "0"
+                case "A": "1"
+                default: c
+                }
+            })
             return cut.count >= 2 && cut.count <= 3 && cut.allSatisfy(\.isNumber) ? .success([cut]) : .failure(.badFormat("A signal report is 2 or 3 digits."))
         case .serial:
-            guard !text.isEmpty, text.count <= 5, text.allSatisfy(\.isNumber), let n = Int(text) else {
+            guard !text.isEmpty, text.count <= 5, text.allSatisfy(\.isNumber), let n = Int(text), n >= 1 else {
                 return .failure(.badFormat("A QSO number is 1–5 digits."))
             }
             return .success([String(n)])
         case .name:
-            return !text.isEmpty && text.count <= 15 && text.allSatisfy(\.isLetter) ? .success([text]) : .failure(.badFormat("A name is 1–15 letters."))
+            // NAQP names arrive hyphenated ("MARY-ANN") and apostrophed
+            // ("O'NEIL"); a digit is still a typo.
+            let ok = !text.isEmpty && text.count <= 15 && text.allSatisfy { $0.isLetter || $0 == "-" || $0 == "'" }
+            return ok ? .success([text]) : .failure(.badFormat("A name is 1–15 letters."))
         case .cqZone, .ituZone:
             let top = element.kind == .cqZone ? 40 : 90
-            guard let n = Int(text), (1...top).contains(n) else { return .failure(.badFormat("A zone is 1–\(top).")) }
+            // Digits only: `Int("+5")` is 5, and a signed zone is a typo.
+            guard text.allSatisfy(\.isNumber), let n = Int(text), (1...top).contains(n) else {
+                return .failure(.badFormat("A zone is 1–\(top)."))
+            }
             return .success([String(n)])
         case .precedence:
             return (element.letters ?? []).contains(text) ? .success([text]) : .failure(.badFormat("Precedence is one of \((element.letters ?? []).joined(separator: " "))."))
@@ -71,6 +100,7 @@ enum ExchangeValidator {
             case .power: return .success([text.filter { !$0.isWhitespace }])
             }
         case .callEcho:
+            guard !text.isEmpty else { return .failure(.badFormat("Enter the callsign as sent back.")) }
             return .success([text])
         case .grid:
             return text.range(of: #"^[A-R]{2}\d{2}([A-X]{2})?$"#, options: .regularExpression) != nil
@@ -85,19 +115,30 @@ enum ExchangeValidator {
 
     private static func validateToken(_ text: String, element: ExchangeElement, contest: ContestDefinition,
                                       side: String, bundle: Bundle) -> Result<[String], Failure> {
-        let tokens = ExchangeParser.tokenize(text)
-        guard !tokens.isEmpty else { return .failure(.empty) }
         let workable = contest.workableSides(for: side)
-        let sets = element.setsSent(by: workable)
-        // Sets a side may send several of at once (a county line), and how many.
+        // Every set id resolved once, in the order the element sends them. The
+        // one list classifies a token, pools what the element accepts, orders
+        // the suggestions, and names the element in the sponsor's own words —
+        // `dxccPrefix` is dynamic and has no `TokenSet` to ask.
+        let sets: [(id: String, set: TokenSet?)] = element.setsSent(by: workable).map {
+            ($0, contest.tokenSet(id: $0, bundle: bundle))
+        }
+        let hint = acceptedHint(for: sets)
+        let tokens = ExchangeParser.tokenize(text)
+        guard !tokens.isEmpty else { return .failure(.empty(hint: hint)) }
+        // Sets a side may send several of at once (a county line), and how
+        // many. A multi spec that names its own sets means those and no others
+        // — the side that sends counties *and* states repeats only counties.
         var multiSets = Set<String>()
         for s in workable {
-            if let spec = element.sentBy[s], spec.multi != nil { multiSets.formUnion(spec.sets ?? []) }
+            if let spec = element.sentBy[s], let multi = spec.multi {
+                multiSets.formUnion(multi.sets ?? spec.sets ?? [])
+            }
         }
         let maxValues = element.maxValues(for: workable)
-        // Everything the element accepts, for the dynamic prefix set's exclusions and for suggestions.
-        let enumerated = sets.compactMap { contest.tokenSet(id: $0, bundle: bundle) }
-        let allAccepted = enumerated.reduce(into: Set<String>()) { $0.formUnion($1.acceptedTokens) }
+        let multiTerm = sets.first { multiSets.contains($0.id) }?.set?.termPlural ?? "values"
+        // Everything the element accepts, for the dynamic prefix set's exclusions.
+        let allAccepted = sets.reduce(into: Set<String>()) { $0.formUnion($1.set?.acceptedTokens ?? []) }
 
         // The value is the token **as sent**, never the set's canonical form:
         // an alias is resolved where it is counted, not where it is received.
@@ -108,11 +149,11 @@ enum ExchangeValidator {
         // lowered model does the same through this set's `aliases`, read by
         // the multiplier's `receivedToken` resolver.
         func classify(_ token: String) -> (set: String, value: String)? {
-            for id in sets {
-                if id == "dxccPrefix" {
-                    if isDXPrefix(token, excluding: allAccepted) { return (id, token) }
-                } else if let set = contest.tokenSet(id: id, bundle: bundle), set.accepts(token) {
-                    return (id, token)
+            for entry in sets {
+                if entry.id == "dxccPrefix" {
+                    if isDXPrefix(token, excluding: allAccepted) { return (entry.id, token) }
+                } else if let set = entry.set, set.accepts(token) {
+                    return (entry.id, token)
                 }
             }
             return nil
@@ -121,17 +162,42 @@ enum ExchangeValidator {
         var classified: [(set: String, value: String)] = []
         for token in tokens {
             guard let hit = classify(token) else {
-                return .failure(.invalid(token, suggestions: suggestions(for: token, among: allAccepted)))
+                return .failure(.invalid(token, suggestions: suggestions(for: token, inSetOrder: sets), hint: hint))
             }
             classified.append(hit)
         }
+        // `ExchangeParser` counts the tokens **as typed**, before it dedupes:
+        // `TX/TX` is two out-of-state tokens and so a mix, while `LIN/LIN` is
+        // one county typed twice. So the "several values means one multi-set"
+        // rule is checked on the raw count; the dedupe follows it, and only
+        // the county-line cap sees the deduped list.
+        if classified.count > 1 {
+            guard classified.allSatisfy({ multiSets.contains($0.set) }) else { return .failure(.mixed(hint: hint)) }
+        }
         var seen = Set<String>()
         let unique = classified.filter { seen.insert($0.value).inserted }
-        if unique.count > 1 {
-            guard unique.allSatisfy({ multiSets.contains($0.set) }) else { return .failure(.mixed) }
-            guard unique.count <= maxValues else { return .failure(.tooMany(unique.count, max: maxValues)) }
+        guard unique.count <= maxValues else {
+            return .failure(.tooMany(unique.count, max: maxValues, term: multiTerm))
         }
         return .success(unique.map(\.value))
+    }
+
+    /// What the element accepts, in its sets' own words and their own order —
+    /// "county, state, province, or DX". The dynamic prefix set has no
+    /// `TokenSet` to ask, so it names itself; a term repeated by two sets
+    /// (a party that takes both `DX` and its own DX aliases) is said once.
+    private static func acceptedHint(for sets: [(id: String, set: TokenSet?)]) -> String {
+        var seen = Set<String>(), terms: [String] = []
+        for entry in sets {
+            let term = entry.set?.term ?? (entry.id == "dxccPrefix" ? "DXCC prefix" : entry.id)
+            if seen.insert(term).inserted { terms.append(term) }
+        }
+        switch terms.count {
+        case 0: return "value"
+        case 1: return terms[0]
+        case 2: return "\(terms[0]) or \(terms[1])"
+        default: return terms.dropLast().joined(separator: ", ") + ", or " + terms[terms.count - 1]
+        }
     }
 
     /// The party rule: a DXCC prefix the ARRL list carries that is not also
@@ -142,9 +208,15 @@ enum ExchangeValidator {
         return DXCCTable.shared.isKnownPrefix(token)
     }
 
-    /// Prefix matches then Damerau-1 candidates, capped at 3 — `ExchangeParser.suggestions` verbatim.
-    static func suggestions(for token: String, among accepted: Set<String>) -> [String] {
-        let all = accepted.sorted()
+    /// Prefix matches then Damerau-1 candidates, capped at 3 — the order
+    /// `ExchangeParser.suggestions` had, which is the element's own set order:
+    /// a county outranks a state because the element sends counties first.
+    /// Within a set the tokens are sorted, so the list is stable.
+    static func suggestions(for token: String, inSetOrder sets: [(id: String, set: TokenSet?)]) -> [String] {
+        var seen = Set<String>(), all: [String] = []
+        for entry in sets {
+            for a in (entry.set?.acceptedTokens ?? []).sorted() where seen.insert(a).inserted { all.append(a) }
+        }
         var out: [String] = []
         for a in all where a.hasPrefix(token) && a != token { out.append(a) }
         for a in all where !out.contains(a) && ExchangeParser.isEditDistanceOne(token, a) { out.append(a) }
