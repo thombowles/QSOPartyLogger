@@ -45,8 +45,13 @@ final class KXProtocolTests: XCTestCase {
     // MARK: Article 11 — this radio has exactly one way to send CW
 
     func testDriverKeysThroughTheRadiosOwnKeyer() {
+        // Asked through `any RadioDriver`, which is how `RadioController` holds
+        // it — and the question is only meaningful there. Asking the concrete
+        // type is something the compiler answers statically, which is a warning
+        // rather than a test.
+        let driver: any RadioDriver = ElecraftKXDriver()
         XCTAssertTrue(
-            ElecraftKXDriver() is any InternalKeyerDriver,
+            driver is any InternalKeyerDriver,
             "a KX's CAT jack carries no key line, so its driver must offer the internal-keyer path"
         )
     }
@@ -247,8 +252,9 @@ final class KXProtocolTests: XCTestCase {
     }
 
     func testDriverKeysOverCATAndDoesNotStream() {
-        XCTAssertNotNil(ElecraftKXDriver() as? any TransmitControlCapable)
-        XCTAssertNil(ElecraftKXDriver() as? any AudioStreamTransmitCapable)
+        let driver: any RadioDriver = ElecraftKXDriver()
+        XCTAssertNotNil(driver as? any TransmitControlCapable)
+        XCTAssertNil(driver as? any AudioStreamTransmitCapable)
     }
 
     // MARK: State, speed sync, and malformed input

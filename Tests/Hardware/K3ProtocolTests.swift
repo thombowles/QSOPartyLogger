@@ -458,8 +458,9 @@ final class K3ProtocolTests: XCTestCase {
     /// The Elecraft family keys over CAT for a sound-card recording, and never
     /// takes the samples over its own link (Article 11: exactly one path).
     func testDriverKeysOverCATAndDoesNotStream() {
-        XCTAssertNotNil(ElecraftK3Driver() as? any TransmitControlCapable)
-        XCTAssertNil(ElecraftK3Driver() as? any AudioStreamTransmitCapable)
+        let driver: any RadioDriver = ElecraftK3Driver()
+        XCTAssertNotNil(driver as? any TransmitControlCapable)
+        XCTAssertNil(driver as? any AudioStreamTransmitCapable)
     }
 
     /// Nothing about the recorder's own path is disturbed by keying: a play

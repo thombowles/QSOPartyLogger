@@ -297,3 +297,41 @@ so the callback is what is pinned.
    gate, tests, README keyboard table.
 4. `docs: README corrections` — the key-line claim and the stale QMX fallback
    paragraph.
+
+## As built — 2026-08-22
+
+All four landed, on `worktree-worktree-kx2-support`, with commit 4 folded into
+commit 3 because both corrections were one-line README edits in the sections
+commit 3 was already rewriting.
+
+**Suite: 3049 → 3073, 0 failures at every step.** The refactor ran the suite
+before and after and produced the same 3049, which is what makes it
+behaviour-free rather than merely believed to be.
+
+Four things went differently from the plan above, all worth recording:
+
+1. **`K3ProtocolTests` was not left untouched.** The plan said it would be,
+   which was wrong: moving the parsers to `ElecraftProtocol` moves the name the
+   tests call them by. Every *assertion* is unchanged and the renames are
+   mechanical, which is still the proof the plan wanted, but the file is edited.
+   Two other test files named the moved symbols too — `BandPlanTests` and
+   `OperatingFeatureTests` — which the plan had not noticed at all.
+2. **The KX2's missing FM went in.** G5's `MD` entry says "FM mode does not
+   apply to the KX2", so `cmdSetMode` takes the model and returns nil for `MD4`
+   there. It was drafted into commit 1 by mistake and moved to commit 2, where
+   it belongs: commit 1 had to be behaviour-free.
+3. **`KeyDiagnostics` had to learn `⌥`.** Not in the plan, and not optional —
+   that log is what answers "the F-keys do nothing", and it would have reported
+   `⌥F2` as a plain `F2`.
+4. **The excerpt generator caught two line-numbering traps** before anything was
+   banked wrong: `splitlines()` breaks on the form feeds `pdftotext` writes at
+   page boundaries, and `read_text()` translates the lone `\r` characters in the
+   KX3 extraction. Either silently shifts every range past page one. The
+   per-passage fingerprint assertions are what made both loud instead of silent,
+   and are the reason to keep writing them.
+
+**Not verified, and cannot be from here:** that a KX2 actually keys from `KY` on
+the air. Every byte is asserted against a mock transport and quoted from G5, and
+the mechanism is what RUMlogNG uses on the same radio over the same cable — but
+no radio has been on the desk. The three open questions above are the specific
+things a bench session should look at.
