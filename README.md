@@ -378,10 +378,20 @@ county grid groups by contest and then by state.
 
 ## Radio control and CW
 
-**Elecraft K3 / K3S / KX3 / KX2** over serial at 4800–38400 baud, with live
-frequency, mode and TX polling, and the band stamped onto each QSO. The app asks
-which model answered and what options are fitted, so it knows how many voice
-memories the rig actually has before it offers you any.
+**Elecraft K3 / K3S** over serial at 4800–38400 baud, with live frequency, mode
+and TX polling, and the band stamped onto each QSO. The app asks which model
+answered and what options are fitted, so it knows how many voice memories the
+rig actually has before it offers you any.
+
+**Elecraft KX3 / KX2** over the ACC jack, at the same rates and with the same
+live polling and the same two on-board voice memories. They are a separate
+entry in the radio menu, and not for tidiness: **a KX is keyed through its own
+keyer over CAT**, because its ACC jack carries no key line for the app to use —
+tip is receive data, ring 1 is transmit data, and the only keying pin, ring 2,
+is a key *output* for driving an amplifier. Everything the app promises about
+CW survives that (speed still changes mid-message, Esc still stops the
+transmission); what changes is that the radio does the element timing. See
+*Keying a KX2 or KX3* below.
 
 **QRP Labs QMX+ / QMX** over its USB serial port — the whole series, since they
 share one CAT manual. Same live frequency, mode and TX polling. The rig has no
@@ -405,14 +415,19 @@ an unproven link gets **Cancel**.
 with sub-millisecond software timing (8–50 WPM, optional PTT line with lead and
 tail). That is the only path on those radios — it is what lets **Esc** cut a
 message mid-character and **⌘=** / **⌘-** change speed *while the message is
-still going out*, rather than on the next one. A radio with no key lines, like
-the Flex, keys through its own keyer instead.
+still going out*, rather than on the next one. A radio whose control link
+carries no key line — the Flex, and a **KX3 / KX2** on its ACC jack — keys
+through its own keyer instead, and the app hands it text rather than edges.
+Each radio does one or the other; there is nothing to choose and no setting to
+get wrong.
 
-> **Set your radio's key line up before the contest, not during it.** With no
-> internal-keyer fallback there is no in-app way out, and keying is one-way —
+> **Set your radio's key line up before the contest, not during it.** On the
+> radios that are keyed directly there is no fallback, and keying is one-way —
 > the radio never reports that it is ignoring the line. On a **QMX** set
 > CW menu → *Key from USB DTR* to **USB 1**; it ships as *None* and will sit
 > there silently until you do. On a **K3**, set CONFIG:PTT-KEY to map DTR.
+> A **KX3 / KX2** needs nothing set up: it is keyed over the CAT cable you
+> already have.
 
 F1–F8 messages support `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH}
 {MEMBER}` and default to the active party's own exchange shape — a serial party
@@ -518,6 +533,34 @@ headphone jack, into LINE IN.
 The K3S, KX3 and KX2 route computer audio differently; their manuals name the
 jack and the menu, and the app's side is the same. The radio's own recorder is
 still one setting away — *Phone messages play from: The radio's voice memories*.
+
+### Keying a KX2 or KX3
+
+**Nothing to wire.** Connect the ACC jack to the Mac — the Elecraft KXUSB cable,
+or any RS-232-level adapter — pick the port, choose **Elecraft KX3 / KX2**, and
+**Connect**. CW goes out over that same cable, as text handed to the radio's own
+keyer, in packets of 24 characters or fewer paced against the radio's own report
+of its buffer. `Esc` sends `RX;`, which "terminates transmit in all modes", and
+`⌘=` / `⌘-` reach a message that is still going out — the app deliberately uses
+the plain `KY` form rather than the `KYW` one, because `KYW` is documented to
+defer exactly those following commands.
+
+Why not DTR keying, as on a K3? Because a KX has no `CONFIG:PTT-KEY`. On a K3
+that menu routes the serial port's own DTR and RTS to the key line inside the
+radio, so one cable does both jobs. A KX2's ACC jack is receive data, transmit
+data, a key *output* for an amplifier, and ground — no key input at all.
+
+You *can* key a KX from a control line, and Elecraft says so: `MENU:CW KEY1`
+set to **HAND** makes the KEY jack "an input for an external keying device
+(keyer, computer, etc.)". That takes a second wire from a keying interface into
+KEY, on a second serial port, which the app does not currently drive — and it
+buys the app's own element timing rather than the radio's. If you want it,
+say so and it can be built; the CAT path needs no hardware you do not already
+own.
+
+> One thing to know: on the radio's own keyer, `Esc` ends the *transmission*
+> rather than cutting the current character, and the element timing is the
+> radio's rather than the app's.
 
 ### Wiring a QMX for direct keying
 

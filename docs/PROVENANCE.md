@@ -845,6 +845,56 @@ The N1MM Logger+ manual was read for interaction precedent and is cited in the
 research file. Per Article 1 it is authority for nothing here, and no byte in
 the driver comes from it.
 
+## Radio protocols — keying a KX3 / KX2 over CAT
+
+Why the portables are a separate radio in the catalogue, keyed through their own
+keyer rather than on a control line. Reasoned about in
+[`docs/research/kx_cw_keying.md`](research/kx_cw_keying.md), which also inventories
+the KX-specific commands across the reference.
+
+- **K3S/K3/KX3/KX2 Programmer's Reference, Rev. G5, Feb. 20 2019** (the revision
+  the drivers already cite, banked in full as
+  [`k3_programmers_reference_g5.txt`](research/k3_programmers_reference_g5.txt))
+  — authority for every byte `ElecraftKXDriver` sends: `KY *[text];` ("0 to 24
+  characters", and the `W` form that "will be delayed until the current message
+  has been sent … e.g., KS (keyer speed)" — which is why the plain form is
+  used); `KY;` answering "`KYn;` where n is 0 (CW text buffer not full) or 1
+  (buffer full)"; `KS`; `RX;`. It is also the authority for the *absence* that
+  drives the whole design: `CONFIG:PTT-KEY` appears in the K3's menu table
+  (Table 5) and in neither KX table (6 and 6A). And its `TBX` entry — "GET only;
+  KX3/KX2 only", counting characters "from KY packets" — is what establishes
+  that a KX2 executes `KY` at all.
+- **KX2 Owner's Manual, Rev. B2** —
+  <https://ftp.elecraft.com/KX2/Manuals%20Downloads/KX2%20owner's%20man%20B2.pdf>
+  (`Last-Modified` Mon 27 Mar 2023 18:52:53 GMT). Fetched 2026-08-22 and now
+  **banked**, by script, as
+  [`kx2_owners_b2_excerpts.txt`](research/kx2_owners_b2_excerpts.txt): the ACC
+  jack pinout (tip = RX data, ring 1 = TX data, ring 2 = key *out*, sleeve =
+  gnd), the KEY jack, and `MENU:CW KEY1` — whose `HAND` setting makes the KEY
+  jack "an input for an external keying device (keyer, computer, etc.)", the
+  sentence that establishes a KX *can* be line-keyed, just not over the cable
+  the app opens.
+- **KX3 Owner's Manual, Rev. C5** —
+  <https://ftp.elecraft.com/KX3/Manuals%20Downloads/E740163%20KX3%20Owner's%20man%20Rev%20C5.pdf>
+  (`Last-Modified` Thu 16 Nov 2017 01:06:57 GMT). Fetched 2026-08-22, banked as
+  [`kx3_owners_c5_excerpts.txt`](research/kx3_owners_c5_excerpts.txt). Identical
+  `CW KEY1` wording; ACC1 is the CAT port and ACC2 a keyline *output* plus a
+  GPIO that can be a PTT input but never a CW key.
+
+Both excerpt files are sliced out of `pdftotext -layout` output by
+[`gen_kx_excerpts.py`](research/gen_kx_excerpts.py), with a fingerprint assertion
+per passage, so no line of either was typed by hand (Article 2).
+
+Two secondary sources were read, and neither is authority for anything
+(Article 1). **RUMlogNG**'s documentation
+(<https://dl2rum.de/RUMlogNG/docs/en/pages/CAT-CW.html>, fetched 2026-08-22) says
+it keys such radios through "a CW keyer that can be controlled via the CAT
+protocol" — the operator's pointer, and it named the mechanism to go and read in
+the Programmer's Reference. **digirig.net** (fetched 2026-08-22) documents that a
+Digirig Mobile's CAT port carries *either* TxD/RxD *or* RTS/DTR keying drivers,
+set by solder jumpers that "can not be changed operationally" — which is why the
+station this was written for has no control line reaching the radio at all.
+
 ## Radio protocols — Elecraft transmit control and line input
 
 For recordings made on the Mac and played through a sound card into the radio

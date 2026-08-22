@@ -168,10 +168,21 @@ one driver serve both:
 
 1. **`TBX`'s response prefix** — G5 gives two incompatible forms in one entry.
    Not depended on; re-check next revision.
-2. **Tap spacing without `DE`.** No documented host-side delay exists on a KX2
+2. **Whether `RX;` empties the KY buffer, or only stops transmitting.** The
+   entry says it "terminates transmit in all modes, including message play and
+   repeating messages" — which is about *transmit*, and says nothing about text
+   already handed over and not yet sent. `ElecraftKXDriver.stopInternalKeyer`
+   therefore drops its own queue as well, so nothing further of ours reaches the
+   radio; whether a packet already inside the radio is discarded is unverified.
+   G5 documents two other stops that might settle it — `^D` (EOT, ASCII 04),
+   "quickly terminates transmission", and the `@` character, which "normally
+   terminates any CW message (via KY or manual send)" but is remapped to a
+   prosign by `CONFIG:CW WGHT`. Neither is used, because neither is
+   unconditional. Needs the radio on the desk.
+3. **Tap spacing without `DE`.** No documented host-side delay exists on a KX2
    for successive `SWT` commands. Working in practice; unquantified.
-3. **Keying accuracy at contest speeds** over CAT. The radio does the element
+4. **Keying accuracy at contest speeds** over CAT. The radio does the element
    timing and the manual does not quantify it. Not benchable without the radio.
-4. **A radio that does not match the selected entry.** `OM` makes the mismatch
+5. **A radio that does not match the selected entry.** `OM` makes the mismatch
    detectable, but reporting it needs a radio-neutral channel the app does not
    have, and naming a model in the app layer is forbidden (Article 10).

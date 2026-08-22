@@ -73,6 +73,7 @@
 		1C955D3925926AD1F9C0AF47 /* LogTablePointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71632B8792B4599E3B28478F /* LogTablePointsTests.swift */; };
 		1D3AD37B41937B2DA133D206 /* ksqp-inside-county-line.log in Resources */ = {isa = PBXBuildFile; fileRef = 30AA217BAB92939C372D052D /* ksqp-inside-county-line.log */; };
 		1DAC9D9495B4F17E4872E359 /* PartyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */; };
+		1E69003A387A4B75D174E36E /* ElecraftKXDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB914F01A5E4A2501DCDC3A /* ElecraftKXDriver.swift */; };
 		1E7FDC4C244F2B6F88CA2229 /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9CC975E303DB2512FF84C86 /* Band.swift */; };
 		1EFC7078C2C24D6FB36D9408 /* AudioFileIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C770738C3FEFA2071FBF53 /* AudioFileIO.swift */; };
 		1F00CED8C43362316C761617 /* QMXProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CE38D4FB00F99FA2C6D973 /* QMXProtocolTests.swift */; };
@@ -179,6 +180,7 @@
 		57D6E95483FBA88DE48DE602 /* UpcomingContestsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49AC8D775ABBA76B9D43CD0 /* UpcomingContestsTests.swift */; };
 		58D88E50F5DFFC687E8E0A52 /* AudioResampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF67E920BF8D84C9C94C101E /* AudioResampler.swift */; };
 		59161437AC1F7C6DE90B2418 /* alqp-table-2026-07-25-early.html in Resources */ = {isa = PBXBuildFile; fileRef = F970162F8C3C567192DEB1BB /* alqp-table-2026-07-25-early.html */; };
+		591917314FC2BFC85D1FB151 /* KXProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B58709B2EFF6DABC1D312A /* KXProtocolTests.swift */; };
 		593C9B4F548045F68D71789E /* SouthCarolinaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4D578B0A19E09B560A6584 /* SouthCarolinaQSOPartyTests.swift */; };
 		596A63350375360B435E02B0 /* ClusterHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EE8FFEB31D798C6454C83D /* ClusterHistory.swift */; };
 		59885B07A76CF890D9FF1CC1 /* mdc-inside-no-rst.adi in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2B1ADDEA10865EAC8AA38 /* mdc-inside-no-rst.adi */; };
@@ -569,6 +571,7 @@
 		26120DE41ED0E944E1F984FA /* swpc_f107_cm_flux_2026-08-09.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "swpc_f107_cm_flux_2026-08-09.json"; sourceTree = "<group>"; };
 		26C770738C3FEFA2071FBF53 /* AudioFileIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileIO.swift; sourceTree = "<group>"; };
 		273A1C77EBE557460270764F /* IowaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IowaQSOPartyTests.swift; sourceTree = "<group>"; };
+		27B58709B2EFF6DABC1D312A /* KXProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KXProtocolTests.swift; sourceTree = "<group>"; };
 		28174F39D351A29CC80B77F2 /* QSO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSO.swift; sourceTree = "<group>"; };
 		28981F0AB9338C01CB01D910 /* VermontQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VermontQSOPartyTests.swift; sourceTree = "<group>"; };
 		2987B08876C368111B9A3EF9 /* ScoreSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreSnapshot.swift; sourceTree = "<group>"; };
@@ -577,6 +580,7 @@
 		2B632B0C39468C5E56F37CB5 /* ScoreEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEngine.swift; sourceTree = "<group>"; };
 		2BF6B6669FD60CEDA6A19618 /* ExchangeSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeSummary.swift; sourceTree = "<group>"; };
 		2CEC4DEED07DBB72D0194DA8 /* PotaPark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaPark.swift; sourceTree = "<group>"; };
+		2DB914F01A5E4A2501DCDC3A /* ElecraftKXDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElecraftKXDriver.swift; sourceTree = "<group>"; };
 		2F1075185DDB395E700E24AA /* BandPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandPlan.swift; sourceTree = "<group>"; };
 		2F34B598BE39EC5CEFDC4DA8 /* listing-empty-2026-07-28.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "listing-empty-2026-07-28.html"; sourceTree = "<group>"; };
 		2FF4DB3C69EF4EB9FFF24B24 /* PreferenceIsolationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceIsolationTests.swift; sourceTree = "<group>"; };
@@ -1449,6 +1453,7 @@
 			isa = PBXGroup;
 			children = (
 				6991F8344C755AD580ADCF48 /* ElecraftK3Driver.swift */,
+				2DB914F01A5E4A2501DCDC3A /* ElecraftKXDriver.swift */,
 				62C57A5EE8327AC390556B4E /* ElecraftProtocol.swift */,
 				18FD9BC7F74A79F7798C7DD3 /* ElecraftSession.swift */,
 				340ED4C605CDF7A0CB74E26C /* FlexDAXPacketizer.swift */,
@@ -1499,6 +1504,7 @@
 				E544AF9D2BD44EEFEC54BDF6 /* FlexRadioDriverTests.swift */,
 				E53DC8597A1A918FA7CB32D4 /* K3ProtocolTests.swift */,
 				C2DD03F2A0464D759CD172A8 /* KeyerTimingTests.swift */,
+				27B58709B2EFF6DABC1D312A /* KXProtocolTests.swift */,
 				EF6989E84D7AABBEB0B1451F /* MorseCodeTests.swift */,
 				51CE38D4FB00F99FA2C6D973 /* QMXProtocolTests.swift */,
 				9D222D2D642B661FCA00F173 /* RadioRegistryTests.swift */,
@@ -1982,6 +1988,7 @@
 				ABDD0E4BC39F882357AA73DC /* IndianaQSOPartyTests.swift in Sources */,
 				7C432C2A33658F48ADF44099 /* IowaQSOPartyTests.swift in Sources */,
 				097E888A0ACA42B4ED11F066 /* K3ProtocolTests.swift in Sources */,
+				591917314FC2BFC85D1FB151 /* KXProtocolTests.swift in Sources */,
 				1C435A7CF041FD09A750BDC7 /* KentuckyQSOPartyTests.swift in Sources */,
 				9F3E246A218E966A51DC14C3 /* KeyDiagnosticsTests.swift in Sources */,
 				42E10D9D5426C54AFA9C6A23 /* KeyMonitorGateTests.swift in Sources */,
@@ -2184,6 +2191,7 @@
 				FBD66968904E12B522405DA0 /* ESM.swift in Sources */,
 				F2BE6B5E0868F72361011DCF /* EditQSOSheet.swift in Sources */,
 				2B2A1A856A6A6B9837A2EFB1 /* ElecraftK3Driver.swift in Sources */,
+				1E69003A387A4B75D174E36E /* ElecraftKXDriver.swift in Sources */,
 				CC1153E72A63EB91CE80509E /* ElecraftProtocol.swift in Sources */,
 				D6F50940EBA08EEA2257B18E /* ElecraftSession.swift in Sources */,
 				7BD916C1B52B135ADEA0EB0E /* EntryBar.swift in Sources */,

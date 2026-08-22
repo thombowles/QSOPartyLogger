@@ -35,12 +35,27 @@ enum RadioRegistry {
     static let all: [RadioDescriptor] = [
         RadioDescriptor(
             id: "elecraft-k3",
-            displayName: "Elecraft K3 / K3S / KX3 / KX2",
+            displayName: "Elecraft K3 / K3S",
             connection: .serial,
             defaultBaud: 38400,
             baudRates: ElecraftK3Driver.baudRates,
             supportsDirectKeying: true,
             makeDriver: { ElecraftK3Driver() }
+        ),
+        // Same protocol, same jacks but one: the portables' CAT jack carries no
+        // key line, so they are keyed through their own keyer and this
+        // descriptor says so with `supportsDirectKeying: false` (Article 11).
+        // A separate entry rather than a branch inside one driver, because the
+        // keying path is a *type* property — `InternalKeyerDriver` conformance
+        // — and one class cannot be both.
+        RadioDescriptor(
+            id: "elecraft-kx",
+            displayName: "Elecraft KX3 / KX2",
+            connection: .serial,
+            defaultBaud: 38400,
+            baudRates: ElecraftKXDriver.baudRates,
+            supportsDirectKeying: false,
+            makeDriver: { ElecraftKXDriver() }
         ),
         RadioDescriptor(
             id: "qrplabs-qmx",

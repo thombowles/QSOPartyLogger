@@ -39,6 +39,9 @@ final class MockSerialTransport: SerialTransport, @unchecked Sendable {
         lock.withLock { written.joined() }
     }
 
+    /// Every poll string any driver here writes on its timer.
+    static let pollStrings = [ElecraftProtocol.pollCommands, ElecraftKXDriver.pollCommands]
+
     /// Writes with the periodic poll filtered out.
     ///
     /// `start` schedules a repeating poll on its own queue, so a test that
@@ -47,7 +50,7 @@ final class MockSerialTransport: SerialTransport, @unchecked Sendable {
     /// true, which is the difference between a test and a flake.
     var writtenExcludingPolls: String {
         lock.withLock {
-            written.filter { $0 != ElecraftProtocol.pollCommands }.joined()
+            written.filter { !Self.pollStrings.contains($0) }.joined()
         }
     }
 }
@@ -397,13 +400,6 @@ final class K3ProtocolTests: XCTestCase {
         XCTAssertEqual(ElecraftK3Driver.cmdPlayK3Memory[4], "SWT39;")
     }
 
-    /// Tables 8 and 8A — tap MSG (11), then the digit. Codes 19 and 27 are
-    /// digits 1 and 2 on both the KX3 and the KX2.
-    func testKXMemorySequences() {
-        XCTAssertEqual(ElecraftK3Driver.cmdPlayKXMemory[1], ["SWT11;", "SWT19;"])
-        XCTAssertEqual(ElecraftK3Driver.cmdPlayKXMemory[2], ["SWT11;", "SWT27;"])
-    }
-
     /// "Terminates transmit in all modes, including message play and repeating
     /// messages" — Programmer's Reference G5, RX entry.
     func testStopVoiceMessageCommand() {
@@ -459,15 +455,6 @@ final class K3ProtocolTests: XCTestCase {
         XCTAssertEqual(transport.writtenExcludingPolls, "TX;RX;")
     }
 
-    /// The bytes are the same on every model the driver serves — the
-    /// reference lists neither command as model-specific.
-    func testSetTransmitIsTheSameOnAKX() {
-        let (driver, transport) = startedRadio(om: "OM APF---TBXI02;", bank: 1)
-        driver.setTransmit(true)
-        driver.setTransmit(false)
-        XCTAssertEqual(transport.writtenExcludingPolls, "TX;RX;")
-    }
-
     /// The Elecraft family keys over CAT for a sound-card recording, and never
     /// takes the samples over its own link (Article 11: exactly one path).
     func testDriverKeysOverCATAndDoesNotStream() {
@@ -496,22 +483,24 @@ final class K3ProtocolTests: XCTestCase {
         XCTAssertEqual(transport.writtenExcludingPolls, "")
     }
 
-    func testKX3PlaysWithTheTwoCommandSequence() {
-        let (driver, transport) = startedRadio(om: "OM A-F-------02;")
+    /// A portable answering on this descriptor is not claimed. Its memories
+    /// are reached by a different switch sequence, so offering them here could
+    /// only tap the wrong switches — the mirror of
+    /// `KXProtocolTests.testAK3AnsweringHereIsNotClaimed`.
+    func testAKXAnsweringHereIsNotClaimedAndTapsNothing() {
+        nonisolated(unsafe) var reported: [VoiceKeyerStatus] = []
+        let driver = ElecraftK3Driver()
+        let transport = MockSerialTransport()
+        driver.onVoiceKeyerStatusChange = { reported.append($0) }
+        driver.start(transport: transport)
+        addTeardownBlock { driver.stop() }
 
-        driver.playVoiceMessage(memory: 2)
-        XCTAssertEqual(transport.writtenExcludingPolls, "SWT11;SWT27;")
-
+        transport.inject("OM A-F-------01;")
         transport.clearWritten()
-        driver.playVoiceMessage(memory: 3)
-        XCTAssertEqual(transport.writtenExcludingPolls, "", "a KX has two memories, not three")
-    }
-
-    /// A KX has no banks, so a bank command must never be emitted at one.
-    func testKXNeverSelectsABank() {
-        let (driver, transport) = startedRadio(om: "OM A-F-------01;")
         driver.playVoiceMessage(memory: 1)
-        XCTAssertFalse(transport.writtenExcludingPolls.contains("SWH37;"))
+
+        XCTAssertEqual(reported, [], "no memory count may be claimed for a radio this driver cannot play")
+        XCTAssertEqual(transport.writtenExcludingPolls, "")
     }
 
     /// A K3 with no recorder fitted must not emit a tap at all.

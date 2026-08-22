@@ -101,9 +101,6 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
 
     /// K3 M1–M4 tap (Table 7). Memories 5–8 are bank 2's M1–M4.
     static let cmdPlayK3Memory: [Int: String] = [1: "SWT21;", 2: "SWT31;", 3: "SWT35;", 4: "SWT39;"]
-    /// KX3/KX2: tap MSG, then tap the digit (Tables 8 and 8A). Codes 19 and 27
-    /// are digits 1 and 2 on both models.
-    static let cmdPlayKXMemory: [Int: [String]] = [1: ["SWT11;", "SWT19;"], 2: ["SWT11;", "SWT27;"]]
     /// K3 REC hold — selects voice bank 1 or 2. The bank is stored separately
     /// per mode group, so this cannot disturb the operator's CW memory bank.
     static let cmdSelectBank = "SWH37;"
@@ -165,34 +162,32 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
             return
         }
 
-        switch model {
-        case .kx3, .kx2:
-            guard let commands = Self.cmdPlayKXMemory[memory] else { return }
-            session.write(commands.joined())
+        // This driver serves the K3/K3S. A portable answering here has its own
+        // descriptor and its own driver, and its memories are reached by a
+        // different switch sequence entirely — so nothing is tapped.
+        guard model == .k3 else { return }
 
-        case .k3:
-            let wantedBank = memory <= 4 ? 1 : 2
-            guard let tap = Self.cmdPlayK3Memory[memory <= 4 ? memory : memory - 4] else { return }
-            if confirmed == wantedBank {
-                session.write(tap)
-                return
-            }
-            // The cached bank is up to one poll old, so it is not evidence.
-            // Hold the tap until an `IC` confirms the bank — wrong audio on the
-            // air is worse than silence (Article 11). A bank we have never
-            // observed is asked about; only a bank observed to be *wrong* is
-            // toggled.
-            lock.lock()
-            pendingVoiceMemory = memory
-            bankConfirmAttempts = 0
-            bankToggleRequested = confirmed != nil
-            lock.unlock()
-            session.write(
-                confirmed == nil
-                    ? ElecraftProtocol.cmdPollIcons
-                    : Self.cmdSelectBank + ElecraftProtocol.cmdPollIcons
-            )
+        let wantedBank = memory <= 4 ? 1 : 2
+        guard let tap = Self.cmdPlayK3Memory[memory <= 4 ? memory : memory - 4] else { return }
+        if confirmed == wantedBank {
+            session.write(tap)
+            return
         }
+        // The cached bank is up to one poll old, so it is not evidence.
+        // Hold the tap until an `IC` confirms the bank — wrong audio on the
+        // air is worse than silence (Article 11). A bank we have never
+        // observed is asked about; only a bank observed to be *wrong* is
+        // toggled.
+        lock.lock()
+        pendingVoiceMemory = memory
+        bankConfirmAttempts = 0
+        bankToggleRequested = confirmed != nil
+        lock.unlock()
+        session.write(
+            confirmed == nil
+                ? ElecraftProtocol.cmdPollIcons
+                : Self.cmdSelectBank + ElecraftProtocol.cmdPollIcons
+        )
     }
 
     func stopVoiceMessage() {
@@ -228,12 +223,18 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
             return
         }
         if let om = ElecraftProtocol.parseOM(response) {
+            // A portable answering on this descriptor is not claimed: its
+            // memories are played by a different switch sequence, so reporting
+            // a count here would offer phone keys that could only tap the
+            // wrong switches. Reporting none leaves them inert, and the
+            // operator's fix is the KX entry in the radio picker.
+            let status = om.model == .k3 ? om.voice : .unsupported
             lock.lock()
-            let changed = om.voice != voiceStatus
+            let changed = status != voiceStatus
             model = om.model
-            voiceStatus = om.voice
+            voiceStatus = status
             lock.unlock()
-            if changed { onVoiceKeyerStatusChange?(om.voice) }
+            if changed { onVoiceKeyerStatusChange?(status) }
             return
         }
         if let ic = ElecraftProtocol.parseIC(response) {

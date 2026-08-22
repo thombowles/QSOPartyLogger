@@ -71,7 +71,13 @@ enum ElecraftProtocol {
 
     /// MD command for an app mode; "SSB" resolves to the conventional
     /// sideband for the frequency (USB at/above 10 MHz, LSB below).
-    static func cmdSetMode(rawMode: String, frequencyHz: Int) -> String? {
+    ///
+    /// `model` decides exactly one thing. G5's `MD` entry says "FM mode does
+    /// not apply to the KX2", so a KX2 is never sent `MD4` — the same shape as
+    /// the QMX driver refusing to emit a mode digit its radio does not have.
+    /// It defaults to the model that has every mode, so the K3's callers and
+    /// their tests are unaffected.
+    static func cmdSetMode(rawMode: String, frequencyHz: Int, model: ElecraftModel = .k3) -> String? {
         let digit: Character? = switch rawMode.uppercased() {
         case "CW": "3"
         case "USB": "2"
@@ -79,7 +85,7 @@ enum ElecraftProtocol {
         case "SSB": frequencyHz >= 10_000_000 ? "2" : "1"
         case "RTTY", "DIGI": "6"
         case "AM": "5"
-        case "FM": "4"
+        case "FM": model == .kx2 ? nil : "4"
         default: nil
         }
         return digit.map { "MD\($0);" }
