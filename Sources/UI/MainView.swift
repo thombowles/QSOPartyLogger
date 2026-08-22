@@ -57,6 +57,10 @@ struct MainView: View {
     @State private var repeatCQ = false
     @State private var repeatTask: Task<Void, Never>?
     @State private var hostWindow: NSWindow?
+    /// ⌃⌘S, or the toolbar's Score button: the score sidebar hidden, so this
+    /// window can be pushed into a corner while another keeps its sidebar.
+    /// Per window, restored with it. The strip shows the total meanwhile.
+    @SceneStorage("scoreSidebarHidden") private var scoreSidebarHidden = false
 
     /// The active party's recordings on this Mac and the recorder behind the
     /// Messages editor's Phone tab. Per window, like the flow.
@@ -210,7 +214,11 @@ struct MainView: View {
 
     var body: some View {
         splitContent
-            .frame(minWidth: 1040, minHeight: 640)
+            // 360 holds the radio bar, the strip, the entry and message rows
+            // and five log rows; the width is the pane's floor plus the
+            // sidebar when it is shown. Two of these fit beside a panadapter
+            // (2026-08-22). Narrower than its rows need, the rows fold.
+            .frame(minHeight: 360)
             .onAppear(perform: onAppear)
             .onDisappear(perform: onDisappear)
             .sheet(isPresented: $showSetup) {
@@ -292,10 +300,12 @@ struct MainView: View {
         HSplitView {
             leftPane
                 .layoutPriority(1)
-            ScoreSidebar(
-                log: document.log, party: party, score: score, members: flow.combinedMembers,
-                advisorInput: advisorInput, onTune: tune
-            )
+            if !scoreSidebarHidden {
+                ScoreSidebar(
+                    log: document.log, party: party, score: score, members: flow.combinedMembers,
+                    advisorInput: advisorInput, onTune: tune
+                )
+            }
         }
     }
 
@@ -593,7 +603,11 @@ struct MainView: View {
     /// the second half, in `leftPane`.
     private var leftPaneSpotWired: some View {
         leftPaneContent
-        .frame(minWidth: 760)
+        // The everyday entry row — call, two reports, the exchange, Log — on
+        // one line with its padding (535 + 24; `ViewThatFits` picks the line
+        // by its ideal width, Log button and all). The widest party's row
+        // folds below ~770 (`WindowSizeTests`).
+        .frame(minWidth: 560)
         .background(WindowAccessor { window in
             hostWindow = window
             applyDefaultDocumentName()
@@ -793,6 +807,13 @@ struct MainView: View {
 
             Spacer()
 
+            // The total, while the sidebar that normally carries it is hidden.
+            if scoreSidebarHidden {
+                Text("\(score.total.formatted()) pts")
+                    .font(.callout.monospacedDigit().weight(.semibold))
+                    .help("Claimed score — the sidebar is hidden; ⌃⌘S shows it")
+            }
+
             Text("\(currentBand.rawValue) \(currentRawMode)")
                 .font(.callout.monospaced().weight(.semibold))
 
@@ -874,6 +895,18 @@ struct MainView: View {
             }
             .help("Band map — spots by frequency with the VFO marker (⌘B)")
             .shortcutHint("⌘B")
+
+            Button {
+                scoreSidebarHidden.toggle()
+            } label: {
+                Label("Score", systemImage: "sidebar.trailing")
+                    .foregroundStyle(scoreSidebarHidden ? .secondary : .primary)
+            }
+            .keyboardShortcut("s", modifiers: [.control, .command])
+            .help(scoreSidebarHidden
+                  ? "Show the score sidebar (⌃⌘S)"
+                  : "Hide the score sidebar (⌃⌘S) — the window can then shrink to half a display, and the strip shows the total")
+            .shortcutHint("⌃⌘S")
 
             Button {
                 showClusterPopover.toggle()

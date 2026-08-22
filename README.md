@@ -140,6 +140,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⇧⌘R` | Restore the party's default CW messages (Messages editor) |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
 | `⇧⌘M` | Expand / collapse every multiplier list in the score sidebar |
+| `⌃⌘S` | Show / hide the score sidebar — hidden, the window shrinks to about 560 points wide and the station strip shows the total |
 | `⇧⌘C` | Copy the score summary as text (also on the score card's right-click menu) |
 | `⇧⌘A` | Collapse / expand the Advisor |
 | `⌥⌘A` | Toggle what the Advisor optimises: Score ↔ QSOs |
@@ -194,6 +195,11 @@ the key code, which window had focus, and what the app did with it.
 - **County validation** against each party's official list, with suggestions for
   typos (`LNI` → `LIN`). The check follows where *you* are operating from, so an
   out-of-state entrant is checked against what they can actually receive.
+- **Two logs beside a panadapter.** The window shrinks to about 560 × 360
+  points with the score sidebar hidden (**⌃⌘S**, or the toolbar's Score
+  button), and about 820 wide with it. Narrower than its rows need, the F-key
+  row and the entry row fold onto extra lines instead of clipping; at the sizes
+  you use today nothing moves.
 - **Serial-number exchanges.** Where a party sends a QSO number instead of a
   report, the entry bar shows yours (pre-filled) and a field for theirs. A
   county-line contact is one contact and carries one number. Deleting a QSO
@@ -250,7 +256,8 @@ multipliers, and 1×1 word trackers where the sponsor runs one. Dupes are flagge
 but kept, because sponsors want them in the log. A **NEW MULT** badge appears
 before you log. The log list's **Pts** column is what the engine paid each row —
 the same breakdown the sidebar totals, so a Skeeter Hunt row reads 3, 2 or 1 by
-the number or power it sent, and a dupe reads 0.
+the number or power it sent, and a dupe reads 0. Hide the sidebar with **⌃⌘S**
+when the window has to be small — the station strip carries the total meanwhile.
 
 Each party names its own multiplier class, so NAQP counts *NA entities*, BCQP
 *districts* and QCQP *regions* — nothing says "county" at a party that doesn't
@@ -1070,7 +1077,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3105 unit tests**, none of which need hardware, a network or a microphone —
+**3112 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a

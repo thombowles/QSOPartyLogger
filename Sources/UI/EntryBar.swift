@@ -65,71 +65,22 @@ struct EntryBar: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 10) {
-                field("Call", text: $entry.callTyped, width: 140, focusTag: .call,
-                      ghost: entry.call.isEmpty
-                          ? entry.callFrame.map { (text: $0.call, color: callFrameColor) }
-                          : nil)
-                if party?.exchangeIncludesRST ?? true {
-                    field("RST S", text: $entry.rstSent, width: 60, focusTag: .rstSent)
-                    field("RST R", text: $entry.rstRcvd, width: 60, focusTag: .rstRcvd)
+            // One line wherever it fits — the fields are fixed width, so the
+            // row's ideal is its minimum — and a flow of the same fields
+            // below that, so a narrow window folds the member and P2P fields
+            // onto a second line rather than clipping the Log button.
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 10) {
+                    fields
+                    statusBadge
+                    Spacer()
+                    logButton
                 }
-                if party?.exchangeIncludesSerial ?? false {
-                    field("Ser S", text: $entry.serialSent, width: 60, focusTag: .serialSent)
-                    field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
+                FlowLayout(horizontalSpacing: 10, verticalSpacing: 6) {
+                    fields
+                    statusBadge
+                    logButton
                 }
-                if party?.exchangeIncludesName ?? false {
-                    field("Name", text: $entry.nameTyped, width: 100,
-                          focusTag: .nameRcvd, provisional: entry.nameIsAutoFilled)
-                }
-                field(
-                    exchangeLabel,
-                    text: $entry.exchangeTyped,
-                    width: 170,
-                    focusTag: .exchange,
-                    provisional: entry.exchangeIsAutoFilled
-                )
-                // Provisional text from our own log is something the operator
-                // copied once already. A county from a spot is a stranger's
-                // claim about a station never worked, so it gets the louder
-                // treatment — what was heard must never look like what was
-                // merely asserted.
-                .overlay {
-                    if entry.exchangeIsUnconfirmed {
-                        RoundedRectangle(cornerRadius: 5)
-                            .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
-                            .foregroundStyle(.orange)
-                            .padding(.top, 16)
-                            .allowsHitTesting(false)
-                    }
-                }
-                .help(entry.exchangeIsUnconfirmed
-                      ? "From a spot, not copied — confirm it before logging"
-                      : "")
-                if let member = party?.memberExchange {
-                    // After the location, the way it is sent ("559 NJ NR 13").
-                    // A number or a power with its unit — "13" or "5W".
-                    field(member.shortTerm, text: $entry.memberTyped, width: 80,
-                          focusTag: .memberRcvd, provisional: entry.memberIsAutoFilled)
-                        // The field is narrow and its label cannot say all
-                        // three cases, of which the blank one is the least
-                        // guessable.
-                        .help("\(member.term), or their power (5W, 100W). "
-                              + "Leave empty if they sent neither — that scores as QRO.")
-                }
-                if showsP2P {
-                    field("P2P park(s)", text: $entry.theirParkTyped,
-                          width: 110, focusTag: .theirPark)
-                        .help("The other station's POTA reference(s) when they are "
-                              + "in a park too — US-3315, comma-separated for an "
-                              + "n-fer. Leave empty otherwise.")
-                }
-                statusBadge
-                Spacer()
-                Button("Log", action: onLog)
-                    .keyboardShortcut(.defaultAction)
-                    .disabled(!canLog)
-                    .shortcutHint("⏎")
             }
             if let warning = entry.dupeWarning {
                 Label(warning, systemImage: "exclamationmark.triangle.fill")
@@ -209,6 +160,76 @@ struct EntryBar: View {
                 && !entry.invalidTheirPark()
         }
         return false
+    }
+
+    /// The entry fields in Tab order, as many as the party needs.
+    @ViewBuilder
+    private var fields: some View {
+        field("Call", text: $entry.callTyped, width: 140, focusTag: .call,
+              ghost: entry.call.isEmpty
+                  ? entry.callFrame.map { (text: $0.call, color: callFrameColor) }
+                  : nil)
+        if party?.exchangeIncludesRST ?? true {
+            field("RST S", text: $entry.rstSent, width: 60, focusTag: .rstSent)
+            field("RST R", text: $entry.rstRcvd, width: 60, focusTag: .rstRcvd)
+        }
+        if party?.exchangeIncludesSerial ?? false {
+            field("Ser S", text: $entry.serialSent, width: 60, focusTag: .serialSent)
+            field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
+        }
+        if party?.exchangeIncludesName ?? false {
+            field("Name", text: $entry.nameTyped, width: 100,
+                  focusTag: .nameRcvd, provisional: entry.nameIsAutoFilled)
+        }
+        field(
+            exchangeLabel,
+            text: $entry.exchangeTyped,
+            width: 170,
+            focusTag: .exchange,
+            provisional: entry.exchangeIsAutoFilled
+        )
+        // Provisional text from our own log is something the operator
+        // copied once already. A county from a spot is a stranger's
+        // claim about a station never worked, so it gets the louder
+        // treatment — what was heard must never look like what was
+        // merely asserted.
+        .overlay {
+            if entry.exchangeIsUnconfirmed {
+                RoundedRectangle(cornerRadius: 5)
+                    .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                    .foregroundStyle(.orange)
+                    .padding(.top, 16)
+                    .allowsHitTesting(false)
+            }
+        }
+        .help(entry.exchangeIsUnconfirmed
+              ? "From a spot, not copied — confirm it before logging"
+              : "")
+        if let member = party?.memberExchange {
+            // After the location, the way it is sent ("559 NJ NR 13").
+            // A number or a power with its unit — "13" or "5W".
+            field(member.shortTerm, text: $entry.memberTyped, width: 80,
+                  focusTag: .memberRcvd, provisional: entry.memberIsAutoFilled)
+                // The field is narrow and its label cannot say all
+                // three cases, of which the blank one is the least
+                // guessable.
+                .help("\(member.term), or their power (5W, 100W). "
+                      + "Leave empty if they sent neither — that scores as QRO.")
+        }
+        if showsP2P {
+            field("P2P park(s)", text: $entry.theirParkTyped,
+                  width: 110, focusTag: .theirPark)
+                .help("The other station's POTA reference(s) when they are "
+                      + "in a park too — US-3315, comma-separated for an "
+                      + "n-fer. Leave empty otherwise.")
+        }
+    }
+
+    private var logButton: some View {
+        Button("Log", action: onLog)
+            .keyboardShortcut(.defaultAction)
+            .disabled(!canLog)
+            .shortcutHint("⏎")
     }
 
     @ViewBuilder

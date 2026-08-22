@@ -39,105 +39,136 @@ struct MessagesRow: View {
     let cqFrequencyLabel: String?
     let onJumpToCQ: () -> Void
 
+    /// The single row's minimum content width — the picker, eight keys at
+    /// their 62-point floor and the controls at theirs — measured 2026-08-22.
+    /// Declared as the row's *ideal* so `ViewThatFits` keeps the single line
+    /// at every width it fits today and folds only below it: a flow lays
+    /// items out at their natural width and would fold the controls onto a
+    /// second line even at the default window. `WindowSizeTests` pins the
+    /// switch.
+    static let singleRowWidth: CGFloat = 884
+
     var body: some View {
-        HStack(spacing: 6) {
-            Picker("", selection: $operatingMode) {
-                ForEach(OperatingMode.allCases, id: \.self) { mode in
-                    Text(mode.rawValue).tag(mode)
-                }
+        ViewThatFits(in: .horizontal) {
+            // Today's row, verbatim, wherever it fits.
+            HStack(spacing: 6) {
+                modePicker
+                messageKeys
+                Spacer()
+                controls
             }
-            .pickerStyle(.segmented)
-            .fixedSize()
-            .help("Run = calling CQ; S&P = search and pounce. Each has its own F1–F8 set. "
-                  + "Toggle Run / Search & Pounce (⌘R). Tuning off your CQ frequency switches to "
-                  + "S&P and tuning back onto it switches to Run — the band map's Tuning options.")
-            // Article 7 — keyboard-first. An out-of-state log opens in S&P, and
-            // ⌘J only reaches Run once a CQ frequency has been captured, which
-            // needs Run already. A picker carries no shortcut of its own, so an
-            // invisible button behind it carries one. It toggles rather than
-            // jumping to Run so the single key serves both directions.
-            .background {
-                Button("Toggle Run / Search & Pounce") {
-                    operatingMode = operatingMode == .run ? .searchPounce : .run
-                }
-                .keyboardShortcut("r", modifiers: .command)
-                .opacity(0)
-                .accessibilityHidden(true)
+            .frame(idealWidth: Self.singleRowWidth)
+            // Narrower than that, the same items fold onto more lines rather
+            // than pushing the stepper, Repeat CQ and ESM off the edge.
+            FlowLayout(horizontalSpacing: 6, verticalSpacing: 4) {
+                modePicker
+                messageKeys
+                controls
             }
-            .shortcutHint("⌘R")
-
-            ForEach(Array(keys.prefix(8).enumerated()), id: \.offset) { index, key in
-                Button {
-                    onSend(index)
-                } label: {
-                    VStack(spacing: 1) {
-                        Text("F\(index + 1)")
-                            .font(.caption2.weight(.bold))
-                            .foregroundStyle(.secondary)
-                        Text(shortLabel(key.caption))
-                            .font(.caption)
-                            .lineLimit(1)
-                    }
-                    .frame(minWidth: 62)
-                }
-                .disabled(!enabled || !key.isActive)
-                .overlay {
-                    if index == pendingIndex {
-                        RoundedRectangle(cornerRadius: 5)
-                            .strokeBorder(.purple, lineWidth: 2)
-                    }
-                }
-                .help(index == pendingIndex ? "Return sends this: \(key.caption)" : key.caption)
-                // Right-click to revise the message this key sends. Enabled
-                // even when the key itself is inert — an empty slot is exactly
-                // the one you want to fill in. ⌥F1–⌥F8 do the same thing
-                // (Article 7).
-                .contextMenu {
-                    Button("Edit F\(index + 1)…") { onEdit(index) }
-                }
-            }
-
-            Spacer()
-
-            if let cqFrequencyLabel {
-                Button {
-                    onJumpToCQ()
-                } label: {
-                    Label(cqFrequencyLabel, systemImage: "arrow.uturn.backward")
-                        .font(.caption.monospacedDigit())
-                }
-                .help("Jump back to your CQ run frequency and Run mode (⌘J)")
-                .shortcutHint("⌘J")
-            }
-
-            Toggle(isOn: $esmEnabled) {
-                Label("ESM", systemImage: "return")
-                    .font(.caption)
-            }
-            .toggleStyle(.button)
-            .tint(.purple)
-            .help("Enter Sends Message: with the cursor in the call field Return only calls — it never logs. Move to the exchange and Return logs and sends your report. An exchange that matches nothing sends AGN?. The outlined key is what Return sends next.")
-
-            Toggle(isOn: $repeatEnabled) {
-                Label(repeatPaused ? "Repeat CQ ⏸" : "Repeat CQ", systemImage: "repeat")
-                    .font(.caption)
-            }
-            .toggleStyle(.button)
-            .tint(repeatPaused ? .orange : .accentColor)
-            .disabled(!enabled || operatingMode != .run)
-            .help("Repeat F1 after each interval. Arming keys nothing — F1, the CQ button or ESM's "
-                  + "Return start the loop. Typing or Esc pauses it and the mode stays on, as does "
-                  + "leaving Run; shortcuts leave it running. Click again to turn the mode off.")
-
-            Stepper(value: $repeatInterval, in: 0.5...15, step: 0.5) {
-                Text(String(format: "%.1fs", repeatInterval))
-                    .font(.caption.monospacedDigit())
-            }
-            .disabled(!repeatEnabled)
-            .help("Silence between repeats")
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 4)
+    }
+
+    private var modePicker: some View {
+        Picker("", selection: $operatingMode) {
+            ForEach(OperatingMode.allCases, id: \.self) { mode in
+                Text(mode.rawValue).tag(mode)
+            }
+        }
+        .pickerStyle(.segmented)
+        .fixedSize()
+        .help("Run = calling CQ; S&P = search and pounce. Each has its own F1–F8 set. "
+              + "Toggle Run / Search & Pounce (⌘R). Tuning off your CQ frequency switches to "
+              + "S&P and tuning back onto it switches to Run — the band map's Tuning options.")
+        // Article 7 — keyboard-first. An out-of-state log opens in S&P, and
+        // ⌘J only reaches Run once a CQ frequency has been captured, which
+        // needs Run already. A picker carries no shortcut of its own, so an
+        // invisible button behind it carries one. It toggles rather than
+        // jumping to Run so the single key serves both directions.
+        .background {
+            Button("Toggle Run / Search & Pounce") {
+                operatingMode = operatingMode == .run ? .searchPounce : .run
+            }
+            .keyboardShortcut("r", modifiers: .command)
+            .opacity(0)
+            .accessibilityHidden(true)
+        }
+        .shortcutHint("⌘R")
+    }
+
+    @ViewBuilder
+    private var messageKeys: some View {
+        ForEach(Array(keys.prefix(8).enumerated()), id: \.offset) { index, key in
+            Button {
+                onSend(index)
+            } label: {
+                VStack(spacing: 1) {
+                    Text("F\(index + 1)")
+                        .font(.caption2.weight(.bold))
+                        .foregroundStyle(.secondary)
+                    Text(shortLabel(key.caption))
+                        .font(.caption)
+                        .lineLimit(1)
+                }
+                .frame(minWidth: 62)
+            }
+            .disabled(!enabled || !key.isActive)
+            .overlay {
+                if index == pendingIndex {
+                    RoundedRectangle(cornerRadius: 5)
+                        .strokeBorder(.purple, lineWidth: 2)
+                }
+            }
+            .help(index == pendingIndex ? "Return sends this: \(key.caption)" : key.caption)
+            // Right-click to revise the message this key sends. Enabled
+            // even when the key itself is inert — an empty slot is exactly
+            // the one you want to fill in. ⌥F1–⌥F8 do the same thing
+            // (Article 7).
+            .contextMenu {
+                Button("Edit F\(index + 1)…") { onEdit(index) }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var controls: some View {
+        if let cqFrequencyLabel {
+            Button {
+                onJumpToCQ()
+            } label: {
+                Label(cqFrequencyLabel, systemImage: "arrow.uturn.backward")
+                    .font(.caption.monospacedDigit())
+            }
+            .help("Jump back to your CQ run frequency and Run mode (⌘J)")
+            .shortcutHint("⌘J")
+        }
+
+        Toggle(isOn: $esmEnabled) {
+            Label("ESM", systemImage: "return")
+                .font(.caption)
+        }
+        .toggleStyle(.button)
+        .tint(.purple)
+        .help("Enter Sends Message: with the cursor in the call field Return only calls — it never logs. Move to the exchange and Return logs and sends your report. An exchange that matches nothing sends AGN?. The outlined key is what Return sends next.")
+
+        Toggle(isOn: $repeatEnabled) {
+            Label(repeatPaused ? "Repeat CQ ⏸" : "Repeat CQ", systemImage: "repeat")
+                .font(.caption)
+        }
+        .toggleStyle(.button)
+        .tint(repeatPaused ? .orange : .accentColor)
+        .disabled(!enabled || operatingMode != .run)
+        .help("Repeat F1 after each interval. Arming keys nothing — F1, the CQ button or ESM's "
+              + "Return start the loop. Typing or Esc pauses it and the mode stays on, as does "
+              + "leaving Run; shortcuts leave it running. Click again to turn the mode off.")
+
+        Stepper(value: $repeatInterval, in: 0.5...15, step: 0.5) {
+            Text(String(format: "%.1fs", repeatInterval))
+                .font(.caption.monospacedDigit())
+        }
+        .disabled(!repeatEnabled)
+        .help("Silence between repeats")
     }
 
     private func shortLabel(_ caption: String) -> String {

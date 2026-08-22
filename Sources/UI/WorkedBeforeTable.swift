@@ -30,8 +30,10 @@ struct WorkedBeforeTable: View {
     /// Past this the table scrolls. A station can only be worked bands × modes
     /// times, and six covers any realistic weekend.
     static let visibleRowCap = 6
-    /// The log table's minimum with no history table above it.
-    static let logTableMinAlone: CGFloat = 240
+    /// The log table's minimum with no history table above it: a header and
+    /// five rows. 240 until 2026-08-22; the window's 360-point floor has no
+    /// room for more, and the log scrolls.
+    static let logTableMinAlone: CGFloat = 120
 
     static func height(contacts: Int, hasArchiveLine: Bool) -> CGFloat {
         guard contacts > 0 || hasArchiveLine else { return 0 }

@@ -435,6 +435,14 @@ final class KeyMonitorGateTests: XCTestCase {
         )
     }
 
+    /// ⌃⌘S — show or hide the score sidebar — is SwiftUI's too: the gate does
+    /// not see ⌃ at all, so the chord reaches the toolbar button untouched,
+    /// and as a ⌘ chord it leaves a repeating CQ alone (2026-08-22).
+    func testControlCommandSIsNotTheGatesAndLeavesARepeatingCQAlone() {
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 1, command: true))  // 's'
+        XCTAssertEqual(response(1, command: true, repeatRunning: true), .init())
+    }
+
     /// ⌘R (Run ⇄ S&P) and ⇧⌘S (the spot sheet) are SwiftUI's, not the gate's
     /// — but they pass through the monitor first, and used to take the CQ
     /// down on the way. Not ours to act on, and not ours to stop.

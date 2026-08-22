@@ -162,6 +162,7 @@
 		4BB24860B49D12AC15176471 /* ExchangeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD32257D3D8870AAFF61403B /* ExchangeParser.swift */; };
 		4C0190EFE7A126C07024FF23 /* ExchangeSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF6B6669FD60CEDA6A19618 /* ExchangeSummary.swift */; };
 		4C6F3EB10F2A2E571A4BBE0B /* VoicePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B6B87D6DA82FC8932F72E /* VoicePlayer.swift */; };
+		4D115FD08D43EF0A1B9BDA61 /* WindowSizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2624011BC330651D87867E /* WindowSizeTests.swift */; };
 		4DAE81B45EDC32DB2E66AD2F /* VoiceKeyer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BB5E239E0C8A5D1FDC80DA /* VoiceKeyer.swift */; };
 		4EDC1040C940876CB130ECE2 /* MinnesotaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F709BDC71E9A295713CBA38 /* MinnesotaQSOPartyTests.swift */; };
 		4EF923452A1A7744E280BF48 /* ScoreSummaryTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C46422A2219F8E603B7F44 /* ScoreSummaryTextTests.swift */; };
@@ -856,6 +857,7 @@
 		BACC3C74F70765598FFE57A5 /* VoiceStatusTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceStatusTextTests.swift; sourceTree = "<group>"; };
 		BBCF2F37A32D904FCCB58446 /* CallHistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryStoreTests.swift; sourceTree = "<group>"; };
 		BBFA325FEB27F5D7ED9C236E /* SpotSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSheet.swift; sourceTree = "<group>"; };
+		BE2624011BC330651D87867E /* WindowSizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSizeTests.swift; sourceTree = "<group>"; };
 		BE87C8AFF4402D21D499C37A /* SerialTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialTransport.swift; sourceTree = "<group>"; };
 		BEFD29B68C87E0D24267605B /* BonusScopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusScopeTests.swift; sourceTree = "<group>"; };
 		BF00103007CE54AA22F0DCF9 /* RadioDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioDriver.swift; sourceTree = "<group>"; };
@@ -1099,6 +1101,7 @@
 				51C881733E52B4CD62D43604 /* SpottingPolicyTests.swift */,
 				713B9DF33F0B96DF2A018A11 /* UppercasingFieldTests.swift */,
 				3A0906D967C114B94D58178D /* VoicePaneKeysTests.swift */,
+				BE2624011BC330651D87867E /* WindowSizeTests.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -2146,6 +2149,7 @@
 				59F2A53F43A55D2BBCA3330A /* VoiceStatusTextTests.swift in Sources */,
 				B518E5100263F27EB5EE9A8A /* VoiceStoreTests.swift in Sources */,
 				5AB0A34A5A5F1D3D57E1A4B6 /* WPXPrefixTests.swift in Sources */,
+				4D115FD08D43EF0A1B9BDA61 /* WindowSizeTests.swift in Sources */,
 				A42E6B812AB3926365054BE2 /* WisconsinQSOPartyTests.swift in Sources */,
 				0EDE7ED8045380184EDE1D4F /* WorkedBeforeTableTests.swift in Sources */,
 				EEAC967D1FF111C0098BA700 /* WorkedStationSpotTests.swift in Sources */,

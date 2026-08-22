@@ -58,14 +58,19 @@ the operator wants at half a display.
 
 ## Decisions
 
-1. **Floors: the pane 760 → 520, the window 640 → 360 tall, and the
-   window's explicit 1040 goes.** 520 holds the entry row of every party
-   but Skeeter-with-P2P on one line (498 + padding), and the window's width
-   is then the pane plus the sidebar, if shown: ~780 with it, ~520 without.
-   360 tall holds the radio bar, the strip, the entry row, the message row
-   and five log rows. Two 780-wide logs fit side by side on a 1920-point
-   display with room above for a panadapter. *Alternative:* no floors at
-   all — a window crushed to a sliver by a stray drag, for no gain.
+1. **Floors: the pane 760 → 560, the window 640 → 360 tall, and the
+   window's explicit 1040 goes.** 560 holds the everyday entry row — call,
+   two reports, the exchange and the Log button — on one line with its
+   padding (535 + 24: `ViewThatFits` picks the line by its *ideal* width,
+   which has the Log button's label in it, not by the 498 the row can be
+   squeezed to). Only Skeeter-with-P2P folds above that, below ~770. The
+   window's width is then the pane plus the sidebar, if shown: ~820 with
+   it, ~560 without. 360 tall holds the radio bar, the strip, the entry
+   row, the message row and five log rows. Two 820-wide logs fit side by
+   side on a 1920-point display with room above for a panadapter.
+   *Alternative:* no floors at all — a window crushed to a sliver by a
+   stray drag, for no gain. *Alternative:* 520, the first number tried —
+   at which the everyday row folds its Log button onto a second line.
 2. **The log table's floor 240 → 120.** `logTableMinAlone` keeps its job —
    the log shrinks by exactly the history table's height so the window
    never grows when a match appears — at a lower number. *Alternative:*
@@ -126,7 +131,7 @@ warning, exchange notices) is unchanged.
 
 - `splitContent.frame(minHeight: 360)` replaces `.frame(minWidth: 1040,
   minHeight: 640)`; `leftPaneSpotWired`'s `.frame(minWidth: 760)` becomes
-  520.
+  560.
 - `@SceneStorage("scoreSidebarHidden") private var scoreSidebarHidden =
   false`; the `HSplitView` adds the sidebar only while it is shown.
 - Toolbar: a *Score* button (`sidebar.trailing`), `⌃⌘S`, wearing the hint;
@@ -150,8 +155,9 @@ window size, and every keyboard path.
 ## Tests
 
 - `Tests/UI/WindowSizeTests.swift` — the probe that produced the table
-  above, kept with bounds: `MainView`'s minimum is at most 800 × 400 with
-  the sidebar shown; `MessagesRow` is one line tall at `singleRowWidth` plus
+  above, kept with bounds: `MainView`'s minimum is at most 840 × 400 with
+  the sidebar shown; the everyday entry row is one line at the pane's
+  floor; `MessagesRow` is one line tall at `singleRowWidth` plus
   its padding and taller one point below it, and its minimum width is under
   200; `EntryBar` for Skeeter with P2P has a minimum width under 320;
   `ScoreSidebar`'s floor is still 250.
@@ -168,7 +174,7 @@ note with the floors; the test count. This spec's as-built note.
 ## Commit sequence
 
 1. `docs: design for a log window that shrinks` — this file.
-2. `window: the log window shrinks to 520 × 360 — rows fold, the score
+2. `window: the log window shrinks to 560 × 360 — rows fold, the score
    sidebar hides (⌃⌘S)` — the rows, the view, the tests, README, and this
    spec's as-built note.
 
@@ -178,3 +184,38 @@ note with the floors; the test count. This spec's as-built note.
   verifiable without a screen; the bounds in the tests are the claim.
 - `@SceneStorage` restores with the window; a log reopened from the
   dashboard or the Finder starts with the sidebar shown. Not pinned.
+
+## As built — 2026-08-22
+
+Landed on `claude/smaller-windows` in the two commits above, on top of
+`dcf08b3`.
+
+**Suite: 3105 → 3112, 0 failures** (2 skipped, as before). The tests went in
+first — the probe that produced the table under *Why*, rewritten with bounds
+— and the test target failed to build on `MessagesRow.singleRowWidth` alone.
+Then the rows, the floors, the sidebar and the strip; on the first run five
+of the six size tests passed and one did not: at the 520 floor the
+*everyday* entry row folded, its Log button on a second line. The cause is
+the rule in Decision 3 read the other way round — `ViewThatFits` chooses by
+the single line's *ideal* width, 535 for that row, which has the Log
+button's label in it; the 498 in the table is what the row can be squeezed
+to, not what it asks for. The floor moved to 560 (535 + padding), the test
+pins exactly that promise, and the whole suite then passed: `Executed 3112
+tests, with 2 tests skipped and 0 failures`.
+
+Worth recording:
+
+1. **Measure, then decide.** The table under *Why* came from a hosted test
+   before a line of layout changed; without it the messages row — 908 wide,
+   unfoldable — would have been found by the operator, not the suite.
+2. **`@SceneStorage` outside a scene is harmless.** `WindowSizeTests` builds
+   `MainView` in a bare `NSHostingController`; the property falls back to
+   its default and nothing is written.
+3. **The folding variants re-create the fields.** Crossing the fold width
+   while typing moves the row between two containers, and SwiftUI gives the
+   text fields new identity — a call half-typed at the moment of a resize
+   could lose focus. Not seen, not pinned; the window is not resized at 35
+   WPM.
+
+**Not yet seen on a screen.** The Release build is staged for the operator:
+the folded rows, the strip's total, the Score button.
