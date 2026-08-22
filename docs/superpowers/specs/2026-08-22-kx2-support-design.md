@@ -285,7 +285,8 @@ so the callback is what is pinned.
    `/dev/cu.usbserial-FTELBR55`, both with a non-zero read offset, i.e. two
    drivers polling one port and each `read()` stealing bytes the other needed.
    The operator confirmed multi-window is intended and normal, so the connection
-   needs to be shared across windows. Its own design.
+   needs to be shared across windows. Its own design — built the same day:
+   [`2026-08-22-shared-radio-connection-design.md`](2026-08-22-shared-radio-connection-design.md).
 
 ## Commit sequence (Article 9 — one radio per commit)
 

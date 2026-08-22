@@ -7,7 +7,10 @@ struct MainView: View {
     @Environment(\.undoManager) private var undoManager
 
     @State private var settings = AppSettings.shared
-    @State private var radio = RadioController()
+    /// The app's one radio, held the way `settings` is — every log window
+    /// shares it, and this window counts itself in and out in `onAppear` /
+    /// `onDisappear` so the link outlives any one of them.
+    @State private var radio = RadioController.shared
     /// Everything the radio puts on the air goes through here. This view builds
     /// the context, calls the flow, and hands the returned transmission to the
     /// radio — it never decides what that transmission is.
@@ -712,7 +715,9 @@ struct MainView: View {
         spotClient.disconnect()
         bandMapPanel?.close()
         bandMapPanel = nil
-        radio.disconnect()
+        // Not `disconnect()`: the radio is the app's, and another window may
+        // still be logging on it. The last window out releases the port.
+        radio.windowDidClose()
     }
 
     // MARK: Station strip
@@ -1114,6 +1119,10 @@ struct MainView: View {
         // The party's recordings load and render off the main actor; the
         // `onChange` on `rendered` hands them to the flow when they land.
         voiceStore.partyID = document.log.partyID
+        // Counted in first: a window that finds the radio already up is
+        // counted like the one that brought it up, and `autoConnect` is a
+        // no-op on a live link.
+        radio.windowDidOpen()
         radio.autoConnect(settings: settings)
 
         // A spot can only get this far under an ASSISTED declaration, so the

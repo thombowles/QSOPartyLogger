@@ -406,7 +406,11 @@ transmit audio (DAX) over the same connection.
 
 Opening a contest file reconnects the last radio you used, and every connect
 *validates* that the radio actually answers rather than letting a dead link
-surface mid-pileup. Connection status lives in the radio bar, not in popups: it
+surface mid-pileup. The connection is the app's, not the window's: a second log
+window shares the radio rather than opening the port again — every window's
+radio bar shows the same frequency, badge and status, Connect and Disconnect in
+any of them act on the one radio, and the port is released when the last log
+window closes. Connection status lives in the radio bar, not in popups: it
 reads "Waiting for radio…" while the link proves out, then shows the live
 frequency — or warns **Radio not answering** in orange, with the details one
 tooltip away. The button offers **Disconnect** only once the radio has answered;
@@ -1057,10 +1061,11 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3073 unit tests**, none of which need hardware, a network or a microphone —
+**3077 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
-exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
-(driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank
+exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
+including its sharing between log windows — (driven over `/dev/null` as a
+stone-deaf serial port), the voice-memory bank
 sequence and its refusal to transmit a memory the radio has not confirmed, the
 voice recorder's model and DSP and its per-party files, the sound-card keying
 sequence (lead, play, tail, unkey — abort at every point, over a fake output),

@@ -135,6 +135,7 @@
 		3CB5FBA489EFFACEE3A57BB1 /* RadioControllerConnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96F76D3F0F364CAA514E629 /* RadioControllerConnectionTests.swift */; };
 		3D1801F37FFEC64F2E540F52 /* SerialPortEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D026EFBE941E3104530AE /* SerialPortEnumerator.swift */; };
 		3E4CB50A4A38D69CDDF3CB6A /* EntryCommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA4D636DCF7164283660F61 /* EntryCommandTests.swift */; };
+		3EBBB641E64C787550EB803E /* RadioControllerSharedConnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C1A05FDABF63DE21084124 /* RadioControllerSharedConnectionTests.swift */; };
 		3EC65F34682AFB29CB5CB473 /* SpotLabelSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B32AF67B7058055ADD0B7 /* SpotLabelSize.swift */; };
 		3F69F4565E8E564590E34E1F /* FOBBRosterParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C804DC994EBCD81FCA5E94 /* FOBBRosterParser.swift */; };
 		406B8E868EA486712C1D3E7F /* HubSpotSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9183D3107E206A940C2DCDCB /* HubSpotSourceTests.swift */; };
@@ -779,6 +780,7 @@
 		95D6B397C7B014ACA6232F8F /* CountyLineExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountyLineExpander.swift; sourceTree = "<group>"; };
 		96C1CC73171B49CEFB01A99E /* MichiganQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MichiganQSOPartyTests.swift; sourceTree = "<group>"; };
 		9750E1850D4F150A6E2742D0 /* paqp-inside-sections.log */ = {isa = PBXFileReference; path = "paqp-inside-sections.log"; sourceTree = "<group>"; };
+		97C1A05FDABF63DE21084124 /* RadioControllerSharedConnectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioControllerSharedConnectionTests.swift; sourceTree = "<group>"; };
 		98AB9C7110E1F087E71F6A58 /* AdvisorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisorTests.swift; sourceTree = "<group>"; };
 		99AB2A7AD88B5D79B5A0C377 /* mdc-inside-no-rst.log */ = {isa = PBXFileReference; path = "mdc-inside-no-rst.log"; sourceTree = "<group>"; };
 		9A39D1408949FD95B50D1EFC /* CallHistorySourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistorySourceTests.swift; sourceTree = "<group>"; };
@@ -1599,6 +1601,7 @@
 				D96F76D3F0F364CAA514E629 /* RadioControllerConnectionTests.swift */,
 				0F83A531E3F0B565E7C2710D /* RadioControllerNudgeTests.swift */,
 				15F470675F687ABB38604249 /* RadioControllerRecordingTests.swift */,
+				97C1A05FDABF63DE21084124 /* RadioControllerSharedConnectionTests.swift */,
 				B7048B719696E04B4942D1AC /* RadioControllerVoiceTests.swift */,
 				C547B8C6F97A27863035E7CD /* RepeatCQPolicyTests.swift */,
 				5F8A0D8EDD44C17364359A07 /* SCPClientTests.swift */,
@@ -2060,6 +2063,7 @@
 				3CB5FBA489EFFACEE3A57BB1 /* RadioControllerConnectionTests.swift in Sources */,
 				74B3B2C1C034061411EA9B2B /* RadioControllerNudgeTests.swift in Sources */,
 				AC7BABF01C4A1A0F06D46D0F /* RadioControllerRecordingTests.swift in Sources */,
+				3EBBB641E64C787550EB803E /* RadioControllerSharedConnectionTests.swift in Sources */,
 				FED0EBDE88307F2AA6D6B6D7 /* RadioControllerVoiceTests.swift in Sources */,
 				9B5CFCE3C27C45119FC5574E /* RadioRegistryTests.swift in Sources */,
 				7820E065122DA7959EF0D0DC /* RateColumnTests.swift in Sources */,

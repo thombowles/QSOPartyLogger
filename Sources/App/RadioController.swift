@@ -67,6 +67,14 @@ final class RadioController {
     typealias ConnectionPhase = RadioConnectionPhase
     typealias ConnectionError = RadioConnectionError
 
+    /// The app's one radio. Every log window holds this instance, the way it
+    /// holds `AppSettings.shared`: a serial port is one stream of bytes, and
+    /// two controllers each polling it split every CAT response between two
+    /// parsers (2026-08-22, `lsof`: two descriptors on one
+    /// `/dev/cu.usbserial-*`, both mid-read). Lazy, so the first window builds
+    /// it and nothing at launch does. Tests build their own with `init()`.
+    static let shared = RadioController()
+
     private(set) var isConnected = false
     private(set) var radioState: RadioState?
     private(set) var lastError: ConnectionError?
@@ -147,6 +155,8 @@ final class RadioController {
         voiceLog = streamer?.transmitAudioTranscript ?? []
     }
 
+    /// The serial ports on offer. Tests inject; the app asks IOKit.
+    var enumeratePorts: () -> [SerialPortInfo] = { SerialPortEnumerator.availablePorts() }
     var availablePorts: [SerialPortInfo] = []
 
     private var transport: (any SerialTransport)?
@@ -200,7 +210,7 @@ final class RadioController {
     }
 
     func refreshPorts() {
-        availablePorts = SerialPortEnumerator.availablePorts()
+        availablePorts = enumeratePorts()
     }
 
     func clearError() {
@@ -372,6 +382,31 @@ final class RadioController {
         }
 
         connect(settings: settings)
+    }
+
+    /// How many log windows are showing this connection. The connection is
+    /// the app's, not any one window's: the first window brings it up
+    /// (`autoConnect`), and it comes down with the last — never because *a*
+    /// window closed while another was still logging on it.
+    private(set) var attachedWindows = 0
+
+    /// A log window appeared. Counted before it auto-connects, so a window
+    /// that finds the radio already up is counted exactly like the one that
+    /// brought it up.
+    func windowDidOpen() {
+        attachedWindows += 1
+    }
+
+    /// A log window went away. The last one out releases the port — a full
+    /// `disconnect`, so a message or recording still on the air comes down
+    /// with it. Floored at zero: a close with no matching open must not drive
+    /// the count negative, or the next real close would leave the port held
+    /// with nothing showing it.
+    func windowDidClose() {
+        attachedWindows = max(0, attachedWindows - 1)
+        if attachedWindows == 0 {
+            disconnect()
+        }
     }
 
     /// The transport dropped out from under us (TCP reset, remote close).

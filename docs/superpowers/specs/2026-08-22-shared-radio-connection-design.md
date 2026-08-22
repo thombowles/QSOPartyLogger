@@ -169,3 +169,31 @@ spec's deferred item 2 gains a pointer here.
 - The proof here is the suite; nobody has yet opened two log windows on the
   operator's Mac with this build. The check on the air is
   `lsof /dev/cu.usbserial-*` with two logs open: one descriptor, not two.
+
+## As built — 2026-08-22
+
+Landed on `claude/friendly-shaw-d81c25` in the two commits above, on top of
+`d2ddc87`.
+
+**Suite: 3073 → 3077, 0 failures.** The four tests went in first and failed to
+compile on exactly the four members the design names — `enumeratePorts`,
+`windowDidOpen`, `windowDidClose`, `attachedWindows` — and on nothing else.
+Then the controller and the view, and the class passed; then the full suite:
+`Executed 3077 tests, with 2 tests skipped and 0 failures`. The Article 10 grep
+over `Sources/App` and `Sources/UI` returned nothing.
+
+Two things worth recording:
+
+1. **One of the four tests pins behaviour that already existed.** `autoConnect`
+   carried `guard !isConnected` before this change; what was missing was a
+   single instance for the guard to matter on, and any way to prove it without
+   an adapter on the desk. The test's control assertion — `connect()` *does*
+   rebuild — is what makes it a test rather than a tautology.
+2. **The view's diff is three lines of behaviour** — `.shared`,
+   `windowDidOpen()`, `windowDidClose()` — and no observer in `MainView`
+   changed. The table under *Design* predicted that; the suite confirms that
+   nothing the window reacts to cared which object it was reacting to.
+
+**Not yet tried with two windows on the operator's Mac.** The check on the air
+stands as written under *Open questions*: two logs open, `lsof
+/dev/cu.usbserial-*`, one descriptor.
