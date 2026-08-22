@@ -330,8 +330,11 @@ Four things went differently from the plan above, all worth recording:
    per-passage fingerprint assertions are what made both loud instead of silent,
    and are the reason to keep writing them.
 
-**Not verified, and cannot be from here:** that a KX2 actually keys from `KY` on
-the air. Every byte is asserted against a mock transport and quoted from G5, and
-the mechanism is what RUMlogNG uses on the same radio over the same cable — but
-no radio has been on the desk. The three open questions above are the specific
-things a bench session should look at.
+**Verified on the air, 2026-08-22.** A Release build was put in front of the
+operator's own KX2 — Digirig in RS-232 mode into the ACC jack, radio picked as
+*Elecraft KX3 / KX2* — and CW from the F-keys goes out. That settles the one
+thing a mock transport could not: a KX2 really does execute these `KY` packets.
+
+Three narrower questions were not separately exercised and stay open in the
+research file: Esc against a message already sending, the two-tap voice-memory
+sequence, and keying at the top of the speed range.

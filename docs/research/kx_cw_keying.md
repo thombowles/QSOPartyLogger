@@ -164,6 +164,21 @@ one driver serve both:
 - The KX2's separate **CW/DATA message memories** (3 × 250 characters) are a
   different feature from the DVR and are not used by this app.
 
+## Bench, 2026-08-22
+
+**The CAT keying path was tried on a real KX2 the day it was written, and it
+works.** The operator's station: KX2, Digirig Mobile jumpered for RS-232 into the
+ACC jack, `/dev/cu.usbserial-21220`, radio picked as *Elecraft KX3 / KX2*. CW
+from the F-keys goes out.
+
+That answers the only question a mock transport could never reach — whether a KX2
+actually executes the `KY` packets this driver builds. It does.
+
+**What the bench did *not* separately exercise**, so the entries below stay open:
+Esc against a message already sending (open question 2), the two-tap voice-memory
+sequence (open question 3), and keying at the top of the speed range (open
+question 4). None of them is known to be broken; none was deliberately tested.
+
 ## Open questions
 
 1. **`TBX`'s response prefix** — G5 gives two incompatible forms in one entry.
@@ -182,7 +197,9 @@ one driver serve both:
 3. **Tap spacing without `DE`.** No documented host-side delay exists on a KX2
    for successive `SWT` commands. Working in practice; unquantified.
 4. **Keying accuracy at contest speeds** over CAT. The radio does the element
-   timing and the manual does not quantify it. Not benchable without the radio.
+   timing and the manual does not quantify it. Keying works on the air
+   (see *Bench* above); how it holds up at the top of the range, and whether a
+   chunk boundary is audible at speed, is unmeasured.
 5. **A radio that does not match the selected entry.** `OM` makes the mismatch
    detectable, but reporting it needs a radio-neutral channel the app does not
    have, and naming a model in the app layer is forbidden (Article 10).
