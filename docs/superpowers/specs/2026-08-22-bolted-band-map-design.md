@@ -237,3 +237,34 @@ note.
   frame is recorded under it like any other, which only matters to the
   first-open placement of a *floating* map — the problem this option exists
   to replace, not to fix in passing.
+
+## As built — 2026-08-22
+
+Landed on `claude/bolted-band-map` in the two commits above, on top of
+`e7cc12b`.
+
+**Suite: 3077 → 3105, 0 failures** (2 skipped, as before). The tests went in
+first: the test target failed to build on `cannot find type 'BandMapBolt' in
+scope` and on nothing else. Then the geometry, the attachment, the settings,
+the gate and the view; the five suites the change touches passed on their
+first run — 86 tests, the 14 on real windows among them — and then the whole
+suite: `Executed 3105 tests, with 2 tests skipped and 0 failures`.
+
+Worth recording:
+
+1. **The AppKit the design rests on held on the first run.** `NSWindow` posts
+   `didMove` and `didResize` synchronously from the call that moved it, so a
+   host moved with `setFrameOrigin` has its map re-pinned before the call
+   returns; a child's level can be set to its parent's; and `addChildWindow`
+   on a visible parent orders the child in — which is why `hide()` detaches
+   before it orders out.
+2. **The view's diff is the attachment's API and one seam.** Nothing was added
+   to an existing `onChange` chain; `leftPaneBoltWired` sits between the spot
+   and tuning halves. `BandMapPanel.make` is untouched.
+3. **⇧⌘B was ⌘B.** The gate ignored ⇧ on the B chord, and
+   `testShiftDoesNotDisturbOtherCommandChords` said so; it now says otherwise,
+   with the bolt's own test beside it.
+
+**Not yet seen on a screen.** The Release build is staged for the operator:
+the look of the bolted pair, the popover's Window section, ⇧⌘B from the
+entry field, and the three cases under *Open questions*.

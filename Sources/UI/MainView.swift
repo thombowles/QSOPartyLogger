@@ -109,6 +109,9 @@ struct MainView: View {
 
     @State private var bandMapModel: BandMapModel?
     @State private var bandMapPanel: NSPanel?
+    /// The panel's relationship to this window — floating, or bolted to its
+    /// side (`settings.bandMapBolted`). Made with the panel; closed with it.
+    @State private var bandMapBolt: BandMapBolt.Attachment?
 
     private var party: PartyDefinition? {
         flow.party
@@ -621,10 +624,19 @@ struct MainView: View {
         .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
     }
 
+    /// The bolt's wiring: the two settings that fasten the band map to this
+    /// window. Its own seam, between the spot and tuning halves, for the same
+    /// type-checker reason.
+    private var leftPaneBoltWired: some View {
+        leftPaneSpotWired
+        .onChange(of: settings.bandMapBolted) { applyBandMapBolt() }
+        .onChange(of: settings.bandMapBoltSide) { applyBandMapBolt() }
+    }
+
     /// The mode and tuning wiring — its own seam for the same type-checker
     /// reason as the other two.
     private var leftPaneTuningWired: some View {
-        leftPaneSpotWired
+        leftPaneBoltWired
         // Leaving Run — by ⌘R or by tuning off the CQ frequency — takes Repeat
         // CQ down (N1MM: turned off "when … the mode changed to S&P"), and
         // the call frame follows the mode: empty in Run.
@@ -713,6 +725,8 @@ struct MainView: View {
         spotPurgeTask?.cancel()
         spotPurgeTask = nil
         spotClient.disconnect()
+        bandMapBolt?.close()
+        bandMapBolt = nil
         bandMapPanel?.close()
         bandMapPanel = nil
         // Not `disconnect()`: the radio is the app's, and another window may
@@ -1278,15 +1292,46 @@ struct MainView: View {
 
     // MARK: Band map panel
 
+    /// ⌘B: show the map, or hide it.
     private func toggleBandMap() {
-        if let panel = bandMapPanel {
-            panel.isVisible ? panel.orderOut(nil) : panel.orderFront(nil)
+        if let panel = bandMapPanel, panel.isVisible {
+            bandMapBolt?.hide()
+        } else {
+            showBandMap()
+        }
+    }
+
+    /// The map on screen — opened beside this window the first time, and
+    /// bolted to it if the setting says so.
+    private func showBandMap() {
+        if let bolt = bandMapBolt {
+            bolt.show()
             return
         }
-        guard let model = bandMapModel else { return }
-        let panel = BandMapPanel.make(model: model, near: hostWindow)
+        guard let model = bandMapModel, let host = hostWindow else { return }
+        let panel = BandMapPanel.make(model: model, near: host)
+        let bolt = BandMapBolt.Attachment(panel: panel, host: host)
         bandMapPanel = panel
-        panel.orderFront(nil)
+        bandMapBolt = bolt
+        bolt.apply(bolted: settings.bandMapBolted, side: settings.bandMapBoltSide)
+        bolt.show()
+    }
+
+    /// The bolt settings, applied to the open map — on every change of
+    /// either, and from ⇧⌘B.
+    private func applyBandMapBolt() {
+        bandMapBolt?.apply(bolted: settings.bandMapBolted, side: settings.bandMapBoltSide)
+    }
+
+    /// ⇧⌘B: bolt the map to the side of this window — opening it if it is
+    /// closed or hidden, since a bolt with nothing on it is not a result —
+    /// or set it free.
+    private func toggleBandMapBolt() {
+        settings.bandMapBolted.toggle()
+        applyBandMapBolt()
+        if settings.bandMapBolted, !(bandMapPanel?.isVisible ?? false) {
+            showBandMap()
+        }
     }
 
     /// Mode changes (radio or manual): swap pre-filled RST defaults
@@ -2181,6 +2226,7 @@ struct MainView: View {
         case .nextSpot: jumpToSpot(.up)
         case .jumpToCQFrequency: jumpToCQFrequency()
         case .toggleBandMap: toggleBandMap()
+        case .toggleBandMapBolt: toggleBandMapBolt()
         case .sendMessage(let index): sendMessageAt(index)
         case .editMessage(let index): editMessageAt(index)
         case .clearEntry: clearEntry()

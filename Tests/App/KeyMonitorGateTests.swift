@@ -307,12 +307,21 @@ final class KeyMonitorGateTests: XCTestCase {
         XCTAssertNil(KeyMonitorGate.action(keyCode: 14, command: false, shift: true))
     }
 
-    /// ⇧ distinguishes only the E chord and the WPM step: the rest of the
-    /// command table ignores it.
+    /// ⇧ distinguishes the E chord, the WPM step and the B chord: the rest of
+    /// the command table ignores it.
     func testShiftDoesNotDisturbOtherCommandChords() {
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 38, command: true, shift: true), .jumpToCQFrequency)
-        XCTAssertEqual(KeyMonitorGate.action(keyCode: 11, command: true, shift: true), .toggleBandMap)
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 126, command: true, shift: true), .nextSpot)
+    }
+
+    // MARK: ⇧⌘B — the band map bolted to its window (2026-08-22)
+
+    /// ⌘B opens and closes the map; ⇧⌘B fastens it to the side of the log
+    /// window and sets it free again. Until the bolt existed ⇧ on the B chord
+    /// was ignored, and ⇧⌘B was a second ⌘B.
+    func testShiftCommandBBoltsTheBandMap() {
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 11, command: true), .toggleBandMap)
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 11, command: true, shift: true), .toggleBandMapBolt)
     }
 
     // MARK: Response — the whole decision for one key down
@@ -402,7 +411,7 @@ final class KeyMonitorGateTests: XCTestCase {
     /// the CQ jump, the VFO nudge, the exports, the hints.
     func testEveryCommandChordLeavesARepeatingCQAlone() {
         let chords: [(UInt16, Bool)] = [
-            (11, false), (126, false), (125, false), (38, false),
+            (11, false), (11, true), (126, false), (125, false), (38, false),
             (123, true), (124, true), (14, false), (14, true), (44, false),
         ]
         for (code, shift) in chords {
@@ -411,6 +420,19 @@ final class KeyMonitorGateTests: XCTestCase {
             XCTAssertFalse(r.abortsTransmission, "keyCode \(code) shift \(shift) aborted the CQ")
             XCTAssertNotNil(r.action, "keyCode \(code) shift \(shift) lost its own job")
         }
+    }
+
+    /// Bolting the map while a CQ repeats is not answering anyone.
+    func testBoltingTheBandMapLeavesARepeatingCQAlone() {
+        XCTAssertEqual(
+            response(11, command: true, shift: true, repeatRunning: true),
+            .init(
+                stopsRepeat: false,
+                abortsTransmission: false,
+                action: .toggleBandMapBolt,
+                consumesEvent: true
+            )
+        )
     }
 
     /// ⌘R (Run ⇄ S&P) and ⇧⌘S (the spot sheet) are SwiftUI's, not the gate's

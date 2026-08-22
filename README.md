@@ -134,6 +134,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⌘R` | Toggle Run / Search & Pounce (the knob also switches: off the CQ frequency → S&P, back onto it → Run) |
 | `⌘J` | Jump back to your CQ run frequency |
 | `⌘B` | Toggle the band map window |
+| `⇧⌘B` | Bolt the band map to the side of its log window — it moves, raises and hides with the window and can't be dragged off — or set it free. Bolting opens the map if it's closed |
 | `⇧⌘S` | Spot — yourself in Run, the call field in S&P — to the DX cluster, the QSO Party Hub and POTA, whichever apply, from one sheet |
 | `⌘1` / `⌘2` / `⌘3` | In the spot sheet: tick or untick the cluster / the hub / POTA; `Return` posts to every ticked network at once |
 | `⇧⌘R` | Restore the party's default CW messages (Messages editor) |
@@ -639,9 +640,17 @@ processor still applies, as it does to a mic).
 **⌘B** opens a floating N1MM-style band map: a vertical frequency ruler for the
 current band with spots plotted where they live, a red VFO marker tracking the
 radio, and a dashed line marking your run frequency. Zoom 25/50/100 kHz or the
-whole band; click a spot to tune and fill the call, click empty map to QSY. It
-stays on screen when another app takes focus, so it can sit beside a panadapter.
+whole band; click a spot to tune and fill the call, click empty map to QSY.
+Floating, it stays on screen when another app takes focus, so it can sit beside
+a panadapter.
 
+- **Bolt it to the log window** (**⇧⌘B**, or the funnel's **Window** section)
+  when you're running two contests at once: each map fastens to the side of its
+  own log — right by default, left for a window against the screen's right edge
+  — moves, raises, minimises and hides with it, and can't be dragged off. Its
+  width is yours. Bolted, it sits at its window's level rather than floating,
+  so the other log's map is never on top of it; set it free and it floats
+  again, right where it is.
 - **Two feeds, one map.** Connect any DXSpider or AR-Cluster telnet node
   (toolbar antenna icon), optionally automatically when a contest opens. On top
   of that, the app polls [qsopartyhub.com](http://qsopartyhub.com) for the active
@@ -1061,7 +1070,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3077 unit tests**, none of which need hardware, a network or a microphone —
+**3105 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a
@@ -1078,7 +1087,7 @@ survives Run ⇄ S&P), spot parsing and filtering and navigation, the
 spotting policy, outgoing spots — which networks are on offer and why not,
 the cluster `DX` command byte for byte, pota.app's own form rules and JSON
 body, the fan-out dispatcher and its receipt — the band map scale and column
-stacking, the band plan, typed
+stacking, the bolt that fastens the map to its window, the band plan, typed
 QSY commands, what the radio keys at every step of the entry flow, keyer
 timing, the logs folder read as history (each log's saved score, duplicate
 files, unreadable files, iCloud placeholders), season stats, the SQP

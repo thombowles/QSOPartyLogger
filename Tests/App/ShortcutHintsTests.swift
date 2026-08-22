@@ -56,7 +56,7 @@ final class ShortcutHintsTests: XCTestCase {
     /// operating loop uses them, and the legend says how to hide itself.
     func testLegendNamesEveryButtonlessKey() {
         let text = ShortcutLegend.line
-        for expected in ["F12", "Esc", "⌘↑", "⌘↓", "⌘J", "⌘=", "⌘-", "⇧⌘←", "⇧⌘→", "⌘A", "⌘/"] {
+        for expected in ["F12", "Esc", "⌘↑", "⌘↓", "⌘J", "⌘=", "⌘-", "⇧⌘←", "⇧⌘→", "⇧⌘B", "⌘A", "⌘/"] {
             XCTAssertTrue(text.contains(expected), "legend lacks \(expected): \(text)")
         }
     }
@@ -75,5 +75,11 @@ final class ShortcutHintsTests: XCTestCase {
 
     func testDescribeNamesTheToggle() {
         XCTAssertEqual(KeyDiagnostics.describe(.toggleShortcutHints), "shortcut hints")
+    }
+
+    /// ⇧⌘B's control lives inside the map's popover, so the legend is where
+    /// the key is found; the readout says what it did.
+    func testDescribeNamesTheBandMapBolt() {
+        XCTAssertEqual(KeyDiagnostics.describe(.toggleBandMapBolt), "band map bolt")
     }
 }

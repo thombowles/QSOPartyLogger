@@ -95,6 +95,9 @@ enum KeyMonitorGate {
         case nextSpot
         case jumpToCQFrequency
         case toggleBandMap
+        /// ⇧⌘B: fasten the band map to the side of its log window, or set it
+        /// free — `BandMapBolt`.
+        case toggleBandMapBolt
         case sendMessage(index: Int)
         /// ⌥F1–⌥F8, and the message buttons' own right-click menu: open the
         /// Messages editor on that slot instead of transmitting it.
@@ -255,8 +258,10 @@ enum KeyMonitorGate {
         case 123 where shift: return .nudgeVFO(byHz: -vfoNudgeHz)  // ←
         case 124 where shift: return .nudgeVFO(byHz: vfoNudgeHz)  // →
         case 38: return .jumpToCQFrequency  // 'j'
-        case 11: return .toggleBandMap  // 'b'
-        // The only chord ⇧ distinguishes. In the toolbar's Export menu these
+        // ⌘B shows and hides the map; ⇧⌘B bolts it to the window, or sets it
+        // free (2026-08-22).
+        case 11: return shift ? .toggleBandMapBolt : .toggleBandMap  // 'b'
+        // ⇧ distinguishes this chord too. In the toolbar's Export menu these
         // are badge text; the gate is what actually fires them.
         case 14: return shift ? .exportCabrillo : .exportADIF  // 'e'
         // ⌘/ — shortcut hints. Also Help › Keyboard Shortcut Hints, which is

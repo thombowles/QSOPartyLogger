@@ -198,6 +198,7 @@ enum KeyDiagnostics {
         case .nextSpot: return "next spot"
         case .jumpToCQFrequency: return "CQ frequency"
         case .toggleBandMap: return "band map"
+        case .toggleBandMapBolt: return "band map bolt"
         case .sendMessage(let index): return "message F\(index + 1)"
         case .editMessage(let index): return "edit message F\(index + 1)"
         case .clearEntry: return "clear entry"

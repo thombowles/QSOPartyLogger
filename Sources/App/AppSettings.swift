@@ -201,6 +201,18 @@ final class AppSettings {
         didSet { defaults.set(spotLabelSize.rawValue, forKey: "spotLabelSize") }
     }
 
+    /// Whether the band map is fastened to the side of its log window, or
+    /// floats free — and which side. Machine-level, like the label size: with
+    /// two logs open the operator is bolting all of his maps, not one. Outside
+    /// the funnel's **Reset All** for the same reason the label size is.
+    var bandMapBolted: Bool {
+        didSet { defaults.set(bandMapBolted, forKey: "bandMapBolted") }
+    }
+
+    var bandMapBoltSide: BandMapBolt.Side {
+        didSet { defaults.set(bandMapBoltSide.rawValue, forKey: "bandMapBoltSide") }
+    }
+
     /// The spot filters as the engine wants them. `workedCalls` and
     /// `allowedModes` are supplied by the caller — they come from the log and
     /// the active party, not from stored preferences.
@@ -420,6 +432,11 @@ final class AppSettings {
         // map with no label size at all.
         spotLabelSize = SpotLabelSize(rawValue: defaults.string(forKey: "spotLabelSize") ?? "")
             ?? .small
+        bandMapBolted = defaults.object(forKey: "bandMapBolted") as? Bool ?? false
+        // The same rule: an unreadable side falls back to the right, never to
+        // a bolted map with no side.
+        bandMapBoltSide = BandMapBolt.Side(rawValue: defaults.string(forKey: "bandMapBoltSide") ?? "")
+            ?? .right
         wpm = defaults.object(forKey: "wpm") as? Int ?? 22
         keyerLineConfig = (defaults.data(forKey: "keyerLineConfig")
             .flatMap { try? JSONDecoder().decode(KeyerLineConfig.self, from: $0) })

@@ -326,6 +326,9 @@ struct BandMapView: View {
             .help(Self.labelSizeHelp)
 
             Divider()
+            windowSection
+
+            Divider()
             Text("SPOT FILTERS")
                 .font(.caption.weight(.bold))
                 .foregroundStyle(.secondary)
@@ -422,6 +425,34 @@ struct BandMapView: View {
         .toggleStyle(.checkbox)
         .padding(14)
         .frame(width: 330)
+    }
+
+    /// WINDOW — the map fastened to the side of its own log window, or free.
+    /// Its own seam, like `tuningSection`, for the popover's type-checker
+    /// budget. Outside **Reset All**, like the label size: this is about
+    /// where the window is, not which spots are on it.
+    @ViewBuilder
+    private var windowSection: some View {
+        @Bindable var settings = model.settings
+        Text("WINDOW")
+            .font(.caption.weight(.bold))
+            .foregroundStyle(.secondary)
+        Toggle("Bolt to the log window", isOn: $settings.bandMapBolted)
+            .help("Fasten the map to the side of its own log window — it moves, raises and "
+                  + "hides with the window and cannot be dragged off, so with two logs open "
+                  + "each map sits beside its own. Free, it floats above every window, the "
+                  + "other log's included (⇧⌘B)")
+            .shortcutHint("⇧⌘B")
+        Picker("", selection: $settings.bandMapBoltSide) {
+            ForEach(BandMapBolt.Side.allCases) { side in
+                Text(side.label).tag(side)
+            }
+        }
+        .pickerStyle(.segmented)
+        .labelsHidden()
+        .disabled(!settings.bandMapBolted)
+        .help("Which side of the log window the map is bolted to — right continues the "
+              + "score sidebar's column; left is for a window against the screen's right edge")
     }
 
     /// TUNING — how the app follows the knob: the ghost call, leaving and

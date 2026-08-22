@@ -52,7 +52,7 @@ The non-negotiables, so they are never a surprise:
 | `Sources/Core/CallHistory/` | N1MM call history file parser, site page parsers, on-disk cache |
 | `Sources/Core/Export/` | Cabrillo V3, ADIF 3.1.4 — both derived from the contest's exchange spec; byte-identity fixtures in `Tests/Fixtures/Exports` |
 | `Sources/Core/History/` | The logs folder read as history (`LogFolder`; the `.qplog` files are the history, each carrying its saved score), season stats, SQP Challenge, upcoming calendar |
-| `Sources/Core/Spotting/` | Cluster protocol, spot parsing, filters, band map scale; outgoing spots — `SpotNetwork`, `SpotDraft`, `SpotReceipt`, per-network bodies |
+| `Sources/Core/Spotting/` | Cluster protocol, spot parsing, filters, band map scale and bolt geometry; outgoing spots — `SpotNetwork`, `SpotDraft`, `SpotReceipt`, per-network bodies |
 | `Sources/Core/Voice/` | `VoiceAudio` DSP, `VoiceClip`/`VoiceMessageSet`, `VoiceLibrary` (per-party recordings on disk) |
 | `Sources/Hardware/Radio/` | `RadioDriver` protocol, `RadioRegistry`, per-radio drivers |
 | `Sources/Hardware/Keying/` | `CWSender` protocol, direct `CWKeyer`, internal-keyer bridge, timing |
