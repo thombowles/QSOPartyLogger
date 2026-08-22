@@ -166,9 +166,9 @@ spec's deferred item 2 gains a pointer here.
 
 ## Open questions
 
-- The proof here is the suite; nobody has yet opened two log windows on the
-  operator's Mac with this build. The check on the air is
-  `lsof /dev/cu.usbserial-*` with two logs open: one descriptor, not two.
+- Not separately exercised on the air: closing one of two windows with the
+  other keeping its live display, and the port releasing on the last close.
+  Neither is known to be broken; both are pinned by the suite.
 
 ## As built — 2026-08-22
 
@@ -194,6 +194,11 @@ Two things worth recording:
    changed. The table under *Design* predicted that; the suite confirms that
    nothing the window reacts to cared which object it was reacting to.
 
-**Not yet tried with two windows on the operator's Mac.** The check on the air
-stands as written under *Open questions*: two logs open, `lsof
-/dev/cu.usbserial-*`, one descriptor.
+**Verified on the air, 2026-08-22.** The 1.4.0 Release build of `9d77e7e` was
+run on the operator's Mac against his KX2 on `/dev/cu.usbserial-FTELBR55`; he
+opened a second log window onto the connected radio and reported that it works.
+Every `lsof` taken during that session — before his test and after it — showed
+one descriptor on the port with the read offset still climbing, so the link
+never dropped. None was taken with two windows provably open, which is why the
+two narrower questions above stay listed rather than claimed. Master took the
+branch by fast-forward at 14:26.
