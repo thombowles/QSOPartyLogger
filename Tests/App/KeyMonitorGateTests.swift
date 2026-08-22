@@ -109,6 +109,60 @@ final class KeyMonitorGateTests: XCTestCase {
         }
     }
 
+    /// ⌥F1–⌥F8 open the Messages editor on that slot — Article 7's keyboard
+    /// path for the right-click "Edit F2…" item on the message buttons.
+    func testOptionFunctionKeysEditTheMessageRatherThanSendIt() {
+        let codes: [UInt16] = [122, 120, 99, 118, 96, 97, 98, 100]
+        for (index, code) in codes.enumerated() {
+            XCTAssertEqual(
+                KeyMonitorGate.action(keyCode: code, command: false, option: true),
+                .editMessage(index: index),
+                "⌥F\(index + 1) (keyCode \(code))"
+            )
+            XCTAssertEqual(
+                KeyMonitorGate.action(keyCode: code, command: false, option: false),
+                .sendMessage(index: index),
+                "and the bare key still transmits"
+            )
+        }
+    }
+
+    /// ⌥ changes nothing outside the F row, so an operator resting a thumb on
+    /// it loses neither Esc nor a ⌘ chord.
+    func testOptionDoesNotDisturbAnyOtherKey() {
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 53, command: false, option: true),
+                       .abortTransmission)
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 111, command: false, option: true),
+                       .clearEntry)
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 11, command: true, option: true),
+                       .toggleBandMap)
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 0, command: false, option: true),
+                     "⌥A is not the gate's business")
+    }
+
+    /// Opening an editor transmits nothing, so it must not take a repeating CQ
+    /// off the air — the same treatment ⇧⌘V already gets, for the same reason.
+    func testEditingAMessageLeavesARepeatingCQAlone() {
+        let editF2 = response(f2, option: true, repeatRunning: true)
+        XCTAssertEqual(editF2.action, .editMessage(index: 1))
+        XCTAssertFalse(editF2.stopsRepeat, "opening an editor is not answering anyone")
+        XCTAssertFalse(editF2.abortsTransmission)
+        XCTAssertTrue(editF2.consumesEvent)
+    }
+
+    /// ...while *sending* one still does, exactly as before.
+    func testSendingAMessageStillTakesTheCQOffTheAir() {
+        let sendF2 = response(f2, repeatRunning: true)
+        XCTAssertEqual(sendF2.action, .sendMessage(index: 1))
+        XCTAssertTrue(sendF2.stopsRepeat)
+        XCTAssertTrue(sendF2.abortsTransmission)
+    }
+
+    /// A sheet owns the keyboard, so ⌥F2 inside the editor must not reopen it.
+    func testOptionFunctionKeysDoNothingFromASheet() {
+        XCTAssertEqual(response(f2, option: true, focus: .sheet), .init())
+    }
+
     func testF12ClearsTheEntry() {
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 111, command: false), .clearEntry)
     }
@@ -272,6 +326,7 @@ final class KeyMonitorGateTests: XCTestCase {
         _ keyCode: UInt16,
         command: Bool = false,
         shift: Bool = false,
+        option: Bool = false,
         focus: KeyMonitorGate.Focus = .document,
         repeatRunning: Bool = false
     ) -> KeyMonitorGate.Response {
@@ -279,6 +334,7 @@ final class KeyMonitorGateTests: XCTestCase {
             keyCode: keyCode,
             command: command,
             shift: shift,
+            option: option,
             focus: focus,
             repeatRunning: repeatRunning
         )

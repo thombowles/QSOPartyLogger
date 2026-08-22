@@ -60,6 +60,10 @@ struct MainView: View {
     @State private var voiceStore = VoiceStore()
     /// Which tab the Messages editor opens on — ⇧⌘V lands on Phone.
     @State private var messagesEditorClass: ModeClass = .cw
+    /// Which F-key slot the editor should open focused on, when it was opened
+    /// from one. Nil when it was opened from the toolbar or ⇧⌘V, which are
+    /// about the whole set rather than one key.
+    @State private var messagesEditorSlot: Int?
 
     @State private var spotStore = SpotStore()
     @State private var spotClient = SpotClient()
@@ -213,7 +217,8 @@ struct MainView: View {
                                voiceStatus: radio.voiceStatus, voiceBank: radio.voiceBank,
                                voiceStore: voiceStore, radio: radio,
                                onPlayToRadio: playRecordingToRadio,
-                               initialClass: messagesEditorClass)
+                               initialClass: messagesEditorClass,
+                               initialSlot: messagesEditorSlot)
             }
             .sheet(isPresented: $showSpotSheet) {
                 if let party {
@@ -473,6 +478,7 @@ struct MainView: View {
                 operatingMode: operatingMode,
                 keys: messageKeys,
                 onSend: sendMessageAt,
+                onEdit: editMessageAt,
                 enabled: radio.isConnected
                     && (currentModeClass == .cw
                         || (currentModeClass == .phone && phoneKeysEnabled)),
@@ -822,6 +828,7 @@ struct MainView: View {
 
             Button {
                 messagesEditorClass = .cw
+                messagesEditorSlot = nil
                 showMessagesEditor = true
             } label: {
                 Label("Messages", systemImage: "keyboard")
@@ -833,6 +840,7 @@ struct MainView: View {
             .background {
                 Button("Voice Messages") {
                     messagesEditorClass = .phone
+                    messagesEditorSlot = nil
                     showMessagesEditor = true
                 }
                 .keyboardShortcut("v", modifiers: [.command, .shift])
@@ -1387,6 +1395,16 @@ struct MainView: View {
         let transmission = flow.transmission(at: index, context: operatingContext)
         guard transmission != .silent else { return }
         sent(transmission, fromMessageAt: index)
+    }
+
+    /// Open the Messages editor on one F-key — from ⌥F1–⌥F8, or from that
+    /// button's own right-click menu. The tab follows the mode being operated,
+    /// because that is the message the key would actually send: CW text on CW,
+    /// the recording or memory it fires on phone.
+    private func editMessageAt(_ index: Int) {
+        messagesEditorClass = currentModeClass == .phone ? .phone : .cw
+        messagesEditorSlot = index
+        showMessagesEditor = true
     }
 
     // MARK: Typed QSY commands + spot tuning
@@ -2075,17 +2093,20 @@ struct MainView: View {
             // behind it.
             let command = event.modifierFlags.contains(.command)
             let shift = event.modifierFlags.contains(.shift)
+            let option = event.modifierFlags.contains(.option)
             let focus = KeyMonitorGate.focus(currentWindows())
             let response = KeyMonitorGate.response(
                 keyCode: event.keyCode,
                 command: command,
                 shift: shift,
+                option: option,
                 focus: focus,
                 repeatRunning: repeatTask != nil
             )
-            Self.keyLog.log("\(KeyDiagnostics.traceLine(keyCode: event.keyCode, command: command, shift: shift, focus: focus, response: response), privacy: .public)")
+            Self.keyLog.log("\(KeyDiagnostics.traceLine(keyCode: event.keyCode, command: command, shift: shift, option: option, focus: focus, response: response), privacy: .public)")
             if focus == .document {
-                noteKeyDown(keyCode: event.keyCode, command: command, shift: shift, action: response.action)
+                noteKeyDown(keyCode: event.keyCode, command: command, shift: shift,
+                            option: option, action: response.action)
             }
 
             // A keystroke pauses the loop and leaves the mode armed — the
@@ -2113,11 +2134,17 @@ struct MainView: View {
 
     /// The legend's last-key line, and the F-row notice's lifecycle: a system
     /// key on an F position raises it, any real function key clears it.
-    private func noteKeyDown(keyCode: UInt16, command: Bool, shift: Bool, action: KeyMonitorGate.Action?) {
-        lastKeyReadout = KeyDiagnostics.lastKeyReadout(keyCode: keyCode, command: command, shift: shift, action: action)
+    private func noteKeyDown(keyCode: UInt16, command: Bool, shift: Bool, option: Bool,
+                             action: KeyMonitorGate.Action?) {
+        lastKeyReadout = KeyDiagnostics.lastKeyReadout(keyCode: keyCode, command: command,
+                                                       shift: shift, option: option, action: action)
         if let notice = KeyDiagnostics.fRowNotice(forKeyCode: keyCode) {
             fRowNotice = notice
         } else if case .sendMessage = action {
+            fRowNotice = nil
+        } else if case .editMessage = action {
+            // A real function key arrived, so the media-key notice is stale
+            // whether it transmitted or opened the editor.
             fRowNotice = nil
         } else if action == .clearEntry {
             fRowNotice = nil
@@ -2146,6 +2173,7 @@ struct MainView: View {
         case .jumpToCQFrequency: jumpToCQFrequency()
         case .toggleBandMap: toggleBandMap()
         case .sendMessage(let index): sendMessageAt(index)
+        case .editMessage(let index): editMessageAt(index)
         case .clearEntry: clearEntry()
         // The gate hoists Esc into `Response.abortsTransmission` — which every
         // key does during a repeat — so this never arrives here. It keeps the

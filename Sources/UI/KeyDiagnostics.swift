@@ -27,8 +27,13 @@ enum KeyDiagnostics {
     }
 
     /// "⇧⌘E" — modifiers in the menu bar's order, then the key.
-    static func chordName(keyCode: UInt16, command: Bool, shift: Bool) -> String {
-        (shift ? "⇧" : "") + (command ? "⌘" : "") + keyName(keyCode: keyCode)
+    static func chordName(
+        keyCode: UInt16, command: Bool, shift: Bool, option: Bool = false
+    ) -> String {
+        // Written in the order macOS writes them, so a trace line can be read
+        // straight off against the menu bar.
+        (shift ? "⇧" : "") + (option ? "⌥" : "") + (command ? "⌘" : "")
+            + keyName(keyCode: keyCode)
     }
 
     private static let names: [UInt16: String] = [
@@ -165,22 +170,24 @@ enum KeyDiagnostics {
     /// One line per key down the monitor ruled on, for the unified log:
     /// `log show --predicate 'subsystem == "org.b5n.QSOPartyLogger"' --last 10m`.
     static func traceLine(
-        keyCode: UInt16, command: Bool, shift: Bool,
+        keyCode: UInt16, command: Bool, shift: Bool, option: Bool = false,
         focus: KeyMonitorGate.Focus, response: KeyMonitorGate.Response
     ) -> String {
         let action = response.action.map { String(describing: $0) } ?? "—"
         let fate = response.consumesEvent ? "consumed" : "passed on"
         let extras = (response.stopsRepeat ? " stops repeat" : "")
             + (response.abortsTransmission ? " aborts TX" : "")
-        return "\(chordName(keyCode: keyCode, command: command, shift: shift)) (\(keyCode)) "
-            + "focus=\(focus) → \(action) \(fate)\(extras)"
+        return "\(chordName(keyCode: keyCode, command: command, shift: shift, option: option)) "
+            + "(\(keyCode)) focus=\(focus) → \(action) \(fate)\(extras)"
     }
 
     /// The legend's "last key" line: the chord and what it did, in words.
     static func lastKeyReadout(
-        keyCode: UInt16, command: Bool, shift: Bool, action: KeyMonitorGate.Action?
+        keyCode: UInt16, command: Bool, shift: Bool, option: Bool = false,
+        action: KeyMonitorGate.Action?
     ) -> String {
-        "\(chordName(keyCode: keyCode, command: command, shift: shift)) — \(describe(action))"
+        "\(chordName(keyCode: keyCode, command: command, shift: shift, option: option)) "
+            + "— \(describe(action))"
     }
 
     static func describe(_ action: KeyMonitorGate.Action?) -> String {
@@ -192,6 +199,7 @@ enum KeyDiagnostics {
         case .jumpToCQFrequency: return "CQ frequency"
         case .toggleBandMap: return "band map"
         case .sendMessage(let index): return "message F\(index + 1)"
+        case .editMessage(let index): return "edit message F\(index + 1)"
         case .clearEntry: return "clear entry"
         case .abortTransmission: return "abort"
         case .exportADIF: return "export ADIF"

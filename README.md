@@ -120,6 +120,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `Tab` to **P2P park(s)** | During a POTA activation, the other station's park reference(s). Deliberately outside the `Space` cycle — most contacts aren't park-to-park — so `Space` from it returns to the call |
 | `F12` | Wipe the entry fields and start over |
 | `F1`–`F8` | Send the message in that slot (Run or S&P set) — CW text on CW; on phone, the voice memory recorded on this Mac (or the radio's own, if that source is chosen). The button shows what it will send: the expanded text, or `M4 AGN?`. A second key during a recording replaces it |
+| `⌥F1`–`⌥F8` | Open the Messages editor on that key, ready to edit — the CW text on CW, the phone tab on phone. Right-clicking the button does the same. Works on an empty slot, which is the one you most want to fill |
 | `Esc` | Abort instantly — a CW message mid-character, a recording mid-playback (audio stops and the radio unkeys together), or a voice memory — stop repeat-CQ, close an open sheet — or, in the park picker's search box, clear it and close the results |
 | `⇧⌘V` | Open the Messages editor on the Phone tab — the voice recorder |
 | `⌘1`–`⌘8` | In the Phone tab: record memory M1–M8; the same key (or the button) stops. Stops by itself at 30 s |
@@ -429,6 +430,11 @@ get wrong.
 > A **KX3 / KX2** needs nothing set up: it is keyed over the CAT cable you
 > already have.
 
+**To revise a key, right-click it** — or press **⌥F1**–**⌥F8**. Either opens the
+Messages editor on that key with the caret already in it, on the tab the mode
+calls for: the CW text on CW, the Phone tab on phone. An empty slot works too,
+which is the one most worth filling.
+
 F1–F8 messages support `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH}
 {MEMBER}` and default to the active party's own exchange shape — a serial party
 sends `{SERIAL}` where the report would go, a name party sends `{NAME}`, and a
@@ -504,7 +510,8 @@ Phone tab shows which bank the radio is in.
 
 1. Connect the K3's RS-232 port (or KUSB adapter) to the Mac.
 2. On the K3, set `CONFIG:PTT-KEY` (menu 103) to `RTS-DTR` — PTT on RTS, CW key
-   on DTR. That's the app's default mapping, changeable in the radio bar.
+   on DTR. That's what the app expects: it keys DTR, and leaves RTS alone
+   unless PTT is switched on.
 3. In the app: pick the port, 38400 baud, **Connect**. Both lines are deasserted
    at open, so the rig never keys on connect.
 
@@ -575,10 +582,11 @@ own.
    USB virtual port and the rate never reaches the radio. Both control lines
    are deasserted at open, so the rig never keys on connect.
 
-The radio's own keyer is the fallback here, as everywhere, and it works: text
-goes out in chunks paced against the QMX's report of its own 80-character send
-buffer, because a message that overflows that buffer is discarded silently
-rather than truncated. Esc still aborts, and drops anything not yet handed over.
+A QMX is keyed from the line and only from the line — there is no fallback to
+its own keyer, on this radio or any other with a key line. (An earlier version
+offered both and the choice is gone; see *CW keying* above for why.) Chunking
+text against a radio's own send buffer is what the app does on a **KX3 / KX2**,
+which has no key line to use instead.
 
 ### Connecting a Flex
 
@@ -1049,7 +1057,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3049 unit tests**, none of which need hardware, a network or a microphone —
+**3073 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle
 (driven over `/dev/null` as a stone-deaf serial port), the voice-memory bank

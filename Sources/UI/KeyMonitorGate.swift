@@ -96,6 +96,9 @@ enum KeyMonitorGate {
         case jumpToCQFrequency
         case toggleBandMap
         case sendMessage(index: Int)
+        /// ⌥F1–⌥F8, and the message buttons' own right-click menu: open the
+        /// Messages editor on that slot instead of transmitting it.
+        case editMessage(index: Int)
         case clearEntry
         case abortTransmission
         case exportADIF
@@ -118,12 +121,18 @@ enum KeyMonitorGate {
     ///
     /// A ⌘ chord that isn't in the command table falls through to the plain
     /// keys, so ⌘F2 still sends message 2 exactly as it always has.
-    static func action(keyCode: UInt16, command: Bool, shift: Bool = false) -> Action? {
+    ///
+    /// `option` is read for the F row and nowhere else: ⌥F2 edits message 2
+    /// rather than sending it, while ⌥ on any other key leaves that key's
+    /// meaning alone.
+    static func action(
+        keyCode: UInt16, command: Bool, shift: Bool = false, option: Bool = false
+    ) -> Action? {
         if command, let chord = commandAction(keyCode: keyCode, shift: shift) {
             return chord
         }
         if let index = fKeyIndex[keyCode] {
-            return .sendMessage(index: index)
+            return option ? .editMessage(index: index) : .sendMessage(index: index)
         }
         switch keyCode {
         case 111: return .clearEntry  // F12: wipe the entry and start over
@@ -145,10 +154,16 @@ enum KeyMonitorGate {
     /// the CQ off the air before it sends. N1MM names only "a call-sign, or
     /// … Escape" as what stops a repeat, and this is that rule with the
     /// keys this app has.
-    static func isShortcut(keyCode: UInt16, command: Bool, shift: Bool = false) -> Bool {
-        switch action(keyCode: keyCode, command: command, shift: shift) {
+    /// `.editMessage` counts as a shortcut for the same reason `.clearEntry`
+    /// does: it opens an editor and transmits nothing, so there is no reason
+    /// to take a CQ off the air for it. ⇧⌘V, which opens the same sheet, has
+    /// always been treated this way.
+    static func isShortcut(
+        keyCode: UInt16, command: Bool, shift: Bool = false, option: Bool = false
+    ) -> Bool {
+        switch action(keyCode: keyCode, command: command, shift: shift, option: option) {
         case .abortTransmission, .sendMessage: return false
-        case .clearEntry: return true
+        case .clearEntry, .editMessage: return true
         default: return command
         }
     }
@@ -191,6 +206,7 @@ enum KeyMonitorGate {
         keyCode: UInt16,
         command: Bool,
         shift: Bool = false,
+        option: Bool = false,
         focus: Focus,
         repeatRunning: Bool
     ) -> Response {
@@ -199,12 +215,13 @@ enum KeyMonitorGate {
         guard focus != .elsewhere else { return Response() }
 
         var response = Response()
-        if repeatRunning, !isShortcut(keyCode: keyCode, command: command, shift: shift) {
+        if repeatRunning,
+           !isShortcut(keyCode: keyCode, command: command, shift: shift, option: option) {
             response.stopsRepeat = true
             response.abortsTransmission = true
         }
 
-        let mapped = action(keyCode: keyCode, command: command, shift: shift)
+        let mapped = action(keyCode: keyCode, command: command, shift: shift, option: option)
         if mapped == .abortTransmission { response.abortsTransmission = true }
 
         // A sheet owns the keyboard: the abort above still stands, but the key

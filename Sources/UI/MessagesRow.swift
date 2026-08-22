@@ -19,6 +19,9 @@ struct MessagesRow: View {
     let keys: [MessageKey]
     /// Send the message in F-key slot `index` (0-based).
     let onSend: (Int) -> Void
+    /// Open the Messages editor on slot `index` (0-based) — the button's
+    /// right-click menu, and ⌥F1–⌥F8.
+    let onEdit: (Int) -> Void
     let enabled: Bool
     /// The slot Return will send next under ESM, outlined so the sequence the
     /// program is stepping through is visible rather than guessed at.
@@ -85,6 +88,13 @@ struct MessagesRow: View {
                     }
                 }
                 .help(index == pendingIndex ? "Return sends this: \(key.caption)" : key.caption)
+                // Right-click to revise the message this key sends. Enabled
+                // even when the key itself is inert — an empty slot is exactly
+                // the one you want to fill in. ⌥F1–⌥F8 do the same thing
+                // (Article 7).
+                .contextMenu {
+                    Button("Edit F\(index + 1)…") { onEdit(index) }
+                }
             }
 
             Spacer()

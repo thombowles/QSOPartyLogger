@@ -32,9 +32,18 @@ struct MessagesEditor: View {
     /// user parties folder on every call, which a view body must not do.
     @State private var party: PartyDefinition?
 
+    /// The F-key slot this sheet was opened for (0-based), when it was opened
+    /// from one — right-click on a message button, or ⌥F1–⌥F8. Nil when the
+    /// whole set was asked for, from the toolbar or ⇧⌘V.
+    private let initialSlot: Int?
+    /// Which CW field holds the caret. Set once on appear when the sheet was
+    /// opened for a particular key, so revising F6 does not start by hunting
+    /// for F6.
+    @FocusState private var focusedSlot: Int?
+
     init(document: LogDocument, settings: AppSettings, voiceStatus: VoiceKeyerStatus, voiceBank: Int?,
          voiceStore: VoiceStore, radio: RadioController, onPlayToRadio: @escaping (Int) -> Void,
-         initialClass: ModeClass = .cw) {
+         initialClass: ModeClass = .cw, initialSlot: Int? = nil) {
         self.document = document
         self.settings = settings
         self.voiceStatus = voiceStatus
@@ -42,6 +51,7 @@ struct MessagesEditor: View {
         self.voiceStore = voiceStore
         self.radio = radio
         self.onPlayToRadio = onPlayToRadio
+        self.initialSlot = initialSlot
         _editClass = State(initialValue: initialClass)
     }
 
@@ -132,6 +142,7 @@ struct MessagesEditor: View {
                             TextField("", text: binding(index))
                                 .font(.body.monospaced())
                                 .frame(width: 360)
+                                .focused($focusedSlot, equals: index)
                         }
                     }
                 }
@@ -210,6 +221,10 @@ struct MessagesEditor: View {
         .onAppear {
             party = document.party
             draft = MessagesDraft(document.log.messages)
+            // Opened for one key: put the caret in it. Only on the CW side —
+            // on the Phone tab a slot is a picker, and stealing focus into a
+            // picker would swallow the ⌘1–⌘8 the recorder rows use.
+            if let initialSlot, editClass == .cw { focusedSlot = initialSlot }
         }
     }
 
