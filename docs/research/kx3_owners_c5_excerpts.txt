@@ -1,0 +1,120 @@
+Elecraft KX3 Owner's Manual, Revision C5 — the same passages as the KX2's, for
+the other radio the elecraft-kx descriptor serves
+==============================================================================
+
+Source: E740163 KX3 Owner's man Rev C5.pdf
+https://ftp.elecraft.com/KX3/Manuals%20Downloads/E740163%20KX3%20Owner's%20man%20Rev%20C5.pdf
+Last-Modified: Thu, 16 Nov 2017 01:06:57 GMT; fetched 2026-08-22.
+Extracted with `pdftotext -layout`; sliced by gen_kx_excerpts.py.
+
+The KX3's CW KEY1 wording is identical to the KX2's, which is what lets one
+driver serve both. Its ACC1 is the CAT port and its ACC2 is a keyline *output*
+plus a GPIO -- configurable as a PTT input, never as a CW key.
+
+--------------------------------------------------------------------------
+CW keying inputs and the KEY jack (extracted lines 135-150)
+--------------------------------------------------------------------------
+                                                           The KX3 has two CW keying inputs:
+                                                           KEY Jack: This stereo 3.5 mm jack on the left side
+                                                           can be used with any hand key, keyer paddle, or
+                                                           other keying device, as selected by the CW KEY1
+    To open the enclosure, follow the                      menu entry (see Using the Menu, pg. 9).
+instructions on pg. 23 (Internal Batteries). Use               A stereo plug is required at the KEY jack,
+only the method shown.                                     even if only the tip contact is being used, as with
+                                                           a hand key.
+    The KX3 can be conveniently operated with
+one hand, in a manner similar to writing in a              KXPD3 Keyer Paddle: The KXPD3 is an optional
+notebook. If you’re right-handed, rotate the radio         high-quality keyer paddle that attaches at the front
+slightly counter-clockwise (see cover illustration).       of the KX3 via two thumb screws. The dot and dash
+If you’re left-handed, rotate the KX3 clockwise.           paddles can be electrically reversed or configured
+                                                           as a hand key using the CW KEY2 menu entry.
+                                                           Allen wrenches are supplied for contact adjustment.
+
+--------------------------------------------------------------------------
+Computer/Control Port (ACC1) and Keyline Out/GPIO (ACC2) (extracted lines 150-192)
+--------------------------------------------------------------------------
+
+
+                                                       4
+    Avoid using bulky connectors or adapters                Computer/Control Port (ACC1)
+that could put excessive stress on side-panel
+jacks. Lightweight cables, preferably with right-           The 3.5-mm stereo ACC1 jack allows firmware
+angle plugs, are strongly recommended.                      updates, configuration, and remote control of the
+                                                            KX3 via a computer. The jack can be connected to
+                                                            a computer’s USB port via the Elecraft model
+Headphones and Speakers                                     KXUSB cable, or to an RS232 port via the model
+The 3.5-mm PHONES jack, on the left side panel,             KXSER cable. (The jack’s tip connection is RX
+accommodates mono or stereo headphones. You                 data from the computer. Ring is TX data to the PC.)
+can also plug in one or two amplified (or powered)          Elecraft provides two KX3 configuration programs:
+external speakers here. Mono or stereo plugs can be
+used. Stereo allows the use of audio effects,               KX3 Utility is required for KX3 configuration and
+providing an enhanced listening experience (pg.             firmware updates (pg. 25). It also provides a
+29).                                                        CW/data terminal function.
+
+The KX3 includes a small built-in speaker for use           Our K3 Memory PC application can be used with
+in quiet operating environments. Plugging in                the KX3 to set up frequency memories more easily
+headphones disables the speaker and its amplifier.          than with the radio’s memory-store function.
+(This is an easy way to extend battery life.)               Many logging, contesting, and control programs are
+Mobile installations: The interior of most vehicles         available from third parties. If the KX3 is not
+is too noisy for use with the KX3’s built-in speaker.       specifically supported by a given program, try
+One or two amplified mobile speakers can be                 selecting Elecraft K3 or K2.
+plugged into the PHONES jack, or you can connect
+this jack to your car stereo’s AUX input. Another           Keyline Out and GPIO (ACC2)
+alternative is to use a device that retransmits the
+KX3’s audio output in the FM broadcast band.                The 2.5-mm stereo ACC2 jack provides a keyline
+                                                            output (ring contact) and a general-purpose 3-volt
+Microphone                                                  logic signal (tip contact).
+The MIC jack is compatible with the Elecraft MH3            The keyline output goes low during transmit, and
+hand mic, which provides PTT as well as VFO                 can be used for transmit/receive switching of linear
+UP/DN buttons. For the MH3, set the MIC BIAS                amplifiers and transverters. For keyline voltage and
+menu entry to O N , and MIC BTN to P T T U P . D N .        current limits, see Specifications.
+                                                            The general-purpose signal, GPIO, can be set up for
+                                                            various equipment control functions. For example,
+                            MH3 Mic Pinout                  it can send band-change information to Elecraft
+                                                            XV-series transverters. See the ACC2 IO menu
+                            Sleeve: Shield                  entry for a full list of uses for this signal, as well as
+                                                            hardware interface requirements.
+                            Ring2: Logic ground
+                                                            Quadrature Outputs (RX I/Q)
+
+--------------------------------------------------------------------------
+MENU:CW KEY1 / CW KEY2 — HAND, the computer keying input (extracted lines 1908-1918)
+--------------------------------------------------------------------------
+                       learned to do “squeeze-keying” with another keyer having this or a similar mode.
+                       Both modes provide dot- and dash-memories—enabling fast code speeds—but
+                       with slightly different “element-insert” timing.
+CW KEY1    TIP=DOT     Specifies whether the left keyer paddle (tip contact on the KEY jack) is D O T or
+                       D A S H . A third selection, H A N D , allows either tip or ring to function as a hand
+                       key, or as an input for an external keying device (keyer, computer, etc.).
+CW KEY2    LFT=DOT     Specifies whether the left lever of the optional KXPD3 keyer paddle is D O T or
+                       D A S H . A third selection, H A N D , allows either lever to function as a hand key,
+                       or as an input for an external keying device (keyer, computer, etc.).
+CW WGHT      1.25      Adjusts element/space timing ratio (weight) for the internal keyer. Also:
+                       Tap 1 to select S S B - C W (default) or S S B + C W (allows CW in SSB modes).
+
+--------------------------------------------------------------------------
+Digital Voice Recorder (DVR) — two messages, MSG then digit (extracted lines 1074-1096)
+--------------------------------------------------------------------------
+Digital Voice Recorder (DVR)
+                                                             transverter output; transverters are driven from
+You can record two voice messages of up to 15                the main antenna jack. This requires the use of
+seconds each, such as your call sign or a CQ, and            transverters that have a common receive/transmit
+play them back one time or with auto-repeat.                 antenna jack and associated T/R switching. Consult
+                                                             the transverter manual for drive power limitations
+    Use the transmit voice monitor to hear DVR               and switching requirements.
+playback. Hold      M O N , then set the level while
+speaking into the mic. 5 is a good starting point.           The ACC2 jack provides a keyline output for
+                                                             keying transverters. The ACC2 jack also provides a
+DVR Record: Hold R E C , then tap 1 or 2 on the              GPIO pin that can be used to select among multiple
+numeric keypad. The current message will be                  transverters based on the band selected at the KX3.
+erased (4 seconds). When prompted, tap X M I T and           This is further explained below.
+start speaking into the mic immediately (no need to
+push PTT). Tap X M I T again to terminate record.            Transverter Band Setup
+MIC gain cannot be adjusted during DVR message
+play. The gain setting at time of recording is used.         Transverter bands are set up using the XV menu
+                                                             entries, as follows:
+DVR Play: Tap M S G , then tap 1 or 2 . To cancel,
+tap X M I T or hit the keyer paddle or hand key. To          §   If a KX3-2M/4M module is installed, set
+auto-repeat a message, tap M S G , but then hold                  MENU:2M/4M to N O R or S L E E P n n .
+rather than tap 1 or 2 . MENU:MSG RPT sets
+                                                             §   Locate the XVn ON menu entry. Tap 1 – 9 to

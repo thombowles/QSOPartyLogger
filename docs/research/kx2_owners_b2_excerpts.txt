@@ -1,0 +1,161 @@
+Elecraft KX2 Owner's Manual, Revision B2 — the passages behind keying the KX2
+from a computer, and its two on-board voice memories
+==============================================================================
+
+Source: KX2 owner's man B2.pdf
+https://ftp.elecraft.com/KX2/Manuals%20Downloads/KX2%20owner's%20man%20B2.pdf
+Last-Modified: Mon, 27 Mar 2023 18:52:53 GMT; fetched 2026-08-22.
+Extracted with `pdftotext -layout`; sliced by gen_kx_excerpts.py.
+
+Load-bearing here: the CW KEY1 menu entry is the authority for the KEY jack
+accepting a computer as a keying input, and the ACC pinout is the authority for
+the CAT jack carrying no key *input* at all -- which together are why the KX is
+keyed over CAT by this app and the K3 is not. See kx_cw_keying.md.
+
+Two columns of the manual's page layout are interleaved by `-layout`; the
+right-hand column of each slice belongs to a neighbouring section and is kept
+rather than edited out, because editing is what Article 2 forbids.
+
+--------------------------------------------------------------------------
+CW Key/Keyer Paddle — the two keying inputs and the KEY jack (extracted lines 194-212)
+--------------------------------------------------------------------------
+CW Key/Keyer Paddle                                             Internal Microphone
+The KX2 has two CW keying inputs:                               For emergency or hand-held use, the KX2 includes a
+                                                                built-in mic, located to the left of the AF/MON control.
+Attached Keyer Paddle: A KXPD2 keyer paddle can                 (There’s a small hole in the panel at this location.) The
+be attached to the front of the KX2 via two thumb               built-in mic is automatically turned on when no
+screws. (A KXPD3 can also be used, but the KX2’s tilt           external mic is plugged in. Tap X M I T to transmit.
+angle favors the shorter KXPD2.) Use the CW KEY2
+menu entry to reverse the dot/dash sides.                           To prevent acoustic feedback, the transmit voice
+                                                                monitor function (MON) is disabled when using the
+KEY Jack: This jack can be used with any hand key,              internal mic with the internal speaker.
+keyer paddle, or other keying device, as configured by
+the CW KEY1 menu entry.
+                                                                External Microphone
+    A stereo plug is required at the KEY jack, even
+                                                                The 3.5 mm MIC jack is compatible with the Elecraft
+if only the tip contact is being used.
+                                                                MH3 hand mic, which provides PTT as well as VFO
+                                                                UP/DN buttons. For the MH3, set the MIC BIAS menu
+Headphones and Speakers                                         entry to O N , and MIC BTN to P T T U P . D N .
+
+--------------------------------------------------------------------------
+Computer/Amp Keying (ACC) — the CAT jack pinout, and key OUT (extracted lines 233-260)
+--------------------------------------------------------------------------
+Computer/Amp Keying (ACC)                                      Amplifier Keying
+                                                               The ACC jack provides a key out signal (Ring 2
+The 3.5 mm accessory jack (ACC) facilitates firmware
+                                                               contact, shown at left). Key out goes low during
+updates and remote control of the KX2 via a computer,
+                                                               transmit, and can be used for transmit/receive
+and/or connection to an Elecraft KXPA100 amp. In
+                                                               switching of linear amplifiers and transverters. For
+either case, a standard stereo plug can be used (see
+                                                               keyline voltage and current limits, see Specifications.
+sleeve, ring 1, and tip connections below). The
+supplied KXUSB cable can be used for this purpose.                 If the key out signal is not required, a regular stereo
+                                                               plug can used (3-circuit). This will short the key out
+                                                               signal to the sleeve (ground), but will not cause any
+                             ACC Jack Pinout                   damage or consume additional current.
+                                                               An Elecraft KX2 Accessory Cable (KX2ACBL) can
+                             Sleeve: Ground                    be used to break out the computer control and key out
+                                                               signals separately. These can then be connected to both
+                             Ring 2: *Key Out
+                                                               an Elecraft KXPA100 ampflier via its supplied cable.
+                             Ring 1: TX Data
+                                                               Auxiliary Outputs (AUX)
+                             Tip:    RX Data
+                                                               If the KX2 is fitted with a KXIO2 (pg. 33), then a 2.5
+* For external ampflier keying, the ACC jack’s key out         mm AUX jack will be available. This jack provides
+signal (on Ring 2) may also be needed, as described at         two general-purpose outputs that can be programmed
+right. In this case a 4-circuit (TRRS) plug is required.       on a per-band basis to control equipment such as an
+                                                               antenna switch or transverter. On the connector, the
+
+--------------------------------------------------------------------------
+MENU:CW KEY1 / CW KEY2 — HAND, the computer keying input (extracted lines 1543-1551)
+--------------------------------------------------------------------------
+                    Both modes provide dot- and dash-memories—enabling fast code speeds—but
+                    with slightly different “element-insert” timing.
+CW KEY1   TIP=DOT   Specifies whether the left keyer paddle (tip contact on the KEY jack) is D O T or
+                    D A S H . A third selection, H A N D , allows either tip or ring to function as a hand
+                    key, or as an input for an external keying device (keyer, computer, etc.).
+CW KEY2   LFT=DOT   Specifies whether the left lever of a KXPD2 (or KXPD3) keyer paddle is D O T or
+                    D A S H . A third selection, H A N D , allows either lever to function as a hand key, or
+                    as an input for an external keying device (keyer, computer, etc.).
+CWT         OFF     When set to O N , the upper half of the S-meter becomes a tuning aid for CW,
+
+--------------------------------------------------------------------------
+Digital Voice Recorder (DVR) — two messages, MSG then digit (extracted lines 1016-1060)
+--------------------------------------------------------------------------
+stations, creating a pileup. To ensure that he has a clear             dual watch). This is actually easier than normal split
+transmit channel, the DX station may say “UP” or                       operation, because VFO A has a larger tuning knob.
+“DOWN” periodically to indicate that he’s listening
+above or below his transmit frequency. For example, in                 Digital Voice Recorder (DVR)
+CW mode he might transmit on 14025 kHz, but listen
+                                                                       You can record two SSB-mode transmit voice
+in the vicinity of 14027 kHz. In this case he would
+                                                                       messages of up to 15 s each, such as your call sign or a
+periodically send “UP 2” (or just “UP”) as a reminder
+                                                                       CQ, and play them back one time or with auto-repeat.
+of where to call him. SSB pileup-split operation is
+                                                                       This can save your voice, especially in an SSB contest.
+similar but may occur over a much wider range.
+                                                                       For example, you could record your callsign in one
+To use split, first hold A > B twice to set VFO B to the               message and a fixed exchange in the other.
+same mode, frequency, and filter settings as VFO A.
+                                                                           The transmit voice monitor should be used so
+Then tune VFO B up about 2 kHz (or the desired
+                                                                       you can hear DVR playback. This can be adjusted in
+offset). Finally, hold S P L I T . The S P L I T icon will turn
+                                                                       receive mode. First, tap     A F / M O N to select the
+on, and the T X icon will point at VFO B, since VFO B
+is now controlling your transmit frequency.                            monitor level function. Then, while speaking into the
+                                                                       mic, use this knob to adjust the level. Start with 5.
+Using dual watch with and without SPLIT
+                                                                       DVR Record:
+DX stations will tune in the vicinity of their specified
+listening frequency when searching for callers. Finding                Hold R E C , then tap 1 or 2 on the numeric keypad. The
+a clear spot in which to transmit will improve your                    current message will be erased (4 s). When prompted,
+chance of being heard. This is where dual watch comes                  tap X M I T and start speaking into the mic (no need to
+in. With dual watch ON, you can listen to your RX and                  push PTT). Tap X M I T again to terminate record. MIC
+TX frequencies at the same time (pg. 25). You’ll be                    gain cannot be adjusted during DVR message play.
+able to tune VFO B to find a clear spot, while still                   The gain setting at time of recording is used.
+listening to the DX station at VFO A’s frequency. VFO                  DVR Play:
+B can be set up to 7 kHz above or 23 kHz below VFO
+                                                                       Tap M S G , then tap 1 or 2. To cancel, tap X M I T or hit
+A. Outside this range, dual watch is disabled, and the
+                                                                       the key. To auto-repeat a message, tap M S G , but then
+S U B icon flashes as a reminder.
+                                                                       hold rather than tap 1 or 2. MENU:MSG RPT sets
+If an SSB-mode pileup extends more than 7 kHz above                    the repeat interval (1 to 255 seconds).
+the DX station, you can use a different technique that
+                                                                  30
+Transmit Noise Gate
+The noise gate function mutes mic audio below a
+
+--------------------------------------------------------------------------
+MENU:VOX MD — hit-the-key transmit in CW (extracted lines 1795-1806)
+--------------------------------------------------------------------------
+                         known as anti-vox.) A setting of about 3 0 is a good starting point. If receive audio
+                         from a speaker trips the vox, increase the setting.
+VOX MD    ON (CW)        If VOX is O F F , transmit must be started by tapping X M I T (otherwise known as
+                         PTT, or push-to-talk operation).
+             OFF         In CW mode, setting VOX MD to O N allows “hit-the-key” transmit. In voice
+          (voice, AF     modes, VOX=O N allows transmit to start when you start speaking. In audio data
+             data)       modes, VOX starts transmit when a computer connected to the mic jack outputs an
+                         audio signal. VOX is always O N in PSK-D and FSK-D modes; PTT is not
+                         available.
+                         VOX cannot be used with the built-in microphone.
+WATTMTR      1.00        Wattmeter calibration parameter. If an external, known-accurate wattmeter reads
+                         lower than the KX2’s wattmeter, decrease the parameter value (and vice-versa).
+
+--------------------------------------------------------------------------
+MENU:RS232 — the CAT rate (extracted lines 1676-1682)
+--------------------------------------------------------------------------
+RPT OFS       0         Sets repeater offset in kHz (applies only in FM mode). For 10 meters, use 100 kHz.
+                        To select + / - / SIMPLEX operation, hold S P L I T .
+RS232      4800 b       This sets the RS232 (or USB) communications rate in bits per second (bps). During
+                        firmware download (via KX2 Utility), the baud rate is set automatically to 38400
+                        baud. It is then restored to the value selected in this menu entry.
+
+                                                 49
