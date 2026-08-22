@@ -142,8 +142,8 @@ final class BandPlanTests: XCTestCase {
     /// The K3 resolves "SSB" to the conventional sideband, so the string the
     /// band plan emits has to be one the driver accepts.
     func testDriversAcceptTheBandPlansRawModes() {
-        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "CW", frequencyHz: 14_040_000), "MD3;")
-        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "SSB", frequencyHz: 14_250_000), "MD2;")
-        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "SSB", frequencyHz: 3_850_000), "MD1;")
+        XCTAssertEqual(ElecraftProtocol.cmdSetMode(rawMode: "CW", frequencyHz: 14_040_000), "MD3;")
+        XCTAssertEqual(ElecraftProtocol.cmdSetMode(rawMode: "SSB", frequencyHz: 14_250_000), "MD2;")
+        XCTAssertEqual(ElecraftProtocol.cmdSetMode(rawMode: "SSB", frequencyHz: 3_850_000), "MD1;")
     }
 }

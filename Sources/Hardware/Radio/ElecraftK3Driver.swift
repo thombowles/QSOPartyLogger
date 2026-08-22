@@ -1,24 +1,15 @@
 import Foundation
 
-/// Which radio in the family answered. The one place a per-model difference
-/// lives, because both the memory count and the play sequence depend on it.
-enum ElecraftModel: Equatable, Sendable {
-    case k3
-    case kx3
-    case kx2
-}
-
-/// Elecraft K3/K3S/KX3/KX2 CAT driver. ASCII commands terminated with ';' at
-/// 38400-8N1 (default). Response formats verified against the Elecraft
-/// **Programmer's Reference revisions F2 and G5** (identical for these
-/// commands), banked as `docs/research/k3_programmers_reference_g5.txt`.
+/// Elecraft K3/K3S/KX3/KX2 CAT driver. Speaks `ElecraftProtocol` over an
+/// `ElecraftSession`; everything below is what this radio *does* with it.
 ///
 /// The K3 has a perfectly good keyer of its own, and this driver deliberately
-/// does not use it: a K3 exposes key lines, so the app keys it directly and
-/// only directly (Article 11), which is what makes Esc abort mid-character and
-/// makes CW speed changeable mid-message without depending on firmware. `KS`
-/// remains, because the radio's own keyer speed still drives the paddles and
-/// the front-panel display.
+/// does not use it: a K3 exposes key lines — `CONFIG:PTT-KEY` (menu 103) routes
+/// its own serial port's DTR/RTS to the key line inside the radio — so the app
+/// keys it directly and only directly (Article 11), which is what makes Esc
+/// abort mid-character and makes CW speed changeable mid-message without
+/// depending on firmware. `KS` remains, because the radio's own keyer speed
+/// still drives the paddles and the front-panel display.
 ///
 /// Voice has two paths on this family, and the app picks (Article 11 as
 /// amended 2026-08-15). Recordings made on the Mac play through a sound card
@@ -28,13 +19,10 @@ enum ElecraftModel: Equatable, Sendable {
 /// recorder remains the option: `VoiceMessageCapable` plays its memories.
 final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlCapable, @unchecked Sendable {
 
-    static let baudRates = [4800, 9600, 19200, 38400]
+    static let baudRates = ElecraftProtocol.baudRates
 
     private let lock = NSLock()
-    private var transport: (any SerialTransport)?
-    private var pollTimer: (any DispatchSourceTimer)?
-    private var rxBuffer = ""
-    private let pollQueue = DispatchQueue(label: "org.b5n.QSOPartyLogger.k3poll", qos: .userInitiated)
+    private let session = ElecraftSession(queueLabel: "org.b5n.QSOPartyLogger.k3poll")
 
     var onStateChange: (@Sendable (RadioState) -> Void)?
     /// Fired when the radio reports a keyer speed different from the last
@@ -84,36 +72,20 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
     // MARK: Lifecycle
 
     func start(transport: any SerialTransport) {
-        lock.lock()
-        self.transport = transport
-        lock.unlock()
-
-        transport.onReceive = { [weak self] data in
-            self?.ingest(data)
+        session.start(
+            transport: transport,
+            setup: ElecraftProtocol.setupCommands,
+            pollCommands: ElecraftProtocol.pollCommands
+        ) { [weak self] response in
+            self?.handle(response: response)
         }
-        // AI0 = deterministic polling; K31 = K3 extended response mode;
-        // OM = which model answered and which option modules are fitted.
-        transport.write(Self.cmdAutoInfoOff + Self.cmdExtendedMode + Self.cmdPollOptions)
-
-        let timer = DispatchSource.makeTimerSource(queue: pollQueue)
-        timer.schedule(deadline: .now() + 0.2, repeating: 0.5)
-        timer.setEventHandler { [weak self] in
-            self?.poll()
-        }
-        timer.resume()
-        lock.lock()
-        pollTimer = timer
-        lock.unlock()
     }
 
     func stop() {
+        session.stop()
         lock.lock()
-        pollTimer?.cancel()
-        pollTimer = nil
-        transport = nil
         lastState = nil
         lastWPM = nil
-        rxBuffer = ""
         voiceStatus = .unsupported
         model = .k3
         lastVoicePlaying = nil
@@ -125,28 +97,7 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
         lock.unlock()
     }
 
-    private func poll() {
-        currentTransport()?.write(Self.pollCommands)
-    }
-
-    private func currentTransport() -> (any SerialTransport)? {
-        lock.lock()
-        defer { lock.unlock() }
-        return transport
-    }
-
-    // MARK: Commands (pure builders — unit tested)
-
-    static let cmdPollIF = "IF;"
-    static let cmdPollKS = "KS;"
-    static let cmdAutoInfoOff = "AI0;"
-    static let cmdExtendedMode = "K31;"
-    static let cmdPollOptions = "OM;"
-    static let cmdPollIcons = "IC;"
-
-    /// IF = freq/mode/TX; KS = keyer speed; IC = icons, which carry the voice
-    /// playback flag and the message bank.
-    static let pollCommands = cmdPollIF + cmdPollKS + cmdPollIcons
+    // MARK: Commands this radio owns (the rest live in `ElecraftProtocol`)
 
     /// K3 M1–M4 tap (Table 7). Memories 5–8 are bank 2's M1–M4.
     static let cmdPlayK3Memory: [Int: String] = [1: "SWT21;", 2: "SWT31;", 3: "SWT35;", 4: "SWT39;"]
@@ -156,57 +107,24 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
     /// K3 REC hold — selects voice bank 1 or 2. The bank is stored separately
     /// per mode group, so this cannot disturb the operator's CW memory bank.
     static let cmdSelectBank = "SWH37;"
-    /// `RX` — "Terminates transmit in all modes, including message play and
-    /// repeating messages" (Pgmrs Ref G5). One command, two jobs: it stops a
-    /// memory playing, and it unkeys after a recording from the Mac.
-    static let cmdReceive = "RX;"
-    static let cmdStopVoiceMessage = cmdReceive
-    /// `TX` — "Same as activating PTT or using the XMIT switch. Applies to all
-    /// modes except direct data, i.e. FSK-D and PSK-D" (Pgmrs Ref G5). Sent by
-    /// the sound-card player before a recording, never at connect.
-    static let cmdTransmit = "TX;"
-
-    static func cmdSetFrequency(hz: Int) -> String {
-        String(format: "FA%011d;", max(0, hz))
-    }
-
-    static func cmdSetKeyerSpeed(wpm: Int) -> String {
-        String(format: "KS%03d;", min(50, max(8, wpm)))
-    }
-
-    /// MD command for an app mode; "SSB" resolves to the conventional
-    /// sideband for the frequency (USB at/above 10 MHz, LSB below).
-    static func cmdSetMode(rawMode: String, frequencyHz: Int) -> String? {
-        let digit: Character? = switch rawMode.uppercased() {
-        case "CW": "3"
-        case "USB": "2"
-        case "LSB": "1"
-        case "SSB": frequencyHz >= 10_000_000 ? "2" : "1"
-        case "RTTY", "DIGI": "6"
-        case "AM": "5"
-        case "FM": "4"
-        default: nil
-        }
-        return digit.map { "MD\($0);" }
-    }
+    /// `RX` stops a memory playing, and unkeys after a recording from the Mac.
+    static let cmdStopVoiceMessage = ElecraftProtocol.cmdReceive
 
     func setFrequency(hz: Int) {
-        currentTransport()?.write(Self.cmdSetFrequency(hz: hz))
+        session.write(ElecraftProtocol.cmdSetFrequency(hz: hz))
     }
 
     func setMode(rawMode: String) {
-        lock.lock()
-        let freq = lastState?.frequencyHz ?? 14_000_000
-        lock.unlock()
-        guard let cmd = Self.cmdSetMode(rawMode: rawMode, frequencyHz: freq) else { return }
-        currentTransport()?.write(cmd)
+        let freq = lock.withLock { lastState?.frequencyHz ?? 14_000_000 }
+        guard let cmd = ElecraftProtocol.cmdSetMode(rawMode: rawMode, frequencyHz: freq) else { return }
+        session.write(cmd)
     }
 
     /// Sets the radio's own keyer speed — the paddles and the front-panel
     /// display, not the app's keying, which is done on the key line. Sent the
     /// moment the operator asks so the two never disagree (Article 11).
     func setKeyerSpeed(wpm: Int) {
-        currentTransport()?.write(Self.cmdSetKeyerSpeed(wpm: wpm))
+        session.write(ElecraftProtocol.cmdSetKeyerSpeed(wpm: wpm))
     }
 
     // MARK: Transmit control (recordings played through a sound card)
@@ -216,7 +134,7 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
     /// machine below is untouched, and `RX;` is the same byte string that
     /// stops a memory, so an abort needs no second command.
     func setTransmit(_ on: Bool) {
-        currentTransport()?.write(on ? Self.cmdTransmit : Self.cmdReceive)
+        session.write(on ? ElecraftProtocol.cmdTransmit : ElecraftProtocol.cmdReceive)
     }
 
     // MARK: Voice memories
@@ -250,13 +168,13 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
         switch model {
         case .kx3, .kx2:
             guard let commands = Self.cmdPlayKXMemory[memory] else { return }
-            currentTransport()?.write(commands.joined())
+            session.write(commands.joined())
 
         case .k3:
             let wantedBank = memory <= 4 ? 1 : 2
             guard let tap = Self.cmdPlayK3Memory[memory <= 4 ? memory : memory - 4] else { return }
             if confirmed == wantedBank {
-                currentTransport()?.write(tap)
+                session.write(tap)
                 return
             }
             // The cached bank is up to one poll old, so it is not evidence.
@@ -269,8 +187,10 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
             bankConfirmAttempts = 0
             bankToggleRequested = confirmed != nil
             lock.unlock()
-            currentTransport()?.write(
-                confirmed == nil ? Self.cmdPollIcons : Self.cmdSelectBank + Self.cmdPollIcons
+            session.write(
+                confirmed == nil
+                    ? ElecraftProtocol.cmdPollIcons
+                    : Self.cmdSelectBank + ElecraftProtocol.cmdPollIcons
             )
         }
     }
@@ -286,106 +206,13 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
         pendingVoiceMemory = nil
         bankToggleRequested = false
         lock.unlock()
-        currentTransport()?.write(Self.cmdStopVoiceMessage)
-    }
-
-    // MARK: Response parsing (pure — unit tested)
-
-    /// `IF[f]*****+yyyyrx*00tmvspbd1*;` — freq at [2..12], TX flag at 28, mode at 29.
-    static func parseIF(_ response: String) -> RadioState? {
-        let chars = Array(response)
-        guard chars.count >= 31, chars[0] == "I", chars[1] == "F" else { return nil }
-        guard let freq = Int(String(chars[2..<13])) else { return nil }
-        guard let mode = K3Mode(rawValue: chars[29]) else { return nil }
-        return RadioState(
-            frequencyHz: freq,
-            rawMode: mode.rawMode,
-            isTransmitting: chars[28] == "1"
-        )
-    }
-
-    /// `FAnnnnnnnnnnn;` → Hz.
-    static func parseFA(_ response: String) -> Int? {
-        guard response.hasPrefix("FA"), response.count >= 13 else { return nil }
-        return Int(String(Array(response)[2..<13]))
-    }
-
-    /// `MDn;` → mode.
-    static func parseMD(_ response: String) -> K3Mode? {
-        guard response.hasPrefix("MD"), response.count >= 3 else { return nil }
-        return K3Mode(rawValue: Array(response)[2])
-    }
-
-    /// `KSnnn;` → WPM.
-    static func parseKS(_ response: String) -> Int? {
-        guard response.hasPrefix("KS"), response.count >= 5 else { return nil }
-        return Int(String(Array(response)[2..<5]))
-    }
-
-    /// `OM` — installed option modules, and on the KX models a product
-    /// identifier. Both variants carry a 12-character field; the reference
-    /// prints the K3 example with a space after `OM`, so one is tolerated.
-    ///
-    /// K3/K3S: `APXSDFfLVR--`, index 4 = `D` when the KDVR3 recorder is fitted.
-    /// KX3/KX2: `APF---TBXI0n`, where `0n` is `01` for a KX2 and `02` for a KX3
-    /// — neither has a `D` position, because the recorder is built in.
-    ///
-    /// **The KX branch also insists index 4 is not `D`, which the discriminator
-    /// does not strictly need.** The reference reserves the K3's trailing dashes
-    /// "for future module letters and product ID", so a later K3 could report an
-    /// identifier where only a KX reports one today. The two families play a
-    /// memory with different command sequences, so a K3 read as a KX would be
-    /// sent bytes from the wrong table. No KX can carry a `D` at index 4 — it is
-    /// a reserved dash there — so this rejects nothing real, and it keeps a
-    /// recorder-equipped K3 resolving as a K3 whatever lands in 10–11.
-    static func parseOM(_ response: String) -> (model: ElecraftModel, voice: VoiceKeyerStatus)? {
-        guard response.hasPrefix("OM") else { return nil }
-        var body = response.dropFirst(2)
-        if body.hasSuffix(";") { body = body.dropLast() }
-        let field = Array(body.trimmingCharacters(in: .whitespaces))
-        guard field.count >= 12 else { return nil }
-
-        if field[4] != "D", field[10] == "0" {
-            if field[11] == "1" { return (.kx2, .available(count: 2)) }
-            if field[11] == "2" { return (.kx3, .available(count: 2)) }
-        }
-        return (.k3, field[4] == "D" ? .available(count: 8) : .notInstalled)
-    }
-
-    /// `ICabcde;` — five 8-bit flag bytes. Byte a bit B2 is "MSG is playing"
-    /// and bit B3 is the message bank (0 = bank 1). B7 is always 1 so that no
-    /// control character reaches the host, which is why this reads unicode
-    /// scalar values rather than `asciiValue`: the transport decodes ISO
-    /// Latin-1, so every byte becomes exactly one scalar in 0x00...0xFF.
-    static func parseIC(_ response: String) -> (playing: Bool, bank: Int)? {
-        let scalars = Array(response.unicodeScalars)
-        guard scalars.count >= 8, scalars[0] == "I", scalars[1] == "C" else { return nil }
-        let a = scalars[2].value
-        return (playing: (a >> 2) & 1 == 1, bank: (a >> 3) & 1 == 1 ? 2 : 1)
+        session.write(Self.cmdStopVoiceMessage)
     }
 
     // MARK: RX plumbing
 
-    private func ingest(_ data: Data) {
-        guard let text = String(data: data, encoding: .isoLatin1) else { return }
-        lock.lock()
-        rxBuffer += text
-        var responses: [String] = []
-        while let sep = rxBuffer.firstIndex(of: ";") {
-            responses.append(String(rxBuffer[..<sep]) + ";")
-            rxBuffer = String(rxBuffer[rxBuffer.index(after: sep)...])
-        }
-        // Guard against garbage floods with no terminator.
-        if rxBuffer.count > 4096 { rxBuffer = "" }
-        lock.unlock()
-
-        for response in responses {
-            handle(response: response)
-        }
-    }
-
     private func handle(response: String) {
-        if let state = Self.parseIF(response) {
+        if let state = ElecraftProtocol.parseIF(response) {
             lock.lock()
             let changed = state != lastState
             lastState = state
@@ -397,10 +224,10 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
             let needsOptions = !askedOptionsAfterFirstIF
             askedOptionsAfterFirstIF = true
             lock.unlock()
-            if needsOptions { currentTransport()?.write(Self.cmdPollOptions) }
+            if needsOptions { session.write(ElecraftProtocol.cmdPollOptions) }
             return
         }
-        if let om = Self.parseOM(response) {
+        if let om = ElecraftProtocol.parseOM(response) {
             lock.lock()
             let changed = om.voice != voiceStatus
             model = om.model
@@ -409,11 +236,11 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
             if changed { onVoiceKeyerStatusChange?(om.voice) }
             return
         }
-        if let ic = Self.parseIC(response) {
+        if let ic = ElecraftProtocol.parseIC(response) {
             handleIcons(ic)
             return
         }
-        if let wpm = Self.parseKS(response) {
+        if let wpm = ElecraftProtocol.parseKS(response) {
             lock.lock()
             let changed = wpm != lastWPM
             lastWPM = wpm
@@ -467,9 +294,9 @@ final class ElecraftK3Driver: RadioDriver, VoiceMessageCapable, TransmitControlC
         case .wait:
             break
         case .tap(let tap):
-            currentTransport()?.write(tap)
+            session.write(tap)
         case .requestBank:
-            currentTransport()?.write(Self.cmdSelectBank + Self.cmdPollIcons)
+            session.write(Self.cmdSelectBank + ElecraftProtocol.cmdPollIcons)
         case .dropped(let memory):
             // The only producer of `.dropped` is the exhausted confirmation
             // window, so this is always the reportable kind.

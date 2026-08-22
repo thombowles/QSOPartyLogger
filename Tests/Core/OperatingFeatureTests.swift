@@ -221,7 +221,7 @@ final class OperatingFeatureTests: XCTestCase {
     }
 
     func testPollIncludesKS() {
-        XCTAssertEqual(ElecraftK3Driver.cmdPollKS, "KS;")
+        XCTAssertEqual(ElecraftProtocol.cmdPollKS, "KS;")
     }
 
     // MARK: Setup-completed flag

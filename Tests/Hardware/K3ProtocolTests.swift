@@ -47,7 +47,7 @@ final class MockSerialTransport: SerialTransport, @unchecked Sendable {
     /// true, which is the difference between a test and a flake.
     var writtenExcludingPolls: String {
         lock.withLock {
-            written.filter { $0 != ElecraftK3Driver.pollCommands }.joined()
+            written.filter { $0 != ElecraftProtocol.pollCommands }.joined()
         }
     }
 }
@@ -78,7 +78,7 @@ final class K3ProtocolTests: XCTestCase {
     }
 
     func testParseIF() throws {
-        let state = try XCTUnwrap(ElecraftK3Driver.parseIF(ifResponse(freqHz: 14_042_000)))
+        let state = try XCTUnwrap(ElecraftProtocol.parseIF(ifResponse(freqHz: 14_042_000)))
         XCTAssertEqual(state.frequencyHz, 14_042_000)
         XCTAssertEqual(state.frequencyKHz, 14042)
         XCTAssertEqual(state.rawMode, "CW")
@@ -87,59 +87,59 @@ final class K3ProtocolTests: XCTestCase {
     }
 
     func testParseIFTransmitAndModes() throws {
-        let tx = try XCTUnwrap(ElecraftK3Driver.parseIF(ifResponse(freqHz: 7_040_000, tx: true)))
+        let tx = try XCTUnwrap(ElecraftProtocol.parseIF(ifResponse(freqHz: 7_040_000, tx: true)))
         XCTAssertTrue(tx.isTransmitting)
         XCTAssertEqual(tx.band, .m40)
 
-        let usb = try XCTUnwrap(ElecraftK3Driver.parseIF(ifResponse(freqHz: 14_240_000, modeDigit: "2")))
+        let usb = try XCTUnwrap(ElecraftProtocol.parseIF(ifResponse(freqHz: 14_240_000, modeDigit: "2")))
         XCTAssertEqual(usb.rawMode, "USB")
         XCTAssertEqual(usb.modeClass, .phone)
 
-        let data = try XCTUnwrap(ElecraftK3Driver.parseIF(ifResponse(freqHz: 14_080_000, modeDigit: "6")))
+        let data = try XCTUnwrap(ElecraftProtocol.parseIF(ifResponse(freqHz: 14_080_000, modeDigit: "6")))
         XCTAssertEqual(data.modeClass, .digital)
 
-        let cwr = try XCTUnwrap(ElecraftK3Driver.parseIF(ifResponse(freqHz: 14_042_000, modeDigit: "7")))
+        let cwr = try XCTUnwrap(ElecraftProtocol.parseIF(ifResponse(freqHz: 14_042_000, modeDigit: "7")))
         XCTAssertEqual(cwr.rawMode, "CW")
     }
 
     func testParseIFRejectsGarbage() {
-        XCTAssertNil(ElecraftK3Driver.parseIF("FA00014042000;"))
-        XCTAssertNil(ElecraftK3Driver.parseIF("IF123"))
-        XCTAssertNil(ElecraftK3Driver.parseIF(""))
-        XCTAssertNil(ElecraftK3Driver.parseIF("?;"))
+        XCTAssertNil(ElecraftProtocol.parseIF("FA00014042000;"))
+        XCTAssertNil(ElecraftProtocol.parseIF("IF123"))
+        XCTAssertNil(ElecraftProtocol.parseIF(""))
+        XCTAssertNil(ElecraftProtocol.parseIF("?;"))
     }
 
     func testParseSimpleResponses() {
-        XCTAssertEqual(ElecraftK3Driver.parseFA("FA00014042000;"), 14_042_000)
-        XCTAssertEqual(ElecraftK3Driver.parseMD("MD3;"), .cw)
-        XCTAssertEqual(ElecraftK3Driver.parseMD("MD9;"), .dataReverse)
-        XCTAssertEqual(ElecraftK3Driver.parseKS("KS028;"), 28)
-        XCTAssertNil(ElecraftK3Driver.parseFA("FA;"))
+        XCTAssertEqual(ElecraftProtocol.parseFA("FA00014042000;"), 14_042_000)
+        XCTAssertEqual(ElecraftProtocol.parseMD("MD3;"), .cw)
+        XCTAssertEqual(ElecraftProtocol.parseMD("MD9;"), .dataReverse)
+        XCTAssertEqual(ElecraftProtocol.parseKS("KS028;"), 28)
+        XCTAssertNil(ElecraftProtocol.parseFA("FA;"))
     }
 
     func testCommandBuilders() {
-        XCTAssertEqual(ElecraftK3Driver.cmdSetFrequency(hz: 14_042_000), "FA00014042000;")
-        XCTAssertEqual(ElecraftK3Driver.cmdSetKeyerSpeed(wpm: 28), "KS028;")
-        XCTAssertEqual(ElecraftK3Driver.cmdSetKeyerSpeed(wpm: 99), "KS050;", "clamped to 50")
-        XCTAssertEqual(ElecraftK3Driver.cmdSetKeyerSpeed(wpm: 1), "KS008;", "clamped to 8")
+        XCTAssertEqual(ElecraftProtocol.cmdSetFrequency(hz: 14_042_000), "FA00014042000;")
+        XCTAssertEqual(ElecraftProtocol.cmdSetKeyerSpeed(wpm: 28), "KS028;")
+        XCTAssertEqual(ElecraftProtocol.cmdSetKeyerSpeed(wpm: 99), "KS050;", "clamped to 50")
+        XCTAssertEqual(ElecraftProtocol.cmdSetKeyerSpeed(wpm: 1), "KS008;", "clamped to 8")
     }
 
     func testCmdSetMode() {
-        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "CW", frequencyHz: 14_040_000), "MD3;")
+        XCTAssertEqual(ElecraftProtocol.cmdSetMode(rawMode: "CW", frequencyHz: 14_040_000), "MD3;")
         XCTAssertEqual(
-            ElecraftK3Driver.cmdSetMode(rawMode: "SSB", frequencyHz: 14_200_000), "MD2;",
+            ElecraftProtocol.cmdSetMode(rawMode: "SSB", frequencyHz: 14_200_000), "MD2;",
             "SSB above 10 MHz is USB"
         )
         XCTAssertEqual(
-            ElecraftK3Driver.cmdSetMode(rawMode: "SSB", frequencyHz: 7_200_000), "MD1;",
+            ElecraftProtocol.cmdSetMode(rawMode: "SSB", frequencyHz: 7_200_000), "MD1;",
             "SSB below 10 MHz is LSB"
         )
-        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "USB", frequencyHz: 7_200_000), "MD2;")
-        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "LSB", frequencyHz: 14_200_000), "MD1;")
-        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "RTTY", frequencyHz: 14_080_000), "MD6;")
-        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "AM", frequencyHz: 14_200_000), "MD5;")
-        XCTAssertEqual(ElecraftK3Driver.cmdSetMode(rawMode: "FM", frequencyHz: 29_600_000), "MD4;")
-        XCTAssertNil(ElecraftK3Driver.cmdSetMode(rawMode: "???", frequencyHz: 14_000_000))
+        XCTAssertEqual(ElecraftProtocol.cmdSetMode(rawMode: "USB", frequencyHz: 7_200_000), "MD2;")
+        XCTAssertEqual(ElecraftProtocol.cmdSetMode(rawMode: "LSB", frequencyHz: 14_200_000), "MD1;")
+        XCTAssertEqual(ElecraftProtocol.cmdSetMode(rawMode: "RTTY", frequencyHz: 14_080_000), "MD6;")
+        XCTAssertEqual(ElecraftProtocol.cmdSetMode(rawMode: "AM", frequencyHz: 14_200_000), "MD5;")
+        XCTAssertEqual(ElecraftProtocol.cmdSetMode(rawMode: "FM", frequencyHz: 29_600_000), "MD4;")
+        XCTAssertNil(ElecraftProtocol.cmdSetMode(rawMode: "???", frequencyHz: 14_000_000))
     }
 
     /// A K3 has key lines, so it is keyed directly and only directly
@@ -278,33 +278,33 @@ final class K3ProtocolTests: XCTestCase {
     /// Programmer's Reference G5, OM entry: "OM APXSDFfLVR--;" with a missing
     /// module's letter replaced by a dash. D at index 4 is the KDVR3.
     func testParseOMK3WithRecorderHasEightMemories() throws {
-        let result = try XCTUnwrap(ElecraftK3Driver.parseOM("OM APXSDFfLVR--;"))
+        let result = try XCTUnwrap(ElecraftProtocol.parseOM("OM APXSDFfLVR--;"))
         XCTAssertEqual(result.model, .k3)
         XCTAssertEqual(result.voice, .available(count: 8))
     }
 
     func testParseOMK3WithoutRecorderIsNotInstalled() throws {
-        let result = try XCTUnwrap(ElecraftK3Driver.parseOM("OM -P-S--------;"))
+        let result = try XCTUnwrap(ElecraftProtocol.parseOM("OM -P-S--------;"))
         XCTAssertEqual(result.model, .k3)
         XCTAssertEqual(result.voice, .notInstalled)
     }
 
     /// The reference prints the K3 example with a space after OM. Tolerate both.
     func testParseOMWithoutTheSpace() throws {
-        let result = try XCTUnwrap(ElecraftK3Driver.parseOM("OMAPXSDFfLVR--;"))
+        let result = try XCTUnwrap(ElecraftProtocol.parseOM("OMAPXSDFfLVR--;"))
         XCTAssertEqual(result.voice, .available(count: 8))
     }
 
     /// KX3 and KX2 have the recorder built in — two memories, nothing to detect.
     /// The trailing 0n is the product identifier: 1 = KX2, 2 = KX3.
     func testParseOMKX2() throws {
-        let result = try XCTUnwrap(ElecraftK3Driver.parseOM("OM A-F-------01;"))
+        let result = try XCTUnwrap(ElecraftProtocol.parseOM("OM A-F-------01;"))
         XCTAssertEqual(result.model, .kx2)
         XCTAssertEqual(result.voice, .available(count: 2))
     }
 
     func testParseOMKX3() throws {
-        let result = try XCTUnwrap(ElecraftK3Driver.parseOM("OM A-F-------02;"))
+        let result = try XCTUnwrap(ElecraftProtocol.parseOM("OM A-F-------02;"))
         XCTAssertEqual(result.model, .kx3)
         XCTAssertEqual(result.voice, .available(count: 2))
     }
@@ -312,10 +312,10 @@ final class K3ProtocolTests: XCTestCase {
     /// Radios do send partial lines. A driver that traps on one takes the app
     /// down mid-contest (Article 13).
     func testParseOMRejectsTruncatedAndForeignResponses() {
-        XCTAssertNil(ElecraftK3Driver.parseOM("OM APX;"))
-        XCTAssertNil(ElecraftK3Driver.parseOM("OM;"))
-        XCTAssertNil(ElecraftK3Driver.parseOM(""))
-        XCTAssertNil(ElecraftK3Driver.parseOM("IF00014042000;"))
+        XCTAssertNil(ElecraftProtocol.parseOM("OM APX;"))
+        XCTAssertNil(ElecraftProtocol.parseOM("OM;"))
+        XCTAssertNil(ElecraftProtocol.parseOM(""))
+        XCTAssertNil(ElecraftProtocol.parseOM("IF00014042000;"))
     }
 
     /// The reference reserves the K3's trailing dashes "for future module
@@ -324,7 +324,7 @@ final class K3ProtocolTests: XCTestCase {
     /// commands from the wrong table, so a fitted recorder — a `D` at index 4,
     /// which no KX can carry — settles the family regardless of 10–11.
     func testARecorderEquippedK3IsNeverMistakenForAKX() throws {
-        let asIfProductIDed = try XCTUnwrap(ElecraftK3Driver.parseOM("OM APXSDFfLVR02;"))
+        let asIfProductIDed = try XCTUnwrap(ElecraftProtocol.parseOM("OM APXSDFfLVR02;"))
         XCTAssertEqual(asIfProductIDed.model, .k3)
         XCTAssertEqual(asIfProductIDed.voice, .available(count: 8))
     }
@@ -332,9 +332,9 @@ final class K3ProtocolTests: XCTestCase {
     /// ...and the guard must not cost a real KX its identity: index 4 is a
     /// reserved dash on both KX models, so neither is affected.
     func testTheGuardStillIdentifiesBothKXModels() throws {
-        XCTAssertEqual(try XCTUnwrap(ElecraftK3Driver.parseOM("OM A-F-------01;")).model, .kx2)
-        XCTAssertEqual(try XCTUnwrap(ElecraftK3Driver.parseOM("OM A-F-------02;")).model, .kx3)
-        XCTAssertEqual(try XCTUnwrap(ElecraftK3Driver.parseOM("OM APF---TBXI02;")).model, .kx3)
+        XCTAssertEqual(try XCTUnwrap(ElecraftProtocol.parseOM("OM A-F-------01;")).model, .kx2)
+        XCTAssertEqual(try XCTUnwrap(ElecraftProtocol.parseOM("OM A-F-------02;")).model, .kx3)
+        XCTAssertEqual(try XCTUnwrap(ElecraftProtocol.parseOM("OM APF---TBXI02;")).model, .kx3)
     }
 
     // MARK: IC — playback and bank
@@ -351,31 +351,31 @@ final class K3ProtocolTests: XCTestCase {
     }
 
     func testParseICReadsPlaybackState() throws {
-        let playing = try XCTUnwrap(ElecraftK3Driver.parseIC(icResponse(playing: true, bank: 1)))
+        let playing = try XCTUnwrap(ElecraftProtocol.parseIC(icResponse(playing: true, bank: 1)))
         XCTAssertTrue(playing.playing)
-        let idle = try XCTUnwrap(ElecraftK3Driver.parseIC(icResponse(playing: false, bank: 1)))
+        let idle = try XCTUnwrap(ElecraftProtocol.parseIC(icResponse(playing: false, bank: 1)))
         XCTAssertFalse(idle.playing)
     }
 
     func testParseICReadsBank() throws {
-        let one = try XCTUnwrap(ElecraftK3Driver.parseIC(icResponse(playing: false, bank: 1)))
+        let one = try XCTUnwrap(ElecraftProtocol.parseIC(icResponse(playing: false, bank: 1)))
         XCTAssertEqual(one.bank, 1)
-        let two = try XCTUnwrap(ElecraftK3Driver.parseIC(icResponse(playing: false, bank: 2)))
+        let two = try XCTUnwrap(ElecraftProtocol.parseIC(icResponse(playing: false, bank: 2)))
         XCTAssertEqual(two.bank, 2)
     }
 
     /// The always-set B7 must not leak into either answer, and the two bits
     /// must not be read as one.
     func testParseICSeparatesTheTwoBits() throws {
-        let both = try XCTUnwrap(ElecraftK3Driver.parseIC(icResponse(playing: true, bank: 2)))
+        let both = try XCTUnwrap(ElecraftProtocol.parseIC(icResponse(playing: true, bank: 2)))
         XCTAssertTrue(both.playing)
         XCTAssertEqual(both.bank, 2)
     }
 
     func testParseICRejectsShortAndForeignResponses() {
-        XCTAssertNil(ElecraftK3Driver.parseIC("IC;"))
-        XCTAssertNil(ElecraftK3Driver.parseIC("IC\u{80}\u{80};"))
-        XCTAssertNil(ElecraftK3Driver.parseIC("KS020;"))
+        XCTAssertNil(ElecraftProtocol.parseIC("IC;"))
+        XCTAssertNil(ElecraftProtocol.parseIC("IC\u{80}\u{80};"))
+        XCTAssertNil(ElecraftProtocol.parseIC("KS020;"))
     }
 
     /// The raw bytes of an `IC` response, for `injectBytes`.
@@ -774,9 +774,9 @@ final class K3ProtocolTests: XCTestCase {
     }
 
     func testPollIncludesIcons() {
-        XCTAssertTrue(ElecraftK3Driver.pollCommands.contains("IC;"))
-        XCTAssertTrue(ElecraftK3Driver.pollCommands.contains("IF;"))
-        XCTAssertTrue(ElecraftK3Driver.pollCommands.contains("KS;"))
+        XCTAssertTrue(ElecraftProtocol.pollCommands.contains("IC;"))
+        XCTAssertTrue(ElecraftProtocol.pollCommands.contains("IF;"))
+        XCTAssertTrue(ElecraftProtocol.pollCommands.contains("KS;"))
     }
 
     func testStatusChangeIsReportedOnce() {
