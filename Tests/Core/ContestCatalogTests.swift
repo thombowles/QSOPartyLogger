@@ -2,10 +2,11 @@ import XCTest
 @testable import QSOPartyLogger
 
 final class ContestCatalogTests: XCTestCase {
-    func testBundledCatalogueIsEveryPartyLowered() {
+    func testBundledCatalogueIsEveryPartyLoweredPlusBundledV2() {
         let contests = ContestCatalog.loadBundled()
-        XCTAssertEqual(contests.count, 50)                    // no v2 file ships yet
-        XCTAssertEqual(Set(contests.map(\.id)), Set(PartyCatalog.loadBundled().map(\.id)))
+        XCTAssertEqual(contests.count, 51)                    // 50 parties + pota (2026-08-25)
+        XCTAssertEqual(Set(contests.map(\.id)),
+                       Set(PartyCatalog.loadBundled().map(\.id)).union(["pota"]))
         XCTAssertEqual(contests.map(\.name), contests.map(\.name).sorted())
     }
 
@@ -37,13 +38,13 @@ final class ContestCatalogTests: XCTestCase {
         try JSONSerialization.data(withJSONObject: json).write(to: dir.appendingPathComponent("ksqp.json"))
         let all = ContestCatalog.all(userContestsDirectory: dir)
         XCTAssertEqual(all.first { $0.id == "ksqp" }?.name, "Kansas, overridden")
-        XCTAssertEqual(all.count, 50)
+        XCTAssertEqual(all.count, 51)                          // 50 parties + pota
     }
 
     func testBundledLoadIsMemoisedAndComplete() {
         let a = ContestCatalog.loadBundled(), b = ContestCatalog.loadBundled()
         XCTAssertEqual(a.map(\.id), b.map(\.id))
-        XCTAssertEqual(a.count, 50)
+        XCTAssertEqual(a.count, 51)                            // 50 parties + pota
         XCTAssertEqual(ContestCatalog.contest(id: "ksqp")?.id, "ksqp")
         XCTAssertEqual(ContestCatalog.contest(id: "ksqp")?.cabrillo.contest, "KS-QSO-PARTY")
     }

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "id": "pota",
+  "name": "Parks on the Air (POTA)",
+  "family": "program",
+  "sponsor": "Parks on the Air, parksontheair.com",
+  "potaProgram": true,
+  "cqLabel": "POTA",
+  "enrichFromCallbook": true,
+  "cabrillo": { "contest": "POTA", "location": "state", "submittable": false },
+  "bands": ["160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "2m", "1.25m", "70cm"],
+  "modeClasses": ["phone", "cw", "digital"],
+  "sides": [{ "id": "all", "label": "Everyone", "predicate": { "kind": "always" }, "workedPredicate": { "kind": "always" } }],
+  "exchange": [{ "id": "rst", "kind": "rst", "sentBy": { "all": {} } }],
+  "multipliers": [],
+  "points": [{ "points": 0 }],
+  "dupe": { "scope": "bandMode", "utcDay": true, "perMyPark": true },
+  "notes": "Parks on the Air — activation and hunter logging, always on. Rules: https://docs.pota.app/docs/rules.html (fetched 2026-08-25): 'A successful activation requires a minimum of 10 QSOs from a park in the designated list within a single UTC day (Zulu day)'; required log fields are the station callsign or operator, call, date, time, band and mode; 'A separate log must be submitted for each park of the multi-park simultaneous activation' — Export for POTA writes one file per park, named per https://docs.pota.app/docs/activator_reference/submitting_logs.html (fetched 2026-08-25). Dupes count once per call, band, mode, UTC day and own-park set, and never block logging. OPEN QUESTION: whether POTA's checker counts duplicate contacts toward the ten — the rules are silent, so the validity meter counts the stricter unique form (docs/research/pota/SOURCES.md, 'POTA rules for the dedicated mode'). Scoring: POTA has none; every QSO is zero points by design.",
+  "caveats": []
+}
