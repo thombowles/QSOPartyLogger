@@ -31,9 +31,13 @@ enum MacroToken: String, CaseIterable, Sendable {
     /// exchange carries one (Skeeter Hunt) — the log's contest-long value.
     /// Self-shaping: a member number expands as `NR 13` (the on-air
     /// convention in the sponsor's own sample QSO), a power as `5W` verbatim.
-    /// Last because it is sent last ("559 NJ NR 13"); never cut. Empty
-    /// elsewhere.
+    /// Sent last ("559 NJ NR 13"); never cut. Empty elsewhere.
     case member = "{MEMBER}"
+    /// The operator's own POTA park reference(s), space-joined — `US-1111`,
+    /// or `US-1111 US-2222` at a two-fer. Empty when not activating, so a
+    /// message that mentions it keys nothing extra from home. Never cut — a
+    /// reference, not a number.
+    case myPark = "{MYPARK}"
 
     /// The macros as the messages editor lists them, in case order:
     /// `{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH} {MEMBER}`. Derived from

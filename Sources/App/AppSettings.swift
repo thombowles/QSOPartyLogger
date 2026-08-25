@@ -484,6 +484,7 @@ final class AppSettings {
         serial: String = "",
         name: String = "",
         member: String = "",
+        myParks: String = "",
         cutNumbers: Bool = false,
         cutOne: Bool = false
     ) -> String {
@@ -508,6 +509,9 @@ final class AppSettings {
             // would turn "NR 13" into "NR A3" for a value the other station
             // has to log verbatim, and half the values are powers anyway.
             case .member: member
+            // The own park(s), space-joined by the caller. Never cut — a
+            // reference, not a number.
+            case .myPark: myParks
             }
         }
         // Iterating the cases rather than chaining one `replacingOccurrences`

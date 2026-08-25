@@ -30,7 +30,7 @@ final class MacroTokenTests: XCTestCase {
     func testHelpListIsExactlyTheCasesInOrder() {
         XCTAssertEqual(
             MacroToken.helpList,
-            "{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH} {MEMBER}"
+            "{MYCALL} {CALL} {RST} {SERIAL} {NAME} {EXCH} {MEMBER} {MYPARK}"
         )
     }
 
@@ -54,7 +54,7 @@ final class MacroTokenTests: XCTestCase {
             let keyed = AppSettings.expandMacros(
                 token.rawValue,
                 myCall: "KE5CW", call: "W6ABC", rst: "599", exchange: "SCLA",
-                serial: "12", name: "TOM", member: "NR 20"
+                serial: "12", name: "TOM", member: "NR 20", myParks: "US-1111"
             )
             XCTAssertFalse(
                 keyed.contains(token.rawValue),

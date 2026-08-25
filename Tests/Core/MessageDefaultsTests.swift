@@ -78,7 +78,7 @@ final class MessageDefaultsTests: XCTestCase {
 
     /// An unrecognised partyID must not hand the operator empty function keys.
     func testNilPartyTakesTheReportForm() {
-        XCTAssertEqual(MessageSets.defaults(for: nil), MessageSets.standard)
+        XCTAssertEqual(MessageSets.defaults(for: nil as PartyDefinition?), MessageSets.standard)
     }
 
     /// Only the exchange-bearing slots vary; CQ, TU, AGN and 73 never do.

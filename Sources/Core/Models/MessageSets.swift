@@ -135,6 +135,53 @@ struct MessageSets: Codable, Equatable, Sendable {
         )
     }
 
+    /// The default macros for a v2 contest's exchange shape — the same
+    /// derivation as the party form, read off the exchange elements, plus
+    /// the contest's own CQ word ("CQ POTA {MYCALL}"). Proven equal to
+    /// `defaults(for party:)` across every bundled party
+    /// (`MessageSetsContestDefaultsTests`), which is what lets the document
+    /// resolve defaults through the ContestCatalog.
+    static func defaults(for contest: ContestDefinition?) -> MessageSets {
+        guard let contest else { return defaults(for: nil as PartyDefinition?) }
+        let includesRST = contest.exchange.contains { $0.kind == .rst }
+        let includesSerial = contest.exchange.contains { $0.kind == .serial }
+        let includesName = contest.exchange.contains { $0.kind == .name }
+        let includesLocation = contest.exchange.contains { $0.id == ExchangeElementID.location }
+        let includesMember = contest.exchange.contains { $0.kind == .memberOrPower }
+        let exchange: [MacroToken?] = [
+            includesRST ? .rst : nil,
+            includesSerial ? .serial : nil,
+            includesName ? .name : nil,
+            includesLocation ? .exchange : nil,
+            includesMember ? .member : nil,
+        ]
+        let sent = exchange.compactMap { $0?.rawValue }.joined(separator: " ")
+        let cq = "CQ \(contest.cqLabel ?? "TEST") \(MacroToken.myCall)"
+
+        return MessageSets(
+            run: [
+                cq,
+                "\(MacroToken.call) \(sent)",
+                "TU \(MacroToken.myCall)",
+                "\(MacroToken.myCall)",
+                "AGN?",
+                "?",
+                "B4",
+                "73 TU \(MacroToken.myCall)",
+            ],
+            searchPounce: [
+                "\(MacroToken.myCall)",
+                sent,
+                "TU",
+                "\(MacroToken.myCall)",
+                "AGN?",
+                "?",
+                "R \(sent)",
+                "73",
+            ]
+        )
+    }
+
     /// Whether any message in either set references a macro.
     ///
     /// Takes a `MacroToken` rather than a string so the two ways of getting

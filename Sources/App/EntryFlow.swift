@@ -323,6 +323,7 @@ final class EntryFlow {
             serial: entry.serialSent,
             name: document.log.exchangeName.uppercased(),
             member: sentMemberMacroText,
+            myParks: document.log.myPotaRefs.joined(separator: " "),
             cutNumbers: context.keying.cutNumbers && context.modeClass == .cw,
             cutOne: context.keying.cutOne
         )

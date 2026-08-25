@@ -44,7 +44,7 @@ final class MessagesDraftTests: XCTestCase {
     func testRestoreDefaultsForAnUnknownPartyTakesTheReportForm() {
         var draft = MessagesDraft(.standard)
         draft.restoreDefaults(for: nil)
-        XCTAssertEqual(draft.edited, MessageSets.defaults(for: nil))
+        XCTAssertEqual(draft.edited, MessageSets.defaults(for: nil as PartyDefinition?))
         XCTAssertEqual(draft[.run, 1], "{CALL} {RST} {EXCH}")
     }
 

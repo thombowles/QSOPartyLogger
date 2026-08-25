@@ -270,6 +270,7 @@
 		8B798A3A385449902326AB88 /* QuebecQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7194268CC1DFB2953FFDE8 /* QuebecQSOPartyTests.swift */; };
 		8BB905FD50F6763E6889CD8C /* BandMapBolt.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26AC3276F271ED30B510B9A /* BandMapBolt.swift */; };
 		8BBD2934F4E94D1F52712C66 /* EntryLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07925E31BA0FCA7B24DF428 /* EntryLayoutTests.swift */; };
+		8CF1D7E6D7723BAAA884D587 /* MessageSetsContestDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F64A531716D31473977B80 /* MessageSetsContestDefaultsTests.swift */; };
 		8E0C9BB5C8132A2F521070E4 /* SeventhCallAreaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */; };
 		8EFDAB5657D6CD9559CD07AC /* DupeRuleScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BA3937091346856760B8A0 /* DupeRuleScopeTests.swift */; };
 		8F567A2E5719915CBF4E612A /* EngineEquivalenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D073B044D1A220A77D2F39 /* EngineEquivalenceTests.swift */; };
@@ -819,6 +820,7 @@
 		9F212545ED1201EF8D3F739F /* PotaRef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaRef.swift; sourceTree = "<group>"; };
 		9FAEBB7A441C9608FDD951FB /* WisconsinQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WisconsinQSOPartyTests.swift; sourceTree = "<group>"; };
 		9FBEB434114457D69D1718C4 /* FlexDAXStreamerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexDAXStreamerTests.swift; sourceTree = "<group>"; };
+		A0F64A531716D31473977B80 /* MessageSetsContestDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSetsContestDefaultsTests.swift; sourceTree = "<group>"; };
 		A11BED6B806AF32B702331FA /* ksqp-outside.log */ = {isa = PBXFileReference; path = "ksqp-outside.log"; sourceTree = "<group>"; };
 		A2215D1E38A85D6578624B1D /* SpottingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpottingTests.swift; sourceTree = "<group>"; };
 		A2914E1429C4152BCF4A61DC /* ClusterProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterProtocolTests.swift; sourceTree = "<group>"; };
@@ -1263,6 +1265,7 @@
 				CD0D74F754FD20FDF7B880B7 /* MemberMultiplierTests.swift */,
 				663F629E69E4BCAFF3D76139 /* MessageDefaultsTests.swift */,
 				1D8987995CCBBA5AAABC8B1C /* MessagesDraftTests.swift */,
+				A0F64A531716D31473977B80 /* MessageSetsContestDefaultsTests.swift */,
 				6C80842521494976B5E96C54 /* MessageSetsVoiceTests.swift */,
 				96C1CC73171B49CEFB01A99E /* MichiganQSOPartyTests.swift */,
 				7F709BDC71E9A295713CBA38 /* MinnesotaQSOPartyTests.swift */,
@@ -2064,6 +2067,7 @@
 				00F64B433E3EC47B0CCEAAD9 /* MemberMultiplierTests.swift in Sources */,
 				035AFCF57A3A41C906E0EC90 /* MessageDefaultsTests.swift in Sources */,
 				F7B80C3393265B922409D10C /* MessageMemoryTests.swift in Sources */,
+				8CF1D7E6D7723BAAA884D587 /* MessageSetsContestDefaultsTests.swift in Sources */,
 				E807AEDC6DD4493748F002F3 /* MessageSetsVoiceTests.swift in Sources */,
 				D8D18E1ACF630156435191F6 /* MessagesDraftTests.swift in Sources */,
 				04860FF18E630448799E4436 /* MichiganQSOPartyTests.swift in Sources */,

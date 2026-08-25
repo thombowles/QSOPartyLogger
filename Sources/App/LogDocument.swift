@@ -83,12 +83,12 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     /// worse than the bug.
     ///
     /// Separate from `ContestLog.init(from:)` on purpose: a `Codable` init must
-    /// not touch the filesystem, and `PartyCatalog.party(id:)` re-reads the
-    /// bundle and the user parties folder on every call.
+    /// not touch the filesystem, and `ContestCatalog.contest(id:)` re-reads
+    /// the user folders on every call.
     nonisolated static func upgradingUntouchedMessages(_ log: ContestLog) -> ContestLog {
         guard log.messages == MessageSets.standard else { return log }
         var upgraded = log
-        upgraded.messages = MessageSets.defaults(for: PartyCatalog.party(id: log.partyID))
+        upgraded.messages = MessageSets.defaults(for: ContestCatalog.contest(id: log.partyID))
         return upgraded
     }
 
@@ -302,11 +302,11 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         // they are saved, so taking the new party's set loses nothing — the
         // old habit is one setup away. A set matching neither is theirs and
         // is left alone. Undo restores it exactly, below.
-        let untouched = oldMessages == MessageSets.defaults(for: PartyCatalog.party(id: oldParty))
+        let untouched = oldMessages == MessageSets.defaults(for: ContestCatalog.contest(id: oldParty))
             || oldMessages == messageMemory?.messages(for: oldParty)
         if untouched {
             log.messages = messageMemory?.messages(for: partyID)
-                ?? MessageSets.defaults(for: PartyCatalog.party(id: partyID))
+                ?? MessageSets.defaults(for: ContestCatalog.contest(id: partyID))
         }
         // Crossing the state line is the one location change that implies a
         // different operating style — the in-state station is the multiplier
