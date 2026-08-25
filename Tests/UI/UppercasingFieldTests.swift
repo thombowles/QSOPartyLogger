@@ -264,7 +264,9 @@ private struct EntryRowHost: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            EntryBar(entry: entry, party: nil, showsP2P: false, onLog: {}, focus: $focus)
+            EntryBar(entry: entry, party: nil,
+                     layout: EntryLayout(party: nil, contest: nil, isActivation: false),
+                     onLog: {}, focus: $focus)
             SuperCheckRow(
                 matches: .init(
                     calls: [.init(call: entry.callNormalized, inHistory: false)],

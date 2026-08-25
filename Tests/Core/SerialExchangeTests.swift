@@ -355,21 +355,20 @@ final class SerialExchangeTests: XCTestCase {
 
     /// Where a party sends a number, Space from the call field lands on the one
     /// numeric field the operator has to type (Article 7 — keyboard-first).
+    /// The flag combinations are expressed as layouts now; the same shapes.
     func testFocusOrderReachesTheReceivedNumber() {
-        XCTAssertEqual(
-            EntryBar.Field.call.next(includesRST: false, includesSerial: true), .serialRcvd
-        )
-        XCTAssertEqual(
-            EntryBar.Field.serialRcvd.next(includesRST: false, includesSerial: true), .exchange
-        )
-        XCTAssertEqual(
-            EntryBar.Field.serialSent.next(includesRST: false, includesSerial: true), .serialRcvd
-        )
+        var serialParty = EntryLayout(party: nil, contest: nil, isActivation: false)
+        serialParty.showsRST = false
+        serialParty.showsSerial = true
+        XCTAssertEqual(EntryBar.Field.call.next(layout: serialParty), .serialRcvd)
+        XCTAssertEqual(EntryBar.Field.serialRcvd.next(layout: serialParty), .exchange)
+        XCTAssertEqual(EntryBar.Field.serialSent.next(layout: serialParty), .serialRcvd)
         // Unchanged where there is no number.
-        XCTAssertEqual(EntryBar.Field.call.next(includesRST: true), .exchange)
-        XCTAssertEqual(EntryBar.Field.rstSent.next(includesRST: true), .rstRcvd)
-        XCTAssertEqual(EntryBar.Field.rstRcvd.next(includesRST: true), .exchange)
-        XCTAssertEqual(EntryBar.Field.exchange.next(includesRST: true), .call)
+        let rstParty = EntryLayout(party: nil, contest: nil, isActivation: false)
+        XCTAssertEqual(EntryBar.Field.call.next(layout: rstParty), .exchange)
+        XCTAssertEqual(EntryBar.Field.rstSent.next(layout: rstParty), .rstRcvd)
+        XCTAssertEqual(EntryBar.Field.rstRcvd.next(layout: rstParty), .exchange)
+        XCTAssertEqual(EntryBar.Field.exchange.next(layout: rstParty), .call)
     }
 
     // MARK: Scoring is untouched

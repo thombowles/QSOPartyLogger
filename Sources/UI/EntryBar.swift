@@ -6,12 +6,16 @@ import SwiftUI
 /// or Return under ESM, takes it.
 struct EntryBar: View {
     @Bindable var entry: EntryState
+    /// Still consulted for the row's `EntryState` questions (a missing name,
+    /// an unreadable member element); the row's *shape* comes from `layout`.
     let party: PartyDefinition?
-    /// Whether this log is a POTA activation (Contest Setup has parks). The
-    /// park-to-park field exists only then — P2P credit does not exist for a
-    /// home station, and the bar stays exactly as it is for every non-POTA
-    /// contest.
-    let showsP2P: Bool
+    /// The row's shape — which fields exist and where Space routes. Built by
+    /// the window from the party/contest (`EntryLayout`); the bar itself
+    /// decides nothing about contests.
+    let layout: EntryLayout
+    /// A quiet caption under the park field — the parsed reference(s) and the
+    /// park's name when the offline directory knows it. Nil hides the line.
+    var parkCaption: String? = nil
     /// The colour of the ghost call — the band map's colour for the spot under
     /// the VFO — and what Space does when the empty call field shows one.
     /// Defaulted so a bar built without a band map (the caret tests) is the
@@ -23,42 +27,10 @@ struct EntryBar: View {
     enum Field: Hashable {
         case call, rstSent, rstRcvd, serialSent, serialRcvd, nameRcvd, exchange, memberRcvd
         case theirPark
-
-        /// Where Space moves next, cycling back to the call from the exchange.
-        /// Call jumps straight to the exchange because the RSTs are pre-filled
-        /// — Tab still walks every field for the rare 579, which is how N1MM
-        /// splits the two keys ("the spacebar … skips over signal report
-        /// fields"; Tab walks them all).
-        ///
-        /// A received QSO number is the one numeric field an operator *must*
-        /// type every contact, so where a party exchanges one, Call lands there
-        /// first and it leads on to the exchange. A received name is the same
-        /// kind of field, and it arrives before the location on the air
-        /// ("TOM TX"), so it sits between the two. The member element arrives
-        /// *after* the location ("559 NJ NR 13"), so its field trails the
-        /// exchange and the cycle closes from there.
-        func next(
-            includesRST: Bool,
-            includesSerial: Bool = false,
-            includesName: Bool = false,
-            includesMember: Bool = false
-        ) -> Field {
-            switch self {
-            case .call: includesSerial ? .serialRcvd : (includesName ? .nameRcvd : .exchange)
-            case .rstSent: includesRST ? .rstRcvd : .exchange
-            case .rstRcvd: includesSerial ? .serialRcvd : (includesName ? .nameRcvd : .exchange)
-            case .serialSent: .serialRcvd
-            case .serialRcvd: includesName ? .nameRcvd : .exchange
-            case .nameRcvd: .exchange
-            case .exchange: includesMember ? .memberRcvd : .call
-            case .memberRcvd: .call
-            // Nothing routes *to* the park field: Space never lands there,
-            // because most contest contacts are not park to park and the
-            // fast path must not grow a stop. Tab reaches it in layout
-            // order, and Space from it closes the cycle back to the call.
-            case .theirPark: .call
-            }
-        }
+        // Space routing lives in `EntryLayout.swift` (`next(layout:)`): the
+        // same rules this enum carried, driven by the row's layout — which
+        // is how a POTA row's park joins the cycle while every party's
+        // routing stays byte-for-byte (`EntryLayoutTests`).
     }
 
     @FocusState.Binding var focus: Field?
@@ -115,6 +87,13 @@ struct EntryBar: View {
                     .font(.callout)
                     .foregroundStyle(.red)
             }
+            // The park named back, when the offline directory knows it —
+            // confirmation the reference points where the operator thinks.
+            if let parkCaption {
+                Label(parkCaption, systemImage: "leaf")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
         }
         .onChange(of: focus) { _, landed in
             guard landed == .rstSent || landed == .rstRcvd else { return }
@@ -141,25 +120,16 @@ struct EntryBar: View {
         }
     }
 
-    /// What the exchange field is asking for, in the party's own words. A
-    /// party with no home region has no host-state codes to hint at — every
-    /// token is a peer location — and one whose multipliers are not counties
-    /// must not be told they are. The old "Cty" shorthand goes with them: the
-    /// leading term already names what the code is.
-    private var exchangeLabel: String {
-        guard let party else { return "Exchange" }
-        guard party.hasHomeRegion else { return "Location" }
-        return "\(party.countyTerm.sentenceCased)/State "
-            + "(\(party.homeState) ×\(party.countyAbbrLengthHint))"
-    }
-
     private var canLog: Bool {
-        if case .valid = entry.exchangeStatus, !entry.callNormalized.isEmpty {
-            return !entry.missingName(party: party)
-                && !entry.invalidMember(party: party)
-                && !entry.invalidTheirPark()
+        guard !entry.callNormalized.isEmpty else { return false }
+        // A row with an exchange field logs only a parsed exchange; a row
+        // without one (POTA) has nothing to parse — call and parks decide.
+        if layout.showsLocation {
+            guard case .valid = entry.exchangeStatus else { return false }
         }
-        return false
+        return !entry.missingName(party: party)
+            && !entry.invalidMember(party: party)
+            && !entry.invalidTheirPark()
     }
 
     /// The entry fields in Tab order, as many as the party needs.
@@ -169,43 +139,45 @@ struct EntryBar: View {
               ghost: entry.call.isEmpty
                   ? entry.callFrame.map { (text: $0.call, color: callFrameColor) }
                   : nil)
-        if party?.exchangeIncludesRST ?? true {
+        if layout.showsRST {
             field("RST S", text: $entry.rstSent, width: 60, focusTag: .rstSent)
             field("RST R", text: $entry.rstRcvd, width: 60, focusTag: .rstRcvd)
         }
-        if party?.exchangeIncludesSerial ?? false {
+        if layout.showsSerial {
             field("Ser S", text: $entry.serialSent, width: 60, focusTag: .serialSent)
             field("Ser R", text: $entry.serialRcvd, width: 60, focusTag: .serialRcvd)
         }
-        if party?.exchangeIncludesName ?? false {
+        if layout.showsName {
             field("Name", text: $entry.nameTyped, width: 100,
                   focusTag: .nameRcvd, provisional: entry.nameIsAutoFilled)
         }
-        field(
-            exchangeLabel,
-            text: $entry.exchangeTyped,
-            width: 170,
-            focusTag: .exchange,
-            provisional: entry.exchangeIsAutoFilled
-        )
-        // Provisional text from our own log is something the operator
-        // copied once already. A county from a spot is a stranger's
-        // claim about a station never worked, so it gets the louder
-        // treatment — what was heard must never look like what was
-        // merely asserted.
-        .overlay {
-            if entry.exchangeIsUnconfirmed {
-                RoundedRectangle(cornerRadius: 5)
-                    .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
-                    .foregroundStyle(.orange)
-                    .padding(.top, 16)
-                    .allowsHitTesting(false)
+        if layout.showsLocation {
+            field(
+                layout.locationLabel,
+                text: $entry.exchangeTyped,
+                width: 170,
+                focusTag: .exchange,
+                provisional: entry.exchangeIsAutoFilled
+            )
+            // Provisional text from our own log is something the operator
+            // copied once already. A county from a spot is a stranger's
+            // claim about a station never worked, so it gets the louder
+            // treatment — what was heard must never look like what was
+            // merely asserted.
+            .overlay {
+                if entry.exchangeIsUnconfirmed {
+                    RoundedRectangle(cornerRadius: 5)
+                        .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                        .foregroundStyle(.orange)
+                        .padding(.top, 16)
+                        .allowsHitTesting(false)
+                }
             }
+            .help(entry.exchangeIsUnconfirmed
+                  ? "From a spot, not copied — confirm it before logging"
+                  : "")
         }
-        .help(entry.exchangeIsUnconfirmed
-              ? "From a spot, not copied — confirm it before logging"
-              : "")
-        if let member = party?.memberExchange {
+        if let member = layout.member {
             // After the location, the way it is sent ("559 NJ NR 13").
             // A number or a power with its unit — "13" or "5W".
             field(member.shortTerm, text: $entry.memberTyped, width: 80,
@@ -216,12 +188,13 @@ struct EntryBar: View {
                 .help("\(member.term), or their power (5W, 100W). "
                       + "Leave empty if they sent neither — that scores as QRO.")
         }
-        if showsP2P {
+        if layout.showsTheirPark {
             field("P2P park(s)", text: $entry.theirParkTyped,
                   width: 110, focusTag: .theirPark)
                 .help("The other station's POTA reference(s) when they are "
-                      + "in a park too — US-3315, comma-separated for an "
-                      + "n-fer. Leave empty otherwise.")
+                      + "in a park too — US-3315 (a bare number expands: "
+                      + "3315 → US-3315), comma-separated for an n-fer. "
+                      + "Leave empty otherwise.")
         }
     }
 
@@ -310,12 +283,7 @@ struct EntryBar: View {
                         onTakeCallFrame()
                         return .handled
                     }
-                    focus = focusTag.next(
-                        includesRST: party?.exchangeIncludesRST ?? true,
-                        includesSerial: party?.exchangeIncludesSerial ?? false,
-                        includesName: party?.exchangeIncludesName ?? false,
-                        includesMember: party?.memberExchange != nil
-                    )
+                    focus = focusTag.next(layout: layout)
                     return .handled
                 }
         }

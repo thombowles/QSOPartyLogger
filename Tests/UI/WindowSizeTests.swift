@@ -20,7 +20,9 @@ final class WindowSizeTests: XCTestCase {
         @State private var entry = EntryState()
         @FocusState private var focus: EntryBar.Field?
         var body: some View {
-            EntryBar(entry: entry, party: party, showsP2P: showsP2P, callFrameColor: .secondary,
+            EntryBar(entry: entry, party: party,
+                     layout: EntryLayout(party: party, contest: nil, isActivation: showsP2P),
+                     callFrameColor: .secondary,
                      onTakeCallFrame: {}, onLog: {}, focus: $focus)
         }
     }

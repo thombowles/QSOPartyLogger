@@ -290,6 +290,23 @@ final class EntryFlow {
         (party?.exchangeIncludesSerial ?? false) ? document.log.nextSerial : nil
     }
 
+    /// Resolves a v2-only contest for tests without touching the bundle.
+    @ObservationIgnored var contestResolver: (String) -> ContestDefinition? =
+        { ContestCatalog.contest(id: $0) }
+    @ObservationIgnored private var contestCache: (id: String, contest: ContestDefinition?)?
+
+    /// The v2 contest for a log whose id names no party (POTA). Nil whenever
+    /// a `PartyDefinition` exists, so every party path stays exactly as it
+    /// was. Cached like `party`, for the same per-keystroke reason.
+    var standaloneContest: ContestDefinition? {
+        guard party == nil else { return nil }
+        let id = document.log.partyID
+        if let cached = contestCache, cached.id == id { return cached.contest }
+        let looked = contestResolver(id)
+        contestCache = (id, looked)
+        return looked
+    }
+
     // MARK: Messages
 
     var activeMessages: [String] {

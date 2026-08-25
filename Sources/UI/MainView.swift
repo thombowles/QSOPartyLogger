@@ -121,6 +121,17 @@ struct MainView: View {
         flow.party
     }
 
+    /// The entry row's shape for this log — party flags, or the contest's
+    /// exchange spec for a v2-only contest (POTA).
+    private var entryLayout: EntryLayout {
+        EntryLayout(party: party, contest: flow.standaloneContest,
+                    isActivation: !document.log.myPotaRefs.isEmpty)
+    }
+
+    /// The quiet line under the park field — wired to the park directory in
+    /// the picker task; nil hides it.
+    private var parkCaption: String? { nil }
+
     /// The one place the view describes "right now" to the flow. Built in a
     /// single property so there is a single place it can be got wrong, and so a
     /// test constructs the same value rather than reproducing the wiring.
@@ -476,7 +487,8 @@ struct MainView: View {
                 }
             Divider()
 
-            EntryBar(entry: entry, party: party, showsP2P: !document.log.myPotaRefs.isEmpty,
+            EntryBar(entry: entry, party: party, layout: entryLayout,
+                     parkCaption: parkCaption,
                      callFrameColor: callFrameColor, onTakeCallFrame: takeCallFrame,
                      onLog: returnPressed, focus: $focusedField)
                 .padding(.horizontal, 12)
