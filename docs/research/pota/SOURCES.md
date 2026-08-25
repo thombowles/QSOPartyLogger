@@ -170,3 +170,58 @@ form's markup is the contract.
   (`AdifExporter.adifMode` — USB/LSB → SSB), editable in the sheet; the
   comment is the operator's own words, uncombined with the county, because
   a mode word in the comment overrides the mode field.
+
+## POTA rules for the dedicated mode
+Fetched 2026-08-25, for the POTA contest mode
+(`docs/superpowers/specs/2026-08-25-pota-mode-and-callbook-design.md`).
+
+From `https://docs.pota.app/docs/rules.html`:
+
+- **Validity** (Activations / Attempts): *"A successful activation requires a
+  minimum of 10 QSOs from a park in the designated list within a single UTC
+  day (Zulu day)."*
+- **Sessions combine** (same section): *"Multiple activities at the same park
+  in the same state/province/entity and the same UTC day count as a single
+  activation, provided that the ten or more QSOs combined were made."*
+- **Required log fields** (Logging Requirements): `STATION_CALLSIGN` or
+  `OPERATOR`, `CALL`, `QSO_DATE`, `TIME_ON`, `BAND`, and `MODE` or `SUBMODE`
+  — the same list the ADIF technical reference above carries.
+- **Separate log per park** (Activation Location and Access): *"Such a
+  multi-park activation requires an overlapped area where all activated
+  parks' boundaries intersect. The intersection must entirely contain the
+  activator and the station equipment."* and *"A separate log must be
+  submitted for each park of the multi-park simultaneous activation."*
+- **OPEN QUESTION — does the ten dedupe?** The rules page addresses duplicate
+  QSO rejection in logging but says nothing about whether working the same
+  station twice (same band, mode, UTC day) counts once or twice toward the
+  10-QSO minimum. The app's validity meter counts the stricter unique form
+  — unique (call, band, mode) per own park per UTC day — which can only
+  under-promise. Re-check each season.
+
+From `https://docs.pota.app/docs/activator_reference/submitting_logs.html`:
+
+- **File naming**: *"follow the filename format:
+  `callsign@parkNumber-activationDdate.adi` (e.g.,
+  KA8H@US-1515-20201127.adi)"* (the template's "Ddate" typo is the page's
+  own). Multi-state parks: *"If the park spans multiple states, include the
+  activation state (i.e., W8MSC@US-4239-20181231-US-MI.adi)."* — the state
+  suffix rides after the date.
+- **Advisory for the self-uploader**: the format is stated as a requirement
+  only *"When submitting logs via email"*; the normal path is *"Upload from
+  My Log Uploads page of pota.app"*, email fallback via a helpdesk ticket to
+  help@parksontheair.com.
+- **One file may span sessions**: *"It is recommended to combine logs from a
+  single activation into a single ADIF file where applicable (same park and
+  same station callsign), although not required."*
+
+### What this bakes into the app
+
+- `PotaStats.validationTarget = 10`, counting unique (call, band, mode) per
+  own park per UTC day — the meter is advisory UI, never a score.
+- `AdifExporter.exportForPota` writes one file per own park;
+  `AdifExporter.potaFileName` produces `CALL@US-1234-YYYYMMDD.adi`, with a
+  park's `@subdivision` appended after the date (`-US-MI`), matching the
+  W8MSC example.
+- `pota.json`'s dupe rule: `bandMode` scope with `utcDay` and `perMyPark` —
+  a new UTC day or a rove to a new park makes the same station workable
+  again, POTA's per-activation scoring.
