@@ -66,4 +66,19 @@ enum PotaRef {
         }
         return .success(refs)
     }
+
+    /// PoLo-style shorthand: a bare 4–5 digit token in the park field is a US
+    /// park number — "2518" → "US-2518" (the POTARef grammar's number is 4–5
+    /// digits; docs/research/pota/SOURCES.md). Only all-digit tokens expand;
+    /// everything else — full refs, @subdivisions, K-TEST, garbage — passes
+    /// through for `parseList` to judge as typed. Comma structure is kept.
+    static func expandShorthand(_ text: String) -> String {
+        text.split(separator: ",", omittingEmptySubsequences: false)
+            .map { token -> String in
+                let t = token.trimmingCharacters(in: .whitespaces)
+                guard (4...5).contains(t.count), t.allSatisfy(\.isNumber) else { return t }
+                return "US-\(t)"
+            }
+            .joined(separator: ",")
+    }
 }

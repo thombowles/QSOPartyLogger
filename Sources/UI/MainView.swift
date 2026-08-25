@@ -135,7 +135,7 @@ struct MainView: View {
     private var parkCaption: String? {
         let typed = entry.theirParkTyped.trimmingCharacters(in: .whitespaces)
         guard !typed.isEmpty else { return nil }
-        guard case .success(let parks) = PotaRef.parseList(typed), !parks.isEmpty else { return nil }
+        guard case .success(let parks) = PotaRef.parseList(PotaRef.expandShorthand(typed)), !parks.isEmpty else { return nil }
         let directory = potaParkClient.directory
         let parts = parks.map { ref -> String in
             let base = ref.split(separator: "@", maxSplits: 1).first.map(String.init) ?? ref

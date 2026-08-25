@@ -965,6 +965,17 @@ final class EntryFlowTests: XCTestCase {
         XCTAssertNil(flow.entry.dupeWarning)
     }
 
+    func testPotaShorthandParkLogsExpanded() throws {
+        let (flow, doc) = try potaFlow()
+        flow.entry.callTyped = "W1AW"
+        flow.entry.theirParkTyped = "2222"
+        guard case .logged = flow.logContact(context(esm: false, connected: false),
+                                             undoManager: nil) else {
+            return XCTFail("shorthand must expand and log")
+        }
+        XCTAssertEqual(doc.log.qsos.first?.theirPotaRefs, ["US-2222"])
+    }
+
     func testPotaTheirParkComesBackOnTheNextBand() throws {
         let (flow, _) = try potaFlow()
         let ctx = context(esm: false, connected: false)

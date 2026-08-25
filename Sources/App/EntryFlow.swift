@@ -499,7 +499,7 @@ final class EntryFlow {
         // One contact, one park set each way. An unparseable park-to-park
         // reference is refused like an unreadable member element — it is
         // what earns the credit at POTA.
-        guard case .success(let theirParks) = PotaRef.parseList(entry.theirParkTyped) else {
+        guard case .success(let theirParks) = PotaRef.parseList(PotaRef.expandShorthand(entry.theirParkTyped)) else {
             return .nothing
         }
         // Mine is the log's current Contest Setup value, stamped per row so
@@ -584,7 +584,7 @@ final class EntryFlow {
         guard !entry.callNormalized.isEmpty else { return .nothing }
         // An unparseable park refuses to log, exactly as in a party — the
         // reference is what earns the P2P credit at POTA.
-        guard case .success(let theirParks) = PotaRef.parseList(entry.theirParkTyped) else {
+        guard case .success(let theirParks) = PotaRef.parseList(PotaRef.expandShorthand(entry.theirParkTyped)) else {
             return .nothing
         }
         // Mine is the log's current Contest Setup value, stamped per row so

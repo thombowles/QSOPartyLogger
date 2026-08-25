@@ -293,7 +293,7 @@ final class EntryState {
     /// credit at POTA, so a mis-keyed one must not go into the log in
     /// silence. Empty is always fine — most contacts are not park to park.
     func invalidTheirPark() -> Bool {
-        if case .failure = PotaRef.parseList(theirParkTyped) { return true }
+        if case .failure = PotaRef.parseList(PotaRef.expandShorthand(theirParkTyped)) { return true }
         return false
     }
 

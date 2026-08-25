@@ -46,4 +46,22 @@ final class PotaRefTests: XCTestCase {
         }
         XCTAssertTrue(failure.message.contains("USA-331"), failure.message)
     }
+
+    // MARK: Shorthand (spec 2026-08-25 decision 13)
+
+    func testDigitsExpandToUSPark() {
+        XCTAssertEqual(PotaRef.expandShorthand("2518"), "US-2518")
+        XCTAssertEqual(PotaRef.expandShorthand("12345"), "US-12345")
+        XCTAssertEqual(PotaRef.expandShorthand("2518, 0001"), "US-2518,US-0001")
+        XCTAssertEqual(PotaRef.expandShorthand("US-2518,4576"), "US-2518,US-4576")
+    }
+
+    func testNonShorthandPassesThroughAsTyped() {
+        XCTAssertEqual(PotaRef.expandShorthand("US-2518"), "US-2518")
+        XCTAssertEqual(PotaRef.expandShorthand("VE-5082@CA-AB"), "VE-5082@CA-AB")
+        XCTAssertEqual(PotaRef.expandShorthand(""), "")
+        XCTAssertEqual(PotaRef.expandShorthand("251"), "251", "three digits is not a park number")
+        XCTAssertEqual(PotaRef.expandShorthand("251879"), "251879", "six digits is not a park number")
+        XCTAssertEqual(PotaRef.expandShorthand("K-TEST"), "K-TEST")
+    }
 }
