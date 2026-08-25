@@ -61,7 +61,8 @@ enum DupeChecker {
     }
 
     /// The general key: call, plus band and/or mode class per `rule.scope`,
-    /// plus both locations when the rule is location-sensitive. With
+    /// plus both locations when the rule is location-sensitive, plus the UTC
+    /// day and the own-park set when the rule asks (POTA). With
     /// `.partyDefault` this is exactly `key(_:)`.
     struct RuleKey: Hashable {
         let call: String
@@ -69,6 +70,14 @@ enum DupeChecker {
         let modeClass: ModeClass?
         let myLoc: String?
         let theirLoc: String?
+        let utcDay: Int?
+        let myParks: String?
+    }
+
+    /// Unix time is a day count in disguise: no leap seconds, so integer
+    /// division by 86 400 is the UTC day, exactly. Also read by `PotaStats`.
+    static func utcDayIndex(_ date: Date) -> Int {
+        Int(floor(date.timeIntervalSince1970 / 86_400))
     }
 
     static func key(_ q: QSO, rule: DupeRule) -> RuleKey {
@@ -77,7 +86,11 @@ enum DupeChecker {
             band: rule.scope == .contest ? nil : q.band,
             modeClass: rule.scope == .bandMode ? q.modeClass : nil,
             myLoc: rule.locationSensitive ? q.myLoc.uppercased() : nil,
-            theirLoc: rule.locationSensitive ? q.theirLoc.uppercased() : nil
+            theirLoc: rule.locationSensitive ? q.theirLoc.uppercased() : nil,
+            utcDay: rule.utcDay ? utcDayIndex(q.timestampUTC) : nil,
+            myParks: rule.perMyPark
+                ? (q.myPotaRefs ?? []).map { $0.uppercased() }.sorted().joined(separator: ",")
+                : nil
         )
     }
 

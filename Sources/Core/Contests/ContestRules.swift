@@ -11,18 +11,31 @@ struct DupeRule: Codable, Equatable, Sendable {
     /// A station worked from (or in) a different location is a new contact —
     /// a mobile changing county. Every party; no DX contest.
     let locationSensitive: Bool
+    /// The UTC day joins the key: a station worked yesterday is new today.
+    /// POTA (spec 2026-08-25 decision 9); no party sets it.
+    let utcDay: Bool
+    /// The own-park set joins the key: a rove to a new park resets dupes,
+    /// POTA's per-activation scoring. No party sets it.
+    let perMyPark: Bool
 
-    init(scope: Scope, locationSensitive: Bool = false) {
+    init(scope: Scope, locationSensitive: Bool = false,
+         utcDay: Bool = false, perMyPark: Bool = false) {
         self.scope = scope
         self.locationSensitive = locationSensitive
+        self.utcDay = utcDay
+        self.perMyPark = perMyPark
     }
 
-    private enum CodingKeys: String, CodingKey { case scope, locationSensitive }
+    private enum CodingKeys: String, CodingKey {
+        case scope, locationSensitive, utcDay, perMyPark
+    }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(scope: try c.decode(Scope.self, forKey: .scope),
-                  locationSensitive: try c.decodeIfPresent(Bool.self, forKey: .locationSensitive) ?? false)
+                  locationSensitive: try c.decodeIfPresent(Bool.self, forKey: .locationSensitive) ?? false,
+                  utcDay: try c.decodeIfPresent(Bool.self, forKey: .utcDay) ?? false,
+                  perMyPark: try c.decodeIfPresent(Bool.self, forKey: .perMyPark) ?? false)
     }
 
     /// Today's `DupeChecker` key: band × mode class + both locations.
