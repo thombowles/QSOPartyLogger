@@ -53,4 +53,12 @@ final class PotaParkDirectoryTests: XCTestCase {
                                               to: (30.27, -97.74))
         XCTAssertEqual(km, 290, accuracy: 15)
     }
+
+    /// The entry caption's by-reference lookup — exact, case-insensitive.
+    func testParkByReference() throws {
+        let d = try XCTUnwrap(PotaParkDirectory.parse(data: fixtureData()))
+        XCTAssertEqual(d.park(reference: "US-0001")?.name, "Acadia National Park")
+        XCTAssertEqual(d.park(reference: "us-0001")?.name, "Acadia National Park")
+        XCTAssertNil(d.park(reference: "US-99999"))
+    }
 }

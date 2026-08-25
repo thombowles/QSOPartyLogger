@@ -128,9 +128,22 @@ struct MainView: View {
                     isActivation: !document.log.myPotaRefs.isEmpty)
     }
 
-    /// The quiet line under the park field — wired to the park directory in
-    /// the picker task; nil hides it.
-    private var parkCaption: String? { nil }
+    /// The quiet line under the park field: the refs as parsed, each with its
+    /// name when the offline directory knows it. Silent while empty or
+    /// unparseable — the red refuse-to-log label owns that case. A park with
+    /// an `@subdivision` looks up by its base reference.
+    private var parkCaption: String? {
+        let typed = entry.theirParkTyped.trimmingCharacters(in: .whitespaces)
+        guard !typed.isEmpty else { return nil }
+        guard case .success(let parks) = PotaRef.parseList(typed), !parks.isEmpty else { return nil }
+        let directory = potaParkClient.directory
+        let parts = parks.map { ref -> String in
+            let base = ref.split(separator: "@", maxSplits: 1).first.map(String.init) ?? ref
+            if let name = directory?.park(reference: base)?.name { return "\(ref) · \(name)" }
+            return ref
+        }
+        return parts.joined(separator: "  ·  ")
+    }
 
     /// Cabrillo exists for every party, and for a v2 contest only where its
     /// spec says so — POTA's says not (`cabrillo.submittable`).

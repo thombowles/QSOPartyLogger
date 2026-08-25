@@ -21,6 +21,14 @@ struct PotaParkDirectory: Equatable, Sendable {
         return PotaParkDirectory(parks: parks)
     }
 
+    /// The park a normalized reference names, or nil — the entry caption's
+    /// lookup. Linear on purpose: it runs per park-field edit, not per
+    /// keystroke of the call path, and the list is ~13k entries.
+    func park(reference: String) -> PotaPark? {
+        let wanted = reference.uppercased()
+        return parks.first { $0.reference.uppercased() == wanted }
+    }
+
     /// Name-or-number search: every whitespace-separated term must match the
     /// name, the reference, or the location tag — so "lake tx" finds Texas
     /// lakes, "0088" finds US-0088, and "cedar hill" finds the park.

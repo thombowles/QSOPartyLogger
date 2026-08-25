@@ -68,4 +68,17 @@ enum ContestCatalog {
     static func contest(id: String, bundle: Bundle = .main) -> ContestDefinition? {
         all(bundle: bundle).first { $0.id == id }
     }
+
+    /// v2-only contests — those whose id no PartyDefinition claims (POTA) —
+    /// for the Setup picker's tail section. Parties keep their own rows;
+    /// this never re-lists one.
+    static func standalone(bundle: Bundle = .main,
+                           userContestsDirectory: URL = userContestsDirectory) -> [ContestDefinition] {
+        var partyIDs = Set(PartyCatalog.loadBundled(bundle: bundle).map(\.id))
+        for (_, result) in PartyCatalog.loadUserParties() {
+            if case .success(let party) = result { partyIDs.insert(party.id) }
+        }
+        return all(bundle: bundle, userContestsDirectory: userContestsDirectory)
+            .filter { !partyIDs.contains($0.id) }
+    }
 }

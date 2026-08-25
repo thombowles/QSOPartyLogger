@@ -51,6 +51,16 @@ struct SetupSheet: View {
         parties.first { $0.id == partyID }
     }
 
+    /// v2-only contests, POTA today — listed after the parties, never among
+    /// them.
+    private var standaloneContests: [ContestDefinition] {
+        ContestCatalog.standalone()
+    }
+
+    private var standaloneContest: ContestDefinition? {
+        standaloneContests.first { $0.id == partyID }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Contest Setup")
@@ -58,8 +68,8 @@ struct SetupSheet: View {
                 .padding()
 
             Form {
-                Section("QSO Party") {
-                    Picker("Party", selection: $partyID) {
+                Section("Contest") {
+                    Picker("Contest", selection: $partyID) {
                         ForEach(PartyCatalog.pickerEntries()) { entry in
                             // NO VERIFICATION MARKER HERE. It used to carry
                             // "⚠︎" for every partially-verified party, which was
@@ -75,6 +85,13 @@ struct SetupSheet: View {
                                  ? "      ↳ \(entry.party.name)"
                                  : entry.party.name)
                                 .tag(entry.party.id)
+                        }
+                        // v2-only contests trail the parties — POTA today.
+                        if !standaloneContests.isEmpty {
+                            Divider()
+                            ForEach(standaloneContests) { contest in
+                                Text(contest.name).tag(contest.id)
+                            }
                         }
                     }
                     if let party, !party.combines.isEmpty {
@@ -94,6 +111,14 @@ struct SetupSheet: View {
                     }
                     if let party {
                         callHistoryRow(party)
+                    }
+                    if standaloneContest?.potaProgram == true {
+                        Text("Always on — no schedule. Pick your park(s) below "
+                             + "to activate; leave them empty to hunt. Dupes "
+                             + "reset each UTC day and at each new park.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     superCheckRow
                 }
@@ -242,8 +267,11 @@ struct SetupSheet: View {
                                    client: parks)
                 }
 
-                Section("My Location") {
-                    if let party {
+                // Only where a party defines an exchange location — a POTA
+                // log's whereabouts is its park list, chosen above.
+                if party != nil {
+                    Section("My Location") {
+                        if let party {
                         // The other half of "what I send", for the parties
                         // whose exchange carries a name (NAQP, MNQP). One
                         // name for the whole contest — the sponsors' own
@@ -318,6 +346,7 @@ struct SetupSheet: View {
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
+                }
                 }
             }
             .formStyle(.grouped)
@@ -676,7 +705,9 @@ struct SetupSheet: View {
 
     private var canSave: Bool {
         guard !station.callsign.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
-        guard let party else { return false }
+        // A standalone v2 contest (POTA) has no exchange location, name or
+        // member element to gate on — a callsign is the whole requirement.
+        guard let party else { return standaloneContest != nil }
         // A name party without a name cannot produce one submittable line —
         // gated exactly as the location token is.
         if party.exchangeIncludesName,
