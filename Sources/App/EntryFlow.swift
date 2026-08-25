@@ -479,7 +479,7 @@ final class EntryFlow {
     }
 
     func logContact(_ context: Context, undoManager: UndoManager?) -> Outcome {
-        guard let party else { return .nothing }
+        guard let party else { return logStandaloneContact(context, undoManager: undoManager) }
         entry.applyDefaults(modeClass: context.modeClass)
         revalidate(context)
         guard case .valid(let theirLocs) = entry.exchangeStatus,
@@ -573,15 +573,63 @@ final class EntryFlow {
         return .logged(rows: rows, transmission: .silent)
     }
 
+    /// The nil-party path: a v2-only contest (POTA). No location element and
+    /// no county line — one row per contact, parks each way, the RSTs from
+    /// the row or the mode's default. Everything else — pending stash, SCP
+    /// strip, clear-for-next — behaves exactly as the party path.
+    private func logStandaloneContact(_ context: Context, undoManager: UndoManager?) -> Outcome {
+        guard standaloneContest != nil else { return .nothing }
+        entry.applyDefaults(modeClass: context.modeClass)
+        revalidate(context)
+        guard !entry.callNormalized.isEmpty else { return .nothing }
+        // An unparseable park refuses to log, exactly as in a party — the
+        // reference is what earns the P2P credit at POTA.
+        guard case .success(let theirParks) = PotaRef.parseList(entry.theirParkTyped) else {
+            return .nothing
+        }
+        // Mine is the log's current Contest Setup value, stamped per row so
+        // the record shows where the contact was actually made from — a
+        // mid-outing rove affects later rows only.
+        let myParks = document.log.myPotaRefs
+        let row = QSO(
+            call: entry.callNormalized,
+            band: context.band,
+            modeClass: context.modeClass,
+            rawMode: context.rawMode,
+            freqKHz: context.freqKHz,
+            sent: [ExchangeElementID.rst: entry.rstSent.isEmpty
+                       ? context.modeClass.defaultRST : entry.rstSent],
+            rcvd: [ExchangeElementID.rst: entry.rstRcvd.isEmpty
+                       ? context.modeClass.defaultRST : entry.rstRcvd],
+            myPotaRefs: myParks.isEmpty ? nil : myParks,
+            theirPotaRefs: theirParks.isEmpty ? nil : theirParks,
+            posture: document.log.operatingMode
+        )
+        document.append(qsos: [row], undoManager: undoManager)
+        entry.pendingExchanges.removeValue(forKey: entry.callNormalized)
+        entry.clearForNextContact(modeClass: context.modeClass)
+        refreshSCPMatches()
+        return .logged(rows: [row], transmission: .silent)
+    }
+
     // MARK: Entry housekeeping
 
     func revalidate(_ context: Context) {
-        entry.revalidate(
-            party: party,
-            log: document.log,
-            band: context.band,
-            modeClass: context.modeClass
-        )
+        if let contest = standaloneContest {
+            entry.revalidate(
+                contest: contest,
+                log: document.log,
+                band: context.band,
+                modeClass: context.modeClass
+            )
+        } else {
+            entry.revalidate(
+                party: party,
+                log: document.log,
+                band: context.band,
+                modeClass: context.modeClass
+            )
+        }
         refreshSCPMatches()
     }
 
@@ -696,9 +744,26 @@ final class EntryFlow {
     /// Offer what we know about the call now in the field, or take back what we
     /// offered for the last one.
     private func refreshPrefill(_ context: Context) {
+        let call = entry.callNormalized
+
+        // The park an activator gave earlier comes back offered on the next
+        // band. **This log only** — never the call history file or the
+        // archive the exchange chain below draws on: a park is where someone
+        // is sitting today, and last season's is worse than nothing. Typed
+        // text is never overwritten, and nothing is taken back either: the
+        // field may hold a half-typed park for the contact being entered
+        // right now, and `clearForNextContact` is what resets it between
+        // contacts. Above the party gate on purpose — a POTA log has no
+        // party and hunts parks all day.
+        if !call.isEmpty, entry.theirParkTyped.isEmpty,
+           let previous = document.log.qsos.last(where: {
+               $0.call.uppercased() == call && $0.theirPotaRefs != nil
+           }) {
+            entry.theirParkTyped = (previous.theirPotaRefs ?? []).joined(separator: ",")
+        }
+
         guard let party else { return }
 
-        let call = entry.callNormalized
         guard !call.isEmpty else {
             entry.clearAutoFilledExchange()
             entry.clearAutoFilledName()
@@ -778,20 +843,6 @@ final class EntryFlow {
             }
         }
 
-        // The park an activator gave earlier comes back offered on the next
-        // band. **This log only** — never the call history file or the
-        // archive the exchange chain above draws on: a park is where someone
-        // is sitting today, and last season's is worse than nothing. Typed
-        // text is never overwritten, and nothing is taken back either: the
-        // field may hold a half-typed park for the contact being entered
-        // right now, and `clearForNextContact` is what resets it between
-        // contacts.
-        if entry.theirParkTyped.isEmpty,
-           let previous = document.log.qsos.last(where: {
-               $0.call.uppercased() == call && $0.theirPotaRefs != nil
-           }) {
-            entry.theirParkTyped = (previous.theirPotaRefs ?? []).joined(separator: ",")
-        }
     }
 
     private func callHistoryCandidate(

@@ -339,6 +339,39 @@ final class EntryState {
         }
     }
 
+    /// Revalidation for a v2-only contest (POTA): there is no exchange
+    /// element to parse, so the status stays `.idle` and `canLog` is decided
+    /// by the layout; the dupe check runs the contest's own rule — the same
+    /// key the engine scores with, so the warning can never disagree with
+    /// the score (utcDay, perMyPark and all).
+    func revalidate(
+        contest: ContestDefinition,
+        log: ContestLog,
+        band: Band,
+        modeClass: ModeClass,
+        now: Date = Date()
+    ) {
+        exchangeStatus = .idle
+        isNewMult = false
+        let callSign = callNormalized
+        guard !callSign.isEmpty else {
+            dupeWarning = nil
+            return
+        }
+        let probe = QSO(
+            timestampUTC: now, call: callSign, band: band,
+            modeClass: modeClass, rawMode: "", sent: [:], rcvd: [:],
+            myPotaRefs: log.myPotaRefs.isEmpty ? nil : log.myPotaRefs
+        )
+        let logged = Set(log.qsos.map { DupeChecker.key($0, rule: contest.dupe) })
+        if logged.contains(DupeChecker.key(probe, rule: contest.dupe)) {
+            let today = contest.dupe.utcDay ? " today" : ""
+            dupeWarning = "DUPE: \(callSign) already worked on \(band.rawValue) \(modeClass.displayName)\(today)"
+        } else {
+            dupeWarning = nil
+        }
+    }
+
     private func updateDupeWarning(
         parsed: ExchangeParser.ParsedExchange,
         log: ContestLog,

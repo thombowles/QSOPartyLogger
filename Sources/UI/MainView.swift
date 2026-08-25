@@ -132,6 +132,12 @@ struct MainView: View {
     /// the picker task; nil hides it.
     private var parkCaption: String? { nil }
 
+    /// Cabrillo exists for every party, and for a v2 contest only where its
+    /// spec says so — POTA's says not (`cabrillo.submittable`).
+    private var cabrilloOffered: Bool {
+        party != nil || (flow.standaloneContest?.cabrillo.submittable ?? false)
+    }
+
     /// The one place the view describes "right now" to the flow. Built in a
     /// single property so there is a single place it can be got wrong, and so a
     /// test constructs the same value rather than reproducing the wiring.
@@ -207,8 +213,13 @@ struct MainView: View {
     }
 
     private var score: ScoreEngine.ScoreBreakdown {
-        guard let party else { return .init() }
-        return ScoreEngine.score(log: document.log, party: party)
+        if let party { return ScoreEngine.score(log: document.log, party: party) }
+        if let contest = flow.standaloneContest {
+            // A v2-only contest (POTA): the general engine, zero points by
+            // design — the QSO and dupe counts are what the sidebar reads.
+            return ScoreEngine.score(log: document.log, contest: contest)
+        }
+        return .init()
     }
 
     private var currentBand: Band {
@@ -860,8 +871,10 @@ struct MainView: View {
             Menu {
                 Button("ADIF (.adi)…") { exportADIF() }
                     .keyboardShortcut("e", modifiers: .command)
-                Button("Cabrillo (.log)…") { exportCabrillo() }
-                    .keyboardShortcut("e", modifiers: [.command, .shift])
+                if cabrilloOffered {
+                    Button("Cabrillo (.log)…") { exportCabrillo() }
+                        .keyboardShortcut("e", modifiers: [.command, .shift])
+                }
             } label: {
                 Label("Export", systemImage: "square.and.arrow.up")
             }
@@ -2280,7 +2293,7 @@ struct MainView: View {
         // table exhaustive.
         case .abortTransmission: radio.abortTransmission(settings: settings)
         case .exportADIF: exportADIF()
-        case .exportCabrillo: exportCabrillo()
+        case .exportCabrillo: if cabrilloOffered { exportCabrillo() }
         // ⇧⌘← / ⇧⌘→: the VFO by 100 Hz.
         case .nudgeVFO(let hz): nudgeVFO(byHz: hz)
         // ⌘/: hints on every button, and the legend under the messages row.
@@ -2311,11 +2324,16 @@ struct MainView: View {
     }
 
     private func exportADIF() {
-        guard let party else { return }
+        let text: String
+        if let party {
+            text = AdifExporter.export(log: document.log, party: party)
+        } else if let contest = flow.standaloneContest {
+            text = AdifExporter.export(log: document.log, contest: contest)
+        } else { return }
         // Through .plainText the save panel would append ".txt" — .adi is not
         // an extension of any plain-text type. .adi (LogDocument.swift) is.
         presentExport(
-            TextExportDocument(text: AdifExporter.export(log: document.log, party: party)),
+            TextExportDocument(text: text),
             type: .adi,
             name: LogDocument.exportBaseName(fileURL: exportFileURL, log: document.log) + ".adi"
         )

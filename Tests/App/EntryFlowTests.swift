@@ -880,4 +880,102 @@ final class EntryFlowTests: XCTestCase {
 
         XCTAssertEqual(doc.log.qsos.map(\.posture), [.run, .searchPounce])
     }
+
+    // MARK: POTA — the nil-party path (spec 2026-08-25 §entry row)
+
+    /// A POTA activation log at one park — the dedicated-mode state after
+    /// Contest Setup. No `PartyDefinition` resolves; the contest comes from
+    /// the catalog.
+    func potaDocument(parks: [String] = ["US-1111"]) -> LogDocument {
+        let doc = LogDocument()
+        doc.updateStation(
+            StationProfile(callsign: "KE5CW"),
+            location: .outOfState(location: ""),
+            partyID: "pota",
+            undoManager: nil
+        )
+        doc.log.myPotaRefs = parks
+        return doc
+    }
+
+    func potaFlow(parks: [String] = ["US-1111"]) throws -> (EntryFlow, LogDocument) {
+        let doc = potaDocument(parks: parks)
+        let flow = EntryFlow(document: doc)
+        XCTAssertNil(flow.party, "pota must resolve to no PartyDefinition")
+        XCTAssertNotNil(flow.standaloneContest)
+        return (flow, doc)
+    }
+
+    func testPotaLogsOneRowWithParksBothWays() throws {
+        let (flow, doc) = try potaFlow()
+        flow.entry.callTyped = "W1AW"
+        flow.entry.theirParkTyped = "US-2222,US-3333"
+        let outcome = flow.logContact(context(esm: false, connected: false),
+                                      undoManager: nil)
+        guard case .logged(let rows, _) = outcome else {
+            return XCTFail("expected .logged, got \(outcome)")
+        }
+        XCTAssertEqual(rows.count, 1, "no county line in POTA — one row per contact")
+        let q = try XCTUnwrap(doc.log.qsos.first)
+        XCTAssertEqual(q.call, "W1AW")
+        XCTAssertEqual(q.myPotaRefs, ["US-1111"])
+        XCTAssertEqual(q.theirPotaRefs, ["US-2222", "US-3333"])
+        XCTAssertEqual(q.rstSent, "599")
+        XCTAssertEqual(q.myLoc, "", "no location element, no location")
+        XCTAssertTrue(flow.entry.call.isEmpty, "row cleared for the next contact")
+    }
+
+    func testPotaHunterLogsWithNoOwnPark() throws {
+        let (flow, doc) = try potaFlow(parks: [])
+        flow.entry.callTyped = "K5ABC"
+        flow.entry.theirParkTyped = "US-4444"
+        guard case .logged = flow.logContact(context(esm: false, connected: false),
+                                             undoManager: nil) else {
+            return XCTFail("a hunter log must log without an own park — decision 1")
+        }
+        XCTAssertNil(doc.log.qsos.first?.myPotaRefs)
+        XCTAssertEqual(doc.log.qsos.first?.theirPotaRefs, ["US-4444"])
+    }
+
+    func testPotaRefusesAGarbledPark() throws {
+        let (flow, doc) = try potaFlow()
+        flow.entry.callTyped = "W1AW"
+        flow.entry.theirParkTyped = "USA-33"
+        guard case .nothing = flow.logContact(context(esm: false, connected: false),
+                                              undoManager: nil) else {
+            return XCTFail("an unparseable park must refuse to log")
+        }
+        XCTAssertTrue(doc.log.qsos.isEmpty)
+    }
+
+    func testPotaDupeWarningIsPerDayAndPark() throws {
+        let (flow, doc) = try potaFlow()
+        let ctx = context(esm: false, connected: false)
+        flow.entry.callTyped = "W1AW"
+        guard case .logged = flow.logContact(ctx, undoManager: nil) else {
+            return XCTFail("first contact must log")
+        }
+        // Same call, band, mode, same UTC day, same park: warned.
+        flow.entry.callTyped = "W1AW"
+        flow.revalidate(ctx)
+        XCTAssertNotNil(flow.entry.dupeWarning)
+        // Rove to a new park: the same station is new again.
+        doc.log.myPotaRefs = ["US-9999"]
+        flow.revalidate(ctx)
+        XCTAssertNil(flow.entry.dupeWarning)
+    }
+
+    func testPotaTheirParkComesBackOnTheNextBand() throws {
+        let (flow, _) = try potaFlow()
+        let ctx = context(esm: false, connected: false)
+        flow.entry.callTyped = "W1AW"
+        flow.entry.theirParkTyped = "US-2222"
+        guard case .logged = flow.logContact(ctx, undoManager: nil) else {
+            return XCTFail("first contact must log")
+        }
+        flow.entry.callTyped = "W1AW"
+        flow.callChanged(ctx)
+        XCTAssertEqual(flow.entry.theirParkTyped, "US-2222",
+                       "the park prefill must not be party-gated")
+    }
 }
