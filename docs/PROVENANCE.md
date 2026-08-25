@@ -759,6 +759,17 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   [`research/pota/SOURCES.md`](research/pota/SOURCES.md) § "POTA spot API".
   No test post was made; a live send is confirmed by the response and two
   follow-up reads.
+- The POTA mode's rules — the 10-QSO single-UTC-day validity sentence, the
+  required log fields, and "A separate log must be submitted for each park
+  of the multi-park simultaneous activation"
+  (docs.pota.app/docs/rules.html), and the submission file naming with its
+  multi-state example `W8MSC@US-4239-20181231-US-MI.adi`
+  (docs.pota.app/docs/activator_reference/submitting_logs.html) — both
+  fetched 2026-08-25 and quoted verbatim in
+  [`research/pota/SOURCES.md`](research/pota/SOURCES.md) § "POTA rules for
+  the dedicated mode". Whether duplicate contacts count toward the ten is
+  not published; the validity meter counts the stricter unique form and the
+  open question is recorded there.
 - DX cluster spotting — the `DX` command from the DXSpider User Manual v1.51
   ("frequency is in kilohertz"; "The callout will also be sent to you as
   proof of receipt", which is why the node's echo is the confirmation) and

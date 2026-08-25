@@ -139,6 +139,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⌘1` / `⌘2` / `⌘3` | In the spot sheet: tick or untick the cluster / the hub / POTA; `Return` posts to every ticked network at once |
 | `⇧⌘R` | Restore the party's default CW messages (Messages editor) |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
+| `⌥⌘E` | Export for POTA — one submission file per park, named `CALL@PARK-YYYYMMDD.adi` (shown when the log has your park set) |
 | `⇧⌘M` | Expand / collapse every multiplier list in the score sidebar |
 | `⌃⌘S` | Show / hide the score sidebar — hidden, the window shrinks to about 560 points wide and the station strip shows the total |
 | `⇧⌘C` | Copy the score summary as text (also on the score card's right-click menu) |
@@ -980,6 +981,48 @@ The cached park list lives in `~/Library/Application Support/QSOPartyLogger/POTA
 Field definitions, upload rules and the spot API's contract are banked in
 [`docs/research/pota/SOURCES.md`](docs/research/pota/SOURCES.md).
 
+## A dedicated POTA mode
+
+Everything above rides a contest. For a plain Tuesday activation — no QSO
+party, just a park — pick **Parks on the Air (POTA)** at the end of Contest
+Setup's picker. It is always on (no schedule), legal on every band the app
+knows including WARC and 60 m, and one log kind serves both directions:
+set your park(s) and it is an activation; leave them empty and it is a
+hunter log. Either way the P2P field is always in the row.
+
+- **The row is POTA-shaped.** Call, the RSTs, and **P2P park(s)** — no
+  county field, because there is no exchange to parse. `Space` cycles call →
+  park → call (Tab still walks the reports), and the Log button needs only a
+  call. Type a bare park number — `2518` — and it logs as `US-2518`; a quiet
+  caption under the field names the park from the offline directory as
+  confirmation, and a P2P park a station gave you earlier is offered back
+  when they call again on the next band.
+- **Dupes follow POTA's clock, not a contest's.** The same station counts
+  again on each band, in each mode, on each new UTC day, and from each new
+  park when you rove — the warning line and the engine key identically, and
+  a dupe is flagged but never blocked from logging.
+- **The sidebar counts your activation.** Any log with your park set — the
+  dedicated mode or a QSO party worked from a picnic table — shows a
+  **POTA panel**: a meter per park toward the ten QSOs that validate an
+  activation (unique call × band × mode this UTC day — POTA does not
+  publish whether duplicates count, so the meter under-promises), the P2P
+  tally, and a countdown when UTC midnight is under two hours away.
+- **Export writes what POTA's uploader wants.** **⌥⌘E** (or Export › For
+  POTA) writes **one ADIF per park**, named the way their submission page
+  recommends — `KE5CW@US-1234-20260825.adi`, multi-state parks appending
+  the state after the date — because POTA requires a separate log per park
+  for an n-fer. Pick a folder once; Finder shows the files. Cabrillo is
+  deliberately not offered for POTA — there is nothing to submit one to.
+- **F1 says CQ POTA.** A POTA log's default messages are composed for the
+  program — `CQ POTA {MYCALL}`, `{CALL} {RST}` — and a new `{MYPARK}` macro
+  expands to your park reference(s) in any message, in any contest, and to
+  nothing from home.
+
+Rules provenance — the ten-QSO UTC-day validity, the separate-log-per-park
+requirement, and the file naming — is quoted verbatim with fetch dates in
+[`docs/research/pota/SOURCES.md`](docs/research/pota/SOURCES.md) § "POTA
+rules for the dedicated mode".
+
 ## Adding a party without writing code
 
 Drop a JSON file in `~/Library/Application Support/QSOPartyLogger/Parties/`.
@@ -1077,7 +1120,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3112 unit tests**, none of which need hardware, a network or a microphone —
+**3159 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a
