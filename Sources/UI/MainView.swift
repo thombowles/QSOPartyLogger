@@ -888,11 +888,15 @@ struct MainView: View {
                     Button("Cabrillo (.log)…") { exportCabrillo() }
                         .keyboardShortcut("e", modifiers: [.command, .shift])
                 }
+                if !AdifExporter.ownParks(log: document.log).isEmpty {
+                    Button("For POTA — one file per park…") { exportPota() }
+                        .keyboardShortcut("e", modifiers: [.command, .option])
+                }
             } label: {
                 Label("Export", systemImage: "square.and.arrow.up")
             }
-            .help("Export the log — ADIF (⌘E) or Cabrillo (⇧⌘E)")
-            .shortcutHint("⌘E · ⇧⌘E")
+            .help("Export the log — ADIF (⌘E), Cabrillo (⇧⌘E), or POTA files (⌥⌘E)")
+            .shortcutHint("⌘E · ⇧⌘E · ⌥⌘E")
 
             Button {
                 beginSpotForMode()
@@ -2307,6 +2311,7 @@ struct MainView: View {
         case .abortTransmission: radio.abortTransmission(settings: settings)
         case .exportADIF: exportADIF()
         case .exportCabrillo: if cabrilloOffered { exportCabrillo() }
+        case .exportPota: exportPota()
         // ⇧⌘← / ⇧⌘→: the VFO by 100 Hz.
         case .nudgeVFO(let hz): nudgeVFO(byHz: hz)
         // ⌘/: hints on every button, and the legend under the messages row.
@@ -2369,6 +2374,49 @@ struct MainView: View {
             type: .plainText,
             name: LogDocument.exportBaseName(fileURL: exportFileURL, log: document.log) + ".log"
         )
+    }
+
+    /// One ADIF per own park, named CALL@PARK-YYYYMMDD.adi — "A separate log
+    /// must be submitted for each park of the multi-park simultaneous
+    /// activation" (docs/research/pota/SOURCES.md). The panel picks a folder
+    /// once; Finder then shows what landed, which is the receipt.
+    private func exportPota() {
+        if let notice = AppIntegrity.check() {
+            exportNotice = notice
+            return
+        }
+        exportNotice = nil
+        let parks = AdifExporter.ownParks(log: document.log)
+        guard !parks.isEmpty else { return }
+        let contest: ContestDefinition
+        if let party { contest = PartyLowering.lowered(party) }
+        else if let standalone = flow.standaloneContest { contest = standalone }
+        else { return }
+
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.canCreateDirectories = true
+        panel.prompt = "Export \(parks.count) File\(parks.count == 1 ? "" : "s")"
+        panel.message = "One POTA submission file per park will be written here."
+        guard panel.runModal() == .OK, let folder = panel.url else { return }
+
+        var written: [URL] = []
+        for park in parks {
+            let text = AdifExporter.exportForPota(log: document.log, contest: contest, park: park)
+            let date = AdifExporter.firstQSODate(log: document.log, park: park) ?? Date()
+            let url = folder.appendingPathComponent(
+                AdifExporter.potaFileName(callsign: document.log.station.callsign,
+                                          park: park, date: date))
+            do {
+                try Data(text.utf8).write(to: url)
+                written.append(url)
+            } catch {
+                exportNotice = "Could not write \(url.lastPathComponent): \(error.localizedDescription)"
+                return
+            }
+        }
+        NSWorkspace.shared.activateFileViewerSelecting(written)
     }
 
     /// Open the save panel for an export — or say why it cannot open.

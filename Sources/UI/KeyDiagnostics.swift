@@ -205,6 +205,7 @@ enum KeyDiagnostics {
         case .abortTransmission: return "abort"
         case .exportADIF: return "export ADIF"
         case .exportCabrillo: return "export Cabrillo"
+        case .exportPota: return "export for POTA"
         case .nudgeVFO(let hz): return "VFO \(hz > 0 ? "+" : "")\(hz) Hz"
         case .toggleShortcutHints: return "shortcut hints"
         }

@@ -173,4 +173,85 @@ final class AdifExporterTests: XCTestCase {
         XCTAssertEqual(text.components(separatedBy: "<eor>").count - 1, 2)
         XCTAssertEqual(text.components(separatedBy: "<my_sig_info:7>US-3315").count - 1, 2)
     }
+
+    // MARK: Export for POTA — one file per own park (spec 2026-08-25 dec. 11)
+
+    /// A POTA log: a P2P contact at the first park, then a two-fer contact.
+    private func potaLog() -> ContestLog {
+        var log = ContestLog(partyID: "pota")
+        log.station.callsign = "KE5CW"
+        let day = Date(timeIntervalSince1970: 1_787_000_000)  // 2026-08-17Z
+        log.qsos = [
+            QSO(timestampUTC: day, call: "W1AW", band: .m20, modeClass: .cw,
+                rawMode: "CW",
+                sent: [ExchangeElementID.rst: "599"],
+                rcvd: [ExchangeElementID.rst: "599"],
+                myPotaRefs: ["US-1111"], theirPotaRefs: ["US-9999"]),
+            QSO(timestampUTC: day.addingTimeInterval(600), call: "K5X",
+                band: .m40, modeClass: .phone, rawMode: "USB",
+                sent: [ExchangeElementID.rst: "59"],
+                rcvd: [ExchangeElementID.rst: "59"],
+                myPotaRefs: ["US-1111", "US-2222"]),
+        ]
+        return log
+    }
+
+    private var potaContest: ContestDefinition {
+        get throws { try XCTUnwrap(ContestCatalog.contest(id: "pota")) }
+    }
+
+    func testOwnParksInFirstAppearanceOrder() {
+        XCTAssertEqual(AdifExporter.ownParks(log: potaLog()), ["US-1111", "US-2222"])
+        var hunter = potaLog()
+        for i in hunter.qsos.indices { hunter.qsos[i].myPotaRefs = nil }
+        XCTAssertTrue(AdifExporter.ownParks(log: hunter).isEmpty)
+    }
+
+    func testPerParkFileCarriesOnlyThatParksRowsAndStampsIt() throws {
+        let first = AdifExporter.exportForPota(log: potaLog(), contest: try potaContest,
+                                               park: "US-1111")
+        // Both rows visited US-1111; each record names it alone.
+        XCTAssertEqual(first.components(separatedBy: "<eor>").count - 1, 2)
+        XCTAssertEqual(first.components(separatedBy: "<my_sig_info:7>US-1111").count - 1, 2)
+        XCTAssertFalse(first.contains("US-2222"))
+        XCTAssertTrue(first.contains("<sig_info:7>US-9999"), "P2P survives the split")
+
+        let second = AdifExporter.exportForPota(log: potaLog(), contest: try potaContest,
+                                                park: "US-2222")
+        XCTAssertEqual(second.components(separatedBy: "<eor>").count - 1, 1)
+        XCTAssertTrue(second.contains("<my_sig_info:7>US-2222"))
+        XCTAssertTrue(second.contains("<call:3>K5X"))
+        XCTAssertFalse(second.contains("W1AW"))
+        XCTAssertFalse(second.contains("US-1111"),
+                       "the two-fer's other park belongs to the other file")
+    }
+
+    func testExportForUnvisitedParkIsHeaderOnly() throws {
+        let text = AdifExporter.exportForPota(log: potaLog(), contest: try potaContest,
+                                              park: "US-7777")
+        XCTAssertEqual(text.components(separatedBy: "<eor>").count - 1, 0)
+    }
+
+    /// The filename POTA's submission page recommends —
+    /// `KA8H@US-1515-20201127.adi`, multi-state parks appending the state
+    /// after the date (`W8MSC@US-4239-20181231-US-MI.adi`). Banked verbatim
+    /// in docs/research/pota/SOURCES.md, fetched 2026-08-25.
+    func testPotaFileName() {
+        let date = Date(timeIntervalSince1970: 1_787_000_000)  // 20260817 UTC
+        XCTAssertEqual(
+            AdifExporter.potaFileName(callsign: "KE5CW", park: "US-1111", date: date),
+            "KE5CW@US-1111-20260817.adi")
+        XCTAssertEqual(
+            AdifExporter.potaFileName(callsign: "ke5cw", park: "US-0001@US-ME", date: date),
+            "KE5CW@US-0001-20260817-US-ME.adi")
+    }
+
+    func testFirstQSODatePerPark() {
+        let log = potaLog()
+        XCTAssertEqual(AdifExporter.firstQSODate(log: log, park: "US-1111"),
+                       Date(timeIntervalSince1970: 1_787_000_000))
+        XCTAssertEqual(AdifExporter.firstQSODate(log: log, park: "US-2222"),
+                       Date(timeIntervalSince1970: 1_787_000_600))
+        XCTAssertNil(AdifExporter.firstQSODate(log: log, park: "US-7777"))
+    }
 }

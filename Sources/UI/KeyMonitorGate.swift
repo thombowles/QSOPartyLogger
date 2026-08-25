@@ -106,6 +106,8 @@ enum KeyMonitorGate {
         case abortTransmission
         case exportADIF
         case exportCabrillo
+        /// ⌥⌘E: one POTA submission file per own park (2026-08-25).
+        case exportPota
         /// ⇧⌘← / ⇧⌘→: the VFO by this many hertz, sign and all.
         case nudgeVFO(byHz: Int)
         /// ⌘/: shortcut hints on every button, and the legend.
@@ -125,13 +127,13 @@ enum KeyMonitorGate {
     /// A ⌘ chord that isn't in the command table falls through to the plain
     /// keys, so ⌘F2 still sends message 2 exactly as it always has.
     ///
-    /// `option` is read for the F row and nowhere else: ⌥F2 edits message 2
-    /// rather than sending it, while ⌥ on any other key leaves that key's
-    /// meaning alone.
+    /// `option` is read for the F row — ⌥F2 edits message 2 rather than
+    /// sending it — and for one command chord, ⌥⌘E (export for POTA); ⌥ on
+    /// any other key leaves that key's meaning alone.
     static func action(
         keyCode: UInt16, command: Bool, shift: Bool = false, option: Bool = false
     ) -> Action? {
-        if command, let chord = commandAction(keyCode: keyCode, shift: shift) {
+        if command, let chord = commandAction(keyCode: keyCode, shift: shift, option: option) {
             return chord
         }
         if let index = fKeyIndex[keyCode] {
@@ -241,7 +243,7 @@ enum KeyMonitorGate {
     static let wpmStep = 1
     static let wpmCoarseStep = 2
 
-    private static func commandAction(keyCode: UInt16, shift: Bool) -> Action? {
+    private static func commandAction(keyCode: UInt16, shift: Bool, option: Bool = false) -> Action? {
         switch keyCode {
         // '=' / keypad '+' and '-' / keypad '-': the speed by one, or by two
         // with ⇧ (⇧= is how '+' arrives) — 2026-08-16, asked for by name.
@@ -261,9 +263,9 @@ enum KeyMonitorGate {
         // ⌘B shows and hides the map; ⇧⌘B bolts it to the window, or sets it
         // free (2026-08-22).
         case 11: return shift ? .toggleBandMapBolt : .toggleBandMap  // 'b'
-        // ⇧ distinguishes this chord too. In the toolbar's Export menu these
+        // ⇧ and ⌥ distinguish this chord. In the toolbar's Export menu these
         // are badge text; the gate is what actually fires them.
-        case 14: return shift ? .exportCabrillo : .exportADIF  // 'e'
+        case 14: return option ? .exportPota : (shift ? .exportCabrillo : .exportADIF)  // 'e'
         // ⌘/ — shortcut hints. Also Help › Keyboard Shortcut Hints, which is
         // what answers it from a sheet or the dashboard, where the gate does
         // not consume it. (⌘? is macOS's own Help-menu search.)

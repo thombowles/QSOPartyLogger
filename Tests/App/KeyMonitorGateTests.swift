@@ -301,6 +301,21 @@ final class KeyMonitorGateTests: XCTestCase {
         )
     }
 
+    /// ⌥⌘E: one POTA submission file per own park (2026-08-25). ⌥ wins over
+    /// ⇧ so a mashed ⌥⇧⌘E still exports something rather than nothing.
+    func testOptionCommandEExportsForPota() {
+        XCTAssertEqual(
+            KeyMonitorGate.action(keyCode: 14, command: true, option: true),
+            .exportPota
+        )
+        XCTAssertEqual(
+            KeyMonitorGate.action(keyCode: 14, command: true, shift: true, option: true),
+            .exportPota
+        )
+        // The unmodified chords are exactly what they were.
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 14, command: true), .exportADIF)
+    }
+
     /// A bare or shifted 'e' is the operator typing a callsign.
     func testPlainEStaysTypeable() {
         XCTAssertNil(KeyMonitorGate.action(keyCode: 14, command: false))
