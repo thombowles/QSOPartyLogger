@@ -27,6 +27,12 @@ struct ScoreSidebar: View {
                     AdvisorSection(input: advisorInput, onTune: onTune)
                 }
                 totalsCard
+                // Data-driven, not contest-driven: any log activating a park
+                // shows the panel — a QSO party worked from one included
+                // (spec 2026-08-25 decision 2; one log, both submissions).
+                if !log.myPotaRefs.isEmpty {
+                    PotaActivationSection(log: log)
+                }
                 if let party {
                     CombinedBreakdownSection(log: log, party: party, members: members)
                     bandModeSection(party)
