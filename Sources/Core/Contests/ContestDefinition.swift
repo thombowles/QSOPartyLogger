@@ -33,6 +33,18 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
     let categories: Categories
     let cabrillo: CabrilloSpec
     let sources: ContestSources
+    /// This is a POTA program log: the their-park field is always visible and
+    /// in the Space cycle, and the band map's POTA feed defaults on. One
+    /// declaration rather than a flag per symptom (spec 2026-08-25 decision
+    /// 12); no party sets it.
+    let potaProgram: Bool
+    /// The word after "CQ" in default messages ("POTA" → "CQ POTA {MYCALL}");
+    /// nil is the contest default, "TEST".
+    let cqLabel: String?
+    /// Whether a callbook lookup's record is stamped into the QSO at logging
+    /// (phase 2 of the spec reads this; the field ships now so pota.json is
+    /// complete). Default false.
+    let enrichFromCallbook: Bool
 
     init(schemaVersion: Int = 2, id: String, name: String, family: ContestFamily, sponsor: String? = nil,
          notes: String? = nil, caveats: [PartyDefinition.Caveat] = [], schedule: [PartyDefinition.ScheduleWindow]? = nil,
@@ -40,7 +52,8 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
          sides: [Side], exchange: [ExchangeElement], multipliers: [MultiplierClass], points: [PointRule],
          dupe: DupeRule, pairing: [String: [String]]? = nil, sideRules: [String: SideRules] = [:],
          bonuses: [BonusRule] = [], scoreFactors: ScoreFactors? = nil, operatingTime: OperatingTimeRule? = nil,
-         categories: Categories = .all, cabrillo: CabrilloSpec, sources: ContestSources = .none) {
+         categories: Categories = .all, cabrillo: CabrilloSpec, sources: ContestSources = .none,
+         potaProgram: Bool = false, cqLabel: String? = nil, enrichFromCallbook: Bool = false) {
         self.schemaVersion = schemaVersion
         self.id = id
         self.name = name
@@ -66,12 +79,16 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
         self.categories = categories
         self.cabrillo = cabrillo
         self.sources = sources
+        self.potaProgram = potaProgram
+        self.cqLabel = cqLabel
+        self.enrichFromCallbook = enrichFromCallbook
     }
 
     private enum CodingKeys: String, CodingKey {
         case schemaVersion, id, name, family, sponsor, notes, caveats, schedule, bands, modeClasses, allowedRawModes
         case tokenSets, sides, exchange, multipliers, points, dupe, pairing, sideRules, bonuses, scoreFactors
         case operatingTime, categories, cabrillo, sources
+        case potaProgram, cqLabel, enrichFromCallbook
     }
 
     init(from decoder: Decoder) throws {
@@ -101,7 +118,10 @@ struct ContestDefinition: Codable, Identifiable, Equatable, Sendable {
             operatingTime: try c.decodeIfPresent(OperatingTimeRule.self, forKey: .operatingTime),
             categories: try c.decodeIfPresent(Categories.self, forKey: .categories) ?? .all,
             cabrillo: try c.decode(CabrilloSpec.self, forKey: .cabrillo),
-            sources: try c.decodeIfPresent(ContestSources.self, forKey: .sources) ?? .none
+            sources: try c.decodeIfPresent(ContestSources.self, forKey: .sources) ?? .none,
+            potaProgram: try c.decodeIfPresent(Bool.self, forKey: .potaProgram) ?? false,
+            cqLabel: try c.decodeIfPresent(String.self, forKey: .cqLabel),
+            enrichFromCallbook: try c.decodeIfPresent(Bool.self, forKey: .enrichFromCallbook) ?? false
         )
     }
 

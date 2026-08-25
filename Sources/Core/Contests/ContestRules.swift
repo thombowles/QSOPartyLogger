@@ -2,6 +2,8 @@ import Foundation
 
 enum ContestFamily: String, Codable, CaseIterable, Sendable {
     case stateQSOParty, dx, domestic, fieldDay, sprint, qrp, vhf
+    /// An always-on operating program rather than a scheduled contest — POTA.
+    case program
 }
 
 /// When a second contact with the same station is a dupe.
@@ -125,10 +127,15 @@ struct CabrilloSpec: Codable, Equatable, Sendable {
     /// the three (MDC, IDQP, NCQP, WIQP), which is what their logs have always
     /// carried; Field Day (class + section) leaves it false. Default false.
     let reportColumn: Bool
+    /// Whether the app offers a Cabrillo file for this contest at all. POTA
+    /// has no Cabrillo submission; `contest` stays non-empty because the
+    /// validator (and ADIF's `contest_id`) still want a name. Default true.
+    let submittable: Bool
 
     init(contest: String, location: Location, transmitterColumn: Bool = false,
          serialSequence: SerialSequence = .contest, categoryMode: String? = nil,
-         homeLocation: String? = nil, reportColumn: Bool = false) {
+         homeLocation: String? = nil, reportColumn: Bool = false,
+         submittable: Bool = true) {
         self.contest = contest
         self.location = location
         self.transmitterColumn = transmitterColumn
@@ -136,10 +143,12 @@ struct CabrilloSpec: Codable, Equatable, Sendable {
         self.categoryMode = categoryMode
         self.homeLocation = homeLocation
         self.reportColumn = reportColumn
+        self.submittable = submittable
     }
 
     private enum CodingKeys: String, CodingKey {
         case contest, location, transmitterColumn, serialSequence, categoryMode, homeLocation, reportColumn
+        case submittable
     }
 
     init(from decoder: Decoder) throws {
@@ -150,7 +159,8 @@ struct CabrilloSpec: Codable, Equatable, Sendable {
                   serialSequence: try c.decodeIfPresent(SerialSequence.self, forKey: .serialSequence) ?? .contest,
                   categoryMode: try c.decodeIfPresent(String.self, forKey: .categoryMode),
                   homeLocation: try c.decodeIfPresent(String.self, forKey: .homeLocation),
-                  reportColumn: try c.decodeIfPresent(Bool.self, forKey: .reportColumn) ?? false)
+                  reportColumn: try c.decodeIfPresent(Bool.self, forKey: .reportColumn) ?? false,
+                  submittable: try c.decodeIfPresent(Bool.self, forKey: .submittable) ?? true)
     }
 }
 

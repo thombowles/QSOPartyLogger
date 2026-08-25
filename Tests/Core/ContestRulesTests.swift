@@ -54,6 +54,6 @@ final class ContestRulesTests: XCTestCase {
 
     func testFamilyRawValues() {
         XCTAssertEqual(ContestFamily.stateQSOParty.rawValue, "stateQSOParty")
-        XCTAssertEqual(ContestFamily.allCases.count, 7)
+        XCTAssertEqual(ContestFamily.allCases.count, 8)  // + .program, 2026-08-25
     }
 }
