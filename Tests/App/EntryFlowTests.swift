@@ -1045,6 +1045,80 @@ final class EntryFlowTests: XCTestCase {
         XCTAssertEqual(doc.log.qsos.first?.theirPotaRefs, ["US-2222"])
     }
 
+    // MARK: State offers (operator request, 2026-08-25): park > own log >
+    // callbook, always as app-owned grey text the first keystroke takes.
+
+    func testParkLocationOffersTheState() throws {
+        let (flow, _) = try potaFlow()
+        let ctx = context(esm: false, connected: false)
+        flow.parkLocation = { $0 == "US-6653" ? "US-MI" : nil }
+        flow.entry.callTyped = "W8EKM"
+        flow.entry.theirParkTyped = "US-6653"
+        flow.theirParkEdited()
+        XCTAssertEqual(flow.entry.stateTyped, "MI",
+                       "where he is sitting, not where he lives")
+        XCTAssertTrue(flow.entry.stateIsAutoFilled)
+        // The park's claim outranks the callbook's home state.
+        flow.callbookRecord = CallbookRecord(
+            call: "W8EKM", name: nil, qth: nil, state: "TX", county: nil,
+            grid: nil, country: nil, dxccID: nil, source: .qrz, fetchedAt: Date())
+        XCTAssertEqual(flow.entry.stateTyped, "MI")
+        _ = ctx
+    }
+
+    func testCallbookOffersTheStateWhereNoParkDoes() throws {
+        let (flow, _) = try potaFlow()
+        flow.entry.callTyped = "W0ABC"
+        flow.callbookRecord = CallbookRecord(
+            call: "W0ABC", name: "Bob", qth: nil, state: "MO", county: nil,
+            grid: nil, country: nil, dxccID: nil, source: .hamqth, fetchedAt: Date())
+        XCTAssertEqual(flow.entry.stateTyped, "MO")
+        XCTAssertTrue(flow.entry.stateIsAutoFilled)
+        // A record for some other call claims nothing here.
+        flow.entry.callTyped = "K5X"
+        flow.callChanged(context(esm: false, connected: false))
+        XCTAssertTrue(flow.entry.stateTyped.isEmpty,
+                      "the offer left with the call it belonged to")
+    }
+
+    func testTypedStateIsNeverTouchedAndOwnLogOutranksCallbook() throws {
+        let (flow, doc) = try potaFlow()
+        let ctx = context(esm: false, connected: false)
+        // He gave me OK on 20 m; QRZ thinks TX.
+        flow.entry.callTyped = "W5XYZ"
+        flow.entry.stateTyped = "OK"
+        guard case .logged = flow.logContact(ctx, undoManager: nil) else {
+            return XCTFail("first contact must log")
+        }
+        XCTAssertEqual(doc.log.qsos.first?.theirState, "OK")
+        flow.callbookRecord = CallbookRecord(
+            call: "W5XYZ", name: nil, qth: nil, state: "TX", county: nil,
+            grid: nil, country: nil, dxccID: nil, source: .qrz, fetchedAt: Date())
+        flow.entry.callTyped = "W5XYZ"
+        flow.callChanged(ctx)
+        XCTAssertEqual(flow.entry.stateTyped, "OK", "what he sent outranks the database")
+        // Operator text is sacred: an offer never overwrites typing.
+        flow.entry.stateTyped = "AR"
+        flow.theirParkEdited()
+        flow.callbookRecord = CallbookRecord(
+            call: "W5XYZ", name: nil, qth: nil, state: "TX", county: nil,
+            grid: nil, country: nil, dxccID: nil, source: .qrz, fetchedAt: Date())
+        XCTAssertEqual(flow.entry.stateTyped, "AR")
+    }
+
+    func testStraddlingParkFallsThroughToTheNextSource() throws {
+        let (flow, _) = try potaFlow()
+        flow.parkLocation = { $0 == "US-0044" ? "US-TN,US-NC" : nil }
+        flow.callbookRecord = CallbookRecord(
+            call: "N4GSM", name: nil, qth: nil, state: "GA", county: nil,
+            grid: nil, country: nil, dxccID: nil, source: .qrz, fetchedAt: Date())
+        flow.entry.callTyped = "N4GSM"
+        flow.entry.theirParkTyped = "US-0044"
+        flow.theirParkEdited()
+        XCTAssertEqual(flow.entry.stateTyped, "GA",
+                       "a straddling park names no state; the callbook may")
+    }
+
     func testHunterOnTheBoardBringsTheirParkAlong() throws {
         // An activator hunting me is spotted on the POTA board; his park
         // arrives with his call (operator report 2, 2026-08-25).

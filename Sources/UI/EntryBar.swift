@@ -209,10 +209,12 @@ struct EntryBar: View {
         }
         if layout.showsTheirState {
             field("State", text: $entry.stateTyped, width: 54,
-                  focusTag: .theirState)
+                  focusTag: .theirState, provisional: entry.stateIsAutoFilled)
                 .help("Their state as you copied it (\"59 Missouri\") — "
                       + "advisory, exported as ADIF STATE, counted in the "
-                      + "activation panel. Leave empty when they didn't say.")
+                      + "activation panel. Grey text is the app's offer — "
+                      + "the park's side, an earlier contact's, or the "
+                      + "callbook's; typing takes it over.")
         }
         if layout.showsNotes {
             field("Notes", text: $entry.notesTyped, width: 140,

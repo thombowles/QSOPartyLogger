@@ -54,6 +54,21 @@ final class PotaParkDirectoryTests: XCTestCase {
         XCTAssertEqual(km, 290, accuracy: 15)
     }
 
+    /// The State offer's parser (operator request 2026-08-25): the single
+    /// subdivision a locationDesc names, or nil where the park spans
+    /// several — an ambiguous park cannot claim a side.
+    func testSingleStateFromLocationDesc() {
+        XCTAssertEqual(PotaPark.singleState(fromLocationDesc: "US-ME"), "ME")
+        XCTAssertEqual(PotaPark.singleState(fromLocationDesc: "us-tx"), "TX")
+        XCTAssertEqual(PotaPark.singleState(fromLocationDesc: "CA-AB"), "AB")
+        XCTAssertNil(PotaPark.singleState(fromLocationDesc: "US-TN,US-NC"),
+                     "a straddling park names no one state")
+        XCTAssertNil(PotaPark.singleState(fromLocationDesc: nil))
+        XCTAssertNil(PotaPark.singleState(fromLocationDesc: ""))
+        XCTAssertNil(PotaPark.singleState(fromLocationDesc: "XX"),
+                     "no separator, no claim")
+    }
+
     /// The entry caption's by-reference lookup — exact, case-insensitive.
     func testParkByReference() throws {
         let d = try XCTUnwrap(PotaParkDirectory.parse(data: fixtureData()))

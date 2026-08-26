@@ -550,6 +550,9 @@ struct MainView: View {
                     flow.callChanged(operatingContext)
                     callbookClient.noteCallChanged(entry.call)
                 }
+                // The park may pin the state down — typed, prefilled, or
+                // pounced, the offer recomputes with it.
+                .onChange(of: entry.theirParkTyped) { flow.theirParkEdited() }
                 .onChange(of: callbookClient.record) {
                     flow.callbookRecord = callbookClient.record
                 }
@@ -1307,6 +1310,11 @@ struct MainView: View {
             spotStore?.all.last {
                 $0.source == .pota && $0.call == call.uppercased()
             }?.park
+        }
+        // …and the park names its state for the State offer, from the
+        // offline directory (operator request, 2026-08-25).
+        flow.parkLocation = { [weak potaParkClient] ref in
+            potaParkClient?.directory?.park(reference: ref)?.locationDesc
         }
         wireSpotDispatcher()
         syncHubSpotClient()

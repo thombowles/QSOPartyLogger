@@ -47,7 +47,7 @@ final class EntryState {
         if !memberRcvd.isEmpty, !memberIsAutoFilled { return true }
         if !serialRcvd.trimmingCharacters(in: .whitespaces).isEmpty { return true }
         if !theirParkTyped.trimmingCharacters(in: .whitespaces).isEmpty { return true }
-        if !stateTyped.trimmingCharacters(in: .whitespaces).isEmpty { return true }
+        if !stateRcvd.trimmingCharacters(in: .whitespaces).isEmpty, !stateIsAutoFilled { return true }
         if !notesTyped.trimmingCharacters(in: .whitespaces).isEmpty { return true }
         if hasSerialOverride { return true }
         let defaults = Set(ModeClass.allCases.map(\.defaultRST))
@@ -154,10 +154,38 @@ final class EntryState {
     /// the field only exists at all while this log is an activation.
     var theirParkTyped = ""
 
-    /// Their state as copied on the air ("59 Missouri") and the operator's
-    /// own note — POTA-log fields (operator report 1, 2026-08-25). Advisory
-    /// data: never parsed, never scored, refused by nothing.
-    var stateTyped = ""
+    /// Their state as copied on the air ("59 Missouri") — a POTA-log field
+    /// (operator report 1, 2026-08-25). Advisory data: never parsed, never
+    /// scored, refused by nothing. Carries the name field's ownership rule
+    /// so the app may *offer* a state — the park's side, an earlier row's,
+    /// the callbook's — as grey text the first keystroke takes over, and
+    /// take back only what it wrote itself.
+    private(set) var stateRcvd = ""
+    private(set) var stateIsAutoFilled = false
+
+    /// The state as the operator edits it; the view binds here, never to
+    /// `stateRcvd`. Writing through it is what makes the text theirs.
+    var stateTyped: String {
+        get { stateRcvd }
+        set {
+            stateRcvd = newValue
+            stateIsAutoFilled = false
+        }
+    }
+
+    func autoFillState(_ text: String) {
+        stateRcvd = text
+        stateIsAutoFilled = !text.isEmpty
+    }
+
+    /// Take back a state the app offered. Operator text is untouched.
+    func clearAutoFilledState() {
+        guard stateIsAutoFilled else { return }
+        stateRcvd = ""
+        stateIsAutoFilled = false
+    }
+
+    /// The operator's own note on this contact — free text, case kept.
     var notesTyped = ""
 
     /// The received element as the operator edits it. Writing through here is
@@ -427,7 +455,8 @@ final class EntryState {
         memberRcvd = ""
         memberIsAutoFilled = false
         theirParkTyped = ""
-        stateTyped = ""
+        stateRcvd = ""
+        stateIsAutoFilled = false
         notesTyped = ""
         exchange = ""
         exchangeIsAutoFilled = false

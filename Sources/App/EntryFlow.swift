@@ -86,8 +86,76 @@ final class EntryFlow {
 
     /// The callbook's current answer, pushed by the window (the client is
     /// the window's; the flow only reads). Read at logging for the POTA
-    /// stamp, and only when it matches the call being logged.
-    var callbookRecord: CallbookRecord?
+    /// stamp, and only when it matches the call being logged. Arrival is
+    /// also a moment the State field may take an offer — the record lands
+    /// asynchronously, well after the keystrokes that asked for it.
+    var callbookRecord: CallbookRecord? {
+        didSet { offerState() }
+    }
+
+    /// The single location a park reference sits in, as the park directory
+    /// describes it ("US-ME") — the window wires this to the offline
+    /// directory. Where they are sitting outranks where they live, so this
+    /// is the State offer's first source (operator request, 2026-08-25).
+    @ObservationIgnored var parkLocation: (String) -> String? = { _ in nil }
+
+    /// The park field changed — typed, prefilled, or taken from the board.
+    /// The park may now name the state.
+    func theirParkEdited() {
+        offerState()
+    }
+
+    /// Offer the State field its best guess, park first — where he is
+    /// sitting right now — then what he sent me earlier this log, then the
+    /// callbook's home state. Offers ride the same ownership rule as the
+    /// name: grey until the operator's first keystroke, taken back when
+    /// their call leaves the field, and never over typed text.
+    private func offerState() {
+        guard standaloneContest?.potaProgram == true else { return }
+        let call = entry.callNormalized
+        guard !call.isEmpty else {
+            entry.clearAutoFilledState()
+            return
+        }
+        guard entry.stateTyped.isEmpty || entry.stateIsAutoFilled else { return }
+        if let hint = parkStateHint() ?? ownLogState(for: call) ?? callbookState(for: call) {
+            entry.autoFillState(hint)
+        } else {
+            entry.clearAutoFilledState()
+        }
+    }
+
+    /// The state the P2P park(s) pin down: every ref must agree on one
+    /// side. A ref's own `@subdivision` answers directly; otherwise the
+    /// directory's locationDesc does — and a park that straddles states
+    /// claims nothing.
+    private func parkStateHint() -> String? {
+        guard case .success(let refs) =
+                PotaRef.parseList(PotaRef.expandShorthand(entry.theirParkTyped)),
+              !refs.isEmpty else { return nil }
+        var states = Set<String>()
+        for ref in refs {
+            let halves = ref.split(separator: "@", maxSplits: 1)
+            let state: String? = halves.count == 2
+                ? PotaPark.singleState(fromLocationDesc: String(halves[1]))
+                : PotaPark.singleState(fromLocationDesc: parkLocation(String(halves[0])))
+            guard let state else { return nil }
+            states.insert(state)
+        }
+        return states.count == 1 ? states.first : nil
+    }
+
+    private func ownLogState(for call: String) -> String? {
+        document.log.qsos.last {
+            $0.call.uppercased() == call && !($0.theirState ?? "").isEmpty
+        }?.theirState
+    }
+
+    private func callbookState(for call: String) -> String? {
+        guard let record = callbookRecord, record.call == call,
+              let state = record.state, !state.isEmpty else { return nil }
+        return state.uppercased()
+    }
 
     /// The park the POTA board currently shows a call activating from, if
     /// any — the window wires this to the spot store. An activator hunting
@@ -801,18 +869,12 @@ final class EntryFlow {
             }
         }
 
-        // His state does not change between bands, so a POTA log offers it
-        // back the way the park comes back — this log only, never a
-        // database (the callbook line already shows what QRZ thinks).
-        // Gated on the POTA row's own field existing: a party log must not
-        // squirrel invisible text into `stateTyped` and trip the erase rule.
-        if standaloneContest?.potaProgram == true,
-           !call.isEmpty, entry.stateTyped.isEmpty,
-           let known = document.log.qsos.last(where: {
-               $0.call.uppercased() == call && !($0.theirState ?? "").isEmpty
-           })?.theirState {
-            entry.stateTyped = known
-        }
+        // The State field's offer — the park's side, an earlier row's, or
+        // the callbook's — recomputed now that the call (and possibly the
+        // park, just above) has changed. Gated inside on the POTA row's own
+        // field existing: a party log must not squirrel invisible text into
+        // the state and trip the erase rule.
+        offerState()
 
         guard let party else { return }
 

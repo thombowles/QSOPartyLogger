@@ -18,5 +18,16 @@ struct PotaPark: Codable, Equatable, Hashable, Sendable, Identifiable {
     /// "lake tx" work.
     let locationDesc: String?
 
+    /// The single state/province a locationDesc names — "US-ME" → "ME",
+    /// "CA-AB" → "AB" — or nil where the park spans several ("US-TN,US-NC"):
+    /// an ambiguous park cannot claim a side, and the State offer falls
+    /// through to the next source (operator request, 2026-08-25).
+    static func singleState(fromLocationDesc desc: String?) -> String? {
+        guard let desc, !desc.contains(",") else { return nil }
+        let halves = desc.uppercased().split(separator: "-", maxSplits: 1)
+        guard halves.count == 2, !halves[1].isEmpty else { return nil }
+        return String(halves[1])
+    }
+
     var id: String { reference }
 }
