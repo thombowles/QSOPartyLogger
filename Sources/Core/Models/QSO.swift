@@ -47,6 +47,21 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
     /// byte-identically.
     var myPotaRefs: [String]?
     var theirPotaRefs: [String]?
+    /// What a callbook lookup knew about the station at logging time —
+    /// stamped only where the contest sets `enrichFromCallbook` (POTA), and
+    /// advisory everywhere: never read by `ScoreEngine`, never a received
+    /// exchange value, exported as plain ADIF station data. `nil` — the
+    /// overwhelmingly common case — writes no key, so every existing log
+    /// encodes byte-identically.
+    struct CallbookStamp: Codable, Hashable, Sendable {
+        var name: String?
+        var qth: String?
+        var state: String?
+        var grid: String?
+        /// The service's short label ("QRZ", "HamQTH") — provenance.
+        var source: String?
+    }
+    var callbook: CallbookStamp?
     /// Whether this contact was made running or searching, stamped at logging
     /// from the same Run/S&P flag that already picks the message set and
     /// decides what ⇧⌘S means.
@@ -137,7 +152,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         theirPotaRefs: [String]? = nil,
         myLoc: String,
         theirLoc: String,
-        posture: OperatingMode? = nil
+        posture: OperatingMode? = nil,
+        callbook: CallbookStamp? = nil
     ) {
         self.init(
             id: id, groupID: groupID, timestampUTC: timestampUTC, call: call, band: band,
@@ -148,7 +164,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
             rcvd: [ExchangeElementID.rst: rstRcvd, ExchangeElementID.serial: serialRcvd.map(String.init) ?? "",
                    ExchangeElementID.name: nameRcvd ?? "", ExchangeElementID.member: memberRcvd ?? "",
                    ExchangeElementID.location: theirLoc],
-            myPotaRefs: myPotaRefs, theirPotaRefs: theirPotaRefs, posture: posture
+            myPotaRefs: myPotaRefs, theirPotaRefs: theirPotaRefs, posture: posture,
+            callbook: callbook
         )
     }
 
@@ -166,7 +183,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         rcvd: [String: String],
         myPotaRefs: [String]? = nil,
         theirPotaRefs: [String]? = nil,
-        posture: OperatingMode? = nil
+        posture: OperatingMode? = nil,
+        callbook: CallbookStamp? = nil
     ) {
         self.id = id
         self.groupID = groupID
@@ -183,6 +201,7 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         self.myPotaRefs = (myPotaRefs?.isEmpty ?? true) ? nil : myPotaRefs
         self.theirPotaRefs = (theirPotaRefs?.isEmpty ?? true) ? nil : theirPotaRefs
         self.posture = posture
+        self.callbook = callbook
     }
 
     /// Drops empty ids and empty values — the maps' one invariant.
@@ -194,6 +213,7 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
 
     private enum CodingKeys: String, CodingKey {
         case id, groupID, timestampUTC, call, band, modeClass, rawMode, freqKHz, sent, rcvd, myPotaRefs, theirPotaRefs, posture
+        case callbook
     }
 
     /// The v1 row's own keys. `rstSent`, `rstRcvd`, `myLoc`, `theirLoc` were
@@ -214,6 +234,7 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         freqKHz = try c.decodeIfPresent(Int.self, forKey: .freqKHz)
         myPotaRefs = try c.decodeIfPresent([String].self, forKey: .myPotaRefs).flatMap { $0.isEmpty ? nil : $0 }
         theirPotaRefs = try c.decodeIfPresent([String].self, forKey: .theirPotaRefs).flatMap { $0.isEmpty ? nil : $0 }
+        callbook = try c.decodeIfPresent(CallbookStamp.self, forKey: .callbook)
         posture = try c.decodeIfPresent(OperatingMode.self, forKey: .posture)
         if c.contains(.sent) || c.contains(.rcvd) {
             sent = Self.compact(try c.decodeIfPresent([String: String].self, forKey: .sent) ?? [:])

@@ -204,6 +204,23 @@ enum AdifExporter {
             r += field("cont", m.continent)
         }
 
+        // The callbook stamp — advisory station data recorded at logging
+        // (spec 2026-08-25 decision 5). On-air data always wins: each field
+        // is written only where nothing upstream already wrote it.
+        if let cb = q.callbook {
+            if (q.nameRcvd ?? "").isEmpty, let name = cb.name {
+                r += field("name", name.uppercased())
+            }
+            if let qth = cb.qth { r += field("qth", qth) }
+            if q.theirLoc.isEmpty, let state = cb.state {
+                r += field("state", state.uppercased())
+            }
+            if !contest.exchange.contains(where: { $0.kind == .grid }),
+               let grid = cb.grid {
+                r += field("gridsquare", grid)
+            }
+        }
+
         // POTA: one emitted record per (my park × their park) pair — POTA's
         // uploader reads a single park per record from MY_SIG_INFO / SIG_INFO
         // (docs/research/pota/SOURCES.md). A row with no parks takes each loop

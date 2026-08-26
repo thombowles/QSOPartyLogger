@@ -91,6 +91,7 @@
 		22153100EBA41351F23D9A99 /* DXCCLabelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D311DEBD1B5C6AA9730A18 /* DXCCLabelStore.swift */; };
 		241A9D98907398CD1DFD522A /* DelawareQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2052FF6C863AA0209875C20 /* DelawareQSOPartyTests.swift */; };
 		251554806373EEDB1B2650BC /* engine-golden.json in Resources */ = {isa = PBXBuildFile; fileRef = EE585D15DF606E21BB3CD741 /* engine-golden.json */; };
+		253F67178C8812AEAE40C5D4 /* CallbookStampTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DF39F3D984B5DBBD0BF686 /* CallbookStampTests.swift */; };
 		25593919ADA400E0D07798E1 /* SpotLabelSizePreferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A83B90871BA86343AB446AA /* SpotLabelSizePreferenceTests.swift */; };
 		2578ED1510E927A5172C6573 /* paqp-inside-sections.adi in Resources */ = {isa = PBXBuildFile; fileRef = A745EC869B4408E8F9549AA9 /* paqp-inside-sections.adi */; };
 		260384C6FA2DE3A3F0FFFFF1 /* filepage-qsop_al-2026-002-2026-07-28.html in Resources */ = {isa = PBXBuildFile; fileRef = 5B18159B62CE889DC2FCBD5B /* filepage-qsop_al-2026-002-2026-07-28.html */; };
@@ -930,6 +931,7 @@
 		D280B58A219790315D6991CC /* CTY */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CTY; path = Resources/CTY; sourceTree = SOURCE_ROOT; };
 		D2CF4BED2C6300C03D09888A /* VoiceAudioTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceAudioTests.swift; sourceTree = "<group>"; };
 		D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDocumentTests.swift; sourceTree = "<group>"; };
+		D3DF39F3D984B5DBBD0BF686 /* CallbookStampTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbookStampTests.swift; sourceTree = "<group>"; };
 		D4750D73F12A657C4B503D40 /* SpotSendState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSendState.swift; sourceTree = "<group>"; };
 		D47ACFCA1323BFC4136D84F3 /* VoiceLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceLibrary.swift; sourceTree = "<group>"; };
 		D47BB5516631675CE4FCBD4F /* UTCTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCTime.swift; sourceTree = "<group>"; };
@@ -1212,6 +1214,7 @@
 				CBC49C26B1FFD6EC5D00830A /* CallAreaSumBonusTests.swift */,
 				1820C002B02488FF8A709D87 /* CallbookCacheTests.swift */,
 				82D4BBDB6DEC6C2ABE2C3B87 /* CallbookParserTests.swift */,
+				D3DF39F3D984B5DBBD0BF686 /* CallbookStampTests.swift */,
 				E9F8E0DD4DFDC0CB0DF3FEF1 /* CallHistoryFileTests.swift */,
 				A69FC9A0E6956A1F2C208BF1 /* CallHistoryPageParserTests.swift */,
 				9A39D1408949FD95B50D1EFC /* CallHistorySourceTests.swift */,
@@ -2015,6 +2018,7 @@
 				C58A052DB7DBAC19355917EA /* CallHistoryStoreTests.swift in Sources */,
 				B3D358F0125674AB822C92A1 /* CallbookCacheTests.swift in Sources */,
 				4B497C5BF5CCE7E985E25D77 /* CallbookParserTests.swift in Sources */,
+				253F67178C8812AEAE40C5D4 /* CallbookStampTests.swift in Sources */,
 				B331E68905D18A8BC2D62682 /* CatalogConsistencyTests.swift in Sources */,
 				7BE97A35880D3C0C58FBF1FC /* CaveatRosterTests.swift in Sources */,
 				198B4CCE041337F320053AA5 /* ChallengeTests.swift in Sources */,
