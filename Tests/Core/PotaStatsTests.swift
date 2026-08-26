@@ -62,6 +62,47 @@ final class PotaStatsTests: XCTestCase {
         XCTAssertEqual(stats.p2pDistinctParks, 2)
     }
 
+    func testStatesAndDXCountTheWholeOuting() {
+        // Typed state first, the callbook's where nothing was typed; DX =
+        // entities that are not mine (operator report 3, 2026-08-25).
+        var withStamp = qso(call: "OK2CQR", day: 0, second: 300, myParks: ["US-1111"])
+        withStamp.callbook = QSO.CallbookStamp(name: nil, qth: nil, state: nil,
+                                               grid: nil, source: "HamQTH")
+        var stamped = qso(call: "K5X", day: 0, second: 240, myParks: ["US-1111"])
+        stamped.callbook = QSO.CallbookStamp(name: nil, qth: nil, state: "TX",
+                                             grid: nil, source: "QRZ")
+        var mo1 = qso(call: "W1AW", day: 0)
+        mo1.theirState = "MO"
+        var mo2 = qso(call: "N0C", day: 1, second: 60)
+        mo2.theirState = "mo"
+        var ct = qso(call: "AB1OC", day: 0, second: 120)
+        ct.theirState = "CT"
+
+        let entities: [String: Int] = ["KE5CW": 291, "W1AW": 291, "N0C": 291,
+                                       "AB1OC": 291, "K5X": 291,
+                                       "OK2CQR": 503, "DL1ABC": 230]
+        let stats = PotaStats.compute(
+            qsos: [mo1, mo2, ct, stamped, withStamp,
+                   qso(call: "DL1ABC", day: 1, second: 120)],
+            ownParks: ["US-1111"],
+            now: Date(timeIntervalSince1970: 86_400 + 7200),
+            myCall: "KE5CW",
+            entityCode: { entities[$0] })
+        XCTAssertEqual(stats.distinctStates, 3, "MO, CT, TX — case-folded, stamp counted")
+        XCTAssertEqual(stats.dxEntities, 2, "OK and DL; my own entity never counts")
+    }
+
+    func testUnknownEntitiesCountNothing() {
+        let stats = PotaStats.compute(
+            qsos: [qso(call: "X1XX", day: 0)],
+            ownParks: ["US-1111"],
+            now: Date(timeIntervalSince1970: 3600),
+            myCall: "KE5CW",
+            entityCode: { _ in nil })
+        XCTAssertEqual(stats.dxEntities, 0, "no CTY answer, no claim")
+        XCTAssertEqual(stats.distinctStates, 0)
+    }
+
     func testUTCMidnightCountdown() {
         XCTAssertEqual(PotaStats.secondsToUTCMidnight(
             now: Date(timeIntervalSince1970: 86_400 - 1800)), 1800)

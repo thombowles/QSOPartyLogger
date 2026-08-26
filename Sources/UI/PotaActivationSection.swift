@@ -12,7 +12,8 @@ struct PotaActivationSection: View {
         TimelineView(.periodic(from: .now, by: 60)) { timeline in
             let stats = PotaStats.compute(qsos: log.qsos,
                                           ownParks: log.myPotaRefs,
-                                          now: timeline.date)
+                                          now: timeline.date,
+                                          myCall: log.station.callsign)
             VStack(alignment: .leading, spacing: 4) {
                 Text("POTA ACTIVATION")
                     .font(.caption.weight(.bold))
@@ -41,6 +42,17 @@ struct PotaActivationSection: View {
                     Text("P2P: \(stats.p2pContacts) contact\(stats.p2pContacts == 1 ? "" : "s") · \(stats.p2pDistinctParks) park\(stats.p2pDistinctParks == 1 ? "" : "s")")
                         .font(.caption.monospacedDigit())
                         .foregroundStyle(.secondary)
+                }
+                // The outing's spread — states from the typed field (or the
+                // callbook's, where nothing was typed), DX from CTY. Whole
+                // log, not today's slice: the QSL story of the trip.
+                if stats.distinctStates > 0 || stats.dxEntities > 0 {
+                    Text("\(stats.distinctStates) state\(stats.distinctStates == 1 ? "" : "s") · \(stats.dxEntities) DX")
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                        .help("Distinct states worked this outing, and DXCC "
+                              + "entities other than your own — from the "
+                              + "State field, the callbook, and the calls.")
                 }
                 // The day boundary is the one clock an activator must not
                 // miss — a 23:50Z contact validates today, a 00:05Z one

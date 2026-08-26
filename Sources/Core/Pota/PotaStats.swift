@@ -21,8 +21,20 @@ struct PotaStats: Equatable, Sendable {
     /// Contacts (not rows) carrying a their-park, over the whole log.
     let p2pContacts: Int
     let p2pDistinctParks: Int
+    /// Distinct states worked over the whole outing — the typed field
+    /// first, the callbook's where nothing was typed (operator report 3,
+    /// 2026-08-25).
+    let distinctStates: Int
+    /// Distinct DXCC entities that are not the operator's own, resolved
+    /// from the calls the way the ADIF export resolves them. A call CTY
+    /// cannot place claims nothing.
+    let dxEntities: Int
 
-    static func compute(qsos: [QSO], ownParks: [String], now: Date) -> PotaStats {
+    static func compute(
+        qsos: [QSO], ownParks: [String], now: Date,
+        myCall: String = "",
+        entityCode: (String) -> Int? = { CTYTable.shared?.match(callsign: $0)?.entity.entityCode }
+    ) -> PotaStats {
         let today = DupeChecker.utcDayIndex(now)
 
         struct Triple: Hashable { let call: String; let band: Band; let mode: ModeClass }
@@ -45,8 +57,22 @@ struct PotaStats: Equatable, Sendable {
             for p in theirs { p2pParks.insert(p.uppercased()) }
         }
 
+        let myEntity = entityCode(myCall.uppercased())
+        var states = Set<String>()
+        var entities = Set<Int>()
+        for q in qsos {
+            let state = (q.theirState ?? q.callbook?.state ?? "")
+                .trimmingCharacters(in: .whitespaces).uppercased()
+            if !state.isEmpty { states.insert(state) }
+            if let code = entityCode(q.call.uppercased()), code != myEntity {
+                entities.insert(code)
+            }
+        }
+
         return PotaStats(parks: parks, p2pContacts: p2pGroups.count,
-                         p2pDistinctParks: p2pParks.count)
+                         p2pDistinctParks: p2pParks.count,
+                         distinctStates: states.count,
+                         dxEntities: entities.count)
     }
 
     /// Seconds until the UTC day rolls — the one clock an activator must
