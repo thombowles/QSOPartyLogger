@@ -199,4 +199,108 @@ final class LogFolderTests: XCTestCase {
         XCTAssertEqual(history.archive, .empty)
         XCTAssertEqual(history.unreadable, [])
     }
+
+    // MARK: POTA — a program log is an outing, not an annual entry
+
+    private func potaQSO(
+        _ call: String, park: String? = nil, offset: TimeInterval = 0
+    ) -> QSO {
+        QSO(
+            timestampUTC: t0.addingTimeInterval(offset),
+            call: call,
+            band: .m20,
+            modeClass: .cw,
+            rawMode: "CW",
+            rstSent: "599",
+            rstRcvd: "599",
+            myPotaRefs: park.map { [$0] },
+            myLoc: "",
+            theirLoc: ""
+        )
+    }
+
+    private func potaLog(qsos: [QSO]) -> ContestLog {
+        var log = ContestLog(partyID: "pota")
+        log.station.callsign = "KE5CW"
+        log.myLocation = .outOfState(location: "MO")
+        log.qsos = qsos
+        log.setupCompleted = true
+        return log
+    }
+
+    /// Every activation of a year is its own record — partyID|year|callsign
+    /// would fold a season of POTA into one row behind a bogus "two files
+    /// for one contest" warning.
+    func testEachPotaOutingIsItsOwnRecord() throws {
+        try write(potaLog(qsos: [potaQSO("W0AAA", park: "US-1234")]),
+                  as: "2026-02-02-KE5CW@US-1234.qplog", modified: t0)
+        try write(potaLog(qsos: [potaQSO("W0BBB", park: "US-5678", offset: 86_400)]),
+                  as: "2026-02-03-KE5CW@US-5678.qplog", modified: t0.addingTimeInterval(60))
+
+        let history = try LogFolder(url: folder).history()
+        XCTAssertEqual(history.archive.records.count, 2)
+        XCTAssertEqual(history.duplicates, [])
+        XCTAssertEqual(Set(history.archive.records.map(\.id)).count, 2)
+    }
+
+    /// A rover's two same-day files at two parks are two outings.
+    func testSameDayDifferentParksAreDistinctOutings() throws {
+        try write(potaLog(qsos: [potaQSO("W0AAA", park: "US-1234")]),
+                  as: "2026-02-02-KE5CW@US-1234.qplog", modified: t0)
+        try write(potaLog(qsos: [potaQSO("W0AAA", park: "US-5678", offset: 3_600)]),
+                  as: "2026-02-02-KE5CW@US-5678.qplog", modified: t0)
+
+        let history = try LogFolder(url: folder).history()
+        XCTAssertEqual(history.archive.records.count, 2)
+        XCTAssertEqual(history.duplicates, [])
+    }
+
+    /// An iCloud "2" copy is the same outing — same UTC day, same parks —
+    /// and still folds to the later-modified file, named.
+    func testICloudCopyOfAnOutingStillFolds() throws {
+        try write(potaLog(qsos: [potaQSO("W0AAA", park: "US-1234")]),
+                  as: "2026-02-02-KE5CW@US-1234.qplog", modified: t0)
+        try write(potaLog(qsos: [potaQSO("W0AAA", park: "US-1234"), potaQSO("K5BBB", park: "US-1234", offset: 60)]),
+                  as: "2026-02-02-KE5CW@US-1234 2.qplog", modified: t0.addingTimeInterval(60))
+
+        let history = try LogFolder(url: folder).history()
+        XCTAssertEqual(history.archive.records.count, 1)
+        XCTAssertEqual(history.archive.records[0].sourceFileName, "2026-02-02-KE5CW@US-1234 2.qplog")
+        XCTAssertEqual(history.duplicates.count, 1)
+        XCTAssertEqual(history.duplicates.first?.others, ["2026-02-02-KE5CW@US-1234.qplog"])
+    }
+
+    /// A hunter log has no park — its outing is the UTC day alone.
+    func testHunterOutingsAreDistinctByDay() throws {
+        try write(potaLog(qsos: [potaQSO("W0AAA")]), as: "hunting day one.qplog", modified: t0)
+        try write(potaLog(qsos: [potaQSO("W0BBB", offset: 86_400)]), as: "hunting day two.qplog", modified: t0)
+
+        let history = try LogFolder(url: folder).history()
+        XCTAssertEqual(history.archive.records.count, 2)
+        XCTAssertEqual(history.duplicates, [])
+    }
+
+    /// The outing itself: UTC day of the first QSO plus the sorted parks
+    /// worked from, straight from the rows (the log's current-park set can
+    /// lag a rover). Parties stay outing-free — identity and id unchanged.
+    func testOutingNamesTheDayAndParks() throws {
+        try write(potaLog(qsos: [
+            potaQSO("W0AAA", park: "US-5678"),
+            potaQSO("W0BBB", park: "US-1234", offset: 60),
+        ]), as: "rove.qplog", modified: t0)
+        try write(log(qsos: [qso("W0AAA")]), as: "2026-08-29 KSQP KE5CW.qplog", modified: t0)
+
+        let history = try LogFolder(url: folder).history()
+        let pota = try XCTUnwrap(history.archive.records.first { $0.partyID == "pota" })
+        XCTAssertEqual(pota.outing, "20260202@US-1234+US-5678")
+        XCTAssertEqual(pota.id, "pota|2026|KE5CW|20260202@US-1234+US-5678")
+        XCTAssertEqual(pota.identity,
+                       ContestRecord.Identity(partyID: "pota", year: 2026, callsign: "KE5CW",
+                                              outing: "20260202@US-1234+US-5678"))
+
+        let ksqp = try XCTUnwrap(history.archive.records.first { $0.partyID == "ksqp" })
+        XCTAssertNil(ksqp.outing)
+        XCTAssertEqual(ksqp.id, "ksqp|2026|KE5CW")
+        XCTAssertEqual(ksqp.identity, self.ksqp)
+    }
 }

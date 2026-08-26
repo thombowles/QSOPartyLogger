@@ -112,13 +112,15 @@ struct LogFolder: Sendable {
         let modified = (try? fileURL.resourceValues(
             forKeys: [.contentModificationDateKey]
         ).contentModificationDate) ?? Date()
-        let (snapshot, origin) = score(for: log)
+        let contest = ContestCatalog.contest(id: log.partyID)
+        let (snapshot, origin) = score(for: log, contests: { _ in contest })
         return ContestRecord.make(
             from: log,
             snapshot: snapshot,
             scoreOrigin: origin,
             updatedAt: modified,
-            sourceFileName: fileURL.lastPathComponent
+            sourceFileName: fileURL.lastPathComponent,
+            program: contest?.family == .program
         )
     }
 
