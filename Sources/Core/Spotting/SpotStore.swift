@@ -22,7 +22,9 @@ final class SpotStore {
         // Your own log ages with the cluster, on the operator's one "Age out
         // after" setting — N1MM has a single spot timeout for the whole map,
         // and a station worked twenty minutes ago has very likely moved.
-        case .cluster, .local: maxAge
+        // POTA board spots are `replace`d wholesale per poll while the feed
+        // runs; this age only fades them once polling stops.
+        case .cluster, .local, .pota: maxAge
         case .hub: Double(max(1, hubMaxAgeMinutes)) * 60
         }
     }
@@ -54,6 +56,14 @@ final class SpotStore {
     func addIfAbsent(_ spot: Spot) {
         guard !all.contains(where: { $0.id == spot.id }) else { return }
         add(spot)
+    }
+
+    /// The POTA board is authoritative per poll: a row gone from the feed
+    /// is QRT or expired, so its spots are replaced wholesale rather than
+    /// aged individually. Other sources are untouched.
+    func replace(source: SpotSource, with spots: [Spot]) {
+        all.removeAll { $0.source == source }
+        for spot in spots { add(spot) }
     }
 
     func purge(now: Date) {

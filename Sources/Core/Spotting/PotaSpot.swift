@@ -134,6 +134,27 @@ enum PotaSpot {
         try? JSONDecoder().decode([BoardSpot].self, from: data)
     }
 
+    /// Board rows as band-map spots (spec 2026-08-25 decision 3).
+    /// Frequencies arrive as kHz strings ("14039.5", "18101" — both observed
+    /// live, SOURCES.md); a row whose frequency does not parse above the
+    /// board's own 1000 kHz floor is dropped, and the mode rides the comment
+    /// so the map's existing mode inference reads it without a new field.
+    static func mapToSpots(_ rows: [BoardSpot], now: Date) -> [Spot] {
+        rows.compactMap { row in
+            guard let kHz = Double(row.frequency ?? ""), kHz > 1000 else { return nil }
+            return Spot(
+                call: row.activator.uppercased(),
+                freqKHz: kHz,
+                spotter: (row.spotter ?? row.activator).uppercased(),
+                comment: row.mode ?? "",
+                receivedAt: now,
+                county: nil,
+                source: .pota,
+                park: row.reference.uppercased()
+            )
+        }
+    }
+
     /// Whether the board shows this spot: same activator, same reference.
     static func contains(_ fields: Fields, in board: [BoardSpot]) -> Bool {
         let activator = fields.activator.trimmingCharacters(in: .whitespaces).uppercased()

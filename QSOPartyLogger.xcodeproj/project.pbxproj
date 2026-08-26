@@ -306,6 +306,7 @@
 		9D4334638CD4522FBB86EDD3 /* SeasonStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3B5E5F871969EC7046D82E /* SeasonStatsTests.swift */; };
 		9D5DE6F0C2EE15277838DC2F /* SpotNetworkAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641A71AB35337E61D4E15E15 /* SpotNetworkAvailability.swift */; };
 		9D8D4938C440C859AA5D5B13 /* QRPLabsQMXDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C4C03006937E6B0629C681 /* QRPLabsQMXDriver.swift */; };
+		9DAC52A1B07210486568BA04 /* PotaBoardSpotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9857D8B536A6650F45883BC /* PotaBoardSpotTests.swift */; };
 		9E71B475BAC195A3262398C8 /* StationMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE49DC2D0D154E19ED3E362 /* StationMemory.swift */; };
 		9EA22C83474785B1EF0C8B2C /* SpotDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCEDCFF4B8E3BEFC889986A /* SpotDraft.swift */; };
 		9ECF4B187A1C5F95F20C0C4C /* BandMapLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256735340D033423D4396DBA /* BandMapLayoutTests.swift */; };
@@ -1022,6 +1023,7 @@
 		F89CD7086051EE91DCF3E35F /* DXCCLabelRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCLabelRefresh.swift; sourceTree = "<group>"; };
 		F8EB12C03231B219068E0737 /* HawaiiQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HawaiiQSOPartyTests.swift; sourceTree = "<group>"; };
 		F970162F8C3C567192DEB1BB /* alqp-table-2026-07-25-early.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "alqp-table-2026-07-25-early.html"; sourceTree = "<group>"; };
+		F9857D8B536A6650F45883BC /* PotaBoardSpotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaBoardSpotTests.swift; sourceTree = "<group>"; };
 		F9DC0A15D96B2BE826452A38 /* alqp-table-2026-07-25-late.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "alqp-table-2026-07-25-late.html"; sourceTree = "<group>"; };
 		FA412B8BE898C741ABE51422 /* SCPDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCPDatabaseTests.swift; sourceTree = "<group>"; };
 		FA4FF8B1FB9896DDBD544CB6 /* ScoreFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreFactor.swift; sourceTree = "<group>"; };
@@ -1335,6 +1337,7 @@
 				3E3270C8AA34DCB8481F768F /* PartyModeInferenceTests.swift */,
 				033F9D044AD7BFDEE8B6D181 /* PennsylvaniaQSOPartyTests.swift */,
 				01A90EE110A2B4A357D33313 /* PointRuleTests.swift */,
+				F9857D8B536A6650F45883BC /* PotaBoardSpotTests.swift */,
 				090F1AC164EC70DAF4BEC46C /* PotaModeContestTests.swift */,
 				EA2D9B1FCC05FCBCC978861F /* PotaParkDirectoryTests.swift */,
 				92BF3A3E0D2A190DDA4A0941 /* PotaParkStoreTests.swift */,
@@ -2162,6 +2165,7 @@
 				E9827B06A176CDDB8E3D8770 /* PartyModeInferenceTests.swift in Sources */,
 				FF1D72B5F974B4BC4D6C3A5A /* PennsylvaniaQSOPartyTests.swift in Sources */,
 				FB7B5F2219E5A36D5DF20B1F /* PointRuleTests.swift in Sources */,
+				9DAC52A1B07210486568BA04 /* PotaBoardSpotTests.swift in Sources */,
 				95A78C2B7AA3E5A6AB19E653 /* PotaModeContestTests.swift in Sources */,
 				935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */,
 				C538ACCF93B5DCFFFE15C1B3 /* PotaParkDirectoryTests.swift in Sources */,
