@@ -343,6 +343,10 @@ struct BandMapView: View {
             Toggle("QSO Party Hub spots only", isOn: hubOnlyBinding(settings: settings))
                 .help("A cluster carries hundreds of spots against the hub's handful — "
                     + "this isolates the ones that name a county when you're hunting multipliers")
+            Toggle("POTA spots in contest logs", isOn: $settings.potaSpotsInParties)
+                .help("The POTA activator board as a spot source while a party log is "
+                    + "front — a POTA log always hunts and ignores this. Receiving "
+                    + "spots is assistance; the assisted-category rules apply.")
             Toggle("Offer the spotted county as the exchange",
                    isOn: $settings.prefillExchangeFromSpots)
                 .help("Tuning to a hub spot puts its county in the exchange field, shown "
@@ -738,6 +742,9 @@ struct BandMapView: View {
             parts.append("location unknown")
         }
         if spot.source == .hub { parts.append("via QSO Party Hub") }
+        if spot.source == .pota, let park = spot.park {
+            parts.append("activating \(park) — via the POTA board; tuning fills the P2P park")
+        }
         if spot.source == .local { parts.append("from your own log — nobody spotted him") }
         if spot.frequencyConfidence == .reconstructed {
             parts.append("frequency reconstructed from a malformed entry — verify before calling")

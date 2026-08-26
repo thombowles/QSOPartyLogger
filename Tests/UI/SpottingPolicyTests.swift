@@ -47,6 +47,23 @@ final class SpottingPolicyTests: XCTestCase {
         )
     }
 
+    /// The POTA board (spec 2026-08-25 decision 3): a POTA log always hunts
+    /// — there is no assisted category at POTA — while a party log needs
+    /// both the opt-in and the same claim rule that governs the hub.
+    func testPotaBoardPolling() {
+        XCTAssertTrue(SpottingPolicy.potaShouldPoll(
+            isPotaProgramLog: true, partyOptIn: false, claim: .nonAssisted),
+            "a POTA log hunts regardless — no claim exists to protect")
+        XCTAssertFalse(SpottingPolicy.potaShouldPoll(
+            isPotaProgramLog: false, partyOptIn: false, claim: .assisted),
+            "a party log needs the opt-in")
+        XCTAssertTrue(SpottingPolicy.potaShouldPoll(
+            isPotaProgramLog: false, partyOptIn: true, claim: .assisted))
+        XCTAssertFalse(SpottingPolicy.potaShouldPoll(
+            isPotaProgramLog: false, partyOptIn: true, claim: .nonAssisted),
+            "the board is spotting assistance like any other network")
+    }
+
     /// A blocked control that does not say why is a bug report. This one names
     /// the setting and where it lives.
     func testBlockedReasonNamesTheFixAndWhereItLives() {

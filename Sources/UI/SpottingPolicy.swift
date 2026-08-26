@@ -44,6 +44,19 @@ enum SpottingPolicy {
         enabled && hasSource && allowsIncomingSpots(claim)
     }
 
+    /// Whether the POTA activator board should be polled (spec 2026-08-25
+    /// decision 3). A POTA log always hunts — POTA has no assisted category,
+    /// so there is no claim to protect. A party log polls only when the
+    /// operator opted in AND the same claim rule that governs the hub
+    /// allows it: the board is spotting assistance like any other network.
+    static func potaShouldPoll(
+        isPotaProgramLog: Bool, partyOptIn: Bool,
+        claim: StationProfile.CategoryAssisted
+    ) -> Bool {
+        if isPotaProgramLog { return true }
+        return partyOptIn && allowsIncomingSpots(claim)
+    }
+
     /// Why the connect controls are switched off. A blocked control that does
     /// not say why is a bug report, so this names the claim, the control that
     /// changes it, and where that control lives.

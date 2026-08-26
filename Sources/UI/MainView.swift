@@ -80,6 +80,9 @@ struct MainView: View {
     @State private var spaceWeatherClient = SpaceWeatherClient()
     @State private var scpClient = SCPClient()
     @State private var potaParkClient = PotaParkClient()
+    /// The POTA activator board — the hunting feed (spec 2026-08-25
+    /// decision 3). Polled while `SpottingPolicy.potaShouldPoll` says so.
+    @State private var potaBoardClient = PotaBoardClient()
     /// Callsign lookup (QRZ/HamQTH). The configuration closure reads the
     /// live settings per lookup, so the pane's edits apply without a
     /// restart — and nothing here touches `AppSettings.shared` until a
@@ -703,6 +706,14 @@ struct MainView: View {
             spotStore.purge(now: Date())
         }
         .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
+        .onChange(of: settings.potaSpotsInParties) { syncPotaBoardClient() }
+        // The board lands in the same store as every other feed, wholesale
+        // per poll — a row gone from the feed is QRT or expired. Receiving
+        // spots is assistance, recorded exactly as the hub records it.
+        .onChange(of: potaBoardClient.spots) {
+            spotStore.replace(source: .pota, with: potaBoardClient.spots)
+            if !potaBoardClient.spots.isEmpty { document.noteSpotsUsed() }
+        }
     }
 
     /// The bolt's wiring: the two settings that fasten the band map to this
@@ -760,6 +771,7 @@ struct MainView: View {
             bandMapModel?.party = party
             bandMapModel?.canSpot = canSpotStation
             syncHubSpotClient()
+            syncPotaBoardClient()
             activateCallHistory()
             activateSuperCheck()
             checkDXCCLabels()
@@ -1204,11 +1216,20 @@ struct MainView: View {
     private func enforceSpottingPolicy() {
         guard !spottingAllowed else {
             syncHubSpotClient()  // back to ASSISTED: the hub may resume
+            syncPotaBoardClient()  // and the board with it
             return
         }
         spotClient.disconnect()
         hubSpotClient.stop()
         spotStore.removeNetworkSpots()
+        // The claim governs contest assistance; POTA itself has no assisted
+        // category, so a POTA log's board feed survives the sweep (the sync
+        // stops it in party logs, where the claim does apply) and its rows
+        // come straight back rather than flapping until the next poll.
+        syncPotaBoardClient()
+        if potaBoardClient.isPolling {
+            spotStore.replace(source: .pota, with: potaBoardClient.spots)
+        }
     }
 
     private func connectCluster() {
@@ -1274,6 +1295,7 @@ struct MainView: View {
         }
         wireSpotDispatcher()
         syncHubSpotClient()
+        syncPotaBoardClient()
         // The download may land after the operator has moved to another
         // party; the tag check keeps a late file from leaking into it.
         callHistoryClient.onIndex = { [weak flow] partyID, parsed in
@@ -1661,6 +1683,12 @@ struct MainView: View {
             spotCounty: settings.prefillExchangeFromSpots ? spot.county : nil,
             atKHz: spot.freqKHz
         )
+        // A POTA spot names the activator's park; it lands in an empty
+        // their-park field the way a previously-given park does — typed
+        // text is never overwritten (spec 2026-08-25 decision 3).
+        if let park = spot.park, entry.theirParkTyped.isEmpty {
+            entry.theirParkTyped = park
+        }
         focusedField = .call
     }
 
@@ -1893,6 +1921,18 @@ struct MainView: View {
             return
         }
         hubSpotClient.start(source: source, party: party)
+    }
+
+    private func syncPotaBoardClient() {
+        if SpottingPolicy.potaShouldPoll(
+            isPotaProgramLog: flow.standaloneContest?.potaProgram == true,
+            partyOptIn: settings.potaSpotsInParties,
+            claim: document.log.station.categoryAssisted
+        ) {
+            potaBoardClient.start()
+        } else {
+            potaBoardClient.stop()
+        }
     }
 
     /// ⌘↑ / ⌘↓. Worked stations stay on the band map, greyed, but

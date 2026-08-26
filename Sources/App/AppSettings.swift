@@ -163,6 +163,13 @@ final class AppSettings {
         didSet { defaults.set(spotSources.map(\.rawValue), forKey: "spotSources") }
     }
 
+    /// The POTA activator board as a spot source while a *party* log is
+    /// front — a POTA log always hunts and never reads this. Off by
+    /// default: a contest band map should not grow a second feed unasked.
+    var potaSpotsInParties: Bool {
+        didSet { defaults.set(potaSpotsInParties, forKey: "potaSpotsInParties") }
+    }
+
     /// Switch the radio between CW and SSB to match the band plan when the app
     /// moves the frequency. Never applies to the VFO knob — see
     /// `BandPlan` and `MainView.applyBandPlanMode`.
@@ -437,6 +444,7 @@ final class AppSettings {
         superCheckEnabled = defaults.object(forKey: "superCheckEnabled") as? Bool ?? true
         spotSources = Set((defaults.stringArray(forKey: "spotSources") ?? [])
             .compactMap(SpotSource.init(rawValue:)))
+        potaSpotsInParties = defaults.object(forKey: "potaSpotsInParties") as? Bool ?? false
         collapsedMultSections = Set(defaults.stringArray(forKey: "collapsedMultSections") ?? [])
         advisorEnabled = defaults.object(forKey: "advisorEnabled") as? Bool ?? true
         advisorCollapsed = defaults.object(forKey: "advisorCollapsed") as? Bool ?? false
