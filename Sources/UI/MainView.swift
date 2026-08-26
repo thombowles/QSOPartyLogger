@@ -841,8 +841,14 @@ struct MainView: View {
                 Text(party.name)
                     .font(.callout)
                     .foregroundStyle(.secondary)
+            } else if let contest = flow.standaloneContest {
+                // A v2-only contest (POTA) has no PartyDefinition on
+                // purpose; its name belongs here, not a warning.
+                Text(contest.name)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
             } else {
-                Label("Party '\(document.log.partyID)' not found", systemImage: "exclamationmark.triangle.fill")
+                Label("Contest '\(document.log.partyID)' not found", systemImage: "exclamationmark.triangle.fill")
                     .foregroundStyle(.orange)
             }
 
