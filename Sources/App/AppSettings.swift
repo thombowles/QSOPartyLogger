@@ -45,6 +45,35 @@ final class AppSettings {
         didSet { defaults.set(clusterPort, forKey: "clusterPort") }
     }
 
+    /// Callsign lookup (spec 2026-08-25 decisions 6–7). Usernames and
+    /// toggles live here; passwords only ever in the Keychain
+    /// (`KeychainStore`), never in defaults.
+    var qrzEnabled: Bool {
+        didSet { defaults.set(qrzEnabled, forKey: "qrzEnabled") }
+    }
+
+    var qrzUsername: String {
+        didSet { defaults.set(qrzUsername, forKey: "qrzUsername") }
+    }
+
+    var hamqthEnabled: Bool {
+        didSet { defaults.set(hamqthEnabled, forKey: "hamqthEnabled") }
+    }
+
+    var hamqthUsername: String {
+        didSet { defaults.set(hamqthUsername, forKey: "hamqthUsername") }
+    }
+
+    /// Which service is asked first when both are enabled; "" = the default
+    /// (HamQTH — the operator's QRZ account is the free tier).
+    var callbookPrimaryRaw: String {
+        didSet { defaults.set(callbookPrimaryRaw, forKey: "callbookPrimaryRaw") }
+    }
+
+    var callbookPrimary: CallbookService? {
+        CallbookService(rawValue: callbookPrimaryRaw)
+    }
+
     /// Connect to the cluster automatically when a contest opens.
     var clusterAutoConnect: Bool {
         didSet { defaults.set(clusterAutoConnect, forKey: "clusterAutoConnect") }
@@ -385,6 +414,11 @@ final class AppSettings {
             ?? RadioRegistry.defaultNetworkPort.map { Int($0) } ?? 0
         clusterHost = defaults.string(forKey: "clusterHost") ?? ""
         clusterPort = defaults.object(forKey: "clusterPort") as? Int ?? 7300
+        qrzEnabled = defaults.object(forKey: "qrzEnabled") as? Bool ?? false
+        qrzUsername = defaults.string(forKey: "qrzUsername") ?? ""
+        hamqthEnabled = defaults.object(forKey: "hamqthEnabled") as? Bool ?? false
+        hamqthUsername = defaults.string(forKey: "hamqthUsername") ?? ""
+        callbookPrimaryRaw = defaults.string(forKey: "callbookPrimaryRaw") ?? ""
         clusterAutoConnect = defaults.object(forKey: "clusterAutoConnect") as? Bool ?? false
         clusterHistory = defaults.stringArray(forKey: "clusterHistory") ?? []
         clusterCommands = defaults.string(forKey: "clusterCommands") ?? "sh/dx 30"
