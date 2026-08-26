@@ -2,6 +2,21 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+**Status (2026-08-25):** executed through Task 4 on branch `pota-hunting`,
+inline. Suite: 3199 tests, 2 skipped, 0 failures. Deviations: (1) no
+per-source checkbox was added to the filters popover — the house design is
+deliberately a one-way "hub only" toggle, and the default all-sources view
+already shows `.pota`; the party opt-in toggle landed beside it instead;
+(2) the on-map park badge was not built — the park rides the spot tooltip
+and the pounce, and a label badge would rework the layout metrics for
+little gain (the tooltip names the park; the P2P field receives it);
+(3) `enforceSpottingPolicy`'s claim sweep gained a POTA-board carve-out the
+plan had not spelled out: the sweep's `removeNetworkSpots` would otherwise
+flap the board feed a POTA log is entitled to keep — the sync re-decides
+and the rows come straight back; (4) the store's `.pota` lifetime joined
+the cluster/local case rather than a new knob, since `replace` is what
+keeps the board truthful while polling. All recorded in their commits.
+
 **Goal:** POTA's live activator board in the band map — spots with their park
 riding along, click/⌘↑⌘↓-to-pounce prefilling call and their-park — polled
 while a POTA log is front, and available to a party log that opts in.

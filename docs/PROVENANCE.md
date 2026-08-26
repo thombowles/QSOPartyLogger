@@ -758,7 +758,10 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   verbatim with live-board observations in
   [`research/pota/SOURCES.md`](research/pota/SOURCES.md) § "POTA spot API".
   No test post was made; a live send is confirmed by the response and two
-  follow-up reads.
+  follow-up reads. The same `GET /spot/activator` list (row shape banked
+  verbatim there, with the five-row fixture) is read back every minute as
+  the band map's POTA hunting feed — `HEAD` is refused, so each poll is a
+  plain GET.
 - The POTA mode's rules — the 10-QSO single-UTC-day validity sentence, the
   required log fields, and "A separate log must be submitted for each park
   of the multi-park simultaneous activation"

@@ -1013,6 +1013,16 @@ hunter log. Either way the P2P field is always in the row.
   the state after the date — because POTA requires a separate log per park
   for an n-fer. Pick a folder once; Finder shows the files. Cabrillo is
   deliberately not offered for POTA — there is nothing to submit one to.
+- **Hunt from the live board.** In a POTA log the band map also carries
+  **POTA's own activator board**, refreshed every minute — each spot wearing
+  the activator's park in its tooltip. Click one (or step with `⌘↑`/`⌘↓`)
+  and the radio QSYs while the call lands in the entry row **and the park
+  lands in the P2P field** — the pounce PoLo can't do, because PoLo has no
+  radio. Rows the board drops (QRT, expired) leave the map on the next
+  refresh. A *party* log can join the hunt too — turn on "POTA spots in
+  contest logs" in the band map's filters — but receiving spots is
+  assistance, so the same ASSISTED-category rule as every other feed
+  applies there; a POTA log has no such category and always hunts.
 - **F1 says CQ POTA.** A POTA log's default messages are composed for the
   program — `CQ POTA {MYCALL}`, `{CALL} {RST}` — and a new `{MYPARK}` macro
   expands to your park reference(s) in any message, in any contest, and to
@@ -1152,7 +1162,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3190 unit tests**, none of which need hardware, a network or a microphone —
+**3199 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a
