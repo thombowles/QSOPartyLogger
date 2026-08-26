@@ -151,6 +151,7 @@
 		42608E9D1104E7C05943F95E /* DashboardModelExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F27BD78F3C7802DAFEB05AE /* DashboardModelExportTests.swift */; };
 		42B6C4082ADCB9C21449B015 /* DupeRuleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B80F43285943C6D0A7E61D /* DupeRuleTests.swift */; };
 		42E10D9D5426C54AFA9C6A23 /* KeyMonitorGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */; };
+		4348DC00118457CF76D1B53F /* PotaBoardClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13483946346E99F04F253202 /* PotaBoardClientTests.swift */; };
 		4412C9D10A374F42658AB7FE /* Uppercasing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D833FBB1F260E1705F9500 /* Uppercasing.swift */; };
 		44174AC81D7484B865919B46 /* KeyDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CBE54B71F1640E915BB657 /* KeyDiagnostics.swift */; };
 		4499E2CE096927357D50EABF /* ScoreEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29960406C674052D5117926D /* ScoreEngineTests.swift */; };
@@ -239,6 +240,7 @@
 		711C59041490CC39A6027902 /* SuperCheckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56703F612637DAECE11B2661 /* SuperCheckTests.swift */; };
 		718965D97870A40FA7844B38 /* TuningPreferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC08411890A02411D150879 /* TuningPreferenceTests.swift */; };
 		71A53F1DD6528F6C6485C0ED /* HubPollPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3068869DC84695A9621519CB /* HubPollPolicyTests.swift */; };
+		73883E03736136A194A0356F /* PotaBoardClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6846AD28D74330D996AD5C /* PotaBoardClient.swift */; };
 		73942B2919A08066576E5060 /* alqp-table-2026-07-25-busy.html in Resources */ = {isa = PBXBuildFile; fileRef = 468D38B74FF2D7C5B9DBDFF9 /* alqp-table-2026-07-25-busy.html */; };
 		74A07D53F3FB78595B12E9BA /* ContestPotaFieldsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3185D4ABC8A47B7E84F661A8 /* ContestPotaFieldsTests.swift */; };
 		74B3B2C1C034061411EA9B2B /* RadioControllerNudgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F83A531E3F0B565E7C2710D /* RadioControllerNudgeTests.swift */; };
@@ -568,6 +570,7 @@
 		112CC71F65B097523B39BC9B /* HubSelfSpotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSelfSpotTests.swift; sourceTree = "<group>"; };
 		126046DF54E2EDABBDB36074 /* PotaSpotClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaSpotClientTests.swift; sourceTree = "<group>"; };
 		132CBF19C2B05E02E5B784A9 /* CaveatRosterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaveatRosterTests.swift; sourceTree = "<group>"; };
+		13483946346E99F04F253202 /* PotaBoardClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaBoardClientTests.swift; sourceTree = "<group>"; };
 		135F472CB9A0491C54F217ED /* CombinedLogSplitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedLogSplitTests.swift; sourceTree = "<group>"; };
 		14042D5B6DD33CC2A46A276C /* SpotFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFilter.swift; sourceTree = "<group>"; };
 		14116D3F394DCD62B4801DDD /* naqpcw-name.log */ = {isa = PBXFileReference; path = "naqpcw-name.log"; sourceTree = "<group>"; };
@@ -901,6 +904,7 @@
 		BACC3C74F70765598FFE57A5 /* VoiceStatusTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceStatusTextTests.swift; sourceTree = "<group>"; };
 		BBCF2F37A32D904FCCB58446 /* CallHistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryStoreTests.swift; sourceTree = "<group>"; };
 		BBFA325FEB27F5D7ED9C236E /* SpotSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSheet.swift; sourceTree = "<group>"; };
+		BD6846AD28D74330D996AD5C /* PotaBoardClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaBoardClient.swift; sourceTree = "<group>"; };
 		BE2624011BC330651D87867E /* WindowSizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSizeTests.swift; sourceTree = "<group>"; };
 		BE87C8AFF4402D21D499C37A /* SerialTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialTransport.swift; sourceTree = "<group>"; };
 		BEFD29B68C87E0D24267605B /* BonusScopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusScopeTests.swift; sourceTree = "<group>"; };
@@ -1683,6 +1687,7 @@
 				58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */,
 				D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */,
 				039CBD24DAEF64BCB1269D67 /* MessageMemoryTests.swift */,
+				13483946346E99F04F253202 /* PotaBoardClientTests.swift */,
 				4A13C34B4765F4AE9FB37456 /* PotaParkClientTests.swift */,
 				126046DF54E2EDABBDB36074 /* PotaSpotClientTests.swift */,
 				2FF4DB3C69EF4EB9FFF24B24 /* PreferenceIsolationTests.swift */,
@@ -1812,6 +1817,7 @@
 				0A5F9E99BE569E4E2DFB8FC7 /* LocationProvider.swift */,
 				B27158AAEFAD7C21DD3D17B0 /* LogDocument.swift */,
 				1AD0B60341F5F0643FF06DF6 /* MessageMemory.swift */,
+				BD6846AD28D74330D996AD5C /* PotaBoardClient.swift */,
 				7E8ACE1B4AD7A5B0F30AF0BF /* PotaParkClient.swift */,
 				1E41369000406AEFA755AE71 /* PotaSpotClient.swift */,
 				FFF706F28E25C2D9ED40B6E0 /* Preferences.swift */,
@@ -2165,6 +2171,7 @@
 				E9827B06A176CDDB8E3D8770 /* PartyModeInferenceTests.swift in Sources */,
 				FF1D72B5F974B4BC4D6C3A5A /* PennsylvaniaQSOPartyTests.swift in Sources */,
 				FB7B5F2219E5A36D5DF20B1F /* PointRuleTests.swift in Sources */,
+				4348DC00118457CF76D1B53F /* PotaBoardClientTests.swift in Sources */,
 				9DAC52A1B07210486568BA04 /* PotaBoardSpotTests.swift in Sources */,
 				95A78C2B7AA3E5A6AB19E653 /* PotaModeContestTests.swift in Sources */,
 				935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */,
@@ -2382,6 +2389,7 @@
 				A41CA85D7E69A9F5C55A2824 /* PhoneMessageSource.swift in Sources */,
 				CF5C83CCA0BCA6C4A70F9E25 /* PointRule.swift in Sources */,
 				9A5EB0C38AAAA012079879C6 /* PotaActivationSection.swift in Sources */,
+				73883E03736136A194A0356F /* PotaBoardClient.swift in Sources */,
 				EADC3E655DA027365F53814C /* PotaPark.swift in Sources */,
 				1A8FD3F2B88A84E0BEA99DF1 /* PotaParkClient.swift in Sources */,
 				1F03EEA369072913AD9AACE8 /* PotaParkDirectory.swift in Sources */,
