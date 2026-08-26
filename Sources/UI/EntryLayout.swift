@@ -18,6 +18,11 @@ struct EntryLayout: Equatable {
     /// contact, so Space reaches it there — and only there: in a party the
     /// fast path must not grow a stop (the old routing, kept).
     var theirParkInSpaceCycle: Bool
+    /// The POTA row's advisory fields (operator report 1, 2026-08-25):
+    /// their state — "59 Missouri" is the usual POTA exchange, so it joins
+    /// the Space cycle after the park — and a free-text note, Tab-only.
+    var showsTheirState: Bool
+    var showsNotes: Bool
 
     init(party: PartyDefinition?, contest: ContestDefinition?, isActivation: Bool) {
         if let party {
@@ -29,6 +34,8 @@ struct EntryLayout: Equatable {
             locationLabel = Self.locationLabel(for: party)
             showsTheirPark = isActivation
             theirParkInSpaceCycle = false
+            showsTheirState = false
+            showsNotes = false
         } else if let contest {
             showsRST = contest.exchange.contains { $0.kind == .rst }
             showsSerial = contest.exchange.contains { $0.kind == .serial }
@@ -40,6 +47,8 @@ struct EntryLayout: Equatable {
             locationLabel = "Exchange"
             showsTheirPark = contest.potaProgram || isActivation
             theirParkInSpaceCycle = contest.potaProgram
+            showsTheirState = contest.potaProgram
+            showsNotes = contest.potaProgram
         } else {
             // An unrecognised partyID: the row the bar has always drawn.
             showsRST = true
@@ -50,6 +59,8 @@ struct EntryLayout: Equatable {
             locationLabel = "Exchange"
             showsTheirPark = isActivation
             theirParkInSpaceCycle = false
+            showsTheirState = false
+            showsNotes = false
         }
     }
 
@@ -99,7 +110,12 @@ extension EntryBar.Field {
         case .nameRcvd: return l.showsLocation ? .exchange : afterExchange
         case .exchange: return l.member != nil ? .memberRcvd : afterExchange
         case .memberRcvd: return afterExchange
-        case .theirPark: return .call
+        // The park leads on to the state where the row has one ("59
+        // Missouri" follows the park on the air); notes never join the
+        // cycle — prose typed mid-run is the exception, and Tab reaches it.
+        case .theirPark: return l.showsTheirState ? .theirState : .call
+        case .theirState: return .call
+        case .notes: return .call
         }
     }
 }

@@ -163,7 +163,14 @@ enum AdifExporter {
             r += field("state", state)
         } else if TokenSet.usStates.abbrs.contains(theirLoc) {
             r += field("state", theirLoc)
+        } else if let typed = q.theirState, !typed.isEmpty {
+            // The POTA row's own state field — what he copied on the air,
+            // where no exchange location supplies one (operator report 1,
+            // 2026-08-25).
+            r += field("state", typed.uppercased())
         }
+        // The operator's note on this contact — plain ADIF COMMENT.
+        r += field("comment", q.notes ?? "")
         let myLoc = q.myLoc.uppercased()
         if let county = counties?.token(for: myLoc), let state = county.group, let name = county.name {
             r += field("my_cnty", "\(state),\(name)")
@@ -212,7 +219,10 @@ enum AdifExporter {
                 r += field("name", name.uppercased())
             }
             if let qth = cb.qth { r += field("qth", qth) }
-            if q.theirLoc.isEmpty, let state = cb.state {
+            // The typed state outranks the database's — the stamp fills
+            // only where neither an exchange location nor the operator
+            // wrote one.
+            if q.theirLoc.isEmpty, (q.theirState ?? "").isEmpty, let state = cb.state {
                 r += field("state", state.uppercased())
             }
             if !contest.exchange.contains(where: { $0.kind == .grid }),

@@ -9,6 +9,10 @@ enum ExchangeElementID {
     static let name = "name"
     static let member = "member"
     static let location = "location"
+    /// Their state as copied on the air in a POTA log ("59 Missouri") —
+    /// carried in `rcvd` like any received token, but declared by no
+    /// contest's exchange spec, so the engine and Cabrillo never read it.
+    static let state = "state"
 }
 
 /// One logged line. County-line contacts produce multiple `QSO` rows sharing a `groupID`
@@ -62,6 +66,10 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         var source: String?
     }
     var callbook: CallbookStamp?
+    /// The operator's own note on this contact ("2-fer", "long path") —
+    /// POTA logs offer the field; any row may carry one. ADIF `comment`;
+    /// nothing scores or exports it anywhere else. `nil` writes no key.
+    var notes: String?
     /// Whether this contact was made running or searching, stamped at logging
     /// from the same Run/S&P flag that already picks the message set and
     /// decides what ⇧⌘S means.
@@ -127,6 +135,12 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         get { rcvd[ExchangeElementID.location] ?? "" }
         set { rcvd[ExchangeElementID.location] = newValue }
     }
+    /// Their state, for POTA logs — copied on the air, never scored; the
+    /// ADIF `state` field where no exchange location supplies one.
+    var theirState: String? {
+        get { rcvd[ExchangeElementID.state] }
+        set { rcvd[ExchangeElementID.state] = newValue }
+    }
 
     // MARK: Inits
 
@@ -184,7 +198,8 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         myPotaRefs: [String]? = nil,
         theirPotaRefs: [String]? = nil,
         posture: OperatingMode? = nil,
-        callbook: CallbookStamp? = nil
+        callbook: CallbookStamp? = nil,
+        notes: String? = nil
     ) {
         self.id = id
         self.groupID = groupID
@@ -202,6 +217,7 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         self.theirPotaRefs = (theirPotaRefs?.isEmpty ?? true) ? nil : theirPotaRefs
         self.posture = posture
         self.callbook = callbook
+        self.notes = notes
     }
 
     /// Drops empty ids and empty values — the maps' one invariant.
@@ -213,7 +229,7 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
 
     private enum CodingKeys: String, CodingKey {
         case id, groupID, timestampUTC, call, band, modeClass, rawMode, freqKHz, sent, rcvd, myPotaRefs, theirPotaRefs, posture
-        case callbook
+        case callbook, notes
     }
 
     /// The v1 row's own keys. `rstSent`, `rstRcvd`, `myLoc`, `theirLoc` were
@@ -235,6 +251,7 @@ struct QSO: Identifiable, Codable, Hashable, Sendable {
         myPotaRefs = try c.decodeIfPresent([String].self, forKey: .myPotaRefs).flatMap { $0.isEmpty ? nil : $0 }
         theirPotaRefs = try c.decodeIfPresent([String].self, forKey: .theirPotaRefs).flatMap { $0.isEmpty ? nil : $0 }
         callbook = try c.decodeIfPresent(CallbookStamp.self, forKey: .callbook)
+        notes = try c.decodeIfPresent(String.self, forKey: .notes)
         posture = try c.decodeIfPresent(OperatingMode.self, forKey: .posture)
         if c.contains(.sent) || c.contains(.rcvd) {
             sent = Self.compact(try c.decodeIfPresent([String: String].self, forKey: .sent) ?? [:])

@@ -788,6 +788,7 @@ struct MainView: View {
             onDeleteRows: { document.remove(ids: $0, undoManager: undoManager) },
             onDeleteGroup: { document.removeGroup(groupID: $0.groupID, undoManager: undoManager) },
             onEdit: { editingQSO = $0 },
+            showsPotaColumns: flow.standaloneContest?.potaProgram == true,
             onBulkEdit: { bulkEditing = BulkEditSheet.Request(rows: $0) },
             canSpot: canSpotStation,
             onSpotStation: { qso in

@@ -30,7 +30,7 @@ struct EntryBar: View {
 
     enum Field: Hashable {
         case call, rstSent, rstRcvd, serialSent, serialRcvd, nameRcvd, exchange, memberRcvd
-        case theirPark
+        case theirPark, theirState, notes
         // Space routing lives in `EntryLayout.swift` (`next(layout:)`): the
         // same rules this enum carried, driven by the row's layout — which
         // is how a POTA row's park joins the cycle while every party's
@@ -207,6 +207,19 @@ struct EntryBar: View {
                       + "3315 → US-3315), comma-separated for an n-fer. "
                       + "Leave empty otherwise.")
         }
+        if layout.showsTheirState {
+            field("State", text: $entry.stateTyped, width: 54,
+                  focusTag: .theirState)
+                .help("Their state as you copied it (\"59 Missouri\") — "
+                      + "advisory, exported as ADIF STATE, counted in the "
+                      + "activation panel. Leave empty when they didn't say.")
+        }
+        if layout.showsNotes {
+            field("Notes", text: $entry.notesTyped, width: 140,
+                  focusTag: .notes, uppercases: false)
+                .help("Your note on this contact — ADIF COMMENT. "
+                      + "Tab reaches it; Space stays out of prose.")
+        }
     }
 
     private var logButton: some View {
@@ -256,13 +269,22 @@ struct EntryBar: View {
         width: CGFloat,
         focusTag: Field,
         provisional: Bool = false,
-        ghost: (text: String, color: Color)? = nil
+        ghost: (text: String, color: Color)? = nil,
+        uppercases: Bool = true
     ) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
-            uppercasingTextField("", text: text)
+            // Notes keep the operator's own case — "2-fer w/ Bob" is prose,
+            // not a token; every other field folds to caps as always.
+            Group {
+                if uppercases {
+                    uppercasingTextField("", text: text)
+                } else {
+                    TextField("", text: text)
+                }
+            }
                 .textFieldStyle(.roundedBorder)
                 .font(.system(.body, design: .monospaced))
                 .foregroundStyle(provisional ? AnyShapeStyle(.secondary) : AnyShapeStyle(.primary))

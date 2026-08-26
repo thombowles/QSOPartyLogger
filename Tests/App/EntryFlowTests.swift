@@ -965,6 +965,36 @@ final class EntryFlowTests: XCTestCase {
         XCTAssertNil(flow.entry.dupeWarning)
     }
 
+    func testPotaLogsStateAndNotes() throws {
+        let (flow, doc) = try potaFlow()
+        flow.entry.callTyped = "W0ABC"
+        flow.entry.stateTyped = "mo"
+        flow.entry.notesTyped = "  2-fer, rain  "
+        guard case .logged = flow.logContact(context(esm: false, connected: false),
+                                             undoManager: nil) else {
+            return XCTFail("must log")
+        }
+        let q = try XCTUnwrap(doc.log.qsos.first)
+        XCTAssertEqual(q.theirState, "MO", "folded to caps like every token")
+        XCTAssertEqual(q.notes, "2-fer, rain", "trimmed, case kept")
+        XCTAssertTrue(flow.entry.stateTyped.isEmpty, "cleared for the next contact")
+        XCTAssertTrue(flow.entry.notesTyped.isEmpty)
+    }
+
+    func testPotaStateComesBackForAKnownStation() throws {
+        let (flow, _) = try potaFlow()
+        let ctx = context(esm: false, connected: false)
+        flow.entry.callTyped = "W0ABC"
+        flow.entry.stateTyped = "MO"
+        guard case .logged = flow.logContact(ctx, undoManager: nil) else {
+            return XCTFail("first contact must log")
+        }
+        flow.entry.callTyped = "W0ABC"
+        flow.callChanged(ctx)
+        XCTAssertEqual(flow.entry.stateTyped, "MO",
+                       "his state does not change between bands")
+    }
+
     func testPotaLogStampsTheCallbookRecord() throws {
         let (flow, doc) = try potaFlow()
         flow.callbookRecord = CallbookRecord(

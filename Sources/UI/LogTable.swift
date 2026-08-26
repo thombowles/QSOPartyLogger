@@ -9,6 +9,10 @@ struct LogTable: View {
     let onDeleteRows: (Set<QSO.ID>) -> Void
     let onDeleteGroup: (QSO) -> Void
     let onEdit: (QSO) -> Void
+    /// The POTA row's State and Notes columns (operator report 1,
+    /// 2026-08-25) — shown for the POTA contest, where the entry row has
+    /// the fields; every party's table keeps its exact columns.
+    var showsPotaColumns: Bool = false
     /// Two or more rows selected → the bulk editor, with the selection in
     /// chronological order so its seed value is the earliest contact's.
     let onBulkEdit: ([QSO]) -> Void
@@ -77,6 +81,20 @@ struct LogTable: View {
                 Text(ExchangeSummary.received(q, party: party)).monospaced()
             }
             .width(min: 76, ideal: 100)
+
+            if showsPotaColumns {
+                TableColumn("St") { q in
+                    Text(q.theirState ?? "").monospaced()
+                }
+                .width(34)
+
+                TableColumn("Notes") { q in
+                    Text(q.notes ?? "")
+                        .lineLimit(1)
+                        .help(q.notes ?? "")
+                }
+                .width(min: 80, ideal: 150)
+            }
 
             TableColumn("Pts") { q in
                 Text(pointsText(q)).monospacedDigit()

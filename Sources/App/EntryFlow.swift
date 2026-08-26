@@ -607,6 +607,11 @@ final class EntryFlow {
                                       state: known.state, grid: known.grid,
                                       source: known.source.label)
         }
+        // Their state as copied and the operator's note — advisory fields
+        // (operator report 1, 2026-08-25): a token folds to caps, prose
+        // keeps its case, and empty stores nothing.
+        let state = entry.stateTyped.trimmingCharacters(in: .whitespaces).uppercased()
+        let note = entry.notesTyped.trimmingCharacters(in: .whitespaces)
         let row = QSO(
             call: entry.callNormalized,
             band: context.band,
@@ -616,11 +621,13 @@ final class EntryFlow {
             sent: [ExchangeElementID.rst: entry.rstSent.isEmpty
                        ? context.modeClass.defaultRST : entry.rstSent],
             rcvd: [ExchangeElementID.rst: entry.rstRcvd.isEmpty
-                       ? context.modeClass.defaultRST : entry.rstRcvd],
+                       ? context.modeClass.defaultRST : entry.rstRcvd,
+                   ExchangeElementID.state: state],
             myPotaRefs: myParks.isEmpty ? nil : myParks,
             theirPotaRefs: theirParks.isEmpty ? nil : theirParks,
             posture: document.log.operatingMode,
-            callbook: stamp
+            callbook: stamp,
+            notes: note.isEmpty ? nil : note
         )
         document.append(qsos: [row], undoManager: undoManager)
         entry.pendingExchanges.removeValue(forKey: entry.callNormalized)
@@ -777,6 +784,19 @@ final class EntryFlow {
                $0.call.uppercased() == call && $0.theirPotaRefs != nil
            }) {
             entry.theirParkTyped = (previous.theirPotaRefs ?? []).joined(separator: ",")
+        }
+
+        // His state does not change between bands, so a POTA log offers it
+        // back the way the park comes back — this log only, never a
+        // database (the callbook line already shows what QRZ thinks).
+        // Gated on the POTA row's own field existing: a party log must not
+        // squirrel invisible text into `stateTyped` and trip the erase rule.
+        if standaloneContest?.potaProgram == true,
+           !call.isEmpty, entry.stateTyped.isEmpty,
+           let known = document.log.qsos.last(where: {
+               $0.call.uppercased() == call && !($0.theirState ?? "").isEmpty
+           })?.theirState {
+            entry.stateTyped = known
         }
 
         guard let party else { return }

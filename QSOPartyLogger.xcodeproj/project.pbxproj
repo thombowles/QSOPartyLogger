@@ -210,6 +210,7 @@
 		60A60A674801918D78F66985 /* FlexRadioDriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544AF9D2BD44EEFEC54BDF6 /* FlexRadioDriverTests.swift */; };
 		60CF9E4540F99AB15D55B7DD /* DXCCTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4212B5C5FFD5CE16B88D78B /* DXCCTable.swift */; };
 		614B6DA68C817BCE6A257501 /* UpcomingContests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02641FE9618E6D9A40BCF583 /* UpcomingContests.swift */; };
+		6261B20CDE53A00728957692 /* PotaFieldsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524D7FF55EAF99B8A2E57D75 /* PotaFieldsTests.swift */; };
 		62EAF9049A238A064611FDEE /* BandMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF27EC7CAEAE6E71B85FD5E9 /* BandMap.swift */; };
 		632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */; };
 		63A4B2876E3DDFD03B783BAB /* VermontQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28981F0AB9338C01CB01D910 /* VermontQSOPartyTests.swift */; };
@@ -697,6 +698,7 @@
 		51CE38D4FB00F99FA2C6D973 /* QMXProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QMXProtocolTests.swift; sourceTree = "<group>"; };
 		522A7E3D7B2C6485763680DB /* TCPTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPTransport.swift; sourceTree = "<group>"; };
 		5232484711D14CF24D1446A9 /* VoiceTrimPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTrimPopover.swift; sourceTree = "<group>"; };
+		524D7FF55EAF99B8A2E57D75 /* PotaFieldsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaFieldsTests.swift; sourceTree = "<group>"; };
 		52BB5E239E0C8A5D1FDC80DA /* VoiceKeyer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceKeyer.swift; sourceTree = "<group>"; };
 		5355B86FB8F19C93A997AFA0 /* CallbookClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbookClient.swift; sourceTree = "<group>"; };
 		53DAC21939D66AA0682998CD /* SuperCheckRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperCheckRow.swift; sourceTree = "<group>"; };
@@ -1342,6 +1344,7 @@
 				033F9D044AD7BFDEE8B6D181 /* PennsylvaniaQSOPartyTests.swift */,
 				01A90EE110A2B4A357D33313 /* PointRuleTests.swift */,
 				F9857D8B536A6650F45883BC /* PotaBoardSpotTests.swift */,
+				524D7FF55EAF99B8A2E57D75 /* PotaFieldsTests.swift */,
 				090F1AC164EC70DAF4BEC46C /* PotaModeContestTests.swift */,
 				EA2D9B1FCC05FCBCC978861F /* PotaParkDirectoryTests.swift */,
 				92BF3A3E0D2A190DDA4A0941 /* PotaParkStoreTests.swift */,
@@ -2173,6 +2176,7 @@
 				FB7B5F2219E5A36D5DF20B1F /* PointRuleTests.swift in Sources */,
 				4348DC00118457CF76D1B53F /* PotaBoardClientTests.swift in Sources */,
 				9DAC52A1B07210486568BA04 /* PotaBoardSpotTests.swift in Sources */,
+				6261B20CDE53A00728957692 /* PotaFieldsTests.swift in Sources */,
 				95A78C2B7AA3E5A6AB19E653 /* PotaModeContestTests.swift in Sources */,
 				935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */,
 				C538ACCF93B5DCFFFE15C1B3 /* PotaParkDirectoryTests.swift in Sources */,

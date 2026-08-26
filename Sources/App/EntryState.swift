@@ -47,6 +47,8 @@ final class EntryState {
         if !memberRcvd.isEmpty, !memberIsAutoFilled { return true }
         if !serialRcvd.trimmingCharacters(in: .whitespaces).isEmpty { return true }
         if !theirParkTyped.trimmingCharacters(in: .whitespaces).isEmpty { return true }
+        if !stateTyped.trimmingCharacters(in: .whitespaces).isEmpty { return true }
+        if !notesTyped.trimmingCharacters(in: .whitespaces).isEmpty { return true }
         if hasSerialOverride { return true }
         let defaults = Set(ModeClass.allCases.map(\.defaultRST))
         if !rstSent.isEmpty, !defaults.contains(rstSent) { return true }
@@ -151,6 +153,12 @@ final class EntryState {
     /// separated. Empty for the overwhelming majority of contest contacts —
     /// the field only exists at all while this log is an activation.
     var theirParkTyped = ""
+
+    /// Their state as copied on the air ("59 Missouri") and the operator's
+    /// own note — POTA-log fields (operator report 1, 2026-08-25). Advisory
+    /// data: never parsed, never scored, refused by nothing.
+    var stateTyped = ""
+    var notesTyped = ""
 
     /// The received element as the operator edits it. Writing through here is
     /// what marks the text as theirs; the view binds to this, never to
@@ -419,6 +427,8 @@ final class EntryState {
         memberRcvd = ""
         memberIsAutoFilled = false
         theirParkTyped = ""
+        stateTyped = ""
+        notesTyped = ""
         exchange = ""
         exchangeIsAutoFilled = false
         exchangeStatus = .idle

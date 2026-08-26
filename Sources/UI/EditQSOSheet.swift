@@ -25,6 +25,8 @@ struct EditQSOSheet: View {
     @State private var rawMode = "CW"
     @State private var myParks = ""
     @State private var theirParks = ""
+    @State private var theirState = ""
+    @State private var notesText = ""
     @State private var validationMessage: String?
 
     var body: some View {
@@ -126,6 +128,22 @@ struct EditQSOSheet: View {
                         .font(.body.monospaced())
                         .frame(width: 160)
                 }
+                // The POTA row's advisory fields (operator report 1,
+                // 2026-08-25). A party row's state comes from its exchange
+                // location, so these show only where the entry bar has them.
+                if party == nil {
+                    GridRow {
+                        Text("State")
+                        uppercasingTextField("", text: $theirState)
+                            .font(.body.monospaced())
+                            .frame(width: 60)
+                    }
+                    GridRow {
+                        Text("Notes")
+                        TextField("", text: $notesText)
+                            .frame(width: 220)
+                    }
+                }
             }
 
             if let message = validationMessage {
@@ -160,6 +178,8 @@ struct EditQSOSheet: View {
             rawMode = original.rawMode
             myParks = (original.myPotaRefs ?? []).joined(separator: ",")
             theirParks = (original.theirPotaRefs ?? []).joined(separator: ",")
+            theirState = original.theirState ?? ""
+            notesText = original.notes ?? ""
         }
     }
 
@@ -218,6 +238,12 @@ struct EditQSOSheet: View {
         updated.modeClass = ModeClass.classify(rawMode: rawMode)
         updated.myPotaRefs = parsedMine.isEmpty ? nil : parsedMine
         updated.theirPotaRefs = parsedTheirs.isEmpty ? nil : parsedTheirs
+        if party == nil {
+            let state = theirState.trimmingCharacters(in: .whitespaces).uppercased()
+            updated.theirState = state.isEmpty ? nil : state
+            let note = notesText.trimmingCharacters(in: .whitespaces)
+            updated.notes = note.isEmpty ? nil : note
+        }
         onSave(updated)
         dismiss()
     }

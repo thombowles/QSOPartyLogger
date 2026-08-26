@@ -50,7 +50,20 @@ final class EntryLayoutTests: XCTestCase {
             XCTAssertTrue(layout.showsTheirPark,
                           "a hunter with no own park still logs their park")
             XCTAssertTrue(layout.theirParkInSpaceCycle)
+            XCTAssertTrue(layout.showsTheirState, "operator report 1, 2026-08-25")
+            XCTAssertTrue(layout.showsNotes)
         }
+    }
+
+    func testPartiesShowNeitherStateNorNotes() {
+        for party in PartyCatalog.loadBundled(bundle: .main) {
+            let layout = EntryLayout(party: party, contest: nil, isActivation: true)
+            XCTAssertFalse(layout.showsTheirState, party.id)
+            XCTAssertFalse(layout.showsNotes, party.id)
+        }
+        let bare = EntryLayout(party: nil, contest: nil, isActivation: false)
+        XCTAssertFalse(bare.showsTheirState)
+        XCTAssertFalse(bare.showsNotes)
     }
 
     func testSpaceCycleMatchesTheOldRoutingForEveryParty() {
@@ -68,6 +81,10 @@ final class EntryLayoutTests: XCTestCase {
             case .exchange: member ? .memberRcvd : .call
             case .memberRcvd: .call
             case .theirPark: .call
+            // Fields the old router never had (2026-08-25); outside the
+            // equivalence loop's field list, mapped trivially to satisfy
+            // the exhaustive switch.
+            case .theirState, .notes: .call
             }
         }
         let fields: [EntryBar.Field] = [.call, .rstSent, .rstRcvd, .serialSent,
@@ -90,11 +107,19 @@ final class EntryLayoutTests: XCTestCase {
     func testPotaSpaceCycle() throws {
         let pota = try XCTUnwrap(ContestCatalog.contest(id: "pota"))
         let layout = EntryLayout(party: nil, contest: pota, isActivation: true)
-        // Call → park (the primary received datum) → call; Tab still walks
-        // the RSTs, whose Space hop chains to the park too.
+        // Call → park → state → call ("59 Missouri" is the usual POTA
+        // exchange, so state sits in the cycle); notes are Tab-only — prose
+        // typed mid-run is the exception, not the path. Tab still walks the
+        // RSTs, whose Space hop chains to the park too.
         XCTAssertEqual(EntryBar.Field.call.next(layout: layout), .theirPark)
         XCTAssertEqual(EntryBar.Field.rstSent.next(layout: layout), .rstRcvd)
         XCTAssertEqual(EntryBar.Field.rstRcvd.next(layout: layout), .theirPark)
-        XCTAssertEqual(EntryBar.Field.theirPark.next(layout: layout), .call)
+        XCTAssertEqual(EntryBar.Field.theirPark.next(layout: layout), .theirState)
+        XCTAssertEqual(EntryBar.Field.theirState.next(layout: layout), .call)
+        XCTAssertEqual(EntryBar.Field.notes.next(layout: layout), .call)
+        // A party's park field still closes straight back to the call.
+        let partyLayout = EntryLayout(party: PartyCatalog.loadBundled(bundle: .main).first,
+                                      contest: nil, isActivation: true)
+        XCTAssertEqual(EntryBar.Field.theirPark.next(layout: partyLayout), .call)
     }
 }
