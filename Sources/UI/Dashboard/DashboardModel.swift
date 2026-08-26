@@ -46,8 +46,27 @@ final class DashboardModel {
         Set(archive.years + [Date().utcYear]).sorted(by: >)
     }
 
+    /// Party IDs whose contest is an always-on program (POTA): their
+    /// records feed the POTA widgets and stay out of every contest one.
+    private(set) var programPartyIDs: Set<String> = []
+
+    /// The archive minus program records — what the season cards, contests
+    /// table and charts read.
+    var contestRecords: [ContestRecord] {
+        archive.records.filter { !programPartyIDs.contains($0.partyID) }
+    }
+
+    /// Program records alone — the POTA cards and history list.
+    var potaRecords: [ContestRecord] {
+        archive.records.filter { programPartyIDs.contains($0.partyID) }
+    }
+
     var stats: SeasonStats {
-        SeasonStats.compute(records: archive.records, year: selectedYear)
+        SeasonStats.compute(records: contestRecords, year: selectedYear)
+    }
+
+    var potaSeason: PotaSeason {
+        PotaSeason.compute(records: potaRecords, year: selectedYear)
     }
 
     /// A combined entry is not a contest the Challenge tracks — `in7qpne` is not
@@ -121,6 +140,7 @@ final class DashboardModel {
 
         guard let folder = logsFolder() else {
             archive = .empty
+            programPartyIDs = []
             duplicates = []
             unreadable = []
             downloading = 0
@@ -134,6 +154,8 @@ final class DashboardModel {
         switch outcome {
         case .success(let history):
             archive = history.archive
+            programPartyIDs = Set(history.archive.records.map(\.partyID)
+                .filter { ContestCatalog.contest(id: $0)?.family == .program })
             duplicates = history.duplicates
             unreadable = history.unreadable
             downloading = history.downloading

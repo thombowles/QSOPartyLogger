@@ -32,6 +32,7 @@ struct DashboardView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 summaryCards
+                potaCards
                 if let standing = model.standing {
                     DashboardChallengeSection(
                         standing: standing,
@@ -39,6 +40,7 @@ struct DashboardView: View {
                     )
                 }
                 DashboardContestsSection(model: model)
+                DashboardPotaSection(model: model)
                 DashboardUpcomingSection(model: model)
                 footer
             }
@@ -141,10 +143,62 @@ struct DashboardView: View {
         }
     }
 
+    /// POTA's own headline numbers — the season cards above count contests
+    /// only, an outing is not a contest entry.
+    private var potaCards: some View {
+        let pota = model.potaSeason
+        return HStack(spacing: 12) {
+            StatCard(
+                title: "Activations",
+                value: "\(pota.activations)",
+                detail: activationsDetail(pota),
+                systemImage: "tree"
+            )
+            StatCard(
+                title: "Parks",
+                value: "\(pota.parksActivated)",
+                detail: "activated in \(String(model.selectedYear))",
+                systemImage: "mappin.and.ellipse"
+            )
+            StatCard(
+                title: "POTA QSOs",
+                value: DashboardFormat.points(pota.qsos),
+                detail: modeSplit(pota.qsosByMode),
+                systemImage: "dot.radiowaves.left.and.right"
+            )
+            StatCard(
+                title: "Park-to-Park",
+                value: "\(pota.p2pContacts)",
+                detail: pota.parksHunted == 0
+                    ? "no parks hunted yet"
+                    : "\(pota.parksHunted) distinct park\(pota.parksHunted == 1 ? "" : "s") hunted",
+                systemImage: "arrow.left.arrow.right"
+            )
+            StatCard(
+                title: "States · DX",
+                value: "\(pota.states) · \(pota.dxEntities)",
+                detail: "states · DX entities worked",
+                systemImage: "globe.americas"
+            )
+        }
+    }
+
+    private func activationsDetail(_ pota: PotaSeason) -> String {
+        guard pota.activations > 0 else { return "none yet" }
+        let short = pota.activations - pota.validActivations
+        return short == 0
+            ? "all valid (≥ \(PotaStats.validationTarget) QSOs)"
+            : "\(pota.validActivations) valid · \(short) short of \(PotaStats.validationTarget)"
+    }
+
     private var modeSplitText: String {
+        modeSplit(model.stats.qsosByMode)
+    }
+
+    private func modeSplit(_ byMode: [String: Int]) -> String {
         let split = ModeClass.allCases
             .compactMap { mode -> String? in
-                guard let count = model.stats.qsosByMode[mode.rawValue], count > 0 else { return nil }
+                guard let count = byMode[mode.rawValue], count > 0 else { return nil }
                 return "\(count) \(mode.displayName)"
             }
             .joined(separator: " · ")

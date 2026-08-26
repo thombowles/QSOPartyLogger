@@ -1,8 +1,10 @@
 import SwiftUI
 
 /// State QSO Party Challenge standing: the sponsor's formula shown working,
-/// the award-level ladder, per-party qualification, and anything logged that
-/// the challenge won't count — labeled, never silently dropped.
+/// the award-level ladder, and per-party qualification. Only contests the
+/// Challenge counts appear — what it won't count (POTA, an unapproved
+/// party) is not this card's business and lives in the season's own
+/// widgets and tables (Tom, 2026-08-26; previously shown greyed).
 struct DashboardChallengeSection: View {
     let standing: ChallengeStanding
     /// Set when a combined entry was split into its member contests to build
@@ -138,22 +140,6 @@ struct DashboardChallengeSection: View {
                             .font(.caption)
                             .foregroundStyle(.orange)
                     }
-                }
-                .font(.callout)
-            }
-
-            ForEach(standing.notApproved) { line in
-                HStack(spacing: 8) {
-                    Image(systemName: "minus.circle")
-                        .foregroundStyle(.secondary)
-                    Text(line.contestName)
-                    Spacer()
-                    Text("\(line.validQSOs) QSOs")
-                        .monospacedDigit()
-                        .foregroundStyle(.secondary)
-                    Text("not on the \(String(standing.year)) approved list")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
                 }
                 .font(.callout)
             }

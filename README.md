@@ -874,12 +874,23 @@ The cached file lives in `~/Library/Application Support/QSOPartyLogger/SCP/`.
   (⌘[ / ⌘]): totals, each claimed score exactly as the sidebar computed it,
   on-air time with breaks excluded, QSO and score charts, and each party's
   year-over-year trend with your personal best flagged. Return reopens a
-  contest's log; ⌘E / ⇧⌘E export it without reopening.
+  contest's log; ⌘E / ⇧⌘E export it without reopening. POTA logs stay out of
+  all of it — an outing is not a contest entry — and get their own row of
+  cards and their own history list instead.
+- **POTA season (cards + history list)** — a second row of headline numbers
+  for the year's Parks on the Air: activations (valid · short of 10), parks
+  activated, POTA QSOs, park-to-park with distinct parks hunted, and
+  states · DX. Below the contests, the POTA history list shows one row per
+  outing — each `.qplog` is its own outing, even two parks on one day —
+  with its parks, QSOs, activation validity (hover for every park-day),
+  P2P, states, DX and time. Return or double-click opens the outing's log;
+  the per-park POTA submission files are exported from the open log (⌥⌘E).
 - **State QSO Party Challenge tracker** — your estimated standing by the
   sponsor's formula (total QSOs × parties entered), with the ≥2-QSO floor and
   the Bronze-to-Diamond ladder. A combined May entry counts as the four contests
-  it's made of, worth up to four multipliers. Parties not on the approved list
-  are shown and excluded rather than silently dropped. It's labelled an
+  it's made of, worth up to four multipliers. Only contests the Challenge
+  counts are listed — POTA and off-list parties live in their own widgets and
+  tables instead of greying up the card. It's labelled an
   estimate — the official score comes from what you post to 3830scores.com.
 - **Upcoming contests** — everything left this season, soonest first, with an ON
   AIR badge while a window is open, countdowns, and "entered ✓" once you've

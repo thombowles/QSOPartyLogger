@@ -35,8 +35,11 @@ struct ChallengeStanding: Equatable, Sendable {
 
     let year: Int
     let lines: [PartyLine]
-    /// Logged parties not on the approved list (MEQP in 2026) — shown, never
-    /// silently dropped, contributing nothing.
+    /// Logged contests the Challenge won't count — a party off the approved
+    /// list (MEQP in 2026), a POTA log. Contributing nothing; still computed
+    /// so a caller can say where a season's QSOs went, but the dashboard
+    /// card no longer lists them (Tom, 2026-08-26) — they have their own
+    /// widgets and tables.
     let notApproved: [PartyLine]
     /// Σ valid QSOs over approved parties — including sub-2-QSO entries,
     /// whose QSOs sum even though they don't multiply (PDF formula counts

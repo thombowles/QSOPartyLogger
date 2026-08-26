@@ -76,4 +76,58 @@ final class DashboardModelTests: XCTestCase {
         XCTAssertNil(model.loadError)
         XCTAssertNil(model.logsFolderURL)
     }
+
+    // MARK: POTA partition
+
+    private func potaLog(park: String, call: String, offset: TimeInterval = 0) -> ContestLog {
+        var log = ContestLog(partyID: "pota")
+        log.station.callsign = "KE5CW"
+        log.myLocation = .outOfState(location: "MO")
+        log.setupCompleted = true
+        log.qsos = [
+            QSO(
+                timestampUTC: t0.addingTimeInterval(offset), call: call, band: .m20,
+                modeClass: .cw, rawMode: "CW", rstSent: "599", rstRcvd: "599",
+                myPotaRefs: [park], myLoc: "", theirLoc: ""
+            )
+        ]
+        return log
+    }
+
+    /// Program records (POTA) feed the POTA widgets and stay out of every
+    /// contest one — season cards, contests table, charts.
+    func testProgramRecordsFeedPotaNotTheContestWidgets() async throws {
+        try write(log(), as: "2026-08-29 KSQP KE5CW.qplog")
+        try write(potaLog(park: "US-1234", call: "W0AAA"), as: "2026-02-02-KE5CW@US-1234.qplog")
+        try write(potaLog(park: "US-5678", call: "K5BBB", offset: 86_400), as: "2026-02-03-KE5CW@US-5678.qplog")
+
+        let model = DashboardModel(logsFolder: { [folder] in folder })
+        await model.refresh()
+        model.selectedYear = 2026
+
+        // Contest widgets: KSQP alone.
+        XCTAssertEqual(model.stats.contests, 1)
+        XCTAssertEqual(model.stats.validQSOs, 1)
+        XCTAssertEqual(model.stats.rows.map(\.partyID), ["ksqp"])
+
+        // POTA widgets: the two outings alone.
+        XCTAssertEqual(model.potaSeason.outings.count, 2)
+        XCTAssertEqual(model.potaSeason.qsos, 2)
+        XCTAssertEqual(model.potaSeason.parksActivated, 2)
+
+        // The whole folder is still one history: every record read, every
+        // year listed.
+        XCTAssertEqual(model.archive.records.count, 3)
+    }
+
+    /// A year with no POTA is simply an empty season — nothing throws, the
+    /// section says so or is hidden.
+    func testYearWithoutPotaIsAnEmptySeason() async throws {
+        try write(log(), as: "2026-08-29 KSQP KE5CW.qplog")
+        let model = DashboardModel(logsFolder: { [folder] in folder })
+        await model.refresh()
+        model.selectedYear = 2026
+        XCTAssertEqual(model.potaSeason.outings, [])
+        XCTAssertEqual(model.stats.contests, 1)
+    }
 }
