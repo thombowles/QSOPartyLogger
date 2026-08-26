@@ -199,14 +199,9 @@ struct EntryBar: View {
                 .help("\(member.term), or their power (5W, 100W). "
                       + "Leave empty if they sent neither — that scores as QRO.")
         }
-        if layout.showsTheirPark {
-            field("P2P park(s)", text: $entry.theirParkTyped,
-                  width: 110, focusTag: .theirPark)
-                .help("The other station's POTA reference(s) when they are "
-                      + "in a park too — US-3315 (a bare number expands: "
-                      + "3315 → US-3315), comma-separated for an n-fer. "
-                      + "Leave empty otherwise.")
-        }
+        // State before the park (operator report, 2026-08-26): the state is
+        // every contact's copy, the park only a P2P's — the common field
+        // sits closer to the reports, and Tab and Space walk this order.
         if layout.showsTheirState {
             field("State", text: $entry.stateTyped, width: 54,
                   focusTag: .theirState, provisional: entry.stateIsAutoFilled)
@@ -215,6 +210,14 @@ struct EntryBar: View {
                       + "activation panel. Grey text is the app's offer — "
                       + "the park's side, an earlier contact's, or the "
                       + "callbook's; typing takes it over.")
+        }
+        if layout.showsTheirPark {
+            field("P2P park(s)", text: $entry.theirParkTyped,
+                  width: 110, focusTag: .theirPark)
+                .help("The other station's POTA reference(s) when they are "
+                      + "in a park too — US-3315 (a bare number expands: "
+                      + "3315 → US-3315), comma-separated for an n-fer. "
+                      + "Leave empty otherwise.")
         }
         if layout.showsNotes {
             field("Notes", text: $entry.notesTyped, width: 140,

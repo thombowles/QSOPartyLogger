@@ -107,19 +107,22 @@ final class EntryLayoutTests: XCTestCase {
     func testPotaSpaceCycle() throws {
         let pota = try XCTUnwrap(ContestCatalog.contest(id: "pota"))
         let layout = EntryLayout(party: nil, contest: pota, isActivation: true)
-        // Call → park → state → call ("59 Missouri" is the usual POTA
-        // exchange, so state sits in the cycle); notes are Tab-only — prose
-        // typed mid-run is the exception, not the path. Tab still walks the
-        // RSTs, whose Space hop chains to the park too.
-        XCTAssertEqual(EntryBar.Field.call.next(layout: layout), .theirPark)
+        XCTAssertTrue(layout.rstInSpaceCycle,
+                      "POTA reports are real copy, not a contest's fixed 59")
+        // The whole exchange in air order (operator reports, 2026-08-26):
+        // call → RST S → RST R → state → park → call. Notes stay Tab-only —
+        // prose typed mid-run is the exception, not the path.
+        XCTAssertEqual(EntryBar.Field.call.next(layout: layout), .rstSent)
         XCTAssertEqual(EntryBar.Field.rstSent.next(layout: layout), .rstRcvd)
-        XCTAssertEqual(EntryBar.Field.rstRcvd.next(layout: layout), .theirPark)
-        XCTAssertEqual(EntryBar.Field.theirPark.next(layout: layout), .theirState)
-        XCTAssertEqual(EntryBar.Field.theirState.next(layout: layout), .call)
+        XCTAssertEqual(EntryBar.Field.rstRcvd.next(layout: layout), .theirState)
+        XCTAssertEqual(EntryBar.Field.theirState.next(layout: layout), .theirPark)
+        XCTAssertEqual(EntryBar.Field.theirPark.next(layout: layout), .call)
         XCTAssertEqual(EntryBar.Field.notes.next(layout: layout), .call)
-        // A party's park field still closes straight back to the call.
+        // A party's Space still skips its pre-filled reports, and its park
+        // field still closes straight back to the call.
         let partyLayout = EntryLayout(party: PartyCatalog.loadBundled(bundle: .main).first,
                                       contest: nil, isActivation: true)
+        XCTAssertFalse(partyLayout.rstInSpaceCycle)
         XCTAssertEqual(EntryBar.Field.theirPark.next(layout: partyLayout), .call)
     }
 }

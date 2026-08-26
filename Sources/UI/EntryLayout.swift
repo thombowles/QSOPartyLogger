@@ -19,10 +19,16 @@ struct EntryLayout: Equatable {
     /// fast path must not grow a stop (the old routing, kept).
     var theirParkInSpaceCycle: Bool
     /// The POTA row's advisory fields (operator report 1, 2026-08-25):
-    /// their state — "59 Missouri" is the usual POTA exchange, so it joins
-    /// the Space cycle after the park — and a free-text note, Tab-only.
+    /// their state — "59 Missouri" is the usual POTA exchange, so it sits
+    /// in the Space cycle between the reports and the park — and a
+    /// free-text note, Tab-only.
     var showsTheirState: Bool
     var showsNotes: Bool
+    /// Space walks the report fields too (operator report, 2026-08-26). A
+    /// party's Space skips its pre-filled 59/599 — the N1MM convention the
+    /// row has always had — but a POTA report is real copy that varies per
+    /// contact, so the cycle stops there.
+    var rstInSpaceCycle: Bool
 
     init(party: PartyDefinition?, contest: ContestDefinition?, isActivation: Bool) {
         if let party {
@@ -36,6 +42,7 @@ struct EntryLayout: Equatable {
             theirParkInSpaceCycle = false
             showsTheirState = false
             showsNotes = false
+            rstInSpaceCycle = false
         } else if let contest {
             showsRST = contest.exchange.contains { $0.kind == .rst }
             showsSerial = contest.exchange.contains { $0.kind == .serial }
@@ -49,6 +56,7 @@ struct EntryLayout: Equatable {
             theirParkInSpaceCycle = contest.potaProgram
             showsTheirState = contest.potaProgram
             showsNotes = contest.potaProgram
+            rstInSpaceCycle = contest.potaProgram
         } else {
             // An unrecognised partyID: the row the bar has always drawn.
             showsRST = true
@@ -61,6 +69,7 @@ struct EntryLayout: Equatable {
             theirParkInSpaceCycle = false
             showsTheirState = false
             showsNotes = false
+            rstInSpaceCycle = false
         }
     }
 
@@ -88,33 +97,35 @@ extension EntryBar.Field {
     /// the air ("TOM TX"); the member element arrives after it ("559 NJ NR
     /// 13"), so its field trails the exchange.
     func next(layout l: EntryLayout) -> EntryBar.Field {
-        // The stop after the call/report hop: the received number, the name,
-        // the exchange — or, with no exchange field at all (POTA), the park.
-        let afterCall: EntryBar.Field = l.showsSerial ? .serialRcvd
-            : l.showsName ? .nameRcvd
-            : l.showsLocation ? .exchange
+        // POTA's tail after the reports, in air order: the state, then the
+        // park, then home (operator reports, 2026-08-26).
+        let potaTail: EntryBar.Field = l.showsTheirState ? .theirState
             : l.theirParkInSpaceCycle ? .theirPark
             : .call
-        let afterExchange: EntryBar.Field = l.theirParkInSpaceCycle ? .theirPark : .call
+        // The stop after the call: the reports where the cycle walks them
+        // (POTA), else the received number, the name, the exchange — or,
+        // with no exchange field at all, straight to the POTA tail.
+        let afterReports: EntryBar.Field = l.showsSerial ? .serialRcvd
+            : l.showsName ? .nameRcvd
+            : l.showsLocation ? .exchange
+            : potaTail
+        let afterExchange: EntryBar.Field = l.theirParkInSpaceCycle ? potaTail : .call
         switch self {
-        case .call: return afterCall
+        case .call: return l.rstInSpaceCycle && l.showsRST ? .rstSent : afterReports
         // Without an RST element the report fields are not rendered at all;
         // the old router still sent this vestigial case to the exchange, and
         // the per-party equivalence test pins that verbatim.
         case .rstSent: return l.showsRST ? .rstRcvd
             : l.showsLocation ? .exchange : afterExchange
-        case .rstRcvd: return afterCall
+        case .rstRcvd: return afterReports
         case .serialSent: return .serialRcvd
         case .serialRcvd: return l.showsName ? .nameRcvd
             : l.showsLocation ? .exchange : afterExchange
         case .nameRcvd: return l.showsLocation ? .exchange : afterExchange
         case .exchange: return l.member != nil ? .memberRcvd : afterExchange
         case .memberRcvd: return afterExchange
-        // The park leads on to the state where the row has one ("59
-        // Missouri" follows the park on the air); notes never join the
-        // cycle — prose typed mid-run is the exception, and Tab reaches it.
-        case .theirPark: return l.showsTheirState ? .theirState : .call
-        case .theirState: return .call
+        case .theirPark: return .call
+        case .theirState: return l.theirParkInSpaceCycle ? .theirPark : .call
         case .notes: return .call
         }
     }
