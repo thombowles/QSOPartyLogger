@@ -135,7 +135,9 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         defaultDisplayName(
             partyID: log.partyID,
             callsign: log.station.callsign,
-            date: log.qsos.map(\.timestampUTC).min() ?? Date()
+            date: log.qsos.map(\.timestampUTC).min() ?? Date(),
+            activatedParks: log.myPotaRefs,
+            potaProgram: ContestCatalog.contest(id: log.partyID)?.potaProgram ?? false
         )
     }
 
@@ -223,12 +225,23 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         log.usedSpots = true
     }
 
-    /// "2026-07-25 ALQP KE5CW" — default display name for unsaved logs.
-    nonisolated static func defaultDisplayName(partyID: String, callsign: String, date: Date = Date()) -> String {
+    /// "2026-07-25 ALQP KE5CW" — default display name for unsaved logs. A
+    /// POTA *activation* is named the way its submission file is —
+    /// "2026-07-25-KE5CW@US-1234", the first park naming the outing
+    /// (operator report 2, 2026-08-26); a hunter log, a missing callsign,
+    /// and every party keep the standard scheme, so no existing log's name
+    /// moves.
+    nonisolated static func defaultDisplayName(
+        partyID: String, callsign: String, date: Date = Date(),
+        activatedParks: [String] = [], potaProgram: Bool = false
+    ) -> String {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
         f.timeZone = TimeZone(identifier: "UTC")
         f.locale = Locale(identifier: "en_US_POSIX")
+        if potaProgram, let park = activatedParks.first, !callsign.isEmpty {
+            return "\(f.string(from: date))-\(callsign.uppercased())@\(park.uppercased())"
+        }
         var parts = [f.string(from: date), partyID.uppercased()]
         if !callsign.isEmpty { parts.append(callsign.uppercased()) }
         return parts.joined(separator: " ")

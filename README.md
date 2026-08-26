@@ -988,13 +988,17 @@ party, just a park — pick **Parks on the Air (POTA)** at the end of Contest
 Setup's picker. It is always on (no schedule), legal on every band the app
 knows including WARC and 60 m, and one log kind serves both directions:
 set your park(s) and it is an activation; leave them empty and it is a
-hunter log. Either way the P2P field is always in the row.
+hunter log. Either way the P2P field is always in the row. An activation
+names itself the way its submission file is named —
+`2026-08-26-KE5CW@US-1234`, renaming as you pick the park until the
+first save — while hunter logs keep the standard dated name.
 
-- **The row is POTA-shaped.** Call, the RSTs, **P2P park(s)**, **State**,
+- **The row is POTA-shaped.** Call, the RSTs, **State**, **P2P park(s)**,
   and **Notes** — no county field, because there is no exchange to parse.
-  `Space` cycles call → park → state → call ("59 Missouri" is the usual
-  POTA exchange; Notes is Tab-only, and keeps your own case), and the Log
-  button needs only a call. Type a bare park number — `2518` — and it logs
+  `Space` walks the whole exchange in air order — call → RST S → RST R →
+  state → park → call — because a POTA report is real copy, not a
+  contest's fixed 59 (Notes is Tab-only, and keeps your own case), and
+  the Log button needs only a call. Type a bare park number — `2518` — and it logs
   as `US-2518`; a quiet caption under the field names the park from the
   offline directory as confirmation. A station's park is offered back when
   they call again on the next band — and **an activator hunting you brings
@@ -1175,7 +1179,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3216 unit tests**, none of which need hardware, a network or a microphone —
+**3217 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a

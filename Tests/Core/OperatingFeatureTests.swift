@@ -397,4 +397,34 @@ final class OperatingFeatureTests: XCTestCase {
             "2026-07-25 ALQP", "no trailing space without a callsign"
         )
     }
+
+    /// A POTA activation is named the way its submission file is (operator
+    /// report 2, 2026-08-26): date-call@park. A hunter log, a missing
+    /// callsign, and every party fall back to the standard scheme.
+    func testPotaActivationDisplayName() {
+        let date = Date(timeIntervalSince1970: 1_784_991_600)  // 2026-07-25 UTC
+        XCTAssertEqual(
+            LogDocument.defaultDisplayName(partyID: "pota", callsign: "KE5CW",
+                                           date: date, activatedParks: ["US-1234", "US-5678"],
+                                           potaProgram: true),
+            "2026-07-25-KE5CW@US-1234", "the first park names the outing"
+        )
+        XCTAssertEqual(
+            LogDocument.defaultDisplayName(partyID: "pota", callsign: "KE5CW",
+                                           date: date, potaProgram: true),
+            "2026-07-25 POTA KE5CW", "a hunter log keeps the standard scheme"
+        )
+        XCTAssertEqual(
+            LogDocument.defaultDisplayName(partyID: "pota", callsign: "",
+                                           date: date, activatedParks: ["US-1234"],
+                                           potaProgram: true),
+            "2026-07-25 POTA", "no callsign, no @ form"
+        )
+        XCTAssertEqual(
+            LogDocument.defaultDisplayName(partyID: "ksqp", callsign: "KE5CW",
+                                           date: date, activatedParks: ["US-1234"]),
+            "2026-07-25 KSQP KE5CW",
+            "a party activation keeps its party's name"
+        )
+    }
 }

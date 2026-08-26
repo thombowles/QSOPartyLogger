@@ -527,6 +527,9 @@ struct MainView: View {
 
             stationStrip
                 .onChange(of: document.log.partyID) { applyDefaultDocumentName() }
+                // A POTA activation is named for its park, so picking one in
+                // Setup renames an unsaved draft the way a party pick does.
+                .onChange(of: document.log.myPotaRefs) { applyDefaultDocumentName() }
                 .onChange(of: document.log.partyID) { voiceStore.partyID = document.log.partyID }
                 .onChange(of: document.log.station.callsign) { applyDefaultDocumentName() }
                 .onChange(of: document.log.setupCompleted) { autoSaveNewDocumentIfNeeded() }
@@ -2243,7 +2246,9 @@ struct MainView: View {
         guard nsDocument.fileURL == nil else { return }
         let name = LogDocument.defaultDisplayName(
             partyID: document.log.partyID,
-            callsign: document.log.station.callsign
+            callsign: document.log.station.callsign,
+            activatedParks: document.log.myPotaRefs,
+            potaProgram: flow.standaloneContest?.potaProgram == true
         )
         nsDocument.displayName = name
         window.title = name
@@ -2268,7 +2273,9 @@ struct MainView: View {
 
         let baseName = LogDocument.defaultDisplayName(
             partyID: document.log.partyID,
-            callsign: document.log.station.callsign
+            callsign: document.log.station.callsign,
+            activatedParks: document.log.myPotaRefs,
+            potaProgram: flow.standaloneContest?.potaProgram == true
         )
         guard let url = CloudMirror.uniqueSaveURL(baseName: baseName) else { return }
         nsDocument.save(to: url, ofType: nsDocument.fileType ?? "QSO Party Log", for: .saveOperation) { error in
