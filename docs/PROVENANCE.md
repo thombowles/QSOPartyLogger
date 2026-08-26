@@ -770,6 +770,18 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   the dedicated mode". Whether duplicate contacts count toward the ten is
   not published; the validity meter counts the stricter unique form and the
   open question is recorded there.
+- Callsign lookup — the QRZ XML Interface Specification v1.34 (the live
+  server stamps 1.36; the version attribute is read as data), its
+  session-key contract ("no guaranteed lifetime", cache-and-reuse, the
+  `Session Timeout` and 24-hour `Connection refused` semantics), the
+  non-subscriber Message, and the `country`-is-QSL-address /
+  `land`-is-entity distinction (qrz.com/docs/xml/current_spec.html); and
+  HamQTH's XML callbook — the one-hour session sentence, the required
+  `prg` parameter and its error strings (hamqth.com/developers.php). Both
+  fetched 2026-08-25, quoted verbatim in
+  [`research/callbook/SOURCES.md`](research/callbook/SOURCES.md). QRZ's
+  free-tier field set is officially unenumerated — recorded there as an
+  open question; the app assumes nothing about it.
 - DX cluster spotting — the `DX` command from the DXSpider User Manual v1.51
   ("frequency is in kilohertz"; "The callout will also be sent to you as
   proof of receipt", which is why the node's echo is the confirmation) and

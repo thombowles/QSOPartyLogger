@@ -1023,6 +1023,38 @@ requirement, and the file naming — is quoted verbatim with fetch dates in
 [`docs/research/pota/SOURCES.md`](docs/research/pota/SOURCES.md) § "POTA
 rules for the dedicated mode".
 
+## Callsign lookup — QRZ and HamQTH
+
+Type a call and a quiet line appears under the entry row: **who they are** —
+name, state, grid, and how far and which way (`Bob · MO · EM48ss ·
+412 mi ↗ — HamQTH`). It works in every log, and it is **advisory only**: a
+lookup never fills an exchange field, because the exchange is what was sent
+on the air, not what a database believes. In a **POTA log** the record is
+also saved into the QSO as it is logged, so the ADIF carries `NAME`, `QTH`,
+`STATE` and `GRIDSQUARE` — on-air data always outranking it where both
+exist.
+
+- **Set it up once** from the toolbar's **Lookup** popover: enable QRZ
+  and/or HamQTH, enter the username and password, and press **Check** — one
+  live login whose verdict lands inline by the button. Checking saves the
+  password to your **login keychain** (macOS may ask once to allow it —
+  and again after the app itself changes); usernames stay in preferences,
+  passwords never do. With both services on, a picker chooses which is
+  asked first — HamQTH by default, since it is free and full while a QRZ
+  account without the XML subscription returns limited fields.
+- **Frugal by design.** A call is looked up only once it looks like one
+  (three characters with a digit), after your typing pauses, and every
+  answer is cached for a month — so a free tier's daily allowance is spent
+  on new calls, never on repeats. QRZ's own session rules are followed to
+  the letter (one login, key reused; their 24-hour refusal is honored with
+  a day of silence); HamQTH's hour-long session renews itself.
+- **Offline, nothing happens** — the line simply does not appear, and
+  logging is never delayed or blocked by a lookup in flight.
+
+The cache lives in `~/Library/Application Support/QSOPartyLogger/Callbook/`.
+Both services' interface contracts are quoted verbatim in
+[`docs/research/callbook/SOURCES.md`](docs/research/callbook/SOURCES.md).
+
 ## Adding a party without writing code
 
 Drop a JSON file in `~/Library/Application Support/QSOPartyLogger/Parties/`.
@@ -1120,7 +1152,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3159 unit tests**, none of which need hardware, a network or a microphone —
+**3190 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a

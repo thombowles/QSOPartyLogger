@@ -2,6 +2,17 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+**Status (2026-08-25):** executed through Task 6 on branch `callbook`,
+inline. Suite: 3190 tests, 2 skipped (the opt-in recorders), 0 failures.
+Deviations: (1) the URL builders use a strict manual query encoder
+(`CallbookQuery`, unreserved characters only) rather than `URLComponents`,
+which leaves `/` and `;` query-legal while QRZ's separators are exactly
+those — the plan anticipated this fork and the tests pin it; (2) Task 2's
+cache was written test-and-implementation together (its red would have been
+a compile failure; noted for honesty); (3) the settings pane gained a
+footer sentence about keychain saves and the monthly cache — copy, not
+behavior. Everything else landed as written.
+
 **Goal:** QRZ.com and HamQTH.com callsign lookup — an advisory info line by
 the call field in every log, and name/state/grid/QTH stamped into POTA-log
 QSOs — with credentials in the Keychain and both services driven by their
