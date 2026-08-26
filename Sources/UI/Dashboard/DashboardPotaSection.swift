@@ -68,19 +68,16 @@ struct DashboardPotaSection: View {
                 let status = day.valid
                     ? "✓ activated"
                     : "\(day.unique)/\(PotaStats.validationTarget) unique"
-                return "\(day.park) · \(DashboardPotaSection.utcDay.string(from: day.day)) — \(status)"
+                return "\(day.park) · \(day.day.formatted(DashboardPotaSection.utcDay)) — \(status)"
             }.joined(separator: "\n")
         }
     }
 
     /// Park-days are UTC facts, like every contest time in the app.
-    static let utcDay: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "MMM d"
-        f.timeZone = TimeZone(identifier: "UTC")
-        f.locale = Locale(identifier: "en_US_POSIX")
-        return f
-    }()
+    nonisolated static let utcDay = Date.FormatStyle(
+        locale: Locale(identifier: "en_US_POSIX"),
+        timeZone: TimeZone(identifier: "UTC")!
+    ).month(.abbreviated).day()
 
     private var rows: [PotaRow] {
         model.potaSeason.outings.map {
@@ -171,7 +168,7 @@ struct DashboardPotaSection: View {
 
     /// The Activation cell: hunting, one park-day against POTA's ten, or
     /// how many of a rove's park-days made it.
-    static func activationLabel(valid: Int, total: Int, unique: Int?) -> String {
+    nonisolated static func activationLabel(valid: Int, total: Int, unique: Int?) -> String {
         guard total > 0 else { return "hunting" }
         if total == 1, let unique {
             return valid == 1

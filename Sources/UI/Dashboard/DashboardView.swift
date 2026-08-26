@@ -6,6 +6,24 @@ import SwiftUI
 /// which are the history.
 struct DashboardView: View {
     @State private var model = DashboardModel()
+    /// Hidden widgets, stored as the pure type's raw string — one pref for
+    /// every dashboard window, so the layout composed once holds.
+    @AppStorage("dashboardHiddenWidgets") private var hiddenWidgetsRaw = ""
+
+    private var visibility: DashboardWidgetVisibility {
+        DashboardWidgetVisibility(rawValue: hiddenWidgetsRaw)
+    }
+
+    private func showsBinding(_ widget: DashboardWidget) -> Binding<Bool> {
+        Binding(
+            get: { visibility.shows(widget) },
+            set: { _ in
+                var toggled = visibility
+                toggled.toggle(widget)
+                hiddenWidgetsRaw = toggled.rawValue
+            }
+        )
+    }
 
     var body: some View {
         Group {
@@ -31,17 +49,24 @@ struct DashboardView: View {
     private var content: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                summaryCards
-                potaCards
-                if let standing = model.standing {
+                if visibility.shows(.seasonCards) { summaryCards }
+                if visibility.shows(.potaCards) { potaCards }
+                if visibility.shows(.challenge), let standing = model.standing {
                     DashboardChallengeSection(
                         standing: standing,
                         includesSplitEntry: model.standingIncludesSplitEntry
                     )
                 }
-                DashboardContestsSection(model: model)
-                DashboardPotaSection(model: model)
-                DashboardUpcomingSection(model: model)
+                if visibility.shows(.contests) { DashboardContestsSection(model: model) }
+                if visibility.shows(.pota) { DashboardPotaSection(model: model) }
+                if visibility.shows(.upcoming) { DashboardUpcomingSection(model: model) }
+                if visibility.allHidden {
+                    Label(
+                        "Every widget is hidden — the toolbar Widgets menu (or ⌘1–⌘6) brings them back.",
+                        systemImage: "rectangle.grid.1x2"
+                    )
+                    .foregroundStyle(.secondary)
+                }
                 footer
             }
             .padding(20)
@@ -82,6 +107,17 @@ struct DashboardView: View {
             .shortcutHint("⌘]")
 
             Spacer()
+
+            Menu {
+                ForEach(DashboardWidget.allCases) { widget in
+                    Toggle(widget.title, isOn: showsBinding(widget))
+                        .keyboardShortcut(KeyEquivalent(widget.shortcutKey), modifiers: .command)
+                }
+            } label: {
+                Label("Widgets", systemImage: "rectangle.grid.1x2")
+            }
+            .help("Show or hide dashboard widgets — compose the dashboard you want (⌘1–⌘6)")
+            .shortcutHint("⌘1–6")
 
             Button {
                 model.revealLogsFolder()

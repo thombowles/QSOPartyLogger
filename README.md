@@ -151,7 +151,9 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY, change band, change mode |
 
 In the Contest Dashboard (**⌘⇧D**): `⌘[` / `⌘]` change year, `⌘R` re-reads the
-logs folder, `Return` opens that contest's log, and `⌘E` / `⇧⌘E` export it.
+logs folder, `Return` opens the selected contest's or POTA outing's log,
+`⌘E` / `⇧⌘E` export a contest's log, and `⌘1`–`⌘6` show/hide each widget
+(also the toolbar Widgets menu) so the dashboard shows exactly what you want.
 
 While repeat-CQ is running, **any key but a shortcut does what `Esc` does**: the
 loop pauses and the CQ on the air comes down mid-character, so the moment you
@@ -885,6 +887,9 @@ The cached file lives in `~/Library/Application Support/QSOPartyLogger/SCP/`.
   with its parks, QSOs, activation validity (hover for every park-day),
   P2P, states, DX and time. Return or double-click opens the outing's log;
   the per-park POTA submission files are exported from the open log (⌥⌘E).
+- **Compose your dashboard** — every widget (season cards, POTA cards, SQP
+  Challenge, contests, POTA history, upcoming) shows or hides from the
+  toolbar Widgets menu or `⌘1`–`⌘6`, and the choice is remembered.
 - **State QSO Party Challenge tracker** — your estimated standing by the
   sponsor's formula (total QSOs × parties entered), with the ≥2-QSO floor and
   the Bronze-to-Diamond ladder. A combined May entry counts as the four contests
@@ -1190,7 +1195,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3217 unit tests**, none of which need hardware, a network or a microphone —
+**3239 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a

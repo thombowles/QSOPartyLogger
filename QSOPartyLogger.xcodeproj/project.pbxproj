@@ -214,6 +214,7 @@
 		6261B20CDE53A00728957692 /* PotaFieldsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524D7FF55EAF99B8A2E57D75 /* PotaFieldsTests.swift */; };
 		62EAF9049A238A064611FDEE /* BandMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF27EC7CAEAE6E71B85FD5E9 /* BandMap.swift */; };
 		632A6829B0960843CC01F4B4 /* PartyCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC93A1E242A717DBE94BB40 /* PartyCatalogTests.swift */; };
+		6355451C03A7F20C8D4FE6EE /* DashboardWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF451982097DB70E21A4A6D /* DashboardWidgets.swift */; };
 		63A4B2876E3DDFD03B783BAB /* VermontQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28981F0AB9338C01CB01D910 /* VermontQSOPartyTests.swift */; };
 		643A9A1349642B8EE6ECBCEC /* naqpcw-name.log in Resources */ = {isa = PBXBuildFile; fileRef = 14116D3F394DCD62B4801DDD /* naqpcw-name.log */; };
 		6525B803608BD20967CA6E54 /* HubSpotLifetimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA8F0CE885ABA98BA247459 /* HubSpotLifetimeTests.swift */; };
@@ -292,6 +293,7 @@
 		90DAE79AC35B65DAAA867D13 /* PotaSpotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C863BBF18FD8954F42F9CBEE /* PotaSpotTests.swift */; };
 		91DA1EA18F0FDE9613ED6B68 /* RadioRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F435A4BFCDEA86D0D8F785C4 /* RadioRegistry.swift */; };
 		91E29909EA0D6171547CAB2D /* MultiplierClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861DB04574AAEACF21FD47A6 /* MultiplierClass.swift */; };
+		91EE03774131C43BF0A89810 /* DashboardWidgetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90271904CB1B7B918B0F0C30 /* DashboardWidgetsTests.swift */; };
 		92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009080AA1C81D0A7D94FA410 /* ModeClass.swift */; };
 		935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A13C34B4765F4AE9FB37456 /* PotaParkClientTests.swift */; };
 		943FE69A83BEC05A8731A5E9 /* ContestLogShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0011E6F647259AD324816CFB /* ContestLogShapeTests.swift */; };
@@ -734,6 +736,7 @@
 		5C2BAF28C33E175242E46CCF /* OklahomaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OklahomaQSOPartyTests.swift; sourceTree = "<group>"; };
 		5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryBar.swift; sourceTree = "<group>"; };
 		5EEF467249C2C6AB91F4EF7D /* QSOPartyLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QSOPartyLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EF451982097DB70E21A4A6D /* DashboardWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardWidgets.swift; sourceTree = "<group>"; };
 		5F01ACCE3E8BBB30BB6AFFB0 /* EditQSOSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditQSOSheet.swift; sourceTree = "<group>"; };
 		5F27BD78F3C7802DAFEB05AE /* DashboardModelExportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardModelExportTests.swift; sourceTree = "<group>"; };
 		5F8A0D8EDD44C17364359A07 /* SCPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCPClientTests.swift; sourceTree = "<group>"; };
@@ -823,6 +826,7 @@
 		8DB06A54AB9ED4AF93B2C146 /* VoiceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceStore.swift; sourceTree = "<group>"; };
 		8E91F46A9B0E33BC6E1FC0F5 /* HubPollPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubPollPolicy.swift; sourceTree = "<group>"; };
 		8FF9844719A87DDAFF307168 /* OperatingTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatingTime.swift; sourceTree = "<group>"; };
+		90271904CB1B7B918B0F0C30 /* DashboardWidgetsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardWidgetsTests.swift; sourceTree = "<group>"; };
 		909A650EB49961812900CFD5 /* HubSelfSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSelfSpot.swift; sourceTree = "<group>"; };
 		90D56FC1028278EEC43767DE /* PotaParkDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkDirectory.swift; sourceTree = "<group>"; };
 		9183D3107E206A940C2DCDCB /* HubSpotSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotSourceTests.swift; sourceTree = "<group>"; };
@@ -1068,6 +1072,7 @@
 				5749F1C4795C57BBD737921D /* DashboardPotaSection.swift */,
 				FAEEA567ED7931AA58B6885D /* DashboardUpcomingSection.swift */,
 				48CB91F21E07017D2A0967CF /* DashboardView.swift */,
+				5EF451982097DB70E21A4A6D /* DashboardWidgets.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -1162,6 +1167,7 @@
 				CF967F6F4FA8B5D87F123A2C /* ContestNoticeTests.swift */,
 				4DFBB554A5050EEC235AC9E7 /* DashboardExportRowTests.swift */,
 				B66F2696A258C16403F99824 /* DashboardPotaRowTests.swift */,
+				90271904CB1B7B918B0F0C30 /* DashboardWidgetsTests.swift */,
 				D07925E31BA0FCA7B24DF428 /* EntryLayoutTests.swift */,
 				71632B8792B4599E3B28478F /* LogTablePointsTests.swift */,
 				56505B17DC3D52012E600A1F /* PotaPickerBehaviorTests.swift */,
@@ -2093,6 +2099,7 @@
 				42608E9D1104E7C05943F95E /* DashboardModelExportTests.swift in Sources */,
 				C8D75CDEDA03D6C333F7F36C /* DashboardModelTests.swift in Sources */,
 				AEB7904A22533EFAB1CB77ED /* DashboardPotaRowTests.swift in Sources */,
+				91EE03774131C43BF0A89810 /* DashboardWidgetsTests.swift in Sources */,
 				241A9D98907398CD1DFD522A /* DelawareQSOPartyTests.swift in Sources */,
 				5EDE438D7051A8CDFAE8BF14 /* DesignatedCountyScoringTests.swift in Sources */,
 				3BE9C47F0CF9E0AC8134E7FD /* DupeCheckerTests.swift in Sources */,
@@ -2347,6 +2354,7 @@
 				1DE8400897440B2CC96380F5 /* DashboardPotaSection.swift in Sources */,
 				2972D77BFB792F27EE319AAD /* DashboardUpcomingSection.swift in Sources */,
 				4711366A73C9961DC8B7BD13 /* DashboardView.swift in Sources */,
+				6355451C03A7F20C8D4FE6EE /* DashboardWidgets.swift in Sources */,
 				87DFF3866AB92FA4A0F51166 /* DupeChecker.swift in Sources */,
 				FBD66968904E12B522405DA0 /* ESM.swift in Sources */,
 				F2BE6B5E0868F72361011DCF /* EditQSOSheet.swift in Sources */,
