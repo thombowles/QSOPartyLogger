@@ -89,6 +89,13 @@ final class EntryFlow {
     /// stamp, and only when it matches the call being logged.
     var callbookRecord: CallbookRecord?
 
+    /// The park the POTA board currently shows a call activating from, if
+    /// any — the window wires this to the spot store. An activator hunting
+    /// me brings his park along with his call (operator report 2,
+    /// 2026-08-25). A closure, not a spot list: the flow stays blind to the
+    /// band map and the tests state the board in one line.
+    @ObservationIgnored var parkOnBoard: (String) -> String? = { _ in nil }
+
     /// The super check partial database, when the option is on and a
     /// MASTER.SCP is cached or downloaded. Nil (option off, nothing
     /// downloaded yet) empties its half of the strip immediately.
@@ -779,11 +786,19 @@ final class EntryFlow {
         // right now, and `clearForNextContact` is what resets it between
         // contacts. Above the party gate on purpose — a POTA log has no
         // party and hunts parks all day.
-        if !call.isEmpty, entry.theirParkTyped.isEmpty,
-           let previous = document.log.qsos.last(where: {
-               $0.call.uppercased() == call && $0.theirPotaRefs != nil
-           }) {
-            entry.theirParkTyped = (previous.theirPotaRefs ?? []).joined(separator: ",")
+        if !call.isEmpty, entry.theirParkTyped.isEmpty {
+            // The board first: it is the activator's own current claim,
+            // minute-fresh, and outranks the park he gave me hours ago —
+            // a rover's old row is exactly what must not come back. The
+            // own-log offer stands where the board says nothing. Typed
+            // text is never overwritten either way.
+            if let onBoard = parkOnBoard(call) {
+                entry.theirParkTyped = onBoard
+            } else if let previous = document.log.qsos.last(where: {
+                $0.call.uppercased() == call && $0.theirPotaRefs != nil
+            }) {
+                entry.theirParkTyped = (previous.theirPotaRefs ?? []).joined(separator: ",")
+            }
         }
 
         // His state does not change between bands, so a POTA log offers it

@@ -1045,6 +1045,37 @@ final class EntryFlowTests: XCTestCase {
         XCTAssertEqual(doc.log.qsos.first?.theirPotaRefs, ["US-2222"])
     }
 
+    func testHunterOnTheBoardBringsTheirParkAlong() throws {
+        // An activator hunting me is spotted on the POTA board; his park
+        // arrives with his call (operator report 2, 2026-08-25).
+        let (flow, _) = try potaFlow()
+        flow.parkOnBoard = { call in call == "W8EKM" ? "US-6653" : nil }
+        flow.entry.callTyped = "W8EKM"
+        flow.callChanged(context(esm: false, connected: false))
+        XCTAssertEqual(flow.entry.theirParkTyped, "US-6653")
+    }
+
+    func testBoardParkNeverOverwritesTypedTextAndOutranksTheOldLog() throws {
+        let (flow, doc) = try potaFlow()
+        let ctx = context(esm: false, connected: false)
+        // Logged him at US-1111 earlier; the board says he roved to US-2222.
+        flow.entry.callTyped = "W8EKM"
+        flow.entry.theirParkTyped = "US-1111"
+        guard case .logged = flow.logContact(ctx, undoManager: nil) else {
+            return XCTFail("first contact must log")
+        }
+        XCTAssertEqual(doc.log.qsos.first?.theirPotaRefs, ["US-1111"])
+        flow.parkOnBoard = { _ in "US-2222" }
+        flow.entry.callTyped = "W8EKM"
+        flow.callChanged(ctx)
+        XCTAssertEqual(flow.entry.theirParkTyped, "US-2222",
+                       "the board is his own current claim — fresher than my old row")
+        // Typed text is never overwritten, board or no board.
+        flow.entry.theirParkTyped = "US-9999"
+        flow.callChanged(ctx)
+        XCTAssertEqual(flow.entry.theirParkTyped, "US-9999")
+    }
+
     func testPotaTheirParkComesBackOnTheNextBand() throws {
         let (flow, _) = try potaFlow()
         let ctx = context(esm: false, connected: false)

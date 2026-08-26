@@ -1300,6 +1300,14 @@ struct MainView: View {
             for spot in spots { spotStore.add(spot) }
             if !spots.isEmpty { document.noteSpotsUsed() }
         }
+        // An activator hunting me is on the board; typing his call brings
+        // his park along (operator report 2, 2026-08-25). The store keeps
+        // only the current board — a row gone from the feed answers nil.
+        flow.parkOnBoard = { [weak spotStore] call in
+            spotStore?.all.last {
+                $0.source == .pota && $0.call == call.uppercased()
+            }?.park
+        }
         wireSpotDispatcher()
         syncHubSpotClient()
         syncPotaBoardClient()
