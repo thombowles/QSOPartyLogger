@@ -965,6 +965,45 @@ final class EntryFlowTests: XCTestCase {
         XCTAssertNil(flow.entry.dupeWarning)
     }
 
+    func testPotaLogStampsTheCallbookRecord() throws {
+        let (flow, doc) = try potaFlow()
+        flow.callbookRecord = CallbookRecord(
+            call: "W1AW", name: "Bob", qth: "Newington", state: "CT",
+            county: nil, grid: "FN31pr", country: nil, dxccID: nil,
+            source: .qrz, fetchedAt: Date())
+        flow.entry.callTyped = "W1AW"
+        guard case .logged = flow.logContact(context(esm: false, connected: false),
+                                             undoManager: nil) else {
+            return XCTFail("must log")
+        }
+        let stamp = try XCTUnwrap(doc.log.qsos.first?.callbook)
+        XCTAssertEqual(stamp.name, "Bob")
+        XCTAssertEqual(stamp.state, "CT")
+        XCTAssertEqual(stamp.source, "QRZ")
+    }
+
+    func testStampSkipsAMismatchedRecordAndPartyLogs() throws {
+        // A stale record for another call must not stamp.
+        let (flow, doc) = try potaFlow()
+        flow.callbookRecord = CallbookRecord(
+            call: "K9ZZZ", name: "Ann", qth: nil, state: nil, county: nil,
+            grid: nil, country: nil, dxccID: nil, source: .hamqth, fetchedAt: Date())
+        flow.entry.callTyped = "W1AW"
+        _ = flow.logContact(context(esm: false, connected: false), undoManager: nil)
+        XCTAssertNil(doc.log.qsos.first?.callbook)
+
+        // A party log never stamps — enrichFromCallbook is POTA-only
+        // (spec decision 4; the operator's own answer).
+        let partyDoc = cqpDocument()
+        let partyFlow = EntryFlow(document: partyDoc)
+        partyFlow.callbookRecord = CallbookRecord(
+            call: "W6ABC", name: "Cy", qth: nil, state: "CA", county: nil,
+            grid: nil, country: nil, dxccID: nil, source: .qrz, fetchedAt: Date())
+        readyToLog(partyFlow)
+        _ = partyFlow.logContact(context(esm: false), undoManager: nil)
+        XCTAssertNil(partyDoc.log.qsos.first?.callbook)
+    }
+
     func testPotaShorthandParkLogsExpanded() throws {
         let (flow, doc) = try potaFlow()
         flow.entry.callTyped = "W1AW"

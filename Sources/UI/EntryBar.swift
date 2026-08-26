@@ -16,6 +16,10 @@ struct EntryBar: View {
     /// A quiet caption under the park field — the parsed reference(s) and the
     /// park's name when the offline directory knows it. Nil hides the line.
     var parkCaption: String? = nil
+    /// The callbook's line for the call in the field — advisory garnish,
+    /// nil-hidden. It never fills any field (spec 2026-08-25 decision 4's
+    /// hard rule: the exchange is what was sent on the air).
+    var callbookCaption: String? = nil
     /// The colour of the ghost call — the band map's colour for the spot under
     /// the VFO — and what Space does when the empty call field shows one.
     /// Defaulted so a bar built without a band map (the caret tests) is the
@@ -91,6 +95,13 @@ struct EntryBar: View {
             // confirmation the reference points where the operator thinks.
             if let parkCaption {
                 Label(parkCaption, systemImage: "leaf")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+            // Who the callbook says this is — name, state, grid, how far.
+            // Advisory only; nothing here is ever written into a field.
+            if let callbookCaption {
+                Label(callbookCaption, systemImage: "person.text.rectangle")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }

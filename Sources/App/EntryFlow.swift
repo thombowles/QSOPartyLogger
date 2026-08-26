@@ -84,6 +84,11 @@ final class EntryFlow {
     /// Only read under `PhoneSource.recordings`.
     var voiceRecordings: [Int: VoiceAudio] = [:]
 
+    /// The callbook's current answer, pushed by the window (the client is
+    /// the window's; the flow only reads). Read at logging for the POTA
+    /// stamp, and only when it matches the call being logged.
+    var callbookRecord: CallbookRecord?
+
     /// The super check partial database, when the option is on and a
     /// MASTER.SCP is cached or downloaded. Nil (option off, nothing
     /// downloaded yet) empties its half of the strip immediately.
@@ -592,6 +597,16 @@ final class EntryFlow {
         // the record shows where the contact was actually made from — a
         // mid-outing rove affects later rows only.
         let myParks = document.log.myPotaRefs
+        // The callbook stamp (spec 2026-08-25 decisions 4–5): only where
+        // the contest asks, and only the record for this very call — a
+        // stale answer for the last station must never mark this one.
+        var stamp: QSO.CallbookStamp?
+        if standaloneContest?.enrichFromCallbook == true,
+           let known = callbookRecord, known.call == entry.callNormalized {
+            stamp = QSO.CallbookStamp(name: known.name, qth: known.qth,
+                                      state: known.state, grid: known.grid,
+                                      source: known.source.label)
+        }
         let row = QSO(
             call: entry.callNormalized,
             band: context.band,
@@ -604,7 +619,8 @@ final class EntryFlow {
                        ? context.modeClass.defaultRST : entry.rstRcvd],
             myPotaRefs: myParks.isEmpty ? nil : myParks,
             theirPotaRefs: theirParks.isEmpty ? nil : theirParks,
-            posture: document.log.operatingMode
+            posture: document.log.operatingMode,
+            callbook: stamp
         )
         document.append(qsos: [row], undoManager: undoManager)
         entry.pendingExchanges.removeValue(forKey: entry.callNormalized)

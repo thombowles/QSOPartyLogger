@@ -80,6 +80,18 @@ struct MainView: View {
     @State private var spaceWeatherClient = SpaceWeatherClient()
     @State private var scpClient = SCPClient()
     @State private var potaParkClient = PotaParkClient()
+    /// Callsign lookup (QRZ/HamQTH). The configuration closure reads the
+    /// live settings per lookup, so the pane's edits apply without a
+    /// restart — and nothing here touches `AppSettings.shared` until a
+    /// lookup actually runs.
+    @State private var callbookClient = CallbookClient(configuration: {
+        .init(qrzEnabled: AppSettings.shared.qrzEnabled,
+              qrzUsername: AppSettings.shared.qrzUsername,
+              hamqthEnabled: AppSettings.shared.hamqthEnabled,
+              hamqthUsername: AppSettings.shared.hamqthUsername,
+              primary: AppSettings.shared.callbookPrimary)
+    })
+    @State private var showLookupPopover = false
     @State private var potaSpotClient = PotaSpotClient()
     /// Fans one confirmed spot out to every ticked network and keeps the
     /// receipt. Its transports are wired in `onAppear`, once the clients
@@ -149,6 +161,18 @@ struct MainView: View {
     /// spec says so — POTA's says not (`cabrillo.submittable`).
     private var cabrilloOffered: Bool {
         party != nil || (flow.standaloneContest?.cabrillo.submittable ?? false)
+    }
+
+    /// The callbook's quiet line for the call in the field — only while the
+    /// published record is for exactly that call, so a half-edited call
+    /// never wears the last station's name.
+    private var callbookCaption: String? {
+        guard let known = callbookClient.record,
+              !entry.call.isEmpty,
+              known.call == entry.callNormalized else { return nil }
+        guard let line = CallbookCaption.line(
+            for: known, stationGrid: document.log.station.gridLocator) else { return nil }
+        return "\(line) — \(known.source.label)"
     }
 
     /// The one place the view describes "right now" to the flow. Built in a
@@ -513,12 +537,19 @@ struct MainView: View {
 
             EntryBar(entry: entry, party: party, layout: entryLayout,
                      parkCaption: parkCaption,
+                     callbookCaption: callbookCaption,
                      callFrameColor: callFrameColor, onTakeCallFrame: takeCallFrame,
                      onLog: returnPressed, focus: $focusedField)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .onChange(of: entry.exchange) { revalidate() }
-                .onChange(of: entry.call) { flow.callChanged(operatingContext) }
+                .onChange(of: entry.call) {
+                    flow.callChanged(operatingContext)
+                    callbookClient.noteCallChanged(entry.call)
+                }
+                .onChange(of: callbookClient.record) {
+                    flow.callbookRecord = callbookClient.record
+                }
                 // The member element can decide the NEW MULT badge (a party
                 // may count the worked station itself), so it revalidates
                 // like the exchange rather than only gating the log.
@@ -964,6 +995,16 @@ struct MainView: View {
             .help("DX cluster connection for spots — click a spot to tune, ⌘↑ / ⌘↓ to step")
             .popover(isPresented: $showClusterPopover) {
                 clusterPopover
+            }
+
+            Button {
+                showLookupPopover.toggle()
+            } label: {
+                Label("Lookup", systemImage: "person.text.rectangle")
+            }
+            .help("Callsign lookup — QRZ and HamQTH credentials. Advisory only; a lookup never fills an exchange field")
+            .popover(isPresented: $showLookupPopover) {
+                CallbookSettingsPane(client: callbookClient)
             }
 
             Menu {
