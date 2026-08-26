@@ -244,6 +244,7 @@
 		75B4B677B2E8E0D1B4F0795D /* AdifExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A779F556F857265114F40CB4 /* AdifExporter.swift */; };
 		77C26EE87D82A2EBF557EFDE /* SpotSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFA325FEB27F5D7ED9C236E /* SpotSheet.swift */; };
 		7820E065122DA7959EF0D0DC /* RateColumnTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC11ED4933513B0D723E776E /* RateColumnTests.swift */; };
+		794CE2922D49CD1E01F748F9 /* CallbookCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE71E311A143F24A7B59DFAB /* CallbookCache.swift */; };
 		798F6A8BFA533CDE10FB3072 /* VoiceSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4295E1FE334FF3C8606B090 /* VoiceSettingsTests.swift */; };
 		7AE3D4F81276D6F42E895941 /* MultiplierRosterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AACC54DA31CF56398BD99B6 /* MultiplierRosterTests.swift */; };
 		7AFC46B00E954C466FB322F6 /* ClusterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F09518732D969C418274DB /* ClusterProtocol.swift */; };
@@ -347,6 +348,7 @@
 		B1D00F1C5357D0F96BD9160A /* MultiplierFloorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E59AE5F347D2C4F33144EA3 /* MultiplierFloorTests.swift */; };
 		B2061CF1D208ED36F005B869 /* VoicePlayerSequenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF43DDFA3090F565A8328AF /* VoicePlayerSequenceTests.swift */; };
 		B331E68905D18A8BC2D62682 /* CatalogConsistencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7BD3A749CC81C285D0CA38 /* CatalogConsistencyTests.swift */; };
+		B3D358F0125674AB822C92A1 /* CallbookCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1820C002B02488FF8A709D87 /* CallbookCacheTests.swift */; };
 		B415EA0CA6216FB04DD8BEF2 /* ksqp-inside-county-line.adi in Resources */ = {isa = PBXBuildFile; fileRef = 18DEEF3FCF190F9F5650878E /* ksqp-inside-county-line.adi */; };
 		B465CCF2CC896B496165BEE0 /* NewJerseyQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E346D3641AA9C7153747275 /* NewJerseyQSOPartyTests.swift */; };
 		B518E5100263F27EB5EE9A8A /* VoiceStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0114485946B808B02EBF704A /* VoiceStoreTests.swift */; };
@@ -567,6 +569,7 @@
 		165BB73EC031F18935DFBE8B /* OneByOneTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneByOneTrackerTests.swift; sourceTree = "<group>"; };
 		16C804DC994EBCD81FCA5E94 /* FOBBRosterParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FOBBRosterParser.swift; sourceTree = "<group>"; };
 		17C9CCE3682DD1DBEC9CD5F3 /* SpotExchangePrefillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotExchangePrefillTests.swift; sourceTree = "<group>"; };
+		1820C002B02488FF8A709D87 /* CallbookCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbookCacheTests.swift; sourceTree = "<group>"; };
 		1897E0B91EAB87E646FB5A8F /* NAQPCW-004.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "NAQPCW-004.txt"; sourceTree = "<group>"; };
 		18DEEF3FCF190F9F5650878E /* ksqp-inside-county-line.adi */ = {isa = PBXFileReference; path = "ksqp-inside-county-line.adi"; sourceTree = "<group>"; };
 		18FD9BC7F74A79F7798C7DD3 /* ElecraftSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElecraftSession.swift; sourceTree = "<group>"; };
@@ -917,6 +920,7 @@
 		CCE7AD7E3989A66634D0BF7A /* RateMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateMeter.swift; sourceTree = "<group>"; };
 		CD0D74F754FD20FDF7B880B7 /* MemberMultiplierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberMultiplierTests.swift; sourceTree = "<group>"; };
 		CDFB83A71484799D6871283B /* DXCC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DXCC; path = Resources/DXCC; sourceTree = SOURCE_ROOT; };
+		CE71E311A143F24A7B59DFAB /* CallbookCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbookCache.swift; sourceTree = "<group>"; };
 		CF6D999640AF4FF7CB86AF56 /* VirginiaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirginiaQSOPartyTests.swift; sourceTree = "<group>"; };
 		CF967F6F4FA8B5D87F123A2C /* ContestNoticeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestNoticeTests.swift; sourceTree = "<group>"; };
 		D068E0A2C3FB191CED57DB7F /* PartyLoweringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyLoweringTests.swift; sourceTree = "<group>"; };
@@ -1206,6 +1210,7 @@
 				AE5F6712BC73D5A2329376A0 /* CabrilloExporterTests.swift */,
 				715DC2AC0C0FD0301DA7FF0B /* CaliforniaQSOPartyTests.swift */,
 				CBC49C26B1FFD6EC5D00830A /* CallAreaSumBonusTests.swift */,
+				1820C002B02488FF8A709D87 /* CallbookCacheTests.swift */,
 				82D4BBDB6DEC6C2ABE2C3B87 /* CallbookParserTests.swift */,
 				E9F8E0DD4DFDC0CB0DF3FEF1 /* CallHistoryFileTests.swift */,
 				A69FC9A0E6956A1F2C208BF1 /* CallHistoryPageParserTests.swift */,
@@ -1683,6 +1688,7 @@
 		D88D26069DC674FFFE2ABE88 /* Lookup */ = {
 			isa = PBXGroup;
 			children = (
+				CE71E311A143F24A7B59DFAB /* CallbookCache.swift */,
 				1EB01E6C0EA808C9BE6E90B1 /* CallbookRecord.swift */,
 				2C7D5CA56E9D119C749DA253 /* CallbookXMLScanner.swift */,
 				DB2B1C39FF387014B80984B2 /* HamQTHXML.swift */,
@@ -2007,6 +2013,7 @@
 				01AE0F21DE7C831820358813 /* CallHistoryPrefillTests.swift in Sources */,
 				08BD9CE48CBF7881C0DA923D /* CallHistorySourceTests.swift in Sources */,
 				C58A052DB7DBAC19355917EA /* CallHistoryStoreTests.swift in Sources */,
+				B3D358F0125674AB822C92A1 /* CallbookCacheTests.swift in Sources */,
 				4B497C5BF5CCE7E985E25D77 /* CallbookParserTests.swift in Sources */,
 				B331E68905D18A8BC2D62682 /* CatalogConsistencyTests.swift in Sources */,
 				7BE97A35880D3C0C58FBF1FC /* CaveatRosterTests.swift in Sources */,
@@ -2253,6 +2260,7 @@
 				E9F0CB45033CD44A319ACFF5 /* CallHistoryPageParser.swift in Sources */,
 				75835577A060303BE0873F18 /* CallHistorySource.swift in Sources */,
 				29E760668224CDB72431795C /* CallHistoryStore.swift in Sources */,
+				794CE2922D49CD1E01F748F9 /* CallbookCache.swift in Sources */,
 				0FF24307A10D7C37E3D3816C /* CallbookRecord.swift in Sources */,
 				0F51821FD184AB0A521E3816 /* CallbookXMLScanner.swift in Sources */,
 				654D25391076282E66654B42 /* ChallengeCalendar.swift in Sources */,
