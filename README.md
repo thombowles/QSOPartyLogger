@@ -990,13 +990,19 @@ knows including WARC and 60 m, and one log kind serves both directions:
 set your park(s) and it is an activation; leave them empty and it is a
 hunter log. Either way the P2P field is always in the row.
 
-- **The row is POTA-shaped.** Call, the RSTs, and **P2P park(s)** — no
-  county field, because there is no exchange to parse. `Space` cycles call →
-  park → call (Tab still walks the reports), and the Log button needs only a
-  call. Type a bare park number — `2518` — and it logs as `US-2518`; a quiet
-  caption under the field names the park from the offline directory as
-  confirmation, and a P2P park a station gave you earlier is offered back
-  when they call again on the next band.
+- **The row is POTA-shaped.** Call, the RSTs, **P2P park(s)**, **State**,
+  and **Notes** — no county field, because there is no exchange to parse.
+  `Space` cycles call → park → state → call ("59 Missouri" is the usual
+  POTA exchange; Notes is Tab-only, and keeps your own case), and the Log
+  button needs only a call. Type a bare park number — `2518` — and it logs
+  as `US-2518`; a quiet caption under the field names the park from the
+  offline directory as confirmation. A station's park and state are
+  offered back when they call again on the next band — and **an activator
+  hunting you brings his park along**: if the call you type is on the POTA
+  board right now, the board's park fills the empty P2P field, fresher
+  than any row from hours ago. State and Notes get their own columns in
+  the POTA log table, are editable per row, and export as ADIF `STATE`
+  (your copy outranking the callbook's) and `COMMENT`.
 - **Dupes follow POTA's clock, not a contest's.** The same station counts
   again on each band, in each mode, on each new UTC day, and from each new
   park when you rove — the warning line and the engine key identically, and
@@ -1006,7 +1012,9 @@ hunter log. Either way the P2P field is always in the row.
   **POTA panel**: a meter per park toward the ten QSOs that validate an
   activation (unique call × band × mode this UTC day — POTA does not
   publish whether duplicates count, so the meter under-promises), the P2P
-  tally, and a countdown when UTC midnight is under two hours away.
+  tally, the outing's **states · DX** spread (from the State field, the
+  callbook, and the calls via CTY), and a countdown when UTC midnight is
+  under two hours away.
 - **Export writes what POTA's uploader wants.** **⌥⌘E** (or Export › For
   POTA) writes **one ADIF per park**, named the way their submission page
   recommends — `KE5CW@US-1234-20260825.adi`, multi-state parks appending
@@ -1162,7 +1170,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3199 unit tests**, none of which need hardware, a network or a microphone —
+**3211 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a
