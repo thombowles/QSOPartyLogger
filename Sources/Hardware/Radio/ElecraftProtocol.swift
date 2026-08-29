@@ -118,10 +118,18 @@ enum ElecraftProtocol {
         return K3Mode(rawValue: Array(response)[2])
     }
 
-    /// `KSnnn;` → WPM.
+    /// `KSnnn;` → WPM. "nnn is 008-050 (8-50 WPM)" (Pgmrs Ref G5), so a
+    /// reading outside that range is not the radio speaking — it is line
+    /// noise, and RF on the serial cable during a transmission is the classic
+    /// source. It is rejected here rather than clamped: clamping is how a
+    /// flipped bit ("KS015;" → "KS815;") became a real 50 WPM on the front
+    /// panel, because the app adopted the reading and wrote it back through
+    /// `cmdSetKeyerSpeed`'s clamp. The next poll is half a second away.
     static func parseKS(_ response: String) -> Int? {
-        guard response.hasPrefix("KS"), response.count >= 5 else { return nil }
-        return Int(String(Array(response)[2..<5]))
+        guard response.hasPrefix("KS"), response.count >= 5,
+              let wpm = Int(String(Array(response)[2..<5])),
+              (8...50).contains(wpm) else { return nil }
+        return wpm
     }
 
     /// `OM` — installed option modules, and on the KX models a product

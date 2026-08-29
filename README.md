@@ -1197,7 +1197,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3247 unit tests**, none of which need hardware, a network or a microphone —
+**3248 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a

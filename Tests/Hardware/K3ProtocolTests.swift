@@ -120,6 +120,22 @@ final class K3ProtocolTests: XCTestCase {
         XCTAssertNil(ElecraftProtocol.parseFA("FA;"))
     }
 
+    /// `KS` "nnn is 008-050 (8-50 WPM)" (Pgmrs Ref G5) — a reading outside
+    /// that range is not the radio speaking, it is line noise, and RF on the
+    /// serial line during a transmission is the classic source. Believing one
+    /// is what sent the speed sync to its 8/50 clamp rails mid-message
+    /// (2026-08-29): a single flipped bit turns "KS015;" into "KS815;", the
+    /// app adopts 815, and the write-back clamps it to 50 on the radio's
+    /// front panel while the message on the air jumps with it.
+    func testParseKSRejectsSpeedsTheRadioCannotReport() {
+        XCTAssertEqual(ElecraftProtocol.parseKS("KS008;"), 8)
+        XCTAssertEqual(ElecraftProtocol.parseKS("KS050;"), 50)
+        XCTAssertNil(ElecraftProtocol.parseKS("KS815;"))
+        XCTAssertNil(ElecraftProtocol.parseKS("KS005;"))
+        XCTAssertNil(ElecraftProtocol.parseKS("KS000;"))
+        XCTAssertNil(ElecraftProtocol.parseKS("KS999;"))
+    }
+
     func testCommandBuilders() {
         XCTAssertEqual(ElecraftProtocol.cmdSetFrequency(hz: 14_042_000), "FA00014042000;")
         XCTAssertEqual(ElecraftProtocol.cmdSetKeyerSpeed(wpm: 28), "KS028;")
