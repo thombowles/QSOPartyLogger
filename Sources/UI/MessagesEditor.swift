@@ -9,7 +9,14 @@ struct MessagesEditor: View {
     let document: LogDocument
     @Bindable var settings: AppSettings
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.undoManager) private var undoManager
+    /// The document window's undo manager, passed in by the presenter — never
+    /// read from this sheet's own environment. A macOS sheet's
+    /// `@Environment(\.undoManager)` is not the document window's, so an undo
+    /// registered against it never reaches the document's change count:
+    /// Save "took" on screen, the document never learned it was dirty, and
+    /// closing the log threw the edit away (2026-08-29, the KSQP CQ message
+    /// reverting to the default).
+    let undoManager: UndoManager?
 
     @State private var editMode: OperatingMode = .run
     @State private var editClass: ModeClass
@@ -42,7 +49,8 @@ struct MessagesEditor: View {
     @FocusState private var focusedSlot: Int?
 
     init(document: LogDocument, settings: AppSettings, voiceStatus: VoiceKeyerStatus, voiceBank: Int?,
-         voiceStore: VoiceStore, radio: RadioController, onPlayToRadio: @escaping (Int) -> Void,
+         voiceStore: VoiceStore, radio: RadioController, undoManager: UndoManager?,
+         onPlayToRadio: @escaping (Int) -> Void,
          initialClass: ModeClass = .cw, initialSlot: Int? = nil) {
         self.document = document
         self.settings = settings
@@ -50,6 +58,7 @@ struct MessagesEditor: View {
         self.voiceBank = voiceBank
         self.voiceStore = voiceStore
         self.radio = radio
+        self.undoManager = undoManager
         self.onPlayToRadio = onPlayToRadio
         self.initialSlot = initialSlot
         _editClass = State(initialValue: initialClass)

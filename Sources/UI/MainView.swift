@@ -286,12 +286,14 @@ struct MainView: View {
             .sheet(isPresented: $showSetup) {
                 SetupSheet(document: document, callHistory: callHistoryClient,
                            scp: scpClient, parks: potaParkClient,
-                           locationProvider: locationProvider)
+                           locationProvider: locationProvider,
+                           undoManager: undoManager)
             }
             .sheet(isPresented: $showMessagesEditor) {
                 MessagesEditor(document: document, settings: settings,
                                voiceStatus: radio.voiceStatus, voiceBank: radio.voiceBank,
                                voiceStore: voiceStore, radio: radio,
+                               undoManager: undoManager,
                                onPlayToRadio: playRecordingToRadio,
                                initialClass: messagesEditorClass,
                                initialSlot: messagesEditorSlot)

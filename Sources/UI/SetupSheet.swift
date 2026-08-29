@@ -19,7 +19,10 @@ struct SetupSheet: View {
     /// an entirely different type.
     var locationProvider: (any LocationProviding)? = nil
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.undoManager) private var undoManager
+    /// The document window's undo manager, passed in by the presenter — never
+    /// read from this sheet's own environment, which is not the window's and
+    /// silently drops the dirty mark (see `MessagesEditor.undoManager`).
+    let undoManager: UndoManager?
 
     @State private var settings = AppSettings.shared
 
