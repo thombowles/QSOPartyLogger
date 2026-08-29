@@ -81,6 +81,37 @@ Quoted verbatim from the page:
 
 On these bands the app leaves the mode alone.
 
+## Source 4 — sideband convention (which sideband "SSB" means)
+
+Read 2026-08-29. Authority for `BandPlan.sidebandRawMode(atKHz:)`.
+
+**IARU Region 2 Band Plan, September 2020**
+(<https://www.iaru-r2.org/wp-content/uploads/2020/02/IARU-Region-2-Band-plan.pdf>),
+Definitions, page 4, quoted verbatim:
+
+> **Upper Sideband (USB) and Lower Sideband (LSB):** For SSB phone operations
+> below 10 MHz use lower sideband (LSB); above 10 MHz use upper sideband
+> (USB). Exception: On 60 m band (5.3 MHz) the best practice is to use upper
+> sideband (USB).
+
+That one sentence is the whole rule, 60 m exception included. The 60 m
+exception is also US regulation, stated in engineering terms:
+
+- **47 CFR §97.303(h)(3)** (<https://www.law.cornell.edu/cfr/text/47/97.303>,
+  read 2026-08-29): phone on the discrete channels is emission designator
+  2K80J3E, and operators *"may set the carrier frequency 1.5 kHz below the
+  center frequency"* — a suppressed carrier below the occupied bandwidth,
+  which is an upper-sideband carrier.
+- **ARRL 60 Meter FAQ** (<https://www.arrl.org/60-meter-faq>, read
+  2026-08-29): *"Effective March 5, 2012 the FCC has permitted CW, USB, and
+  certain digital modes on the channelized segment of 60m"*, and the channel
+  center is *"1.5 kHz above the suppressed carrier frequency of a transceiver
+  operated in the Upper Sideband (USB) mode."*
+
+The ARRL band plan page (Source 3) and the R2 plan's band tables say nothing
+about sideband choice; the R2 Definitions entry above is the only place any of
+the banked sources states the convention outright.
+
 ## Behaviour reference — N1MM Logger+
 
 Read 2026-07-25.

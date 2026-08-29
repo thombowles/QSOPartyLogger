@@ -86,9 +86,24 @@ enum BandPlan {
         return target
     }
 
+    /// The sideband "SSB" means at a frequency — the raw mode a driver is
+    /// actually sent. IARU Region 2 Band Plan (September 2020), Definitions:
+    /// "For SSB phone operations below 10 MHz use lower sideband (LSB); above
+    /// 10 MHz use upper sideband (USB). Exception: On 60 m band (5.3 MHz) the
+    /// best practice is to use upper sideband (USB)." The 60 m exception is
+    /// US regulation besides — §97.303(h)(3) puts the phone carrier 1.5 kHz
+    /// below the channel center, an upper-sideband carrier. Quotes banked in
+    /// `docs/research/band_plan_sources.md` (Source 4).
+    static func sidebandRawMode(atKHz kHz: Double) -> String {
+        if Band.from(freqKHz: Int(kHz.rounded())) == .m60 { return "USB" }
+        return kHz < 10_000 ? "LSB" : "USB"
+    }
+
     /// The raw mode string the radio drivers and the manual mode picker both
-    /// understand. "SSB" rather than USB/LSB on purpose — the driver resolves
-    /// the sideband from the frequency it is already tuned to.
+    /// understand. "SSB" rather than USB/LSB on purpose — `RadioController`
+    /// resolves the sideband against the freshest frequency it knows,
+    /// commanded or polled (`resolvedRawMode`), and a driver falls back to
+    /// its own polled frequency if a bare "SSB" ever reaches it.
     static func rawMode(for mode: ModeClass) -> String? {
         switch mode {
         case .cw: "CW"

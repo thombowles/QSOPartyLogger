@@ -148,7 +148,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⌘A` | Select every row in the log (`⇧`-click for a range, `⌘`-click for scattered rows) |
 | `⌘.` | Dismiss the spots-already-used badge for this sitting |
 | `⌘/` | Shortcut hints on / off (also Help › Keyboard Shortcut Hints): every button wears its key, and a legend under the message buttons lists the keys that have no button, with a "last key" readout of what the app received |
-| `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY, change band, change mode |
+| `14025`, `7.040`, `40M`, `222`, `CW`, `SSB` in the call field | QSY, change band, change mode — `SSB` picks the band's conventional sideband (LSB below 10 MHz, USB above, USB on 60 m) |
 
 In the Contest Dashboard (**⌘⇧D**): `⌘[` / `⌘]` change year, `⌘R` re-reads the
 logs folder, `Return` opens the selected contest's or POTA outing's log,
@@ -693,9 +693,11 @@ a panadapter.
   off frequency. Twenty calls on one frequency show all twenty. Label size is
   adjustable S/M/L/XL for reading across the room.
 - **Band-plan-aware mode switching**: tune into the phone segment and the radio
-  goes to SSB, into the CW segment and it goes to CW. It only fires when *the
-  app* moves you, so your own VFO knob never changes mode mid-QSO. Crossovers
-  come from 47 CFR §97.305(c). Untick **Follow band plan on QSY** to disable.
+  goes to SSB — the band's conventional sideband, LSB below 10 MHz and USB
+  above, USB on 60 m (IARU Region 2 convention) — into the CW segment and it
+  goes to CW. It only fires when *the app* moves you, so your own VFO knob
+  never changes mode mid-QSO. Crossovers come from 47 CFR §97.305(c). Untick
+  **Follow band plan on QSY** to disable.
 - **CQ frequency memory**: sending F1 in Run mode remembers your run frequency;
   **⌘J** jumps back to it after an S&P excursion.
 - **Run and S&P follow the knob.** Tune more than the leave-Run distance off
@@ -1195,7 +1197,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3239 unit tests**, none of which need hardware, a network or a microphone —
+**3247 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a

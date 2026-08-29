@@ -512,22 +512,31 @@ final class RadioController {
     // MARK: Frequency / mode control (spots, typed QSY commands)
 
     func setFrequency(kHz: Double) {
-        driver?.setFrequency(hz: Int((kHz * 1000).rounded()))
+        guard let driver else { return }
+        let hz = Int((kHz * 1000).rounded())
+        lastCommandedHz = hz
+        lastCommandedAt = Date()
+        driver.setFrequency(hz: hz)
     }
 
     // MARK: VFO nudge (⇧⌘← / ⇧⌘→)
 
-    /// How long a nudge target outranks the polled frequency. Long enough for
-    /// a burst of presses, shorter than a deliberate turn of the knob.
+    /// How long a commanded target outranks the polled frequency. Long enough
+    /// for a burst of presses, shorter than a deliberate turn of the knob.
     static let nudgeWindow: TimeInterval = 1.5
 
-    private var lastNudgeTargetHz: Int?
-    private var lastNudgeIssuedAt: Date?
+    /// The last frequency this app commanded — a QSY, a spot click, or a
+    /// nudge — and when. Inside `nudgeWindow` it is the better answer to
+    /// "where is the radio": the poll lags by up to an interval, so a nudge
+    /// builds on it and an "SSB" resolves its sideband against it.
+    private var lastCommandedHz: Int?
+    private var lastCommandedAt: Date?
 
-    /// What a nudge is relative to. The polled frequency lags the radio by up
-    /// to a poll interval, so two quick presses computed from it would set the
-    /// same target twice and move once; a target issued within `nudgeWindow`
-    /// wins. Nil when there is nothing to nudge from at all.
+    /// What a nudge — or a mode resolution — is relative to. The polled
+    /// frequency lags the radio by up to a poll interval, so two quick
+    /// presses computed from it would set the same target twice and move
+    /// once; a target issued within `nudgeWindow` wins. Nil when there is
+    /// nothing to reckon from at all.
     static func nudgeBase(polledHz: Int?, lastTargetHz: Int?, lastIssuedAt: Date?, now: Date) -> Int? {
         if let lastTargetHz, let lastIssuedAt, now.timeIntervalSince(lastIssuedAt) < nudgeWindow {
             return lastTargetHz
@@ -541,18 +550,41 @@ final class RadioController {
     @discardableResult
     func nudgeFrequency(byHz hz: Int, now: Date = Date()) -> Int? {
         guard isConnected, let driver,
-              let base = Self.nudgeBase(polledHz: radioState?.frequencyHz, lastTargetHz: lastNudgeTargetHz,
-                                        lastIssuedAt: lastNudgeIssuedAt, now: now)
+              let base = Self.nudgeBase(polledHz: radioState?.frequencyHz, lastTargetHz: lastCommandedHz,
+                                        lastIssuedAt: lastCommandedAt, now: now)
         else { return nil }
         let target = max(0, base + hz)
-        lastNudgeTargetHz = target
-        lastNudgeIssuedAt = now
+        lastCommandedHz = target
+        lastCommandedAt = now
         driver.setFrequency(hz: target)
         return target
     }
 
+    /// "SSB" goes out as the conventional sideband for the frequency the
+    /// radio is about to be on; everything else goes out as asked.
     func setMode(rawMode: String) {
-        driver?.setMode(rawMode: rawMode)
+        driver?.setMode(rawMode: Self.resolvedRawMode(
+            rawMode, commandedHz: lastCommandedHz, commandedAt: lastCommandedAt,
+            polledHz: radioState?.frequencyHz, now: Date()))
+    }
+
+    /// The raw mode actually sent when the operator or the band plan asks for
+    /// "SSB": the conventional sideband (`BandPlan.sidebandRawMode`) for the
+    /// frequency the radio is *about* to be on. A target this app commanded
+    /// inside `nudgeWindow` outranks the polled frequency for the same reason
+    /// a nudge builds on one — the poll lags, and a QSY's mode command lands
+    /// right behind its FA on the same wire, when the poll still reads the
+    /// old band; that is exactly how a QSY to 40 m phone went out as USB.
+    /// With no frequency to resolve against at all, "SSB" passes through and
+    /// the driver's own fallback owns the guess. An explicit "USB"/"LSB" —
+    /// and every other mode — is the operator's word and is never rewritten.
+    static func resolvedRawMode(_ rawMode: String, commandedHz: Int?, commandedAt: Date?,
+                                polledHz: Int?, now: Date) -> String {
+        guard rawMode.uppercased() == "SSB",
+              let hz = nudgeBase(polledHz: polledHz, lastTargetHz: commandedHz,
+                                 lastIssuedAt: commandedAt, now: now)
+        else { return rawMode }
+        return BandPlan.sidebandRawMode(atKHz: Double(hz) / 1000)
     }
 
     func sendCW(_ text: String, settings: AppSettings) {

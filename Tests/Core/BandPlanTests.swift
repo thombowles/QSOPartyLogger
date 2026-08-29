@@ -37,6 +37,33 @@ final class BandPlanTests: XCTestCase {
         }
     }
 
+    // MARK: Sideband convention
+
+    /// IARU Region 2 Band Plan (September 2020), Definitions: "For SSB phone
+    /// operations below 10 MHz use lower sideband (LSB); above 10 MHz use
+    /// upper sideband (USB)." — `docs/research/band_plan_sources.md`.
+    func testSidebandConventionPerBand() {
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 1850), "LSB", "160m")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 3790), "LSB", "75m")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 7188), "LSB", "40m")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 14225), "USB", "20m")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 18140), "USB", "17m")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 21300), "USB", "15m")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 24950), "USB", "12m")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 28400), "USB", "10m")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 50125), "USB", "6m")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 144200), "USB", "2m")
+    }
+
+    /// The R2 definition's own exception, and US regulation besides
+    /// (§97.303(h)(3) puts the phone carrier 1.5 kHz below channel center —
+    /// an upper-sideband carrier): 60 m is USB despite being below 10 MHz.
+    func testSixtyMetersIsUpperSidebandDespiteBeingBelow10MHz() {
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 5332), "USB")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 5357), "USB")
+        XCTAssertEqual(BandPlan.sidebandRawMode(atKHz: 5405), "USB")
+    }
+
     func testTypicalContestFrequencies() {
         XCTAssertEqual(BandPlan.radioMode(atKHz: 14040), .cw)
         XCTAssertEqual(BandPlan.radioMode(atKHz: 14250), .phone)
