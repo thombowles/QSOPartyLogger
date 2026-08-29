@@ -641,6 +641,18 @@ struct MainView: View {
             .padding(.horizontal, 14)
             .padding(.bottom, 4)
         }
+        // Silent phone keys say why, right where the dashes are — the same
+        // gates that silence `transmission(at:)`, so this can only name a
+        // blocker that is really blocking. No dismiss button: it reflects
+        // live state and clears itself the moment the state is fixed.
+        if let notice = phoneKeysSilentNotice {
+            Label(notice, systemImage: "speaker.slash.fill")
+                .font(.caption)
+                .foregroundStyle(.orange)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 14)
+                .padding(.bottom, 4)
+        }
         // An export that could not run says so here — the same inline place,
         // never a modal (Tom's rule), and never silence.
         if let notice = exportNotice {
@@ -1681,6 +1693,12 @@ struct MainView: View {
         } else {
             manualRawMode = manualToken(for: rawMode)
         }
+    }
+
+    /// Why the phone F-keys are silent, from the same gates that silence
+    /// them — nil whenever they can play, or off phone.
+    private var phoneKeysSilentNotice: String? {
+        flow.phoneKeysNotice(context: operatingContext, voiceStatus: radio.voiceStatus)
     }
 
     /// Map any typed mode onto the manual picker's CW/SSB/RTTY tokens.

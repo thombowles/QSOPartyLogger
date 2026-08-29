@@ -1163,4 +1163,78 @@ final class EntryFlowTests: XCTestCase {
         XCTAssertEqual(flow.entry.theirParkTyped, "US-2222",
                        "the park prefill must not be party-gated")
     }
+
+    // MARK: Phone keys notice
+
+    /// The message row's inline explanation for silent phone keys. Each case
+    /// is the same guard `transmission(at:)` goes silent on, so the notice can
+    /// only name a blocker that is really blocking — a KSQP phone afternoon
+    /// was lost to bare dashes whose reason lived only in the Messages editor
+    /// (2026-08-29).
+
+    func testPhoneNoticeNamesAnUnreportedVoiceKeyer() throws {
+        let flow = EntryFlow(document: cqpDocument())
+        let ctx = EntryFlow.Context(modeClass: .phone, rawMode: "LSB", radioConnected: true,
+                                    voiceMemoryCount: 0, phoneSource: .radioMemories)
+        XCTAssertEqual(
+            flow.phoneKeysNotice(context: ctx, voiceStatus: .unsupported),
+            "Phone keys play the radio's voice memories, and it hasn't reported any — "
+                + "disconnect and reconnect to ask again."
+        )
+    }
+
+    func testPhoneNoticeNamesAMissingRecorderOption() throws {
+        let flow = EntryFlow(document: cqpDocument())
+        let ctx = EntryFlow.Context(modeClass: .phone, rawMode: "LSB", radioConnected: true,
+                                    voiceMemoryCount: 0, phoneSource: .radioMemories)
+        XCTAssertEqual(
+            flow.phoneKeysNotice(context: ctx, voiceStatus: .notInstalled),
+            "Phone keys play the radio's voice memories, and this radio's recorder isn't "
+                + "installed — switch to Mac recordings in the Messages editor (⇧⌘V)."
+        )
+    }
+
+    func testPhoneNoticeNamesAnUnreadyRecordingsPath() throws {
+        let flow = EntryFlow(document: cqpDocument())
+        let ctx = EntryFlow.Context(modeClass: .phone, rawMode: "USB", radioConnected: true,
+                                    phoneSource: .recordings(ready: false))
+        XCTAssertEqual(
+            flow.phoneKeysNotice(context: ctx, voiceStatus: .unsupported),
+            "Phone keys play recordings from this Mac, and the audio path isn't set up — "
+                + "pick devices in the Messages editor (⇧⌘V), or switch to the radio's memories."
+        )
+    }
+
+    func testPhoneNoticeNamesAnEmptyRecordingLibrary() throws {
+        let flow = EntryFlow(document: cqpDocument())
+        let ctx = EntryFlow.Context(modeClass: .phone, rawMode: "USB", radioConnected: true,
+                                    phoneSource: .recordings(ready: true))
+        XCTAssertEqual(
+            flow.phoneKeysNotice(context: ctx, voiceStatus: .unsupported),
+            "Phone keys play recordings from this Mac, and none are recorded for this party — "
+                + "record in the Messages editor (⇧⌘V), or switch to the radio's memories."
+        )
+    }
+
+    /// A playable source shows no notice — and neither do CW, digital, or a
+    /// disconnected radio, where silent keys are the intended state.
+    func testPhoneNoticeIsSilentWheneverTheKeysCanPlay() throws {
+        let flow = EntryFlow(document: cqpDocument())
+        XCTAssertNil(flow.phoneKeysNotice(
+            context: EntryFlow.Context(modeClass: .phone, rawMode: "LSB", radioConnected: true,
+                                       voiceMemoryCount: 8, phoneSource: .radioMemories),
+            voiceStatus: .available(count: 8)))
+        flow.voiceRecordings[1] = VoiceAudio.silence(seconds: 0.1, sampleRate: 48_000)
+        XCTAssertNil(flow.phoneKeysNotice(
+            context: EntryFlow.Context(modeClass: .phone, rawMode: "USB", radioConnected: true,
+                                       phoneSource: .recordings(ready: true)),
+            voiceStatus: .unsupported))
+        XCTAssertNil(flow.phoneKeysNotice(
+            context: EntryFlow.Context(modeClass: .cw, rawMode: "CW", radioConnected: true),
+            voiceStatus: .unsupported))
+        XCTAssertNil(flow.phoneKeysNotice(
+            context: EntryFlow.Context(modeClass: .phone, rawMode: "LSB", radioConnected: false,
+                                       phoneSource: .radioMemories),
+            voiceStatus: .unsupported))
+    }
 }

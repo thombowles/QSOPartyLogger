@@ -460,6 +460,40 @@ final class EntryFlow {
     /// ESM drives Return on CW, and on phone once there is something to play
     /// — the radio's memories, or a ready path with a recording in it.
     /// Otherwise Return is a plain log key.
+    /// Why every phone key is silent right now, or nil when the source can
+    /// play — the message row's inline notice. Each branch is the same guard
+    /// `transmission(at:)` goes silent on, so the text can only name a
+    /// blocker that is really blocking; a KSQP phone afternoon was lost to
+    /// bare dashes whose reason lived only in the Messages editor
+    /// (2026-08-29). Nil while disconnected — manual phone logging keeps its
+    /// keys silent on purpose — and nil off phone, where the CW texts speak
+    /// for themselves.
+    func phoneKeysNotice(context: Context, voiceStatus: VoiceKeyerStatus) -> String? {
+        guard context.modeClass == .phone, context.radioConnected else { return nil }
+        switch context.phoneSource {
+        case .radioMemories:
+            // The row's own gate, not `voiceStatus.isReady`: the keys go
+            // silent on the count in the context, so the notice follows it
+            // exactly; the status only chooses the wording.
+            if context.voiceMemoryCount > 0 { return nil }
+            if case .notInstalled = voiceStatus {
+                return "Phone keys play the radio's voice memories, and this radio's recorder "
+                    + "isn't installed — switch to Mac recordings in the Messages editor (⇧⌘V)."
+            }
+            return "Phone keys play the radio's voice memories, and it hasn't reported any — "
+                + "disconnect and reconnect to ask again."
+        case .recordings(ready: false):
+            return "Phone keys play recordings from this Mac, and the audio path isn't set up — "
+                + "pick devices in the Messages editor (⇧⌘V), or switch to the radio's memories."
+        case .recordings(ready: true):
+            if voiceRecordings.isEmpty {
+                return "Phone keys play recordings from this Mac, and none are recorded for this "
+                    + "party — record in the Messages editor (⇧⌘V), or switch to the radio's memories."
+            }
+            return nil
+        }
+    }
+
     func esmDrivesReturn(_ context: Context) -> Bool {
         guard context.keying.esmEnabled, context.radioConnected else { return false }
         switch context.modeClass {

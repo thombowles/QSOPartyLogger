@@ -482,6 +482,12 @@ the red button stops (names and F-key mappings save with the sheet). ⇢ Radio
 plays a memory to the radio exactly as the F-key will, so the level can be set
 against the radio's ALC meter with the Level slider.
 
+**Silent phone keys say why.** When every phone F-key would be silent — the
+radio hasn't reported its voice memories, the recorder option isn't fitted, the
+Mac-recordings path isn't set up, or no recordings exist for this party — a
+one-line notice under the message row names the blocker and the fix, instead of
+a row of bare dashes and an ESM that quietly stands down.
+
 **They live in your iCloud folder.** Once you have chosen an iCloud Drive
 folder (toolbar → iCloud → *Choose iCloud Folder…*, the same folder your logs
 mirror to), recordings are kept in its `Voice` subfolder — one folder per
@@ -1197,7 +1203,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3248 unit tests**, none of which need hardware, a network or a microphone —
+**3253 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 exporters, the K3, QMX and FlexRadio protocols and the connection lifecycle —
 including its sharing between log windows — (driven over `/dev/null` as a
