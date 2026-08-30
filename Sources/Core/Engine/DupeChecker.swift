@@ -43,7 +43,21 @@ enum DupeChecker {
         theirLocs: [String],
         log: [QSO]
     ) -> [(myLoc: String, theirLoc: String)] {
-        let logged = Set(log.map(key))
+        existingDupePairs(call: call, band: band, modeClass: modeClass,
+                          myLocs: myLocs, theirLocs: theirLocs, logged: Set(log.map(key)))
+    }
+
+    /// The same check against a key set the caller already holds — the entry
+    /// row's per-keystroke path (`LiveScore.dupeKeys`), answered without
+    /// rebuilding the set from the whole log.
+    static func existingDupePairs(
+        call: String,
+        band: Band,
+        modeClass: ModeClass,
+        myLocs: [String],
+        theirLocs: [String],
+        logged: Set<DupeKey>
+    ) -> [(myLoc: String, theirLoc: String)] {
         var dupes: [(String, String)] = []
         for mine in myLocs {
             for theirs in theirLocs {

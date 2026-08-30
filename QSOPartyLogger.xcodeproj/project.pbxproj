@@ -224,6 +224,7 @@
 		65E5DFBFDD4BE2CD4549A134 /* BandMapLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C1B0D852691D58AD871CC /* BandMapLayout.swift */; };
 		65EA39B0B0AE20B7666BF414 /* SpotFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14042D5B6DD33CC2A46A276C /* SpotFilter.swift */; };
 		6615F01A1746C284C34DD7C4 /* SCPStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A7D51B8CF8AFE96129EA2F /* SCPStoreTests.swift */; };
+		66748F50D261944C01865539 /* ScoreEngineCachedKeysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EF45C3C8D021DBB936419F /* ScoreEngineCachedKeysTests.swift */; };
 		667D53EA8632F9A2B8046A51 /* CallbookClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4460708A809F0A75773DA205 /* CallbookClientTests.swift */; };
 		67A80A778F35F15BE390F382 /* BulkEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64840D9ACF7A45698878A84 /* BulkEditSheet.swift */; };
 		688F883E10245C3D0543C4F7 /* NewHampshireQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3451A53ECE9C61AD37E8E16C /* NewHampshireQSOPartyTests.swift */; };
@@ -392,6 +393,7 @@
 		BDE105E89B5774A9A615D824 /* MississippiQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44F85963D8820FBCA6986965 /* MississippiQSOPartyTests.swift */; };
 		BE693C74252E94F5B376BE2A /* SpotDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8406DD0E324590D588D72B5 /* SpotDispatcher.swift */; };
 		BEB6284CA706FC461D203DAE /* HubFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC05BC2077B42827CBC8A537 /* HubFrequency.swift */; };
+		BF3651E7923D74495B61B2ED /* EntryStateCachedKeysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEE2665198F8DBC754CDDD /* EntryStateCachedKeysTests.swift */; };
 		BF4B93C891EBDA79CBD3E843 /* ChallengeStanding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B598E336484B5D8CC5B9A2F9 /* ChallengeStanding.swift */; };
 		C0299D40AE883FF41A58C149 /* PotaSeasonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A07158B42755CE27DB99D0 /* PotaSeasonTests.swift */; };
 		C0F9C6AFC27E447B1992BEA5 /* FlexDAXStreamerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBEB434114457D69D1718C4 /* FlexDAXStreamerTests.swift */; };
@@ -792,6 +794,7 @@
 		75214B2954E32E9289B737EE /* MemberExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberExchangeTests.swift; sourceTree = "<group>"; };
 		753BDFA1A8E71033064FC36E /* VoiceAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceAudio.swift; sourceTree = "<group>"; };
 		75970653CB7669E2A41577F5 /* Challenge */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Challenge; path = Resources/Challenge; sourceTree = SOURCE_ROOT; };
+		76BEE2665198F8DBC754CDDD /* EntryStateCachedKeysTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryStateCachedKeysTests.swift; sourceTree = "<group>"; };
 		77008B4098813D7986E66E3E /* SpotFrequencyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFrequencyTests.swift; sourceTree = "<group>"; };
 		771A2A2E70C2A91608F19549 /* RadioBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioBar.swift; sourceTree = "<group>"; };
 		782905999AE900BBDBBE6D2C /* fobb-roster-page-2026-07.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "fobb-roster-page-2026-07.html"; sourceTree = "<group>"; };
@@ -899,6 +902,7 @@
 		B265AA7F78A3F58757A2E0A8 /* ContestCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestCatalog.swift; sourceTree = "<group>"; };
 		B27158AAEFAD7C21DD3D17B0 /* LogDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDocument.swift; sourceTree = "<group>"; };
 		B311ACDB55F4A18F8A7B3A0F /* CallHistoryClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryClientTests.swift; sourceTree = "<group>"; };
+		B3EF45C3C8D021DBB936419F /* ScoreEngineCachedKeysTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEngineCachedKeysTests.swift; sourceTree = "<group>"; };
 		B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeventhCallAreaQSOPartyTests.swift; sourceTree = "<group>"; };
 		B49AC8D775ABBA76B9D43CD0 /* UpcomingContestsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingContestsTests.swift; sourceTree = "<group>"; };
 		B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyDefinition.swift; sourceTree = "<group>"; };
@@ -1378,6 +1382,7 @@
 				EF7194268CC1DFB2953FFDE8 /* QuebecQSOPartyTests.swift */,
 				433A191B9362FB73554ADEA5 /* RateMeterTests.swift */,
 				EBD1F2D81475C7AC090117A5 /* SalmonRunTests.swift */,
+				B3EF45C3C8D021DBB936419F /* ScoreEngineCachedKeysTests.swift */,
 				29960406C674052D5117926D /* ScoreEngineTests.swift */,
 				EDEF6EE3217F107C7332AC6D /* ScoreFactorTests.swift */,
 				1D9A6BB88648696A07EDF1BB /* ScoreSnapshotTests.swift */,
@@ -1708,6 +1713,7 @@
 				F53EE348D4F155F8D1FCC2EF /* DashboardModelTests.swift */,
 				42866F267E48E55BA7B2A686 /* DXCCLabelClientTests.swift */,
 				944ACFBCB11B916DDD2F8933 /* EntryFlowTests.swift */,
+				76BEE2665198F8DBC754CDDD /* EntryStateCachedKeysTests.swift */,
 				4F6C7056708ECE6573BF5FF3 /* GridLocateTests.swift */,
 				019DA95DE2A4D5A20E63D7B0 /* KeyDiagnosticsTests.swift */,
 				58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */,
@@ -2117,6 +2123,7 @@
 				3E4CB50A4A38D69CDDF3CB6A /* EntryCommandTests.swift in Sources */,
 				E9D3C1BC588F38EE754CF5AE /* EntryFlowTests.swift in Sources */,
 				8BBD2934F4E94D1F52712C66 /* EntryLayoutTests.swift in Sources */,
+				BF3651E7923D74495B61B2ED /* EntryStateCachedKeysTests.swift in Sources */,
 				3BC4CAB316F58AE4894DDB41 /* ExchangeElementTests.swift in Sources */,
 				EFF567B7FAA9F043F72398D2 /* ExchangeParserTests.swift in Sources */,
 				30817044B3B8822195ECD6C2 /* ExchangeSummaryTests.swift in Sources */,
@@ -2235,6 +2242,7 @@
 				9A1D1AAD285B8D3F63E205C6 /* SCPDatabaseTests.swift in Sources */,
 				6615F01A1746C284C34DD7C4 /* SCPStoreTests.swift in Sources */,
 				36855A41F241A73EAF900267 /* SalmonRunTests.swift in Sources */,
+				66748F50D261944C01865539 /* ScoreEngineCachedKeysTests.swift in Sources */,
 				4499E2CE096927357D50EABF /* ScoreEngineTests.swift in Sources */,
 				D3C262F0AB8FAFD31D1B4EB6 /* ScoreFactorTests.swift in Sources */,
 				D4CE5FF9DB7B905BB108E160 /* ScoreSnapshotTests.swift in Sources */,

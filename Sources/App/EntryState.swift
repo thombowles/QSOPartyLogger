@@ -334,11 +334,19 @@ final class EntryState {
     }
 
     /// Re-validate the exchange and refresh dupe/new-mult hints.
+    ///
+    /// `currentMultKeys` and `loggedDupeKeys` are the log's own key sets when
+    /// the caller already holds them (`LiveScore`) — the badge and the dupe
+    /// warning are then answered without re-scoring the log, which is what
+    /// makes this safe on every keystroke. Nil falls back to computing both
+    /// from the log, exactly as before.
     func revalidate(
         party: PartyDefinition?,
         log: ContestLog,
         band: Band,
-        modeClass: ModeClass
+        modeClass: ModeClass,
+        currentMultKeys: Set<ScoreEngine.MultKey>? = nil,
+        loggedDupeKeys: Set<DupeChecker.DupeKey>? = nil
     ) {
         guard let party else {
             exchangeStatus = .idle
@@ -361,13 +369,24 @@ final class EntryState {
             // Bumblebees, again on each band), so the badge cannot be decided
             // by the location alone. Both are inert for every other party.
             let typedMember = memberRcvd.trimmingCharacters(in: .whitespaces)
-            isNewMult = ScoreEngine.wouldAddMultiplier(
-                theirLocs: parsed.locations, band: band, modeClass: modeClass,
-                log: log, party: party,
-                call: callNormalized,
-                memberRcvd: typedMember.isEmpty ? nil : typedMember
-            )
-            updateDupeWarning(parsed: parsed, log: log, band: band, modeClass: modeClass)
+            isNewMult = if let currentMultKeys {
+                ScoreEngine.wouldAddMultiplier(
+                    theirLocs: parsed.locations, band: band, modeClass: modeClass,
+                    log: log, party: party,
+                    call: callNormalized,
+                    memberRcvd: typedMember.isEmpty ? nil : typedMember,
+                    current: currentMultKeys
+                )
+            } else {
+                ScoreEngine.wouldAddMultiplier(
+                    theirLocs: parsed.locations, band: band, modeClass: modeClass,
+                    log: log, party: party,
+                    call: callNormalized,
+                    memberRcvd: typedMember.isEmpty ? nil : typedMember
+                )
+            }
+            updateDupeWarning(parsed: parsed, log: log, band: band, modeClass: modeClass,
+                              logged: loggedDupeKeys)
         case .failure(let error):
             exchangeStatus = .invalid(error.localizedDescription)
             isNewMult = false
@@ -385,7 +404,8 @@ final class EntryState {
         log: ContestLog,
         band: Band,
         modeClass: ModeClass,
-        now: Date = Date()
+        now: Date = Date(),
+        loggedRuleKeys: Set<DupeChecker.RuleKey>? = nil
     ) {
         exchangeStatus = .idle
         isNewMult = false
@@ -399,7 +419,7 @@ final class EntryState {
             modeClass: modeClass, rawMode: "", sent: [:], rcvd: [:],
             myPotaRefs: log.myPotaRefs.isEmpty ? nil : log.myPotaRefs
         )
-        let logged = Set(log.qsos.map { DupeChecker.key($0, rule: contest.dupe) })
+        let logged = loggedRuleKeys ?? Set(log.qsos.map { DupeChecker.key($0, rule: contest.dupe) })
         if logged.contains(DupeChecker.key(probe, rule: contest.dupe)) {
             let today = contest.dupe.utcDay ? " today" : ""
             dupeWarning = "DUPE: \(callSign) already worked on \(band.rawValue) \(modeClass.displayName)\(today)"
@@ -412,21 +432,33 @@ final class EntryState {
         parsed: ExchangeParser.ParsedExchange,
         log: ContestLog,
         band: Band,
-        modeClass: ModeClass
+        modeClass: ModeClass,
+        logged: Set<DupeChecker.DupeKey>?
     ) {
         let callSign = callNormalized
         guard !callSign.isEmpty else {
             dupeWarning = nil
             return
         }
-        let dupes = DupeChecker.existingDupePairs(
-            call: callSign,
-            band: band,
-            modeClass: modeClass,
-            myLocs: log.myLocation.sentExchanges,
-            theirLocs: parsed.locations,
-            log: log.qsos
-        )
+        let dupes = if let logged {
+            DupeChecker.existingDupePairs(
+                call: callSign,
+                band: band,
+                modeClass: modeClass,
+                myLocs: log.myLocation.sentExchanges,
+                theirLocs: parsed.locations,
+                logged: logged
+            )
+        } else {
+            DupeChecker.existingDupePairs(
+                call: callSign,
+                band: band,
+                modeClass: modeClass,
+                myLocs: log.myLocation.sentExchanges,
+                theirLocs: parsed.locations,
+                log: log.qsos
+            )
+        }
         dupeWarning = dupes.isEmpty
             ? nil
             : "DUPE: \(callSign) already worked on \(band.rawValue) \(modeClass.displayName) (\(dupes.map(\.theirLoc).joined(separator: ", ")))"

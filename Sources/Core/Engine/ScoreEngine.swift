@@ -155,13 +155,35 @@ enum ScoreEngine {
         call: String = "",
         memberRcvd: String? = nil
     ) -> Bool {
-        let candidates: [[String: String]] = theirLocs.map { loc in
+        wouldAddMultiplier(received: multiplierCandidates(theirLocs: theirLocs, memberRcvd: memberRcvd),
+                           call: call, band: band, modeClass: modeClass,
+                           log: log, contest: PartyLowering.lowered(party))
+    }
+
+    /// The badge against a key set the caller already holds — the entry row's
+    /// per-keystroke path, answered without re-scoring the log.
+    static func wouldAddMultiplier(
+        theirLocs: [String],
+        band: Band,
+        modeClass: ModeClass,
+        log: ContestLog,
+        party: PartyDefinition,
+        call: String = "",
+        memberRcvd: String? = nil,
+        current: Set<MultKey>
+    ) -> Bool {
+        wouldAddMultiplier(received: multiplierCandidates(theirLocs: theirLocs, memberRcvd: memberRcvd),
+                           call: call, band: band, modeClass: modeClass,
+                           log: log, contest: PartyLowering.lowered(party), current: current)
+    }
+
+    /// A county line's several received locations are several candidate rows.
+    private static func multiplierCandidates(theirLocs: [String], memberRcvd: String?) -> [[String: String]] {
+        theirLocs.map { loc in
             var rcvd = [ExchangeElementID.location: loc]
             if let memberRcvd { rcvd[ExchangeElementID.member] = memberRcvd }
             return rcvd
         }
-        return wouldAddMultiplier(received: candidates, call: call, band: band, modeClass: modeClass,
-                                  log: log, contest: PartyLowering.lowered(party))
     }
 
     /// Valid (non-dupe, allowed-mode) QSO counts per band and mode class —

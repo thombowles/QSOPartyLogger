@@ -509,9 +509,20 @@ extension ScoreEngine {
     /// consulted, as today.
     static func wouldAddMultiplier(received: [[String: String]], call: String, band: Band, modeClass: ModeClass,
                                    log: ContestLog, contest: ContestDefinition) -> Bool {
+        wouldAddMultiplier(received: received, call: call, band: band, modeClass: modeClass,
+                           log: log, contest: contest,
+                           current: score(log: log, contest: contest).multiplierKeys)
+    }
+
+    /// The same question against a key set the caller already holds — the
+    /// per-keystroke path (`LiveScore`). `current` must be this log's own
+    /// `score(...).multiplierKeys`, which is exactly what the overload above
+    /// derives; the whole rule lives here, so the two cannot drift.
+    static func wouldAddMultiplier(received: [[String: String]], call: String, band: Band, modeClass: ModeClass,
+                                   log: ContestLog, contest: ContestDefinition,
+                                   current: Set<MultKey>) -> Bool {
         guard contest.modeClasses.contains(modeClass) else { return false }
         let side = contest.resolvedSideID(log.sideID)
-        let current = score(log: log, contest: contest).multiplierKeys
         let rules = contest.rules(for: side)
         // Past the contest's scored ceiling, a further multiplier pays nothing,
         // so the badge must not send the operator chasing it (CQP: 58 of 63).
