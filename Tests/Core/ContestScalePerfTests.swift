@@ -171,4 +171,39 @@ final class ContestScalePerfTests: XCTestCase {
         print(String(format: "PERF | save size at n=2000: %.2f MB", Double(bytes) / 1_048_576))
         XCTAssertGreaterThan(bytes, 0)
     }
+
+    /// The after-numbers: the same per-keystroke question answered against
+    /// the key sets `LiveScore` already holds. `foldPerChange` is what one
+    /// contact now costs the cache (the fold runs once per log change);
+    /// `revalidateCached` + one worked-before scan is the whole engine bill
+    /// for a keystroke.
+    func testCachedPathBaselines() {
+        var lines: [String] = []
+        lines.append("PERF | n | foldPerChange | revalidateCached | keystrokeEngine")
+        for n in [500, 1_000, 2_000, 4_000] {
+            let log = makeLog(n: n)
+            let party = ksqp!
+            let multKeys = ScoreEngine.score(log: log, party: party).multiplierKeys
+            let dupeKeys = Set(log.qsos.map(DupeChecker.key))
+
+            let fold = median { _ = ScoreEngine.score(log: log, party: party) }
+
+            let entry = EntryState()
+            entry.callTyped = "W0X123"
+            entry.exchangeTyped = counties[42]
+            let cached = median {
+                entry.revalidate(party: party, log: log, band: .m20, modeClass: .cw,
+                                 currentMultKeys: multKeys, loggedDupeKeys: dupeKeys)
+            }
+            let keystroke = median {
+                entry.revalidate(party: party, log: log, band: .m20, modeClass: .cw,
+                                 currentMultKeys: multKeys, loggedDupeKeys: dupeKeys)
+                _ = DupeChecker.workedContacts(call: "W0X123", log: log.qsos)
+            }
+            lines.append(String(format: "PERF | %d | %.2f | %.4f | %.4f",
+                                n, fold, cached, keystroke))
+        }
+        for line in lines { print(line) }
+        XCTAssertFalse(lines.isEmpty)
+    }
 }
