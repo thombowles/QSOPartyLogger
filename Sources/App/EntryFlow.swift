@@ -164,6 +164,16 @@ final class EntryFlow {
     /// band map and the tests state the board in one line.
     @ObservationIgnored var parkOnBoard: (String) -> String? = { _ in nil }
 
+    /// The log's current key sets, when the window holds a `LiveScore` —
+    /// the badge and the dupe warning are then answered per keystroke
+    /// without re-scoring the log. Closures, not values: the sets move with
+    /// every contact and the flow must never hold a stale copy. Nil (the
+    /// default, and every existing test) keeps the compute-from-the-log
+    /// path exactly as it was.
+    @ObservationIgnored var currentMultKeys: () -> Set<ScoreEngine.MultKey>? = { nil }
+    @ObservationIgnored var loggedDupeKeys: () -> Set<DupeChecker.DupeKey>? = { nil }
+    @ObservationIgnored var loggedRuleKeys: () -> Set<DupeChecker.RuleKey>? = { nil }
+
     /// The super check partial database, when the option is on and a
     /// MASTER.SCP is cached or downloaded. Nil (option off, nothing
     /// downloaded yet) empties its half of the strip immediately.
@@ -753,14 +763,17 @@ final class EntryFlow {
                 contest: contest,
                 log: document.log,
                 band: context.band,
-                modeClass: context.modeClass
+                modeClass: context.modeClass,
+                loggedRuleKeys: loggedRuleKeys()
             )
         } else {
             entry.revalidate(
                 party: party,
                 log: document.log,
                 band: context.band,
-                modeClass: context.modeClass
+                modeClass: context.modeClass,
+                currentMultKeys: currentMultKeys(),
+                loggedDupeKeys: loggedDupeKeys()
             )
         }
         refreshSCPMatches()

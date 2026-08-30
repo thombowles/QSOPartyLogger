@@ -15,6 +15,10 @@ struct MainView: View {
     /// the context, calls the flow, and hands the returned transmission to the
     /// radio — it never decides what that transmission is.
     @State private var flow: EntryFlow
+    /// The one score fold per log change. Everything in this window that
+    /// used to fold the log itself — the sidebar, the table's flags, the
+    /// advisor, the badge, the band map — reads this instead.
+    @State private var liveScore: LiveScore
     @FocusState private var focusedField: EntryBar.Field?
 
     init(document: LogDocument) {
@@ -22,6 +26,7 @@ struct MainView: View {
         // Built once with the document, not per body pass: the flow caches the
         // party lookup and owns the entry row's link to the log's QSO number.
         _flow = State(initialValue: EntryFlow(document: document))
+        _liveScore = State(initialValue: LiveScore(document: document))
     }
 
     private var entry: EntryState { flow.entry }
@@ -253,13 +258,10 @@ struct MainView: View {
     }
 
     private var score: ScoreEngine.ScoreBreakdown {
-        if let party { return ScoreEngine.score(log: document.log, party: party) }
-        if let contest = flow.standaloneContest {
-            // A v2-only contest (POTA): the general engine, zero points by
-            // design — the QSO and dupe counts are what the sidebar reads.
-            return ScoreEngine.score(log: document.log, contest: contest)
-        }
-        return .init()
+        // One fold per log change, not one per read — reading it also
+        // registers this view on `LogDocument.generation`, which is exactly
+        // when the score can move.
+        liveScore.breakdown
     }
 
     private var currentBand: Band {
@@ -367,7 +369,8 @@ struct MainView: View {
             if !scoreSidebarHidden {
                 ScoreSidebar(
                     log: document.log, party: party, score: score, members: flow.combinedMembers,
-                    advisorInput: advisorInput, onTune: tune
+                    advisorInput: advisorInput, onTune: tune,
+                    bandModeCounts: liveScore.bandModeCounts
                 )
             }
         }
@@ -467,11 +470,7 @@ struct MainView: View {
     }
 
     private func workedCalls(on band: Band) -> Set<String> {
-        Set(
-            document.log.qsos
-                .filter { $0.band == band && $0.modeClass == currentModeClass }
-                .map { $0.call.uppercased() }
-        )
+        liveScore.workedCalls(band: band, modeClass: currentModeClass)
     }
 
     /// The same, but paired with the county each contact was made in, so a
@@ -484,11 +483,7 @@ struct MainView: View {
     }
 
     private func workedCallCounties(on band: Band) -> Set<String> {
-        Set(
-            document.log.qsos
-                .filter { $0.band == band && $0.modeClass == currentModeClass }
-                .map { "\($0.call.uppercased())|\($0.theirLoc.uppercased())" }
-        )
+        liveScore.workedCallCounties(band: band, modeClass: currentModeClass)
     }
 
     /// The radio bar with the radio-driven wiring — frequency, band, mode,
@@ -1333,6 +1328,13 @@ struct MainView: View {
         flow.parkLocation = { [weak potaParkClient] ref in
             potaParkClient?.directory?.park(reference: ref)?.locationDesc
         }
+        // The log's current key sets, so the badge and the dupe warning are
+        // answered per keystroke without re-scoring the log. Closures, not
+        // values: `LiveScore` refolds lazily when the log changes, and the
+        // flow must always see that fold, never a stashed one.
+        flow.currentMultKeys = { [weak liveScore] in liveScore?.multiplierKeys }
+        flow.loggedDupeKeys = { [weak liveScore] in liveScore?.dupeKeys }
+        flow.loggedRuleKeys = { [weak liveScore] in liveScore?.ruleDupeKeys }
         wireSpotDispatcher()
         syncHubSpotClient()
         syncPotaBoardClient()
@@ -1379,6 +1381,7 @@ struct MainView: View {
             model.callHistory = flow.callHistoryIndex?.parsed
             model.onTuneSpot = { tune(to: $0) }
             model.onTuneKHz = { qsyTo(kHz: $0) }
+            model.currentMultKeys = { [weak liveScore] in liveScore?.multiplierKeys }
             model.canSpot = canSpotStation
             model.onSpotStation = { spot in
                 // A spot names no park, but the log may: a station worked

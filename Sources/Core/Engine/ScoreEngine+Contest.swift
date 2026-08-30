@@ -219,8 +219,8 @@ extension ScoreEngine {
     /// (`ContestCatalog.all`), so the sets can differ while the key does not,
     /// and a stale entry would silently classify a token under the wrong set.
     /// The cost this would save is one map per fold, next to a fold over the
-    /// whole log; `wouldAddMultiplier` builds it twice per keystroke and that
-    /// is still far below the re-score it already performs.
+    /// whole log — and the fold itself now runs once per log change
+    /// (`LiveScore`), not per keystroke, so there is nothing left to shave.
     static func resolvedTokenSets(for side: String, contest: ContestDefinition) -> [String: ExchangeValidator.ResolvedSets] {
         var out: [String: ExchangeValidator.ResolvedSets] = [:]
         for element in contest.receivedElements(for: side) where element.kind == .token {

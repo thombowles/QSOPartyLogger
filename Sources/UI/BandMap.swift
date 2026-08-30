@@ -55,6 +55,12 @@ final class BandMapModel {
         locationCache = [:]
     }
 
+    /// The log's current multiplier keys, from the window's `LiveScore` —
+    /// nil until wired, which keeps the re-scoring path. A closure so the
+    /// map can never hold a stale set; `@ObservationIgnored` because it is
+    /// wiring, not state.
+    @ObservationIgnored var currentMultKeys: () -> Set<ScoreEngine.MultKey>? = { nil }
+
     var onTuneSpot: ((Spot) -> Void)?
     var onTuneKHz: ((Double) -> Void)?
     /// Right-click → spot this station, to whichever networks apply. Opens
@@ -170,9 +176,16 @@ final class BandMapModel {
         if let cached = neededMultiplierCache[key] {
             needed = cached
         } else {
-            needed = ScoreEngine.wouldAddMultiplier(
-                theirLocs: [located.location], band: band, modeClass: mode, log: log, party: party
-            )
+            needed = if let current = currentMultKeys() {
+                ScoreEngine.wouldAddMultiplier(
+                    theirLocs: [located.location], band: band, modeClass: mode,
+                    log: log, party: party, current: current
+                )
+            } else {
+                ScoreEngine.wouldAddMultiplier(
+                    theirLocs: [located.location], band: band, modeClass: mode, log: log, party: party
+                )
+            }
             neededMultiplierCache[key] = needed
         }
         return LocationVerdict(location: located.location, source: located.source, needed: needed)

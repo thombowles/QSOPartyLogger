@@ -15,6 +15,10 @@ struct ScoreSidebar: View {
     /// read-only uses of this sidebar want.
     var advisorInput: ((Date) -> Advisor.Input)?
     var onTune: (Spot) -> Void = { _ in }
+    /// Valid-QSO counts per band and mode, supplied by the window's
+    /// `LiveScore` so this sidebar never folds the log itself. The
+    /// dashboard's read-only uses leave it nil and compute as before.
+    var bandModeCounts: [Band: [ModeClass: Int]]? = nil
 
     /// Which multiplier lists the operator has collapsed, remembered per party.
     @State private var settings = AppSettings.shared
@@ -55,7 +59,7 @@ struct ScoreSidebar: View {
     // MARK: QSOs by band/mode
 
     private func bandModeSection(_ party: PartyDefinition) -> some View {
-        let counts = ScoreEngine.bandModeCounts(log: log, party: party)
+        let counts = bandModeCounts ?? ScoreEngine.bandModeCounts(log: log, party: party)
         let modes = party.allowedModeClasses
         let bands = Band.allCases.filter { counts[$0] != nil }
 
