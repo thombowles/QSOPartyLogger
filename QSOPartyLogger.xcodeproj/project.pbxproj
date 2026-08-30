@@ -515,6 +515,7 @@
 		F7B80C3393265B922409D10C /* MessageMemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039CBD24DAEF64BCB1269D67 /* MessageMemoryTests.swift */; };
 		F8230055988666CE68A087CF /* CWKeyerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E1360204AB093D08447987 /* CWKeyerTests.swift */; };
 		F83F61572FFAE5140A028B1E /* naqpcw-name.adi in Resources */ = {isa = PBXBuildFile; fileRef = 7213F95E6CDC798646C2340C /* naqpcw-name.adi */; };
+		F848D3A5C888BDE321E3C294 /* EntrySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9AD27E2AB7A975BB1700AB /* EntrySection.swift */; };
 		F8EA538325E986713ED66813 /* TokenSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91991260BB14DFD37004DF3B /* TokenSet.swift */; };
 		FA21443D02E0BA5E35702397 /* BandMapBoltAttachmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62964F532E8EF7DFEAAF1F91 /* BandMapBoltAttachmentTests.swift */; };
 		FA255DF473A40C79961107EF /* HubSpotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D590A3128E841A331486E328 /* HubSpotClient.swift */; };
@@ -575,6 +576,7 @@
 		0A5BA028001710ECEF0674D1 /* BandMapStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapStatusTests.swift; sourceTree = "<group>"; };
 		0A5F9E99BE569E4E2DFB8FC7 /* LocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProvider.swift; sourceTree = "<group>"; };
 		0B4B7B2632E809D2D53F4D08 /* Maidenhead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maidenhead.swift; sourceTree = "<group>"; };
+		0D9AD27E2AB7A975BB1700AB /* EntrySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntrySection.swift; sourceTree = "<group>"; };
 		0DEA58106A345669FAF4E466 /* HubSpotFilteringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotFilteringTests.swift; sourceTree = "<group>"; };
 		0E4D5D5EFD3CC5CD8F7F2B06 /* SpotReceipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotReceipt.swift; sourceTree = "<group>"; };
 		0EC4FB2912638C4B5052ED72 /* HubSpotParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotParser.swift; sourceTree = "<group>"; };
@@ -1492,6 +1494,7 @@
 				5F01ACCE3E8BBB30BB6AFFB0 /* EditQSOSheet.swift */,
 				5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */,
 				A77DD2E724B2662706CEB848 /* EntryLayout.swift */,
+				0D9AD27E2AB7A975BB1700AB /* EntrySection.swift */,
 				F53E1CCA809156CAFA061676 /* FlowLayout.swift */,
 				B8CBE54B71F1640E915BB657 /* KeyDiagnostics.swift */,
 				58F8DCDD9B83142A28657268 /* KeyMonitorGate.swift */,
@@ -2389,6 +2392,7 @@
 				0B84F1968593931579E19473 /* EntryCommand.swift in Sources */,
 				8169A7673BCD6E9B2A60EE78 /* EntryFlow.swift in Sources */,
 				101FA2D3094424CE2F2418D1 /* EntryLayout.swift in Sources */,
+				F848D3A5C888BDE321E3C294 /* EntrySection.swift in Sources */,
 				2FBC769F772805B49F4479DB /* EntryState.swift in Sources */,
 				F514B49832FCD358FCF5D4AD /* ExchangeElement.swift in Sources */,
 				4BB24860B49D12AC15176471 /* ExchangeParser.swift in Sources */,

@@ -53,11 +53,14 @@ struct MainView: View {
     /// F-key that arrives as brightness or backlight can say so. Never
     /// consumed.
     @State private var mediaKeyMonitor: Any?
-    /// The line under the messages row when the F row arrives as media keys —
-    /// `KeyDiagnostics.fRowNotice`. Cleared by the next real function key.
-    @State private var fRowNotice: String?
-    /// The last key the monitor ruled on, for the shortcut-hints legend.
-    @State private var lastKeyReadout: String?
+    /// The key monitor's readout and F-row notice — an object, not `@State`,
+    /// so a keyDown invalidates the notice strip inside `EntrySection` alone,
+    /// never this whole window.
+    @State private var keyReadout = KeyReadout()
+    /// The worked-before table's height, reported by `EntrySection` so the
+    /// log table can give back exactly what that table takes. A plain value:
+    /// this view re-renders only when it actually changes, not per keystroke.
+    @State private var workedBeforeHeight: CGFloat = 0
 
     @State private var repeatCQ = false
     @State private var repeatTask: Task<Void, Never>?
@@ -141,46 +144,10 @@ struct MainView: View {
         flow.party
     }
 
-    /// The entry row's shape for this log — party flags, or the contest's
-    /// exchange spec for a v2-only contest (POTA).
-    private var entryLayout: EntryLayout {
-        EntryLayout(party: party, contest: flow.standaloneContest,
-                    isActivation: !document.log.myPotaRefs.isEmpty)
-    }
-
-    /// The quiet line under the park field: the refs as parsed, each with its
-    /// name when the offline directory knows it. Silent while empty or
-    /// unparseable — the red refuse-to-log label owns that case. A park with
-    /// an `@subdivision` looks up by its base reference.
-    private var parkCaption: String? {
-        let typed = entry.theirParkTyped.trimmingCharacters(in: .whitespaces)
-        guard !typed.isEmpty else { return nil }
-        guard case .success(let parks) = PotaRef.parseList(PotaRef.expandShorthand(typed)), !parks.isEmpty else { return nil }
-        let directory = potaParkClient.directory
-        let parts = parks.map { ref -> String in
-            let base = ref.split(separator: "@", maxSplits: 1).first.map(String.init) ?? ref
-            if let name = directory?.park(reference: base)?.name { return "\(ref) · \(name)" }
-            return ref
-        }
-        return parts.joined(separator: "  ·  ")
-    }
-
     /// Cabrillo exists for every party, and for a v2 contest only where its
     /// spec says so — POTA's says not (`cabrillo.submittable`).
     private var cabrilloOffered: Bool {
         party != nil || (flow.standaloneContest?.cabrillo.submittable ?? false)
-    }
-
-    /// The callbook's quiet line for the call in the field — only while the
-    /// published record is for exactly that call, so a half-edited call
-    /// never wears the last station's name.
-    private var callbookCaption: String? {
-        guard let known = callbookClient.record,
-              !entry.call.isEmpty,
-              known.call == entry.callNormalized else { return nil }
-        guard let line = CallbookCaption.line(
-            for: known, stationGrid: document.log.station.gridLocator) else { return nil }
-        return "\(line) — \(known.source.label)"
     }
 
     /// The one place the view describes "right now" to the flow. Built in a
@@ -228,22 +195,6 @@ struct MainView: View {
         }
     }
 
-    /// What the messages row draws for F1–F8 right now. Built here rather than
-    /// in the row so the row never has to know which mode class is live.
-    private var messageKeys: [MessagesRow.MessageKey] {
-        let context = operatingContext
-        return (0..<8).map { index in
-            switch flow.transmission(at: index, context: context) {
-            case .cw(let text):
-                MessagesRow.MessageKey(caption: text, isActive: true)
-            case .voice(_, let caption), .recording(_, _, let caption):
-                MessagesRow.MessageKey(caption: caption, isActive: true)
-            case .silent:
-                MessagesRow.MessageKey(caption: context.modeClass == .phone ? "—" : "",
-                                       isActive: false)
-            }
-        }
-    }
 
     /// The document owns the mode so it survives a reopen. Writes go straight
     /// to `log` without registering undo — ⌘Z belongs to log edits, and an
@@ -431,39 +382,6 @@ struct MainView: View {
         )
     }
 
-    /// Every prior contact with the call in the entry field — the history
-    /// table's contents, and the reason it is on screen at all.
-    private var workedBefore: [DupeChecker.WorkedContact] {
-        DupeChecker.workedContacts(call: entry.callNormalized, log: document.log.qsos)
-    }
-
-    /// "KSQP 2025 — JOH" when previous contests know the station and this one
-    /// does not — or, failing that, what the party's call history file says
-    /// he sends. It is where a pre-filled exchange came from, which is why it
-    /// belongs on screen rather than only in the field.
-    private var workedBeforeArchiveLine: String? {
-        guard workedBefore.isEmpty, !entry.callNormalized.isEmpty else { return nil }
-        if let seen = flow.archiveIndex.entries(for: entry.callNormalized).first {
-            return "\(seen.partyID.uppercased()) \(seen.year) — \(seen.theirLoc)"
-        }
-        guard let (partyID, parsed) = flow.callHistoryIndex,
-              partyID == party?.id,
-              let known = parsed.entry(for: entry.callNormalized),
-              !known.isEmpty
-        else { return nil }
-        let bits = [known.name, known.locations.first, known.userText]
-            .compactMap { $0 }
-            .filter { !$0.isEmpty }
-        return "Call history — \(bits.joined(separator: " · "))"
-    }
-
-    private var workedBeforeHeight: CGFloat {
-        WorkedBeforeTable.height(
-            contacts: workedBefore.count,
-            hasArchiveLine: workedBeforeArchiveLine != nil
-        )
-    }
-
     /// Calls already in the log on the current band+mode — grays their spots.
     private var workedCallsOnCurrentBandMode: Set<String> {
         workedCalls(on: currentBand)
@@ -538,147 +456,30 @@ struct MainView: View {
                 }
             Divider()
 
-            EntryBar(entry: entry, party: party, layout: entryLayout,
-                     parkCaption: parkCaption,
-                     callbookCaption: callbookCaption,
-                     callFrameColor: callFrameColor, onTakeCallFrame: takeCallFrame,
-                     onLog: returnPressed, focus: $focusedField)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .onChange(of: entry.exchange) { revalidate() }
-                .onChange(of: entry.call) {
-                    flow.callChanged(operatingContext)
-                    callbookClient.noteCallChanged(entry.call)
-                }
-                // The park may pin the state down — typed, prefilled, or
-                // pounced, the offer recomputes with it.
-                .onChange(of: entry.theirParkTyped) { flow.theirParkEdited() }
-                .onChange(of: callbookClient.record) {
-                    flow.callbookRecord = callbookClient.record
-                }
-                // The member element can decide the NEW MULT badge (a party
-                // may count the worked station itself), so it revalidates
-                // like the exchange rather than only gating the log.
-                .onChange(of: entry.memberRcvd) { revalidate() }
-
-            superCheckStrip
-
-            MessagesRow(
-                operatingMode: operatingMode,
-                keys: messageKeys,
-                onSend: sendMessageAt,
-                onEdit: editMessageAt,
-                enabled: radio.isConnected
-                    && (currentModeClass == .cw
-                        || (currentModeClass == .phone && phoneKeysEnabled)),
-                pendingIndex: pendingMessageIndex,
-                repeatEnabled: $repeatCQ,
+            // The whole typing cluster in one child view, so a keystroke
+            // invalidates it alone — this body reads no EntryState at all,
+            // and the log table and sidebar re-render per contact, never per
+            // character.
+            EntrySection(
+                document: document, flow: flow, settings: settings, radio: radio,
+                callbookClient: callbookClient, potaParkClient: potaParkClient,
+                bandMapModel: bandMapModel, keyReadout: keyReadout,
+                context: { operatingContext },
+                focus: $focusedField,
+                workedBeforeHeight: $workedBeforeHeight,
+                exportNotice: $exportNotice,
+                repeatCQ: $repeatCQ,
                 repeatPaused: repeatPaused,
-                repeatInterval: $settings.repeatIntervalSeconds,
-                esmEnabled: $settings.esmEnabled,
-                cqFrequencyLabel: cqFrequencyHz.map { String(format: "%.1f", Double($0) / 1000) },
+                cqFrequencyHz: cqFrequencyHz,
+                onLog: returnPressed,
+                onTakeCallFrame: takeCallFrame,
+                onSendMessage: sendMessageAt,
+                onEditMessage: editMessageAt,
                 onJumpToCQ: jumpToCQFrequency
             )
-
-            keyNoticeStrip
-
-            if workedBeforeHeight > 0 {
-                WorkedBeforeTable(
-                    call: entry.callNormalized,
-                    contacts: workedBefore,
-                    archiveLine: workedBeforeArchiveLine,
-                    currentBand: currentBand,
-                    currentModeClass: currentModeClass
-                )
-            }
             Divider()
 
             logTable
-        }
-    }
-
-    /// Under the messages row: the shortcut legend while hints are on (⌘/),
-    /// and the F-row notice when the keyboard sent a media key where an F-key
-    /// was expected. Inline, dismissable, and gone by itself the moment a real
-    /// F-key arrives — never a modal.
-    @ViewBuilder
-    private var keyNoticeStrip: some View {
-        if settings.showShortcutHints {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(ShortcutLegend.line)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(ShortcutLegend.lastKeyLine(lastKeyReadout))
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
-                    .help("What the logger last received from the keyboard, and what it did with it — "
-                          + "press an F-key here to check the F row reaches the app")
-            }
-            .padding(.horizontal, 14)
-            .padding(.bottom, 4)
-        }
-        if let notice = fRowNotice {
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Label(notice, systemImage: "exclamationmark.triangle.fill")
-                    .font(.caption)
-                    .foregroundStyle(.orange)
-                    .fixedSize(horizontal: false, vertical: true)
-                Button {
-                    fRowNotice = nil
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(.secondary)
-                .accessibilityLabel("Dismiss keyboard notice")
-            }
-            .padding(.horizontal, 14)
-            .padding(.bottom, 4)
-        }
-        // Silent phone keys say why, right where the dashes are — the same
-        // gates that silence `transmission(at:)`, so this can only name a
-        // blocker that is really blocking. No dismiss button: it reflects
-        // live state and clears itself the moment the state is fixed.
-        if let notice = phoneKeysSilentNotice {
-            Label(notice, systemImage: "speaker.slash.fill")
-                .font(.caption)
-                .foregroundStyle(.orange)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal, 14)
-                .padding(.bottom, 4)
-        }
-        // An export that could not run says so here — the same inline place,
-        // never a modal (Tom's rule), and never silence.
-        if let notice = exportNotice {
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Label(notice, systemImage: "square.and.arrow.up.trianglebadge.exclamationmark")
-                    .font(.caption)
-                    .foregroundStyle(.orange)
-                    .fixedSize(horizontal: false, vertical: true)
-                Button {
-                    exportNotice = nil
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(.secondary)
-                .accessibilityLabel("Dismiss export notice")
-            }
-            .padding(.horizontal, 14)
-            .padding(.bottom, 4)
-        }
-    }
-
-    /// Reserved height while the feature is live (option on, and a database
-    /// or the party's call history loaded), so the strip filling and emptying
-    /// under a 35 WPM exchange never reflows the window. Absent entirely
-    /// otherwise.
-    @ViewBuilder
-    private var superCheckStrip: some View {
-        if settings.superCheckEnabled, flow.superCheckLive {
-            SuperCheckRow(matches: flow.superCheckMatches, typedCall: entry.callNormalized)
-                .padding(.horizontal, 14)
         }
     }
 
@@ -963,15 +764,14 @@ struct MainView: View {
             .help("Export the log — ADIF (⌘E), Cabrillo (⇧⌘E), or POTA files (⌥⌘E)")
             .shortcutHint("⌘E · ⇧⌘E · ⌥⌘E")
 
-            Button {
-                beginSpotForMode()
-            } label: {
-                Label(spotCommandLabel, systemImage: spotCommandIcon)
-            }
-            .keyboardShortcut("s", modifiers: [.command, .shift])
-            .disabled(!canSpotNow)
-            .help(spotCommandHelp)
-            .shortcutHint("⇧⌘S")
+            // Its own view: the label follows the operating mode and the
+            // typed call, and those reads must land on the button, not on
+            // this whole window's body (the keystroke fence, 2026-08-30).
+            SpotToolbarButton(
+                document: document, flow: flow,
+                canSpot: { canSpot(target: $0) },
+                action: beginSpotForMode
+            )
 
             Button {
                 messagesEditorClass = .cw
@@ -1616,9 +1416,6 @@ struct MainView: View {
     }
 
     /// The F-key slot Return will send next, or nil when ESM isn't driving it.
-    private var pendingMessageIndex: Int? {
-        flow.pendingMessageIndex(operatingContext)
-    }
 
     /// F12 — wipe a half-typed contact and get back to the call field.
     private func clearEntry() {
@@ -1698,11 +1495,6 @@ struct MainView: View {
         }
     }
 
-    /// Why the phone F-keys are silent, from the same gates that silence
-    /// them — nil whenever they can play, or off phone.
-    private var phoneKeysSilentNotice: String? {
-        flow.phoneKeysNotice(context: operatingContext, voiceStatus: radio.voiceStatus)
-    }
 
     /// Map any typed mode onto the manual picker's CW/SSB/RTTY tokens.
     private func manualToken(for mode: String) -> String {
@@ -1773,11 +1565,6 @@ struct MainView: View {
     /// station.
     private var canSpotStation: Bool { canSpot(target: .station) }
 
-    /// The gate for ⇧⌘S and its toolbar button — whoever the mode says.
-    private var canSpotNow: Bool {
-        canSpot(target: spotCommand == .myself ? .myself : .station)
-    }
-
     /// The transports the dispatcher fans a spot out through: the open node
     /// session, the hub client, the POTA client — and their reports back.
     /// Wired once the clients exist, in `onAppear`.
@@ -1812,32 +1599,6 @@ struct MainView: View {
     /// station you found on the board.
     private var spotCommand: SpotCommand {
         SpotCommand.target(mode: document.log.operatingMode, entryCall: entry.callNormalized)
-    }
-
-    /// The button says which one it is before it is pressed. A command that
-    /// changes meaning has to show it, or it is the same trap as two shortcuts
-    /// a modifier apart.
-    private var spotCommandLabel: String {
-        spotCommand == .myself ? "Spot Myself" : "Spot Station"
-    }
-
-    private var spotCommandIcon: String {
-        spotCommand == .myself ? "dot.radiowaves.left.and.right" : "dot.radiowaves.right"
-    }
-
-    private var spotCommandHelp: String {
-        guard canSpotNow else {
-            return "Nothing to spot to yet — connect a cluster node, pick a party with a "
-                + "QSO Party Hub page, or set your park in Contest Setup; and set your callsign"
-        }
-        let what = switch spotCommand {
-        case .myself: "Spot yourself (⇧⌘S)"
-        case .station(let call): "Spot \(call) (⇧⌘S)"
-        case .blankStation: "Spot a station (⇧⌘S) — type the call in the sheet"
-        }
-        return what + " — to the DX cluster, the QSO Party Hub and POTA, whichever apply, "
-            + "confirmed before it sends. Or right-click any spot on the band map, or any "
-            + "row in the log."
     }
 
     /// Where the radio is, to 10 Hz — finer than that is noise on a spot, and
@@ -2106,10 +1867,6 @@ struct MainView: View {
         focusedField = .call
     }
 
-    /// The ghost call's colour — the band map's colour for that spot.
-    private var callFrameColor: Color {
-        entry.callFrame.flatMap { bandMapModel?.status(for: $0) }?.color ?? .secondary
-    }
 
     // MARK: CW speed
 
@@ -2388,8 +2145,8 @@ struct MainView: View {
             else { return event }
             Self.keyLog.log("media key \(key.name, privacy: .public) \(key.isDown ? "down" : "up", privacy: .public)")
             if let notice = KeyDiagnostics.fRowNotice(for: key) {
-                fRowNotice = notice
-                lastKeyReadout = "\(key.name) — a media key, not a function key"
+                keyReadout.fRowNotice = notice
+                keyReadout.lastKeyReadout = "\(key.name) — a media key, not a function key"
             }
             return event
         }
@@ -2399,18 +2156,18 @@ struct MainView: View {
     /// key on an F position raises it, any real function key clears it.
     private func noteKeyDown(keyCode: UInt16, command: Bool, shift: Bool, option: Bool,
                              action: KeyMonitorGate.Action?) {
-        lastKeyReadout = KeyDiagnostics.lastKeyReadout(keyCode: keyCode, command: command,
-                                                       shift: shift, option: option, action: action)
+        keyReadout.lastKeyReadout = KeyDiagnostics.lastKeyReadout(keyCode: keyCode, command: command,
+                                                                  shift: shift, option: option, action: action)
         if let notice = KeyDiagnostics.fRowNotice(forKeyCode: keyCode) {
-            fRowNotice = notice
+            keyReadout.fRowNotice = notice
         } else if case .sendMessage = action {
-            fRowNotice = nil
+            keyReadout.fRowNotice = nil
         } else if case .editMessage = action {
             // A real function key arrived, so the media-key notice is stale
             // whether it transmitted or opened the editor.
-            fRowNotice = nil
+            keyReadout.fRowNotice = nil
         } else if action == .clearEntry {
-            fRowNotice = nil
+            keyReadout.fRowNotice = nil
         }
     }
 
@@ -2622,5 +2379,54 @@ struct TextExportDocument: FileDocument {
 
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         FileWrapper(regularFileWithContents: Data(text.utf8))
+    }
+}
+
+/// The ⇧⌘S toolbar button — its own view because its label follows the
+/// operating mode and the typed call, and those reads must land here rather
+/// than on the whole window's body (the keystroke fence, 2026-08-30). The
+/// button says which one it is before it is pressed: a command that changes
+/// meaning has to show it, or it is the same trap as two shortcuts a
+/// modifier apart.
+private struct SpotToolbarButton: View {
+    let document: LogDocument
+    let flow: EntryFlow
+    /// Evaluated in this body, so whatever it reads registers here.
+    let canSpot: (SpotNetworkAvailability.Target) -> Bool
+    let action: () -> Void
+
+    private var spotCommand: SpotCommand {
+        SpotCommand.target(mode: document.log.operatingMode, entryCall: flow.entry.callNormalized)
+    }
+
+    private var canSpotNow: Bool {
+        canSpot(spotCommand == .myself ? .myself : .station)
+    }
+
+    var body: some View {
+        Button(action: action) {
+            Label(spotCommand == .myself ? "Spot Myself" : "Spot Station",
+                  systemImage: spotCommand == .myself
+                      ? "dot.radiowaves.left.and.right" : "dot.radiowaves.right")
+        }
+        .keyboardShortcut("s", modifiers: [.command, .shift])
+        .disabled(!canSpotNow)
+        .help(help)
+        .shortcutHint("⇧⌘S")
+    }
+
+    private var help: String {
+        guard canSpotNow else {
+            return "Nothing to spot to yet — connect a cluster node, pick a party with a "
+                + "QSO Party Hub page, or set your park in Contest Setup; and set your callsign"
+        }
+        let what = switch spotCommand {
+        case .myself: "Spot yourself (⇧⌘S)"
+        case .station(let call): "Spot \(call) (⇧⌘S)"
+        case .blankStation: "Spot a station (⇧⌘S) — type the call in the sheet"
+        }
+        return what + " — to the DX cluster, the QSO Party Hub and POTA, whichever apply, "
+            + "confirmed before it sends. Or right-click any spot on the band map, or any "
+            + "row in the log."
     }
 }
