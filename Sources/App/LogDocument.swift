@@ -34,7 +34,17 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
 
     static var readableContentTypes: [UTType] { [.qplog] }
 
-    var log: ContestLog
+    var log: ContestLog {
+        didSet { generation &+= 1 }
+    }
+
+    /// Bumped by every `log` mutation — the O(1) "did anything change" stamp
+    /// `LiveScore` keys its cache on. Observed, so a view that reads the
+    /// cached score re-renders exactly when the log changes. Reads never
+    /// bump it; the initialisers don't either (a property's own `didSet`
+    /// does not fire during `init`), so a freshly opened document starts
+    /// at 0 with nothing folded yet.
+    private(set) var generation = 0
 
     /// Where this document currently lives on disk (tracked by the UI from
     /// the NSDocument bridge; nil while still an unsaved draft). Used to skip

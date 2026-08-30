@@ -91,6 +91,7 @@
 		2116FEE0D5157A280241DAE1 /* BonusScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFD29B68C87E0D24267605B /* BonusScopeTests.swift */; };
 		21A520CE49B99E980AD2828A /* CombinedLogSplitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135F472CB9A0491C54F217ED /* CombinedLogSplitTests.swift */; };
 		22153100EBA41351F23D9A99 /* DXCCLabelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D311DEBD1B5C6AA9730A18 /* DXCCLabelStore.swift */; };
+		236FAA2397783EA3827508C0 /* LiveScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C36998D546AA0AF941E36D /* LiveScore.swift */; };
 		241A9D98907398CD1DFD522A /* DelawareQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2052FF6C863AA0209875C20 /* DelawareQSOPartyTests.swift */; };
 		251554806373EEDB1B2650BC /* engine-golden.json in Resources */ = {isa = PBXBuildFile; fileRef = EE585D15DF606E21BB3CD741 /* engine-golden.json */; };
 		253F67178C8812AEAE40C5D4 /* CallbookStampTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DF39F3D984B5DBBD0BF686 /* CallbookStampTests.swift */; };
@@ -425,6 +426,7 @@
 		CD43C2A39B7F73159CA453D9 /* MemberExchangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75214B2954E32E9289B737EE /* MemberExchangeTests.swift */; };
 		CD619D2916CB1A7385A1F423 /* CombinedBreakdownSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02590141050CF40EEF90B0C1 /* CombinedBreakdownSection.swift */; };
 		CDF617D869D5238FAB9DB3BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1B2185C4DCD353FBC522D1A /* Assets.xcassets */; };
+		CE16DBA80E84DB4A44604103 /* LiveScoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE62D067430FB2C0F8A99EAA /* LiveScoreTests.swift */; };
 		CEACC3EEBBF6A962A00C0F48 /* LogDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27158AAEFAD7C21DD3D17B0 /* LogDocument.swift */; };
 		CF5C83CCA0BCA6C4A70F9E25 /* PointRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928D9406BEDF52EBC3DD925C /* PointRule.swift */; };
 		D0D1F31090A7D5B23D094EAD /* SpotDraftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47B5C2B4B0E3D55FBFEA997 /* SpotDraftTests.swift */; };
@@ -555,6 +557,7 @@
 		033F9D044AD7BFDEE8B6D181 /* PennsylvaniaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PennsylvaniaQSOPartyTests.swift; sourceTree = "<group>"; };
 		03674EF03D1FFEDC38888A79 /* ExchangeSummaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeSummaryTests.swift; sourceTree = "<group>"; };
 		039CBD24DAEF64BCB1269D67 /* MessageMemoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMemoryTests.swift; sourceTree = "<group>"; };
+		03C36998D546AA0AF941E36D /* LiveScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveScore.swift; sourceTree = "<group>"; };
 		03CE1E1946B617E9A436FD8A /* CallHistoryClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryClient.swift; sourceTree = "<group>"; };
 		04053E0272A2391F55417D60 /* SpotFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFilterTests.swift; sourceTree = "<group>"; };
 		0472BDED0E13FBBD670B36ED /* ExchangeElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeElement.swift; sourceTree = "<group>"; };
@@ -1064,6 +1067,7 @@
 		FCD28963E087488CA3722809 /* ArkansasQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArkansasQSOPartyTests.swift; sourceTree = "<group>"; };
 		FD32257D3D8870AAFF61403B /* ExchangeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeParser.swift; sourceTree = "<group>"; };
 		FDD35AA6A29190DFD49C7D72 /* ColoradoQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoradoQSOPartyTests.swift; sourceTree = "<group>"; };
+		FE62D067430FB2C0F8A99EAA /* LiveScoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveScoreTests.swift; sourceTree = "<group>"; };
 		FF2C8D6694C9F0C035095796 /* FlexRadioDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexRadioDriver.swift; sourceTree = "<group>"; };
 		FFC7EEC941E41165B0FE43C9 /* SkeeterRosterParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeeterRosterParser.swift; sourceTree = "<group>"; };
 		FFEC9FB88DA24155AF297AC2 /* TennesseeQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TennesseeQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -1717,6 +1721,7 @@
 				4F6C7056708ECE6573BF5FF3 /* GridLocateTests.swift */,
 				019DA95DE2A4D5A20E63D7B0 /* KeyDiagnosticsTests.swift */,
 				58A224607966DFCCC3082F6E /* KeyMonitorGateTests.swift */,
+				FE62D067430FB2C0F8A99EAA /* LiveScoreTests.swift */,
 				D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */,
 				039CBD24DAEF64BCB1269D67 /* MessageMemoryTests.swift */,
 				13483946346E99F04F253202 /* PotaBoardClientTests.swift */,
@@ -1847,6 +1852,7 @@
 				3B07E26A34F4A74B9165A344 /* EntryState.swift */,
 				D590A3128E841A331486E328 /* HubSpotClient.swift */,
 				88D2806AD8D0238FAE9C9E6D /* KeychainStore.swift */,
+				03C36998D546AA0AF941E36D /* LiveScore.swift */,
 				0A5F9E99BE569E4E2DFB8FC7 /* LocationProvider.swift */,
 				B27158AAEFAD7C21DD3D17B0 /* LogDocument.swift */,
 				1AD0B60341F5F0643FF06DF6 /* MessageMemory.swift */,
@@ -2156,6 +2162,7 @@
 				9F3E246A218E966A51DC14C3 /* KeyDiagnosticsTests.swift in Sources */,
 				42E10D9D5426C54AFA9C6A23 /* KeyMonitorGateTests.swift in Sources */,
 				0B13C9686C52A0FFC4FD1016 /* KeyerTimingTests.swift in Sources */,
+				CE16DBA80E84DB4A44604103 /* LiveScoreTests.swift in Sources */,
 				36D1463B5DC69485948798D3 /* LogDocumentTests.swift in Sources */,
 				AB87CDB7F0D931F151F186C7 /* LogFolderTests.swift in Sources */,
 				1C955D3925926AD1F9C0AF47 /* LogTablePointsTests.swift in Sources */,
@@ -2404,6 +2411,7 @@
 				0589789400D49E118C812D8E /* KeyMonitorGate.swift in Sources */,
 				BB5DE58A6F719416EB9AA50B /* KeychainStore.swift in Sources */,
 				BD620D19CDA5954AD41075B9 /* KeyerTiming.swift in Sources */,
+				236FAA2397783EA3827508C0 /* LiveScore.swift in Sources */,
 				BD0B20AA6859EE9406080E6C /* LocationProvider.swift in Sources */,
 				CEACC3EEBBF6A962A00C0F48 /* LogDocument.swift in Sources */,
 				EAA5045F0BA4CB2EB6BB915C /* LogFolder.swift in Sources */,
