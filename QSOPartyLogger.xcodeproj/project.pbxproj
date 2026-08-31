@@ -398,6 +398,7 @@
 		BEB6284CA706FC461D203DAE /* HubFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC05BC2077B42827CBC8A537 /* HubFrequency.swift */; };
 		BF3651E7923D74495B61B2ED /* EntryStateCachedKeysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BEE2665198F8DBC754CDDD /* EntryStateCachedKeysTests.swift */; };
 		BF4B93C891EBDA79CBD3E843 /* ChallengeStanding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B598E336484B5D8CC5B9A2F9 /* ChallengeStanding.swift */; };
+		BF8D5643C3A4FBDF37AB2609 /* SuperCheckAsyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5B4C51231FC2D2E7DFDAA1 /* SuperCheckAsyncTests.swift */; };
 		C0299D40AE883FF41A58C149 /* PotaSeasonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A07158B42755CE27DB99D0 /* PotaSeasonTests.swift */; };
 		C0F9C6AFC27E447B1992BEA5 /* FlexDAXStreamerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBEB434114457D69D1718C4 /* FlexDAXStreamerTests.swift */; };
 		C29144991141C6C4FBB0C7C3 /* DXCCLabelRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89CD7086051EE91DCF3E35F /* DXCCLabelRefresh.swift */; };
@@ -616,6 +617,7 @@
 		1D9A6BB88648696A07EDF1BB /* ScoreSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreSnapshotTests.swift; sourceTree = "<group>"; };
 		1DB947FA06E0482D6F99A796 /* DesignatedCountyScoringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignatedCountyScoringTests.swift; sourceTree = "<group>"; };
 		1E41369000406AEFA755AE71 /* PotaSpotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaSpotClient.swift; sourceTree = "<group>"; };
+		1E5B4C51231FC2D2E7DFDAA1 /* SuperCheckAsyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperCheckAsyncTests.swift; sourceTree = "<group>"; };
 		1EB01E6C0EA808C9BE6E90B1 /* CallbookRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbookRecord.swift; sourceTree = "<group>"; };
 		1F3E13C1AD5E096081CF332B /* ksqp-outside-dx.adi */ = {isa = PBXFileReference; path = "ksqp-outside-dx.adi"; sourceTree = "<group>"; };
 		1FE95997B2CFA8BC341F95EE /* skeeter-member.adi */ = {isa = PBXFileReference; path = "skeeter-member.adi"; sourceTree = "<group>"; };
@@ -1752,6 +1754,7 @@
 				4965CF427FF28FE0F8D27B4E /* SpaceWeatherClientTests.swift */,
 				AD6591008A672F612DB9FA26 /* SpotDispatcherTests.swift */,
 				6A83B90871BA86343AB446AA /* SpotLabelSizePreferenceTests.swift */,
+				1E5B4C51231FC2D2E7DFDAA1 /* SuperCheckAsyncTests.swift */,
 				EA8FAE342F109F10019D3BA4 /* SuperCheckFlowTests.swift */,
 				1CC08411890A02411D150879 /* TuningPreferenceTests.swift */,
 				E4295E1FE334FF3C8606B090 /* VoiceSettingsTests.swift */,
@@ -2298,6 +2301,7 @@
 				A632469108D3943D5C878CD7 /* SpottingTests.swift in Sources */,
 				B6FBE02A952C1AE6A69D169F /* StationMemoryTests.swift in Sources */,
 				E796127A2382C49ADF81525C /* StationProfileNormalizationTests.swift in Sources */,
+				BF8D5643C3A4FBDF37AB2609 /* SuperCheckAsyncTests.swift in Sources */,
 				8254AB72055CCFA9DAE27961 /* SuperCheckFlowTests.swift in Sources */,
 				711C59041490CC39A6027902 /* SuperCheckTests.swift in Sources */,
 				0F87B0740AE33C79FF082253 /* TennesseeQSOPartyTests.swift in Sources */,

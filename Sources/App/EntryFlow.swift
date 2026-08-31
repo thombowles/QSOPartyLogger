@@ -200,6 +200,16 @@ final class EntryFlow {
     /// without rescanning 50k calls for a fragment that has not moved.
     @ObservationIgnored private var scpFragment: String?
 
+    /// How the strip computes its matches. `.immediate` — the default, and
+    /// every test — scans synchronously, exactly as always. `.background`
+    /// (set by the window) runs the ~7 ms MASTER.SCP scan off the main
+    /// actor and applies the result only if the fragment still stands, so a
+    /// stale scan can never overwrite a newer one and a call keystroke
+    /// costs the main thread nothing.
+    enum SCPScanMode { case immediate, background }
+    @ObservationIgnored var scpScanMode: SCPScanMode = .immediate
+    @ObservationIgnored private var scpTask: Task<Void, Never>?
+
     func updateSCPDatabase(_ database: SCPDatabase?) {
         scpDatabase = database
         scpFragment = nil
@@ -217,12 +227,32 @@ final class EntryFlow {
         let fragment = entry.callNormalized
         guard fragment != scpFragment else { return }
         scpFragment = fragment
-        let fresh = SuperCheck.matches(
-            for: fragment,
-            scpCalls: scpDatabase?.calls ?? [],
-            historyCalls: historyCallsForParty,
-            limit: Self.scpDisplayCap
-        )
+        scpTask?.cancel()
+        let scpCalls = scpDatabase?.calls ?? []
+        let historyCalls = historyCallsForParty
+        switch scpScanMode {
+        case .immediate:
+            applySCPMatches(SuperCheck.matches(
+                for: fragment, scpCalls: scpCalls,
+                historyCalls: historyCalls, limit: Self.scpDisplayCap
+            ), for: fragment)
+        case .background:
+            let cap = Self.scpDisplayCap
+            scpTask = Task.detached(priority: .userInitiated) { [weak self] in
+                let fresh = SuperCheck.matches(
+                    for: fragment, scpCalls: scpCalls,
+                    historyCalls: historyCalls, limit: cap
+                )
+                guard !Task.isCancelled else { return }
+                await self?.applySCPMatches(fresh, for: fragment)
+            }
+        }
+    }
+
+    /// Only the freshest fragment's result may land — a scan that outlived
+    /// its keystroke is dropped here, whichever order the tasks finish in.
+    private func applySCPMatches(_ fresh: SuperCheck.Matches, for fragment: String) {
+        guard fragment == scpFragment else { return }
         if fresh != superCheckMatches { superCheckMatches = fresh }
     }
 

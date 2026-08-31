@@ -1129,6 +1129,10 @@ struct MainView: View {
         flow.parkLocation = { [weak potaParkClient] ref in
             potaParkClient?.directory?.park(reference: ref)?.locationDesc
         }
+        // The MASTER.SCP scan leaves the main actor in the window — a call
+        // keystroke costs it nothing; the strip fills a few ms later, always
+        // for the freshest fragment.
+        flow.scpScanMode = .background
         // The log's current key sets, so the badge and the dupe warning are
         // answered per keystroke without re-scoring the log. Closures, not
         // values: `LiveScore` refolds lazily when the log changes, and the
