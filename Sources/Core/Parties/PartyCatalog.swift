@@ -43,16 +43,27 @@ enum PartyCatalog {
         return parties
     }
 
-    /// User-supplied parties; failures are returned so the UI can explain bad files.
-    static func loadUserParties() -> [(url: URL, result: Result<PartyDefinition, Error>)] {
-        let dir = userPartiesDirectory
+    private static let userCache = OSAllocatedUnfairLock<
+        [URL: (stamp: UserFolderStamp, parties: [(url: URL, result: Result<PartyDefinition, Error>)])]
+    >(initialState: [:])
+
+    /// User-supplied parties; failures are returned so the UI can explain bad
+    /// files. Decoded (and proven to lower) only when the folder's stamp has
+    /// moved — this used to re-decode every user file on every lookup, which
+    /// the save path reached once per logged contact.
+    static func loadUserParties(in dir: URL = userPartiesDirectory) -> [(url: URL, result: Result<PartyDefinition, Error>)] {
+        let stamp = UserFolderStamp.of(dir)
+        if let hit = userCache.withLock({ $0[dir] }), hit.stamp == stamp { return hit.parties }
         guard let urls = try? FileManager.default.contentsOfDirectory(
             at: dir, includingPropertiesForKeys: nil
-        ) else { return [] }
-        return urls
+        ) else {
+            userCache.withLock { $0[dir] = (stamp, []) }
+            return []
+        }
+        let parties = urls
             .filter { $0.pathExtension.lowercased() == "json" }
             .sorted { $0.lastPathComponent < $1.lastPathComponent }
-            .map { url in
+            .map { url -> (url: URL, result: Result<PartyDefinition, Error>) in
                 do {
                     let party = try decode(try Data(contentsOf: url))
                     return (url, .success(party))
@@ -65,6 +76,8 @@ enum PartyCatalog {
                     return (url, .failure(error))
                 }
             }
+        userCache.withLock { $0[dir] = (stamp, parties) }
+        return parties
     }
 
     /// All loadable parties, user files overriding bundled ones with the same id.

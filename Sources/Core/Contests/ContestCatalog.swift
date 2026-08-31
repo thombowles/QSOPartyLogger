@@ -34,13 +34,24 @@ enum ContestCatalog {
         return contests
     }
 
-    /// User v2 files in a folder; failures are returned so the UI can explain them.
+    private static let userCache = OSAllocatedUnfairLock<
+        [URL: (stamp: UserFolderStamp, contests: [(url: URL, result: Result<ContestDefinition, Error>)])]
+    >(initialState: [:])
+
+    /// User v2 files in a folder; failures are returned so the UI can explain
+    /// them. Decoded only when the folder's stamp has moved, like
+    /// `PartyCatalog.loadUserParties` and for the same per-save reason.
     static func loadUserContests(in dir: URL = userContestsDirectory) -> [(url: URL, result: Result<ContestDefinition, Error>)] {
-        guard let urls = try? FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil) else { return [] }
-        return urls
+        let stamp = UserFolderStamp.of(dir)
+        if let hit = userCache.withLock({ $0[dir] }), hit.stamp == stamp { return hit.contests }
+        guard let urls = try? FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil) else {
+            userCache.withLock { $0[dir] = (stamp, []) }
+            return []
+        }
+        let contests = urls
             .filter { $0.pathExtension.lowercased() == "json" }
             .sorted { $0.lastPathComponent < $1.lastPathComponent }
-            .map { url in
+            .map { url -> (url: URL, result: Result<ContestDefinition, Error>) in
                 do { return (url, .success(try ContestDefinition.decode(try Data(contentsOf: url)))) }
                 catch {
                     // Logged as well as returned, like the bundled and user
@@ -50,6 +61,8 @@ enum ContestCatalog {
                     return (url, .failure(error))
                 }
             }
+        userCache.withLock { $0[dir] = (stamp, contests) }
+        return contests
     }
 
     /// Everything, user party files (lowered) and user v2 files overriding
