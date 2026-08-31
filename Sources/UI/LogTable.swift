@@ -3,7 +3,12 @@ import SwiftUI
 /// The QSO log. County-line rows carry a ⧉ marker with the group's row count;
 /// dupes and new mults are flagged from the live score.
 struct LogTable: View {
-    let qsos: [QSO]
+    /// The rows in display order, newest first — sorted by the window's
+    /// `LiveScore` once per log change, never here per render.
+    let rows: [QSO]
+    /// Each contact group's row count, built alongside `rows` for the same
+    /// reason: a computed dictionary here re-ran per visible cell.
+    let groupSizes: [UUID: Int]
     let score: ScoreEngine.ScoreBreakdown
     let party: PartyDefinition?
     let onDeleteRows: (Set<QSO.ID>) -> Void
@@ -28,14 +33,6 @@ struct LogTable: View {
     /// ⌘A for the lot — the selection model N1MM's Log window documents, and
     /// `Table` gives every one of those keyboard paths for free.
     @State private var selection = Set<QSO.ID>()
-
-    private var rows: [QSO] {
-        qsos.sortedChronologically().reversed()
-    }
-
-    private var groupSizes: [UUID: Int] {
-        Dictionary(grouping: qsos, by: \.groupID).mapValues(\.count)
-    }
 
     private static let timeFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -179,7 +176,7 @@ struct LogTable: View {
     /// which is what the bulk sheet seeds from — means the one the operator
     /// worked first.
     private func selectedRows(_ ids: Set<QSO.ID>) -> [QSO] {
-        qsos.sortedChronologically().filter { ids.contains($0.id) }
+        rows.reversed().filter { ids.contains($0.id) }
     }
 
     private func pointsText(_ q: QSO) -> String {

@@ -598,7 +598,8 @@ struct MainView: View {
 
     private var logTable: some View {
         LogTable(
-            qsos: document.log.qsos,
+            rows: liveScore.displayRows,
+            groupSizes: liveScore.groupSizes,
             score: score,
             party: party,
             onDeleteRows: { document.remove(ids: $0, undoManager: undoManager) },

@@ -120,4 +120,27 @@ final class LiveScoreTests: XCTestCase {
         document.log.qsos.append(probeQSO(call: "W0FRESH"))
         XCTAssertTrue(live.workedCalls(band: .m15, modeClass: .cw).contains("W0FRESH"))
     }
+
+    @MainActor
+    func testDisplayRowsAndGroupSizesFollowTheLog() {
+        let document = seededDocument(rows: 20)
+        let live = LiveScore(document: document)
+        let expected = Array(document.log.qsos.sortedChronologically().reversed())
+        XCTAssertEqual(live.displayRows.map(\.id), expected.map(\.id))
+        XCTAssertEqual(live.groupSizes,
+                       Dictionary(grouping: document.log.qsos, by: \.groupID).mapValues(\.count))
+        XCTAssertEqual(live.foldCount, 0, "table data never folds the score")
+
+        // A county-line contact joins: two rows, one groupID, newest first.
+        let group = UUID()
+        let t = Date(timeIntervalSince1970: 1_788_200_000)
+        for county in [counties[60], counties[61]] {
+            document.log.qsos.append(QSO(
+                groupID: group, timestampUTC: t, call: "N0CL", band: .m20,
+                modeClass: .cw, rawMode: "CW", freqKHz: 14040,
+                rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: county))
+        }
+        XCTAssertEqual(live.groupSizes[group], 2)
+        XCTAssertEqual(live.displayRows.first?.call, "N0CL")
+    }
 }

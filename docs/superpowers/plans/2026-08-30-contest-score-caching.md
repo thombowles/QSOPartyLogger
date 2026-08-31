@@ -264,6 +264,66 @@ final class LiveScore {
 - [ ] **Step 6.2:** Run harness Debug + Release; record numbers in the commit message.
 - [ ] **Step 6.3:** README test count + docs. **Commit** `perf: keystroke engine work reads the cached fold — measured before/after`.
 
+## Addendum 2026-08-31 — the deferred fixes (4-6), approved after the on-air look
+
+Tasks 1-6 shipped and merged (master b2f3aed). These four tasks finish the
+per-contact and background costs the first phase deliberately left.
+
+### Task 7: Log table rows and group sizes once per change
+
+- LiveScore gains `displayRows: [QSO]` (newest-first) + `groupSizes: [UUID: Int]`,
+  memoised per generation in their own cache slot (no fold). Tests in
+  LiveScoreTests: order (newest first, stable ties), counts, generation refresh.
+- LogTable's `qsos` param becomes `rows: [QSO]` + `groupSizes: [UUID: Int]`;
+  `selectedRows` = `rows.reversed().filter…` (identical order to today);
+  the computed properties go. One caller (MainView:600) updated.
+- Commit: `ui: the log table's rows and group sizes are computed once per change`.
+
+### Task 8: Catalog user folders re-read only when they change
+
+- `PartyCatalog.loadUserParties()` / `ContestCatalog.loadUserContests(in:)` get a
+  stat-stamp memo: `[URL: (stamp: [Entry(name, size, mtime)], results)]` behind
+  an `OSAllocatedUnfairLock`, keyed by directory. Same stamp → cached results;
+  any add/remove/edit (size or mtime moves) → full reload. Content edits in
+  place are caught by per-file mtime, which a directory-mtime key would miss.
+- Tests: temp-dir — same contents twice returns identical results without
+  re-decoding (observable via a decode-count hook? No — assert correctness +
+  a mutated file IS picked up; the cache is an optimisation, correctness is
+  the contract), and an edited file's new definition is returned.
+- Commit: `catalog: user party and contest folders re-read only when they change`.
+
+### Task 9: The stamped snapshot reuses the window's fold
+
+- `ScoreSnapshot.make(breakdown:bandModeCounts:log:)` — the parts form; the
+  existing `make(log:contest:)` computes the parts and delegates (byte-identical
+  by construction).
+- `ContestLog.stampingScoreSnapshot(using:)` — stamps a caller-supplied
+  snapshot under the same draft rule (unfinished setup / empty log → nil).
+- `LogDocument`: `typealias Snapshot = SaveSnapshot` (`{ log, score:
+  ScoreSnapshot? }`); `snapshot(contentType:)` captures
+  `scoreSnapshotProvider?()` (a window-wired closure; guarded
+  `Thread.isMainThread` + `MainActor.assumeIsolated`, returns nil off-main or
+  when LiveScore has no rules — nil falls back to the legacy compute).
+  `dataForSaving(_:score:)` uses the supplied snapshot when present.
+- MainView wires the provider in `onAppear` next to the flow closures.
+- Tests: bytes of `dataForSaving(log, score: parts-built)` == legacy bytes on a
+  seeded KSQP log; draft logs stamp nil either way; nil provider = legacy.
+- Commit: `save: the stamped snapshot reuses the window's fold`.
+
+### Task 10: The SCP scan comes off the main actor in the window
+
+- `EntryFlow.scpScanMode: .immediate` (default — every existing test and the
+  synchronous contract unchanged) `/ .background` (the window): the scan runs
+  in `Task.detached`, the result applies on the main actor only if the
+  fragment still stands (stale scans drop; newest fragment wins).
+- MainView sets `.background` in `onAppear`.
+- Test: background mode eventually publishes matches for the final fragment
+  (poll with timeout); immediate mode covered by the existing 11 assertions.
+- Commit: `scp: the strip's scan leaves the main actor in the window`.
+
+README test count updates in the last commit; full suite before each commit's
+push of responsibility. Same guardrails as Tasks 1-6.
+
 ## Self-Review
 
 - Spec coverage: fix 1 → Tasks 3-4; fix 2 → Tasks 1-2 + 4.3; fix 3 → Task 5; evidence → Tasks 0, 6. ✓

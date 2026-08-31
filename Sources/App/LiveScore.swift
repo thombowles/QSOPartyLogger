@@ -52,6 +52,15 @@ final class LiveScore {
     /// live, where `dupeKeys` is the set the warning reads.
     var ruleDupeKeys: Set<DupeChecker.RuleKey>? { refreshed().ruleDupeKeys }
 
+    /// The log table's rows, newest first — sorted once per log change
+    /// instead of on every render pass (the table used to re-sort at up to
+    /// 2 Hz while the radio poll invalidated the window).
+    var displayRows: [QSO] { tableRefreshed().rows }
+
+    /// Each contact group's row count, for the table's ⧉ marker — built once
+    /// per change instead of per visible cell.
+    var groupSizes: [UUID: Int] { tableRefreshed().groupSizes }
+
     /// Calls already in the log on this band and mode, uppercased — the spot
     /// filter's grey-out set. Memoised per band|mode within a generation.
     func workedCalls(band: Band, modeClass: ModeClass) -> Set<String> {
@@ -80,6 +89,18 @@ final class LiveScore {
     @ObservationIgnored private var contestCache: (id: String, contest: ContestDefinition?)?
     @ObservationIgnored private var workedCache:
         (generation: Int, sets: [String: (calls: Set<String>, counties: Set<String>)]) = (-1, [:])
+    @ObservationIgnored private var tableCache: (generation: Int, rows: [QSO], groupSizes: [UUID: Int])?
+
+    private func tableRefreshed() -> (generation: Int, rows: [QSO], groupSizes: [UUID: Int]) {
+        let generation = document.generation
+        if let tableCache, tableCache.generation == generation { return tableCache }
+        let qsos = document.log.qsos
+        let fresh = (generation,
+                     Array(qsos.sortedChronologically().reversed()),
+                     Dictionary(grouping: qsos, by: \.groupID).mapValues(\.count))
+        tableCache = fresh
+        return fresh
+    }
 
     private func refreshed() -> Cache {
         // Observed on purpose: reading the score is how a view subscribes to
