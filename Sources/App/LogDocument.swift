@@ -30,7 +30,14 @@ extension UTType {
 /// which is what makes the `@unchecked Sendable` sound.
 @Observable
 final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
-    typealias Snapshot = ContestLog
+    /// What one save writes: the log, and — when the window supplied one —
+    /// its score as already folded, so the write queue never re-scores.
+    struct SaveSnapshot: Sendable {
+        var log: ContestLog
+        var score: ScoreSnapshot?
+    }
+
+    typealias Snapshot = SaveSnapshot
 
     static var readableContentTypes: [UTType] { [.qplog] }
 
@@ -55,6 +62,12 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     /// until the window wires the real store, so a document built in a test
     /// remembers nothing and no test can reach another through the memory.
     @ObservationIgnored var messageMemory: MessageMemory?
+
+    /// The window's already-computed score for the save's stamp, wired like
+    /// the flow's closures. Nil — no window yet, a test, an id with no rules
+    /// installed, or a call off the main thread — falls back to computing
+    /// the snapshot at save time, exactly as before.
+    @ObservationIgnored var scoreSnapshotProvider: (() -> ScoreSnapshot?)?
 
     /// Nonisolated on purpose: `DocumentGroup`'s new-document factory runs on a
     /// background dispatch queue, so this must not touch main-actor state.
@@ -102,18 +115,18 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
         return upgraded
     }
 
-    func snapshot(contentType: UTType) throws -> ContestLog {
-        log
+    func snapshot(contentType: UTType) throws -> SaveSnapshot {
+        SaveSnapshot(log: log, score: scoreSnapshotProvider.flatMap { $0() })
     }
 
-    func fileWrapper(snapshot: ContestLog, configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = try LogDocument.dataForSaving(snapshot)
+    func fileWrapper(snapshot: SaveSnapshot, configuration: WriteConfiguration) throws -> FileWrapper {
+        let data = try LogDocument.dataForSaving(snapshot.log, score: snapshot.score)
         // Best-effort iCloud mirror on every save; never blocks or fails the
         // primary write. Documents that already live in the logs folder ARE
         // the synced copy — mirroring them would trigger "file changed by
         // another application" churn.
-        if CloudMirror.isEnabled, snapshot.setupCompleted, !CloudMirror.folderContains(knownFileURL) {
-            let name = LogDocument.mirrorFileName(for: snapshot)
+        if CloudMirror.isEnabled, snapshot.log.setupCompleted, !CloudMirror.folderContains(knownFileURL) {
+            let name = LogDocument.mirrorFileName(for: snapshot.log)
             DispatchQueue.global(qos: .utility).async {
                 CloudMirror.mirror(data: data, fileName: name)
             }
@@ -125,9 +138,11 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     /// iCloud mirror alike: the log with its score as of this save stamped
     /// in (`ContestLog.stampingScoreSnapshot`), so the file itself is the
     /// contest history the dashboard reads. The document's model is not
-    /// touched; the stamp lives in the file.
-    nonisolated static func dataForSaving(_ log: ContestLog) throws -> Data {
-        try log.stampingScoreSnapshot().encoded()
+    /// touched; the stamp lives in the file. A `score` the window already
+    /// folded is stamped directly; nil computes it here, exactly as before.
+    nonisolated static func dataForSaving(_ log: ContestLog, score: ScoreSnapshot? = nil) throws -> Data {
+        if let score { return try log.stampingScoreSnapshot(using: score).encoded() }
+        return try log.stampingScoreSnapshot().encoded()
     }
 
     /// The stem the export save panel offers: the log's own name — the file's

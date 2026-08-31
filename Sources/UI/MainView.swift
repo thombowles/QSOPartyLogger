@@ -1136,6 +1136,21 @@ struct MainView: View {
         flow.currentMultKeys = { [weak liveScore] in liveScore?.multiplierKeys }
         flow.loggedDupeKeys = { [weak liveScore] in liveScore?.dupeKeys }
         flow.loggedRuleKeys = { [weak liveScore] in liveScore?.ruleDupeKeys }
+        // The save's stamp reuses the fold the window already holds — the
+        // write path used to re-score the log twice per contact. Off the
+        // main thread, or for an id with no rules installed, the provider
+        // answers nil and the save computes as before.
+        document.scoreSnapshotProvider = { [weak liveScore, weak document] in
+            guard Thread.isMainThread else { return nil }
+            return MainActor.assumeIsolated {
+                guard let liveScore, let document, liveScore.scoresWithRules else { return nil }
+                return ScoreSnapshot.make(
+                    breakdown: liveScore.breakdown,
+                    bandModeCounts: liveScore.bandModeCounts,
+                    log: document.log
+                )
+            }
+        }
         wireSpotDispatcher()
         syncHubSpotClient()
         syncPotaBoardClient()

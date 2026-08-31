@@ -96,10 +96,20 @@ struct ScoreSnapshot: Codable, Equatable, Sendable {
     /// Full snapshot via the scoring engine — the same fold the score
     /// sidebar shows, so the dashboard can never disagree with it.
     static func make(log: ContestLog, contest: ContestDefinition) -> ScoreSnapshot {
-        let breakdown = ScoreEngine.score(log: log, contest: contest)
+        make(breakdown: ScoreEngine.score(log: log, contest: contest),
+             bandModeCounts: ScoreEngine.bandModeCounts(log: log, contest: contest),
+             log: log)
+    }
+
+    /// The same snapshot from parts a caller already holds — the window's
+    /// `LiveScore` fold at save time. The computing overload above delegates
+    /// here, so the two can never disagree about the shape.
+    static func make(breakdown: ScoreEngine.ScoreBreakdown,
+                     bandModeCounts: [Band: [ModeClass: Int]],
+                     log: ContestLog) -> ScoreSnapshot {
         var byMode: [String: Int] = [:]
         var byBand: [String: Int] = [:]
-        for (band, modes) in ScoreEngine.bandModeCounts(log: log, contest: contest) {
+        for (band, modes) in bandModeCounts {
             for (mode, count) in modes {
                 byMode[mode.rawValue, default: 0] += count
                 byBand[band.rawValue, default: 0] += count

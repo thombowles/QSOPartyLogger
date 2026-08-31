@@ -271,6 +271,15 @@ struct ContestLog: Codable, Equatable, Sendable {
         return stamped
     }
 
+    /// The same copy, stamped with a snapshot the caller already computed —
+    /// the window's cached fold at save time. The draft rule is unchanged:
+    /// an unfinished setup or an empty log stamps nil whatever is supplied.
+    func stampingScoreSnapshot(using snapshot: ScoreSnapshot) -> ContestLog {
+        var stamped = self
+        stamped.scoreSnapshot = setupCompleted && !qsos.isEmpty ? snapshot : nil
+        return stamped
+    }
+
     static func decode(from data: Data) throws -> ContestLog {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601

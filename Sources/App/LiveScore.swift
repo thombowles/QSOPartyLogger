@@ -52,6 +52,12 @@ final class LiveScore {
     /// live, where `dupeKeys` is the set the warning reads.
     var ruleDupeKeys: Set<DupeChecker.RuleKey>? { refreshed().ruleDupeKeys }
 
+    /// Whether this log's id resolved to installed rules. False for a log
+    /// from a build with parties this Mac does not have — the save's stamp
+    /// then falls back to its legacy counts-only path rather than freezing
+    /// an all-zero score into the file.
+    var scoresWithRules: Bool { refreshed().scoresWithRules }
+
     /// The log table's rows, newest first — sorted once per log change
     /// instead of on every render pass (the table used to re-sort at up to
     /// 2 Hz while the radio poll invalidated the window).
@@ -82,6 +88,7 @@ final class LiveScore {
         var bandModeCounts: [Band: [ModeClass: Int]]
         var dupeKeys: Set<DupeChecker.DupeKey>
         var ruleDupeKeys: Set<DupeChecker.RuleKey>?
+        var scoresWithRules = false
     }
 
     @ObservationIgnored private var cache: Cache?
@@ -117,11 +124,13 @@ final class LiveScore {
         if let party = party(id: log.partyID) {
             fresh.breakdown = ScoreEngine.score(log: log, party: party)
             fresh.bandModeCounts = ScoreEngine.bandModeCounts(log: log, party: party)
+            fresh.scoresWithRules = true
             foldCount += 1
         } else if let contest = contest(id: log.partyID) {
             fresh.breakdown = ScoreEngine.score(log: log, contest: contest)
             fresh.bandModeCounts = ScoreEngine.bandModeCounts(log: log, contest: contest)
             fresh.ruleDupeKeys = Set(log.qsos.map { DupeChecker.key($0, rule: contest.dupe) })
+            fresh.scoresWithRules = true
             foldCount += 1
         }
         cache = fresh
