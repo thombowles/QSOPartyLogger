@@ -63,7 +63,7 @@ final class CallbookClient {
     private var debounceTask: Task<Void, Never>?
 
     init(fetcher: CallbookFetching = URLSessionCallbookFetcher(),
-         credentials: CredentialStore = KeychainStore(),
+         credentials: CredentialStore = CachingCredentialStore.shared,
          cache: CallbookCache = CallbookCache(),
          configuration: @escaping () -> Configuration) {
         self.fetcher = fetcher
@@ -78,6 +78,19 @@ final class CallbookClient {
     static func isPlausibleCall(_ call: String) -> Bool {
         let c = call.trimmingCharacters(in: .whitespaces)
         return c.count >= 3 && c.contains(where: \.isNumber)
+    }
+
+    /// Touch the enabled services' credentials once, at a deliberate moment
+    /// (window open). If the keychain is going to ask at all — a new binary
+    /// under ad-hoc signing — it asks now, before the first pileup; the
+    /// caching store then keeps every later login off the keychain for the
+    /// rest of the run.
+    func prewarmCredentials() {
+        let config = configuration()
+        for service in order(config) {
+            let account = service == .qrz ? config.qrzUsername : config.hamqthUsername
+            _ = credentials.password(service: service.keychainService, account: account)
+        }
     }
 
     /// The entry path's entry point: debounced 600 ms, cancelled by the
@@ -123,11 +136,17 @@ final class CallbookClient {
         case .qrz:
             qrzSessionKey = nil
             qrzRefusedUntil = nil
+            // Check is the operator's explicit ask: see the keychain as it
+            // is now, not as this run first found it.
+            credentials.invalidate(service: CallbookService.qrz.keychainService,
+                                   account: config.qrzUsername)
             let ok = await qrzLogin(config: config)
             return ok ? "QRZ accepted the login."
                       : (console.last ?? "QRZ did not accept the login.")
         case .hamqth:
             hamqthSession = nil
+            credentials.invalidate(service: CallbookService.hamqth.keychainService,
+                                   account: config.hamqthUsername)
             let ok = await hamqthLogin(config: config)
             return ok ? "HamQTH accepted the login."
                       : (console.last ?? "HamQTH did not accept the login.")

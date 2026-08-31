@@ -12,7 +12,10 @@ struct CallbookSettingsPane: View {
     @State private var hamqthPassword = ""
     @State private var qrzStatus: String?
     @State private var hamqthStatus: String?
-    private let credentials: CredentialStore = KeychainStore()
+    // The shared caching store, not a fresh KeychainStore: the pane's saves
+    // must feed the same cache the lookup client reads, or a new password
+    // would sit behind a stale miss until relaunch.
+    private let credentials: CredentialStore = CachingCredentialStore.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {

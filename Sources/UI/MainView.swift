@@ -1172,6 +1172,10 @@ struct MainView: View {
         activateSuperCheck()
         checkDXCCLabels()
         checkSpaceWeather()
+        // Any keychain ask a new binary will ever raise happens here, at
+        // window-open — never an hour into a contest when a lookup session
+        // expires (KSQP operator report, 2026-08-31).
+        callbookClient.prewarmCredentials()
         if settings.clusterAutoConnect,
            !settings.clusterHost.trimmingCharacters(in: .whitespaces).isEmpty,
            !document.log.station.callsign.isEmpty,

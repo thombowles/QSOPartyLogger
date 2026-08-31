@@ -1089,8 +1089,11 @@ exist.
   and/or HamQTH, enter the username and password, and press **Check** — one
   live login whose verdict lands inline by the button. Checking saves the
   password to your **login keychain** (macOS may ask once to allow it —
-  and again after the app itself changes); usernames stay in preferences,
-  passwords never do. With both services on, a picker chooses which is
+  and once more after the app itself changes, at window-open, never
+  mid-contest: the keychain is read once per credential per run, so a
+  lookup session renewing an hour into a pileup reuses the copy in
+  memory); usernames stay in preferences, passwords never do. With both
+  services on, a picker chooses which is
   asked first — HamQTH by default, since it is free and full while a QRZ
   account without the XML subscription returns limited fields.
 - **Frugal by design.** A call is looked up only once it looks like one
@@ -1203,7 +1206,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3279 unit tests**, none of which need hardware, a network or a microphone —
+**3288 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 the score cache's one-fold-per-change discipline (typing costs microseconds of
 engine work at thousands of QSOs — measured baselines live in the suite),

@@ -123,6 +123,7 @@
 		2FADB97332AC9D40282F9897 /* RadioBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771A2A2E70C2A91608F19549 /* RadioBar.swift */; };
 		2FB28E2BB6D45DB0A743B1FB /* HawaiiQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EB12C03231B219068E0737 /* HawaiiQSOPartyTests.swift */; };
 		2FBC769F772805B49F4479DB /* EntryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B07E26A34F4A74B9165A344 /* EntryState.swift */; };
+		2FFA024B95862DC2C4862AAC /* CachingCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38196D24A0F970A5730CD31F /* CachingCredentialStore.swift */; };
 		305E1E7BCE5D2DD20771B8DB /* RateMeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE7AD7E3989A66634D0BF7A /* RateMeter.swift */; };
 		30817044B3B8822195ECD6C2 /* ExchangeSummaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03674EF03D1FFEDC38888A79 /* ExchangeSummaryTests.swift */; };
 		3106B033A8F6B098A30118E1 /* AdvisorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC0C13AC06A91C6F85B83E4 /* AdvisorSection.swift */; };
@@ -229,6 +230,7 @@
 		6615F01A1746C284C34DD7C4 /* SCPStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A7D51B8CF8AFE96129EA2F /* SCPStoreTests.swift */; };
 		66748F50D261944C01865539 /* ScoreEngineCachedKeysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EF45C3C8D021DBB936419F /* ScoreEngineCachedKeysTests.swift */; };
 		667D53EA8632F9A2B8046A51 /* CallbookClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4460708A809F0A75773DA205 /* CallbookClientTests.swift */; };
+		66C9C8C2F2A2F89F9E2822B6 /* CachingCredentialStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FC8AECDDDD418CB3F9111D /* CachingCredentialStoreTests.swift */; };
 		67A80A778F35F15BE390F382 /* BulkEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64840D9ACF7A45698878A84 /* BulkEditSheet.swift */; };
 		688F883E10245C3D0543C4F7 /* NewHampshireQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3451A53ECE9C61AD37E8E16C /* NewHampshireQSOPartyTests.swift */; };
 		68A357B0FC6E4E8AC3AC8F13 /* SolarGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7B9510D707A5A3BC7B61F8 /* SolarGeometryTests.swift */; };
@@ -672,7 +674,9 @@
 		369E1591F09C47EEADB9A4D7 /* MaidenheadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaidenheadTests.swift; sourceTree = "<group>"; };
 		37D073B044D1A220A77D2F39 /* EngineEquivalenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineEquivalenceTests.swift; sourceTree = "<group>"; };
 		37E6E9F50EC449DAB97086C1 /* ClusterSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterSpot.swift; sourceTree = "<group>"; };
+		38196D24A0F970A5730CD31F /* CachingCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachingCredentialStore.swift; sourceTree = "<group>"; };
 		38A07158B42755CE27DB99D0 /* PotaSeasonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaSeasonTests.swift; sourceTree = "<group>"; };
+		38FC8AECDDDD418CB3F9111D /* CachingCredentialStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachingCredentialStoreTests.swift; sourceTree = "<group>"; };
 		3A0906D967C114B94D58178D /* VoicePaneKeysTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePaneKeysTests.swift; sourceTree = "<group>"; };
 		3B07E26A34F4A74B9165A344 /* EntryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryState.swift; sourceTree = "<group>"; };
 		3BD6F1CD9E4B5D9387123E6C /* SpotFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotFrequency.swift; sourceTree = "<group>"; };
@@ -1721,6 +1725,7 @@
 				818536965FB66D5D0475DFDE /* BandMapBoltPreferenceTests.swift */,
 				725F2EE6C91643ADCAC4B72C /* BandMapObservationTests.swift */,
 				0A5BA028001710ECEF0674D1 /* BandMapStatusTests.swift */,
+				38FC8AECDDDD418CB3F9111D /* CachingCredentialStoreTests.swift */,
 				4460708A809F0A75773DA205 /* CallbookClientTests.swift */,
 				94354D23B8B582B72B8FC894 /* CallFrameTests.swift */,
 				B311ACDB55F4A18F8A7B3A0F /* CallHistoryClientTests.swift */,
@@ -1859,6 +1864,7 @@
 			children = (
 				8229A822492AAC87B462F1C2 /* AppIntegrity.swift */,
 				093C918A35B84A46D9369272 /* AppSettings.swift */,
+				38196D24A0F970A5730CD31F /* CachingCredentialStore.swift */,
 				5355B86FB8F19C93A997AFA0 /* CallbookClient.swift */,
 				03CE1E1946B617E9A436FD8A /* CallHistoryClient.swift */,
 				32C89D2926CF6C8F0A3DEC77 /* CloudMirror.swift */,
@@ -2088,6 +2094,7 @@
 				829A9A5D7A0010D693D79879 /* CTYTableTests.swift in Sources */,
 				F8230055988666CE68A087CF /* CWKeyerTests.swift in Sources */,
 				74E99956E00F3D1E74816983 /* CabrilloExporterTests.swift in Sources */,
+				66C9C8C2F2A2F89F9E2822B6 /* CachingCredentialStoreTests.swift in Sources */,
 				0C98121EB0A1EFAF11C23781 /* CaliforniaQSOPartyTests.swift in Sources */,
 				AFABF3686AB980194F459E40 /* CallAreaSumBonusTests.swift in Sources */,
 				12E1FE53CDC81A2F09F47D71 /* CallFrameTests.swift in Sources */,
@@ -2356,6 +2363,7 @@
 				C6FA714C3CDFA18E1988D2E3 /* CWKeyer.swift in Sources */,
 				E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */,
 				07DD9D8145710BDC93C288FD /* CabrilloExporter.swift in Sources */,
+				2FFA024B95862DC2C4862AAC /* CachingCredentialStore.swift in Sources */,
 				E8FAF2B6ECB072BB3D618F5F /* CallHistoryClient.swift in Sources */,
 				32DC0E794DD42A7AAF64CA38 /* CallHistoryFile.swift in Sources */,
 				E9F0CB45033CD44A319ACFF5 /* CallHistoryPageParser.swift in Sources */,

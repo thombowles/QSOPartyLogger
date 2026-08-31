@@ -7,12 +7,23 @@ protocol CredentialStore: AnyObject {
     func password(service: String, account: String) -> String?
     func set(_ password: String, service: String, account: String)
     func delete(service: String, account: String)
+    /// Forget any cached answer for this credential, so the next read asks
+    /// the backing store again — the settings pane's Check button, after
+    /// the operator fixed things outside the app. A requirement (with the
+    /// no-op default below) so it dispatches through the existential.
+    func invalidate(service: String, account: String)
+}
+
+extension CredentialStore {
+    /// A plain store has no cache to forget.
+    func invalidate(service: String, account: String) {}
 }
 
 /// The real store: one generic-password item per lookup service in the
-/// login keychain. First Keychain use in this app — with ad-hoc signing a
-/// rebuilt dev binary may re-prompt for access (the same churn class as the
-/// TCC resets); a release identity is stable. Spec 2026-08-25 decision 7.
+/// login keychain. Reached through `CachingCredentialStore.shared` in the
+/// app, which is what keeps the ad-hoc signing churn (a rebuilt binary is a
+/// new identity to the keychain) down to at most one ask per build, at
+/// window-open. Spec 2026-08-25 decision 7; KSQP operator report 2026-08-31.
 final class KeychainStore: CredentialStore {
     func password(service: String, account: String) -> String? {
         var query = base(service: service, account: account)
