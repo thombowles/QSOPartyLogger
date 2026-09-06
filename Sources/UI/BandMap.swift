@@ -818,7 +818,24 @@ private struct PanelMinimumSize: NSViewRepresentable {
 /// Floating utility panel hosting the band map, one per contest window.
 @MainActor
 enum BandMapPanel {
-    static func make(model: BandMapModel, near window: NSWindow?) -> NSPanel {
+    /// Where a map opens: at `saved` when any part of it is on `screen`;
+    /// otherwise — the first open, or a monitor that is gone — docked just
+    /// right of its window at `size`, kept on the screen; with no window
+    /// either, `size` at the origin for AppKit to place.
+    nonisolated static func initialFrame(saved: NSRect?, host: NSRect?, screen: NSRect, size: NSSize) -> NSRect {
+        if let saved, saved.width > 0, saved.height > 0, screen.intersects(saved) {
+            return saved
+        }
+        guard let host else { return NSRect(origin: .zero, size: size) }
+        var x = host.maxX + 8
+        if x + size.width > screen.maxX {
+            x = screen.maxX - size.width - 8
+        }
+        let y = max(host.maxY - size.height, screen.minY)
+        return NSRect(x: x, y: y, width: size.width, height: size.height)
+    }
+
+    static func make(model: BandMapModel, near window: NSWindow?, frame saved: NSRect?) -> NSPanel {
         // 230 is the long-standing default and comfortably clears the smallest
         // label size; only a bigger one raises it, so a panel opened for the
         // first time at XL is already wide enough for two columns instead of
@@ -841,16 +858,16 @@ enum BandMapPanel {
         panel.level = .floating
         panel.contentView = NSHostingView(rootView: BandMapView(model: model))
 
-        if !panel.setFrameUsingName("BandMapPanel"), let win = window, let screen = win.screen {
-            // First open: dock just right of the contest window.
-            var x = win.frame.maxX + 8
-            if x + width > screen.visibleFrame.maxX {
-                x = screen.visibleFrame.maxX - width - 8
-            }
-            let y = max(win.frame.maxY - height, screen.visibleFrame.minY)
-            panel.setFrame(NSRect(x: x, y: y, width: width, height: height), display: false)
-        }
-        panel.setFrameAutosaveName("BandMapPanel")
+        // Where it was last (`AppSettings.bandMapFrame`, saved by the bolt
+        // attachment on every move) — not AppKit's frame autosave, whose one
+        // name every window's map fought over.
+        let screen = (window?.screen ?? NSScreen.main)?.visibleFrame
+            ?? NSRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        panel.setFrame(
+            initialFrame(saved: saved, host: window?.frame, screen: screen,
+                         size: NSSize(width: width, height: height)),
+            display: false
+        )
         return panel
     }
 }

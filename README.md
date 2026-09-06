@@ -133,7 +133,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⇧⌘←` / `⇧⌘→` | Nudge the VFO down / up 100 Hz (a burst of presses adds up; disconnected, the band-map cursor moves instead) |
 | `⌘R` | Toggle Run / Search & Pounce (the knob also switches: off the CQ frequency → S&P, back onto it → Run) |
 | `⌘J` | Jump back to your CQ run frequency |
-| `⌘B` | Toggle the band map window |
+| `⌘B` | Toggle the band map window — remembered: a log opened next time brings the map back if it was up, where it was |
 | `⇧⌘B` | Bolt the band map to the side of its log window — it moves, raises and hides with the window and can't be dragged off — or set it free. Bolting opens the map if it's closed |
 | `⇧⌘S` | Spot — yourself in Run, the call field in S&P — to the DX cluster, the QSO Party Hub and POTA, whichever apply, from one sheet |
 | `⌘1` / `⌘2` / `⌘3` | In the spot sheet: tick or untick the cluster / the hub / POTA; `Return` posts to every ticked network at once |
@@ -142,6 +142,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⌥⌘E` | Export for POTA — one submission file per park, named `CALL@PARK-YYYYMMDD.adi` (shown when the log has your park set) |
 | `⇧⌘M` | Expand / collapse every multiplier list in the score sidebar |
 | `⌃⌘S` | Show / hide the score sidebar — hidden, the window shrinks to about 560 points wide and the station strip shows the total |
+| `⌃Tab` / `⌃⇧Tab` | Next / previous contest tab — every open log is a tab of one window (also in the Window menu, with *Move Tab to New Window* and *Merge All Windows*) |
 | `⇧⌘C` | Copy the score summary as text (also on the score card's right-click menu) |
 | `⇧⌘A` | Collapse / expand the Advisor |
 | `⌥⌘A` | Toggle what the Advisor optimises: Score ↔ QSOs |
@@ -203,6 +204,19 @@ the key code, which window had focus, and what the app did with it.
   button), and about 820 wide with it. Narrower than its rows need, the F-key
   row and the entry row fold onto extra lines instead of clipping; at the sizes
   you use today nothing moves.
+- **Every contest is a tab.** A second log opens as a tab of the window you
+  have, not a second window: **⌃Tab** / **⌃⇧Tab** switch, the tab bar's **+**
+  starts a new log, and a tab can be dragged out into its own window (or merged
+  back, from the Window menu). Each tab keeps its own band map; the map of the
+  tab in front is the one on screen. The dashboard stays a window of its own.
+- **The window comes back where you left it.** Its position and size are
+  saved on every move and resize, and the first log of the next run opens
+  right there (a later one opens as a tab, so it is already there). So does
+  the band map: whether it was up (**⌘B**, or its close button) and where it
+  was are remembered, and the next log opened brings it back, bolted if it
+  was. ⌘B in one tab shows or hides the map in every tab, like bolting does.
+  A frame left on a monitor that is no longer plugged in is ignored, and the
+  system places the window instead.
 - **Serial-number exchanges.** Where a party sends a QSO number instead of a
   report, the entry bar shows yours (pre-filled) and a field for theirs. A
   county-line contact is one contact and carries one number. Deleting a QSO
@@ -658,7 +672,10 @@ current band with spots plotted where they live, a red VFO marker tracking the
 radio, and a dashed line marking your run frequency. Zoom 25/50/100 kHz or the
 whole band; click a spot to tune and fill the call, click empty map to QSY.
 Floating, it stays on screen when another app takes focus, so it can sit beside
-a panadapter.
+a panadapter. Where you put it, and whether it was up, is remembered across
+runs: a log opened tomorrow brings the map back in the same place. With
+several contests in tabs, each tab has its own map and only the front tab's is
+on screen.
 
 - **Bolt it to the log window** (**⇧⌘B**, or the funnel's **Window** section)
   when you're running two contests at once: each map fastens to the side of its

@@ -65,6 +65,9 @@ struct MainView: View {
     @State private var repeatCQ = false
     @State private var repeatTask: Task<Void, Never>?
     @State private var hostWindow: NSWindow?
+    /// The window's frame, remembered across runs (`AppSettings.logWindowFrame`).
+    /// Made with the window; released with the view.
+    @State private var windowMemory: WindowFrameMemory?
     /// ⌃⌘S, or the toolbar's Score button: the score sidebar hidden, so this
     /// window can be pushed into a corner while another keeps its sidebar.
     /// Per window, restored with it. The strip shows the total meanwhile.
@@ -495,6 +498,7 @@ struct MainView: View {
         // folds below ~770 (`WindowSizeTests`).
         .frame(minWidth: 560)
         .background(WindowAccessor { window in
+            if hostWindow !== window { adoptHostWindow(window) }
             hostWindow = window
             applyDefaultDocumentName()
         })
@@ -539,6 +543,7 @@ struct MainView: View {
         leftPaneSpotWired
         .onChange(of: settings.bandMapBolted) { applyBandMapBolt() }
         .onChange(of: settings.bandMapBoltSide) { applyBandMapBolt() }
+        .onChange(of: settings.bandMapShown) { followBandMapShown() }
     }
 
     /// The mode and tuning wiring — its own seam for the same type-checker
@@ -1221,6 +1226,7 @@ struct MainView: View {
             }
             bandMapModel = model
         }
+        restoreBandMapIfWanted()
     }
 
     /// Serve the active party's cached call history at once, then let the
@@ -1297,29 +1303,65 @@ struct MainView: View {
 
     // MARK: Band map panel
 
-    /// ⌘B: show the map, or hide it.
+    /// ⌘B: show the map, or hide it — and remember which.
     private func toggleBandMap() {
         if let panel = bandMapPanel, panel.isVisible {
             bandMapBolt?.hide()
+            settings.bandMapShown = false
         } else {
             showBandMap()
         }
     }
 
-    /// The map on screen — opened beside this window the first time, and
-    /// bolted to it if the setting says so.
+    /// The map on screen — where it was last, or beside this window the
+    /// first time — bolted to it if the setting says so.
     private func showBandMap() {
+        settings.bandMapShown = true
         if let bolt = bandMapBolt {
             bolt.show()
             return
         }
         guard let model = bandMapModel, let host = hostWindow else { return }
-        let panel = BandMapPanel.make(model: model, near: host)
+        let panel = BandMapPanel.make(model: model, near: host, frame: settings.bandMapFrame)
         let bolt = BandMapBolt.Attachment(panel: panel, host: host)
+        bolt.onFrameChanged = { settings.bandMapFrame = $0 }
+        bolt.onClosedByOperator = { settings.bandMapShown = false }
         bandMapPanel = panel
         bandMapBolt = bolt
         bolt.apply(bolted: settings.bandMapBolted, side: settings.bandMapBoltSide)
         bolt.show()
+    }
+
+    /// ⌘B in any tab is ⌘B in every tab: the setting changed — here or in
+    /// another window — and this window's map follows it. A background
+    /// tab's map stays off screen until the tab is in front (`sync`).
+    private func followBandMapShown() {
+        if settings.bandMapShown {
+            if bandMapBolt == nil { showBandMap() } else { bandMapBolt?.show() }
+        } else {
+            bandMapBolt?.hide()
+        }
+    }
+
+    /// The map was up when the operator last had a say: open it, once both
+    /// the model (`onAppear`) and the window (the accessor) exist. Called
+    /// from both, in whichever order they come; idempotent.
+    private func restoreBandMapIfWanted() {
+        guard settings.bandMapShown, bandMapPanel == nil,
+              bandMapModel != nil, hostWindow != nil else { return }
+        showBandMap()
+    }
+
+    /// The hosting window, once known: it tabs with the other logs, comes
+    /// back where it was, and brings its band map if that was up.
+    private func adoptHostWindow(_ window: NSWindow) {
+        hostWindow = window
+        LogWindowTabs.configure(window)
+        LogWindowTabs.join(window)
+        windowMemory = WindowFrameMemory(window: window, saved: settings.logWindowFrame) {
+            settings.logWindowFrame = $0
+        }
+        restoreBandMapIfWanted()
     }
 
     /// The bolt settings, applied to the open map — on every change of

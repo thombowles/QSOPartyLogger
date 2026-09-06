@@ -249,6 +249,47 @@ final class AppSettings {
         didSet { defaults.set(bandMapBoltSide.rawValue, forKey: "bandMapBoltSide") }
     }
 
+    /// Whether the band map was up when the operator last had a say — ⌘B, or
+    /// the panel's close button. A log window opening with this on opens its
+    /// map. Machine-level like the bolt: with two tabs open he is showing his
+    /// maps, not one.
+    var bandMapShown: Bool {
+        didSet { defaults.set(bandMapShown, forKey: "bandMapShown") }
+    }
+
+    /// Where the band map was last — saved on its every move and resize, so
+    /// the next open puts it back. Nil until it has been opened once, and
+    /// ignored (not restored) when it is off every screen.
+    var bandMapFrame: CGRect? {
+        didSet { Self.store(frame: bandMapFrame, forKey: "bandMapFrame", in: defaults) }
+    }
+
+    /// Where the log window was last — one frame for every log window, saved
+    /// on its every move and resize, restored to a window that opens alone
+    /// (one opening into the tab group takes the group's frame).
+    var logWindowFrame: CGRect? {
+        didSet { Self.store(frame: logWindowFrame, forKey: "logWindowFrame", in: defaults) }
+    }
+
+    /// A frame is stored as `NSStringFromRect`'s text — readable in the plist,
+    /// and read back through `NSRectFromString`, which turns anything it
+    /// cannot parse into the zero rect. A rect with no area — the parse
+    /// failure, or a hand-edited file — reads as nothing remembered.
+    private static func store(frame: CGRect?, forKey key: String, in defaults: UserDefaults) {
+        if let frame {
+            defaults.set(NSStringFromRect(frame), forKey: key)
+        } else {
+            defaults.removeObject(forKey: key)
+        }
+    }
+
+    private static func frame(forKey key: String, in defaults: UserDefaults) -> CGRect? {
+        guard let text = defaults.string(forKey: key) else { return nil }
+        let rect = NSRectFromString(text)
+        guard rect.width > 0, rect.height > 0 else { return nil }
+        return rect
+    }
+
     /// The spot filters as the engine wants them. `workedCalls` and
     /// `allowedModes` are supplied by the caller — they come from the log and
     /// the active party, not from stored preferences.
@@ -479,6 +520,9 @@ final class AppSettings {
         // a bolted map with no side.
         bandMapBoltSide = BandMapBolt.Side(rawValue: defaults.string(forKey: "bandMapBoltSide") ?? "")
             ?? .right
+        bandMapShown = defaults.object(forKey: "bandMapShown") as? Bool ?? false
+        bandMapFrame = Self.frame(forKey: "bandMapFrame", in: defaults)
+        logWindowFrame = Self.frame(forKey: "logWindowFrame", in: defaults)
         wpm = defaults.object(forKey: "wpm") as? Int ?? 22
         keyerLineConfig = (defaults.data(forKey: "keyerLineConfig")
             .flatMap { try? JSONDecoder().decode(KeyerLineConfig.self, from: $0) })

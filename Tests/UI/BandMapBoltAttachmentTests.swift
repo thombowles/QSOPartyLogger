@@ -224,4 +224,129 @@ final class BandMapBoltAttachmentTests: XCTestCase {
         f.host.setFrameOrigin(NSPoint(x: 250, y: 100))
         XCTAssertEqual(f.panel.frame, before, "nothing is left observing the window")
     }
+
+    // MARK: Remembering — the frame and the close button
+
+    func testEveryMoveAndResizeOfTheMapIsReported() {
+        let f = fixture()
+        var reported: [NSRect] = []
+        f.bolt.onFrameChanged = { reported.append($0) }
+        f.bolt.show()
+        f.panel.setFrameOrigin(NSPoint(x: 40, y: 40))
+        f.panel.setFrame(NSRect(x: 40, y: 40, width: 300, height: 500), display: false)
+        XCTAssertEqual(reported.last, NSRect(x: 40, y: 40, width: 300, height: 500))
+        XCTAssertEqual(reported.count, 2)
+    }
+
+    /// The panel's own close button is the operator saying "no map": it is
+    /// reported, and the map is no longer a child to be brought back.
+    func testTheOperatorClosingTheMapIsReportedAndDetaches() {
+        let f = fixture()
+        var closed = 0
+        f.bolt.onClosedByOperator = { closed += 1 }
+        f.bolt.show()
+        f.bolt.apply(bolted: true, side: .right)
+        f.panel.performClose(nil)
+        XCTAssertEqual(closed, 1)
+        XCTAssertFalse(f.panel.isVisible)
+        XCTAssertFalse(f.bolt.isAttached)
+        XCTAssertNil(f.panel.parent)
+    }
+
+    /// The log window closing closes the map too — that is not the operator
+    /// turning it off, and must not be remembered as such.
+    func testTheWindowClosingIsNotTheOperatorClosingTheMap() {
+        let f = fixture()
+        var closed = 0
+        f.bolt.onClosedByOperator = { closed += 1 }
+        f.bolt.show()
+        f.bolt.close()
+        XCTAssertEqual(closed, 0)
+    }
+
+    // MARK: Tabs — the map goes with its window
+
+    /// A tab that is not selected is ordered out; its map goes out with it,
+    /// and comes back when the tab is selected again — re-pinned, if bolted.
+    func testAHiddenWindowHidesItsMapAndAShownOneBringsItBack() {
+        let f = fixture()
+        f.bolt.show()
+        f.bolt.apply(bolted: true, side: .right)
+        f.host.orderOut(nil)
+        f.bolt.sync()
+        XCTAssertFalse(f.panel.isVisible)
+        XCTAssertFalse(f.bolt.isAttached)
+        f.host.setFrameOrigin(NSPoint(x: 60, y: 60))
+        f.host.orderFront(nil)
+        f.bolt.sync()
+        XCTAssertTrue(f.panel.isVisible)
+        XCTAssertTrue(f.bolt.isAttached)
+        XCTAssertEqual(f.panel.frame, f.expected(.right))
+    }
+
+    func testAFloatingMapGoesWithItsWindowToo() {
+        let f = fixture()
+        f.bolt.show()
+        f.bolt.apply(bolted: false, side: .right)
+        f.host.orderOut(nil)
+        f.bolt.sync()
+        XCTAssertFalse(f.panel.isVisible)
+        f.host.orderFront(nil)
+        f.bolt.sync()
+        XCTAssertTrue(f.panel.isVisible)
+        XCTAssertNil(f.panel.parent, "still floating")
+    }
+
+    /// A map the operator hid stays hidden when the window comes back.
+    func testAMapHiddenByTheOperatorStaysHiddenAcrossATabSwitch() {
+        let f = fixture()
+        f.bolt.show()
+        f.bolt.hide()
+        f.host.orderOut(nil)
+        f.bolt.sync()
+        f.host.orderFront(nil)
+        f.bolt.sync()
+        XCTAssertFalse(f.panel.isVisible)
+    }
+
+    /// Two windows in a tab group, the other tab selected: the map goes with
+    /// its tab. The hosted bundle is never the active app, so the main-window
+    /// notifications that drive this on a desktop do not fire here; the rule
+    /// is asserted through `sync()`, as above.
+    func testSelectingAnotherTabHidesTheMap() throws {
+        let f = fixture()
+        let other = NSWindow(
+            contentRect: NSRect(x: 100, y: 100, width: 900, height: 600),
+            styleMask: [.titled, .closable, .resizable],
+            backing: .buffered,
+            defer: false
+        )
+        other.isReleasedWhenClosed = false
+        addTeardownBlock { @MainActor in other.close() }
+        f.host.tabbingMode = .preferred
+        other.tabbingMode = .preferred
+        f.host.addTabbedWindow(other, ordered: .above)
+        f.host.tabGroup?.selectedWindow = f.host
+        f.bolt.show()
+        XCTAssertTrue(f.bolt.hostIsShowing)
+        XCTAssertTrue(f.panel.isVisible)
+        f.host.tabGroup?.selectedWindow = other
+        XCTAssertFalse(f.bolt.hostIsShowing)
+        f.bolt.sync()
+        XCTAssertFalse(f.panel.isVisible)
+        f.host.tabGroup?.selectedWindow = f.host
+        f.bolt.sync()
+        XCTAssertTrue(f.panel.isVisible)
+    }
+
+    /// A lone window — no tab group, or a group of one — is showing whenever
+    /// it is on screen.
+    func testAWindowWithNoTabSiblingsIsShowingWhenOnScreen() {
+        let f = fixture()
+        XCTAssertTrue(f.bolt.hostIsShowing)
+        f.host.tabbingMode = .preferred
+        XCTAssertTrue(f.bolt.hostIsShowing, "a group of one is no group")
+        f.host.orderOut(nil)
+        XCTAssertFalse(f.bolt.hostIsShowing)
+    }
 }

@@ -34,6 +34,8 @@ struct DashboardView: View {
             }
         }
         .frame(minWidth: 1000, minHeight: 680)
+        // A window of its own, never a tab among the logs (`LogWindowTabs`).
+        .background(WindowAccessor { $0.tabbingMode = .disallowed })
         .navigationTitle("Contest Dashboard")
         .navigationSubtitle(model.historyFolderPath ?? "no logs folder chosen")
         .toolbar { toolbarContent }

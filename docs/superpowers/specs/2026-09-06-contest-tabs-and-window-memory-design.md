@@ -94,7 +94,9 @@ store.
 - `MainView` sets `bandMapShown` in `showBandMap` / `toggleBandMap`, saves the
   frame from `onFrameChanged`, and restores an open map when both the model
   and the host window exist (`restoreBandMapIfWanted`, called from the
-  accessor and from `onAppear`, idempotent).
+  accessor and from `onAppear`, idempotent). Every window follows the
+  setting (`onChange(of: settings.bandMapShown)`), so ⌘B in one tab is ⌘B in
+  every tab — the bolt's semantics.
 
 ### Tabs and the map
 
