@@ -39,7 +39,7 @@ struct CenteredDialog<Content: View>: NSViewRepresentable {
         // to say which screen the log is on.
         let content = content()
         let title = title
-        DispatchQueue.main.async {
+        Presenter.later {
             presenter.sync(content: content, title: title, screen: view.window?.screen)
         }
     }
@@ -50,7 +50,23 @@ struct CenteredDialog<Content: View>: NSViewRepresentable {
     final class Presenter {
         var wanted = false
         private(set) var window: NSWindow?
-        private var running = false
+        private(set) var running = false
+
+        /// Run `block` on the next turn of the main run loop, in every common
+        /// mode — the modal session's included.
+        ///
+        /// Never `DispatchQueue.main.async`: `runModal` blocks the block it
+        /// is called from, and a block on the main *queue* holds that queue
+        /// for the session's whole life — so the dismissal dispatched to it
+        /// never ran, the dialog could not be closed, and every main-actor
+        /// task in the app (a download in the dialog itself, a save) waited
+        /// with it (the operator, 2026-09-07). A run-loop block holds
+        /// nothing: the nested loop keeps serving the queue.
+        static func later(_ block: @escaping @MainActor () -> Void) {
+            RunLoop.main.perform(inModes: [.common]) {
+                MainActor.assumeIsolated(block)
+            }
+        }
 
         /// Open or close, whichever `wanted` asks for and is not yet so.
         func sync<V: View>(content: V, title: String, screen: NSScreen?) {
@@ -63,11 +79,22 @@ struct CenteredDialog<Content: View>: NSViewRepresentable {
                 running = true
                 NSApp.runModal(for: window)
                 running = false
-            } else if !wanted, let window {
-                if running { NSApp.stopModal() }
+                // Closed from inside the session (`close`) or by a stop from
+                // elsewhere: either way the window is done.
                 window.orderOut(nil)
-                self.window = nil
+                if self.window === window { self.window = nil }
+            } else if !wanted, let window {
+                close(window)
             }
+        }
+
+        /// End the session and take the window down. Safe from inside the
+        /// session — the usual case, the dialog's own Save or Cancel — where
+        /// `runModal` returns once the current event is handled.
+        func close(_ window: NSWindow) {
+            if running { NSApp.stopModal() }
+            window.orderOut(nil)
+            self.window = nil
         }
 
         /// The window: sheet-like — no title bar to see, no buttons, not

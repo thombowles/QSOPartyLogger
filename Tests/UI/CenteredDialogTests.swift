@@ -33,6 +33,41 @@ final class CenteredDialogTests: XCTestCase {
         XCTAssertEqual(window.frame.midY, screen.midY, accuracy: 1)
     }
 
+    /// The regression: the session used to be started from a block on the
+    /// main dispatch queue, which `runModal` then held for the session's
+    /// whole life — so the dismissal dispatched to that queue never ran and
+    /// the dialog could not be closed. A block on the main queue must run
+    /// *during* the session, and closing from it must end the session.
+    func testTheMainQueueKeepsServingDuringTheSessionAndCanCloseIt() {
+        let presenter = CenteredDialog<Fixed>.Presenter()
+        presenter.wanted = true
+        var mainQueueRanDuringSession = false
+        // The watchdog: if the queue is held, this run-loop block ends the
+        // session anyway so the test fails instead of hanging.
+        let watchdog = Timer(timeInterval: 3, repeats: false) { _ in
+            MainActor.assumeIsolated { if presenter.running { NSApp.stopModal() } }
+        }
+        RunLoop.main.add(watchdog, forMode: .common)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            mainQueueRanDuringSession = presenter.running
+            presenter.wanted = false
+            if let window = presenter.window { presenter.close(window) }
+        }
+        CenteredDialog<Fixed>.Presenter.later {
+            presenter.sync(content: Fixed(), title: "Contest Setup", screen: nil)
+        }
+        // Spin until the session has come and gone.
+        let deadline = Date().addingTimeInterval(4)
+        while presenter.window != nil || !presenter.running && Date() < deadline && !mainQueueRanDuringSession {
+            RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.05))
+            if presenter.window == nil, mainQueueRanDuringSession { break }
+        }
+        watchdog.invalidate()
+        XCTAssertTrue(mainQueueRanDuringSession, "the main queue must not be held by the modal session")
+        XCTAssertFalse(presenter.running)
+        XCTAssertNil(presenter.window)
+    }
+
     /// Sheet-like: no buttons, no visible title, not resizable, draggable by
     /// its background — and a titled window, so it can become key.
     func testTheDialogLooksLikeASheet() {
