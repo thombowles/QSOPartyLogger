@@ -1036,6 +1036,13 @@ RUMlogNG's own broadcast carries. Anything else on the LAN that reads
 N1MM's packets (Log4OM, DXKeeper's gateway, MacLoggerDX…) hears the same
 feed.
 
+RUMlogNG has no contest field of its own, and its **Note** is the one place
+the packet's comment reaches (its name, QTH, power and grid fields take the
+matching elements; the contest name, exchange and section are discarded —
+found by sending it a marker packet). So every QSO's Note reads the QSO's
+own date and the contest — `2026-09-07 Kansas QSO Party` — followed by
+your own note on the row, after a middle dot, when you wrote one.
+
 ## POTA activations on any contest
 
 Any contest log doubles as a POTA activation log. Contest Setup has a **POTA
@@ -1289,7 +1296,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3409 unit tests**, none of which need hardware, a network or a microphone —
+**3410 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 the score cache's one-fold-per-change discipline (typing costs microseconds of
 engine work at thousands of QSOs — measured baselines live in the suite),

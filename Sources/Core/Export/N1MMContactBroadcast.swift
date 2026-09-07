@@ -165,7 +165,7 @@ enum N1MMContactBroadcast {
             ("gridsquare", firstNonEmpty(value(.grid, in: row.rcvd, contest: contest), row.callbook?.grid ?? "")),
             ("exchange1", exchange1(row: row, contest: contest)),
             ("section", section(row: row, contest: contest)),
-            ("comment", row.notes ?? ""),
+            ("comment", note(row: row, contest: contest)),
             ("qth", row.callbook?.qth ?? ""),
             ("name", firstNonEmpty(value(.name, in: row.rcvd, contest: contest), row.callbook?.name ?? "")),
             ("power", power(row: row, contest: contest)),
@@ -231,6 +231,28 @@ enum N1MMContactBroadcast {
     static func timestamp(_ date: Date) -> String {
         timestampFormatter.string(from: date)
     }
+
+    /// `comment` — what RUMlogNG shows as the QSO's Note, and the only
+    /// element that reaches it: a marker packet (2026-09-07, research bank)
+    /// showed `contestname`, `exchange1`, `section`, `misctext` and
+    /// `SentExchange` discarded, and RUMlogNG has no contest field at all.
+    /// So the note names the QSO's own UTC date and the contest, then the
+    /// operator's note when the row has one: "2026-09-07 Kansas QSO Party ·
+    /// long path". The ADIF `comment` stays the operator's note alone —
+    /// ADIF has `contest_id` and `qso_date` for the rest.
+    static func note(row: QSO, contest: ContestDefinition) -> String {
+        let head = "\(dateFormatter.string(from: row.timestampUTC)) \(contest.name)"
+        guard let notes = row.notes, !notes.isEmpty else { return head }
+        return "\(head) · \(notes)"
+    }
+
+    private static let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        f.timeZone = TimeZone(identifier: "UTC")
+        f.locale = Locale(identifier: "en_US_POSIX")
+        return f
+    }()
 
     private static let timestampFormatter: DateFormatter = {
         let f = DateFormatter()

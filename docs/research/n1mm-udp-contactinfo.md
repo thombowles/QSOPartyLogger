@@ -288,3 +288,27 @@ Diagnosed on the Mac mini running both apps, without the screen:
 
 So `app` is `N1MM`. Every other element stayed as designed; the trailing
 `dxcc` / `my_gridsquare` and `IsOriginal` `True` were accepted as sent.
+
+### What RUMlogNG 6.5.1 keeps from a contactinfo (marker probe, 2026-09-07)
+
+A throwaway W1AW packet named each candidate element in its own value
+(`NOTE-VIA-COMMENT`, `NOTE-VIA-MISCTEXT`, …), was read back from
+`ZCORE_QSO`, and was removed again with N1MM's `contactdelete`:
+
+| Packet element | RUMlogNG column | Field |
+| --- | --- | --- |
+| `comment` | `ZNOTE` | **Note** |
+| `name` | `ZNAME` | Name |
+| `qth` | `ZQTH` | QTH |
+| `power` | `ZPOWER` | Power |
+| `gridsquare` | `ZLOCATOR` | Locator |
+| `call`, `timestamp`, `rxfreq`, `band`, `mode`, `snt`, `rcv` | `ZCALLSIGN`, `ZDATETIME`, `ZQRG`, `ZBAND`, `ZMODE`, `ZRSTTX`, `ZRSTRX` | the QSO |
+| `countryprefix`, `continent`, `wpxprefix`, `dxcc` | `ZDXCC`, `ZCNT`, `ZPREFIX`, `ZDXCCADIF` | entity (RUMlogNG also fills `ZCQ`, `ZITU` itself) |
+| `contestname`, `exchange1`, `section`, `misctext`, `SentExchange`, `RoverLocation`, `NetBiosName` | — | discarded |
+
+`ZCORE_QSO` has no contest column (its columns: `ZCALLSIGN ZDATETIME ZQRG
+ZBAND ZMODE ZRSTRX ZRSTTX ZNAME ZQTH ZNOTE ZPOWER ZLOCATOR ZSTATE ZCOUNTY
+ZIOTA ZSATNAME ZSATMODE ZQSL ZEQSL ZLOTWQSL ZCLUBLOG ZMANAGER ZUSER_1…4
+…`), so the contest's name can reach RUMlogNG only through the Note. The
+app therefore sends `comment` as the QSO's UTC date and the contest's name,
+then the operator's own note after a middle dot.

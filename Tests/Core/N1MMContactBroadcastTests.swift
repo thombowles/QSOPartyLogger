@@ -65,7 +65,7 @@ final class N1MMContactBroadcastTests: XCTestCase {
             \t<gridsquare></gridsquare>
             \t<exchange1>MRN</exchange1>
             \t<section></section>
-            \t<comment></comment>
+            \t<comment>2026-08-29 Kansas QSO Party</comment>
             \t<qth></qth>
             \t<name></name>
             \t<power></power>
@@ -153,7 +153,7 @@ final class N1MMContactBroadcastTests: XCTestCase {
         var row = w0bh()
         row.notes = "Tom & Jerry <QRP> \"long\" 'path'"
         let xml = N1MMContactBroadcast.contactInfo(row: row, log: ksqpLog([row]), contest: try ksqp(), station: station).xml
-        XCTAssertTrue(xml.contains("<comment>Tom &amp; Jerry &lt;QRP&gt; &quot;long&quot; &apos;path&apos;</comment>"), xml)
+        XCTAssertTrue(xml.contains("<comment>2026-08-29 Kansas QSO Party · Tom &amp; Jerry &lt;QRP&gt; &quot;long&quot; &apos;path&apos;</comment>"), xml)
     }
 
     func testRunPostureAndTheEnginesCreditAreCarried() throws {
@@ -291,6 +291,24 @@ final class N1MMContactBroadcastTests: XCTestCase {
         log.qsos = [row]
         let xml = N1MMContactBroadcast.contactInfo(row: row, log: log, contest: contest, station: station).xml
         XCTAssertTrue(xml.contains("<zone>8</zone>"))
+    }
+
+    /// RUMlogNG's Note field is filled from `comment` and nothing else reaches
+    /// it (verified 2026-09-07 with a marker packet, recorded in the research
+    /// bank), and RUMlogNG has no contest field at all — so the comment names
+    /// the QSO's own UTC date and the contest, then the operator's note when
+    /// the row has one.
+    func testTheCommentNamesTheQSOsOwnDateAndTheContestForRUMlogsNote() throws {
+        let contest = try generalContest(exchange: [["id": "rst", "kind": "rst", "sentBy": ["all": [:]]]])
+        var log = ContestLog(partyID: contest.id)
+        log.station.callsign = "KE5CW"
+        let secondDay = QSO(id: id(8), timestampUTC: t.addingTimeInterval(2 * 86_400), call: "W1AW", band: .m20,
+                            modeClass: .cw, rawMode: "CW", freqKHz: 14042, sent: ["rst": "599"], rcvd: ["rst": "599"])
+        let xml = N1MMContactBroadcast.contactInfo(row: secondDay, log: log, contest: contest, station: station).xml
+        XCTAssertTrue(xml.contains("<comment>2026-08-31 CQ World Wide DX Contest, CW</comment>"), xml)
+        let replaced = N1MMContactBroadcast.contactReplace(row: secondDay, replacing: secondDay, log: log,
+                                                           contest: contest, station: station).xml
+        XCTAssertTrue(replaced.contains("<comment>2026-08-31 CQ World Wide DX Contest, CW</comment>"))
     }
 
     /// The callbook stamp fills only what the exchange left empty — the
