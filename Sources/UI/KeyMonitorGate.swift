@@ -51,19 +51,25 @@ enum KeyMonitorGate {
         var bandMap: Int?
         /// `hostWindow.attachedSheet != nil`.
         var hostHasAttachedSheet: Bool
+        /// `NSApp.modalWindow` — the app-modal dialog running, if one is
+        /// (Contest Setup, `CenteredDialog`). It holds the keyboard exactly
+        /// as a sheet does.
+        var modal: Int?
 
         init(
             host: Int?,
             key: Int?,
             keySheetParent: Int? = nil,
             bandMap: Int? = nil,
-            hostHasAttachedSheet: Bool = false
+            hostHasAttachedSheet: Bool = false,
+            modal: Int? = nil
         ) {
             self.host = host
             self.key = key
             self.keySheetParent = keySheetParent
             self.bandMap = bandMap
             self.hostHasAttachedSheet = hostHasAttachedSheet
+            self.modal = modal
         }
     }
 
@@ -74,6 +80,12 @@ enum KeyMonitorGate {
         // anyone else's is not ours at all.
         if let parent = windows.keySheetParent {
             return parent == host ? .sheet : .elsewhere
+        }
+
+        // A modal dialog is a sheet that hangs from the screen instead of the
+        // window: it owns the keyboard, and nothing is consumed while it does.
+        if let modal = windows.modal, modal == key {
+            return .sheet
         }
 
         let isOurs = key == host || (windows.bandMap.map { $0 == key } ?? false)

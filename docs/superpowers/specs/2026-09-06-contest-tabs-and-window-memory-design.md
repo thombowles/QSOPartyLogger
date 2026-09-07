@@ -164,6 +164,20 @@ same branch, one commit per group, with the same rule — a claim is a test.
    program records; `PotaSeason` counts a party record's park contacts only
    (the hour before the park was set is the contest's alone), and the list
    names the contest beside the park. The record stays a contest entry.
+9. **Contest Setup in the middle of the screen.** A sheet hangs from its
+   window, and a window against the bottom of the display pushed the sheet's
+   Save button off the screen. `CenteredDialog` presents the same view in an
+   app-modal window centred on the log's screen — sheet-like (no title bar
+   to see, no buttons, not resizable, draggable), Esc and Return reaching
+   its own buttons, and the key monitor treating `NSApp.modalWindow` as it
+   treats a sheet. `SetupSheet` closes through a closure it is handed,
+   since the environment's `dismiss` closes only a sheet.
+10. **Park names and states in the POTA list.** The dashboard reads the
+   downloaded park list (the cache Contest Setup's POTA section fills) off
+   the main actor on every refresh, and a "Park name" column shows each
+   park as `Cedar Hill State Park · TX` (`PotaPark.nameAndState`; a park
+   spanning states shows them all). Before the list is downloaded the column
+   says so on hover.
 
 ## Testing
 

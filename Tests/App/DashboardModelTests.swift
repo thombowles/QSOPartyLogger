@@ -166,6 +166,25 @@ final class DashboardModelTests: XCTestCase {
         XCTAssertEqual(model.archive.records.count, 2, "still one record per log")
     }
 
+    /// The POTA list names each park from the downloaded park list; a park
+    /// the list does not know, or no list yet, is the reference alone.
+    func testParkNamesComeFromTheDownloadedParkList() async throws {
+        try write(potaLog(park: "US-1234", call: "W0AAA"), as: "2026-02-02-KE5CW@US-1234.qplog")
+        let directory = PotaParkDirectory(parks: [
+            PotaPark(reference: "US-1234", name: "Cedar Hill State Park", latitude: nil,
+                     longitude: nil, grid: nil, locationDesc: "US-TX"),
+        ])
+        let model = DashboardModel(logsFolder: { [folder] in folder }, parkDirectory: { directory })
+        await model.refresh()
+        XCTAssertEqual(model.parkLabel("US-1234"), "Cedar Hill State Park · TX")
+        XCTAssertEqual(model.parkLabel("us-1234"), "Cedar Hill State Park · TX", "references are case-blind")
+        XCTAssertNil(model.parkLabel("US-9999"))
+
+        let withoutList = DashboardModel(logsFolder: { [folder] in folder }, parkDirectory: { nil })
+        await withoutList.refresh()
+        XCTAssertNil(withoutList.parkLabel("US-1234"))
+    }
+
     /// A year with no POTA is simply an empty season — nothing throws, the
     /// section says so or is hidden.
     func testYearWithoutPotaIsAnEmptySeason() async throws {

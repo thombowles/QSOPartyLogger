@@ -204,6 +204,10 @@ the key code, which window had focus, and what the app did with it.
   button), and about 820 wide with it. Narrower than its rows need, the F-key
   row and the entry row fold onto extra lines instead of clipping; at the sizes
   you use today nothing moves.
+- **Contest Setup opens in the middle of the screen**, not hung from the
+  log window as a sheet, so a window pushed against the bottom of the display
+  never cuts off its Save button. It is modal like a sheet — Esc cancels,
+  Return saves — and it can be dragged.
 - **Every contest is a tab.** A second log opens as a tab of the window you
   have, not a second window: **⌃Tab** / **⌃⇧Tab** switch, the tab bar's **+**
   starts a new log, and a tab can be dragged out into its own window (or merged
@@ -920,8 +924,10 @@ The cached file lives in `~/Library/Application Support/QSOPartyLogger/SCP/`.
   activated, POTA QSOs, park-to-park with distinct parks hunted, and
   states · DX. Below the contests, the POTA history list shows one row per
   outing — each `.qplog` is its own outing, even two parks on one day —
-  with its parks, QSOs, activation validity (hover for every park-day),
-  P2P, states, DX and time. Return or double-click opens the outing's log;
+  with its parks, each park's name and state once the park list has been
+  downloaded (Contest Setup's POTA section), QSOs, activation validity
+  (hover for every park-day), P2P, states, DX and time. Return or
+  double-click opens the outing's log;
   the per-park POTA submission files are exported from the open log (⌥⌘E).
 - **Compose your dashboard** — every widget (season cards, POTA cards, SQP
   Challenge, contests, POTA history, upcoming) shows or hides from the
@@ -1234,7 +1240,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3349 unit tests**, none of which need hardware, a network or a microphone —
+**3358 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 the score cache's one-fold-per-change discipline (typing costs microseconds of
 engine work at thousands of QSOs — measured baselines live in the suite),

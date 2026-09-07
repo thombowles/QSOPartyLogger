@@ -30,4 +30,14 @@ struct PotaPark: Codable, Equatable, Hashable, Sendable, Identifiable {
     }
 
     var id: String { reference }
+
+    /// The park as a listing names it — "Cedar Hill State Park · TX"; a park
+    /// spanning states shows them all ("Great Smoky Mountains · TN/NC"), and
+    /// one with no location tag is its name alone.
+    var nameAndState: String {
+        let states = (locationDesc ?? "")
+            .split(separator: ",")
+            .compactMap { PotaPark.singleState(fromLocationDesc: String($0)) }
+        return states.isEmpty ? name : "\(name) · \(states.joined(separator: "/"))"
+    }
 }

@@ -243,12 +243,15 @@ struct MainView: View {
             .frame(minHeight: 360)
             .onAppear(perform: onAppear)
             .onDisappear(perform: onDisappear)
-            .sheet(isPresented: $showSetup) {
+            // A dialog in the middle of the screen, not a sheet: a window
+            // against the bottom of the display would cut the sheet off.
+            .background(CenteredDialog(isPresented: $showSetup, title: "Contest Setup") {
                 SetupSheet(document: document, callHistory: callHistoryClient,
                            scp: scpClient, parks: potaParkClient,
                            locationProvider: locationProvider,
-                           undoManager: undoManager)
-            }
+                           undoManager: undoManager,
+                           close: { showSetup = false })
+            })
             .sheet(isPresented: $showMessagesEditor) {
                 MessagesEditor(document: document, settings: settings,
                                voiceStatus: radio.voiceStatus, voiceBank: radio.voiceBank,
@@ -2275,7 +2278,8 @@ struct MainView: View {
             key: key?.windowNumber,
             keySheetParent: key?.sheetParent?.windowNumber,
             bandMap: bandMapPanel?.windowNumber,
-            hostHasAttachedSheet: hostWindow?.attachedSheet != nil
+            hostHasAttachedSheet: hostWindow?.attachedSheet != nil,
+            modal: NSApp.modalWindow?.windowNumber
         )
     }
 

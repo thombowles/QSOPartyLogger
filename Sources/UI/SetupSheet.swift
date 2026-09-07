@@ -23,6 +23,10 @@ struct SetupSheet: View {
     /// read from this sheet's own environment, which is not the window's and
     /// silently drops the dirty mark (see `MessagesEditor.undoManager`).
     let undoManager: UndoManager?
+    /// How to close when presented as a dialog window (`CenteredDialog`)
+    /// rather than a sheet — the environment's `dismiss` closes a sheet and
+    /// nothing else. Nil in previews and wherever it is still a sheet.
+    var close: (() -> Void)? = nil
 
     @State private var settings = AppSettings.shared
 
@@ -357,7 +361,7 @@ struct SetupSheet: View {
             Divider()
             HStack {
                 Spacer()
-                Button("Cancel") { dismiss() }
+                Button("Cancel") { closeSheet() }
                     .keyboardShortcut(.cancelAction)
                 Button("Save") { save() }
                     .keyboardShortcut(.defaultAction)
@@ -788,6 +792,10 @@ struct SetupSheet: View {
             entryClassID: entryClassID, myPotaRefs: selectedParks,
             undoManager: undoManager
         )
-        dismiss()
+        closeSheet()
+    }
+
+    private func closeSheet() {
+        if let close { close() } else { dismiss() }
     }
 }

@@ -21,14 +21,33 @@ final class DashboardModel {
 
     private(set) var parties: [PartyDefinition] = []
     let challengeCalendar = ChallengeCalendar.loadBundled()
+    /// The downloaded park list — the cache Contest Setup's POTA section
+    /// fills — for each park's name and state in the POTA list. Nil until
+    /// it has been downloaded; the list then shows references alone.
+    private(set) var parks: PotaParkDirectory?
 
     /// Where the logs are — the iCloud logs folder setting in the app, read
     /// at every use so a folder chosen mid-session is followed at once; a
     /// temp folder in tests, so nothing here can reach the real one.
     private let logsFolder: @Sendable () -> URL?
+    /// Where the park list comes from — the on-disk cache in the app; a
+    /// directory handed in by tests.
+    private let parkDirectory: @Sendable () -> PotaParkDirectory?
 
-    init(logsFolder: @escaping @Sendable () -> URL? = { CloudMirror.activeFolder() }) {
+    init(
+        logsFolder: @escaping @Sendable () -> URL? = { CloudMirror.activeFolder() },
+        parkDirectory: @escaping @Sendable () -> PotaParkDirectory? = {
+            PotaParkStore(folder: PotaParkStore.defaultFolder).loadCached()?.directory
+        }
+    ) {
         self.logsFolder = logsFolder
+        self.parkDirectory = parkDirectory
+    }
+
+    /// "Cedar Hill State Park · TX" for a reference the park list knows;
+    /// nil for one it does not, or before the list is downloaded.
+    func parkLabel(_ reference: String) -> String? {
+        parks?.park(reference: reference)?.nameAndState
     }
 
     // MARK: Derived
@@ -150,9 +169,13 @@ final class DashboardModel {
             loadError = nil
             return
         }
+        let parkDirectory = parkDirectory
         let outcome = await Task.detached(priority: .userInitiated) { () -> Result<LogFolder.History, Error> in
             Result { try LogFolder(url: folder).history() }
         }.value
+        // ~13k parks, parsed off the main actor like the history; read on
+        // every refresh so a list downloaded mid-session shows on the next.
+        parks = await Task.detached(priority: .utility) { parkDirectory() }.value
 
         switch outcome {
         case .success(let history):

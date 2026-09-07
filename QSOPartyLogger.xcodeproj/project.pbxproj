@@ -392,6 +392,7 @@
 		B67933ABF82FA03495CDCDA2 /* SpotNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABEEF77551215EC81055A0B /* SpotNetwork.swift */; };
 		B697AC58255763D8708239E5 /* SCPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA34D87EC7908A404F08591 /* SCPClient.swift */; };
 		B6FBE02A952C1AE6A69D169F /* StationMemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8199BE77C57911CB47B7B016 /* StationMemoryTests.swift */; };
+		B701EB46D154251675B6F05B /* CenteredDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A774ECBA23001D909734E9 /* CenteredDialog.swift */; };
 		B7243633E4D07A80F69479B0 /* VoiceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB06A54AB9ED4AF93B2C146 /* VoiceStore.swift */; };
 		B7A10BA679D25B2381EEEDFF /* SpotFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD6F1CD9E4B5D9387123E6C /* SpotFrequency.swift */; };
 		B7C12F0924DA71B2046CD562 /* PartyLowering.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B8D7D8A84BD8C7C8B17E58 /* PartyLowering.swift */; };
@@ -432,6 +433,7 @@
 		C6FA714C3CDFA18E1988D2E3 /* CWKeyer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C943C5C616ADB650DA248E /* CWKeyer.swift */; };
 		C741F139BD316A8596431202 /* ExchangeValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA1DE529E1D715FE798A8614 /* ExchangeValidatorTests.swift */; };
 		C8236BF947275FBB57A90FBB /* SpotReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9CE5AB018C465D9E626FBD /* SpotReceiptView.swift */; };
+		C853AA787C8098D194EB9F6B /* CenteredDialogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6836DD803FC0B0E8D2C0E92E /* CenteredDialogTests.swift */; };
 		C86470C8A36E65E23F364FD5 /* OhioQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F2B4F0F3E08B109AEE12BA /* OhioQSOPartyTests.swift */; };
 		C882100B919C90A0F8FCA41B /* CatalogCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15A3E3524BBC36EAEF9C3D6 /* CatalogCacheTests.swift */; };
 		C8C87BAD9A1785B11F8F9065 /* warun-inside-prefix-dx.adi in Resources */ = {isa = PBXBuildFile; fileRef = D51072BCF5371BCF34CD99D7 /* warun-inside-prefix-dx.adi */; };
@@ -490,6 +492,7 @@
 		E2E7996753FAE85415AB41CE /* CWSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52BEC7154012161AF51ED0 /* CWSender.swift */; };
 		E33CB105D528BC0ACBAB6094 /* skeeter-member.adi in Resources */ = {isa = PBXBuildFile; fileRef = 1FE95997B2CFA8BC341F95EE /* skeeter-member.adi */; };
 		E34624A2D637C9A83D39EF83 /* SpotDispatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6591008A672F612DB9FA26 /* SpotDispatcherTests.swift */; };
+		E5009FC087F7929962CCB92C /* PotaParkLabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0804AC397A0A5A6326F28435 /* PotaParkLabelTests.swift */; };
 		E5DB66FCFD449DB1E9AB4323 /* ContestNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8C43BC0C6C5932ECF83B4B /* ContestNotice.swift */; };
 		E64FE26D4B39A995603DC746 /* ActivatedCountyMultiplierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E51C701CCCCEE5527FA99E /* ActivatedCountyMultiplierTests.swift */; };
 		E69FB34E0D878351AFD87628 /* Advisor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E6305A1D5D177F6DF014E0 /* Advisor.swift */; };
@@ -588,6 +591,7 @@
 		067FE6B0EB648263DEECAC66 /* OperatorAlertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatorAlertTests.swift; sourceTree = "<group>"; };
 		0691A2D1B7E5003BCEEE96F4 /* PotaSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaSpot.swift; sourceTree = "<group>"; };
 		075DC2D7011F9E054C8826A8 /* HubSpotPrefillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotPrefillTests.swift; sourceTree = "<group>"; };
+		0804AC397A0A5A6326F28435 /* PotaParkLabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkLabelTests.swift; sourceTree = "<group>"; };
 		08CF1A3E5A619F09371EECA1 /* TokenSetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenSetTests.swift; sourceTree = "<group>"; };
 		08FF41186D203AD847CB46B4 /* PotaParkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaParkStore.swift; sourceTree = "<group>"; };
 		090F1AC164EC70DAF4BEC46C /* PotaModeContestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaModeContestTests.swift; sourceTree = "<group>"; };
@@ -793,6 +797,7 @@
 		663F629E69E4BCAFF3D76139 /* MessageDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDefaultsTests.swift; sourceTree = "<group>"; };
 		664054B23A5FFD3251287DA8 /* SuperCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperCheck.swift; sourceTree = "<group>"; };
 		6694E6ACAFA3D6FA9E78B2FE /* NewEnglandQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEnglandQSOPartyTests.swift; sourceTree = "<group>"; };
+		6836DD803FC0B0E8D2C0E92E /* CenteredDialogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredDialogTests.swift; sourceTree = "<group>"; };
 		688069BEE269AD9FC777EED3 /* LogFolderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogFolderTests.swift; sourceTree = "<group>"; };
 		6904B66416910440D9E4B71A /* VoiceKeyerStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceKeyerStatusTests.swift; sourceTree = "<group>"; };
 		691217DB3EE08B9E1068C3C6 /* CallbookSettingsPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbookSettingsPane.swift; sourceTree = "<group>"; };
@@ -1055,6 +1060,7 @@
 		E53DC8597A1A918FA7CB32D4 /* K3ProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K3ProtocolTests.swift; sourceTree = "<group>"; };
 		E544AF9D2BD44EEFEC54BDF6 /* FlexRadioDriverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexRadioDriverTests.swift; sourceTree = "<group>"; };
 		E57CEF931EEFE52947A0DC75 /* MultiStatePartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiStatePartyTests.swift; sourceTree = "<group>"; };
+		E6A774ECBA23001D909734E9 /* CenteredDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredDialog.swift; sourceTree = "<group>"; };
 		E6D311DEBD1B5C6AA9730A18 /* DXCCLabelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCLabelStore.swift; sourceTree = "<group>"; };
 		E70A4C058DB0BE3BF9AA15BC /* Parties */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Parties; path = Resources/Parties; sourceTree = SOURCE_ROOT; };
 		E77F88B8469172A628005C61 /* ArizonaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArizonaQSOPartyTests.swift; sourceTree = "<group>"; };
@@ -1224,6 +1230,7 @@
 				D36ADEFE4F5840117297E4D6 /* BandMapHeaderTests.swift */,
 				CADB3755C2AA6B1E8DF06BB5 /* BandMapPanelPlacementTests.swift */,
 				CF3DE095FF10F043BEB52ECF /* BandMapSettingsTabTests.swift */,
+				6836DD803FC0B0E8D2C0E92E /* CenteredDialogTests.swift */,
 				CF967F6F4FA8B5D87F123A2C /* ContestNoticeTests.swift */,
 				4DFBB554A5050EEC235AC9E7 /* DashboardExportRowTests.swift */,
 				B66F2696A258C16403F99824 /* DashboardPotaRowTests.swift */,
@@ -1429,6 +1436,7 @@
 				524D7FF55EAF99B8A2E57D75 /* PotaFieldsTests.swift */,
 				090F1AC164EC70DAF4BEC46C /* PotaModeContestTests.swift */,
 				EA2D9B1FCC05FCBCC978861F /* PotaParkDirectoryTests.swift */,
+				0804AC397A0A5A6326F28435 /* PotaParkLabelTests.swift */,
 				92BF3A3E0D2A190DDA4A0941 /* PotaParkStoreTests.swift */,
 				6494352FEF3C42EC27F6120C /* PotaRefTests.swift */,
 				38A07158B42755CE27DB99D0 /* PotaSeasonTests.swift */,
@@ -1542,6 +1550,7 @@
 				F4F9D5BEC6EC5CFE1596B280 /* BandMapSettingsPopover.swift */,
 				B64840D9ACF7A45698878A84 /* BulkEditSheet.swift */,
 				691217DB3EE08B9E1068C3C6 /* CallbookSettingsPane.swift */,
+				E6A774ECBA23001D909734E9 /* CenteredDialog.swift */,
 				02590141050CF40EEF90B0C1 /* CombinedBreakdownSection.swift */,
 				8D8C43BC0C6C5932ECF83B4B /* ContestNotice.swift */,
 				5F01ACCE3E8BBB30BB6AFFB0 /* EditQSOSheet.swift */,
@@ -2160,6 +2169,7 @@
 				C882100B919C90A0F8FCA41B /* CatalogCacheTests.swift in Sources */,
 				B331E68905D18A8BC2D62682 /* CatalogConsistencyTests.swift in Sources */,
 				7BE97A35880D3C0C58FBF1FC /* CaveatRosterTests.swift in Sources */,
+				C853AA787C8098D194EB9F6B /* CenteredDialogTests.swift in Sources */,
 				198B4CCE041337F320053AA5 /* ChallengeTests.swift in Sources */,
 				46267A86861ADDCD7E3EDBA8 /* CloudMirrorTests.swift in Sources */,
 				D3877536C753E23BBA86DEE4 /* ClusterHistoryTests.swift in Sources */,
@@ -2295,6 +2305,7 @@
 				95A78C2B7AA3E5A6AB19E653 /* PotaModeContestTests.swift in Sources */,
 				935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */,
 				C538ACCF93B5DCFFFE15C1B3 /* PotaParkDirectoryTests.swift in Sources */,
+				E5009FC087F7929962CCB92C /* PotaParkLabelTests.swift in Sources */,
 				ED6D904A680FE4DA2B03DA38 /* PotaParkStoreTests.swift in Sources */,
 				52EE1853788BA4165EC60E40 /* PotaPickerBehaviorTests.swift in Sources */,
 				0422C3FFC563470A6E880A7A /* PotaRefTests.swift in Sources */,
@@ -2431,6 +2442,7 @@
 				0FF24307A10D7C37E3D3816C /* CallbookRecord.swift in Sources */,
 				A98EEEFFE90C818D048399B9 /* CallbookSettingsPane.swift in Sources */,
 				0F51821FD184AB0A521E3816 /* CallbookXMLScanner.swift in Sources */,
+				B701EB46D154251675B6F05B /* CenteredDialog.swift in Sources */,
 				654D25391076282E66654B42 /* ChallengeCalendar.swift in Sources */,
 				BF4B93C891EBDA79CBD3E843 /* ChallengeStanding.swift in Sources */,
 				BC984B0894398DED6243482C /* CloudMirror.swift in Sources */,

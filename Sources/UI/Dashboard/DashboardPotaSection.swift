@@ -39,6 +39,9 @@ struct DashboardPotaSection: View {
     struct PotaRow: Identifiable, Sendable {
         let outing: PotaSeason.Outing
         let fileAvailable: Bool
+        /// Each park's name and state from the downloaded park list, joined
+        /// for a rove; empty until the list is downloaded.
+        let parkNames: String
 
         var id: String { outing.id }
         var date: Date { outing.date }
@@ -82,8 +85,12 @@ struct DashboardPotaSection: View {
     ).month(.abbreviated).day()
 
     private var rows: [PotaRow] {
-        model.potaSeason.outings.map {
-            PotaRow(outing: $0, fileAvailable: model.logFileExists($0.record))
+        model.potaSeason.outings.map { outing in
+            PotaRow(
+                outing: outing,
+                fileAvailable: model.logFileExists(outing.record),
+                parkNames: outing.parks.compactMap(model.parkLabel).joined(separator: " · ")
+            )
         }
     }
 
@@ -122,6 +129,21 @@ struct DashboardPotaSection: View {
                     }
                 }
             }
+
+            TableColumn("Park name", value: \.parkNames) { row in
+                if row.parkNames.isEmpty {
+                    Text(row.parks.isEmpty ? "" : "—")
+                        .foregroundStyle(.tertiary)
+                        .help(row.parks.isEmpty ? ""
+                              : "Download the park list in Contest Setup's POTA section to see names and states")
+                } else {
+                    Text(row.parkNames)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .help(row.parkNames)
+                }
+            }
+            .width(min: 140, ideal: 240)
 
             TableColumn("QSOs", value: \.qsos) { row in
                 Text("\(row.qsos)").monospacedDigit()

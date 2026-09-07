@@ -13,7 +13,28 @@ final class KeyMonitorGateTests: XCTestCase {
     private let otherDoc = 200
     private let otherSheet = 201
 
+    private let ourDialog = 103
+
     // MARK: Focus — whose keystroke is it
+
+    /// Contest Setup is a modal dialog in the middle of the screen, not a
+    /// sheet (`CenteredDialog`): it holds the keyboard as a sheet does, so
+    /// an F-key never transmits from it and Esc reaches its Cancel.
+    func testAModalDialogOwnsTheKeyboardLikeASheet() {
+        XCTAssertEqual(
+            KeyMonitorGate.focus(.init(host: host, key: ourDialog, modal: ourDialog)),
+            .sheet
+        )
+    }
+
+    /// A modal window that is not the key window is not what has the
+    /// keyboard — whatever is key decides, as before.
+    func testAModalWindowElsewhereChangesNothing() {
+        XCTAssertEqual(
+            KeyMonitorGate.focus(.init(host: host, key: host, modal: ourDialog)),
+            .document
+        )
+    }
 
     func testOurWindowWithNoSheetOwnsTheKeyboard() {
         XCTAssertEqual(
