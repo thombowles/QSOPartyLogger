@@ -57,9 +57,14 @@ enum N1MMContactBroadcast {
         var data: Data { Data(xml.utf8) }
     }
 
-    /// `app` — provenance, the way the POTA spot's `source` names the app.
-    /// RUMlogNG's own packet carries no `app` element at all.
-    static let app = "QSOPartyLogger"
+    /// `app` — `N1MM`, because RUMlogNG 6.5.1 saves a `contactinfo` only
+    /// when this element is exactly that (verified 2026-09-07 against the
+    /// running app: the same packet with this app's own name was dropped,
+    /// with `N1MM` it was saved, and N1MM's `contactdelete` removed it
+    /// again — docs/research/n1mm-udp-contactinfo.md). The packet is N1MM's
+    /// format field for field, so the claim is the format's; RUMlogNG's own
+    /// N1MM-format packet carries no `app` element at all.
+    static let app = "N1MM"
     /// `contestnr` — "a unique number assigned to this contest instance in
     /// this database" (N1MM), opaque to every listener; one contest per log.
     static let contestNumber = "1"

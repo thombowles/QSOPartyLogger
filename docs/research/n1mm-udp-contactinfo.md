@@ -258,3 +258,33 @@ Pane "RUMlog, N1MM & TR4W compatible": outgoing *App info (N1MM, RUMlog)*,
 *Listen to other RUMlog instances*; incoming *QSOs received from Flex / ADIF*
 (popup *Save QSO*, port 2237) and *QSOs received from N1MM* (popup *Save
 QSO*, port 12060). The app targets the last of these.
+
+## Verified against RUMlogNG 6.5.1 (build 727), 2026-09-07
+
+The first build sent `<app>QSOPartyLogger</app>` and RUMlogNG saved nothing.
+Diagnosed on the Mac mini running both apps, without the screen:
+
+- `netstat -anv -p udp` showed RUMlogNG's IPv4 socket `*.12060` with 17,096
+  bytes received and the logger holding no UDP socket (it closes the socket
+  on every host edit and reopens on the next packet) — so packets had
+  arrived and been dropped.
+- RUMlogNG's own binary strings name what its listener does: it prints
+  `%@ [%@] QSO imported --> %@ %@ %@` on success and `Error parsing N1MM
+  xml: %@` on a bad document (neither appeared), and for a delete it reads
+  `contactdelete/app` and compares it with the literal `N1MM`. Its saved
+  preferences: `UdpSaveFromN1mmPort = 12060`, `UdpSaveQsFromN1mmIdx = 1`
+  (*Save QSO*). The Network Status window's station table is the
+  RUMlog-to-RUMlog sync ("RUMlog instances in the network"), which its page
+  says is "not available for the contest interface yet"; it plays no part
+  in the N1MM listener.
+- The experiment, one variable: the app's exact KD2KW packet sent from a
+  script to 127.0.0.1:12060, read-only counts of RUMlogNG's `ZCORE_QSO`
+  table before and after each send —
+  `<app>QSOPartyLogger</app>`: 13,929 → 13,929 (dropped);
+  `<app>N1MM</app>`: 13,929 → 13,930, KD2KW 123 → 124 (saved);
+  N1MM's `contactdelete` with the same `ID`, `call`, `timestamp`:
+  13,930 → 13,929 (removed — the delete path works, and the logbook ended
+  exactly as it began).
+
+So `app` is `N1MM`. Every other element stayed as designed; the trailing
+`dxcc` / `my_gridsquare` and `IsOriginal` `True` were accepted as sent.

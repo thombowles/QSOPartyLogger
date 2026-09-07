@@ -151,7 +151,7 @@ host name of its own — the caller passes `StationContext` (station name,
 
 | Element | Value | Why |
 | --- | --- | --- |
-| `app` | `QSOPartyLogger` | provenance, as the POTA spot's `source` is; RUMlogNG's own packet has no `app` at all, so a listener that demanded `N1MM` would refuse RUMlogNG too |
+| `app` | `N1MM` | RUMlogNG 6.5.1 saves a contact only when the element is exactly `N1MM` — verified 2026-09-07 against the running app (see the research bank); the first build's `QSOPartyLogger` was dropped silently |
 | `contestname` | `contest.cabrillo.contest` (`KS-QSO-PARTY`) | the sponsor's own token, what ADIF `contest_id` already carries |
 | `contestnr` | `1` | opaque per-database counter in N1MM; one contest per log here |
 | `timestamp` | `yyyy-MM-dd HH:mm:ss` UTC | N1MM's example, and N1MM logs in UTC |
@@ -331,9 +331,10 @@ usage string names RUMlogNG.
 
 ## 9. Open calls, defaulted
 
-1. **`app` says `QSOPartyLogger`, not `N1MM`.** RUMlogNG's own packet has
-   no `app`; a listener that insists on `N1MM` would refuse RUMlogNG too.
-   If Tom's RUMlogNG refuses the packets, this is the first thing to flip.
+1. ~~**`app` says `QSOPartyLogger`, not `N1MM`.**~~ **Overturned by
+   experiment, 2026-09-07:** RUMlogNG 6.5.1 dropped the packet silently and
+   saved the identical packet with `N1MM`; N1MM's `contactdelete` removed
+   it again. The element says `N1MM`.
 2. **`contestname` is the Cabrillo name.** N1MM's own tokens (`KSQP`) are
    not published as a list; the sponsor's token is at least citable.
 3. **⇧⌘L** for *Send Whole Log Now* — free in the gate, no AppKit meaning

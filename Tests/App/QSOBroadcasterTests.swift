@@ -304,4 +304,17 @@ final class QSOBroadcasterTests: XCTestCase {
         XCTAssertTrue(QSOBroadcaster.Status.failed("x").isFailure)
         XCTAssertFalse(QSOBroadcaster.Status.off.isFailure)
     }
+    // MARK: The unified-log trace
+
+    /// One line per datagram, the way every key is traced — what left, for
+    /// whom, where, and how big; or why it did not leave.
+    func testTraceLineNamesThePacketItsCallItsDestinationAndItsSize() {
+        let packet = N1MMContactBroadcast.contactInfo(row: row("W0BH"), log: log([row("W0BH")]), contest: ksqp,
+                                                      station: .init(stationName: "SHACK-MAC"))
+        XCTAssertEqual(QSOBroadcaster.traceLine(packet, destination: "127.0.0.1:12060"),
+                       "contactinfo W0BH → 127.0.0.1:12060, \(packet.data.count) bytes sent")
+        let delete = N1MMContactBroadcast.contactDelete(row: row("W0BH"), log: log([]), station: .init(stationName: "SHACK-MAC"))
+        XCTAssertEqual(QSOBroadcaster.traceLine(delete, destination: "10.0.0.9:12060", refused: "No route to host"),
+                       "contactdelete W0BH → 10.0.0.9:12060, \(delete.data.count) bytes refused: No route to host")
+    }
 }

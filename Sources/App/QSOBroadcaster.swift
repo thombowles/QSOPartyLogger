@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import os
 
 /// Sends the log's changes to RUMlogNG — or any N1MM-compatible listener —
 /// as N1MM contact packets over UDP (`N1MMContactBroadcast`), and keeps the
@@ -68,6 +69,12 @@ final class QSOBroadcaster {
             return f
         }()
     }
+
+    /// Every datagram, and every refusal, goes to the unified log the way
+    /// every key does: `log show --predicate 'subsystem ==
+    /// "org.b5n.QSOPartyLogger"' --last 10m` then answers "did it leave?"
+    /// without the kernel's socket table.
+    private static let log = Logger(subsystem: "org.b5n.QSOPartyLogger", category: "rumlog")
 
     private(set) var config = Config()
     /// Datagrams sent since the window opened.
@@ -212,11 +219,13 @@ final class QSOBroadcaster {
             if failures.count > failuresBefore {
                 let reason = failures.lastErrno.map { String(cString: strerror($0)) } ?? "unknown error"
                 lastFailure = "Send failed: \(reason)"
+                Self.log.log("\(Self.traceLine(next.packet, destination: self.config.destination, refused: reason), privacy: .public)")
             } else {
                 lastFailure = nil
                 sentCount += 1
                 lastSentCall = next.packet.call
                 lastSentAt = now()
+                Self.log.log("\(Self.traceLine(next.packet, destination: self.config.destination), privacy: .public)")
             }
             if next.wholeLog {
                 wholeLogDone += 1
@@ -245,8 +254,17 @@ final class QSOBroadcaster {
             return opened
         } catch {
             lastFailure = error.localizedDescription
+            Self.log.log("open \(self.config.destination, privacy: .public) failed: \(error.localizedDescription, privacy: .public)")
             return nil
         }
+    }
+
+    /// One line per datagram for the unified log: what left, for whom,
+    /// where, how big — or why it did not leave.
+    static func traceLine(_ packet: N1MMContactBroadcast.Packet, destination: String, refused: String? = nil) -> String {
+        let head = "\(packet.kind.rawValue) \(packet.call) → \(destination), \(packet.data.count) bytes"
+        if let refused { return "\(head) refused: \(refused)" }
+        return "\(head) sent"
     }
 
     private func closeSender() {

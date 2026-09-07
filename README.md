@@ -1018,12 +1018,16 @@ The pane's status line says what left this Mac — *Sent W0BH at 14:32:05z to
 127.0.0.1:12060 · 12 this session* — and turns orange, in the kernel's own
 words, when a packet could not be sent or the host could not be resolved.
 UDP carries no reply, so *sent* never means *saved*; RUMlogNG's log is the
-check.
+check. Every datagram is also traced to the unified log —
+`log show --predicate 'subsystem == "org.b5n.QSOPartyLogger"' --last 10m`
+shows `contactinfo KD2KW → 127.0.0.1:12060, 1400 bytes sent`, or why it
+was refused.
 
 What goes out is N1MM's `contactinfo` packet field for field, from N1MM's
 own documentation (banked in
-[`docs/research/n1mm-udp-contactinfo.md`](docs/research/n1mm-udp-contactinfo.md)):
-the contest's Cabrillo name, the time in UTC, band, frequency in 10 Hz
+[`docs/research/n1mm-udp-contactinfo.md`](docs/research/n1mm-udp-contactinfo.md)),
+down to `<app>N1MM</app>` — RUMlogNG saves nothing that claims otherwise,
+verified against 6.5.1: the contest's Cabrillo name, the time in UTC, band, frequency in 10 Hz
 units, mode (`SSB` as the band's sideband, since N1MM's vocabulary is
 `USB`/`LSB`), reports, serials, the received exchange, section, zone,
 precedence, check, the engine's points and new-multiplier flag, Run or S&P,
@@ -1285,7 +1289,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3408 unit tests**, none of which need hardware, a network or a microphone —
+**3409 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 the score cache's one-fold-per-change discipline (typing costs microseconds of
 engine work at thousands of QSOs — measured baselines live in the suite),

@@ -28,6 +28,11 @@ final class N1MMContactBroadcastTests: XCTestCase {
 
     // MARK: The packet, byte for byte
 
+    /// `app` says N1MM: RUMlogNG 6.5.1 saves a contact only when it does —
+    /// verified 2026-09-07 against the running app (the same packet with
+    /// `QSOPartyLogger` was dropped; with `N1MM` it was saved, and N1MM's
+    /// contactdelete removed it again). Recorded in
+    /// docs/research/n1mm-udp-contactinfo.md.
     func testAKSQPRowIsN1MMsContactInfoPacket() throws {
         let row = w0bh()
         let packet = N1MMContactBroadcast.contactInfo(
@@ -38,7 +43,7 @@ final class N1MMContactBroadcastTests: XCTestCase {
         XCTAssertEqual(packet.xml, """
             <?xml version="1.0" encoding="utf-8"?>
             <contactinfo>
-            \t<app>QSOPartyLogger</app>
+            \t<app>N1MM</app>
             \t<contestname>KS-QSO-PARTY</contestname>
             \t<contestnr>1</contestnr>
             \t<timestamp>2026-08-29 14:32:00</timestamp>
@@ -325,7 +330,7 @@ final class N1MMContactBroadcastTests: XCTestCase {
         XCTAssertEqual(packet.xml, """
             <?xml version="1.0" encoding="utf-8"?>
             <contactdelete>
-            \t<app>QSOPartyLogger</app>
+            \t<app>N1MM</app>
             \t<timestamp>2026-08-29 14:32:00</timestamp>
             \t<mycall>KE5CW</mycall>
             \t<band>14</band>

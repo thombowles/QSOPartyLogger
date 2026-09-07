@@ -163,8 +163,11 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   with quotes in
   [`docs/research/n1mm-udp-contactinfo.md`](research/n1mm-udp-contactinfo.md).
   Two spellings on N1MM's page (`exchangel`, `ismultiplierl`) are emitted
-  with the digit, on the evidence recorded there. No other logger's code
-  was read for a byte.
+  with the digit, on the evidence recorded there. The `app` element says
+  `N1MM` because RUMlogNG 6.5.1 saves nothing else — established by
+  experiment against the running app on 2026-09-07 and recorded in the same
+  file, with the listener's own messages from its binary strings. No other
+  logger's code was read for a byte.
 - NAQP CW + SSB: rules from NCJ's own "Rules: 2026 North American QSO Party
   (CW/SSB/RTTY)" (ncjweb.com, printed NCJ Oct/Nov 2025), the official paper
   log form whose Multiplier Check List is the country list, and the ARRL DXCC
