@@ -1223,7 +1223,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3288 unit tests**, none of which need hardware, a network or a microphone —
+**3319 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 the score cache's one-fold-per-change discipline (typing costs microseconds of
 engine work at thousands of QSOs — measured baselines live in the suite),
