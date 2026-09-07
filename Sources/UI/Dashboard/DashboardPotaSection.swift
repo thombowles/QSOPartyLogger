@@ -43,6 +43,8 @@ struct DashboardPotaSection: View {
         var id: String { outing.id }
         var date: Date { outing.date }
         var parks: String { outing.parks.joined(separator: " ") }
+        /// The contest a park was worked during — nil for a POTA log.
+        var contest: String? { outing.isContest ? outing.record.partyID.uppercased() : nil }
         var qsos: Int { outing.qsos }
         var p2p: Int { outing.p2pContacts }
         var states: Int { outing.states }
@@ -107,6 +109,12 @@ struct DashboardPotaSection: View {
                     Text(row.parks.isEmpty ? "hunting" : row.parks)
                         .monospaced()
                         .foregroundStyle(row.parks.isEmpty ? .secondary : .primary)
+                    if let contest = row.contest {
+                        Text(contest)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                            .help("Worked from the park during \(contest) — the contest is in the contests table as well; only the contacts made from the park count here")
+                    }
                     if row.fileAvailable {
                         Image(systemName: "doc")
                             .foregroundStyle(.tertiary)

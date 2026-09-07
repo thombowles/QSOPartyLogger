@@ -49,4 +49,12 @@ final class BandMapPanelPlacementTests: XCTestCase {
             NSRect(origin: .zero, size: size)
         )
     }
+
+    // MARK: The title — which contest this map belongs to
+
+    func testTheTitleNamesTheContestFirstSoANarrowPanelKeepsIt() {
+        XCTAssertEqual(BandMapPanel.title(contest: "KSQP"), "KSQP — Band Map")
+        XCTAssertEqual(BandMapPanel.title(contest: ""), "Band Map")
+        XCTAssertEqual(BandMapPanel.title(contest: nil), "Band Map")
+    }
 }

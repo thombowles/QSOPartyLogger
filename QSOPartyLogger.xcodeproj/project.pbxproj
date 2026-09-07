@@ -61,6 +61,7 @@
 		101FA2D3094424CE2F2418D1 /* EntryLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77DD2E724B2662706CEB848 /* EntryLayout.swift */; };
 		117D7D394184CA651CF5BBBB /* FlexDAXStreamer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72036BDCB3570C1CC5A20611 /* FlexDAXStreamer.swift */; };
 		11AB0576DF424ACBFF5550E9 /* sevenqp-inside-multistate.adi in Resources */ = {isa = PBXBuildFile; fileRef = BFADF47A9A6D36349E3E896C /* sevenqp-inside-multistate.adi */; };
+		11EDB33581E6A9F87AE981BD /* BandMapHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36ADEFE4F5840117297E4D6 /* BandMapHeaderTests.swift */; };
 		122FB6190515703980A91D42 /* SpaceWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469E3B88134A7EDA380CC2C2 /* SpaceWeather.swift */; };
 		12B5C43A3D964A6854B895FA /* HamQTHXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2B1C39FF387014B80984B2 /* HamQTHXML.swift */; };
 		12C6DC13CA936881DB5F134C /* ScoreSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA812496670164897C4A0447 /* ScoreSidebar.swift */; };
@@ -172,6 +173,7 @@
 		497F973081DCEE07F2662518 /* RadioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AE54A60C33CC8614CCB97C /* RadioController.swift */; };
 		499CEF425A960D3FF83E545D /* VoicePaneKeysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0906D967C114B94D58178D /* VoicePaneKeysTests.swift */; };
 		4A57F99BE9580955BE968B72 /* NebraskaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203C517DD5F8DB942A927E90 /* NebraskaQSOPartyTests.swift */; };
+		4A5E8BC39A0C9A03AF78633F /* BandMapSettingsPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F9D5BEC6EC5CFE1596B280 /* BandMapSettingsPopover.swift */; };
 		4B497C5BF5CCE7E985E25D77 /* CallbookParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D4BBDB6DEC6C2ABE2C3B87 /* CallbookParserTests.swift */; };
 		4B4B5685BDBC46707ED07FE8 /* DXCCLabelClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CAE6A6F0991A97405ABD310 /* DXCCLabelClient.swift */; };
 		4B57DE872C673ADDFB695588 /* CallHistoryClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B311ACDB55F4A18F8A7B3A0F /* CallHistoryClientTests.swift */; };
@@ -217,6 +219,7 @@
 		5EDE438D7051A8CDFAE8BF14 /* DesignatedCountyScoringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB947FA06E0482D6F99A796 /* DesignatedCountyScoringTests.swift */; };
 		5EF45AAD5ACFBAC6C2A4C56F /* ScoreSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2987B08876C368111B9A3EF9 /* ScoreSnapshot.swift */; };
 		60A60A674801918D78F66985 /* FlexRadioDriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544AF9D2BD44EEFEC54BDF6 /* FlexRadioDriverTests.swift */; };
+		60A630F684647F7995D4B3D5 /* RightClickCatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12721BE0B1F2BF3FF1E17008 /* RightClickCatcher.swift */; };
 		60CF9E4540F99AB15D55B7DD /* DXCCTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4212B5C5FFD5CE16B88D78B /* DXCCTable.swift */; };
 		614B6DA68C817BCE6A257501 /* UpcomingContests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02641FE9618E6D9A40BCF583 /* UpcomingContests.swift */; };
 		6261B20CDE53A00728957692 /* PotaFieldsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524D7FF55EAF99B8A2E57D75 /* PotaFieldsTests.swift */; };
@@ -292,6 +295,9 @@
 		87DFF3866AB92FA4A0F51166 /* DupeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A13A0105A3055F65F9C60 /* DupeChecker.swift */; };
 		8805F55FE16A204228464EEB /* PotaRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F212545ED1201EF8D3F739F /* PotaRef.swift */; };
 		88BB23141B05C2F92271D789 /* GridLocateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C7056708ECE6573BF5FF3 /* GridLocateTests.swift */; };
+		8942367FEC65F937ADB5120F /* BandMapSettingsTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3DE095FF10F043BEB52ECF /* BandMapSettingsTabTests.swift */; };
+		8952116E3A5EE8DF0BBB3226 /* RightClickCatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53153CD73B296DBC0ADB9DD /* RightClickCatcherTests.swift */; };
+		89B31C94DE85EFD6990F6471 /* LogWindowPlacement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E36E2F3AC2AEAC986732FC /* LogWindowPlacement.swift */; };
 		8B19312BCE02BA60190C5266 /* cqp-inside-serials.adi in Resources */ = {isa = PBXBuildFile; fileRef = B081DEDD21D80040621BF30D /* cqp-inside-serials.adi */; };
 		8B798A3A385449902326AB88 /* QuebecQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7194268CC1DFB2953FFDE8 /* QuebecQSOPartyTests.swift */; };
 		8BB905FD50F6763E6889CD8C /* BandMapBolt.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26AC3276F271ED30B510B9A /* BandMapBolt.swift */; };
@@ -305,6 +311,7 @@
 		91DA1EA18F0FDE9613ED6B68 /* RadioRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F435A4BFCDEA86D0D8F785C4 /* RadioRegistry.swift */; };
 		91E29909EA0D6171547CAB2D /* MultiplierClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861DB04574AAEACF21FD47A6 /* MultiplierClass.swift */; };
 		91EE03774131C43BF0A89810 /* DashboardWidgetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90271904CB1B7B918B0F0C30 /* DashboardWidgetsTests.swift */; };
+		922BFA89D6391AB708B4AE7B /* LogWindowPlacementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02ADCB77F0DD32531DDF20F /* LogWindowPlacementTests.swift */; };
 		92E8FB798AC43E339B0BCEEF /* ModeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009080AA1C81D0A7D94FA410 /* ModeClass.swift */; };
 		935FD4EBB8DD3ADC160037B0 /* PotaParkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A13C34B4765F4AE9FB37456 /* PotaParkClientTests.swift */; };
 		943FE69A83BEC05A8731A5E9 /* ContestLogShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0011E6F647259AD324816CFB /* ContestLogShapeTests.swift */; };
@@ -350,6 +357,7 @@
 		A9F464CB1389B62DCF4D4A4A /* LogWindowTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2487DA19106B9F0451DCE0C /* LogWindowTabs.swift */; };
 		A9FC2E13D5AAAFEDD440F60F /* SectionMultiplierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B143A6F4360839CB52EFA48 /* SectionMultiplierTests.swift */; };
 		AA298B42C48C6E77E848FD97 /* AudioResamplerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323B49E1E225DDF4B6C3377B /* AudioResamplerTests.swift */; };
+		AAAF4BD0D811063FA2CB2170 /* ContestShortLabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C072FD90C8F3366B386F66D /* ContestShortLabelTests.swift */; };
 		AB0C01693044173C3C4B1035 /* ksqp-outside-phone.adi in Resources */ = {isa = PBXBuildFile; fileRef = EA05F375D2305B1633D99B18 /* ksqp-outside-phone.adi */; };
 		AB6E92740C1C67A1740CB0A6 /* RepeatCQPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2EC53476E0238BCCDB76 /* RepeatCQPolicy.swift */; };
 		AB785F9E9E0713494C68A009 /* DashboardExportRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFBB554A5050EEC235AC9E7 /* DashboardExportRowTests.swift */; };
@@ -414,6 +422,7 @@
 		C3CDE006A150B8867C4B7794 /* SkeeterRosterParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC7EEC941E41165B0FE43C9 /* SkeeterRosterParser.swift */; };
 		C46093573C4E0C33B0EE6086 /* QSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28174F39D351A29CC80B77F2 /* QSO.swift */; };
 		C4A0BBE3CA76C438A158B860 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4617D5E5CB3103CD4E042746 /* MainView.swift */; };
+		C4D3224F5E1D3A53EDC18333 /* BandMapHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF2DC8F7B80F1AB06B4E614 /* BandMapHeader.swift */; };
 		C51EA8F46AB45C0DBBA944C7 /* SpotRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198B67F829207C5E6DBB329C /* SpotRepeat.swift */; };
 		C538ACCF93B5DCFFFE15C1B3 /* PotaParkDirectoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2D9B1FCC05FCBCC978861F /* PotaParkDirectoryTests.swift */; };
 		C58A052DB7DBAC19355917EA /* CallHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCF2F37A32D904FCCB58446 /* CallHistoryStoreTests.swift */; };
@@ -597,6 +606,7 @@
 		11006733B29859B820BF14AE /* DXCCTableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXCCTableTests.swift; sourceTree = "<group>"; };
 		112CC71F65B097523B39BC9B /* HubSelfSpotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSelfSpotTests.swift; sourceTree = "<group>"; };
 		126046DF54E2EDABBDB36074 /* PotaSpotClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaSpotClientTests.swift; sourceTree = "<group>"; };
+		12721BE0B1F2BF3FF1E17008 /* RightClickCatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightClickCatcher.swift; sourceTree = "<group>"; };
 		132CBF19C2B05E02E5B784A9 /* CaveatRosterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaveatRosterTests.swift; sourceTree = "<group>"; };
 		13483946346E99F04F253202 /* PotaBoardClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaBoardClientTests.swift; sourceTree = "<group>"; };
 		135F472CB9A0491C54F217ED /* CombinedLogSplitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedLogSplitTests.swift; sourceTree = "<group>"; };
@@ -760,6 +770,7 @@
 		5B4D578B0A19E09B560A6584 /* SouthCarolinaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SouthCarolinaQSOPartyTests.swift; sourceTree = "<group>"; };
 		5BA71198926002262F846473 /* ChallengeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeTests.swift; sourceTree = "<group>"; };
 		5BE5CDC2177C8552E1D6426F /* MorseCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCode.swift; sourceTree = "<group>"; };
+		5C072FD90C8F3366B386F66D /* ContestShortLabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestShortLabelTests.swift; sourceTree = "<group>"; };
 		5C2BAF28C33E175242E46CCF /* OklahomaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OklahomaQSOPartyTests.swift; sourceTree = "<group>"; };
 		5C942E87BA6E5499DF57A6A8 /* EntryBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryBar.swift; sourceTree = "<group>"; };
 		5EEF467249C2C6AB91F4EF7D /* QSOPartyLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QSOPartyLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -825,6 +836,7 @@
 		7A13480F81C3AAAF48E260E3 /* MissouriQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissouriQSOPartyTests.swift; sourceTree = "<group>"; };
 		7CBCFF429B5A8DE4663100EF /* AppIntegrityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntegrityTests.swift; sourceTree = "<group>"; };
 		7CC43C19DF629A758F1B4641 /* ContestLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestLog.swift; sourceTree = "<group>"; };
+		7CF2DC8F7B80F1AB06B4E614 /* BandMapHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapHeader.swift; sourceTree = "<group>"; };
 		7CF9FA80F46B3FCDDEB440A0 /* SpotNetworkAvailabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotNetworkAvailabilityTests.swift; sourceTree = "<group>"; };
 		7DC23CBE9D9FF78C2719ABE0 /* MacroToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroToken.swift; sourceTree = "<group>"; };
 		7DC4C4A853BB7179CD85AC18 /* swpc_planetary_k_index_2026-08-09.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "swpc_planetary_k_index_2026-08-09.json"; sourceTree = "<group>"; };
@@ -841,6 +853,7 @@
 		82A15E4511652305732261EE /* SetupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupSheet.swift; sourceTree = "<group>"; };
 		82D4BBDB6DEC6C2ABE2C3B87 /* CallbookParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbookParserTests.swift; sourceTree = "<group>"; };
 		831C1B0D852691D58AD871CC /* BandMapLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapLayout.swift; sourceTree = "<group>"; };
+		84E36E2F3AC2AEAC986732FC /* LogWindowPlacement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogWindowPlacement.swift; sourceTree = "<group>"; };
 		861DB04574AAEACF21FD47A6 /* MultiplierClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplierClass.swift; sourceTree = "<group>"; };
 		862F0943C96CE6E802D95471 /* AudioFileIOTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileIOTests.swift; sourceTree = "<group>"; };
 		86B06BAA5938A3F067E0DC2D /* VoiceClip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceClip.swift; sourceTree = "<group>"; };
@@ -921,6 +934,7 @@
 		AEA4A841592D4E7DF22124AB /* QSOPostureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSOPostureTests.swift; sourceTree = "<group>"; };
 		AF67E920BF8D84C9C94C101E /* AudioResampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioResampler.swift; sourceTree = "<group>"; };
 		AFA8F0CE885ABA98BA247459 /* HubSpotLifetimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotLifetimeTests.swift; sourceTree = "<group>"; };
+		B02ADCB77F0DD32531DDF20F /* LogWindowPlacementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogWindowPlacementTests.swift; sourceTree = "<group>"; };
 		B03F51B338E67A5CA4B43766 /* w2lj-skeeter-page-2026-08-04.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "w2lj-skeeter-page-2026-08-04.html"; sourceTree = "<group>"; };
 		B081DEDD21D80040621BF30D /* cqp-inside-serials.adi */ = {isa = PBXFileReference; path = "cqp-inside-serials.adi"; sourceTree = "<group>"; };
 		B2436011194157AC1F402566 /* EntryCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryCommand.swift; sourceTree = "<group>"; };
@@ -931,6 +945,7 @@
 		B4709C71C105A2FD4D80D7C3 /* SeventhCallAreaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeventhCallAreaQSOPartyTests.swift; sourceTree = "<group>"; };
 		B49AC8D775ABBA76B9D43CD0 /* UpcomingContestsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingContestsTests.swift; sourceTree = "<group>"; };
 		B4CBD3A2D0AB1FB85B4B439A /* PartyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyDefinition.swift; sourceTree = "<group>"; };
+		B53153CD73B296DBC0ADB9DD /* RightClickCatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightClickCatcherTests.swift; sourceTree = "<group>"; };
 		B53EC04A80BE35768462933D /* NorthDakotaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorthDakotaQSOPartyTests.swift; sourceTree = "<group>"; };
 		B54B32AF67B7058055ADD0B7 /* SpotLabelSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotLabelSize.swift; sourceTree = "<group>"; };
 		B598E336484B5D8CC5B9A2F9 /* ChallengeStanding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeStanding.swift; sourceTree = "<group>"; };
@@ -987,6 +1002,7 @@
 		CD0D74F754FD20FDF7B880B7 /* MemberMultiplierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberMultiplierTests.swift; sourceTree = "<group>"; };
 		CDFB83A71484799D6871283B /* DXCC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DXCC; path = Resources/DXCC; sourceTree = SOURCE_ROOT; };
 		CE71E311A143F24A7B59DFAB /* CallbookCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbookCache.swift; sourceTree = "<group>"; };
+		CF3DE095FF10F043BEB52ECF /* BandMapSettingsTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapSettingsTabTests.swift; sourceTree = "<group>"; };
 		CF6D999640AF4FF7CB86AF56 /* VirginiaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirginiaQSOPartyTests.swift; sourceTree = "<group>"; };
 		CF967F6F4FA8B5D87F123A2C /* ContestNoticeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContestNoticeTests.swift; sourceTree = "<group>"; };
 		D068E0A2C3FB191CED57DB7F /* PartyLoweringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyLoweringTests.swift; sourceTree = "<group>"; };
@@ -995,6 +1011,7 @@
 		D2052FF6C863AA0209875C20 /* DelawareQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelawareQSOPartyTests.swift; sourceTree = "<group>"; };
 		D280B58A219790315D6991CC /* CTY */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CTY; path = Resources/CTY; sourceTree = SOURCE_ROOT; };
 		D2CF4BED2C6300C03D09888A /* VoiceAudioTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceAudioTests.swift; sourceTree = "<group>"; };
+		D36ADEFE4F5840117297E4D6 /* BandMapHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapHeaderTests.swift; sourceTree = "<group>"; };
 		D3DD664ADDF1E6C4CD2E4400 /* LogDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDocumentTests.swift; sourceTree = "<group>"; };
 		D3DF39F3D984B5DBBD0BF686 /* CallbookStampTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbookStampTests.swift; sourceTree = "<group>"; };
 		D4750D73F12A657C4B503D40 /* SpotSendState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSendState.swift; sourceTree = "<group>"; };
@@ -1068,6 +1085,7 @@
 		F3A6CD38D36F93D879D6A6C8 /* ExchangeElementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeElementTests.swift; sourceTree = "<group>"; };
 		F435A4BFCDEA86D0D8F785C4 /* RadioRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioRegistry.swift; sourceTree = "<group>"; };
 		F47B5C2B4B0E3D55FBFEA997 /* SpotDraftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotDraftTests.swift; sourceTree = "<group>"; };
+		F4F9D5BEC6EC5CFE1596B280 /* BandMapSettingsPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandMapSettingsPopover.swift; sourceTree = "<group>"; };
 		F50EF7423E88A0338CAF3332 /* HubSpotPrefill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubSpotPrefill.swift; sourceTree = "<group>"; };
 		F53E1CCA809156CAFA061676 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		F53EE348D4F155F8D1FCC2EF /* DashboardModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardModelTests.swift; sourceTree = "<group>"; };
@@ -1203,17 +1221,21 @@
 			isa = PBXGroup;
 			children = (
 				62964F532E8EF7DFEAAF1F91 /* BandMapBoltAttachmentTests.swift */,
+				D36ADEFE4F5840117297E4D6 /* BandMapHeaderTests.swift */,
 				CADB3755C2AA6B1E8DF06BB5 /* BandMapPanelPlacementTests.swift */,
+				CF3DE095FF10F043BEB52ECF /* BandMapSettingsTabTests.swift */,
 				CF967F6F4FA8B5D87F123A2C /* ContestNoticeTests.swift */,
 				4DFBB554A5050EEC235AC9E7 /* DashboardExportRowTests.swift */,
 				B66F2696A258C16403F99824 /* DashboardPotaRowTests.swift */,
 				90271904CB1B7B918B0F0C30 /* DashboardWidgetsTests.swift */,
 				D07925E31BA0FCA7B24DF428 /* EntryLayoutTests.swift */,
 				71632B8792B4599E3B28478F /* LogTablePointsTests.swift */,
+				B02ADCB77F0DD32531DDF20F /* LogWindowPlacementTests.swift */,
 				734937D3E42FD109B7B794C7 /* LogWindowTabsTests.swift */,
 				56505B17DC3D52012E600A1F /* PotaPickerBehaviorTests.swift */,
 				35603FAC30DAAF7154DA76E3 /* RadioBarStatusTests.swift */,
 				DC11ED4933513B0D723E776E /* RateColumnTests.swift */,
+				B53153CD73B296DBC0ADB9DD /* RightClickCatcherTests.swift */,
 				51C881733E52B4CD62D43604 /* SpottingPolicyTests.swift */,
 				713B9DF33F0B96DF2A018A11 /* UppercasingFieldTests.swift */,
 				3A0906D967C114B94D58178D /* VoicePaneKeysTests.swift */,
@@ -1516,6 +1538,8 @@
 				DEC0C13AC06A91C6F85B83E4 /* AdvisorSection.swift */,
 				EF27EC7CAEAE6E71B85FD5E9 /* BandMap.swift */,
 				E38D5373C8EDE7E7BA93645C /* BandMapBoltAttachment.swift */,
+				7CF2DC8F7B80F1AB06B4E614 /* BandMapHeader.swift */,
+				F4F9D5BEC6EC5CFE1596B280 /* BandMapSettingsPopover.swift */,
 				B64840D9ACF7A45698878A84 /* BulkEditSheet.swift */,
 				691217DB3EE08B9E1068C3C6 /* CallbookSettingsPane.swift */,
 				02590141050CF40EEF90B0C1 /* CombinedBreakdownSection.swift */,
@@ -1528,6 +1552,7 @@
 				B8CBE54B71F1640E915BB657 /* KeyDiagnostics.swift */,
 				58F8DCDD9B83142A28657268 /* KeyMonitorGate.swift */,
 				1A23E3ADEAE3B7F86B2A421E /* LogTable.swift */,
+				84E36E2F3AC2AEAC986732FC /* LogWindowPlacement.swift */,
 				E2487DA19106B9F0451DCE0C /* LogWindowTabs.swift */,
 				4617D5E5CB3103CD4E042746 /* MainView.swift */,
 				01C6419D10E7C381AE554C1B /* MessagesEditor.swift */,
@@ -1537,6 +1562,7 @@
 				22504435770919C0C1FCA961 /* PotaPickerBehavior.swift */,
 				771A2A2E70C2A91608F19549 /* RadioBar.swift */,
 				6183074E6FEE712AC9AAA24B /* RateColumn.swift */,
+				12721BE0B1F2BF3FF1E17008 /* RightClickCatcher.swift */,
 				AA812496670164897C4A0447 /* ScoreSidebar.swift */,
 				82A15E4511652305732261EE /* SetupSheet.swift */,
 				FC9722BE1802AF2F695FB6DD /* ShortcutHint.swift */,
@@ -1748,6 +1774,7 @@
 				B311ACDB55F4A18F8A7B3A0F /* CallHistoryClientTests.swift */,
 				359DF0F30A9EF39FE37A2287 /* CallHistoryPrefillTests.swift */,
 				57263564A0C38ADE1B3E1897 /* CloudMirrorTests.swift */,
+				5C072FD90C8F3366B386F66D /* ContestShortLabelTests.swift */,
 				5F27BD78F3C7802DAFEB05AE /* DashboardModelExportTests.swift */,
 				F53EE348D4F155F8D1FCC2EF /* DashboardModelTests.swift */,
 				42866F267E48E55BA7B2A686 /* DXCCLabelClientTests.swift */,
@@ -2101,9 +2128,11 @@
 				FA21443D02E0BA5E35702397 /* BandMapBoltAttachmentTests.swift in Sources */,
 				262FB629BB74D7ED4674A6E1 /* BandMapBoltPreferenceTests.swift in Sources */,
 				D240D4137D8059D559EB4730 /* BandMapBoltTests.swift in Sources */,
+				11EDB33581E6A9F87AE981BD /* BandMapHeaderTests.swift in Sources */,
 				9ECF4B187A1C5F95F20C0C4C /* BandMapLayoutTests.swift in Sources */,
 				D8C66775D3C9F52A735ABA85 /* BandMapObservationTests.swift in Sources */,
 				0254A40E4B852CBCEF934224 /* BandMapPanelPlacementTests.swift in Sources */,
+				8942367FEC65F937ADB5120F /* BandMapSettingsTabTests.swift in Sources */,
 				1F1FBEDEE908B3EBB86AFC61 /* BandMapStatusTests.swift in Sources */,
 				83FA7452B5CF0039189A7995 /* BandMapTests.swift in Sources */,
 				EC56BDD4BA4DD578EFC84597 /* BandPlanTests.swift in Sources */,
@@ -2151,6 +2180,7 @@
 				6E088F38D7D40B9432EBD501 /* ContestRulesTests.swift in Sources */,
 				5D3E380BD57BE407AC3A5738 /* ContestScalePerfTests.swift in Sources */,
 				A353F48674542D5C64924659 /* ContestScoreEngineTests.swift in Sources */,
+				AAAF4BD0D811063FA2CB2170 /* ContestShortLabelTests.swift in Sources */,
 				2E637491E59BD85BC0F975E9 /* CountyGroupingTests.swift in Sources */,
 				A4276D42A299E140C2F6C501 /* CountyLineExpanderTests.swift in Sources */,
 				5518F09603FD0BBC880772E8 /* DXCCLabelClientTests.swift in Sources */,
@@ -2208,6 +2238,7 @@
 				36D1463B5DC69485948798D3 /* LogDocumentTests.swift in Sources */,
 				AB87CDB7F0D931F151F186C7 /* LogFolderTests.swift in Sources */,
 				1C955D3925926AD1F9C0AF47 /* LogTablePointsTests.swift in Sources */,
+				922BFA89D6391AB708B4AE7B /* LogWindowPlacementTests.swift in Sources */,
 				9D5A96B74990E1751A7172FD /* LogWindowTabsTests.swift in Sources */,
 				85A69706B637C953E611533F /* LouisianaQSOPartyTests.swift in Sources */,
 				59F0F94BA72533398057FAF7 /* MacroTokenTests.swift in Sources */,
@@ -2288,6 +2319,7 @@
 				3A857866492731ADB2E7B655 /* RateMeterTests.swift in Sources */,
 				BA85DF2E6283531372C18D2F /* RecordingAccumulatorTests.swift in Sources */,
 				D8030CD4307A9AF029289415 /* RepeatCQPolicyTests.swift in Sources */,
+				8952116E3A5EE8DF0BBB3226 /* RightClickCatcherTests.swift in Sources */,
 				E08E671185832A9BD05A62D0 /* SCPClientTests.swift in Sources */,
 				9A1D1AAD285B8D3F63E205C6 /* SCPDatabaseTests.swift in Sources */,
 				6615F01A1746C284C34DD7C4 /* SCPStoreTests.swift in Sources */,
@@ -2376,8 +2408,10 @@
 				62EAF9049A238A064611FDEE /* BandMap.swift in Sources */,
 				8BB905FD50F6763E6889CD8C /* BandMapBolt.swift in Sources */,
 				B84E406223FABC89E81276EB /* BandMapBoltAttachment.swift in Sources */,
+				C4D3224F5E1D3A53EDC18333 /* BandMapHeader.swift in Sources */,
 				65E5DFBFDD4BE2CD4549A134 /* BandMapLayout.swift in Sources */,
 				4B8F195A6C31CC6820EDE455 /* BandMapScale.swift in Sources */,
+				4A5E8BC39A0C9A03AF78633F /* BandMapSettingsPopover.swift in Sources */,
 				0E122728DD4F2CC234B5E788 /* BandPlan.swift in Sources */,
 				F159E9D83D3C5AB7516EE0A7 /* BulkEdit.swift in Sources */,
 				67A80A778F35F15BE390F382 /* BulkEditSheet.swift in Sources */,
@@ -2465,6 +2499,7 @@
 				CEACC3EEBBF6A962A00C0F48 /* LogDocument.swift in Sources */,
 				EAA5045F0BA4CB2EB6BB915C /* LogFolder.swift in Sources */,
 				D733F370D91E26789F664325 /* LogTable.swift in Sources */,
+				89B31C94DE85EFD6990F6471 /* LogWindowPlacement.swift in Sources */,
 				A9F464CB1389B62DCF4D4A4A /* LogWindowTabs.swift in Sources */,
 				6F4E90CFE0F8A311059869C1 /* MacroToken.swift in Sources */,
 				E846862056468AB1BD3D5FD4 /* Maidenhead.swift in Sources */,
@@ -2516,6 +2551,7 @@
 				ED92C6E0F5A3EBEAAB9FEE33 /* RateColumn.swift in Sources */,
 				305E1E7BCE5D2DD20771B8DB /* RateMeter.swift in Sources */,
 				AB6E92740C1C67A1740CB0A6 /* RepeatCQPolicy.swift in Sources */,
+				60A630F684647F7995D4B3D5 /* RightClickCatcher.swift in Sources */,
 				B697AC58255763D8708239E5 /* SCPClient.swift in Sources */,
 				962C83188C384DA2D6A8362D /* SCPDatabase.swift in Sources */,
 				87DEFAA494644FF89C542876 /* SCPStore.swift in Sources */,

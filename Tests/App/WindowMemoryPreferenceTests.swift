@@ -29,6 +29,8 @@ final class WindowMemoryPreferenceTests: XCTestCase {
         let scratch = try scratchStore()
         let settings = AppSettings(defaults: scratch)
         settings.logWindowFrame = CGRect(x: 10, y: 20, width: 1300, height: 820)
+        // The scene reads the frame at launch straight from the store.
+        XCTAssertEqual(AppSettings.storedFrame(forKey: "logWindowFrame", in: scratch)?.height, 820)
         settings.bandMapFrame = CGRect(x: 1320, y: 300, width: 260, height: 540)
         settings.bandMapShown = true
         XCTAssertEqual(scratch.string(forKey: "logWindowFrame"), "{{10, 20}, {1300, 820}}")

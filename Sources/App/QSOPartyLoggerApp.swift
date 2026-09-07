@@ -7,6 +7,12 @@ struct QSOPartyLoggerApp: App {
             MainView(document: configuration.document)
         }
         .defaultSize(width: 1280, height: 800)
+        // The saved frame, before the window is shown — so it opens where it
+        // was rather than opening centred and jumping there. Reads the store
+        // directly: nothing here may build `AppSettings.shared` (below).
+        .defaultWindowPlacement { _, _ in
+            LogWindowPlacement.windowPlacement(MainActor.assumeIsolated { LogWindowPlacement.saved() })
+        }
         .commands {
             // Help › Keyboard Shortcut Hints (⌘/): every button wears its key,
             // and the log window lists the keys that have no button. From the

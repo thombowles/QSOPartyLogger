@@ -51,6 +51,13 @@ struct ContestRecord: Equatable, Sendable, Identifiable {
         qsos.map(\.timestampUTC).min()
     }
 
+    /// Whether any contact was made from a park of the operator's own — a
+    /// contest worked from a park, which the dashboard's POTA side counts as
+    /// an outing too, park contacts only.
+    var activatesAPark: Bool {
+        qsos.contains { !($0.myPotaRefs ?? []).isEmpty }
+    }
+
     /// UTC year of the log's earliest QSO; nil for an empty log.
     static func year(of log: ContestLog) -> Int? {
         log.qsos.map(\.timestampUTC).min()?.utcYear

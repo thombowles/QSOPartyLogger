@@ -1,9 +1,12 @@
 import Foundation
 
 /// A year of POTA as the dashboard tells it, computed pure from program
-/// records (`ContestRecord`s whose contest family is `.program`): one row
-/// per outing — a log file — with its park-days, and a season rollup that
-/// unions distinct things (parks, states, entities) and sums the rest.
+/// records (`ContestRecord`s whose contest family is `.program`) and from
+/// party records worked from a park: one row per outing — a log file — with
+/// its park-days, and a season rollup that unions distinct things (parks,
+/// states, entities) and sums the rest. A program log is POTA end to end,
+/// hunting from home included; a party log is POTA only on the rows that
+/// carry the park — the hour before the park was set is the contest's alone.
 /// The ten-QSO validity is `PotaStats`' strict unique reading; the open
 /// question is banked in docs/research/pota/SOURCES.md.
 struct PotaSeason: Equatable, Sendable {
@@ -24,6 +27,9 @@ struct PotaSeason: Equatable, Sendable {
     /// One outing — one log file in the folder.
     struct Outing: Equatable, Sendable, Identifiable {
         let record: ContestRecord
+        /// The outing's POTA contacts: a program log's every valid contact,
+        /// a party log's park contacts.
+        let qsos: Int
         /// Distinct parks activated, sorted; empty for a hunter log.
         let parks: [String]
         /// Ordered by day, then park.
@@ -34,8 +40,9 @@ struct PotaSeason: Equatable, Sendable {
 
         var id: String { record.id }
         var date: Date { record.earliestQSO ?? .distantPast }
-        var qsos: Int { record.snapshot.validQSOs }
         var minutes: Int { record.snapshot.operatingMinutes }
+        /// A party record worked from a park, as against a program log.
+        var isContest: Bool { record.outing == nil }
         var validParkDays: Int { parkDays.filter(\.valid).count }
     }
 
@@ -93,8 +100,12 @@ struct PotaSeason: Equatable, Sendable {
             var states = Set<String>()
             var entities = Set<Int>()
             let myEntity = entityCode(record.callsign.uppercased())
+            let program = record.outing != nil
+            let contacts = program
+                ? record.qsos
+                : record.qsos.filter { !($0.myPotaRefs ?? []).isEmpty }
 
-            for q in record.qsos {
+            for q in contacts {
                 let day = utc.startOfDay(for: q.timestampUTC)
                 for park in q.myPotaRefs ?? [] {
                     unique[Key(park: park.uppercased(), day: day), default: []]
@@ -115,8 +126,10 @@ struct PotaSeason: Equatable, Sendable {
             let parkDays = unique
                 .map { ParkDay(park: $0.key.park, day: $0.key.day, unique: $0.value.count) }
                 .sorted { ($0.day, $0.park) < ($1.day, $1.park) }
+            let potaQSOs = program ? record.snapshot.validQSOs : contacts.count
             outings.append(Outing(
                 record: record,
+                qsos: potaQSOs,
                 parks: Set(unique.keys.map(\.park)).sorted(),
                 parkDays: parkDays,
                 p2pContacts: p2pGroups.count,
@@ -128,10 +141,14 @@ struct PotaSeason: Equatable, Sendable {
             seasonHunted.formUnion(hunted)
             seasonStates.formUnion(states)
             seasonEntities.formUnion(entities)
-            for (mode, count) in record.snapshot.qsosByMode {
-                byMode[mode, default: 0] += count
+            if program {
+                for (mode, count) in record.snapshot.qsosByMode {
+                    byMode[mode, default: 0] += count
+                }
+            } else {
+                for q in contacts { byMode[q.modeClass.rawValue, default: 0] += 1 }
             }
-            qsos += record.snapshot.validQSOs
+            qsos += potaQSOs
             minutes += record.snapshot.operatingMinutes
             p2p += p2pGroups.count
         }

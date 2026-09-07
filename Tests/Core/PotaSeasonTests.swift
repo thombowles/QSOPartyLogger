@@ -56,6 +56,23 @@ final class PotaSeasonTests: XCTestCase {
         )!
     }
 
+    /// A contest log worked from a park: a party record, not a program one —
+    /// no outing in its identity — whose park contacts the POTA side counts.
+    private func contestRecord(qsos: [QSO], partyID: String = "ksqp") -> ContestRecord {
+        var log = ContestLog(partyID: partyID)
+        log.station.callsign = "KE5CW"
+        log.myLocation = .inState(counties: ["JOH"])
+        log.qsos = qsos
+        log.setupCompleted = true
+        return ContestRecord.make(
+            from: log,
+            snapshot: ScoreSnapshot.best(for: log),
+            updatedAt: t0,
+            sourceFileName: "ksqp.qplog",
+            program: false
+        )!
+    }
+
     /// US calls resolve to the operator's own entity; DL and G are DX.
     private let entities: (String) -> Int? = {
         ["KE5CW": 291, "W0AAA": 291, "K5BBB": 291, "DL1ABC": 230, "G4XYZ": 223][$0]
@@ -98,6 +115,28 @@ final class PotaSeasonTests: XCTestCase {
         XCTAssertEqual(se.outings.map(\.validParkDays), [0, 1])
         XCTAssertEqual(se.activations, 2)
         XCTAssertEqual(se.validActivations, 1)
+    }
+
+    // MARK: A contest worked from a park
+
+    /// A party record's contacts are POTA contacts only where the park is on
+    /// the row — the hour before the park was set is the contest's alone —
+    /// while a program record's every contact counts, park or hunting.
+    func testAContestRecordCountsOnlyItsParkContacts() {
+        let ksqp = contestRecord(qsos: [
+            qso("N0X", offset: -3600),                      // before the park
+            qso("W0AAA", park: "US-1234"),
+            qso("K5BBB", park: "US-1234", mode: .phone, offset: 60),
+        ])
+        let hunting = record(qsos: [qso("W0AAA", offset: 86_400)])
+        let se = season([ksqp, hunting])
+        XCTAssertEqual(se.outings.map(\.qsos), [2, 1])
+        XCTAssertEqual(se.outings[0].parks, ["US-1234"])
+        XCTAssertEqual(se.outings[0].record.partyID, "ksqp")
+        XCTAssertNil(se.outings[0].record.outing, "a party record keeps a party's identity")
+        XCTAssertEqual(se.qsos, 3)
+        XCTAssertEqual(se.qsosByMode, ["cw": 2, "phone": 1])
+        XCTAssertEqual(se.parksActivated, 1)
     }
 
     // MARK: P2P, states, DX

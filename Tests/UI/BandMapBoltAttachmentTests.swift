@@ -48,7 +48,7 @@ final class BandMapBoltAttachmentTests: XCTestCase {
             defer: false
         )
         panel.isReleasedWhenClosed = false
-        panel.level = .floating
+        panel.level = .normal
         panel.contentMinSize = NSSize(width: 230, height: 280)
         let bolt = BandMapBolt.Attachment(panel: panel, host: host)
         addTeardownBlock { @MainActor in
@@ -60,13 +60,16 @@ final class BandMapBoltAttachmentTests: XCTestCase {
 
     // MARK: Bolting
 
-    func testAFreeMapIsNoChildAndFloats() {
+    /// Free, the map is an ordinary window — the log window's level, not
+    /// floating over every other app's — so it behaves like the log itself:
+    /// behind another app when that app is in front, forward with the app.
+    func testAFreeMapIsNoChildAtTheOrdinaryLevel() {
         let f = fixture()
         f.bolt.show()
         f.bolt.apply(bolted: false, side: .right)
         XCTAssertFalse(f.bolt.isAttached)
         XCTAssertNil(f.panel.parent)
-        XCTAssertEqual(f.panel.level, .floating)
+        XCTAssertEqual(f.panel.level, .normal)
         XCTAssertTrue(f.panel.isVisible)
     }
 
@@ -158,7 +161,7 @@ final class BandMapBoltAttachmentTests: XCTestCase {
 
     // MARK: Setting it free
 
-    func testSettingItFreeLeavesItWhereItIsAndFloating() {
+    func testSettingItFreeLeavesItWhereItIsAtTheOrdinaryLevel() {
         let f = fixture()
         f.bolt.show()
         f.bolt.apply(bolted: true, side: .right)
@@ -166,7 +169,7 @@ final class BandMapBoltAttachmentTests: XCTestCase {
         f.bolt.apply(bolted: false, side: .right)
         XCTAssertFalse(f.bolt.isAttached)
         XCTAssertNil(f.panel.parent)
-        XCTAssertEqual(f.panel.level, .floating)
+        XCTAssertEqual(f.panel.level, .normal)
         XCTAssertEqual(f.panel.frame, bolted, "no remembered position to jump to")
         f.host.setFrameOrigin(NSPoint(x: 200, y: 120))
         XCTAssertEqual(f.panel.frame, bolted, "and the window no longer drags it along")
@@ -348,5 +351,46 @@ final class BandMapBoltAttachmentTests: XCTestCase {
         XCTAssertTrue(f.bolt.hostIsShowing, "a group of one is no group")
         f.host.orderOut(nil)
         XCTAssertFalse(f.bolt.hostIsShowing)
+    }
+
+    // MARK: One frame for every tab's map
+
+    /// Every log's map takes the one remembered frame when it comes on
+    /// screen, so switching tabs never means re-placing the map.
+    func testAMapShownTakesTheSharedFrame() {
+        let f = fixture()
+        let shared = NSRect(x: 40, y: 40, width: 300, height: 500)
+        f.bolt.sharedFrame = { shared }
+        f.bolt.show()
+        XCTAssertEqual(f.panel.frame, shared)
+    }
+
+    func testTheSharedFrameIsTakenOnEveryShow() {
+        let f = fixture()
+        var shared = NSRect(x: 40, y: 40, width: 300, height: 500)
+        f.bolt.sharedFrame = { shared }
+        f.bolt.show()
+        f.bolt.hide()
+        shared = NSRect(x: 400, y: 100, width: 260, height: 700)
+        f.bolt.show()
+        XCTAssertEqual(f.panel.frame, shared)
+    }
+
+    /// Bolted, the position is the pin's — but the width is the shared one.
+    func testABoltedMapTakesTheSharedWidth() {
+        let f = fixture()
+        f.bolt.sharedFrame = { NSRect(x: 40, y: 40, width: 320, height: 500) }
+        f.bolt.apply(bolted: true, side: .right)
+        f.bolt.show()
+        XCTAssertEqual(f.panel.frame.width, 320)
+        XCTAssertEqual(f.panel.frame, f.expected(.right))
+    }
+
+    func testNoSharedFrameLeavesTheMapWhereItIs() {
+        let f = fixture()
+        let before = f.panel.frame
+        f.bolt.sharedFrame = { nil }
+        f.bolt.show()
+        XCTAssertEqual(f.panel.frame, before)
     }
 }

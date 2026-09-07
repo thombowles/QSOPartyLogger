@@ -6,9 +6,9 @@ extension BandMapBolt {
     /// made with the panel in `MainView`; closed with it.
     ///
     /// Bolted, the panel is a child of the log window (`addChildWindow`), so
-    /// it is raised, lowered, minimised and moved with it; it is held at the
-    /// window's level rather than floating, so the *other* log's map is never
-    /// on top of this one; and it is pinned to the edge — the window's every
+    /// it is raised, lowered, minimised and moved with it; free, it is an
+    /// ordinary window at the log's own level — never floating over another
+    /// app's — and it is pinned to the edge — the window's every
     /// move and resize re-pins it, and so does any attempt to drag the map
     /// away by its title bar. Its own resize is left alone: the width is the
     /// operator's, and snapping the origin back during a live resize from the
@@ -38,6 +38,11 @@ extension BandMapBolt {
         /// The panel's own close button — the operator saying "no map".
         /// Not fired by `close()`, which is the window going away.
         var onClosedByOperator: (@MainActor () -> Void)?
+        /// The one frame every log's map shares (`AppSettings.bandMapFrame`):
+        /// taken whenever this map comes on screen, so switching tabs never
+        /// means placing the map again. Bolted, the pin decides the position
+        /// and the shared width stands.
+        var sharedFrame: (@MainActor () -> NSRect?)?
 
         init(panel: NSPanel, host: NSWindow) {
             self.panel = panel
@@ -122,6 +127,10 @@ extension BandMapBolt {
         /// showing. Idempotent; run on every change of either.
         func sync() {
             if wanted, hostIsShowing {
+                if let frame = sharedFrame?(), frame.width > 0, frame.height > 0,
+                   panel.frame != frame {
+                    panel.setFrame(frame, display: false)
+                }
                 if !panel.isVisible { panel.orderFront(nil) }
                 attach()
             } else {
@@ -173,7 +182,7 @@ extension BandMapBolt {
         private func detach() {
             guard isAttached else { return }
             host.removeChildWindow(panel)
-            panel.level = .floating
+            panel.level = .normal
             isAttached = false
         }
     }

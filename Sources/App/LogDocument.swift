@@ -256,6 +256,19 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     /// (operator report 2, 2026-08-26); a hunter log, a missing callsign,
     /// and every party keep the standard scheme, so no existing log's name
     /// moves.
+    /// The short name a log goes by where there is no room for the party's
+    /// full name — the band map's title and header, so with several contests
+    /// in tabs each map says whose it is. The token the file name carries:
+    /// the party's id in capitals, or the park for a POTA activation.
+    nonisolated static func contestShortLabel(
+        partyID: String, activatedParks: [String] = [], potaProgram: Bool = false
+    ) -> String {
+        if potaProgram, let park = activatedParks.first, !park.isEmpty {
+            return park.uppercased()
+        }
+        return partyID.uppercased()
+    }
+
     nonisolated static func defaultDisplayName(
         partyID: String, callsign: String, date: Date = Date(),
         activatedParks: [String] = [], potaProgram: Bool = false

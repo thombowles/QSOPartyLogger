@@ -1,4 +1,5 @@
 import SwiftUI
+import os
 import UniformTypeIdentifiers
 import os
 
@@ -68,6 +69,9 @@ struct MainView: View {
     /// The window's frame, remembered across runs (`AppSettings.logWindowFrame`).
     /// Made with the window; released with the view.
     @State private var windowMemory: WindowFrameMemory?
+    /// Where the window opened against where it was saved — the one line
+    /// that tells a jump the operator saw from one the app made.
+    private static let windowLog = Logger(subsystem: "org.b5n.QSOPartyLogger", category: "window")
     /// ⌃⌘S, or the toolbar's Score button: the score sidebar hidden, so this
     /// window can be pushed into a corner while another keeps its sidebar.
     /// Per window, restored with it. The strip shows the total meanwhile.
@@ -447,7 +451,10 @@ struct MainView: View {
                 .onChange(of: document.log.partyID) { applyDefaultDocumentName() }
                 // A POTA activation is named for its park, so picking one in
                 // Setup renames an unsaved draft the way a party pick does.
-                .onChange(of: document.log.myPotaRefs) { applyDefaultDocumentName() }
+                .onChange(of: document.log.myPotaRefs) {
+                    applyDefaultDocumentName()
+                    refreshBandMapTitle()
+                }
                 .onChange(of: document.log.partyID) { voiceStore.partyID = document.log.partyID }
                 .onChange(of: document.log.station.callsign) { applyDefaultDocumentName() }
                 .onChange(of: document.log.setupCompleted) { autoSaveNewDocumentIfNeeded() }
@@ -591,6 +598,7 @@ struct MainView: View {
             bandMapModel?.allowedModes = party?.allowedModeClasses ?? []
             bandMapModel?.party = party
             bandMapModel?.canSpot = canSpotStation
+            refreshBandMapTitle()
             syncHubSpotClient()
             syncPotaBoardClient()
             activateCallHistory()
@@ -1226,6 +1234,7 @@ struct MainView: View {
             }
             bandMapModel = model
         }
+        refreshBandMapTitle()
         restoreBandMapIfWanted()
     }
 
@@ -1322,10 +1331,14 @@ struct MainView: View {
             return
         }
         guard let model = bandMapModel, let host = hostWindow else { return }
+        refreshBandMapTitle()
         let panel = BandMapPanel.make(model: model, near: host, frame: settings.bandMapFrame)
         let bolt = BandMapBolt.Attachment(panel: panel, host: host)
         bolt.onFrameChanged = { settings.bandMapFrame = $0 }
         bolt.onClosedByOperator = { settings.bandMapShown = false }
+        // Every tab's map at the one remembered place: taken on every show,
+        // so a map moved in one tab is where the next tab's map appears.
+        bolt.sharedFrame = { settings.bandMapFrame }
         bandMapPanel = panel
         bandMapBolt = bolt
         bolt.apply(bolted: settings.bandMapBolted, side: settings.bandMapBoltSide)
@@ -1343,6 +1356,19 @@ struct MainView: View {
         }
     }
 
+    /// The map says whose it is — title bar and header — from the log's
+    /// party or park (`LogDocument.contestShortLabel`), kept current as
+    /// setup names either.
+    private func refreshBandMapTitle() {
+        let label = LogDocument.contestShortLabel(
+            partyID: document.log.partyID,
+            activatedParks: document.log.myPotaRefs,
+            potaProgram: flow.standaloneContest?.potaProgram == true
+        )
+        bandMapModel?.contestLabel = label
+        bandMapPanel?.title = BandMapPanel.title(contest: label)
+    }
+
     /// The map was up when the operator last had a say: open it, once both
     /// the model (`onAppear`) and the window (the accessor) exist. Called
     /// from both, in whichever order they come; idempotent.
@@ -1358,9 +1384,13 @@ struct MainView: View {
         hostWindow = window
         LogWindowTabs.configure(window)
         LogWindowTabs.join(window)
-        windowMemory = WindowFrameMemory(window: window, saved: settings.logWindowFrame) {
+        let memory = WindowFrameMemory(window: window, saved: settings.logWindowFrame) {
             settings.logWindowFrame = $0
         }
+        windowMemory = memory
+        Self.windowLog.notice(
+            "log window placed at \(NSStringFromRect(memory.placedAt), privacy: .public); saved \(settings.logWindowFrame.map(NSStringFromRect) ?? "none", privacy: .public); corrected \(memory.corrected, privacy: .public) to \(NSStringFromRect(window.frame), privacy: .public); tabs \(window.tabbedWindows?.count ?? 1, privacy: .public)"
+        )
         restoreBandMapIfWanted()
     }
 

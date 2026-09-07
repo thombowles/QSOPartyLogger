@@ -51,9 +51,11 @@ final class WindowFrameMemoryTests: XCTestCase {
     func testALoneWindowIsRestoredToTheSavedFrame() {
         let w = window()
         let saved = CGRect(x: 200, y: 300, width: 1300, height: 820)
+        let before = w.frame
         let memory = WindowFrameMemory(window: w, saved: saved, screens: [screen], save: { _ in })
         XCTAssertEqual(w.frame, saved)
-        withExtendedLifetime(memory) {}
+        XCTAssertTrue(memory.corrected, "the window was moved there")
+        XCTAssertEqual(memory.placedAt, before, "and remembers where it found it")
     }
 
     /// A window opening into a tab group takes the group's frame; restoring
@@ -70,7 +72,7 @@ final class WindowFrameMemoryTests: XCTestCase {
             screens: [screen], save: { _ in }
         )
         XCTAssertEqual(second.frame, before)
-        withExtendedLifetime(memory) {}
+        XCTAssertFalse(memory.corrected)
     }
 
     // MARK: Saving
@@ -95,5 +97,28 @@ final class WindowFrameMemoryTests: XCTestCase {
         )
         XCTAssertTrue(saved.isEmpty, "the frame that was just read back is not written again")
         withExtendedLifetime(memory) {}
+    }
+
+    /// A window SwiftUI already placed at the saved frame — `LogWindowPlacement`
+    /// — is left alone, to the few points AppKit may have nudged it by to
+    /// keep it on the screen (a frame saved at x −2 is placed at x 0; seen
+    /// in the unified log, 2026-09-07).
+    func testAWindowAlreadyAtTheSavedFrameIsNotCorrected() {
+        let w = window()
+        let before = w.frame
+        let saved = CGRect(x: before.minX - 2, y: before.minY + 1, width: before.width, height: before.height + 0.3)
+        let memory = WindowFrameMemory(window: w, saved: saved, screens: [screen], save: { _ in })
+        XCTAssertFalse(memory.corrected)
+        XCTAssertEqual(w.frame, before)
+    }
+
+    /// Past the tolerance it is a different place, and the window goes there.
+    func testAWindowFartherOffThanTheToleranceIsCorrected() {
+        let w = window()
+        let before = w.frame
+        let saved = before.offsetBy(dx: WindowFrameMemory.tolerance + 1, dy: 0)
+        let memory = WindowFrameMemory(window: w, saved: saved, screens: [screen], save: { _ in })
+        XCTAssertTrue(memory.corrected)
+        XCTAssertEqual(w.frame, saved)
     }
 }

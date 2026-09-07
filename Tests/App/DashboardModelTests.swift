@@ -120,6 +120,52 @@ final class DashboardModelTests: XCTestCase {
         XCTAssertEqual(model.archive.records.count, 3)
     }
 
+    /// A contest worked from a park — KSQP from a state park, the park in
+    /// the log's Setup — is both: a contest entry in every contest widget,
+    /// and an outing in the POTA cards and list, counting the contacts made
+    /// from the park.
+    func testAContestWorkedFromAParkIsAlsoAnOuting() async throws {
+        var paired = log()
+        paired.qsos = [
+            QSO(
+                timestampUTC: t0, call: "W0BH", band: .m20, modeClass: .cw, rawMode: "CW",
+                freqKHz: 14042, rstSent: "599", rstRcvd: "599", myPotaRefs: ["US-1234"],
+                myLoc: "TX", theirLoc: "MRN"
+            ),
+            QSO(
+                timestampUTC: t0.addingTimeInterval(60), call: "K0A", band: .m20, modeClass: .cw,
+                rawMode: "CW", freqKHz: 14043, rstSent: "599", rstRcvd: "599",
+                myPotaRefs: ["US-1234"], myLoc: "TX", theirLoc: "ALL"
+            ),
+            // Before the park was set — not a POTA contact, still a contest one.
+            QSO(
+                timestampUTC: t0.addingTimeInterval(-3600), call: "N0X", band: .m40, modeClass: .cw,
+                rawMode: "CW", freqKHz: 7042, rstSent: "599", rstRcvd: "599",
+                myLoc: "TX", theirLoc: "BAR"
+            ),
+        ]
+        try write(paired, as: "2026-08-29 KSQP KE5CW.qplog")
+        try write(potaLog(park: "US-5678", call: "K5BBB"), as: "2026-02-02-KE5CW@US-5678.qplog")
+
+        let model = DashboardModel(logsFolder: { [folder] in folder })
+        await model.refresh()
+        model.selectedYear = 2026
+
+        // Contest widgets: KSQP, whole — three contacts.
+        XCTAssertEqual(model.stats.contests, 1)
+        XCTAssertEqual(model.stats.validQSOs, 3)
+        XCTAssertEqual(model.stats.rows.map(\.partyID), ["ksqp"])
+
+        // POTA widgets: the park outing and the contest's park contacts.
+        XCTAssertEqual(model.potaSeason.outings.count, 2)
+        let ksqp = try XCTUnwrap(model.potaSeason.outings.first { $0.record.partyID == "ksqp" })
+        XCTAssertEqual(ksqp.parks, ["US-1234"])
+        XCTAssertEqual(ksqp.qsos, 2, "only the contacts made from the park")
+        XCTAssertEqual(model.potaSeason.qsos, 3)
+        XCTAssertEqual(model.potaSeason.parksActivated, 2)
+        XCTAssertEqual(model.archive.records.count, 2, "still one record per log")
+    }
+
     /// A year with no POTA is simply an empty season — nothing throws, the
     /// section says so or is hidden.
     func testYearWithoutPotaIsAnEmptySeason() async throws {

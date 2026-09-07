@@ -4,8 +4,9 @@ import AppKit
 ///
 /// Made for a window with the frame last saved for it; restores that frame
 /// if the window opens alone and the frame is still on a screen, then hands
-/// every move and resize to `save`. One per log window, held by the view for
-/// the window's life.
+/// every move and resize to `save`. One per log window, held by the view
+/// for the window's life. `LogWindowPlacement` gives the next window the
+/// saved frame before it is shown; this is the memory behind it.
 ///
 /// Not AppKit's `setFrameAutosaveName`: one name serves one window, so the
 /// second tab's call fails silently and stops saving; and it restores at a
@@ -16,12 +17,34 @@ final class WindowFrameMemory {
     /// only ever touched on the main actor, where the class lives.
     nonisolated(unsafe) private var observers: [any NSObjectProtocol] = []
 
+    /// Whether the window had to be moved to the saved frame — false when
+    /// it was already there, which is what `LogWindowPlacement` is for, or
+    /// when there was nothing to restore. Logged by the window, so a jump
+    /// the operator sees can be told from one the app made.
+    private(set) var corrected = false
+    /// The frame the window had when the memory met it — what SwiftUI (and
+    /// `LogWindowPlacement`) gave it — before any correction.
+    let placedAt: CGRect
+
     /// The frame to restore: `saved`, if any part of it is on any of
     /// `screens` (their visible frames) — a monitor that is gone leaves the
     /// window to the system rather than restored off every screen.
-    static func placement(saved: CGRect?, screens: [CGRect]) -> CGRect? {
+    nonisolated static func placement(saved: CGRect?, screens: [CGRect]) -> CGRect? {
         guard let saved, saved.width > 0, saved.height > 0 else { return nil }
         return screens.contains { $0.intersects(saved) } ? saved : nil
+    }
+
+    /// How far a placed window may sit from the saved frame and still count
+    /// as there. AppKit keeps a new window on the screen — a frame saved two
+    /// points past the left edge is placed at the edge — and moving it back
+    /// would be a jump of two points for nothing.
+    nonisolated static let tolerance: CGFloat = 8
+
+    /// Whether two frames are the same place to the eye: within `tolerance`
+    /// in every dimension.
+    nonisolated static func sameFrame(_ a: CGRect, _ b: CGRect) -> Bool {
+        abs(a.minX - b.minX) <= tolerance && abs(a.minY - b.minY) <= tolerance
+            && abs(a.width - b.width) <= tolerance && abs(a.height - b.height) <= tolerance
     }
 
     init(
@@ -30,11 +53,14 @@ final class WindowFrameMemory {
         screens: [CGRect] = NSScreen.screens.map(\.visibleFrame),
         save: @escaping @MainActor (CGRect) -> Void
     ) {
+        placedAt = window.frame
         // A window opening into a tab group takes the group's frame;
         // restoring the saved one would move every tab.
         let alone = (window.tabbedWindows?.count ?? 1) <= 1
-        if alone, let frame = Self.placement(saved: saved, screens: screens), window.frame != frame {
+        if alone, let frame = Self.placement(saved: saved, screens: screens),
+           !Self.sameFrame(window.frame, frame) {
             window.setFrame(frame, display: true)
+            corrected = true
         }
         // Observed after the restore, so the frame just read back is not
         // written straight out again. Synchronous, on the main thread, like

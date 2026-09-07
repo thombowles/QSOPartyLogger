@@ -56,9 +56,12 @@ final class DashboardModel {
         archive.records.filter { !programPartyIDs.contains($0.partyID) }
     }
 
-    /// Program records alone — the POTA cards and history list.
+    /// What the POTA cards and history list read: the program records, and
+    /// every contest worked from a park — KSQP from a state park — which is
+    /// an outing as well as an entry, its park contacts counted
+    /// (`PotaSeason`). Such a record is in `contestRecords` too.
     var potaRecords: [ContestRecord] {
-        archive.records.filter { programPartyIDs.contains($0.partyID) }
+        archive.records.filter { programPartyIDs.contains($0.partyID) || $0.activatesAPark }
     }
 
     var stats: SeasonStats {

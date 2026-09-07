@@ -283,7 +283,11 @@ final class AppSettings {
         }
     }
 
-    private static func frame(forKey key: String, in defaults: UserDefaults) -> CGRect? {
+    /// Internal, and static, so the app's scene can read the saved window
+    /// frame at launch straight from the store — never through `shared`,
+    /// which must not be built before the test bundle redirects preferences
+    /// (`PreferenceIsolationTests`).
+    nonisolated static func storedFrame(forKey key: String, in defaults: UserDefaults) -> CGRect? {
         guard let text = defaults.string(forKey: key) else { return nil }
         let rect = NSRectFromString(text)
         guard rect.width > 0, rect.height > 0 else { return nil }
@@ -521,8 +525,8 @@ final class AppSettings {
         bandMapBoltSide = BandMapBolt.Side(rawValue: defaults.string(forKey: "bandMapBoltSide") ?? "")
             ?? .right
         bandMapShown = defaults.object(forKey: "bandMapShown") as? Bool ?? false
-        bandMapFrame = Self.frame(forKey: "bandMapFrame", in: defaults)
-        logWindowFrame = Self.frame(forKey: "logWindowFrame", in: defaults)
+        bandMapFrame = Self.storedFrame(forKey: "bandMapFrame", in: defaults)
+        logWindowFrame = Self.storedFrame(forKey: "logWindowFrame", in: defaults)
         wpm = defaults.object(forKey: "wpm") as? Int ?? 22
         keyerLineConfig = (defaults.data(forKey: "keyerLineConfig")
             .flatMap { try? JSONDecoder().decode(KeyerLineConfig.self, from: $0) })

@@ -121,12 +121,12 @@ struct MessagesRow: View {
                 }
             }
             .help(index == pendingIndex ? "Return sends this: \(key.caption)" : key.caption)
-            // Right-click to revise the message this key sends. Enabled
-            // even when the key itself is inert — an empty slot is exactly
-            // the one you want to fill in. ⌥F1–⌥F8 do the same thing
-            // (Article 7).
-            .contextMenu {
-                Button("Edit F\(index + 1)…") { onEdit(index) }
+            // Right-click to revise the message this key sends — the editor
+            // opens at once, with no menu between. Works even when the key
+            // itself is inert: an empty slot is exactly the one you want to
+            // fill in. ⌥F1–⌥F8 do the same thing (Article 7).
+            .overlay {
+                RightClickCatcher { onEdit(index) }
             }
         }
     }

@@ -120,7 +120,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `Tab` to **P2P park(s)** | During a POTA activation, the other station's park reference(s). Deliberately outside the `Space` cycle — most contacts aren't park-to-park — so `Space` from it returns to the call |
 | `F12` | Wipe the entry fields and start over |
 | `F1`–`F8` | Send the message in that slot (Run or S&P set) — CW text on CW; on phone, the voice memory recorded on this Mac (or the radio's own, if that source is chosen). The button shows what it will send: the expanded text, or `M4 AGN?`. A second key during a recording replaces it |
-| `⌥F1`–`⌥F8` | Open the Messages editor on that key, ready to edit — the CW text on CW, the phone tab on phone. Right-clicking the button does the same. Works on an empty slot, which is the one you most want to fill |
+| `⌥F1`–`⌥F8` | Open the Messages editor on that key, ready to edit — the CW text on CW, the phone tab on phone. Right-clicking the button opens it at once — no menu between. Works on an empty slot, which is the one you most want to fill |
 | `Esc` | Abort instantly — a CW message mid-character, a recording mid-playback (audio stops and the radio unkeys together), or a voice memory — stop repeat-CQ, close an open sheet — or, in the park picker's search box, clear it and close the results |
 | `⇧⌘V` | Open the Messages editor on the Phone tab — the voice recorder |
 | `⌘1`–`⌘8` | In the Phone tab: record memory M1–M8; the same key (or the button) stops. Stops by itself at 30 s |
@@ -211,7 +211,8 @@ the key code, which window had focus, and what the app did with it.
   tab in front is the one on screen. The dashboard stays a window of its own.
 - **The window comes back where you left it.** Its position and size are
   saved on every move and resize, and the first log of the next run opens
-  right there (a later one opens as a tab, so it is already there). So does
+  right there — placed before it is shown, not shown and then moved (a later
+  one opens as a tab, so it is already there). So does
   the band map: whether it was up (**⌘B**, or its close button) and where it
   was are remembered, and the next log opened brings it back, bolted if it
   was. ⌘B in one tab shows or hides the map in every tab, like bolting does.
@@ -459,7 +460,7 @@ get wrong.
 > A **KX3 / KX2** needs nothing set up: it is keyed over the CAT cable you
 > already have.
 
-**To revise a key, right-click it** — or press **⌥F1**–**⌥F8**. Either opens the
+**To revise a key, right-click it** (the editor opens at once — there is no menu to pick from) — or press **⌥F1**–**⌥F8**. Either opens the
 Messages editor on that key with the caret already in it, on the tab the mode
 calls for: the CW text on CW, the Phone tab on phone. An empty slot works too,
 which is the one most worth filling.
@@ -667,33 +668,39 @@ processor still applies, as it does to a mic).
 
 ## Spotting and the band map
 
-**⌘B** opens a floating N1MM-style band map: a vertical frequency ruler for the
-current band with spots plotted where they live, a red VFO marker tracking the
-radio, and a dashed line marking your run frequency. Zoom 25/50/100 kHz or the
-whole band; click a spot to tune and fill the call, click empty map to QSY.
-Floating, it stays on screen when another app takes focus, so it can sit beside
-a panadapter. Where you put it, and whether it was up, is remembered across
-runs: a log opened tomorrow brings the map back in the same place. With
-several contests in tabs, each tab has its own map and only the front tab's is
-on screen.
+**⌘B** opens an N1MM-style band map in a window of its own: a vertical
+frequency ruler for the current band with spots plotted where they live, a red
+VFO marker tracking the radio, and a dashed line marking your run frequency.
+Zoom 25/50/100 kHz or the whole band; click a spot to tune and fill the call,
+click empty map to QSY. The title bar and the header say which log the map
+belongs to (`KSQP — Band Map`), so two tabs' maps are never confused. It is an
+ordinary window at the log's own level — behind another app's window when that
+is in front, forward with the app, never floating over everything. Where you
+put it, and whether it was up, is remembered across runs, and every tab's map
+shares that one size and position: move it in one tab and the next tab's map
+appears right there. Only the front tab's map is on screen. At the narrowest
+width the header folds onto two lines instead of squeezing.
 
-- **Bolt it to the log window** (**⇧⌘B**, or the funnel's **Window** section)
-  when you're running two contests at once: each map fastens to the side of its
-  own log — right by default, left for a window against the screen's right edge
-  — moves, raises, minimises and hides with it, and can't be dragged off. Its
-  width is yours. Bolted, it sits at its window's level rather than floating,
-  so the other log's map is never on top of it; set it free and it floats
-  again, right where it is.
+- **Bolt it to the log window** (**⇧⌘B**, or the funnel's **Window** page)
+  when you'd rather not place it at all: the map fastens to the side of its own
+  log — right by default, left for a window against the screen's right edge —
+  moves, raises, minimises and hides with it, and can't be dragged off. Its
+  width is yours. Set it free and it stays right where it is.
 - **Two feeds, one map.** Connect any DXSpider or AR-Cluster telnet node
   (toolbar antenna icon), optionally automatically when a contest opens. On top
   of that, the app polls [qsopartyhub.com](http://qsopartyhub.com) for the active
   party — and unlike a cluster spot, a hub spot carries the **county**, which is
   the multiplier you're actually chasing. 39 of the 50 bundled parties have a hub
   page. A spot seen on both feeds is one entry.
-- **Filters** (funnel button): North American stations only, North American
-  spotters only, hide worked stations, hide RBN/skimmer spots, hub-only, per
-  mode, per band, and how long spots live (5 min – 2 hr). It's a panel, not a
-  menu — tick everything you want in one visit. All off by default.
+- **Settings** (funnel button), on three short pages so nothing has to be
+  dragged to be read, and it reopens on the page you left. **Spots**: North
+  American stations only, North American spotters only, hide worked stations,
+  hide RBN/skimmer spots, hub-only, POTA spots in contest logs, offer the
+  spotted county, per mode, per band, and how long spots live (5 min – 2 hr),
+  with its own **Reset Filters**. **Tuning**: the band plan switch and how the
+  map follows the knob, with **Reset Tuning**. **Window**: the label size and
+  the bolt. It's a panel, not a menu — tick everything you want in one visit.
+  All filters off by default.
 - **Worked stations stay visible**, greyed and struck through so you can watch
   the band fill up, and ⌘↓ / ⌘↑ steps straight over them.
 - **Rovers stop hiding.** A mobile that changes county is a new contact: work
@@ -731,7 +738,7 @@ on screen.
   armed, so tuning back finds it ready for F1. Both halves are
   N1MM's ("QSYing will switch to S&P mode"; back "within the tuning tolerance
   of the marker, the program will switch automatically to Run mode"), each
-  with its own switch under the funnel's **Tuning** section.
+  with its own switch on the funnel's **Tuning** page.
 - **The call frame — a ghost call.** Searching, the nearest visible spot within
   the tuning tolerance (300 Hz on CW and digital, 1 kHz on phone; settable)
   appears in the empty call field in the map's colour for it. **Space**, or
@@ -903,7 +910,11 @@ The cached file lives in `~/Library/Application Support/QSOPartyLogger/SCP/`.
   year-over-year trend with your personal best flagged. Return reopens a
   contest's log; ⌘E / ⇧⌘E export it without reopening. POTA logs stay out of
   all of it — an outing is not a contest entry — and get their own row of
-  cards and their own history list instead.
+  cards and their own history list instead. A contest worked from a park —
+  KSQP from a state park, the park set in the log's Setup — is both: an entry
+  in the contests table, and an outing in the POTA cards and list, counting
+  only the contacts made from the park, with the contest's name beside the
+  park in the list.
 - **POTA season (cards + history list)** — a second row of headline numbers
   for the year's Parks on the Air: activations (valid · short of 10), parks
   activated, POTA QSOs, park-to-park with distinct parks hunted, and
@@ -1223,7 +1234,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3319 unit tests**, none of which need hardware, a network or a microphone —
+**3349 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 the score cache's one-fold-per-change discipline (typing costs microseconds of
 engine work at thousands of QSOs — measured baselines live in the suite),

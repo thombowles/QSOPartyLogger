@@ -123,6 +123,48 @@ while hidden so the parent cannot bring it back on its own.
    system puts it, not off-screen.
 5. **The dashboard stays a window**, never a tab of the logs.
 
+## Follow-ups from the first look, 2026-09-07
+
+The operator ran the build and asked for eight more things; each is in the
+same branch, one commit per group, with the same rule — a claim is a test.
+
+1. **The window opened centred, then jumped to its frame.** The memory
+   restores once the window exists — after SwiftUI has shown it.
+   `DocumentGroup.defaultWindowPlacement` decides *before*, for restored
+   windows too (the unified log showed the closure called for each), so
+   `LogWindowPlacement` converts the saved frame into SwiftUI's space: the
+   primary display's flipped coordinates (origin top-left, y down — the menu
+   bar puts the visible rect at y 30), position the window frame's top-left,
+   size the frame's own, chrome included — calibrated by placing at
+   {300, 396, 1200 × 648} and reading the frame back as {300, 252, 1200 × 648}
+   on a 1296-point display. The memory logs (`window` category) where the
+   window was placed and whether it had to correct — the line that tells a
+   jump the operator saw from one the app made.
+2. **Every tab's map at one size and position.** The attachment takes the
+   shared frame (`bandMapFrame`) on every show; bolted, the pin decides the
+   position and the shared width stands.
+3. **The map says whose it is.** `LogDocument.contestShortLabel` — the
+   party's id in capitals, or the park for a POTA activation — in the
+   panel's title (`KSQP — Band Map`, contest first so a narrow title bar
+   keeps it) and in the header.
+4. **The header folds.** `BandMapHeader`: band, VFO and contest on one line
+   with the span and the funnel where the panel is wide enough (about 270),
+   two lines where it is not (the narrowest panel is 230).
+5. **Right-click on an F-key opens the editor at once.** `RightClickCatcher`,
+   an overlay that claims only the right button (and ⌃-click) in `hitTest`,
+   so a left click still sends. The context menu is gone.
+6. **Settings in three pages.** `BandMapSettingsPopover` — Spots, Tuning,
+   Window — each with its own reset, the page remembered. The popover was
+   taller than the screen left room for below the funnel.
+7. **The map is an ordinary window.** `level = .normal`, free or bolted:
+   behind another app's window when that is in front, forward with the
+   app, never floating over everything.
+8. **A contest worked from a park is an outing too.** The dashboard's POTA
+   cards and list read every record that activates a park as well as the
+   program records; `PotaSeason` counts a party record's park contacts only
+   (the hour before the park was set is the contest's alone), and the list
+   names the contest beside the park. The record stays a contest entry.
+
 ## Testing
 
 - `LogWindowTabsTests` (UI): configure sets mode and identifier; a second
