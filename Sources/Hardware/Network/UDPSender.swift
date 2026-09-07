@@ -49,9 +49,9 @@ final class UDPSender: UDPSending, @unchecked Sendable {
         var errorDescription: String? {
             switch self {
             case .resolve(let host):
-                "Could not resolve \(host) for the audio stream."
+                "Could not resolve \(host)."
             case .socket(let e), .connect(let e):
-                "Could not open the audio stream socket: \(String(cString: strerror(e)))"
+                "Could not open the UDP socket: \(String(cString: strerror(e)))"
             }
         }
     }

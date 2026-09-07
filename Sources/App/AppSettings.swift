@@ -74,6 +74,31 @@ final class AppSettings {
         CallbookService(rawValue: callbookPrimaryRaw)
     }
 
+    // MARK: Sending QSOs to RUMlogNG (N1MM's UDP contact packets)
+
+    /// Send every logged, edited and deleted QSO to RUMlogNG — or any
+    /// N1MM-compatible listener — as it happens (`QSOBroadcaster`). Off by
+    /// default: a logger never starts talking to another program unasked.
+    var qsoBroadcastEnabled: Bool {
+        didSet { defaults.set(qsoBroadcastEnabled, forKey: "qsoBroadcastEnabled") }
+    }
+
+    /// Where the packets go: RUMlogNG on this Mac by default; another Mac's
+    /// address, or a subnet broadcast (`192.168.1.255`), reaches one
+    /// elsewhere.
+    var qsoBroadcastHost: String {
+        didSet { defaults.set(qsoBroadcastHost, forKey: "qsoBroadcastHost") }
+    }
+
+    /// N1MM's recommended port, and RUMlogNG's "QSOs received from N1MM"
+    /// default.
+    var qsoBroadcastPort: Int {
+        didSet { defaults.set(qsoBroadcastPort, forKey: "qsoBroadcastPort") }
+    }
+
+    static let defaultQSOBroadcastHost = "127.0.0.1"
+    static let defaultQSOBroadcastPort = 12060
+
     /// Connect to the cluster automatically when a contest opens.
     var clusterAutoConnect: Bool {
         didSet { defaults.set(clusterAutoConnect, forKey: "clusterAutoConnect") }
@@ -471,6 +496,13 @@ final class AppSettings {
         hamqthEnabled = defaults.object(forKey: "hamqthEnabled") as? Bool ?? false
         hamqthUsername = defaults.string(forKey: "hamqthUsername") ?? ""
         callbookPrimaryRaw = defaults.string(forKey: "callbookPrimaryRaw") ?? ""
+        qsoBroadcastEnabled = defaults.object(forKey: "qsoBroadcastEnabled") as? Bool ?? false
+        qsoBroadcastHost = defaults.string(forKey: "qsoBroadcastHost") ?? Self.defaultQSOBroadcastHost
+        // A port outside the range falls back to N1MM's rather than to
+        // nothing: a hand-edited preference file must never leave the
+        // sender with no destination.
+        qsoBroadcastPort = (defaults.object(forKey: "qsoBroadcastPort") as? Int)
+            .flatMap { (1...65535).contains($0) ? $0 : nil } ?? Self.defaultQSOBroadcastPort
         clusterAutoConnect = defaults.object(forKey: "clusterAutoConnect") as? Bool ?? false
         clusterHistory = defaults.stringArray(forKey: "clusterHistory") ?? []
         clusterCommands = defaults.string(forKey: "clusterCommands") ?? "sh/dx 30"
