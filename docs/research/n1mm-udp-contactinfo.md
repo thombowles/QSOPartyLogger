@@ -311,4 +311,6 @@ ZBAND ZMODE ZRSTRX ZRSTTX ZNAME ZQTH ZNOTE ZPOWER ZLOCATOR ZSTATE ZCOUNTY
 ZIOTA ZSATNAME ZSATMODE ZQSL ZEQSL ZLOTWQSL ZCLUBLOG ZMANAGER ZUSER_1…4
 …`), so the contest's name can reach RUMlogNG only through the Note. The
 app therefore sends `comment` as the QSO's UTC date and the contest's name,
-then the operator's own note after a middle dot.
+the exchange each way as the log table shows it (`Sent 599 TX · Rcvd 599
+DEC` — `ExchangeSummary`'s text, pinned equal across every bundled party
+shape), then the operator's own note, all separated by middle dots.

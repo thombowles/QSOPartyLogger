@@ -236,14 +236,34 @@ enum N1MMContactBroadcast {
     /// element that reaches it: a marker packet (2026-09-07, research bank)
     /// showed `contestname`, `exchange1`, `section`, `misctext` and
     /// `SentExchange` discarded, and RUMlogNG has no contest field at all.
-    /// So the note names the QSO's own UTC date and the contest, then the
-    /// operator's note when the row has one: "2026-09-07 Kansas QSO Party ·
-    /// long path". The ADIF `comment` stays the operator's note alone —
-    /// ADIF has `contest_id` and `qso_date` for the rest.
+    /// So the note names the QSO's own UTC date and the contest, the
+    /// exchange each way as the log table shows it, then the operator's note
+    /// when the row has one: "2026-09-07 Kansas QSO Party · Sent 599 TX ·
+    /// Rcvd 599 DEC · long path". The ADIF `comment` stays the operator's
+    /// note alone — ADIF has fields for the rest.
     static func note(row: QSO, contest: ContestDefinition) -> String {
-        let head = "\(dateFormatter.string(from: row.timestampUTC)) \(contest.name)"
-        guard let notes = row.notes, !notes.isEmpty else { return head }
-        return "\(head) · \(notes)"
+        let sent = exchangeText(row.sent, contest: contest)
+        let rcvd = exchangeText(row.rcvd, contest: contest)
+        let parts: [String?] = [
+            "\(dateFormatter.string(from: row.timestampUTC)) \(contest.name)",
+            sent.isEmpty ? nil : "Sent \(sent)",
+            rcvd.isEmpty ? nil : "Rcvd \(rcvd)",
+            (row.notes ?? "").isEmpty ? nil : row.notes,
+        ]
+        return parts.compactMap { $0 }.joined(separator: " · ")
+    }
+
+    /// One side's exchange as the log table prints it: every element the
+    /// contest declares, in exchange order, the values the row holds —
+    /// "599 TX", "12 SCLA", "TOM TX", "559 NJ 13". A call echo is the call
+    /// and never part of the text. Pinned equal to `ExchangeSummary` across
+    /// every bundled party shape.
+    static func exchangeText(_ map: [String: String], contest: ContestDefinition) -> String {
+        contest.exchange
+            .filter { $0.kind != .callEcho }
+            .compactMap { map[$0.id]?.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
     }
 
     private static let dateFormatter: DateFormatter = {

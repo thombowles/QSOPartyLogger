@@ -169,7 +169,7 @@ host name of its own — the caller passes `StationContext` (station name,
 | `gridsquare` | received `grid` element, else the callbook stamp's grid, else empty | |
 | `exchange1` | the received `location` token (county / state / DX) for a party; for a general contest the received values of its token elements in exchange order, space-joined | N1MM's Exchange1 is "the exchange" beyond RST, serial, name and section |
 | `section` | received `section` element or empty | "whatever the rules define" — SS/FD sections |
-| `comment` | the QSO's UTC date and the contest's name, then the row's note: `2026-09-07 Kansas QSO Party · long path` | RUMlogNG's Note is filled from `comment` and from nothing else, and it has no contest field (marker probe, 2026-09-07 — research bank) |
+| `comment` | the QSO's UTC date and the contest's name, the exchange each way as the log table shows it, then the row's note: `2026-09-07 Kansas QSO Party · Sent 599 TX · Rcvd 599 DEC · long path` | RUMlogNG's Note is filled from `comment` and from nothing else, and it has no contest field (marker probe, 2026-09-07 — research bank) |
 | `qth` | the callbook stamp's QTH or empty | |
 | `name` | received `name`, else the callbook stamp's name | the same precedence ADIF uses |
 | `power` | received `power` element; else the member-or-power element when it is a power (`5W`) | "received power exchange from the other station" |

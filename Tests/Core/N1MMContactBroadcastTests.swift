@@ -65,7 +65,7 @@ final class N1MMContactBroadcastTests: XCTestCase {
             \t<gridsquare></gridsquare>
             \t<exchange1>MRN</exchange1>
             \t<section></section>
-            \t<comment>2026-08-29 Kansas QSO Party</comment>
+            \t<comment>2026-08-29 Kansas QSO Party · Sent 599 TX · Rcvd 599 MRN</comment>
             \t<qth></qth>
             \t<name></name>
             \t<power></power>
@@ -153,7 +153,7 @@ final class N1MMContactBroadcastTests: XCTestCase {
         var row = w0bh()
         row.notes = "Tom & Jerry <QRP> \"long\" 'path'"
         let xml = N1MMContactBroadcast.contactInfo(row: row, log: ksqpLog([row]), contest: try ksqp(), station: station).xml
-        XCTAssertTrue(xml.contains("<comment>2026-08-29 Kansas QSO Party · Tom &amp; Jerry &lt;QRP&gt; &quot;long&quot; &apos;path&apos;</comment>"), xml)
+        XCTAssertTrue(xml.contains("<comment>2026-08-29 Kansas QSO Party · Sent 599 TX · Rcvd 599 MRN · Tom &amp; Jerry &lt;QRP&gt; &quot;long&quot; &apos;path&apos;</comment>"), xml)
     }
 
     func testRunPostureAndTheEnginesCreditAreCarried() throws {
@@ -191,6 +191,7 @@ final class N1MMContactBroadcastTests: XCTestCase {
         XCTAssertTrue(xml.contains("<rcvnr>7</rcvnr>"))
         XCTAssertTrue(xml.contains("<exchange1>SCLA</exchange1>"))
         XCTAssertTrue(xml.contains("<SentExchange>TX</SentExchange>"))
+        XCTAssertTrue(xml.contains("<comment>2026-08-29 California QSO Party · Sent 12 TX · Rcvd 7 SCLA</comment>"), xml)
     }
 
     func testTheNameGoesToNameAndTheSentExchangeCarriesNameAndState() throws {
@@ -206,6 +207,7 @@ final class N1MMContactBroadcastTests: XCTestCase {
         XCTAssertTrue(xml.contains("<name>BOB</name>"))
         XCTAssertTrue(xml.contains("<exchange1>CA</exchange1>"))
         XCTAssertTrue(xml.contains("<SentExchange>TOM TX</SentExchange>"), xml)
+        XCTAssertTrue(xml.contains("<comment>2026-08-29 North American QSO Party, CW · Sent TOM TX · Rcvd BOB CA</comment>"), xml)
     }
 
     /// The member-or-power element: a power goes to `power` ("received power
@@ -305,10 +307,25 @@ final class N1MMContactBroadcastTests: XCTestCase {
         let secondDay = QSO(id: id(8), timestampUTC: t.addingTimeInterval(2 * 86_400), call: "W1AW", band: .m20,
                             modeClass: .cw, rawMode: "CW", freqKHz: 14042, sent: ["rst": "599"], rcvd: ["rst": "599"])
         let xml = N1MMContactBroadcast.contactInfo(row: secondDay, log: log, contest: contest, station: station).xml
-        XCTAssertTrue(xml.contains("<comment>2026-08-31 CQ World Wide DX Contest, CW</comment>"), xml)
+        XCTAssertTrue(xml.contains("<comment>2026-08-31 CQ World Wide DX Contest, CW · Sent 599 · Rcvd 599</comment>"), xml)
         let replaced = N1MMContactBroadcast.contactReplace(row: secondDay, replacing: secondDay, log: log,
                                                            contest: contest, station: station).xml
-        XCTAssertTrue(replaced.contains("<comment>2026-08-31 CQ World Wide DX Contest, CW</comment>"))
+        XCTAssertTrue(replaced.contains("<comment>2026-08-31 CQ World Wide DX Contest, CW · Sent 599 · Rcvd 599</comment>"))
+    }
+
+    /// The note's exchange is the log table's own Sent and Rcvd text
+    /// (`ExchangeSummary`), row for row across every bundled party shape —
+    /// what RUMlogNG shows is what the operator saw.
+    func testTheNotesExchangeIsWhatTheLogTableShows() throws {
+        for fixture in try ExportFixtures.all() {
+            let contest = try PartyLowering.lower(fixture.party)
+            for row in fixture.log.qsos {
+                XCTAssertEqual(N1MMContactBroadcast.exchangeText(row.sent, contest: contest),
+                               ExchangeSummary.sent(row, party: fixture.party), "\(fixture.name) \(row.call) sent")
+                XCTAssertEqual(N1MMContactBroadcast.exchangeText(row.rcvd, contest: contest),
+                               ExchangeSummary.received(row, party: fixture.party), "\(fixture.name) \(row.call) rcvd")
+            }
+        }
     }
 
     /// The callbook stamp fills only what the exchange left empty — the
