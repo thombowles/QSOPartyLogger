@@ -23,7 +23,8 @@ protocol UDPSending: AnyObject, Sendable {
     func close()
 }
 
-/// A connected BSD UDP socket. Connected rather than bound to a chosen port,
+/// A connected BSD UDP socket — the Flex DAX audio stream's, and the RUMlogNG
+/// contact broadcast's. Connected rather than bound to a chosen port,
 /// so the kernel picks a free local port and the sandbox's network-client
 /// entitlement suffices; the port is read back with `getsockname` so it can
 /// be registered with the radio (`client udpport`), which then sees the
@@ -67,6 +68,11 @@ final class UDPSender: UDPSending, @unchecked Sendable {
         defer { freeaddrinfo(info) }
         let s = socket(first.pointee.ai_family, first.pointee.ai_socktype, first.pointee.ai_protocol)
         guard s >= 0 else { throw UDPError.socket(errno) }
+        // A subnet broadcast (192.168.1.255 — the addressing N1MM documents
+        // for its contact packets) is refused by the kernel unless the
+        // socket says it means to; harmless for a unicast destination.
+        var broadcast: Int32 = 1
+        _ = setsockopt(s, SOL_SOCKET, SO_BROADCAST, &broadcast, socklen_t(MemoryLayout<Int32>.size))
         guard Darwin.connect(s, first.pointee.ai_addr, first.pointee.ai_addrlen) == 0 else {
             let e = errno
             Darwin.close(s)

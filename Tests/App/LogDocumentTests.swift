@@ -647,4 +647,101 @@ final class LogDocumentTests: XCTestCase {
         ]
         XCTAssertNil(try ContestLog.decode(from: try LogDocument.dataForSaving(log)).scoreSnapshot)
     }
+
+    // MARK: The row-change seam (RUMlogNG broadcast, 2026-09-07)
+
+    @MainActor
+    private func observedDocument() -> (LogDocument, () -> [QSOChange]) {
+        let doc = LogDocument()
+        var seen: [QSOChange] = []
+        doc.qsoObserver = { seen.append($0) }
+        return (doc, { seen })
+    }
+
+    private func row(_ call: String, county: String = "MRN") -> QSO {
+        QSO(timestampUTC: Date(timeIntervalSince1970: 1_770_000_000), call: call, band: .m20,
+            modeClass: .cw, rawMode: "CW", rstSent: "599", rstRcvd: "599", myLoc: "TX", theirLoc: county)
+    }
+
+    @MainActor
+    func testAppendReportsTheRowsAdded() {
+        let (doc, seen) = observedDocument()
+        let rows = [row("W0BH"), row("N0XYZ")]
+        doc.append(qsos: rows, undoManager: nil)
+        XCTAssertEqual(seen(), [.added(rows)])
+    }
+
+    @MainActor
+    func testAppendingNothingReportsNothing() {
+        let (doc, seen) = observedDocument()
+        doc.append(qsos: [], undoManager: nil)
+        XCTAssertEqual(seen(), [])
+    }
+
+    @MainActor
+    func testRemoveReportsTheRowsRemovedAndRemoveGroupTheWholeGroup() {
+        let (doc, seen) = observedDocument()
+        let a = row("W0BH"), b = row("N0XYZ")
+        let c1 = row("K5TR")
+        var c2 = row("K5TR", county: "BOU")
+        c2.groupID = c1.groupID
+        doc.append(qsos: [a, b, c1, c2], undoManager: nil)
+        doc.remove(ids: [b.id], undoManager: nil)
+        doc.removeGroup(groupID: c1.groupID, undoManager: nil)
+        XCTAssertEqual(Array(seen().dropFirst()), [.removed([b]), .removed([c1, c2])])
+    }
+
+    @MainActor
+    func testRemovingAnUnknownIDReportsNothing() {
+        let (doc, seen) = observedDocument()
+        doc.remove(ids: [UUID()], undoManager: nil)
+        XCTAssertEqual(seen(), [])
+    }
+
+    @MainActor
+    func testUpdateReportsOldAndNew() {
+        let (doc, seen) = observedDocument()
+        let old = row("W0BH")
+        doc.append(qsos: [old], undoManager: nil)
+        var new = old
+        new.theirLoc = "BOU"
+        doc.update(qso: new, undoManager: nil)
+        XCTAssertEqual(seen().last, .replaced([.init(old: old, new: new)]))
+    }
+
+    @MainActor
+    func testBulkUpdateReportsEveryPairOnceAndSkipsRowsNotInTheLog() {
+        let (doc, seen) = observedDocument()
+        let a = row("W0BH"), b = row("N0XYZ")
+        doc.append(qsos: [a, b], undoManager: nil)
+        var a2 = a, b2 = b
+        a2.rstRcvd = "579"; b2.rstRcvd = "559"
+        doc.update(qsos: [a2, b2, row("K5TR")], actionName: "Change 2 Contacts", undoManager: nil)
+        XCTAssertEqual(seen().last, .replaced([.init(old: a, new: a2), .init(old: b, new: b2)]))
+    }
+
+    @MainActor
+    func testUndoReportsTheInverseChange() {
+        let (doc, seen) = observedDocument()
+        let undo = UndoManager()
+        undo.groupsByEvent = false
+        let a = row("W0BH")
+        undo.beginUndoGrouping()
+        doc.append(qsos: [a], undoManager: undo)
+        undo.endUndoGrouping()
+        undo.undo()
+        XCTAssertEqual(seen(), [.added([a]), .removed([a])])
+        undo.redo()
+        XCTAssertEqual(seen().last, .added([a]))
+    }
+
+    /// Opening a file sets the log outright; nothing must re-send it.
+    @MainActor
+    func testLoadingALogReportsNothing() throws {
+        let (doc, seen) = observedDocument()
+        var log = ContestLog(partyID: "ksqp")
+        log.qsos = [row("W0BH")]
+        doc.log = try LogDocument.decodeUpgrading(try log.encoded())
+        XCTAssertEqual(seen(), [])
+    }
 }

@@ -69,6 +69,14 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     /// the snapshot at save time, exactly as before.
     @ObservationIgnored var scoreSnapshotProvider: (() -> ScoreSnapshot?)?
 
+    /// Whoever wants to hear about row changes — the RUMlogNG broadcaster —
+    /// receives each mutation with the rows it touched (`QSOChange`). Undo
+    /// and redo come back through the same four mutations, so a ⌘Z of a
+    /// logged contact reports `.removed` with no extra code. Loading a
+    /// document sets `log` directly and reports nothing. Nil until the
+    /// window wires it, so a document built in a test tells no one.
+    @ObservationIgnored var qsoObserver: ((QSOChange) -> Void)?
+
     /// Nonisolated on purpose: `DocumentGroup`'s new-document factory runs on a
     /// background dispatch queue, so this must not touch main-actor state.
     /// The last station profile is read straight out of `Preferences.store`
@@ -182,6 +190,7 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
             }
         }
         undoManager?.setActionName("Log Contact")
+        if !qsos.isEmpty { qsoObserver?(.added(qsos)) }
     }
 
     @MainActor
@@ -194,6 +203,7 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
             }
         }
         undoManager?.setActionName("Delete Contact")
+        if !removed.isEmpty { qsoObserver?(.removed(removed)) }
     }
 
     @MainActor
@@ -212,6 +222,7 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
             }
         }
         undoManager?.setActionName("Edit Contact")
+        qsoObserver?(.replaced([.init(old: old, new: qso)]))
     }
 
     /// One field changed across many rows — the bulk editor's single mutation.
@@ -225,9 +236,11 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
     func update(qsos: [QSO], actionName: String, undoManager: UndoManager?) {
         let byID = Dictionary(qsos.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
         var previous: [QSO] = []
+        var replacements: [QSOChange.Replacement] = []
         for idx in log.qsos.indices {
             guard let updated = byID[log.qsos[idx].id] else { continue }
             previous.append(log.qsos[idx])
+            replacements.append(.init(old: log.qsos[idx], new: updated))
             log.qsos[idx] = updated
         }
         guard !previous.isEmpty else { return }
@@ -237,6 +250,7 @@ final class LogDocument: ReferenceFileDocument, @unchecked Sendable {
             }
         }
         undoManager?.setActionName(actionName)
+        qsoObserver?(.replaced(replacements))
     }
 
     /// A spot from either feed — cluster or hub — reached this session.
