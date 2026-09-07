@@ -150,6 +150,21 @@ Per-party behaviour and known limitations are in [PARTIES.md](PARTIES.md).
   [`docs/research/scp_masterfile.md`](research/scp_masterfile.md).
   **Hint data only, never rule authority** (constitution Article 1):
   nothing from it reaches scoring, validation, or export.
+- Sending QSOs to RUMlogNG: every element of the N1MM `contactinfo`,
+  `contactreplace` and `contactdelete` packets, their order, the 10 Hz
+  frequency unit, the band token, the 32-hex-character ID and the
+  delete-then-replace edit sequence come from the N1MM Logger+ **"External
+  UDP Messages"** page (n1mmwp.hamdocs.com/appendices/external-udp-broadcasts/,
+  fetched 2026-09-07); what RUMlogNG's *QSOs received from N1MM* listener
+  is comes from RUMlogNG's own documentation, version history (5.0: "Real
+  time import from other loggers in N1MM format") and its author's forum
+  packet (dl2rum.de, fetched 2026-09-07), which also supplies the two
+  trailing elements RUMlogNG itself sends (`dxcc`, `my_gridsquare`). Banked
+  with quotes in
+  [`docs/research/n1mm-udp-contactinfo.md`](research/n1mm-udp-contactinfo.md).
+  Two spellings on N1MM's page (`exchangel`, `ismultiplierl`) are emitted
+  with the digit, on the evidence recorded there. No other logger's code
+  was read for a byte.
 - NAQP CW + SSB: rules from NCJ's own "Rules: 2026 North American QSO Party
   (CW/SSB/RTTY)" (ncjweb.com, printed NCJ Oct/Nov 2025), the official paper
   log form whose Multiplier Check List is the country list, and the ARRL DXCC

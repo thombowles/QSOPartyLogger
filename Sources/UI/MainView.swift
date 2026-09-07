@@ -110,6 +110,10 @@ struct MainView: View {
               primary: AppSettings.shared.callbookPrimary)
     })
     @State private var showLookupPopover = false
+    /// Every row change to RUMlogNG, as N1MM contact packets (2026-09-07).
+    /// Wired to the document in `onAppear`; the toolbar popover configures it.
+    @State private var broadcaster = QSOBroadcaster()
+    @State private var showBroadcastPopover = false
     @State private var potaSpotClient = PotaSpotClient()
     /// Fans one confirmed spot out to every ticked network and keeps the
     /// receipt. Its transports are wired in `onAppear`, once the clients
@@ -537,6 +541,7 @@ struct MainView: View {
         }
         .onChange(of: settings.hubSpotsEnabled) { syncHubSpotClient() }
         .onChange(of: settings.potaSpotsInParties) { syncPotaBoardClient() }
+        .onChange(of: settings.qsoBroadcast) { broadcaster.configure(settings.qsoBroadcast) }
         // The board lands in the same store as every other feed, wholesale
         // per poll — a row gone from the feed is QRT or expired. Receiving
         // spots is assistance, recorded exactly as the hub records it.
@@ -652,6 +657,8 @@ struct MainView: View {
         spotPurgeTask?.cancel()
         spotPurgeTask = nil
         spotClient.disconnect()
+        broadcaster.shutdown()
+        document.qsoObserver = nil
         bandMapBolt?.close()
         bandMapBolt = nil
         bandMapPanel?.close()
@@ -856,6 +863,18 @@ struct MainView: View {
             .help("Callsign lookup — QRZ and HamQTH credentials. Advisory only; a lookup never fills an exchange field")
             .popover(isPresented: $showLookupPopover) {
                 CallbookSettingsPane(client: callbookClient)
+            }
+
+            Button {
+                showBroadcastPopover.toggle()
+            } label: {
+                Label("RUMlog", systemImage: settings.qsoBroadcastEnabled ? "paperplane.fill" : "paperplane")
+                    .foregroundStyle(broadcastTint)
+            }
+            .help("Send every QSO to RUMlogNG as it is logged — N1MM's UDP packets. ⇧⌘L sends the whole log again")
+            .shortcutHint("⇧⌘L")
+            .popover(isPresented: $showBroadcastPopover) {
+                QSOBroadcastPane(broadcaster: broadcaster, sendWholeLog: sendWholeLogToRUMlog)
             }
 
             Menu {
@@ -1174,6 +1193,18 @@ struct MainView: View {
         wireSpotDispatcher()
         syncHubSpotClient()
         syncPotaBoardClient()
+        // Every row change to RUMlogNG. The scoring closure reads the fold
+        // the window keeps for the table — the same generation, so no
+        // second fold — and is never called while sending is off.
+        broadcaster.configure(settings.qsoBroadcast)
+        document.qsoObserver = { [weak broadcaster, weak document, weak liveScore] change in
+            guard let broadcaster, let document else { return }
+            broadcaster.handle(
+                change, log: document.log,
+                contest: ContestCatalog.contest(id: document.log.partyID),
+                scoring: { Self.rowScoring($0, liveScore: liveScore) }
+            )
+        }
         // The download may land after the operator has moved to another
         // party; the tag check keeps a late file from leaking into it.
         callHistoryClient.onIndex = { [weak flow] partyID, parsed in
@@ -1820,6 +1851,34 @@ struct MainView: View {
     /// Start, restart or stop hub polling to match the setting and the party.
     /// Two of the nineteen bundled parties have no hub page at all, so this
     /// quietly does nothing for them rather than polling a dead URL.
+    // MARK: RUMlogNG
+
+    /// The toolbar button's colour: orange while the last send failed, green
+    /// while sending is on, plain otherwise.
+    private var broadcastTint: Color {
+        if broadcaster.status.isFailure { return .orange }
+        return settings.qsoBroadcastEnabled ? .green : .primary
+    }
+
+    /// ⇧⌘L and the pane's button: every row again, oldest first.
+    private func sendWholeLogToRUMlog() {
+        broadcaster.sendWholeLog(
+            log: document.log,
+            contest: ContestCatalog.contest(id: document.log.partyID),
+            scoring: { Self.rowScoring($0, liveScore: liveScore) }
+        )
+    }
+
+    /// The engine's credit for a row, from the fold the window already
+    /// keeps: `points` and `ismultiplier1` in the packet. Nothing when the
+    /// log's rules are not installed.
+    private static func rowScoring(_ row: QSO, liveScore: LiveScore?) -> N1MMContactBroadcast.RowScoring {
+        guard let liveScore, liveScore.scoresWithRules else { return .none }
+        let breakdown = liveScore.breakdown
+        return .init(points: breakdown.pointsByRowID[row.id] ?? 0,
+                     isNewMultiplier: breakdown.newMultRowIDs.contains(row.id))
+    }
+
     private func syncHubSpotClient() {
         guard SpottingPolicy.hubShouldPoll(
             enabled: settings.hubSpotsEnabled,
@@ -2307,6 +2366,8 @@ struct MainView: View {
         case .nudgeVFO(let hz): nudgeVFO(byHz: hz)
         // ⌘/: hints on every button, and the legend under the messages row.
         case .toggleShortcutHints: settings.showShortcutHints.toggle()
+        // ⇧⌘L: the whole log to RUMlogNG again; a second press stops it.
+        case .sendLogToRUMlog: sendWholeLogToRUMlog()
         }
     }
 

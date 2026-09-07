@@ -355,6 +355,23 @@ final class KeyMonitorGateTests: XCTestCase {
     /// ⌘B opens and closes the map; ⇧⌘B fastens it to the side of the log
     /// window and sets it free again. Until the bolt existed ⇧ on the B chord
     /// was ignored, and ⇧⌘B was a second ⌘B.
+    /// ⇧⌘L sends the whole log to RUMlogNG again (2026-09-07). ⌘L alone and
+    /// a plain L stay with the field — 'L' is a letter in a callsign.
+    func testShiftCommandLSendsTheLogToRUMlog() {
+        XCTAssertEqual(KeyMonitorGate.action(keyCode: 37, command: true, shift: true), .sendLogToRUMlog)
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 37, command: true))
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 37, command: false))
+        XCTAssertNil(KeyMonitorGate.action(keyCode: 37, command: false, shift: true))
+        XCTAssertTrue(KeyMonitorGate.isShortcut(keyCode: 37, command: true, shift: true))
+        let fromSheet = KeyMonitorGate.response(keyCode: 37, command: true, shift: true, focus: .sheet, repeatRunning: false)
+        XCTAssertNil(fromSheet.action)
+        XCTAssertFalse(fromSheet.consumesEvent)
+        let fromDocument = KeyMonitorGate.response(keyCode: 37, command: true, shift: true, focus: .document, repeatRunning: true)
+        XCTAssertEqual(fromDocument.action, .sendLogToRUMlog)
+        XCTAssertFalse(fromDocument.stopsRepeat, "a shortcut leaves a repeating CQ alone")
+        XCTAssertTrue(fromDocument.consumesEvent)
+    }
+
     func testShiftCommandBBoltsTheBandMap() {
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 11, command: true), .toggleBandMap)
         XCTAssertEqual(KeyMonitorGate.action(keyCode: 11, command: true, shift: true), .toggleBandMapBolt)

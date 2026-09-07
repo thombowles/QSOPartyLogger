@@ -53,7 +53,7 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>© 2026 Tom Bowles, KE5CW</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>QSO Party Logger connects to your FlexRadio and DX cluster spotting nodes on your local network.</string>
+	<string>QSO Party Logger connects to your FlexRadio and DX cluster spotting nodes on your local network, and sends your QSOs to RUMlogNG when you ask it to.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Your location fills in your Maidenhead grid square and finds the POTA parks nearest you.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

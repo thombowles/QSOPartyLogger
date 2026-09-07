@@ -23,6 +23,8 @@ Requires macOS 15 or later. SwiftUI, Swift 6. Built for KE5CW.
 4. Type a call, press **Space**, type the exchange, press **Return**. That's a
    QSO.
 5. **⌘E** exports ADIF, **⇧⌘E** exports Cabrillo, whenever you're ready.
+6. Optional: the **RUMlog** toolbar button sends every QSO to RUMlogNG as you
+   log it, so the contest never needs importing.
 
 The log saves itself. Every QSO change is written straight to disk, so a crash
 never costs contacts.
@@ -140,6 +142,7 @@ button and shows the last key the app received. Press ⌘/ again to hide them.
 | `⇧⌘R` | Restore the party's default CW messages (Messages editor) |
 | `⌘E` / `⇧⌘E` | Export ADIF / Cabrillo |
 | `⌥⌘E` | Export for POTA — one submission file per park, named `CALL@PARK-YYYYMMDD.adi` (shown when the log has your park set) |
+| `⇧⌘L` | Send the whole log to RUMlogNG again — every row, oldest first, paced (the RUMlog toolbar popover turns the live feed on and says what has left this Mac); pressing it while a send runs stops it |
 | `⇧⌘M` | Expand / collapse every multiplier list in the score sidebar |
 | `⌃⌘S` | Show / hide the score sidebar — hidden, the window shrinks to about 560 points wide and the station strip shows the total |
 | `⌃Tab` / `⌃⇧Tab` | Next / previous contest tab — every open log is a tab of one window (also in the Window menu, with *Move Tab to New Window* and *Merge All Windows*) |
@@ -987,6 +990,48 @@ Suggested filenames follow the log ("2026-08-29 KSQP KE5CW.adi"), and the app
 declares the ADIF file type so the save panel keeps `.adi` instead of appending
 `.txt`.
 
+### Sending QSOs to RUMlogNG
+
+If your station log lives in RUMlogNG, the contest never needs importing.
+The **RUMlog** toolbar button opens a small pane: turn on **Send QSOs as
+they are logged** and every contact goes to RUMlogNG the moment you press
+Return, in the same UDP packets N1MM Logger+ broadcasts — which is what
+RUMlogNG's *QSOs received from N1MM* listener saves. Edits and deletions
+follow (an edit is N1MM's own delete-then-replace pair, so RUMlogNG's copy
+tracks corrections, not just additions), and so does ⌘Z. County-line
+contacts arrive as one QSO per county, exactly as they sit in the log and in
+the ADIF.
+
+On RUMlogNG's side: Preferences › UDP › **QSOs received from N1MM** → *Save
+QSO*, port 12060. The pane's defaults — `127.0.0.1`, `12060` — reach a
+RUMlogNG on this Mac; put another Mac's address (or `192.168.1.255` for the
+whole subnet) in the Host field to reach one elsewhere, and allow the Local
+Network prompt macOS raises the first time.
+
+**⇧⌘L — Send Whole Log Now** resends every row, oldest first, paced so a
+two-thousand-QSO log takes about ten seconds and drops nothing. That is the
+catch-up for a log made before the feature was on, a RUMlogNG that was not
+running, or a doubt — a QSO RUMlogNG already has is a duplicate by its own
+rules. Press it again to stop.
+
+The pane's status line says what left this Mac — *Sent W0BH at 14:32:05z to
+127.0.0.1:12060 · 12 this session* — and turns orange, in the kernel's own
+words, when a packet could not be sent or the host could not be resolved.
+UDP carries no reply, so *sent* never means *saved*; RUMlogNG's log is the
+check.
+
+What goes out is N1MM's `contactinfo` packet field for field, from N1MM's
+own documentation (banked in
+[`docs/research/n1mm-udp-contactinfo.md`](docs/research/n1mm-udp-contactinfo.md)):
+the contest's Cabrillo name, the time in UTC, band, frequency in 10 Hz
+units, mode (`SSB` as the band's sideband, since N1MM's vocabulary is
+`USB`/`LSB`), reports, serials, the received exchange, section, zone,
+precedence, check, the engine's points and new-multiplier flag, Run or S&P,
+and a stable ID per row — plus the `dxcc` and `my_gridsquare` elements
+RUMlogNG's own broadcast carries. Anything else on the LAN that reads
+N1MM's packets (Log4OM, DXKeeper's gateway, MacLoggerDX…) hears the same
+feed.
+
 ## POTA activations on any contest
 
 Any contest log doubles as a POTA activation log. Contest Setup has a **POTA
@@ -1240,7 +1285,7 @@ Requires Xcode 26 and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 `.xcodeproj` by hand. The app icon is drawn in code; rerun
 `swift Tools/GenerateAppIcon.swift` after editing it.
 
-**3359 unit tests**, none of which need hardware, a network or a microphone —
+**3408 unit tests**, none of which need hardware, a network or a microphone —
 no serial port, no cluster, no HTTP. They cover the scoring engine, county data,
 the score cache's one-fold-per-change discipline (typing costs microseconds of
 engine work at thousands of QSOs — measured baselines live in the suite),
@@ -1258,7 +1303,9 @@ repeat-CQ rules (the toggle arms, shortcuts leave the loop alone, the mode
 survives Run ⇄ S&P), spot parsing and filtering and navigation, the
 spotting policy, outgoing spots — which networks are on offer and why not,
 the cluster `DX` command byte for byte, pota.app's own form rules and JSON
-body, the fan-out dispatcher and its receipt — the band map scale and column
+body, the fan-out dispatcher and its receipt — the N1MM contact packets
+RUMlogNG receives, byte for byte, and the paced sender behind them — the
+band map scale and column
 stacking, the bolt that fastens the map to its window, the band plan, typed
 QSY commands, what the radio keys at every step of the entry flow, keyer
 timing, the logs folder read as history (each log's saved score, duplicate

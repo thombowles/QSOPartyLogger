@@ -369,6 +369,7 @@
 		ABAD7776F500F0195A2ACDF5 /* OperatingTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9844719A87DDAFF307168 /* OperatingTime.swift */; };
 		ABB809BEB34E708DA91380F3 /* NorthAmericanQSOPartyCWTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 250F1FBFEB632D5492568FE7 /* NorthAmericanQSOPartyCWTests.swift */; };
 		ABDD0E4BC39F882357AA73DC /* IndianaQSOPartyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0676CB4B55B41FD7B226CA31 /* IndianaQSOPartyTests.swift */; };
+		ABE9C435A22AA167E6ED806A /* QSOBroadcastPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6D04BBB56942123B450403 /* QSOBroadcastPane.swift */; };
 		AC51CD88CDF9CBFA21C5C25F /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD300005CA528B8CA373476 /* Spot.swift */; };
 		AC7BABF01C4A1A0F06D46D0F /* RadioControllerRecordingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F470675F687ABB38604249 /* RadioControllerRecordingTests.swift */; };
 		AD2610CB527C183EDC0A785B /* SideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA0566542371D92D0E9CB82 /* SideTests.swift */; };
@@ -651,6 +652,7 @@
 		1E5B4C51231FC2D2E7DFDAA1 /* SuperCheckAsyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperCheckAsyncTests.swift; sourceTree = "<group>"; };
 		1EB01E6C0EA808C9BE6E90B1 /* CallbookRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbookRecord.swift; sourceTree = "<group>"; };
 		1F3E13C1AD5E096081CF332B /* ksqp-outside-dx.adi */ = {isa = PBXFileReference; path = "ksqp-outside-dx.adi"; sourceTree = "<group>"; };
+		1F6D04BBB56942123B450403 /* QSOBroadcastPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSOBroadcastPane.swift; sourceTree = "<group>"; };
 		1FE95997B2CFA8BC341F95EE /* skeeter-member.adi */ = {isa = PBXFileReference; path = "skeeter-member.adi"; sourceTree = "<group>"; };
 		203C517DD5F8DB942A927E90 /* NebraskaQSOPartyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NebraskaQSOPartyTests.swift; sourceTree = "<group>"; };
 		22504435770919C0C1FCA961 /* PotaPickerBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotaPickerBehavior.swift; sourceTree = "<group>"; };
@@ -1584,6 +1586,7 @@
 				C7087EC666C63C5C851AFAD0 /* PotaActivationSection.swift */,
 				EFC407B6F7601B9C0FD01DD1 /* PotaParkPicker.swift */,
 				22504435770919C0C1FCA961 /* PotaPickerBehavior.swift */,
+				1F6D04BBB56942123B450403 /* QSOBroadcastPane.swift */,
 				771A2A2E70C2A91608F19549 /* RadioBar.swift */,
 				6183074E6FEE712AC9AAA24B /* RateColumn.swift */,
 				12721BE0B1F2BF3FF1E17008 /* RightClickCatcher.swift */,
@@ -2575,6 +2578,7 @@
 				9D8D4938C440C859AA5D5B13 /* QRPLabsQMXDriver.swift in Sources */,
 				538AE135B7531FF7E31C0628 /* QRZXML.swift in Sources */,
 				C46093573C4E0C33B0EE6086 /* QSO.swift in Sources */,
+				ABE9C435A22AA167E6ED806A /* QSOBroadcastPane.swift in Sources */,
 				B43F9F8CF0349DD2B74AFE46 /* QSOBroadcaster.swift in Sources */,
 				F6811F6E0AC2D4CB941B68E3 /* QSOChange.swift in Sources */,
 				AE2D036E6F83E9F0F1141634 /* QSOPartyLoggerApp.swift in Sources */,

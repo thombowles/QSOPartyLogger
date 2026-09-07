@@ -124,6 +124,10 @@ enum KeyMonitorGate {
         case nudgeVFO(byHz: Int)
         /// ⌘/: shortcut hints on every button, and the legend.
         case toggleShortcutHints
+        /// ⇧⌘L: every row of the log to RUMlogNG again, oldest first — the
+        /// catch-up for a log made before sending was on (2026-09-07). A
+        /// second press stops it.
+        case sendLogToRUMlog
     }
 
     /// One press of ⇧⌘← / ⇧⌘→, in hertz.
@@ -282,6 +286,9 @@ enum KeyMonitorGate {
         // what answers it from a sheet or the dashboard, where the gate does
         // not consume it. (⌘? is macOS's own Help-menu search.)
         case 44: return .toggleShortcutHints  // '/'
+        // ⇧⌘L — the whole log to RUMlogNG again. Only with ⇧: ⌘L alone is
+        // left free, and a plain L is a letter in a callsign.
+        case 37 where shift: return .sendLogToRUMlog  // 'l'
         default: return nil
         }
     }

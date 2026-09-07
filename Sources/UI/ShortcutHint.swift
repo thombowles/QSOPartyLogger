@@ -58,6 +58,7 @@ enum ShortcutLegend {
         Item(keys: "⇧⌘= ⇧⌘-", action: "WPM ±2"),
         Item(keys: "⇧⌘← ⇧⌘→", action: "VFO ±100 Hz"),
         Item(keys: "⇧⌘B", action: "bolt the band map"),
+        Item(keys: "⇧⌘L", action: "send the log to RUMlogNG"),
         Item(keys: "⌘A", action: "select all rows"),
         Item(keys: "⌘/", action: "hide these hints"),
     ]

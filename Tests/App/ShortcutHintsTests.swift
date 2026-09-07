@@ -56,7 +56,7 @@ final class ShortcutHintsTests: XCTestCase {
     /// operating loop uses them, and the legend says how to hide itself.
     func testLegendNamesEveryButtonlessKey() {
         let text = ShortcutLegend.line
-        for expected in ["F12", "Esc", "⌘↑", "⌘↓", "⌘J", "⌘=", "⌘-", "⇧⌘←", "⇧⌘→", "⇧⌘B", "⌘A", "⌘/"] {
+        for expected in ["F12", "Esc", "⌘↑", "⌘↓", "⌘J", "⌘=", "⌘-", "⇧⌘←", "⇧⌘→", "⇧⌘B", "⇧⌘L", "⌘A", "⌘/"] {
             XCTAssertTrue(text.contains(expected), "legend lacks \(expected): \(text)")
         }
     }

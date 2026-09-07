@@ -208,6 +208,7 @@ enum KeyDiagnostics {
         case .exportPota: return "export for POTA"
         case .nudgeVFO(let hz): return "VFO \(hz > 0 ? "+" : "")\(hz) Hz"
         case .toggleShortcutHints: return "shortcut hints"
+        case .sendLogToRUMlog: return "send the log to RUMlogNG"
         }
     }
 }

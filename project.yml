@@ -68,7 +68,7 @@ targets:
         CFBundleVersion: "8"
         LSMinimumSystemVersion: "15.0"
         NSHumanReadableCopyright: "© 2026 Tom Bowles, KE5CW"
-        NSLocalNetworkUsageDescription: "QSO Party Logger connects to your FlexRadio and DX cluster spotting nodes on your local network."
+        NSLocalNetworkUsageDescription: "QSO Party Logger connects to your FlexRadio and DX cluster spotting nodes on your local network, and sends your QSOs to RUMlogNG when you ask it to."
         NSMicrophoneUsageDescription: "Voice messages are recorded here and played to your radio."
         NSLocationUsageDescription: "Your location fills in your Maidenhead grid square and finds the POTA parks nearest you."
         NSLocationWhenInUseUsageDescription: "Your location fills in your Maidenhead grid square and finds the POTA parks nearest you."
