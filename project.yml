@@ -56,16 +56,16 @@ targets:
         INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Tom Bowles, KE5CW"
         INFOPLIST_KEY_NSPrincipalClass: NSApplication
         INFOPLIST_KEY_CFBundleDisplayName: "QSO Party Logger"
-        CURRENT_PROJECT_VERSION: 8
-        MARKETING_VERSION: 1.7.0
+        CURRENT_PROJECT_VERSION: 9
+        MARKETING_VERSION: 1.8.0
         SWIFT_EMIT_LOC_STRINGS: YES
     info:
       path: Resources/Info.plist
       properties:
         CFBundleName: QSOPartyLogger
         CFBundleDisplayName: QSO Party Logger
-        CFBundleShortVersionString: "1.7.0"
-        CFBundleVersion: "8"
+        CFBundleShortVersionString: "1.8.0"
+        CFBundleVersion: "9"
         LSMinimumSystemVersion: "15.0"
         NSHumanReadableCopyright: "© 2026 Tom Bowles, KE5CW"
         NSLocalNetworkUsageDescription: "QSO Party Logger connects to your FlexRadio and DX cluster spotting nodes on your local network, and sends your QSOs to RUMlogNG when you ask it to."
